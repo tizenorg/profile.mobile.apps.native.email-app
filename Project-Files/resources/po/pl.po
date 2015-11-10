@@ -1,0 +1,1062 @@
+msgid "IDS_EMAIL_POP_FAILED_TO_MOVE"
+msgstr "Nie można przenieść."
+
+msgid "IDS_ST_OPT_DEFAULT_RINGTONE"
+msgstr "Domyślny dzwonek"
+
+msgid "IDS_EMAIL_BODY_MAXIMUM_NUMBER_OF_EMAIL_ACCOUNTS_REACHED"
+msgstr "Osiągnięto maksymalną liczbę kont e-mail."
+
+msgid "IDS_ST_OPT_EVERY_PD_HOURS_ABB2"
+msgstr "Co %d godz."
+
+msgid "IDS_ST_OPT_EVERY_1_HOUR"
+msgstr "Co 1 godzinę"
+
+msgid "IDS_TPLATFORM_ACBUTTON_DONE_ABB"
+msgstr "GOTOWE"
+
+msgid "IDS_TPLATFORM_ACBUTTON_CANCEL_ABB"
+msgstr "ANULUJ"
+
+msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
+msgstr "USUŃ"
+
+msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
+msgstr "Wymagane połączenie z siecią Wi-Fi. Połącz się z siecią Wi-Fi i spróbuj ponownie"
+
+msgid "IDS_EMAIL_POP_MOBILE_DATA_IS_DISABLED_CONNECT_TO_WI_FI_NETWORK_INSTEAD_OR_ENABLE_MOBILE_DATA_AND_TRY_AGAIN"
+msgstr "Transmisja danych sieci jest wyłączona. Połącz się z siecią Wi-Fi lub włącz transmisję danych po sieci w ustawieniach urządzenia i spróbuj ponownie."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_CANCELLED"
+msgstr "Anulowano pobieranie."
+
+msgid "IDS_EMAIL_BODY_TODAY"
+msgstr "Dzisiaj"
+
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Brak elementów do wyświetlenia."
+
+msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
+msgstr "Pobierać można tylko adresy URL http lub https."
+
+msgid "IDS_BR_OPT_WEB_SEARCH"
+msgstr "Wyszukiwanie w sieci WWW"
+
+msgid "IDS_ASEML_POP_THE_SECURITY_POLICY_PREVENTS_THE_USE_OF_POP_AND_IMAP_EMAIL_PROTOCOLS"
+msgstr "Zasady zabezpieczeń uniemożliwiają korzystanie z protokołów poczty e-mail POP i IMAP."
+
+msgid "IDS_ASEML_HEADER_UNABLE_TO_USE_FUNCTION_ABB"
+msgstr "Nie można użyć funkcji"
+
+msgid "IDS_EMAIL_TPOP_SYNC_EMAIL_DISABLED_FOR_PS"
+msgstr "Synchronizacja poczty e-mail została wyłączona dla konta e-mail %s."
+
+msgid "IDS_EMAIL_TPOP_SIGNATURE_SAVED"
+msgstr "Zapisano podpis."
+
+msgid "IDS_EMAIL_TPOP_SERVER_ERROR_OCCURRED_ABB"
+msgstr "Wystąpił błąd serwera."
+
+msgid "IDS_EMAIL_TPOP_SENDING_FAILED"
+msgstr "Błąd wysyłania."
+
+msgid "IDS_EMAIL_TPOP_SENDING_EMAIL_ING"
+msgstr "Wysyłanie e-maila..."
+
+msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
+msgstr "Wysyłanie e-maili..."
+
+msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
+msgstr "Zmiana rozmiaru plików..."
+
+msgid "IDS_EMAIL_TPOP_RECIPIENT_ALREADY_EXISTS"
+msgstr "Odbiorca już istnieje."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAIL_ADDRESSES_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "Liczba adresów e-mail usuniętych z Nadawców priorytetowych: %d."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MOVED_TO_SELECTED_FOLDER"
+msgstr "Do wybranego katalogu przeniesiono e-maili: %d."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MARKED_AS_UNREAD"
+msgstr "E-maili: %d oznaczono jako nieprzeczytane."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MARKED_AS_READ"
+msgstr "E-maili: %d oznaczono jako przeczytane."
+
+msgid "IDS_EMAIL_TPOP_P1SD_EMAILS_MOVED_TO_P2SS"
+msgstr "Liczba e-maili przeniesionych do katalogu %2$s: %1$d."
+
+msgid "IDS_EMAIL_TPOP_NEW_EMAIL_RECEIVED_ABB"
+msgstr "Odebrano nowy e-mail."
+
+msgid "IDS_EMAIL_TPOP_NETWORK_NOT_AVAILABLE_EMAIL_WILL_BE_SENT_WHEN_CONNECTED_TO_NETWORK"
+msgstr "Sieć niedostępna. E-mail zostanie wysłany po podłączeniu do sieci."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_REGISTERED_DEVICES_REACHED_FOR_THIS_ACCOUNT_DEREGISTER_SOME_DEVICES_AND_TRY_AGAIN"
+msgstr "Osiągnięto maksymalną liczbę zarejestrowanych urządzeń dla tego konta. Wyrejestruj niektóre urządzenia i spróbuj ponownie."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_RECIPIENTS_HPD_REACHED"
+msgstr "Osiągnięto maksymalną liczbę odbiorców (%d)."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
+msgstr "Osiągnięto maksymalną liczbę znaków."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Osiągnięto maksymalną liczbę znaków (%d)."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
+msgstr "Osiągnięto maksymalny rozmiar wiadomości (%d KB)."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
+msgstr "Przekroczono maksymalny rozmiar wiadomości. Udostępnionych zostanie tylko pierwszych: %d KB."
+
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Ładowanie..."
+
+msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
+msgstr "Wprowadzono nieprawidłowy adres e-mail."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_NAME_ALREADY_IN_USE_ABB"
+msgstr "Nazwa katalogu już w użyciu."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_DELETED_ABB"
+msgstr "Katalog usunięty."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_CREATED"
+msgstr "Utworzono katalog."
+
+msgid "IDS_EMAIL_TPOP_FILE_SAVED_TO_DOWNLOADS"
+msgstr "Plik został zapisany w Pobranych."
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_SIGN_IN_TO_PS"
+msgstr "Logowanie do konta %s nie powiodło się."
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_SAVE_EMAIL"
+msgstr "Błąd zapisywania e-mail."
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_CONNECT_TO_NETWORK"
+msgstr "Nie można nawiązać połączenia z siecią."
+
+msgid "IDS_EMAIL_TPOP_ENTER_AT_LEAST_ONE_VALID_RECIPIENT"
+msgstr "Wprowadź co najmniej jednego prawidłowego odbiorcę."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_SENT"
+msgstr "Wysłano e-mail."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_SAVED_IN_DRAFTS"
+msgstr "E-mail został zapisany w wersjach roboczych."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_MARKED_AS_UNREAD"
+msgstr "E-mail oznaczono jako nieprzeczytany."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "Adres e-mail został usunięty z Nadawców priorytetowych."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ALREADY_ADDED_TO_PRIORITY_SENDERS"
+msgstr "Adres e-mail został już dodany do nadawców priorytetowych."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ADDED_TO_PRIORITY_SENDERS"
+msgstr "Adres e-mail został dodany do Nadawców priorytetowych."
+
+msgid "IDS_EMAIL_TPOP_DELETING_FOLDER_ING"
+msgstr "Usuwanie katalogu..."
+
+msgid "IDS_EMAIL_TPOP_CREATING_FOLDER_ING"
+msgstr "Tworzenie katalogu..."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_SELECTED_FOLDER"
+msgstr "Do wybranego katalogu przeniesiono 1 e-mail."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_PS"
+msgstr "Liczba e-maili przeniesionych do katalogu %s: 1."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MARKED_AS_UNREAD"
+msgstr "1 e-mail oznaczono jako nieprzeczytany."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MARKED_AS_READ"
+msgstr "1 e-mail oznaczono jako przeczytany."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "Liczba adresów e-mail usuniętych z Nadawców priorytetowych: 1."
+
+msgid "IDS_EMAIL_TMBODY_SYNC_SETTINGS"
+msgstr "Ustawienia synchronizacji"
+
+msgid "IDS_EMAIL_TMBODY_DEFAULT_SENDING_ACCOUNT"
+msgstr "Domyślne konto wysyłania"
+
+msgid "IDS_EMAIL_SBODY_SENT_FROM_MY_SAMSUNG_DEVICE"
+msgstr "Wysłano z mojego urządzenia Samsung."
+
+msgid "IDS_EMAIL_SBODY_RECEIVE_STATUS_BAR_NOTIFICATIONS_WHEN_EMAILS_ARRIVE"
+msgstr "Otrzymuj powiadomienia na pasku stanu o przychodzących e-mailach."
+
+msgid "IDS_EMAIL_SBODY_NO_SUBJECT_M_NOUN"
+msgstr "Brak tematu"
+
+msgid "IDS_EMAIL_SBODY_NO_RECIPIENTS_M_NOUN"
+msgstr "Brak odbiorców"
+
+msgid "IDS_EMAIL_POP_YOU_MUST_DOWNLOAD_THE_MESSAGE_BEFORE_YOU_CAN_DOWNLOAD_THE_ATTACHMENT"
+msgstr "Aby pobrać załącznik, musisz najpierw pobrać wiadomość."
+
+msgid "IDS_EMAIL_POP_YOU_HAVE_NOT_YET_CREATED_AN_EMAIL_ACCOUNT_CREATE_AN_EMAIL_ACCOUNT_AND_TRY_AGAIN"
+msgstr "Nie utworzono jeszcze konta e-mail. Utwórz konto e-mail i spróbuj ponownie."
+
+msgid "IDS_EMAIL_POP_YOU_CAN_ONLY_LOG_IN_ONCE_EVERY_15_MINUTES"
+msgstr "Możesz się logować tylko raz na 15 minut."
+
+msgid "IDS_EMAIL_POP_YOUR_PASSWORD_CONTAINS_SPACES_MANY_SERVERS_DO_NOT_SUPPORT_PASSWORDS_WITH_SPACES"
+msgstr "Hasło zawiera spacje. Wiele serwerów nie obsługuje haseł zawierających spacje."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
+msgstr "Nie można przenosić wiadomości e-mail z wielu kont jednocześnie."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Nie można połączyć się z serwerem."
+
+msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
+msgstr "Aby utworzyć e-mail, utwórz konto e-mail."
+
+msgid "IDS_EMAIL_POP_THIS_FILE_TYPE_IS_NOT_SUPPORTED_BY_ANY_APPLICATION_ON_YOUR_DEVICE"
+msgstr "Ten typ plików nie jest obsługiwany przez żadną aplikację w urządzeniu."
+
+msgid "IDS_EMAIL_POP_THIS_EMAIL_WILL_BE_DELETED"
+msgstr "Ten e-mail zostanie usunięty."
+
+msgid "IDS_EMAIL_POP_THIS_EMAIL_HAS_BEEN_DELETED_FROM_THE_SERVER"
+msgstr "Ten e-mail został usunięty z serwera."
+
+msgid "IDS_EMAIL_POP_THE_VCARD_HAS_NOT_BEEN_CREATED_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Nie utworzono wizytówki vCard. Wystąpił nieznany błąd."
+
+msgid "IDS_EMAIL_POP_THE_SELECTED_DATA_COULD_NOT_BE_FOUND"
+msgstr "Nie można znaleźć wybranych danych."
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_TOTAL_SIZE_OF_ATTACHMENTS_HPS_MB_HAS_BEEN_EXCEEDED_REMOVE_SOME_FILES_AND_TRY_AGAIN"
+msgstr "Przekroczono maksymalny całkowity rozmiar załączników (%s MB). Usuń niektóre pliki i spróbuj ponownie."
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_NUMBER_OF_ATTACHMENTS_HPD_HAS_BEEN_REACHED"
+msgstr "Osiągnięto maksymalną liczbę załączników (%d)."
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_ATTACHMENT_SIZE_ALLOWED_BY_THE_CURRENT_EXCHANGE_SERVER_POLICY_HAS_BEEN_EXCEEDED"
+msgstr "Przekroczono maksymalny rozmiar załącznika dozwolony przez obecną zasadę serwera Exchange."
+
+msgid "IDS_EMAIL_POP_THE_CURRENT_EXCHANGE_SERVER_POLICY_PREVENTS_ATTACHMENTS_FROM_BEING_DOWNLOADED_TO_MOBILE_DEVICES"
+msgstr "Obecne zasady serwera Exchange uniemożliwiają pobieranie załączników na urządzenia przenośne."
+
+msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE_GO_TO_SETTINGS_POWER_AND_STORAGE_STORAGE_THEN_DELETE_SOME_FILES_AND_TRY_AGAIN"
+msgstr "Za mało miejsca w położeniu pamięci urządzenia. Przejdź do menu Ustawienia > Energia i położenie pamięci > Położenie pamięci, a następnie usuń niektóre pliki i spróbuj ponownie."
+
+msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE"
+msgstr "Za mało miejsca w pamięci urządzenia."
+
+msgid "IDS_EMAIL_POP_SERVER_NOT_AVAILABLE"
+msgstr "Serwer niedostępny."
+
+msgid "IDS_EMAIL_POP_SERVER_INFORMATION_QUERY_FAILED_ENTER_SERVER_INFORMATION_MANUALLY"
+msgstr "Zapytanie o informacje o serwerze nie powiodło się. Wprowadź informacje o serwerze ręcznie."
+
+msgid "IDS_EMAIL_POP_SECURITY_POLICY_RESTRICTS_USE_OF_THIS_ACCOUNT"
+msgstr "Zasady zabezpieczeń ograniczają użycie tego konta."
+
+msgid "IDS_EMAIL_POP_SAVING_EMAIL_ING"
+msgstr "Zapisywanie e-maila..."
+
+msgid "IDS_EMAIL_POP_SAVE_YOUR_CHANGES_OR_DISCARD_THEM_Q"
+msgstr "Zapisać zmiany czy odrzucić?"
+
+msgid "IDS_EMAIL_POP_REMOVING_ACCOUNT_ING"
+msgstr "Usuwanie konta..."
+
+msgid "IDS_EMAIL_POP_PLEASE_FILL_ALL_THE_MANDATORY_FIELDS"
+msgstr "Wypełnij wszystkie pola obowiązkowe."
+
+msgid "IDS_EMAIL_POP_ONLY_PART_OF_THE_MESSAGE_HAS_BEEN_DOWNLOADED_IF_YOU_CONTINUE_THE_REST_OF_THE_MESSAGE_MAY_BE_LOST"
+msgstr "Pobrano tylko część wiadomości. W przypadku kontynuowania pozostała część wiadomości może zostać utracona."
+
+msgid "IDS_EMAIL_POP_NO_RESPONSE_HAS_BEEN_RECEIVED_FROM_THE_SERVER_TRY_AGAIN_LATER"
+msgstr "Nie otrzymano odpowiedzi z serwera. Spróbuj ponownie później."
+
+msgid "IDS_EMAIL_POP_NETWORK_BUSY"
+msgstr "Sieć zajęta."
+
+msgid "IDS_EMAIL_POP_INVALID_OR_INACCESSIBLE_CERTIFICATE"
+msgstr "Nieprawidłowy lub niedostępny certyfikat"
+
+msgid "IDS_EMAIL_POP_INITIALISING_APPLICATION_ING"
+msgstr "Inicjowanie aplikacji..."
+
+msgid "IDS_EMAIL_POP_HOST_NOT_FOUND"
+msgstr "Nie znaleziono hosta."
+
+msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_OR_NETWORK_NOT_AVAILABLE"
+msgstr "Włączono tryb offline lub sieć jest niedostępna."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_START_EMAIL_APPLICATION"
+msgstr "Uruchomienie aplikacji pocztowej nie powiodło się."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DOWNLOAD_ATTACHMENT_CHECK_YOUR_NETWORK_CONNECTION_AND_TRY_AGAIN"
+msgstr "Błąd pobierania załącznika. Sprawdź połączenie sieciowe i spróbuj ponownie."
+
+msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
+msgstr "Email został usunięty z serwera."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Błąd pobierania"
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Pobieranie..."
+
+msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
+msgstr "Usunięcie tego konta spowoduje również usunięcie z urządzenia wszystkich powiązanych z nim wiadomości, kontaktów i innych danych. Dotknij opcji Usuń, aby kontynuować."
+
+msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
+msgstr "Tworzenie wizytówki vCard..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Błąd łączenia"
+
+msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
+msgstr "Dołączono już plik o tej nazwie."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Błąd uwierzytelniania"
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Wystąpił nieznany błąd"
+
+msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
+msgstr "Wszystkie załączniki w tym e-mailu zostaną pobrane przed jego przesłaniem dalej."
+
+msgid "IDS_EMAIL_OPT_VIEW_CONTACT_DETAILS_ABB"
+msgstr "Wyświetl szczegóły kontaktu"
+
+msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
+msgstr "Aktualizuj kontakt"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Udostępnij"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Ustawienia"
+
+msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
+msgstr "Wyślij do mnie"
+
+msgid "IDS_EMAIL_OPT_SEND"
+msgstr "Wyślij"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Zaznacz wszystko"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Wybierz"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Szukaj"
+
+msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
+msgstr "Zapisz w Roboczych"
+
+msgid "IDS_EMAIL_OPT_REPLY_ALL"
+msgstr "Odpowiedz wszystkim"
+
+msgid "IDS_EMAIL_OPT_REPLY"
+msgstr "Odpisz"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_SPAM_ABB"
+msgstr "Usuń ze Spamu"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
+msgstr "Usuń z nadawców Priorytetowych"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Usuń"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Odśwież"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Wklej"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Oryginalny"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
+msgstr "Przenieś do pola gł. odb. (Do)"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_CC"
+msgstr "Przenieś do DW"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_BCC_ABB"
+msgstr "Przenieś do UDW"
+
+msgid "IDS_EMAIL_OPT_MOVE"
+msgstr "Przenieś"
+
+msgid "IDS_EMAIL_OPT_MEDIUM_M_IMAGE_SIZE"
+msgstr "Średnia"
+
+msgid "IDS_EMAIL_OPT_MARK_AS_UNREAD_ABB"
+msgstr "Oznacz jako nieprzeczytane"
+
+msgid "IDS_EMAIL_OPT_MARK_AS_READ_ABB"
+msgstr "Oznacz jako przeczytane"
+
+msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
+msgstr "Niska"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Przekaż"
+
+msgid "IDS_EMAIL_OPT_EDIT"
+msgstr "Edytuj"
+
+msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
+msgstr "Usuń katalog"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Usuń"
+
+msgid "IDS_EMAIL_OPT_CUT"
+msgstr "Wytnij"
+
+msgid "IDS_EMAIL_OPT_CREATE_FOLDER_ABB2"
+msgstr "Utwórz katalog"
+
+msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
+msgstr "Utwórz kontakt"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Kopiuj"
+
+msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
+msgstr "Utwórz e-mail"
+
+msgid "IDS_EMAIL_OPT_CLIPBOARD"
+msgstr "Schowek"
+
+msgid "IDS_EMAIL_OPT_CANCEL_SENDING_ABB"
+msgstr "Anuluj wysyłanie"
+
+msgid "IDS_EMAIL_OPT_ADD_TO_PRIORITY_SENDERS_ABB"
+msgstr "Dodaj do nad. priorytetowych"
+
+msgid "IDS_EMAIL_OPT_ADD_TO_CONTACTS_ABB2"
+msgstr "Dodaj do Kontaktów"
+
+msgid "IDS_EMAIL_OPT_ADD_CC_BCC"
+msgstr "Dodaj DW/UDW"
+
+msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
+msgstr "Dodaj załącznik"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Dodaj konto"
+
+msgid "IDS_EMAIL_OPT_ADD"
+msgstr "Dodaj"
+
+msgid "IDS_EMAIL_NPBODY_NO_RESULTS_FOUND"
+msgstr "Nie znaleziono wyników"
+
+msgid "IDS_EMAIL_NPBODY_NO_PRIORITY_SENDERS"
+msgstr "Brak nadawców priorytetowych"
+
+msgid "IDS_EMAIL_NPBODY_NO_EMAILS"
+msgstr "Brak e-maili"
+
+msgid "IDS_EMAIL_MBODY_VIBRATION"
+msgstr "Wibracja"
+
+msgid "IDS_EMAIL_MBODY_SIGNATURE"
+msgstr "Podpis"
+
+msgid "IDS_EMAIL_MBODY_PRIORITY_SENDERS"
+msgstr "Nadawcy priorytetowi"
+
+msgid "IDS_EMAIL_MBODY_NO_EMAIL_ADDRESS_OR_NAME"
+msgstr "Brak adr.e-mail lub nazwy"
+
+msgid "IDS_EMAIL_MBODY_NOTIFICATION_SOUND"
+msgstr "Dźwięk powiadomienia"
+
+msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
+msgstr "Nowe e-maile"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Powiadomienia e-mail"
+
+msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
+msgstr "Edytuj podpis"
+
+msgid "IDS_EMAIL_MBODY_DISPLAY_SIGNATURE"
+msgstr "Wyświetl podpis"
+
+msgid "IDS_EMAIL_MBODY_DISPLAY_IMAGES"
+msgstr "Wyświetl obrazy"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_SEND_EMAIL_ABB"
+msgstr "Nie można wysłać e-maila"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"
+msgstr "Nie można wykonać czynności"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_OPEN_FILE_ABB"
+msgstr "Nie można otworzyć pliku"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_MOVE_EMAILS_ABB"
+msgstr "Nie można przenieść e-maili"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_DOWNLOAD_ATTACHMENT_ABB"
+msgstr "Nie można pobrać załącznika"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_COMPOSE_EMAIL_ABB"
+msgstr "Nie można utworzyć e-maila"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
+msgstr "Nie można dodać załącznika"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Temat"
+
+msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
+msgstr "Zatrzymyw. tworzenia e-maila"
+
+msgid "IDS_EMAIL_HEADER_STARRED_EMAILS_ABB"
+msgstr "E-maile oznacz. gwiazdką"
+
+msgid "IDS_EMAIL_HEADER_SPAMBOX"
+msgstr "Skrzynka spamu"
+
+msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
+msgstr "Pokaż wszystkie katalogi"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Ustawienia"
+
+msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
+msgstr "Wysłane"
+
+msgid "IDS_EMAIL_HEADER_SEND_TO_MYSELF_ABB"
+msgstr "Wyślij do mnie"
+
+msgid "IDS_EMAIL_HEADER_SELECT_FOLDER_ABB2"
+msgstr "Wybierz katalog"
+
+msgid "IDS_EMAIL_HEADER_SELECT_ALL_ABB"
+msgstr "Wybierz wszystko"
+
+msgid "IDS_EMAIL_HEADER_SELECT_ACTION_ABB"
+msgstr "Wybierz czynność"
+
+msgid "IDS_EMAIL_HEADER_RE_C_M_READ_REPORT"
+msgstr "Odp.:"
+
+msgid "IDS_EMAIL_HEADER_REMOVE_ACCOUNT_ABB"
+msgstr "Usuń konto"
+
+msgid "IDS_EMAIL_HEADER_RECYCLE_BIN_ABB"
+msgstr "Kosz"
+
+msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
+msgstr "Nadawcy priorytetowi"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "Wybranych: %d"
+
+msgid "IDS_EMAIL_HEADER_OUTBOX"
+msgstr "Skrzynka nadawcza"
+
+msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
+msgstr "Otwieranie e-maila"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Powiadomienia"
+
+msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
+msgstr "Skrz. pocztowa"
+
+msgid "IDS_EMAIL_HEADER_INBOX"
+msgstr "Skrzynka odbiorcza"
+
+msgid "IDS_EMAIL_HEADER_IMAGE_QUALITY_ABB"
+msgstr "Jakość obrazu"
+
+msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
+msgstr "(domyśl.)"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Ogólne"
+
+msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
+msgstr "Katalogi dla tego konta"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_SAVE_ATTACHMENT_ABB"
+msgstr "Nie można zapisać załącznika"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_DELETE_ACCOUNT_ABB"
+msgstr "Nie można usunąć konta"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_CONNECT_TO_SERVER_ABB"
+msgstr "Nie można poł. się z serwerem"
+
+msgid "IDS_EMAIL_HEADER_ENTER_NEW_PASSWORD_ABB"
+msgstr "Wpisywanie nowego hasła"
+
+msgid "IDS_EMAIL_HEADER_DRAFTS"
+msgstr "Wersje robocze"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ENTIRE_EMAIL_ABB"
+msgstr "Pobieranie całego e-maila"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENT_HEADER"
+msgstr "Pobieranie załącznika"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
+msgstr "Pobieranie załączników"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Usuń"
+
+msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
+msgstr "Tworzenie wizytówki vCard"
+
+msgid "IDS_EMAIL_HEADER_COMPOSE_ABB"
+msgstr "Utwórz"
+
+msgid "IDS_EMAIL_HEADER_COMBINED_INBOX_ABB"
+msgstr "Łączona skrzynka odb."
+
+msgid "IDS_EMAIL_HEADER_COMBINED_ACCOUNTS_ABB"
+msgstr "Konta łączone"
+
+msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
+msgstr "Załączniki"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Konta"
+
+msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
+msgstr "Filmy"
+
+msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
+msgstr "Zrób zdjęcie"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Ustawienia"
+
+msgid "IDS_EMAIL_BUTTON_SEND_ALL"
+msgstr "Wyślij wszystko"
+
+msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
+msgstr "Zapisz"
+
+msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
+msgstr "Nagraj film"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_MEMO"
+msgstr "Notatka"
+
+msgid "IDS_EMAIL_BUTTON_IMAGES_ABB"
+msgstr "Obrazy"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
+msgstr "Pobierz cały e-mail"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Pobierz wszystko"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Gotowe"
+
+msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
+msgstr "Odrzuć"
+
+msgid "IDS_EMAIL_BUTTON_DELETE_ABB4"
+msgstr "Usuń"
+
+msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
+msgstr "Utwórz"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Kontyn."
+
+msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
+msgstr "Kontakty"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Anuluj"
+
+msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
+msgstr "Nagraj plik audio"
+
+msgid "IDS_EMAIL_BUTTON2_CALENDAR"
+msgstr "Kalendarz"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Wczoraj"
+
+msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
+msgstr "Nie można otworzyć połączenia z serwerem. Wystąpił błąd zabezpieczeń."
+
+msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
+msgstr "Do"
+
+msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
+msgstr "Ten katalog i cała jego zawartość zostaną usunięte."
+
+msgid "IDS_EMAIL_BODY_SERVER_DOES_NOT_SUPPORT_TLS"
+msgstr "Serwer nie obsługuje protokołu TLS."
+
+msgid "IDS_EMAIL_BODY_SENT_C_M_DATE"
+msgstr "Wysłano:"
+
+msgid "IDS_EMAIL_BODY_PS_MB"
+msgstr "%s MB"
+
+msgid "IDS_EMAIL_BODY_PS_KB"
+msgstr "%s kB"
+
+msgid "IDS_EMAIL_BODY_PS_GB"
+msgstr "%s GB"
+
+msgid "IDS_EMAIL_BODY_PS_B"
+msgstr "%s B"
+
+msgid "IDS_EMAIL_BODY_PD_FILES_ABB"
+msgstr "Pl.: %d"
+
+msgid "IDS_EMAIL_BODY_ORIGINAL_MESSAGE"
+msgstr "Oryginalna wiadomość"
+
+msgid "IDS_EMAIL_BODY_NO_MORE_EMAILS_M_STATUS"
+msgstr "Nie ma więcej e-maili"
+
+msgid "IDS_EMAIL_BODY_MY_FILES_M_APPLICATION"
+msgstr "Moje pliki"
+
+msgid "IDS_EMAIL_BODY_MAPS_ABB"
+msgstr "Mapy"
+
+msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
+msgstr "Ładowanie więcej..."
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Ostatnia aktualizacja"
+
+msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
+msgstr "Dołącz oryginalną wiadomość"
+
+msgid "IDS_EMAIL_BODY_IMAP4"
+msgstr "IMAP4"
+
+msgid "IDS_EMAIL_BODY_FWD_C"
+msgstr "PD:"
+
+msgid "IDS_EMAIL_BODY_FROM_MSENDER"
+msgstr "Od"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Nazwa katalogu"
+
+msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
+msgstr "Przes.w górę,by zał. więc."
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "Adres email"
+
+msgid "IDS_EMAIL_BODY_CC_BCC"
+msgstr "DW/UDW"
+
+msgid "IDS_EMAIL_BODY_CC"
+msgstr "DW"
+
+msgid "IDS_EMAIL_BODY_BCC"
+msgstr "UDW"
+
+msgid "IDS_EMAIL_BODY_AUDIO_FILES_ABB"
+msgstr "Pliki audio"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_SEND_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "E-maile zostaną tu wyświetlone po ich wysłaniu."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_RECEIVE_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "E-maile zostaną tu wyświetlone po ich otrzymaniu."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_MOVE_EMAILS_TO_THIS_FOLDER_THEY_WILL_BE_SHOWN_HERE"
+msgstr "E-maile zostaną tu wyświetlone po dodaniu ich do tego katalogu."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_HAVE_TRIED_TO_SEND_EMAILS_BUT_THEY_FAILED_TO_BE_SENT_THEY_WILL_BE_SHOWN_HERE"
+msgstr "E-maile, których nie udało się wysłać, będą tutaj widoczne."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_DELETE_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "E-maile zostaną tu wyświetlone po ich usunięciu."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_PRIORITY_SENDERS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Nadawcy priorytetowi zostaną tu wyświetleni po ich dodaniu."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_PRIORITY_SENDERS_EMAILS_FROM_THEM_WILL_BE_SHOWN_HERE"
+msgstr "Gdy dodasz nadawców priorytetowych, e-maile od nich będą wyświetlane w tym miejscu."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_FAVOURITE_EMAILS_BY_TAPPING_THE_STAR_ICON_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Ulubione e-maile zostaną tu wyświetlone po ich dodaniu poprzez dotknięcie ikony gwiazdki."
+
+msgid "IDS_EMAIL_BODY_1_FILE_ABB"
+msgstr "Pl.: 1"
+
+msgid "IDS_EMAIL_ACBUTTON_MAILBOX_ABB"
+msgstr "SKRZ. POCZTOWA"
+
+msgid "IDS_MF_HEADER_UNABLE_TO_SAVE_DATA_ABB"
+msgstr "Nie można zapisać danych"
+
+msgid "IDS_ST_TPOP_VALIDATING_ACCOUNT_ING_ABB"
+msgstr "Walidacja konta..."
+
+msgid "IDS_ST_TMBODY_USERNAME"
+msgstr "Nazwa użytkownika"
+
+msgid "IDS_ST_TMBODY_SYNC_WHILE_ROAMING"
+msgstr "Synchronizacja podczas roamingu"
+
+msgid "IDS_ST_TMBODY_SYNC"
+msgstr "Synchronizacja"
+
+msgid "IDS_ST_TMBODY_SERVER_ADDRESS"
+msgstr "Adres serwera"
+
+msgid "IDS_ST_TMBODY_SENDER_NAME"
+msgstr "Nazwa nadawcy"
+
+msgid "IDS_ST_TMBODY_PASSWORD"
+msgstr "Hasło"
+
+msgid "IDS_ST_TMBODY_ACCOUNT_NAME"
+msgstr "Nazwa konta"
+
+msgid "IDS_ST_SBODY_TLS"
+msgstr "TLS"
+
+msgid "IDS_ST_SBODY_SSL"
+msgstr "SSL"
+
+msgid "IDS_ST_SBODY_SHOW_PASSWORD_ABB"
+msgstr "Wyświetl hasło"
+
+msgid "IDS_ST_SBODY_SET_AS_DEFAULT_ACCOUNT_ABB"
+msgstr "Ustaw jako konto domyślne"
+
+msgid "IDS_ST_SBODY_PROCESSING_PLEASE_WAIT_ING_ABB"
+msgstr "Przetwarzanie. Czekaj..."
+
+msgid "IDS_ST_SBODY_POP3"
+msgstr "POP3"
+
+msgid "IDS_ST_SBODY_NOT_SYNCED_YET_M_STATUS"
+msgstr "Jeszcze niezsynchronizowane"
+
+msgid "IDS_ST_SBODY_IMAP"
+msgstr "IMAP"
+
+msgid "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"
+msgstr "To konto zostało już dodane."
+
+msgid "IDS_ST_POP_THE_MAXIMUM_NUMBER_OF_EMAIL_ACCOUNTS_HPD_HAS_BEEN_REACHED"
+msgstr "Osiągnięto maksymalną liczbę kont e-maili (%d)."
+
+msgid "IDS_ST_POP_CHECK_THE_EMAIL_ADDRESS_AND_PASSWORD_YOU_HAVE_ENTERED"
+msgstr "Sprawdź wprowadzony przez siebie adres e-mail i hasło."
+
+msgid "IDS_ST_POP_ALL_DATA_RELATED_TO_THIS_ACCOUNT_WILL_BE_DELETED_FROM_THE_DEVICE"
+msgstr "Wszystkie dane powiązane z tym kontem zostaną usunięte z urządzenia."
+
+msgid "IDS_ST_OPT_REMOVE"
+msgstr "Usuń"
+
+msgid "IDS_ST_OPT_PUSH"
+msgstr "Z serwera"
+
+msgid "IDS_ST_OPT_NO_LIMIT"
+msgstr "Brak limitu"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Brak"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Ręcznie"
+
+msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
+msgstr "Zach. ust., jak poza roam."
+
+msgid "IDS_ST_OPT_HEADER_ONLY"
+msgstr "Tylko nagłówki"
+
+msgid "IDS_ST_OPT_EVERY_PD_MINUTES_ABB"
+msgstr "Co %d min"
+
+msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
+msgstr "Co godzinę"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Codziennie"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Domyślnie"
+
+msgid "IDS_ST_MBODY_SYNC_EMAILS"
+msgstr "Synchronizuj e-maile"
+
+msgid "IDS_ST_MBODY_SMTP_AUTHENTICATION"
+msgstr "Uwierzytelnianie SMTP"
+
+msgid "IDS_ST_MBODY_SERVER_SETTINGS"
+msgstr "Ustawienia serwera"
+
+msgid "IDS_ST_MBODY_SAME_AS_POP3_IMAP4"
+msgstr "Taki sam jak POP3/IMAP4"
+
+msgid "IDS_ST_MBODY_POP3_BEFORE_SMTP"
+msgstr "Serwer POP3 przed SMTP"
+
+msgid "IDS_ST_MBODY_OTHER"
+msgstr "Inne"
+
+msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
+msgstr "Plan synch. poczty e-mail"
+
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Ostrzeżenie"
+
+msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
+msgstr "Nie można potwierdzić konta"
+
+msgid "IDS_ST_HEADER_UNABLE_TO_ADD_ACCOUNT_ABB"
+msgstr "Nie można dodać konta"
+
+msgid "IDS_ST_HEADER_SERVER_TYPE_ABB"
+msgstr "Typ serwera"
+
+msgid "IDS_ST_HEADER_SELECT_ACCOUNT_TYPE_ABB"
+msgstr "Wybierz typ konta"
+
+msgid "IDS_ST_HEADER_SECURITY_TYPE_ABB"
+msgstr "Typ zabezpieczeń"
+
+msgid "IDS_ST_HEADER_OUTGOING_SERVER_SETTINGS_ABB"
+msgstr "Ustaw. serwera poczty wychodzącej"
+
+msgid "IDS_ST_HEADER_LIMIT_RETRIEVAL_SIZE"
+msgstr "Limit rozmiaru pobierania"
+
+msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
+msgstr "Ustaw. serwera poczty przychodzącej"
+
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "E-mail"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Dalej"
+
+msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
+msgstr "Konfig. ręczna"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Cichy"
+
+msgid "IDS_ST_BODY_PORT"
+msgstr "Port"
+
+msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
+msgstr "WYŚLIJ"
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Rozmiar czcionki"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Kolor czcionki"
+
+msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
+msgstr "Zmień nazwę katalogu"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
+msgstr "Przenieś do skrzynki spamu"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_SPAMBOX_ABB"
+msgstr "Usuń ze Skrzynki spamu"
+
+msgid "IDS_EMAIL_OPT_SHOW_TEXT_TOOLS"
+msgstr "Pokaż narzędzia tekstu"
+
+msgid "IDS_EMAIL_OPT_HIDE_TEXT_TOOLS"
+msgstr "Ukryj narzędzia tekstu"
+
+msgid "IDS_EMAIL_HEADER_EMAIL_SETTINGS"
+msgstr "Ustawienia e-mail"
+
+msgid "IDS_EMAIL_BODY_SYNCING_ING"
+msgstr "Synchronizacja..."
+
+msgid "IDS_EMAIL_BODY_SYNC_FAILED_TRY_LATER"
+msgstr "Synchronizacja nie powiodła się. Spróbuj później."
+
+msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
+msgstr "Kolor tła tekstu"
+
+msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
+msgstr "Pobrane"
+
+msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
+msgstr "Automatycznie pobieraj załączniki podczas połączenia z siecią Wi-Fi"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Zapisano."
+
+msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
+msgstr "Włącz tekst sformatowany"
+
+msgid "IDS_EMAIL_OPT_DISABLE_RICH_TEXT_ABB2"
+msgstr "Wyłącz tekst sformatowany"
+
+msgid "IDS_EMAIL_BUTTON_SHOW_ABB"
+msgstr "Pokaż"
+
+msgid "IDS_EMAIL_BUTTON_HIDE_ABB3"
+msgstr "Ukryj"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_SAVE_EMAILS_IN_DRAFTS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "E-maile zostaną tutaj wyświetlone po ich zapisaniu w Roboczych."
+
+msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
+msgstr "Zapisz wszystko"
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Nie można usunąć."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
+msgstr "Zmieniono nazwę katalogu."
+
+msgid "IDS_EMAIL_HEADER_SELECT_EMAILS"
+msgstr "Wybierz wiadomości e-mail"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_EMAILS_TO_SPAM_THEY_WILL_BE_SHOWN_HERE"
+msgstr "E-maile zostaną tu wyświetlone po ich dodaniu do spamu."
+
+msgid "IDS_EMAIL_BUTTON_RENAME_ABB"
+msgstr "Zmień nazwę"
+
+msgid "IDS_EMAIL_POP_RENAMING_FOLDER_ING"
+msgstr "Zmienianie nazwy katalogu..."
+
+msgid "IDS_EMAIL_POP_NETWORK_NOT_AVAILABLE_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
+msgstr "Sieć niedostępna. Ta wiadomość zostanie wysłana po podłączeniu do sieci."
+
+msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
+msgstr "Tryb Offline jest włączony. Ta wiadomość zostanie wysłana po podłączeniu do sieci."
+

@@ -1,0 +1,263 @@
+/*
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+#define EC_IMAGE_COMBINED_SCROLLER_BAR	DIR_ICON_VIEWER"core_scroll_bar_v.#.png"
+#define EC_IMAGE_COMBINED_SCROLLER_BAR_EFFECT	DIR_ICON_VIEWER"core_scroll_bar_v_ef.#.png"
+
+#define EC_SCROLLER_HANDLER_SCROLLBAR_VBAR_PADDING_SIZE 4
+#define EC_SCROLLER_HANDLER_SCROLLBAR_VBAR_DRAGABLE 10 44
+#define EC_SCROLLER_HANDLER_SCROLLBAR_VBAR_DRAGABLE_MAX 10 9999
+
+// combined scroller is based on elm scroller. so, need to keep original form.
+group {
+	name: "ec/combined_scroller/base";
+	images {
+		image: EC_IMAGE_COMBINED_SCROLLER_BAR COMP;
+		image: EC_IMAGE_COMBINED_SCROLLER_BAR_EFFECT COMP;
+	}
+	script {
+		public sbvis_v, sbalways_v, sbvis_timer;
+		public timer0(val) {
+			new v;
+			v = get_int(sbvis_v);
+			if (v) {
+				v = get_int(sbalways_v);
+				if (!v) {
+					emit("do-hide-vbar", "");
+					set_int(sbvis_v, 0);
+				}
+			}
+			set_int(sbvis_timer, 0);
+			return 0;
+		}
+	}
+	parts {
+		E_PART_BASE;
+		part { name: "clipper";
+			type: RECT;
+			mouse_events: 0;
+			scale: 1;
+			description { state: "default" 0.0;
+			rel1.to: "base";
+			rel2.to: "base";
+			rel1.offset: 0 0;
+			rel2.offset: -1 -1;
+			}
+		}
+		part { name: "elm.swallow.content";
+			clip_to: "clipper";
+			type: SWALLOW;
+			scale: 1;
+			description { state: "default" 0.0;
+				rel1.to: "base";
+				rel2.to: "base";
+				rel1.offset: 0 0;
+				rel2.offset: -1 -1;
+			}
+		}
+		part { name: "sb_vbar_top_padding";
+			type: SPACER;
+			scale: 1;
+			description { state: "default" 0.0;
+				min: 0 EC_SCROLLER_HANDLER_SCROLLBAR_VBAR_PADDING_SIZE;
+				max: 0 EC_SCROLLER_HANDLER_SCROLLBAR_VBAR_PADDING_SIZE;
+				rel1.relative: 1.0 0.0;
+				rel2.relative: 1.0 0.0;
+				rel1.to: "elm.swallow.content";
+				rel2.to: "elm.swallow.content";
+				fixed: 1 1;
+				align: 1.0 0.0;
+			}
+		}
+		part { name: "sb_vbar_bottom_padding";
+			type: SPACER;
+			scale: 1;
+			description { state: "default" 0.0;
+				min: 0 EC_SCROLLER_HANDLER_SCROLLBAR_VBAR_PADDING_SIZE;
+				max: 0 EC_SCROLLER_HANDLER_SCROLLBAR_VBAR_PADDING_SIZE;
+				rel1.relative: 1.0 1.0;
+				rel2.relative: 1.0 1.0;
+				rel1.to: "elm.swallow.content";
+				rel2.to: "elm.swallow.content";
+				fixed: 1 1;
+				align: 1.0 1.0;
+			}
+		}
+		part { name: "sb_vbar_right_padding";
+			type: SPACER;
+			scale: 1;
+			description { state: "default" 0.0;
+				min: EC_SCROLLER_HANDLER_SCROLLBAR_VBAR_PADDING_SIZE 0;
+				max: EC_SCROLLER_HANDLER_SCROLLBAR_VBAR_PADDING_SIZE 0;
+				rel1.relative: 1.0 1.0;
+				rel2.relative: 1.0 1.0;
+				rel1.to: "elm.swallow.content";
+				rel2.to: "elm.swallow.content";
+				fixed: 1 1;
+				align: 1.0 1.0;
+			}
+		}
+		part {
+			name: "sb_vbar_clip_master";
+			type: RECT;
+			mouse_events: 0;
+			description {
+				state: "default" 0.0;
+			}
+			description {
+				state: "hidden" 0.0;
+				visible: 0;
+				color: 255 255 255 0;
+			}
+		}
+		part {
+			name: "sb_vbar_clip";
+			clip_to: "sb_vbar_clip_master";
+			type: RECT;
+			mouse_events: 0;
+			description {
+				state: "default" 0.0;
+				visible: 0;
+				color: 255 255 255 0;
+			}
+			description {
+				state: "show" 0.0;
+				visible: 1;
+				color: 255 255 255 255;
+			}
+		}
+		part { name: "sb_vbar";
+			type: RECT;
+			mouse_events: 0;
+			scale: 1;
+			description { state: "default" 0.0;
+				fixed: 1 1;
+				visible: 0;
+				min: EC_SCROLLER_HANDLER_SCROLLBAR_VBAR_DRAGABLE;
+				align: 1.0 0.0;
+				rel1 {
+					relative: 0.0 1.0;
+					to_y: "sb_vbar_top_padding";
+					to_x: "sb_vbar_right_padding";
+				}
+				rel2 {
+					relative: 0.0 0.0;
+					to_y: "sb_vbar_bottom_padding";
+					to_x: "sb_vbar_right_padding";
+				}
+			}
+		}
+		part { name: "elm.dragable.vbar";
+			clip_to: "sb_vbar_clip";
+			mouse_events: 0;
+			dragable {
+				x: 0 0 0;
+				y: 1 1 0;
+				confine: "sb_vbar";
+			}
+			description { state: "default" 0.0;
+				fixed: 1 1;
+				min: EC_SCROLLER_HANDLER_SCROLLBAR_VBAR_DRAGABLE;
+				max: EC_SCROLLER_HANDLER_SCROLLBAR_VBAR_DRAGABLE_MAX;
+				rel1 {
+					relative: 0.5 0.5;
+					to: "sb_vbar";
+				}
+				rel2 {
+					relative: 0.5 0.5;
+					to: "sb_vbar";
+				}
+				image {
+					normal: EC_IMAGE_COMBINED_SCROLLER_BAR;
+					middle: DEFAULT;
+				}
+				color: SCROLLBAR_BG_COLOR;
+			}
+		}
+		part { name: "vbar_effect";
+			clip_to: "sb_vbar_clip";
+			mouse_events: 0;
+			scale: 1;
+			description { state: "default" 0.0;
+				rel1.to: "elm.dragable.vbar";
+				rel2.to: "elm.dragable.vbar";
+				image.normal: EC_IMAGE_COMBINED_SCROLLER_BAR;
+				color: SCROLLBAR_BG_COLOR;
+			}
+		}
+	}
+	programs {
+		program {
+			name: "load";
+			signal: "load";
+			source: "";
+			script {
+				set_int(sbvis_v, 0);
+				set_int(sbalways_v, 0);
+				set_int(sbvis_timer, 0);
+			}
+		}
+		program {
+			name: "scroll_v";
+			signal: "elm,action,scroll_v";
+			source: "elm";
+			script {
+				new v;
+				v = get_int(sbvis_v);
+				v |= get_int(sbalways_v);
+				if (!v) {
+					emit("do-show-vbar", "");
+					set_int(sbvis_v, 1);
+				}
+				v = get_int(sbvis_timer);
+				if (v > 0) cancel_timer(v);
+				v = timer(1.0, "timer0", 0);
+				set_int(sbvis_timer, v);
+			}
+		}
+		program {
+			name: "sb_vbar_show";
+			signal: "do-show-vbar";
+			source: "";
+			action:  STATE_SET "show" 0.0;
+			transition: LINEAR 0.5;
+			target: "sb_vbar_clip";
+		}
+		program {
+			name: "sb_vbar_hide";
+			signal: "do-hide-vbar";
+			source: "";
+			action:  STATE_SET "default" 0.0;
+			transition: LINEAR 0.5;
+			target: "sb_vbar_clip";
+		}
+		program {
+			name: "landscape";
+			signal: "scroller_landscape";
+			source: "";
+			action:  STATE_SET "landscape_mode" 0.0;
+			target: "sb_vbar";
+		}
+		program {
+			name: "portrait";
+			signal: "scroller_portrait";
+			source: "";
+			action:  STATE_SET "default" 0.0;
+			target: "sb_vbar";
+		}
+	}
+}

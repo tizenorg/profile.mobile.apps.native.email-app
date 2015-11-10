@@ -1,0 +1,8 @@
+<manifest>
+	<define>
+		<domain name="org.tizen.email" />
+	</define>
+	<request>
+		<domain name="org.tizen.email" />
+	</request>
+</manifest>

@@ -1,0 +1,205 @@
+/*
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+#include "email-colors.edc"
+#include "../../../common/inc/email-images.h"
+#include "email-parts.edc"
+#include "email-templates.edc"
+
+#define POPUP_PROCESSING_VIEW_LAYOUT_BG_MIN_INC 0 120
+#define POPUP_TEXT_FONT_SIZE 40
+#define POPUP_CONTENT_DEFAULT_PADDING_TOP_MIN_INC 33
+#define POPUP_CONTENT_DEFAULT_PADDING_BOTTOM_MIN_INC 33
+#define POPUP_CONTENT_DEFAULT_PADDING_LEFT_MIN_INC 32
+#define POPUP_CONTENT_DEFAULT_PADDING_RIGHT_MIN_INC 32
+#define POPUP_PROCESSING_SWALLOW_VIEW_LAYOUT_MIN_INC 56 56
+#define POPUP_PROCESSING_SWALLOW_VIEW_LAYOUT_MAX_INC 56 56
+#define POPUP_PROCESSING_SWALLOW_VIEW_LAYOUT_PADDING_AFTER_INC 32 0
+
+#define POPUP_TEXT_ENTRY_PADDING_TOP 12
+#define POPUP_TEXT_ENTRY_PADDING_LEFT 42
+#define POPUP_TEXT_ENTRY_PADDING_RIGHT 32
+
+#define RESOURCE_IMAGE( FILE_NAME, WIDTH, HEIGHT, COLOR ) \
+	group { \
+		name: FILE_NAME; \
+		images.image: FILE_NAME COMP; \
+		parts { \
+			part { name: "image"; \
+				type: IMAGE; \
+				scale: 1; \
+				description { \
+					state: "default" 0.0; \
+					image.normal: FILE_NAME; \
+					min: WIDTH HEIGHT; \
+					aspect: WIDTH/HEIGHT WIDTH/HEIGHT; \
+					aspect_preference: BOTH; \
+					color: COLOR; \
+				} \
+			} \
+		} \
+	}
+
+#define RESOURCE_IMAGE_SQUARE( FILE_NAME, SIZE, COLOR ) RESOURCE_IMAGE( FILE_NAME, SIZE, SIZE, COLOR )
+
+collections {
+	base_scale: 2.6;		// multi scale for HD resolution
+
+	#include "../common/email-title-search.edc"
+
+/* composer_icon */
+	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_COMPOSER_EXPAND_OPEN, 60, AO006 );
+	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_COMPOSER_EXPAND_CLOSE, 60, AO006 );
+	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_COMPOSER_CONTACT, 80, AO006 );
+	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_COMPOSER_ATTACH_ICON, 80, AO006 );
+	RESOURCE_IMAGE( EMAIL_IMAGE_COMPOSER_RTTB_BORDERED_COLOR_BAR, 50, 10, COLOR_WHITE );
+	RESOURCE_IMAGE( EMAIL_IMAGE_COMPOSER_RTTB_BORDERLESS_COLOR_BAR, 48, 8, COLOR_WHITE );
+
+/* list_icon */
+	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_ICON_PRIO_SENDER, 48, AO003 );
+	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_ICON_LIST_ATTACH, 34, AO004 );
+	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_ICON_LIST_FORWARD, 48, AO001 );
+	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_ICON_LIST_REPLY, 48, AO002 );
+	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_COMPOSE_BUTTON, 80, COLOR_WHITE );
+	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_SEARCH_BACK_BUTTON, 80, COLOR_WHITE );
+
+/* viewer_icon */
+	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_ICON_DOWN, 50, AO006 );
+	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_ICON_CANCEL, 50, AO006 );
+
+/* folders_icon */
+	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_CORE_EXPAND_OPENED, 36, AO006 );
+	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_CORE_EXPAND_CLOSED, 36, AO006 );
+
+/* search_icon */
+	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_CORE_CLEAR, 80, COLOR_WHITE );
+
+/* processing popup */
+	group { name: "processing_view";
+		styles {
+			style { name: "popup_processing_style";
+				base: "color=#000000FF font=Tizen:style=Regular font_size="POPUP_TEXT_FONT_SIZE" text_class=list_item wrap=mixed ellipsis=1.0";
+				tag:  "br" "\n";
+				tag:  "tab" "\t";
+			}
+		}
+		parts {
+			part { name: "bg";
+				type: SPACER;
+				scale: 1;
+				description { state: "default" 0.0;
+					min: POPUP_PROCESSING_VIEW_LAYOUT_BG_MIN_INC;
+				}
+			}
+			part { name: "pad_t";
+				type: SPACER;
+				scale: 1;
+				description { state: "default" 0.0;
+					min: 0 POPUP_CONTENT_DEFAULT_PADDING_TOP_MIN_INC;
+					fixed: 0 1;
+					rel2.relative: 1.0 0.0;
+					align: 0.0 0.0;
+				}
+			}
+			part { name: "pad_b";
+				type: SPACER;
+				scale: 1;
+				description { state: "default" 0.0;
+					min: 0 POPUP_CONTENT_DEFAULT_PADDING_BOTTOM_MIN_INC;
+					fixed: 0 1;
+					rel1.relative: 0.0 1.0;
+					align: 0.0 1.0;
+				}
+			}
+			part { name: "pad_l";
+				type: SPACER;
+				scale: 1;
+				description { state: "default" 0.0;
+					min: POPUP_CONTENT_DEFAULT_PADDING_LEFT_MIN_INC 0;
+					fixed: 1 0;
+					rel2.relative: 0.0 1.0;
+					align: 0.0 0.0;
+				}
+			}
+			part { name: "pad_r";
+				type: SPACER;
+				scale: 1;
+				description { state: "default" 0.0;
+					min: POPUP_CONTENT_DEFAULT_PADDING_RIGHT_MIN_INC 0;
+					fixed: 1 0;
+					rel1.relative: 1.0 0.0;
+					align: 1.0 0.0;
+				}
+			}
+			part { name: "processing";
+				type: SWALLOW;
+				scale: 1;
+				description { state: "default" 0.0;
+					min: POPUP_PROCESSING_SWALLOW_VIEW_LAYOUT_MIN_INC;
+					max: POPUP_PROCESSING_SWALLOW_VIEW_LAYOUT_MAX_INC;
+					fixed: 1 1;
+					rel1 {
+						relative: 1.0 0.0;
+						to_x: "pad_l";
+					}
+					rel2 {
+						relative: 0.0 1.0;
+						to_x: "pad_r";
+					}
+					align: 0.0 0.5;
+				}
+			}
+			part { name: "pad_after_processing";
+				type: SPACER;
+				scale: 1;
+				description { state: "default" 0.0;
+					min: POPUP_PROCESSING_SWALLOW_VIEW_LAYOUT_PADDING_AFTER_INC;
+					fixed: 1 0;
+					rel1 {
+						relative: 1.0 0.0;
+						to: "processing";
+					}
+					rel2.to: "processing";
+					align: 0.0 0.5;
+				}
+			}
+			part { name: "elm.text";
+				type: TEXTBLOCK;
+				scale: 1;
+				description { state: "default" 0.0;
+					rel1 {
+						relative: 1.0 1.0;
+						to_x: "pad_after_processing";
+						to_y: "pad_t";
+					}
+					rel2 {
+						relative: 0.0 0.0;
+						to_x: "pad_r";
+						to_y: "pad_b";
+					}
+					align: 0.0 0.5;
+					text {
+						style: "popup_processing_style";
+						min: 0 1;
+					}
+				}
+			}
+		}
+	}
+
+	ENTRY_WITH_UPPER_TEXT_DESCRIPTION_LAYOUT(popup_description_with_entry_style, POPUP_TEXT_ENTRY_PADDING_TOP, POPUP_TEXT_ENTRY_PADDING_LEFT, POPUP_TEXT_ENTRY_PADDING_RIGHT)
+}

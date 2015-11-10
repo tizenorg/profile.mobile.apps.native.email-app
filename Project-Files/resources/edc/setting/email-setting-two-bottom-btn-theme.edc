@@ -1,0 +1,107 @@
+/*
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+#define ES_BOTTOM_BAR_MAX_HEIGHT 152
+#define ES_BOTTOM_BAR_BUTTON_MAX_HEIGHT 104
+#define ES_BOTTOM_BAR_HOR_BORDER_PADDING_WIDTH 32
+#define ES_BOTTOM_BAR_CENTER_PADDING_WIDTH 32
+
+group {
+	name: "two_bottom_btn";
+	parts {
+		part {
+			name: "bg";
+			type: RECT;
+			mouse_events: 1;
+			scale: 1;
+			description {
+				state: "default" 0.0;
+				min: 0 ES_BOTTOM_BAR_MAX_HEIGHT;
+				color: 255 255 255 255;
+			}
+		}
+		part {
+			name: "left.padding";
+			type: SPACER;
+			mouse_events: 0;
+			scale: 1;
+			description {
+			state: "default" 0.0;
+				fixed: 1 0;
+				min: ES_BOTTOM_BAR_HOR_BORDER_PADDING_WIDTH 0;
+				max: ES_BOTTOM_BAR_HOR_BORDER_PADDING_WIDTH -1;
+				rel1 { relative: 0.0 0.0; }
+				rel2 { relative: 0.0 1.0; }
+				align: 0.0 0.0;
+			}
+		}
+		part {
+			name: "right.padding";
+			type: SPACER;
+			mouse_events: 0;
+			scale: 1;
+			description {
+				state: "default" 0.0;
+				min: ES_BOTTOM_BAR_HOR_BORDER_PADDING_WIDTH 0;
+				max: ES_BOTTOM_BAR_HOR_BORDER_PADDING_WIDTH -1;
+				fixed: 1 0;
+				rel1 { relative: 1.0 0.0; }
+				rel2 { relative: 1.0 1.0; }
+				align: 1.0 0.0;
+			}
+		}
+		part {
+			name: "center.padding";
+			type: SPACER;
+			mouse_events: 0;
+			scale: 1;
+			description {
+				state: "default" 0.0;
+				fixed: 1 0;
+				min: ES_BOTTOM_BAR_CENTER_PADDING_WIDTH 0;
+				max: ES_BOTTOM_BAR_CENTER_PADDING_WIDTH -1;
+				align: 0.5 0.0;
+			}
+		}
+		part {
+			name: "btn1.swallow";
+			type: SWALLOW;
+			mouse_events: 1;
+			scale: 1;
+			description {
+				state: "default" 0.0;
+				max: -1 ES_BOTTOM_BAR_BUTTON_MAX_HEIGHT;
+				rel1 {relative: 1.0 0.0; to_x: "left.padding";}
+				rel2 { relative: 0.0 1.0; to_x: "center.padding";}
+				align: 0.0 0.5;
+			}
+		}
+		part {
+			name: "btn2.swallow";
+			type: SWALLOW;
+			mouse_events: 1;
+			scale: 1;
+			description {
+				state: "default" 0.0;
+				max: -1 ES_BOTTOM_BAR_BUTTON_MAX_HEIGHT;
+				rel1 { relative: 1.0 0.0; to_x: "center.padding";}
+				rel2 { relative: 0.0 1.0; to_x: "right.padding";}
+				align: 0.0 0.5;
+			}
+		}
+	}
+}

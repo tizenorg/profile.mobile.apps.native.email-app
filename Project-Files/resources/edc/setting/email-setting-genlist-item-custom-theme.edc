@@ -1,0 +1,58 @@
+/*
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+#define ACCOUNT_NAME_ITEM_HEIGHT 144
+#define ACCOUNT_NAME_ITEM_LEFT_ICON_WIDTH 8
+#define ACCOUNT_NAME_ITEM_LEFT_PADDING_WIDTH 24
+#define ACCOUNT_NAME_ITEM_RIGHT_PADDING_WIDTH 32
+#define ACCOUNT_NAME_ITEM_TOP_PADDING 23
+#define ACCOUNT_NAME_ITEM_BOTTOM_PADDING 23
+
+#define ENTRY_TEXT_ITEM_TOP_PADDING 24
+#define ENTRY_TEXT_ITEM_RIGHT_PADDING 32
+#define ENTRY_TEXT_ITEM_LEFT_PADDING 32
+
+/*
+	   ----------------------------------------------------------------
+	   |                 |     | elm.text                       |     |
+	   |elm.swallow.icon | pad |--------------------------------| pad |
+	   |                 |     | elm.text.sub                   |     |
+	   ----------------------------------------------------------------
+*/
+
+DOUBLE_LINE_ACCOUNT_FOLDER_ITEM(gl_accounts_2lines_item, ACCOUNT_NAME_ITEM_LEFT_ICON_WIDTH, ACCOUNT_NAME_ITEM_LEFT_PADDING_WIDTH, ACCOUNT_NAME_ITEM_RIGHT_PADDING_WIDTH, ACCOUNT_NAME_ITEM_TOP_PADDING, ACCOUNT_NAME_ITEM_BOTTOM_PADDING)
+
+/*
+	   ----------------------------------------------------------------
+	   |                 |     |                                 |     |
+	   |elm.swallow.icon | pad | elm.text                        | pad |
+	   |                 |     |                                 |     |
+	   ----------------------------------------------------------------
+*/
+
+SINGLE_LINE_ACCOUNT_FOLDER_ITEM(gl_accounts_1line_item, ACCOUNT_NAME_ITEM_HEIGHT, ACCOUNT_NAME_ITEM_LEFT_ICON_WIDTH, ACCOUNT_NAME_ITEM_LEFT_PADDING_WIDTH, ACCOUNT_NAME_ITEM_RIGHT_PADDING_WIDTH, ACCOUNT_NAME_ITEM_TOP_PADDING, ACCOUNT_NAME_ITEM_BOTTOM_PADDING)
+
+/*
+	   ----------------------------------------------------------------
+	   |  pad  | elm.text                                       | pad |
+	   |--------------------------------------------------------------|
+	   |                          pad                                 |
+	   ----------------------------------------------------------------
+	   |                     elm.swallow.entry                        |
+	   ----------------------------------------------------------------
+*/
+ENTRY_WITH_UPPER_TEXT_DESCRIPTION_LAYOUT(gl_entry_text_item, ENTRY_TEXT_ITEM_TOP_PADDING, ENTRY_TEXT_ITEM_LEFT_PADDING, ENTRY_TEXT_ITEM_RIGHT_PADDING)

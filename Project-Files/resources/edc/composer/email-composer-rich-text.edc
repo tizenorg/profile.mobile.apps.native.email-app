@@ -1,0 +1,475 @@
+/*
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+#define RICHTEXT_TOOLBAR_HEIGHT 96
+
+#define RTTB_BUTTON_LAYOUT_MIN_SIZE 92 92
+
+#define BTN_IMAGE_MIN_MAX_WIDTH  48
+#define BTN_IMAGE_MIN_MAX_HEIGHT 48
+
+#define COLOR_BAR_SIZE 50 10
+#define COLOR_BAR_BOTTOM_PADDING_HEIGHT 3
+
+#define TRANSPARENT_COLOR_VALUE 0 0 0 0
+
+#define BUTTON_TOOGLE_STYLES(style_name, button_image, sizeMinMaxWidth, sizeMinMaxHeight) \
+group { name: "elm/button/base/"style_name; \
+	images { \
+		image: button_image COMP; \
+	} \
+	parts { \
+		part { name : "bg"; \
+			type : SPACER; \
+			scale: 1; \
+			description { \
+				state: "default" 0.0; \
+				min: RTTB_BUTTON_LAYOUT_MIN_SIZE; \
+			} \
+		} \
+		part { name: "button_image"; \
+			type: IMAGE; \
+			scale: 1; \
+			description { state: "default" 0.0; \
+				min: sizeMinMaxWidth sizeMinMaxHeight; \
+				max: sizeMinMaxWidth sizeMinMaxHeight; \
+				aspect: sizeMinMaxWidth/sizeMinMaxHeight sizeMinMaxWidth/sizeMinMaxHeight; \
+				aspect_preference: BOTH; \
+				fixed : 1.0 1.0; \
+				image.normal: button_image; \
+				color :  AO007; \
+			} \
+			description { \
+				state: "pressed" 0.0; \
+				inherit: "default" 0.0; \
+				fixed : 1.0 1.0; \
+				color :  AO007S; \
+			} \
+			description { \
+				state: "unpressed" 0.0; \
+				inherit: "default" 0.0; \
+				fixed : 1.0 1.0; \
+				color :  AO007; \
+			} \
+			description { \
+				state: "disabled" 0.0; \
+				inherit: "default" 0.0; \
+				fixed : 1.0 1.0; \
+				color :  AO007D; \
+			} \
+		} \
+		part { name: "over1"; \
+			type: RECT; \
+			scale: 1; \
+			ignore_flags: ON_HOLD; \
+			description { state: "default" 0.0; \
+				color: TRANSPARENT_COLOR_VALUE; \
+			} \
+		} \
+		part { name: "disabler"; \
+			type: RECT; \
+			scale: 1; \
+			description { state: "default" 0.0; \
+				color: TRANSPARENT_COLOR_VALUE; \
+				visible: 0; \
+			} \
+			description { state: "disabled" 0.0; \
+				inherit: "default" 0.0; \
+				visible: 1; \
+			} \
+		} \
+	} \
+	programs { \
+		program { \
+			signal: "button_press"; \
+			source: ""; \
+			action: STATE_SET "pressed" 0.0; \
+			target: "button_image"; \
+		} \
+		program { name: "button_unpress"; \
+			signal: "button_unpress"; \
+			source: ""; \
+			action: STATE_SET "unpressed" 0.0; \
+			target: "button_image"; \
+		} \
+		program { \
+			signal: "mouse,down,1"; \
+			source: "over1"; \
+			action: SIGNAL_EMIT "elm,action,click" ""; \
+		} \
+		program { name: "button_disable_set"; \
+			action: STATE_SET "disabled" 0.0; \
+			target: "button_image"; \
+		} \
+		program { name: "button_enable_set"; \
+			action: STATE_SET "default" 0.0; \
+			target: "button_image"; \
+		} \
+		program { \
+			signal: "button_disable"; \
+			source: ""; \
+			action: STATE_SET "disabled" 0.0; \
+			target: "disabler"; \
+			after : "button_unpress"; \
+			after : "button_disable_set"; \
+		} \
+		program { \
+			signal: "button_enable"; \
+			source: ""; \
+			action: STATE_SET "default" 0.0; \
+			target: "disabler"; \
+			after : "button_enable_set"; \
+		} \
+	} \
+}
+
+#define BUTTON_STYLES(style_name, button_image, sizeMinMaxWidth, sizeMinMaxHeight) \
+group { name: "elm/button/base/"style_name; \
+	images { \
+		image: button_image COMP; \
+	} \
+	parts { \
+		part { name : "bg"; \
+			type : SPACER; \
+			scale: 1; \
+			description { \
+				state: "default" 0.0; \
+				min: RTTB_BUTTON_LAYOUT_MIN_SIZE; \
+			} \
+	     } \
+		part { name: "button_image"; \
+			type: IMAGE; \
+			scale: 1; \
+			description { state: "default" 0.0; \
+				min: sizeMinMaxWidth sizeMinMaxHeight; \
+				max: sizeMinMaxWidth sizeMinMaxHeight; \
+				aspect: sizeMinMaxWidth/sizeMinMaxHeight sizeMinMaxWidth/sizeMinMaxHeight; \
+				aspect_preference: BOTH; \
+			   	fixed : 1.0 1.0; \
+				image.normal: button_image; \
+				color :  AO007; \
+			} \
+			description { \
+				state: "clicked" 0.0; \
+				inherit: "default" 0.0; \
+				fixed : 1.0 1.0; \
+				color :  AO007S; \
+			} \
+			description { \
+				state: "disabled" 0.0; \
+				inherit: "default" 0.0; \
+				fixed : 1.0 1.0; \
+				color :  AO007D; \
+			} \
+		} \
+		part { name: "over1"; \
+			type: RECT; \
+			scale: 1; \
+			ignore_flags: ON_HOLD; \
+			description { state: "default" 0.0; \
+				color: TRANSPARENT_COLOR_VALUE; \
+			} \
+		} \
+		part { name: "over2"; \
+			type: RECT; \
+			scale: 1; \
+			repeat_events: 1; \
+			description { state: "default" 0.0; \
+				color: TRANSPARENT_COLOR_VALUE; \
+			} \
+		} \
+		part { name: "disabler"; \
+			type: RECT; \
+			scale: 1; \
+			description { state: "default" 0.0; \
+				color: TRANSPARENT_COLOR_VALUE; \
+				visible: 0; \
+			} \
+			description { state: "disabled" 0.0; \
+				inherit: "default" 0.0; \
+				visible: 1; \
+			} \
+		} \
+	} \
+	programs { \
+		program { name: "button_click"; \
+			signal: "mouse,down,1"; \
+			source: "over1"; \
+			action: SIGNAL_EMIT "elm,action,press" ""; \
+			after: "button_click_anim"; \
+		} \
+		program { name: "button_click_anim"; \
+			action: STATE_SET "clicked" 0.0; \
+			target: "button_image"; \
+		} \
+		program { name: "button_unclick"; \
+			signal: "mouse,up,1"; \
+			source: "over2"; \
+			action: SIGNAL_EMIT "elm,action,unpress" ""; \
+			after: "button_unclick_anim"; \
+			after: "button_unclick3"; \
+		} \
+		program { name: "button_unclick3"; \
+			action: SIGNAL_EMIT "elm,action,click" ""; \
+		} \
+		program { name: "button_unclick_anim"; \
+			action: STATE_SET "default" 0.0; \
+			target: "button_image"; \
+		} \
+		program { name: "button_disable_set"; \
+			action: STATE_SET "disabled" 0.0; \
+			target: "button_image"; \
+		} \
+		program { name: "button_enable_set"; \
+			action: STATE_SET "default" 0.0; \
+			target: "button_image"; \
+		} \
+		program { \
+			signal: "button_disable"; \
+			source: ""; \
+			action: STATE_SET "disabled" 0.0; \
+			target: "disabler"; \
+			after : "button_unclick_anim"; \
+			after : "button_disable_set"; \
+		} \
+		program { \
+			signal: "button_enable"; \
+			source: ""; \
+			action: STATE_SET "default" 0.0; \
+			target: "disabler"; \
+			after : "button_enable_set"; \
+		} \
+	} \
+}
+
+#define BUTTON_FONTCOLOR_STYLES(style_name, button_image, sizeMinMaxWidth, sizeMinMaxHeight) \
+group { name: "elm/button/base/"style_name; \
+	images { \
+		image: button_image COMP; \
+	} \
+	parts { \
+		part { name : "bg"; \
+			type : SPACER; \
+			scale: 1; \
+			description { \
+				state: "default" 0.0; \
+				min: RTTB_BUTTON_LAYOUT_MIN_SIZE; \
+			} \
+		} \
+		part { name: "button_image"; \
+			type: IMAGE; \
+			scale: 1; \
+			description { state: "default" 0.0; \
+				min: sizeMinMaxWidth sizeMinMaxHeight; \
+				max: sizeMinMaxWidth sizeMinMaxHeight; \
+				aspect: sizeMinMaxWidth/sizeMinMaxHeight sizeMinMaxWidth/sizeMinMaxHeight; \
+				aspect_preference: BOTH; \
+				fixed : 1.0 1.0; \
+				image.normal: button_image; \
+				color :  AO007; \
+			} \
+			description { \
+				state: "clicked" 0.0; \
+				inherit: "default" 0.0; \
+				fixed : 1.0 1.0; \
+				color :  AO007S; \
+			} \
+			description { \
+				state: "disabled" 0.0; \
+				inherit: "default" 0.0; \
+				fixed : 1.0 1.0; \
+				color :  AO007D; \
+			} \
+		} \
+		part { name : "colored_line_bottom_padding"; \
+			type : SPACER; \
+			scale: 1; \
+			description { \
+				state: "default" 0.0; \
+				min: 0 COLOR_BAR_BOTTOM_PADDING_HEIGHT; \
+				fixed: 0 1; \
+				align: 0.5 1.0; \
+			   	rel1 \
+			   	{ \
+			   		relative: 0.0 1.0; to: "button_image"; \
+			   	} \
+			   	rel2 \
+				{ \
+			   		relative: 1.0 1.0; to: "button_image"; \
+				} \
+			} \
+	     } \
+		 part { name : "colored_line"; \
+			type : SWALLOW; \
+			scale: 1; \
+			description { \
+				state: "default" 0.0; \
+				min: COLOR_BAR_SIZE; \
+				fixed: 1 1; \
+				align: 0.5 1.0; \
+				rel1 \
+				{ \
+					relative: 0.0 0.0; to: "colored_line_bottom_padding"; \
+				} \
+			   	rel2 \
+				{ \
+			   		relative: 1.0 0.0; to: "colored_line_bottom_padding"; \
+				} \
+			} \
+		} \
+		part { name: "over1"; \
+			type: RECT; \
+			scale: 1; \
+			ignore_flags: ON_HOLD; \
+			description { state: "default" 0.0; \
+				color: TRANSPARENT_COLOR_VALUE; \
+			} \
+		} \
+		part { name: "over2"; \
+			type: RECT; \
+			scale: 1; \
+			repeat_events: 1; \
+			description { state: "default" 0.0; \
+				color: TRANSPARENT_COLOR_VALUE; \
+			} \
+		} \
+		part { name: "disabler"; \
+			type: RECT; \
+			scale: 1; \
+			description { state: "default" 0.0; \
+				color: TRANSPARENT_COLOR_VALUE; \
+				visible: 0; \
+			} \
+			description { state: "disabled" 0.0; \
+				inherit: "default" 0.0; \
+				visible: 1; \
+			} \
+		} \
+	} \
+	programs { \
+		program { name: "button_click"; \
+			signal: "mouse,down,1"; \
+			source: "over1"; \
+			action: SIGNAL_EMIT "elm,action,press" ""; \
+			after: "button_click_anim"; \
+		} \
+		program { name: "button_click_anim"; \
+			action: STATE_SET "clicked" 0.0; \
+			target: "button_image"; \
+		} \
+		program { name: "button_unclick"; \
+			signal: "mouse,up,1"; \
+			source: "over2"; \
+			action: SIGNAL_EMIT "elm,action,unpress" ""; \
+			after: "button_unclick_anim"; \
+			after: "button_unclick3"; \
+		 } \
+		 program { name: "button_unclick3"; \
+			action: SIGNAL_EMIT "elm,action,click" ""; \
+         } \
+		 program { name: "button_unclick_anim"; \
+			action: STATE_SET "default" 0.0; \
+			target: "button_image"; \
+		 } \
+		 program { name: "button_disable_set"; \
+			action: STATE_SET "disabled" 0.0; \
+			target: "button_image"; \
+		 } \
+		 program { name: "button_enable_set"; \
+			action: STATE_SET "default" 0.0; \
+			target: "button_image"; \
+		 } \
+		 program { \
+			signal: "button_disable"; \
+			source: ""; \
+			action: STATE_SET "disabled" 0.0; \
+			target: "disabler"; \
+			after : "button_unclick_anim"; \
+			after : "button_disable_set"; \
+		 } \
+		 program { \
+			signal: "button_enable"; \
+			source: ""; \
+			action: STATE_SET "default" 0.0; \
+			target: "disabler"; \
+			after : "button_enable_set"; \
+		} \
+	} \
+}
+
+group
+{
+	name: "ec/rt/layout/base";
+	parts {
+		part { name : "bg";
+			type : RECT;
+			scale: 1;
+			description { 
+				state : "default" 0.0;
+				min: 0 RICHTEXT_TOOLBAR_HEIGHT;
+				color: AO008;
+			}
+		}
+		part { name : "ec/rt/layout/base/toolbar_box";
+			type : SWALLOW;
+			scale: 1;
+		}
+		part { name : "line_top";
+			type : RECT;
+			scale: 1;
+			description {
+				state : "default" 0.0;
+				align : 0.0 0.0;
+				max : -1 1;
+				fixed : 0 1;
+				rel1 {
+					relative: 0.0 0.0;
+				}
+				rel2 {
+					relative: 1.0 0.0;
+					offset: 0 1;
+				}
+				color: AO005;
+			}
+		}
+		part { name : "line_bottom";
+			type : RECT;
+			scale: 1;
+			description {
+				state : "default" 0.0;
+				align : 0.0 0.0;
+				max : -1 1;
+				fixed : 0 1;
+				rel1 {
+					relative: 0.0 1.0;
+					offset: 0 -1;
+				}
+				rel2 {
+					relative: 1.0 1.0;
+				}
+				color: AO005;
+			}
+		}
+	}
+}
+
+BUTTON_STYLES("ec/toolbar/button/fontsize", EC_IMAGE_TOOLBAR_FONTSIZE, BTN_IMAGE_MIN_MAX_WIDTH, BTN_IMAGE_MIN_MAX_HEIGHT);
+BUTTON_TOOGLE_STYLES("ec/toolbar/button/bold", EC_IMAGE_TOOLBAR_BOLD, BTN_IMAGE_MIN_MAX_WIDTH, BTN_IMAGE_MIN_MAX_HEIGHT);
+BUTTON_TOOGLE_STYLES("ec/toolbar/button/italic", EC_IMAGE_TOOLBAR_ITALIC, BTN_IMAGE_MIN_MAX_WIDTH, BTN_IMAGE_MIN_MAX_HEIGHT);
+BUTTON_TOOGLE_STYLES("ec/toolbar/button/underline", EC_IMAGE_TOOLBAR_UNDERLINE, BTN_IMAGE_MIN_MAX_WIDTH, BTN_IMAGE_MIN_MAX_HEIGHT);
+BUTTON_FONTCOLOR_STYLES("ec/toolbar/button/fontcolor", EC_IMAGE_TOOLBAR_FONTCOLOR, BTN_IMAGE_MIN_MAX_WIDTH, BTN_IMAGE_MIN_MAX_HEIGHT);
+BUTTON_FONTCOLOR_STYLES("ec/toolbar/button/fontbgcolor", EC_IMAGE_TOOLBAR_FONTBGCOLOR, BTN_IMAGE_MIN_MAX_WIDTH, BTN_IMAGE_MIN_MAX_HEIGHT);

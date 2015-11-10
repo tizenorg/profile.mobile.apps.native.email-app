@@ -1,0 +1,194 @@
+/*
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+#define ATTACHMENT_MAX_HEIGHT 120
+#define ATTACHMENT_ITEM_MIME_ICON_SIZE 50
+#define ATTACHMENT_ITEM_RIGHT_PADDING_WIDTH 32
+#define ATTACHMENT_ITEM_LEFT_PADDING_WIDTH 32
+#define ATTACHMENT_ITEM_MIME_ICON_RIGHT_PADDING_WIDTH 32
+#define ATTACHMENT_ITEM_DOWNLOAD_ICON_LEFT_PADDING_WIDTH 32
+#define BOX_SNGL_BUTTON_HEIGHT 78
+#define BOX_SNGL_BUTTON_HEIGHT_PADDING 21
+#define TOOLBAR_SNGL_BUTTON_HEIGHT 104
+#define TOOLBAR_SNGL_BUTTON_HEIGHT_PADDING 24
+#define OPEN_EMAIL_PROGRESS_TOP_PADDING 461
+#define OPEN_EMAIL_PROGRESS_SIZE 102 102
+
+group {
+	name: "ev/viewer/base";
+	parts {
+		E_PART_BASE
+		E_PART_PADDING_TOP(OPEN_EMAIL_PROGRESS_TOP_PADDING);
+		E_PART_SWALLOW("ev.swallow.subject",
+			mouse_events: 1;
+			description {
+				state: "default" 0.0;
+				align: 0.5 0.0;
+				fixed: 1 1;
+				rel2.relative: 1.0 0.0;
+			}
+		)
+		E_PART_RECT("ev.content.bg",
+			mouse_events: 1;
+			description {
+				state: "default" 0.0;
+				rel1 {relative: 0 1; to_y: "ev.swallow.subject"; }
+				rel2 {relative: 1 1; }
+				color: 255 255 255 255;
+			}
+		)
+		E_PART_SWALLOW("ev.swallow.content",
+			description {
+				state: "default" 0.0;
+				align: 0.5 0.0;
+				rel1 {relative: 0 0; to: "ev.content.bg"; }
+				rel2 {relative: 1 1; to: "ev.content.bg"; }
+			}
+		)
+		E_PART_SWALLOW("ev.swallow.progress",
+			mouse_events: 1;
+			repeat_events: 1;
+			description {
+				state: "default" 0.0;
+				min: OPEN_EMAIL_PROGRESS_SIZE;
+				max: OPEN_EMAIL_PROGRESS_SIZE;
+				rel1 {relative: 0 1; to_y: "padding.top"; }
+				align: 0.5 0.0;
+			}
+		)
+		E_PART_SWALLOW("ev.swallow.scroller",
+			description {
+				state: "default" 0.0;
+				align: 0.5 0.0;
+				rel1 {relative: 0 0; to: "ev.content.bg"; }
+				rel2 {relative: 1 1; to: "ev.content.bg"; }
+			}
+		)
+		E_PART_SWALLOW("ev.swallow.webview_button",
+			description {
+				state: "default" 0.0;
+				min: 0 1;
+				max: -1 1;
+				fixed: 0 1;
+				align: 0.0 0.0;
+			}
+		)
+	}
+}
+
+group {
+	name: "ev/layout/base";
+	parts {
+		E_PART_BASE
+		E_PART_SWALLOW("ev.swallow.box",
+			description { state: "default" 0.0;
+				fixed: 0 1;
+				rel1 { relative: 0.0 0.0; to: "base"; }
+				rel2 { relative: 1.0 0.0; to: "base"; }
+				align: 0.5 0;
+			}
+		)
+		E_PART_SWALLOW("ev.swallow.webview",
+			description { state: "default" 0.0;
+				rel1 { relative: 0.0 1.0; to: "ev.swallow.box"; }
+				rel2 { relative: 1.0 1.0; to: "base"; }
+				align: 0.5 0;
+			}
+		)
+	}
+}
+
+group {
+	name: "ev/layout/attachment_item";
+	parts {
+		E_PART_BASE_H(ATTACHMENT_MAX_HEIGHT)
+		E_PART_PADDING_LEFT(ATTACHMENT_ITEM_LEFT_PADDING_WIDTH)
+		E_PART_PADDING_RIGHT(ATTACHMENT_ITEM_RIGHT_PADDING_WIDTH)
+		E_PART_SWALLOW("ev.swallow.mime_icon",
+			mouse_events: 1;
+			description { state: "default" 0.0;
+				fixed: 1 1;
+				max: ATTACHMENT_ITEM_MIME_ICON_SIZE ATTACHMENT_ITEM_MIME_ICON_SIZE;
+				rel1 { relative: 1.0 0.0; to_x: "padding.left"; }
+				align: 0.0 0.5;
+			}
+		)
+		E_PART_SPACER("ev.mime_icon.padding.right",
+			description { state: "default" 0.0;
+				fixed: 1 0;
+				min: ATTACHMENT_ITEM_MIME_ICON_RIGHT_PADDING_WIDTH 0;
+				max: ATTACHMENT_ITEM_MIME_ICON_RIGHT_PADDING_WIDTH -1;
+				rel1 { relative: 1 0; to_x: "ev.swallow.mime_icon"; }
+				rel2 { relative: 1 1; to_x: "ev.swallow.mime_icon"; }
+				align: 0 0.5;
+			}
+		)
+		E_PART_SWALLOW("ev.swallow.download_icon",
+			description {
+				state: "default" 0.0;
+				rel1 { relative: 0.0 0.0; to_x: "padding.right"; }
+				rel2 { relative: 0.0 1.0; to_x: "padding.right"; }
+				align: 1.0 0.5;
+			}
+		)
+		E_PART_SPACER("ev.download_icon.padding.left",
+			description { state: "default" 0.0;
+				fixed: 1 0;
+				min: ATTACHMENT_ITEM_DOWNLOAD_ICON_LEFT_PADDING_WIDTH 0;
+				max: ATTACHMENT_ITEM_DOWNLOAD_ICON_LEFT_PADDING_WIDTH -1;
+				rel1 { relative: 0 0; to_x: "ev.swallow.download_icon"; }
+				rel2 { relative: 0 1; to_x: "ev.swallow.download_icon"; }
+				align: 1.0 0.5;
+			}
+		)
+		E_PART_SWALLOW("ev.swallow.content",
+			mouse_events: 1;
+			description {
+				state: "default" 0.0;
+				rel1 { relative: 1.0 0.0; to_x: "ev.mime_icon.padding.right"; }
+				rel2 { relative: 0.0 1.0; to_x: "ev.download_icon.padding.left"; }
+			}
+		)
+		E_PART_SWALLOW("ev.swallow.download_button",
+			description {
+				state: "default" 0.0;
+				rel1 { relative: 0.0 0.0; to_x: "ev.swallow.download_icon"; }
+			}
+		)
+	}
+}
+
+group {
+	name: "ev/layout/attachment_button";
+	parts {
+		E_PART_RECT("event.rect",
+			mouse_events: 1;
+			description { state: "default" 0.0;
+				color: 0 0 0 0;
+			}
+		)
+	}
+	programs {
+		program { name: "click_layout";
+			signal: "mouse,clicked,1";
+			source: "event.rect";
+			action: SIGNAL_EMIT "attachment_button.clicked" "edje";
+		}
+	}
+}
+
+SINGLE_BUTTON_LAYOUT("ev/layout/toolbar_single_button", "ev.swallow.toolbar_single_button", TRANSPARENT, TOOLBAR_SNGL_BUTTON_HEIGHT, TOOLBAR_SNGL_BUTTON_HEIGHT_PADDING)

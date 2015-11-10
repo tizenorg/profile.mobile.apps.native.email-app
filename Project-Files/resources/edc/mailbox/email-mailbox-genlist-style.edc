@@ -1,0 +1,455 @@
+/*
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.ll
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+#define GENLIST_ITEM_HEIGHT 144
+#define PADDING_TOP 22
+#define PADDING_BOTTOM 22
+#define PADDING_LEFT 32
+#define PADDING_RIGHT 32
+#define ACCOUNT_COLORBAR_WIDTH 10
+#define SELECT_CHECKBOX_PART_WIDTH 82 //Checkbox width 50 + Right padding 32
+#define ATTACH_ICON_PADDING_RIGHT 4
+#define ATTACH_ICON_PADDING_LEFT 12
+#define DATA_TEXT_HEIGHT 54
+#define SENDER_TEXT_HEIGHT 43
+#define SUBJECT_TEXT_HEIGHT 43
+#define STAR_ICON_PADING_LEFT 24
+#define STAR_ICON_PADING_RIGHT 11
+#define STAR_ICON_LAYOUT_SIZE 80
+
+#define SENDER_FONT_SIZE 40
+#define SUBJECT_FONT_SIZE 32
+#define DATA_FONT_SIZE 32
+
+#define SENDER_COLOR_READ		ATO002D_HEX
+#define SENDER_COLOR_UNREAD		ATO002_HEX
+#define SENDER_COLOR_READ_PRESS		ATO002DP_HEX
+#define SENDER_COLOR_UNREAD_PRESS	ATO002P_HEX
+
+#define SUBJECT_COLOR_READ		ATO003D_HEX
+#define SUBJECT_COLOR_UNREAD		ATO003_HEX
+#define SUBJECT_COLOR_READ_PRESS	ATO003DP_HEX
+#define SUBJECT_COLOR_UNREAD_PRESS	ATO003P_HEX
+
+#define DATA_COLOR_READ			ATO004D_HEX
+#define DATA_COLOR_UNREAD		ATO004_HEX
+#define DATA_COLOR_READ_PRESS		ATO004P_HEX
+#define DATA_COLOR_UNREAD_PRESS		ATO004P_HEX
+
+#define MATCH_TAG_COLOR_SENDER		ATO007_HEX
+#define MATCH_TAG_COLOR_SUBJECT		ATO008_HEX
+
+
+group { name: "elm/genlist/item/email_mailbox/default";
+
+	data.item: "texts" "email.data.text email.sender.text email.subject.text";
+	data.item: "contents" "account_colorbar email.star.icon email.status.icon email.attachment.icon select_checkbox_icon";
+
+	data.item: "banded_bg_area" "elm.swallow.bg";
+	data.item: "banded_bg_color" "255 255 255 255";
+
+	styles{
+		MAILBOX_TEXT_STYLE("text_sender_read", SENDER_FONT_SIZE, SENDER_COLOR_READ, MATCH_TAG_COLOR_SENDER)
+		MAILBOX_TEXT_STYLE("text_sender_read_press", SENDER_FONT_SIZE, SENDER_COLOR_READ_PRESS, MATCH_TAG_COLOR_SENDER)
+		MAILBOX_TEXT_STYLE("text_sender_unread", SENDER_FONT_SIZE, SENDER_COLOR_UNREAD, MATCH_TAG_COLOR_SENDER)
+		MAILBOX_TEXT_STYLE("text_sender_unread_press", SENDER_FONT_SIZE, SENDER_COLOR_UNREAD_PRESS, MATCH_TAG_COLOR_SENDER)
+
+		MAILBOX_TEXT_STYLE("text_subject_read", SUBJECT_FONT_SIZE, SUBJECT_COLOR_READ, MATCH_TAG_COLOR_SUBJECT)
+		MAILBOX_TEXT_STYLE("text_subject_read_press", SUBJECT_FONT_SIZE, SUBJECT_COLOR_READ_PRESS, MATCH_TAG_COLOR_SUBJECT)
+		MAILBOX_TEXT_STYLE("text_subject_unread", SUBJECT_FONT_SIZE, SUBJECT_COLOR_UNREAD, MATCH_TAG_COLOR_SUBJECT)
+		MAILBOX_TEXT_STYLE("text_subject_unread_press", SUBJECT_FONT_SIZE, SUBJECT_COLOR_UNREAD_PRESS, MATCH_TAG_COLOR_SUBJECT)
+
+		MAILBOX_TEXT_STYLE("text_date_read", DATA_FONT_SIZE,  DATA_COLOR_READ, DATA_COLOR_READ)
+		MAILBOX_TEXT_STYLE("text_date_read_press", DATA_FONT_SIZE,  DATA_COLOR_READ_PRESS, DATA_COLOR_READ_PRESS)
+		MAILBOX_TEXT_STYLE("text_date_unread", DATA_FONT_SIZE, DATA_COLOR_UNREAD, DATA_COLOR_UNREAD)
+		MAILBOX_TEXT_STYLE("text_date_unread_press", DATA_FONT_SIZE, DATA_COLOR_UNREAD_PRESS, DATA_COLOR_UNREAD_PRESS)
+	}
+
+	parts {
+
+		PART(SWALLOW, "elm.swallow.bg", \
+			description { state: "default" 0.0; \
+			} \
+		)
+
+		PART(RECT, "base", \
+			description { state: "default" 0.0; \
+				min: 0 GENLIST_ITEM_HEIGHT; \
+				color: 0 0 0 0; \
+			} \
+		)
+
+		PART(SPACER, "elm.padding.top",
+			DSC_FROM_T("default" 0.0,
+				min: 0 PADDING_TOP;
+				max: -1 PADDING_TOP;
+			)
+		)
+
+		PART(SPACER, "elm.padding.bottom",
+			DSC_FROM_B("default" 0.0,
+				min: 0 PADDING_BOTTOM;
+		    		max: -1 PADDING_BOTTOM;
+		 	)
+		)
+
+		PART(SWALLOW, "account_colorbar",
+		 	DSC_FROM_L("default" 0.0,
+				min: ACCOUNT_COLORBAR_WIDTH 0;
+				max: ACCOUNT_COLORBAR_WIDTH -1;
+			)
+		)
+
+		PART(SPACER, "elm.padding.left",
+		 	DSC_FROM_L("default" 0.0,
+				min: PADDING_LEFT 0;
+		    		max: PADDING_LEFT -1;
+		 	)
+		)
+
+		PART(SPACER, "elm.padding.right",
+			DSC_FROM_R("default" 0.0,
+				min: PADDING_RIGHT 0;
+				max: PADDING_RIGHT -1;
+			)
+		)
+
+
+		PART(SWALLOW, "email.status.icon",
+			DSC_LTB("default" 0.0, "elm.padding.left", "elm.padding.top", "email.subject.text",
+			)
+		)
+
+		PART(SWALLOW, "select_checkbox_icon",
+			DSC_FROM_R("default" 0.0,
+				min: 0 0;
+				max: SELECT_CHECKBOX_PART_WIDTH -1;
+			)
+		)
+
+		PART(SPACER, "select_checkbox.pading.left",
+			DSC_R("default" 0.0, "select_checkbox_icon",
+				min: PADDING_LEFT 0;
+				max: PADDING_LEFT -1;
+			)
+		)
+
+		PART(SWALLOW, "email.attachment.icon",
+			DSC_RTB("default" 0.0, "attachment.icon.right.padding", "elm.padding.top", "email.subject.text",
+			)
+		)
+
+		PART(SWALLOW, "attachment.icon.right.padding",
+			DSC_RTB("default" 0.0, "email.data.text", "elm.padding.top", "email.subject.text",
+				min: ATTACH_ICON_PADDING_RIGHT DATA_TEXT_HEIGHT;
+				max: ATTACH_ICON_PADDING_RIGHT -1;
+			)
+		)
+
+
+		PART(SPACER, "attachment.icon.left.padding",
+			DSC_RTB("default" 0.0, "email.attachment.icon", "elm.padding.top", "email.subject.text",
+				min: ATTACH_ICON_PADDING_LEFT DATA_TEXT_HEIGHT;
+				max: ATTACH_ICON_PADDING_LEFT -1;
+			)
+		)
+
+		PART(TEXTBLOCK, "email.sender.text",
+			DSC_LRTB("default" 0.0, "email.status.icon", "attachment.icon.left.padding", "elm.padding.top","email.subject.text",
+				text {
+					style: "text_sender_unread";
+					align: 0.0 0.5;
+					min: 0 1;
+					max: 0 1;
+			    	}
+				min: 0 SENDER_TEXT_HEIGHT;
+		 	)
+			description { state: "read" 0.0;
+		    		inherit: "default" 0.0;
+		    		text {
+					style: "text_sender_read";
+			    	}
+			}
+
+			description { state: "read_pressed" 0.0;
+		    		inherit: "default" 0.0;
+		    		text {
+					style: "text_sender_read_press";
+			    	}
+		 	}
+			description { state: "unread_pressed" 0.0;
+		    		inherit: "default" 0.0;
+				text {
+					style: "text_sender_unread_press";
+			    	}
+
+		 	}
+		)
+
+		PART(TEXTBLOCK, "email.data.text",
+			DSC_RTB("default" 0.0, "select_checkbox.pading.left", "elm.padding.top", "email.subject.text",
+				text {
+					style: "text_date_unread";
+					align: 1.0 0.5;
+					min: 1 1;
+					max: 1 1;
+					ellipsis: -1;
+			    	}
+				min: 0 DATA_TEXT_HEIGHT;
+		 	)
+
+			description { state: "read" 0.0;
+		    		inherit: "default" 0.0;
+				text {
+					style: "text_date_read";
+			    	}
+			}
+
+			description { state: "read_pressed" 0.0;
+		    		inherit: "default" 0.0;
+		    		text {
+					style: "text_date_read_press";
+			    	}
+		 	}
+			description { state: "unread_pressed" 0.0;
+		    		inherit: "default" 0.0;
+		    		text {
+					style: "text_date_unread_press";
+			    	}
+		 	}
+		)
+
+		PART(TEXTBLOCK, "email.subject.text",
+			DSC_LRB("default" 0.0, "elm.padding.left", "star.icon.padding.left", "elm.padding.bottom",
+				text {
+					style: "text_subject_unread";
+					align: 0.0 0.5;
+					min: 0 1;
+					max: 0 1;
+			    	}
+				min: 0 SUBJECT_TEXT_HEIGHT;
+		 	)
+
+			description { state: "read" 0.0;
+		    		inherit: "default" 0.0;
+		    		text {
+					style: "text_subject_read";
+			    	}
+			}
+
+			description { state: "read_pressed" 0.0;
+		    		inherit: "default" 0.0;
+		    		text {
+					style: "text_subject_read_press";
+			    	}
+		 	}
+
+			description { state: "unread_pressed" 0.0;
+		    		inherit: "default" 0.0;
+		    		text {
+					style: "text_subject_unread_press";
+			    	}
+		 	}
+		)
+
+
+		PART(SPACER, "star.icon.padding.left",
+			DSC_R("default" 0.0, "email.star.icon",
+				min: STAR_ICON_PADING_LEFT 0;
+				max: STAR_ICON_PADING_LEFT -1;
+			)
+		)
+
+		PART(SPACER, "star.icon.padding.right",
+			DSC_R("default" 0.0, "select_checkbox_icon",
+				min: STAR_ICON_PADING_RIGHT 0;
+				max: STAR_ICON_PADING_RIGHT -1;
+			)
+		)
+
+		PART(SWALLOW, "email.star.icon",
+			DSC_R("default" 0.0, "star.icon.padding.right",
+				min: STAR_ICON_LAYOUT_SIZE STAR_ICON_LAYOUT_SIZE;
+				max: STAR_ICON_LAYOUT_SIZE STAR_ICON_LAYOUT_SIZE;
+				align: 1.0 1.0;
+			)
+		)
+
+	}
+
+	programs{
+		program {
+			name: "play_sound";
+			signal: "elm,state,clicked";
+			source: "elm";
+			script {
+				run_program(PROGRAM:"touch_sound");
+			}
+		}
+		program {
+			name: "touch_sound";
+			action: RUN_PLUGIN "touch_sound";
+		}
+		program {
+			name: "check_mail_as_read";
+			signal: "check_mail_as_read";
+			source: "mailbox";
+			script {
+				set_state(PART:"email.subject.text", "read", 0.0);
+				set_state(PART:"email.data.text", "read", 0.0);
+				set_state(PART:"email.sender.text", "read", 0.0);
+			}
+		}
+
+		program {
+			name: "check_mail_as_unread";
+			signal: "check_mail_as_unread";
+			source: "mailbox";
+			script {
+				set_state(PART:"email.subject.text", "default", 0.0);
+				set_state(PART:"email.data.text", "default", 0.0);
+				set_state(PART:"email.sender.text", "default", 0.0);
+			}
+		}
+		program {
+			name: "highlight_unread_mail";
+			signal: "highlight_unread_mail";
+			source: "mailbox";
+			script {
+				set_state(PART:"email.subject.text", "unread_pressed", 0.0);
+				set_state(PART:"email.data.text", "unread_pressed", 0.0);
+				set_state(PART:"email.sender.text", "unread_pressed", 0.0);
+			}
+		}
+		program {
+			name: "highlight_read_mail";
+			signal: "highlight_read_mail";
+			source: "mailbox";
+			script {
+				set_state(PART:"email.subject.text", "read_pressed", 0.0);
+				set_state(PART:"email.data.text", "read_pressed", 0.0);
+				set_state(PART:"email.sender.text", "read_pressed", 0.0);
+			}
+		}
+	}
+}
+
+#define STAR_ICON_PADDING_LEFT 15
+#define STAR_ICON_PADDING_RIGHT 15
+#define STAR_ICON_PADDING_TOP 15
+#define STAR_ICON_PADDING_BOTTOM 15
+#define STAR_ICON_SIZE 50
+
+	group {
+		name: "email/layout/star.icon";
+		parts {
+			PART(RECT, "bg",
+				repeat_events: 0;\
+				description { state: "default" 0.0;
+					color: 0 0 0 0;
+				}
+	  		)
+
+			PART(SPACER, "elm.padding.left",
+				DSC_FROM_L("default" 0.0,
+					min: STAR_ICON_PADDING_LEFT 0;
+					max: STAR_ICON_PADDING_LEFT -1;
+				)
+			)
+
+			PART(SPACER, "elm.padding.right",
+				DSC_FROM_R("default" 0.0,
+					min: STAR_ICON_PADDING_RIGHT 0;
+					max: STAR_ICON_PADDING_RIGHT -1;
+				)
+			)
+
+			PART(SPACER, "elm.padding.top",
+				DSC_FROM_T("default" 0.0,
+					min: 0 STAR_ICON_PADDING_TOP;
+					max: -1 STAR_ICON_PADDING_TOP;
+				)
+			)
+
+			PART(SPACER, "elm.padding.bottom",
+				DSC_FROM_B("default" 0.0,
+					min: 0 STAR_ICON_PADDING_BOTTOM;
+					max: -1 STAR_ICON_PADDING_BOTTOM;
+				)
+			)
+
+			PART(SWALLOW, "elm.swallow.content",
+				DSC_LR("default" 0.0, "elm.padding.left", "elm.padding.right",
+					min: STAR_ICON_SIZE STAR_ICON_SIZE;
+					max: STAR_ICON_SIZE STAR_ICON_SIZE;
+				)
+			)
+		}
+	}
+
+#define SELECT_ICON_PADDING_LEFT 0
+#define SELECT_ICON_PADDING_RIGHT 32
+#define SELECT_ICON_PADDING_TOP 47
+#define SELECT_ICON_PADDING_BOTTOM 47
+#define SELECT_ICON_SIZE 50
+
+	group {
+		name: "email/layout/select.icon";
+		parts {
+			PART(RECT, "bg",
+				repeat_events: 0;\
+				description { state: "default" 0.0;
+					color: 0 0 0 0;
+				}
+	  		)
+
+			PART(SPACER, "elm.padding.left",
+				DSC_FROM_L("default" 0.0,
+					min: SELECT_ICON_PADDING_LEFT 0;
+					max: SELECT_ICON_PADDING_LEFT -1;
+				)
+			)
+
+			PART(SPACER, "elm.padding.right",
+				DSC_FROM_R("default" 0.0,
+					min: SELECT_ICON_PADDING_RIGHT 0;
+					max: SELECT_ICON_PADDING_RIGHT -1;
+				)
+			)
+
+			PART(SPACER, "elm.padding.top",
+				DSC_FROM_T("default" 0.0,
+					min: 0 SELECT_ICON_PADDING_TOP;
+					max: -1 SELECT_ICON_PADDING_TOP;
+				)
+			)
+
+			PART(SPACER, "elm.padding.bottom",
+				DSC_FROM_B("default" 0.0,
+					min: 0 SELECT_ICON_PADDING_BOTTOM;
+					max: -1 SELECT_ICON_PADDING_BOTTOM;
+				)
+			)
+
+			PART(SWALLOW, "elm.swallow.content",
+				DSC_LR("default" 0.0, "elm.padding.left", "elm.padding.right",
+					min: SELECT_ICON_SIZE STAR_ICON_SIZE;
+					max: SELECT_ICON_SIZE STAR_ICON_SIZE;
+				)
+			)
+		}
+	}
