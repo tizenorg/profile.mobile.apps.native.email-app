@@ -1,0 +1,1062 @@
+msgid "IDS_EMAIL_POP_FAILED_TO_MOVE"
+msgstr "Mistókst að færa."
+
+msgid "IDS_ST_OPT_DEFAULT_RINGTONE"
+msgstr "Sjálfgefnir hringitónar"
+
+msgid "IDS_EMAIL_BODY_MAXIMUM_NUMBER_OF_EMAIL_ACCOUNTS_REACHED"
+msgstr "Hámarksfjölda pósthólfa hefur verið náð."
+
+msgid "IDS_ST_OPT_EVERY_PD_HOURS_ABB2"
+msgstr "Á %d klst. fresti"
+
+msgid "IDS_ST_OPT_EVERY_1_HOUR"
+msgstr "Á 1 klst. fr."
+
+msgid "IDS_TPLATFORM_ACBUTTON_DONE_ABB"
+msgstr "LOKIÐ"
+
+msgid "IDS_TPLATFORM_ACBUTTON_CANCEL_ABB"
+msgstr "HÆTTA VIÐ"
+
+msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
+msgstr "EYÐA"
+
+msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
+msgstr "Wi-Fi tenging nauðsynleg. Tengdu við Wi-Fi netkerfi og reyndu aftur."
+
+msgid "IDS_EMAIL_POP_MOBILE_DATA_IS_DISABLED_CONNECT_TO_WI_FI_NETWORK_INSTEAD_OR_ENABLE_MOBILE_DATA_AND_TRY_AGAIN"
+msgstr "Slökkt á farsímagögnum. Tengdu við Wi-Fit net í staðinn, eða kveiktu á farsímagögnum og reyndu aftur."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_CANCELLED"
+msgstr "Það var hætt við niðurhal."
+
+msgid "IDS_EMAIL_BODY_TODAY"
+msgstr "Í dag"
+
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Engin atriði til birtingar."
+
+msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
+msgstr "Aðeins er hægt að sækja http- og https-vefslóðir."
+
+msgid "IDS_BR_OPT_WEB_SEARCH"
+msgstr "Leit á vefnum"
+
+msgid "IDS_ASEML_POP_THE_SECURITY_POLICY_PREVENTS_THE_USE_OF_POP_AND_IMAP_EMAIL_PROTOCOLS"
+msgstr "Öryggisstefnan kemur í veg fyrir notkun POP- og IMAP-samskiptareglna fyrir tölvupóst."
+
+msgid "IDS_ASEML_HEADER_UNABLE_TO_USE_FUNCTION_ABB"
+msgstr "Ekki hægt að nota eiginleika"
+
+msgid "IDS_EMAIL_TPOP_SYNC_EMAIL_DISABLED_FOR_PS"
+msgstr "Samstilling tölvupósts er óvirk fyrir %s."
+
+msgid "IDS_EMAIL_TPOP_SIGNATURE_SAVED"
+msgstr "Undirskrift vistuð."
+
+msgid "IDS_EMAIL_TPOP_SERVER_ERROR_OCCURRED_ABB"
+msgstr "Villa kom upp á netþjóni."
+
+msgid "IDS_EMAIL_TPOP_SENDING_FAILED"
+msgstr "Sending mistókst."
+
+msgid "IDS_EMAIL_TPOP_SENDING_EMAIL_ING"
+msgstr "Sendi tölvupóst..."
+
+msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
+msgstr "Sendi tölvupóst..."
+
+msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
+msgstr "Breyti stærð skráa..."
+
+msgid "IDS_EMAIL_TPOP_RECIPIENT_ALREADY_EXISTS"
+msgstr "Viðtakandi er þegar til."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAIL_ADDRESSES_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "%d netföng fjarlægð úr forgangssendendum."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MOVED_TO_SELECTED_FOLDER"
+msgstr "%d skeyti færð í valda möppu."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MARKED_AS_UNREAD"
+msgstr "%d skeyti merkt sem ólesin."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MARKED_AS_READ"
+msgstr "%d skeyti merkt sem lesin."
+
+msgid "IDS_EMAIL_TPOP_P1SD_EMAILS_MOVED_TO_P2SS"
+msgstr "%1$d skeyti færð í %2$s."
+
+msgid "IDS_EMAIL_TPOP_NEW_EMAIL_RECEIVED_ABB"
+msgstr "Nýtt skeyti móttekið."
+
+msgid "IDS_EMAIL_TPOP_NETWORK_NOT_AVAILABLE_EMAIL_WILL_BE_SENT_WHEN_CONNECTED_TO_NETWORK"
+msgstr "Ekkert net er til staðar. Tölvupósturinn verður sendur þegar þú hefur tengst neti."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_REGISTERED_DEVICES_REACHED_FOR_THIS_ACCOUNT_DEREGISTER_SOME_DEVICES_AND_TRY_AGAIN"
+msgstr "Hámarksfjölda skráðra tækja hefur verið náð fyrir þennan reikning. Afskráðu einhver tæki og reyndu aftur."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_RECIPIENTS_HPD_REACHED"
+msgstr "Hámarksfjölda viðtakenda (%d) hefur verið náð."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
+msgstr "Hámarksfjölda stafa hefur verið náð."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Hámarksfjölda stafa (%d) hefur verið náð."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
+msgstr "Hámarksstærð skeytis (%d KB) hefur verið náð."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
+msgstr "Hámarksstærð skilaboða hefur verið náð. Aðeins fyrstu %d KB verður deilt."
+
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Hleð..."
+
+msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
+msgstr "Ógilt netfang fært inn."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_NAME_ALREADY_IN_USE_ABB"
+msgstr "Möppuheitið er þegar í notkun."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_DELETED_ABB"
+msgstr "Möppu eytt."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_CREATED"
+msgstr "Mappa búin til."
+
+msgid "IDS_EMAIL_TPOP_FILE_SAVED_TO_DOWNLOADS"
+msgstr "Skrá var vistuð í „Niðurhal“."
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_SIGN_IN_TO_PS"
+msgstr "Innskráning á %s mistókst."
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_SAVE_EMAIL"
+msgstr "Mistókst að vista tölvupóst."
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_CONNECT_TO_NETWORK"
+msgstr "Mistókst að tengjast neti."
+
+msgid "IDS_EMAIL_TPOP_ENTER_AT_LEAST_ONE_VALID_RECIPIENT"
+msgstr "Færðu inn minnst einn gildan viðtakanda."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_SENT"
+msgstr "Tölvupóstur sendur."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_SAVED_IN_DRAFTS"
+msgstr "Tölvupóstur var vistaður í „Drög“."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_MARKED_AS_UNREAD"
+msgstr "Skeyti merkt sem ólesið."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "Netfang fjarlægt úr „Forgangssendendur“."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ALREADY_ADDED_TO_PRIORITY_SENDERS"
+msgstr "Netfangi hefur þegar verið bætt við forgangssendendur."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ADDED_TO_PRIORITY_SENDERS"
+msgstr "Netfangi bætt við „Forgangssendendur“."
+
+msgid "IDS_EMAIL_TPOP_DELETING_FOLDER_ING"
+msgstr "Möppu eytt..."
+
+msgid "IDS_EMAIL_TPOP_CREATING_FOLDER_ING"
+msgstr "Bý til möppu..."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_SELECTED_FOLDER"
+msgstr "1 skeyti fært í valda möppu."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_PS"
+msgstr "1 skeyti fært í %s."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MARKED_AS_UNREAD"
+msgstr "1 skeyti merkt sem ólesið."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MARKED_AS_READ"
+msgstr "1 skeyti merkt sem lesið."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "1 netfang fjarlægt úr forgangssendendum."
+
+msgid "IDS_EMAIL_TMBODY_SYNC_SETTINGS"
+msgstr "Samstillingar"
+
+msgid "IDS_EMAIL_TMBODY_DEFAULT_SENDING_ACCOUNT"
+msgstr "Sjálfgefið sendingarpósthólf"
+
+msgid "IDS_EMAIL_SBODY_SENT_FROM_MY_SAMSUNG_DEVICE"
+msgstr "Sent úr Samsung-tækinu mínu."
+
+msgid "IDS_EMAIL_SBODY_RECEIVE_STATUS_BAR_NOTIFICATIONS_WHEN_EMAILS_ARRIVE"
+msgstr "Fá tilkynningar á stöðustiku þegar tölvupóstur berst."
+
+msgid "IDS_EMAIL_SBODY_NO_SUBJECT_M_NOUN"
+msgstr "Ekkert efni"
+
+msgid "IDS_EMAIL_SBODY_NO_RECIPIENTS_M_NOUN"
+msgstr "Engir viðtakendur"
+
+msgid "IDS_EMAIL_POP_YOU_MUST_DOWNLOAD_THE_MESSAGE_BEFORE_YOU_CAN_DOWNLOAD_THE_ATTACHMENT"
+msgstr "Þú þarft að sækja skeytið áður en þú getur sótt viðhengið."
+
+msgid "IDS_EMAIL_POP_YOU_HAVE_NOT_YET_CREATED_AN_EMAIL_ACCOUNT_CREATE_AN_EMAIL_ACCOUNT_AND_TRY_AGAIN"
+msgstr "Þú hefur enn ekki stofnað tölvupóstreikning. Stofnaðu tölvupóstreikning og reyndu aftur."
+
+msgid "IDS_EMAIL_POP_YOU_CAN_ONLY_LOG_IN_ONCE_EVERY_15_MINUTES"
+msgstr "Þú getur aðeins skráð þig inn einu sinni á 15 mínútna fresti."
+
+msgid "IDS_EMAIL_POP_YOUR_PASSWORD_CONTAINS_SPACES_MANY_SERVERS_DO_NOT_SUPPORT_PASSWORDS_WITH_SPACES"
+msgstr "Lykilorðið þitt inniheldur bil. Margir netþjónar styðja ekki lykilorð með bilum."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
+msgstr "Ekki er hægt að færa skeyti úr mörgum pósthólfum í einu."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Ekki tókst að tengjast netþjóni."
+
+msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
+msgstr "Stofnaðu tölvupóstreikning til að skrifa tölvupóst."
+
+msgid "IDS_EMAIL_POP_THIS_FILE_TYPE_IS_NOT_SUPPORTED_BY_ANY_APPLICATION_ON_YOUR_DEVICE"
+msgstr "Ekkert forrit í tækinu þínu styður þessa skráargerð."
+
+msgid "IDS_EMAIL_POP_THIS_EMAIL_WILL_BE_DELETED"
+msgstr "Þessum tölvupósti verður eytt."
+
+msgid "IDS_EMAIL_POP_THIS_EMAIL_HAS_BEEN_DELETED_FROM_THE_SERVER"
+msgstr "Þessum tölvupósti var eytt af þjóninum."
+
+msgid "IDS_EMAIL_POP_THE_VCARD_HAS_NOT_BEEN_CREATED_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "vCard-skráin var ekki búin til. Óþekkt villa kom upp."
+
+msgid "IDS_EMAIL_POP_THE_SELECTED_DATA_COULD_NOT_BE_FOUND"
+msgstr "Valin gögn finnast ekki."
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_TOTAL_SIZE_OF_ATTACHMENTS_HPS_MB_HAS_BEEN_EXCEEDED_REMOVE_SOME_FILES_AND_TRY_AGAIN"
+msgstr "Hámarksheildarstærð viðhengja (%s MB) hefur verið náð. Fjarlægðu einhverjar skrár og reyndu aftur."
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_NUMBER_OF_ATTACHMENTS_HPD_HAS_BEEN_REACHED"
+msgstr "Hámarksfjölda viðhengja (%d) hefur verið náð."
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_ATTACHMENT_SIZE_ALLOWED_BY_THE_CURRENT_EXCHANGE_SERVER_POLICY_HAS_BEEN_EXCEEDED"
+msgstr "Hámarksstærð viðhengis sem núverandi stefna Exchange-þjónsins leyfir hefur verið náð."
+
+msgid "IDS_EMAIL_POP_THE_CURRENT_EXCHANGE_SERVER_POLICY_PREVENTS_ATTACHMENTS_FROM_BEING_DOWNLOADED_TO_MOBILE_DEVICES"
+msgstr "Núverandi stefna Exchange-þjónsins kemur í veg fyrir að viðhengi séu sótt í fartæki."
+
+msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE_GO_TO_SETTINGS_POWER_AND_STORAGE_STORAGE_THEN_DELETE_SOME_FILES_AND_TRY_AGAIN"
+msgstr "Ekki er nægt rými í geymslu tækisins. Opnaðu Stillingar > Orka og geymsla > Geymsla til að eyða einhverjum skrám og reyndu svo aftur."
+
+msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE"
+msgstr "Ekki er nægt rými í geymslu tækisins."
+
+msgid "IDS_EMAIL_POP_SERVER_NOT_AVAILABLE"
+msgstr "Netþjónn ekki tiltækur."
+
+msgid "IDS_EMAIL_POP_SERVER_INFORMATION_QUERY_FAILED_ENTER_SERVER_INFORMATION_MANUALLY"
+msgstr "Fyrirspurn um upplýsingar netþjóns mistókst. Sláðu inn upplýsingar netþjóns handvirkt."
+
+msgid "IDS_EMAIL_POP_SECURITY_POLICY_RESTRICTS_USE_OF_THIS_ACCOUNT"
+msgstr "Öryggisstefna takmarkar notkun þessa pósthólfs."
+
+msgid "IDS_EMAIL_POP_SAVING_EMAIL_ING"
+msgstr "Vista tölvupóst..."
+
+msgid "IDS_EMAIL_POP_SAVE_YOUR_CHANGES_OR_DISCARD_THEM_Q"
+msgstr "Hvort viltu vista breytingarnar eða fleygja þeim?"
+
+msgid "IDS_EMAIL_POP_REMOVING_ACCOUNT_ING"
+msgstr "Fjarlægi áskrift..."
+
+msgid "IDS_EMAIL_POP_PLEASE_FILL_ALL_THE_MANDATORY_FIELDS"
+msgstr "Fylltu út alla nauðsynlega reiti."
+
+msgid "IDS_EMAIL_POP_ONLY_PART_OF_THE_MESSAGE_HAS_BEEN_DOWNLOADED_IF_YOU_CONTINUE_THE_REST_OF_THE_MESSAGE_MAY_BE_LOST"
+msgstr "Aðeins hluti skeytisins var sóttur. Ef þú heldur áfram gæti afgangur skeytisins glatast."
+
+msgid "IDS_EMAIL_POP_NO_RESPONSE_HAS_BEEN_RECEIVED_FROM_THE_SERVER_TRY_AGAIN_LATER"
+msgstr "Ekkert svar barst frá netþjóninum. Reyndu aftur síðar."
+
+msgid "IDS_EMAIL_POP_NETWORK_BUSY"
+msgstr "Það næst ekki samband við kerfið."
+
+msgid "IDS_EMAIL_POP_INVALID_OR_INACCESSIBLE_CERTIFICATE"
+msgstr "Ógilt eða óaðgengilegt vottorð."
+
+msgid "IDS_EMAIL_POP_INITIALISING_APPLICATION_ING"
+msgstr "Búnaður frumstilltur..."
+
+msgid "IDS_EMAIL_POP_HOST_NOT_FOUND"
+msgstr "Hýsill fannst ekki."
+
+msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_OR_NETWORK_NOT_AVAILABLE"
+msgstr "Kveikt er á flugstillingu eða kerfið ekki tiltækt."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_START_EMAIL_APPLICATION"
+msgstr "Ræsing tölvupóstforrits mistókst."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DOWNLOAD_ATTACHMENT_CHECK_YOUR_NETWORK_CONNECTION_AND_TRY_AGAIN"
+msgstr "Mistókst að sækja viðhengi. Athugaðu nettenginguna og reyndu aftur."
+
+msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
+msgstr "Pósti eytt af þjóni."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Það er ekki hægt að hlaða niður."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Verið er að hala niður..."
+
+msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
+msgstr "Ef þú eyðir þessum reikningi er öllum skeytum, tengiliðum og öðrum gögnum reikningsins einnig eytt úr tækinu. Pikkaðu á „Eyða“ til að halda áfram."
+
+msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
+msgstr "Býr til vCard..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Tenging brást."
+
+msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
+msgstr "Skrá með þetta heiti hefur þegar verið hengd við."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Sannprófun mistókst."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Óþekkt villa kom upp"
+
+msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
+msgstr "Öll viðhengi í þessum tölvupósti verða sótt áður en hann er framsendur."
+
+msgid "IDS_EMAIL_OPT_VIEW_CONTACT_DETAILS_ABB"
+msgstr "Skoða samskiptaupplýsingar"
+
+msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
+msgstr "Uppfæra tengilið"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Samnýta"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Stillingar"
+
+msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
+msgstr "Senda mér"
+
+msgid "IDS_EMAIL_OPT_SEND"
+msgstr "Senda"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Velja allt"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Velja"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Leita"
+
+msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
+msgstr "Vista í drögum"
+
+msgid "IDS_EMAIL_OPT_REPLY_ALL"
+msgstr "Svara öllum"
+
+msgid "IDS_EMAIL_OPT_REPLY"
+msgstr "Svara"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_SPAM_ABB"
+msgstr "Fjarlægja úr ruslefni"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
+msgstr "Fjarlægja úr „Forgangssendendur“"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Fjarlægja"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Endurnýja"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Líma"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Tökustærð"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
+msgstr "Færa í aðalviðtakanda (Til)"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_CC"
+msgstr "Færa í Af."
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_BCC_ABB"
+msgstr "Færa í falið afrit"
+
+msgid "IDS_EMAIL_OPT_MOVE"
+msgstr "Færa"
+
+msgid "IDS_EMAIL_OPT_MEDIUM_M_IMAGE_SIZE"
+msgstr "Miðlungs"
+
+msgid "IDS_EMAIL_OPT_MARK_AS_UNREAD_ABB"
+msgstr "Merkja sem ólesið"
+
+msgid "IDS_EMAIL_OPT_MARK_AS_READ_ABB"
+msgstr "Merkja sem lesið"
+
+msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
+msgstr "Lágur"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Framsenda"
+
+msgid "IDS_EMAIL_OPT_EDIT"
+msgstr "Breyta"
+
+msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
+msgstr "Eyða möppu"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Eyða"
+
+msgid "IDS_EMAIL_OPT_CUT"
+msgstr "Klippa"
+
+msgid "IDS_EMAIL_OPT_CREATE_FOLDER_ABB2"
+msgstr "Búa til möppu"
+
+msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
+msgstr "Nýr tengiliður"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Afrita"
+
+msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
+msgstr "Skrifa tölvupóst"
+
+msgid "IDS_EMAIL_OPT_CLIPBOARD"
+msgstr "Klippiborð"
+
+msgid "IDS_EMAIL_OPT_CANCEL_SENDING_ABB"
+msgstr "Hætta við sendingu"
+
+msgid "IDS_EMAIL_OPT_ADD_TO_PRIORITY_SENDERS_ABB"
+msgstr "Bæta við forgangssendendur"
+
+msgid "IDS_EMAIL_OPT_ADD_TO_CONTACTS_ABB2"
+msgstr "Bæta við tengiliði"
+
+msgid "IDS_EMAIL_OPT_ADD_CC_BCC"
+msgstr "Bæta við afriti/földu afriti"
+
+msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
+msgstr "Setja inn viðhengi"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Bæta við reikningi"
+
+msgid "IDS_EMAIL_OPT_ADD"
+msgstr "Bæta við"
+
+msgid "IDS_EMAIL_NPBODY_NO_RESULTS_FOUND"
+msgstr "Engar niðurstöður"
+
+msgid "IDS_EMAIL_NPBODY_NO_PRIORITY_SENDERS"
+msgstr "Engir forgangssendendur"
+
+msgid "IDS_EMAIL_NPBODY_NO_EMAILS"
+msgstr "Enginn tölvupóstur"
+
+msgid "IDS_EMAIL_MBODY_VIBRATION"
+msgstr "Titringur"
+
+msgid "IDS_EMAIL_MBODY_SIGNATURE"
+msgstr "Undirskrift"
+
+msgid "IDS_EMAIL_MBODY_PRIORITY_SENDERS"
+msgstr "Sendendur í forgangi"
+
+msgid "IDS_EMAIL_MBODY_NO_EMAIL_ADDRESS_OR_NAME"
+msgstr "Ekkert netfang eða nafn"
+
+msgid "IDS_EMAIL_MBODY_NOTIFICATION_SOUND"
+msgstr "Tilkynningahljóð"
+
+msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
+msgstr "Nýr tölvupóstur"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Tilkynningar í tölvupósti"
+
+msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
+msgstr "Breyta undirskrift"
+
+msgid "IDS_EMAIL_MBODY_DISPLAY_SIGNATURE"
+msgstr "Birta undirskrift"
+
+msgid "IDS_EMAIL_MBODY_DISPLAY_IMAGES"
+msgstr "Birta myndir"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_SEND_EMAIL_ABB"
+msgstr "Ekki er hægt að senda póst"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"
+msgstr "Ekki er hægt að framkvæma aðgerð"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_OPEN_FILE_ABB"
+msgstr "Ekki er hægt að opna skrána"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_MOVE_EMAILS_ABB"
+msgstr "Ekki er hægt að færa tölvupóst"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_DOWNLOAD_ATTACHMENT_ABB"
+msgstr "Mistókst að sækja viðhengi"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_COMPOSE_EMAIL_ABB"
+msgstr "Ekki er hægt að skrifa tölvupóst"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
+msgstr "Ekki hægt að bæta við viðhengi"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Efni"
+
+msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
+msgstr "Hætta að skrifa tölvupóst"
+
+msgid "IDS_EMAIL_HEADER_STARRED_EMAILS_ABB"
+msgstr "Merktir póstar"
+
+msgid "IDS_EMAIL_HEADER_SPAMBOX"
+msgstr "Ruslpóstur"
+
+msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
+msgstr "Sýna allar möppur"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Stillingar"
+
+msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
+msgstr "Sent"
+
+msgid "IDS_EMAIL_HEADER_SEND_TO_MYSELF_ABB"
+msgstr "Senda mér"
+
+msgid "IDS_EMAIL_HEADER_SELECT_FOLDER_ABB2"
+msgstr "Velja möppu"
+
+msgid "IDS_EMAIL_HEADER_SELECT_ALL_ABB"
+msgstr "Velja allt"
+
+msgid "IDS_EMAIL_HEADER_SELECT_ACTION_ABB"
+msgstr "Velja aðgerð"
+
+msgid "IDS_EMAIL_HEADER_RE_C_M_READ_REPORT"
+msgstr "Sv:"
+
+msgid "IDS_EMAIL_HEADER_REMOVE_ACCOUNT_ABB"
+msgstr "Fjarlægja reikning"
+
+msgid "IDS_EMAIL_HEADER_RECYCLE_BIN_ABB"
+msgstr "Ruslakarfa"
+
+msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
+msgstr "Forgangssendendur"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d valið"
+
+msgid "IDS_EMAIL_HEADER_OUTBOX"
+msgstr "Úthólf"
+
+msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
+msgstr "Opna tölvupóst"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Tilkynningar"
+
+msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
+msgstr "Pósthólf"
+
+msgid "IDS_EMAIL_HEADER_INBOX"
+msgstr "Innhólf"
+
+msgid "IDS_EMAIL_HEADER_IMAGE_QUALITY_ABB"
+msgstr "Myndgæði"
+
+msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
+msgstr "(sjálfg.)"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Almennt"
+
+msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
+msgstr "Möppur þessa reiknings"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_SAVE_ATTACHMENT_ABB"
+msgstr "Mistókst að vista viðhengi"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_DELETE_ACCOUNT_ABB"
+msgstr "Mistókst að eyða reikningi"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_CONNECT_TO_SERVER_ABB"
+msgstr "Mistókst að tengjast netþjóni"
+
+msgid "IDS_EMAIL_HEADER_ENTER_NEW_PASSWORD_ABB"
+msgstr "Sláðu inn nýtt lykilorð"
+
+msgid "IDS_EMAIL_HEADER_DRAFTS"
+msgstr "Drög"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ENTIRE_EMAIL_ABB"
+msgstr "Sækja allan póstinn"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENT_HEADER"
+msgstr "Sækja viðhengi"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
+msgstr "Sækja viðhengi"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Eyða"
+
+msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
+msgstr "Búa til vCard"
+
+msgid "IDS_EMAIL_HEADER_COMPOSE_ABB"
+msgstr "Skrifa"
+
+msgid "IDS_EMAIL_HEADER_COMBINED_INBOX_ABB"
+msgstr "Sameinað innhólf"
+
+msgid "IDS_EMAIL_HEADER_COMBINED_ACCOUNTS_ABB"
+msgstr "Sameinaðir reikningar"
+
+msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
+msgstr "Viðhengi"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Reikningar"
+
+msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
+msgstr "Myndskeið"
+
+msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
+msgstr "Taka mynd"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Stillingar"
+
+msgid "IDS_EMAIL_BUTTON_SEND_ALL"
+msgstr "Senda allt"
+
+msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
+msgstr "Vista"
+
+msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
+msgstr "Taka upp"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "Í lagi"
+
+msgid "IDS_EMAIL_BUTTON_MEMO"
+msgstr "Minnismiði"
+
+msgid "IDS_EMAIL_BUTTON_IMAGES_ABB"
+msgstr "Myndir"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
+msgstr "Sækja allan tölvupóstinn"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Sækja allt"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Lokið"
+
+msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
+msgstr "Fleygja"
+
+msgid "IDS_EMAIL_BUTTON_DELETE_ABB4"
+msgstr "Eyða"
+
+msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
+msgstr "Búa til"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Áfram"
+
+msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
+msgstr "Tengiliðir"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Hætta v."
+
+msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
+msgstr "Taka upp hljóðskrá"
+
+msgid "IDS_EMAIL_BUTTON2_CALENDAR"
+msgstr "Dagatal"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Í gær"
+
+msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
+msgstr "Mistókst að tengjast við netþjón. Öryggisvilla kom upp."
+
+msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
+msgstr "Til"
+
+msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
+msgstr "Þessari möppu og öllu innihaldi hennar verður eytt."
+
+msgid "IDS_EMAIL_BODY_SERVER_DOES_NOT_SUPPORT_TLS"
+msgstr "Þjónn styður ekki TLS."
+
+msgid "IDS_EMAIL_BODY_SENT_C_M_DATE"
+msgstr "Sent:"
+
+msgid "IDS_EMAIL_BODY_PS_MB"
+msgstr "%s MB"
+
+msgid "IDS_EMAIL_BODY_PS_KB"
+msgstr "%s KB"
+
+msgid "IDS_EMAIL_BODY_PS_GB"
+msgstr "%s GB"
+
+msgid "IDS_EMAIL_BODY_PS_B"
+msgstr "%s B"
+
+msgid "IDS_EMAIL_BODY_PD_FILES_ABB"
+msgstr "%d skrár"
+
+msgid "IDS_EMAIL_BODY_ORIGINAL_MESSAGE"
+msgstr "Upphafleg skilaboð"
+
+msgid "IDS_EMAIL_BODY_NO_MORE_EMAILS_M_STATUS"
+msgstr "Engin fleiri skeyti"
+
+msgid "IDS_EMAIL_BODY_MY_FILES_M_APPLICATION"
+msgstr "Skrárnar mínar"
+
+msgid "IDS_EMAIL_BODY_MAPS_ABB"
+msgstr "Kort"
+
+msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
+msgstr "Hleð meira..."
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Síðast uppfært"
+
+msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
+msgstr "Láta upphafleg skilaboð fylgja með"
+
+msgid "IDS_EMAIL_BODY_IMAP4"
+msgstr "IMAP4"
+
+msgid "IDS_EMAIL_BODY_FWD_C"
+msgstr "FRS:"
+
+msgid "IDS_EMAIL_BODY_FROM_MSENDER"
+msgstr "Frá"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Heiti möppu"
+
+msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
+msgstr "Strjúktu upp fyrir meira"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "Netfang"
+
+msgid "IDS_EMAIL_BODY_CC_BCC"
+msgstr "Af./Fal."
+
+msgid "IDS_EMAIL_BODY_CC"
+msgstr "Afrit"
+
+msgid "IDS_EMAIL_BODY_BCC"
+msgstr "Falið afrit"
+
+msgid "IDS_EMAIL_BODY_AUDIO_FILES_ABB"
+msgstr "Hljóðskrár"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_SEND_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Tölvupóstur birtist hér eftir að þú sendir hann."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_RECEIVE_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Tölvupóstur birtist hér eftir að hann berst þér."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_MOVE_EMAILS_TO_THIS_FOLDER_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Tölvupóstur birtist hér eftir að hann er færður í þessa möppu."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_HAVE_TRIED_TO_SEND_EMAILS_BUT_THEY_FAILED_TO_BE_SENT_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Tölvupóstur birtist hér þegar mistekist hefur að senda hann."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_DELETE_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Tölvupóstur birtist hér eftir að þú eyðir honum."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_PRIORITY_SENDERS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Forgangssendendur birtast hér eftir að þeim er bætt við."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_PRIORITY_SENDERS_EMAILS_FROM_THEM_WILL_BE_SHOWN_HERE"
+msgstr "Tölvupóstur frá sendendum í forgangi birtist hér eftir að þú bætir þeim við."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_FAVOURITE_EMAILS_BY_TAPPING_THE_STAR_ICON_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Tölvupóstur birtist hér eftir að honum er bætt við uppáhald með því að pikka á stjörnutáknið."
+
+msgid "IDS_EMAIL_BODY_1_FILE_ABB"
+msgstr "1 skrá"
+
+msgid "IDS_EMAIL_ACBUTTON_MAILBOX_ABB"
+msgstr "PÓSTHÓLF"
+
+msgid "IDS_MF_HEADER_UNABLE_TO_SAVE_DATA_ABB"
+msgstr "Ekki hægt að vista gögn"
+
+msgid "IDS_ST_TPOP_VALIDATING_ACCOUNT_ING_ABB"
+msgstr "Staðfesti reikning..."
+
+msgid "IDS_ST_TMBODY_USERNAME"
+msgstr "Notandanafn"
+
+msgid "IDS_ST_TMBODY_SYNC_WHILE_ROAMING"
+msgstr "Samstilla í reiki"
+
+msgid "IDS_ST_TMBODY_SYNC"
+msgstr "Samstilla"
+
+msgid "IDS_ST_TMBODY_SERVER_ADDRESS"
+msgstr "Vistfang netþjóns"
+
+msgid "IDS_ST_TMBODY_SENDER_NAME"
+msgstr "Nafn sendanda"
+
+msgid "IDS_ST_TMBODY_PASSWORD"
+msgstr "Lykilorð"
+
+msgid "IDS_ST_TMBODY_ACCOUNT_NAME"
+msgstr "Heiti reiknings"
+
+msgid "IDS_ST_SBODY_TLS"
+msgstr "TLS"
+
+msgid "IDS_ST_SBODY_SSL"
+msgstr "SSL"
+
+msgid "IDS_ST_SBODY_SHOW_PASSWORD_ABB"
+msgstr "Sýna lykilorð"
+
+msgid "IDS_ST_SBODY_SET_AS_DEFAULT_ACCOUNT_ABB"
+msgstr "Velja sem sjálfgefinn reikning"
+
+msgid "IDS_ST_SBODY_PROCESSING_PLEASE_WAIT_ING_ABB"
+msgstr "Vinn. Augnablik..."
+
+msgid "IDS_ST_SBODY_POP3"
+msgstr "POP3"
+
+msgid "IDS_ST_SBODY_NOT_SYNCED_YET_M_STATUS"
+msgstr "Ósamstillt"
+
+msgid "IDS_ST_SBODY_IMAP"
+msgstr "IMAP"
+
+msgid "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"
+msgstr "Þessum reikningi hefur þegar verið bætt við."
+
+msgid "IDS_ST_POP_THE_MAXIMUM_NUMBER_OF_EMAIL_ACCOUNTS_HPD_HAS_BEEN_REACHED"
+msgstr "Hámarksfjölda pósthólfa (%d) hefur verið náð."
+
+msgid "IDS_ST_POP_CHECK_THE_EMAIL_ADDRESS_AND_PASSWORD_YOU_HAVE_ENTERED"
+msgstr "Athugaðu netfangið og lykilorðið sem þú slóst inn."
+
+msgid "IDS_ST_POP_ALL_DATA_RELATED_TO_THIS_ACCOUNT_WILL_BE_DELETED_FROM_THE_DEVICE"
+msgstr "Öllum gögnum sem tengjast þessum reikningi verður eytt af tækinu."
+
+msgid "IDS_ST_OPT_REMOVE"
+msgstr "Fjarlægja"
+
+msgid "IDS_ST_OPT_PUSH"
+msgstr "Vöktun"
+
+msgid "IDS_ST_OPT_NO_LIMIT"
+msgstr "Án takmarkana"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Ekkert"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Handvirkt"
+
+msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
+msgstr "Halda stillingum án reikis"
+
+msgid "IDS_ST_OPT_HEADER_ONLY"
+msgstr "Aðeins haus"
+
+msgid "IDS_ST_OPT_EVERY_PD_MINUTES_ABB"
+msgstr "Á %d mínútna fresti"
+
+msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
+msgstr "Á hverri klukkustund"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Á hverjum degi"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Sjálfgefið"
+
+msgid "IDS_ST_MBODY_SYNC_EMAILS"
+msgstr "Samstilla tölvupóst"
+
+msgid "IDS_ST_MBODY_SMTP_AUTHENTICATION"
+msgstr "SMTP-sannvottun"
+
+msgid "IDS_ST_MBODY_SERVER_SETTINGS"
+msgstr "Stillingar þjóns"
+
+msgid "IDS_ST_MBODY_SAME_AS_POP3_IMAP4"
+msgstr "Sama og POP3/IMAP4"
+
+msgid "IDS_ST_MBODY_POP3_BEFORE_SMTP"
+msgstr "POP3 á undan SMTP"
+
+msgid "IDS_ST_MBODY_OTHER"
+msgstr "Annað"
+
+msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
+msgstr "Áætlun tölvupóstsamstill."
+
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Viðvörun"
+
+msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
+msgstr "Ekki hægt að votta reikning"
+
+msgid "IDS_ST_HEADER_UNABLE_TO_ADD_ACCOUNT_ABB"
+msgstr "Mistókst að bæta við reikningi"
+
+msgid "IDS_ST_HEADER_SERVER_TYPE_ABB"
+msgstr "Gerð netþjóns"
+
+msgid "IDS_ST_HEADER_SELECT_ACCOUNT_TYPE_ABB"
+msgstr "Velja tegund reiknings"
+
+msgid "IDS_ST_HEADER_SECURITY_TYPE_ABB"
+msgstr "Öryggisgerð"
+
+msgid "IDS_ST_HEADER_OUTGOING_SERVER_SETTINGS_ABB"
+msgstr "Stillingar sendingarþjóns"
+
+msgid "IDS_ST_HEADER_LIMIT_RETRIEVAL_SIZE"
+msgstr "Takmarka niðurhalsstærð"
+
+msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
+msgstr "Stillingar móttökuþjóns"
+
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "Tölvupóstur"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Næsta"
+
+msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
+msgstr "Handvirk upps."
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Án hljóðs"
+
+msgid "IDS_ST_BODY_PORT"
+msgstr "Tengi"
+
+msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
+msgstr "SENDA"
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Leturstærð"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Leturlitur"
+
+msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
+msgstr "Endurnefna möppu"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
+msgstr "Færa í Ruslpóst"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_SPAMBOX_ABB"
+msgstr "Fjarlægja úr ruslpóstmöppu"
+
+msgid "IDS_EMAIL_OPT_SHOW_TEXT_TOOLS"
+msgstr "Sýna textaverkfæri"
+
+msgid "IDS_EMAIL_OPT_HIDE_TEXT_TOOLS"
+msgstr "Fela textaverkfæri"
+
+msgid "IDS_EMAIL_HEADER_EMAIL_SETTINGS"
+msgstr "Tölvupóststill."
+
+msgid "IDS_EMAIL_BODY_SYNCING_ING"
+msgstr "Samstilli..."
+
+msgid "IDS_EMAIL_BODY_SYNC_FAILED_TRY_LATER"
+msgstr "Samstilling mistókst. Reyndu aftur síðar."
+
+msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
+msgstr "Litur bakgrunnstexta"
+
+msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
+msgstr "Sótt"
+
+msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
+msgstr "Sækja viðhengi sjálfkrafa þegar tenging við Wi-Fi net er til staðar"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Vistað."
+
+msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
+msgstr "Kveikja á RTF-sniði"
+
+msgid "IDS_EMAIL_OPT_DISABLE_RICH_TEXT_ABB2"
+msgstr "Slökkva á RTF-sniði"
+
+msgid "IDS_EMAIL_BUTTON_SHOW_ABB"
+msgstr "Sýna"
+
+msgid "IDS_EMAIL_BUTTON_HIDE_ABB3"
+msgstr "Fela"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_SAVE_EMAILS_IN_DRAFTS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Þegar tölvupóstur er vistaður í drögum er hann birtur hér."
+
+msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
+msgstr "Vista allt"
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Mistókst að eyða."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
+msgstr "Möppuheiti breytt."
+
+msgid "IDS_EMAIL_HEADER_SELECT_EMAILS"
+msgstr "Veldu tölvupóst"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_EMAILS_TO_SPAM_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Tölvupóstur birtist hér eftir að þú flokkar hann sem rusl."
+
+msgid "IDS_EMAIL_BUTTON_RENAME_ABB"
+msgstr "Endurnefna"
+
+msgid "IDS_EMAIL_POP_RENAMING_FOLDER_ING"
+msgstr "Endurnefni möppu..."
+
+msgid "IDS_EMAIL_POP_NETWORK_NOT_AVAILABLE_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
+msgstr "Net ekki til staðar. Þetta skeyti verður sent þegar þú tengist neti."
+
+msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
+msgstr "Kveikt á flugstillingu. Þetta skeyti verður sent þegar þú tengist neti."
+

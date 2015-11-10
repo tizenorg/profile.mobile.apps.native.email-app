@@ -1,0 +1,35 @@
+/*
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+collections {
+	plugins {
+		plugin {
+			name: "touch_sound"; // Name run by RUN_PLUGIN
+			source: "feedback"; // External edje plugin name
+			param: "FEEDBACK_TYPE_SOUND FEEDBACK_PATTERN_TAP";
+		}
+	}
+	base_scale: 2.6;		// multi scale for HD resolution
+
+	#include "../common/email-colors.edc"
+	#include "../common/email-parts.edc"
+	#include "email-viewer-common.edc"
+	#include "email-viewer-base-layout.edc"
+	#include "email-viewer-subject-layout.edc"
+	#include "email-viewer-popup.edc"
+	#include "email-viewer-scroller.edc"
+}

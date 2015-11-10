@@ -1,0 +1,116 @@
+/*
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+#define ITEM_HEIGHT 120
+#define PADDING_LEFT 32
+#define CONTACT_BUTTON_PADDING_RIGHT 17
+#define CONTACT_BUTTON_PADDING_LEFT 17
+#define CONTACT_BUTTON_SIZE 80
+group {
+	name: "email.filter.address_edit_view";
+	parts {
+		part {
+			name: "base";
+			type: RECT;
+			scale: 1;
+			description {
+				state: "default" 0.0;
+				min: 0 ITEM_HEIGHT;
+				max: -1 ITEM_HEIGHT;
+				color: 0 0 0 0;
+			}
+		}
+
+		part {
+			name: "padding_left";
+			type: SPACER;
+			scale: 1;
+			description {
+				state: "default" 0.0;
+				fixed: 1 0;
+				align: 0 0.5;
+				min: PADDING_LEFT 0;
+				max: PADDING_LEFT -1;
+				rel2.relative: 0.0 1.0;
+
+			}
+
+		}
+
+		part {
+			name: "padding_right";
+			type: SPACER;
+			scale: 1;
+			description {
+				state: "default" 0.0;
+				fixed: 1 0;
+				align: 1 0.5;
+				rel1.relative: 1.0 0.0;
+				min: CONTACT_BUTTON_PADDING_RIGHT 0;
+				max: CONTACT_BUTTON_PADDING_RIGHT -1;
+			}
+
+		}
+
+		part {
+			name: "email.filter.contact_btn";
+			type: SWALLOW;
+			scale: 1;
+			description {
+				state: "default" 0.0;
+				fixed: 1 0;
+				align: 1 0.5;
+				min: CONTACT_BUTTON_SIZE CONTACT_BUTTON_SIZE;
+				max: CONTACT_BUTTON_SIZE CONTACT_BUTTON_SIZE;
+				rel1 { relative: 0.0 0.0; to_x: "padding_right"; }
+				rel2 { relative: 0.0 1.0; to_x: "padding_right"; }
+
+			}
+		}
+
+		part {
+			name: "contact_btn_padding_left";
+			type: SPACER;
+			scale: 1;
+			description {
+				state: "default" 0.0;
+				fixed: 1 0;
+				align: 1 0.5;
+				min: CONTACT_BUTTON_PADDING_LEFT 0;
+				max: CONTACT_BUTTON_PADDING_LEFT -1;
+				rel1 { relative: 0.0 0.0; to_x: "email.filter.contact_btn"; }
+				rel2 { relative: 0.0 1.0; to_x: "email.filter.contact_btn"; }
+
+			}
+
+		}
+
+
+		part {
+			name: "email.filter.editfield_ly";
+			type: SWALLOW;
+			scale: 1;
+			description {
+				state: "default" 0.0;
+				align: 1 0.5;
+				fixed: 1 0;
+				rel1 { relative: 0.0 0.0; to: "base"; }
+				rel2 { relative: 1.0 1.0; to: "contact_btn_padding_left"; }
+			}
+		}
+	}
+}

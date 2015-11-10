@@ -1,0 +1,1062 @@
+msgid "IDS_EMAIL_POP_FAILED_TO_MOVE"
+msgstr "Presun zlyhal."
+
+msgid "IDS_ST_OPT_DEFAULT_RINGTONE"
+msgstr "Predvolené zvonenie"
+
+msgid "IDS_EMAIL_BODY_MAXIMUM_NUMBER_OF_EMAIL_ACCOUNTS_REACHED"
+msgstr "Dosiahol sa maximálny počet e-mailových kont."
+
+msgid "IDS_ST_OPT_EVERY_PD_HOURS_ABB2"
+msgstr "Po každých %d hodinách"
+
+msgid "IDS_ST_OPT_EVERY_1_HOUR"
+msgstr "Každú 1 hodinu"
+
+msgid "IDS_TPLATFORM_ACBUTTON_DONE_ABB"
+msgstr "HOTOVO"
+
+msgid "IDS_TPLATFORM_ACBUTTON_CANCEL_ABB"
+msgstr "ZRUŠIŤ"
+
+msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
+msgstr "ODSTRÁNIŤ"
+
+msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
+msgstr "Vyžaduje sa pripojenie k sieti Wi-Fi. Pripojte sa k sieti Wi-Fi a skúste to znova"
+
+msgid "IDS_EMAIL_POP_MOBILE_DATA_IS_DISABLED_CONNECT_TO_WI_FI_NETWORK_INSTEAD_OR_ENABLE_MOBILE_DATA_AND_TRY_AGAIN"
+msgstr "Mobilné dátové pripojenie je vypnuté. Pripojte sa namiesto toho k sieti Wi-Fi alebo zapnite mobilné dátové pripojenie a skúste to znova"
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_CANCELLED"
+msgstr "Sťahovanie zrušené."
+
+msgid "IDS_EMAIL_BODY_TODAY"
+msgstr "Dnes"
+
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Žiadne položky na zobrazenie."
+
+msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
+msgstr "Stiahnuť možno iba adresy URL typu http alebo https."
+
+msgid "IDS_BR_OPT_WEB_SEARCH"
+msgstr "Vyhľadávanie na webe"
+
+msgid "IDS_ASEML_POP_THE_SECURITY_POLICY_PREVENTS_THE_USE_OF_POP_AND_IMAP_EMAIL_PROTOCOLS"
+msgstr "Politika zabezpečenia zabraňuje používaniu e-mailových protokolov POP a IMAP."
+
+msgid "IDS_ASEML_HEADER_UNABLE_TO_USE_FUNCTION_ABB"
+msgstr "Funkcia sa nedá použiť"
+
+msgid "IDS_EMAIL_TPOP_SYNC_EMAIL_DISABLED_FOR_PS"
+msgstr "Synchronizácia e-mailov je pre konto %s vypnutá."
+
+msgid "IDS_EMAIL_TPOP_SIGNATURE_SAVED"
+msgstr "Podpis sa uložil."
+
+msgid "IDS_EMAIL_TPOP_SERVER_ERROR_OCCURRED_ABB"
+msgstr "Vyskytla sa chyba servera."
+
+msgid "IDS_EMAIL_TPOP_SENDING_FAILED"
+msgstr "Odoslanie zlyhalo."
+
+msgid "IDS_EMAIL_TPOP_SENDING_EMAIL_ING"
+msgstr "Odosiela sa e-mail..."
+
+msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
+msgstr "Odosielajú sa e-maily..."
+
+msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
+msgstr "Upravuje sa veľkosť súborov..."
+
+msgid "IDS_EMAIL_TPOP_RECIPIENT_ALREADY_EXISTS"
+msgstr "Príjemca už existuje."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAIL_ADDRESSES_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "Vykonalo sa odstránenie %d e-mailových adries zo zoznamu prioritných odosielateľov."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MOVED_TO_SELECTED_FOLDER"
+msgstr "Vykonalo sa premiestnenie %d e-mailov do vybratého priečinka."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MARKED_AS_UNREAD"
+msgstr "E-maily v počte %d sa označili ako neprečítané."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MARKED_AS_READ"
+msgstr "E-maily v počte %d sa označili ako prečítané."
+
+msgid "IDS_EMAIL_TPOP_P1SD_EMAILS_MOVED_TO_P2SS"
+msgstr "Vykonalo sa premiestnenie %1$d e-mailov do priečinka %2$s."
+
+msgid "IDS_EMAIL_TPOP_NEW_EMAIL_RECEIVED_ABB"
+msgstr "Prijali ste nový e-mail."
+
+msgid "IDS_EMAIL_TPOP_NETWORK_NOT_AVAILABLE_EMAIL_WILL_BE_SENT_WHEN_CONNECTED_TO_NETWORK"
+msgstr "Sieť nie je k dispozícii. E-mail sa odošle po pripojení k sieti."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_REGISTERED_DEVICES_REACHED_FOR_THIS_ACCOUNT_DEREGISTER_SOME_DEVICES_AND_TRY_AGAIN"
+msgstr "Dosiahol sa maximálny počet registrovaných zariadení pre toto konto. Zrušte registráciu niektorých zariadení a skúste to znova."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_RECIPIENTS_HPD_REACHED"
+msgstr "Dosiahol sa maximálny počet príjemcov (%d)."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
+msgstr "Dosiahol sa maximálny počet znakov."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Dosiahol sa maximálny počet znakov (%d)."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
+msgstr "Dosiahla sa maximálna veľkosť správy (%d kB)."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
+msgstr "Prekročila sa maximálna veľkosť správy. Zdieľať sa bude iba prvých %d kB."
+
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Načítava sa..."
+
+msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
+msgstr "Zadali ste neplatnú e-mailovú adresu."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_NAME_ALREADY_IN_USE_ABB"
+msgstr "Názov priečinka sa už používa."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_DELETED_ABB"
+msgstr "Priečinok sa odstránil."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_CREATED"
+msgstr "Priečinok sa vytvoril."
+
+msgid "IDS_EMAIL_TPOP_FILE_SAVED_TO_DOWNLOADS"
+msgstr "Súbor sa uložil do priečinka Stiahnuté súbory."
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_SIGN_IN_TO_PS"
+msgstr "Nepodarilo sa prihlásiť v službe %s."
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_SAVE_EMAIL"
+msgstr "Nepodarilo sa uložiť e-mail."
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_CONNECT_TO_NETWORK"
+msgstr "Nepodarilo sa pripojiť k sieti."
+
+msgid "IDS_EMAIL_TPOP_ENTER_AT_LEAST_ONE_VALID_RECIPIENT"
+msgstr "Zadajte aspoň jedného platného príjemcu."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_SENT"
+msgstr "E-mail bol odoslaný."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_SAVED_IN_DRAFTS"
+msgstr "E-mail sa uložil do priečinka Koncepty."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_MARKED_AS_UNREAD"
+msgstr "E-mail sa označil ako neprečítaný."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "E-mailová adresa sa odstránila zo zoznamu prioritných odosielateľov."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ALREADY_ADDED_TO_PRIORITY_SENDERS"
+msgstr "E-mailová adresa je už pridaná medzi prioritných odosielateľov."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ADDED_TO_PRIORITY_SENDERS"
+msgstr "E-mailová adresa sa pridala do zoznamu prioritných odosielateľov."
+
+msgid "IDS_EMAIL_TPOP_DELETING_FOLDER_ING"
+msgstr "Odstraňuje sa priečinok..."
+
+msgid "IDS_EMAIL_TPOP_CREATING_FOLDER_ING"
+msgstr "Vytvára sa priečinok..."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_SELECTED_FOLDER"
+msgstr "Do vybratého priečinka sa premiestnil 1 e-mail."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_PS"
+msgstr "1 e-mail sa premiestnil do priečinka %s."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MARKED_AS_UNREAD"
+msgstr "1 e-mail sa označil ako neprečítaný."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MARKED_AS_READ"
+msgstr "1 e-mail sa označil ako prečítaný."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "1 e-mailová adresa sa odstránila zo zoznamu prioritných odosielateľov."
+
+msgid "IDS_EMAIL_TMBODY_SYNC_SETTINGS"
+msgstr "Nastavenia synchronizácie"
+
+msgid "IDS_EMAIL_TMBODY_DEFAULT_SENDING_ACCOUNT"
+msgstr "Predvolené odosielacie konto"
+
+msgid "IDS_EMAIL_SBODY_SENT_FROM_MY_SAMSUNG_DEVICE"
+msgstr "Odoslané z môjho zariadenia Samsung."
+
+msgid "IDS_EMAIL_SBODY_RECEIVE_STATUS_BAR_NOTIFICATIONS_WHEN_EMAILS_ARRIVE"
+msgstr "Pri doručení e-mailov sa budú prijímať oznámenia na stavovom riadku."
+
+msgid "IDS_EMAIL_SBODY_NO_SUBJECT_M_NOUN"
+msgstr "Žiadny predmet"
+
+msgid "IDS_EMAIL_SBODY_NO_RECIPIENTS_M_NOUN"
+msgstr "Žiadni príjemcovia"
+
+msgid "IDS_EMAIL_POP_YOU_MUST_DOWNLOAD_THE_MESSAGE_BEFORE_YOU_CAN_DOWNLOAD_THE_ATTACHMENT"
+msgstr "Pred stiahnutím prílohy musíte stiahnuť správu."
+
+msgid "IDS_EMAIL_POP_YOU_HAVE_NOT_YET_CREATED_AN_EMAIL_ACCOUNT_CREATE_AN_EMAIL_ACCOUNT_AND_TRY_AGAIN"
+msgstr "Nemáte ešte vytvorené e-mailové konto. Vytvorte e-mailové konto a skúste to znova."
+
+msgid "IDS_EMAIL_POP_YOU_CAN_ONLY_LOG_IN_ONCE_EVERY_15_MINUTES"
+msgstr "Môžete sa prihlásiť iba raz každých 15 minút."
+
+msgid "IDS_EMAIL_POP_YOUR_PASSWORD_CONTAINS_SPACES_MANY_SERVERS_DO_NOT_SUPPORT_PASSWORDS_WITH_SPACES"
+msgstr "Vaše heslo obsahuje medzery. Mnohé servery nepodporujú heslá s medzerami."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
+msgstr "Nemožno premiestniť e-maily z viacerých kont naraz."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Nedá sa pripojiť na server."
+
+msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
+msgstr "Ak chcete napísať e-mail, vytvorte si e-mailové konto."
+
+msgid "IDS_EMAIL_POP_THIS_FILE_TYPE_IS_NOT_SUPPORTED_BY_ANY_APPLICATION_ON_YOUR_DEVICE"
+msgstr "Tento typ súborov nepodporuje žiadna aplikácia vo vašom zariadení."
+
+msgid "IDS_EMAIL_POP_THIS_EMAIL_WILL_BE_DELETED"
+msgstr "Tento e-mail sa odstráni."
+
+msgid "IDS_EMAIL_POP_THIS_EMAIL_HAS_BEEN_DELETED_FROM_THE_SERVER"
+msgstr "Tento e-mail sa odstránil zo servera."
+
+msgid "IDS_EMAIL_POP_THE_VCARD_HAS_NOT_BEEN_CREATED_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Vizitka sa nevytvorila. Vyskytla sa neznáma chyba."
+
+msgid "IDS_EMAIL_POP_THE_SELECTED_DATA_COULD_NOT_BE_FOUND"
+msgstr "Nepodarilo sa nájsť vybraté údaje."
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_TOTAL_SIZE_OF_ATTACHMENTS_HPS_MB_HAS_BEEN_EXCEEDED_REMOVE_SOME_FILES_AND_TRY_AGAIN"
+msgstr "Prekročila sa maximálna celková veľkosť príloh (%s MB). Odstráňte niektoré súbory a skúste to znova."
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_NUMBER_OF_ATTACHMENTS_HPD_HAS_BEEN_REACHED"
+msgstr "Dosiahol sa maximálny počet príloh (%d)."
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_ATTACHMENT_SIZE_ALLOWED_BY_THE_CURRENT_EXCHANGE_SERVER_POLICY_HAS_BEEN_EXCEEDED"
+msgstr "Prekročila sa maximálna veľkosť príloh povolená aktuálnou politikou servera Exchange."
+
+msgid "IDS_EMAIL_POP_THE_CURRENT_EXCHANGE_SERVER_POLICY_PREVENTS_ATTACHMENTS_FROM_BEING_DOWNLOADED_TO_MOBILE_DEVICES"
+msgstr "Aktuálna politika servera Exchange zabraňuje sťahovaniu príloh do mobilných zariadení."
+
+msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE_GO_TO_SETTINGS_POWER_AND_STORAGE_STORAGE_THEN_DELETE_SOME_FILES_AND_TRY_AGAIN"
+msgstr "V úložisku zariadenia nie je dostatok miesta. Prejdite do menu Nastavenia > Energia a úložisko > Úložisko a potom odstráňte niektoré súbory a skúste to znova."
+
+msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE"
+msgstr "V úložnom priestore zariadenia nie je dostatok miesta."
+
+msgid "IDS_EMAIL_POP_SERVER_NOT_AVAILABLE"
+msgstr "Server je nedostupný."
+
+msgid "IDS_EMAIL_POP_SERVER_INFORMATION_QUERY_FAILED_ENTER_SERVER_INFORMATION_MANUALLY"
+msgstr "Dotaz na informácie o serveri zlyhal. Zadajte informácie o serveri manuálne."
+
+msgid "IDS_EMAIL_POP_SECURITY_POLICY_RESTRICTS_USE_OF_THIS_ACCOUNT"
+msgstr "Politika zabezpečenia obmedzuje použitie tohto konta."
+
+msgid "IDS_EMAIL_POP_SAVING_EMAIL_ING"
+msgstr "Ukladá sa e-mail..."
+
+msgid "IDS_EMAIL_POP_SAVE_YOUR_CHANGES_OR_DISCARD_THEM_Q"
+msgstr "Uložiť zmeny alebo ich zahodiť?"
+
+msgid "IDS_EMAIL_POP_REMOVING_ACCOUNT_ING"
+msgstr "Odstraňuje sa konto..."
+
+msgid "IDS_EMAIL_POP_PLEASE_FILL_ALL_THE_MANDATORY_FIELDS"
+msgstr "Vyplňte všetky povinné polia."
+
+msgid "IDS_EMAIL_POP_ONLY_PART_OF_THE_MESSAGE_HAS_BEEN_DOWNLOADED_IF_YOU_CONTINUE_THE_REST_OF_THE_MESSAGE_MAY_BE_LOST"
+msgstr "Stiahla sa iba časť správy. Ak budete pokračovať, zvyšok správy sa môže stratiť."
+
+msgid "IDS_EMAIL_POP_NO_RESPONSE_HAS_BEEN_RECEIVED_FROM_THE_SERVER_TRY_AGAIN_LATER"
+msgstr "Zo servera sa neprijala žiadna odpoveď. Skúste to znova neskôr."
+
+msgid "IDS_EMAIL_POP_NETWORK_BUSY"
+msgstr "Sieť obsadená."
+
+msgid "IDS_EMAIL_POP_INVALID_OR_INACCESSIBLE_CERTIFICATE"
+msgstr "Neplatný alebo nedostupný certifikát."
+
+msgid "IDS_EMAIL_POP_INITIALISING_APPLICATION_ING"
+msgstr "Inicializuje sa aplikácia..."
+
+msgid "IDS_EMAIL_POP_HOST_NOT_FOUND"
+msgstr "Hostiteľ sa nenašiel."
+
+msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_OR_NETWORK_NOT_AVAILABLE"
+msgstr "Je zapnutý letový režim alebo sieť nie je k dispozícii."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_START_EMAIL_APPLICATION"
+msgstr "Nepodarilo sa spustiť aplikáciu E-mail."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DOWNLOAD_ATTACHMENT_CHECK_YOUR_NETWORK_CONNECTION_AND_TRY_AGAIN"
+msgstr "Nepodarilo sa stiahnuť prílohu. Skontrolujte sieťové pripojenie a skúste to znova."
+
+msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
+msgstr "E-mail bol odstránený zo servera."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Stiahnutie nedostupné."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Sťahovanie..."
+
+msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
+msgstr "Odstránením tohto konta sa odstránia aj všetky správy konta, kontakty a ďalšie údaje zo zariadenia. Pokračujte ťuknutím na tlačidlo Odstrániť."
+
+msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
+msgstr "Vytvára sa vizitka..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Pripojenie sa nepodarilo."
+
+msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
+msgstr "Súbor s týmto názvom je už priložený."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Overenie zlyhalo."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Došlo k neznámej chybe"
+
+msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
+msgstr "Pred preposlaním tohto e-mailu sa stiahnu všetky jeho prílohy."
+
+msgid "IDS_EMAIL_OPT_VIEW_CONTACT_DETAILS_ABB"
+msgstr "Zobraziť kontaktné údaje"
+
+msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
+msgstr "Aktualizovať kontakt"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Zdieľať"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Nastavenia"
+
+msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
+msgstr "Odoslať mne"
+
+msgid "IDS_EMAIL_OPT_SEND"
+msgstr "Odoslať"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Vybrať všetky"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Vybrať"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Vyhľadávanie"
+
+msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
+msgstr "Uložiť do konceptov"
+
+msgid "IDS_EMAIL_OPT_REPLY_ALL"
+msgstr "Odpovedať všetkým"
+
+msgid "IDS_EMAIL_OPT_REPLY"
+msgstr "Odpoveď"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_SPAM_ABB"
+msgstr "Odstrániť z obťažujúcich"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
+msgstr "Odstrániť z prioritných odosielateľov"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Odstrániť"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Obnoviť"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Vložiť"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Pôvodná"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
+msgstr "Na hlavného príjemcu (adresát)"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_CC"
+msgstr "Presunúť do poľa Kópia"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_BCC_ABB"
+msgstr "Premiest. do poľa Skrytá kópia"
+
+msgid "IDS_EMAIL_OPT_MOVE"
+msgstr "Premiestniť"
+
+msgid "IDS_EMAIL_OPT_MEDIUM_M_IMAGE_SIZE"
+msgstr "Stredná"
+
+msgid "IDS_EMAIL_OPT_MARK_AS_UNREAD_ABB"
+msgstr "Označiť ako neprečítané"
+
+msgid "IDS_EMAIL_OPT_MARK_AS_READ_ABB"
+msgstr "Označiť ako prečítané"
+
+msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
+msgstr "Nízka"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Preposlať"
+
+msgid "IDS_EMAIL_OPT_EDIT"
+msgstr "Upraviť"
+
+msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
+msgstr "Odstrániť priečinok"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Odstrániť"
+
+msgid "IDS_EMAIL_OPT_CUT"
+msgstr "Vystrihnúť"
+
+msgid "IDS_EMAIL_OPT_CREATE_FOLDER_ABB2"
+msgstr "Vytvoriť priečinok"
+
+msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
+msgstr "Vytvoriť kontakt"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Kopírovať"
+
+msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
+msgstr "Napísať e-mail"
+
+msgid "IDS_EMAIL_OPT_CLIPBOARD"
+msgstr "Schránka"
+
+msgid "IDS_EMAIL_OPT_CANCEL_SENDING_ABB"
+msgstr "Zrušiť odosielanie"
+
+msgid "IDS_EMAIL_OPT_ADD_TO_PRIORITY_SENDERS_ABB"
+msgstr "Pridať do priorit. odosielateľov"
+
+msgid "IDS_EMAIL_OPT_ADD_TO_CONTACTS_ABB2"
+msgstr "Pridať do kontaktov"
+
+msgid "IDS_EMAIL_OPT_ADD_CC_BCC"
+msgstr "Pridať polia Kópia a Skrytá kópia"
+
+msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
+msgstr "Pridať prílohu"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Pridať konto"
+
+msgid "IDS_EMAIL_OPT_ADD"
+msgstr "Pridať"
+
+msgid "IDS_EMAIL_NPBODY_NO_RESULTS_FOUND"
+msgstr "Nenašli sa žiadne výsledky"
+
+msgid "IDS_EMAIL_NPBODY_NO_PRIORITY_SENDERS"
+msgstr "Žiadni prioritní odosielatelia"
+
+msgid "IDS_EMAIL_NPBODY_NO_EMAILS"
+msgstr "Žiadne e-maily"
+
+msgid "IDS_EMAIL_MBODY_VIBRATION"
+msgstr "Vibrovanie"
+
+msgid "IDS_EMAIL_MBODY_SIGNATURE"
+msgstr "Podpis"
+
+msgid "IDS_EMAIL_MBODY_PRIORITY_SENDERS"
+msgstr "Prioritní odosielatelia"
+
+msgid "IDS_EMAIL_MBODY_NO_EMAIL_ADDRESS_OR_NAME"
+msgstr "Žiadna e-mail. adr./meno"
+
+msgid "IDS_EMAIL_MBODY_NOTIFICATION_SOUND"
+msgstr "Zvuk oznámenia"
+
+msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
+msgstr "Nové e-maily"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "E-mailové oznámenia"
+
+msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
+msgstr "Upravte podpis"
+
+msgid "IDS_EMAIL_MBODY_DISPLAY_SIGNATURE"
+msgstr "Zobraziť podpis"
+
+msgid "IDS_EMAIL_MBODY_DISPLAY_IMAGES"
+msgstr "Zobraziť fotografie"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_SEND_EMAIL_ABB"
+msgstr "E-mail nemožno odoslať"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"
+msgstr "Akcia sa nedá vykonať"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_OPEN_FILE_ABB"
+msgstr "Súbor sa nedá otvoriť"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_MOVE_EMAILS_ABB"
+msgstr "E-maily sa nedajú premiestniť"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_DOWNLOAD_ATTACHMENT_ABB"
+msgstr "Príloha sa nedá stiahnuť"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_COMPOSE_EMAIL_ABB"
+msgstr "Nedá sa napísať e-mail"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
+msgstr "Príloha sa nedá pridať"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Predmet"
+
+msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
+msgstr "Zastavenie písania e-mailu"
+
+msgid "IDS_EMAIL_HEADER_STARRED_EMAILS_ABB"
+msgstr "Hodnotené e-maily"
+
+msgid "IDS_EMAIL_HEADER_SPAMBOX"
+msgstr "Schránka pre nevyžiadanú poštu"
+
+msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
+msgstr "Zobraziť všetky priečinky"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Nastavenia"
+
+msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
+msgstr "Odoslané"
+
+msgid "IDS_EMAIL_HEADER_SEND_TO_MYSELF_ABB"
+msgstr "Odoslať mne"
+
+msgid "IDS_EMAIL_HEADER_SELECT_FOLDER_ABB2"
+msgstr "Vyberte priečinok"
+
+msgid "IDS_EMAIL_HEADER_SELECT_ALL_ABB"
+msgstr "Vybrať všetko"
+
+msgid "IDS_EMAIL_HEADER_SELECT_ACTION_ABB"
+msgstr "Vyberte akciu"
+
+msgid "IDS_EMAIL_HEADER_RE_C_M_READ_REPORT"
+msgstr "Odpoveď:"
+
+msgid "IDS_EMAIL_HEADER_REMOVE_ACCOUNT_ABB"
+msgstr "Odstrániť konto"
+
+msgid "IDS_EMAIL_HEADER_RECYCLE_BIN_ABB"
+msgstr "Kôš"
+
+msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
+msgstr "Priorit. odosielatelia"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "Vybraté: %d"
+
+msgid "IDS_EMAIL_HEADER_OUTBOX"
+msgstr "Odchádzajúce"
+
+msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
+msgstr "Otvorenie e-mailu"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Oznámenia"
+
+msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
+msgstr "Pošt. schránka"
+
+msgid "IDS_EMAIL_HEADER_INBOX"
+msgstr "Doručené"
+
+msgid "IDS_EMAIL_HEADER_IMAGE_QUALITY_ABB"
+msgstr "Kvalita fotografie"
+
+msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
+msgstr "(predv.)"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Všeobecné"
+
+msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
+msgstr "Priečinky pre toto konto"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_SAVE_ATTACHMENT_ABB"
+msgstr "Nepodarilo sa uložiť prílohu"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_DELETE_ACCOUNT_ABB"
+msgstr "Nepodarilo sa odstrániť konto"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_CONNECT_TO_SERVER_ABB"
+msgstr "Nepodarilo sa prip. k serveru"
+
+msgid "IDS_EMAIL_HEADER_ENTER_NEW_PASSWORD_ABB"
+msgstr "Zadajte nové heslo"
+
+msgid "IDS_EMAIL_HEADER_DRAFTS"
+msgstr "Koncepty"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ENTIRE_EMAIL_ABB"
+msgstr "Stiahnuť celý e-mail"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENT_HEADER"
+msgstr "Stiahnuť prílohu"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
+msgstr "Stiahnutie príloh"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Odstrániť"
+
+msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
+msgstr "Vytvoriť vizitku"
+
+msgid "IDS_EMAIL_HEADER_COMPOSE_ABB"
+msgstr "Napísať"
+
+msgid "IDS_EMAIL_HEADER_COMBINED_INBOX_ABB"
+msgstr "Kombin. doručená pošta"
+
+msgid "IDS_EMAIL_HEADER_COMBINED_ACCOUNTS_ABB"
+msgstr "Kombinované kontá"
+
+msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
+msgstr "Prílohy"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Kontá"
+
+msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
+msgstr "Videá"
+
+msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
+msgstr "Odfotograf."
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Nastavenia"
+
+msgid "IDS_EMAIL_BUTTON_SEND_ALL"
+msgstr "Odoslať všetko"
+
+msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
+msgstr "Uložiť"
+
+msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
+msgstr "Nahrať video"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_MEMO"
+msgstr "Pripomienka"
+
+msgid "IDS_EMAIL_BUTTON_IMAGES_ABB"
+msgstr "Fotografie"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
+msgstr "Stiahnuť celý e-mail"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Stiahnuť všetko"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Hotovo"
+
+msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
+msgstr "Zahodiť"
+
+msgid "IDS_EMAIL_BUTTON_DELETE_ABB4"
+msgstr "Odstrániť"
+
+msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
+msgstr "Vytvoriť"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Pokrač."
+
+msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
+msgstr "Kontakty"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Zrušiť"
+
+msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
+msgstr "Nahrať zvu-\nkový súbor"
+
+msgid "IDS_EMAIL_BUTTON2_CALENDAR"
+msgstr "Kalendár"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Včera"
+
+msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
+msgstr "Nedá sa nadviazať spojenie so serverom. Vyskytla sa chyba zabezpečenia."
+
+msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
+msgstr "Príjemca"
+
+msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
+msgstr "Tento priečinok a všetok jeho obsah sa odstráni."
+
+msgid "IDS_EMAIL_BODY_SERVER_DOES_NOT_SUPPORT_TLS"
+msgstr "Server nepodporuje službu TLS."
+
+msgid "IDS_EMAIL_BODY_SENT_C_M_DATE"
+msgstr "Odoslané:"
+
+msgid "IDS_EMAIL_BODY_PS_MB"
+msgstr "%s MB"
+
+msgid "IDS_EMAIL_BODY_PS_KB"
+msgstr "%s kB"
+
+msgid "IDS_EMAIL_BODY_PS_GB"
+msgstr "%s GB"
+
+msgid "IDS_EMAIL_BODY_PS_B"
+msgstr "%s B"
+
+msgid "IDS_EMAIL_BODY_PD_FILES_ABB"
+msgstr "%d súb."
+
+msgid "IDS_EMAIL_BODY_ORIGINAL_MESSAGE"
+msgstr "Pôvodná správa"
+
+msgid "IDS_EMAIL_BODY_NO_MORE_EMAILS_M_STATUS"
+msgstr "Žiadne ďalšie e-maily"
+
+msgid "IDS_EMAIL_BODY_MY_FILES_M_APPLICATION"
+msgstr "Moje súbory"
+
+msgid "IDS_EMAIL_BODY_MAPS_ABB"
+msgstr "Mapy"
+
+msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
+msgstr "Načítavajú sa ďalšie..."
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Dátum poslednej aktualizácie"
+
+msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
+msgstr "Zahrnúť pôvodnú správu"
+
+msgid "IDS_EMAIL_BODY_IMAP4"
+msgstr "IMAP4"
+
+msgid "IDS_EMAIL_BODY_FWD_C"
+msgstr "Fw:"
+
+msgid "IDS_EMAIL_BODY_FROM_MSENDER"
+msgstr "Od"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Názov priečinka"
+
+msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
+msgstr "Rýchl. potiah. nahor načítate viac"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "E-mailová adresa"
+
+msgid "IDS_EMAIL_BODY_CC_BCC"
+msgstr "Kópia/skrytá kópia"
+
+msgid "IDS_EMAIL_BODY_CC"
+msgstr "CC"
+
+msgid "IDS_EMAIL_BODY_BCC"
+msgstr "Bcc"
+
+msgid "IDS_EMAIL_BODY_AUDIO_FILES_ABB"
+msgstr "Zvuk. súbory"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_SEND_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Tu sa zobrazia e-maily po ich odoslaní."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_RECEIVE_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Tu sa zobrazia e-maily po ich prijatí."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_MOVE_EMAILS_TO_THIS_FOLDER_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Tu sa zobrazia e-maily po ich premiestnení do tohto priečinka."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_HAVE_TRIED_TO_SEND_EMAILS_BUT_THEY_FAILED_TO_BE_SENT_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Tu sa zobrazia e-maily po neúspešnom pokuse o ich odoslanie."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_DELETE_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Tu sa zobrazia e-maily po ich odstránení."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_PRIORITY_SENDERS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Tu sa zobrazia prioritní odosielatelia po ich pridaní."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_PRIORITY_SENDERS_EMAILS_FROM_THEM_WILL_BE_SHOWN_HERE"
+msgstr "Tu sa zobrazia e-maily od prioritných odosielateľov po ich pridaní."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_FAVOURITE_EMAILS_BY_TAPPING_THE_STAR_ICON_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Tu sa zobrazia obľúbené e-maily po ich pridaní ťuknutím na ikonu hviezdičky."
+
+msgid "IDS_EMAIL_BODY_1_FILE_ABB"
+msgstr "1 súb."
+
+msgid "IDS_EMAIL_ACBUTTON_MAILBOX_ABB"
+msgstr "POŠT. SCHRÁNKA"
+
+msgid "IDS_MF_HEADER_UNABLE_TO_SAVE_DATA_ABB"
+msgstr "Údaje sa nedajú uložiť"
+
+msgid "IDS_ST_TPOP_VALIDATING_ACCOUNT_ING_ABB"
+msgstr "Overuje sa konto..."
+
+msgid "IDS_ST_TMBODY_USERNAME"
+msgstr "Meno používateľa"
+
+msgid "IDS_ST_TMBODY_SYNC_WHILE_ROAMING"
+msgstr "Synchronizácia pri roamingu"
+
+msgid "IDS_ST_TMBODY_SYNC"
+msgstr "Synchronizovať"
+
+msgid "IDS_ST_TMBODY_SERVER_ADDRESS"
+msgstr "Adresa servera"
+
+msgid "IDS_ST_TMBODY_SENDER_NAME"
+msgstr "Meno odosielateľa"
+
+msgid "IDS_ST_TMBODY_PASSWORD"
+msgstr "Heslo"
+
+msgid "IDS_ST_TMBODY_ACCOUNT_NAME"
+msgstr "Názov konta"
+
+msgid "IDS_ST_SBODY_TLS"
+msgstr "TLS"
+
+msgid "IDS_ST_SBODY_SSL"
+msgstr "SSL"
+
+msgid "IDS_ST_SBODY_SHOW_PASSWORD_ABB"
+msgstr "Zobraziť heslo"
+
+msgid "IDS_ST_SBODY_SET_AS_DEFAULT_ACCOUNT_ABB"
+msgstr "Nastaviť ako predvolené konto"
+
+msgid "IDS_ST_SBODY_PROCESSING_PLEASE_WAIT_ING_ABB"
+msgstr "Spracováva sa. Počkajte, prosím..."
+
+msgid "IDS_ST_SBODY_POP3"
+msgstr "POP3"
+
+msgid "IDS_ST_SBODY_NOT_SYNCED_YET_M_STATUS"
+msgstr "Ešte nesynchronizované"
+
+msgid "IDS_ST_SBODY_IMAP"
+msgstr "IMAP"
+
+msgid "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"
+msgstr "Toto konto už bolo pridané."
+
+msgid "IDS_ST_POP_THE_MAXIMUM_NUMBER_OF_EMAIL_ACCOUNTS_HPD_HAS_BEEN_REACHED"
+msgstr "Dosiahol sa maximálny počet e-mailových kont (%d)."
+
+msgid "IDS_ST_POP_CHECK_THE_EMAIL_ADDRESS_AND_PASSWORD_YOU_HAVE_ENTERED"
+msgstr "Skontrolujte zadanú e-mailovú adresu a heslo."
+
+msgid "IDS_ST_POP_ALL_DATA_RELATED_TO_THIS_ACCOUNT_WILL_BE_DELETED_FROM_THE_DEVICE"
+msgstr "Všetky údaje týkajúce sa tohto konta sa odstránia zo zariadenia."
+
+msgid "IDS_ST_OPT_REMOVE"
+msgstr "Odstrániť"
+
+msgid "IDS_ST_OPT_PUSH"
+msgstr "Automatické zasielanie"
+
+msgid "IDS_ST_OPT_NO_LIMIT"
+msgstr "Bez obmedzenia"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Žiadny"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Ručne"
+
+msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
+msgstr "Ponechať neroaming. nast."
+
+msgid "IDS_ST_OPT_HEADER_ONLY"
+msgstr "Iba hlavička"
+
+msgid "IDS_ST_OPT_EVERY_PD_MINUTES_ABB"
+msgstr "Po každých %d min."
+
+msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
+msgstr "Každú hodinu"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Každý deň"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Predvolený"
+
+msgid "IDS_ST_MBODY_SYNC_EMAILS"
+msgstr "Synchronizovať e-maily"
+
+msgid "IDS_ST_MBODY_SMTP_AUTHENTICATION"
+msgstr "Overovanie SMTP"
+
+msgid "IDS_ST_MBODY_SERVER_SETTINGS"
+msgstr "Nastavenia servera"
+
+msgid "IDS_ST_MBODY_SAME_AS_POP3_IMAP4"
+msgstr "Zhodné s POP3/IMAP4"
+
+msgid "IDS_ST_MBODY_POP3_BEFORE_SMTP"
+msgstr "POP3 pred SMTP"
+
+msgid "IDS_ST_MBODY_OTHER"
+msgstr "Iné"
+
+msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
+msgstr "Rozvrh synchr. e-mailov"
+
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Varovanie"
+
+msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
+msgstr "Konto sa nedá overiť"
+
+msgid "IDS_ST_HEADER_UNABLE_TO_ADD_ACCOUNT_ABB"
+msgstr "Konto sa nedá pridať"
+
+msgid "IDS_ST_HEADER_SERVER_TYPE_ABB"
+msgstr "Typ servera"
+
+msgid "IDS_ST_HEADER_SELECT_ACCOUNT_TYPE_ABB"
+msgstr "Vyberte typ konta"
+
+msgid "IDS_ST_HEADER_SECURITY_TYPE_ABB"
+msgstr "Typ zabezpečenia"
+
+msgid "IDS_ST_HEADER_OUTGOING_SERVER_SETTINGS_ABB"
+msgstr "Nastavenia servera odchádz. pošty"
+
+msgid "IDS_ST_HEADER_LIMIT_RETRIEVAL_SIZE"
+msgstr "Obmedzenie veľkosti načítania"
+
+msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
+msgstr "Nastavenia servera prichádz. pošty"
+
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "E-mail"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Ďalej"
+
+msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
+msgstr "Manuálne nast."
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Tichý"
+
+msgid "IDS_ST_BODY_PORT"
+msgstr "Port"
+
+msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
+msgstr "ODOSLAŤ"
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Veľkosť písma"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Farba písma"
+
+msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
+msgstr "Premenovať priečinok"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
+msgstr "Presunúť do schránky pre nevyžiadanú poštu"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_SPAMBOX_ABB"
+msgstr "Odstrániť z nevyžiadanej pošty"
+
+msgid "IDS_EMAIL_OPT_SHOW_TEXT_TOOLS"
+msgstr "Zobraziť textové nástroje"
+
+msgid "IDS_EMAIL_OPT_HIDE_TEXT_TOOLS"
+msgstr "Skryť textové nástroje"
+
+msgid "IDS_EMAIL_HEADER_EMAIL_SETTINGS"
+msgstr "Nastavenia e-mailu"
+
+msgid "IDS_EMAIL_BODY_SYNCING_ING"
+msgstr "Synchronizuje sa..."
+
+msgid "IDS_EMAIL_BODY_SYNC_FAILED_TRY_LATER"
+msgstr "Synchronizácia zlyhala. Skúste to neskôr."
+
+msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
+msgstr "Farba pozadia textu"
+
+msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
+msgstr "Stiahnuté"
+
+msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
+msgstr "Automaticky stiahnuť prílohy pri pripojení k sieti Wi-Fi"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Uložené."
+
+msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
+msgstr "Zapnúť formátovaný text"
+
+msgid "IDS_EMAIL_OPT_DISABLE_RICH_TEXT_ABB2"
+msgstr "Vypnúť formátovaný text"
+
+msgid "IDS_EMAIL_BUTTON_SHOW_ABB"
+msgstr "Zobraziť"
+
+msgid "IDS_EMAIL_BUTTON_HIDE_ABB3"
+msgstr "Skryť"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_SAVE_EMAILS_IN_DRAFTS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Tu sa zobrazia e-maily po ich uložení do priečinka Koncepty."
+
+msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
+msgstr "Uložiť všetky"
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Vymazanie zlyhalo."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
+msgstr "Priečinok sa premenoval."
+
+msgid "IDS_EMAIL_HEADER_SELECT_EMAILS"
+msgstr "Vyberte e-maily"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_EMAILS_TO_SPAM_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Tu sa zobrazia e-maily po ich pridaní medzi obťažujúce."
+
+msgid "IDS_EMAIL_BUTTON_RENAME_ABB"
+msgstr "Premenovať"
+
+msgid "IDS_EMAIL_POP_RENAMING_FOLDER_ING"
+msgstr "Premenúva sa priečinok..."
+
+msgid "IDS_EMAIL_POP_NETWORK_NOT_AVAILABLE_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
+msgstr "Sieť nie je k dispozícii. Táto správa sa odošle po pripojení k sieti."
+
+msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
+msgstr "Letový režim je zapnutý. Táto správa sa odošle po pripojení k sieti."
+

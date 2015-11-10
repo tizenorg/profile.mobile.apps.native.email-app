@@ -1,0 +1,75 @@
+/*
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+#define COLOR_WHITE 255 255 255 255
+
+#define TEXT_BLACK_COLOR	0 0 0 255
+#define TEXT_GRAY_COLOR	   	76 76 76 255
+#define LIST_BG_COLOR		255 255 255 255
+#define TRANSPARENT			0 0 0 0
+#define SCROLLBAR_BG_COLOR	61 185 204 179
+#define BG_COLOR			255 255 255 255
+#define BG_COLOR_STROKE		61 185 204 255
+#define NAVIFRAME_TITLE_BG	61 185 204 255
+#define NAVI_BTN_SELECT_BG	46 140 154 255
+
+#define W023	61 185 204 255
+#define W023P	1 26 56 255
+#define AO001	42 184 66 255
+#define AO002	61 185 204 255
+#define AO003	255 178 0 255
+#define AO004	102 102 102 255
+#define AO005	0 0 0 51
+#define AO006	61 185 204 255
+#define AO007	117 117 117 255
+#define AO007S	61 185 204 255
+#define AO007D	0 0 0 77
+#define AO008	250 250 250 255
+
+#define T024L1	115 115 155 255
+#define T027L1	50 150 166 255
+
+#define W024	61 185 204 38
+
+#define ATO002_HEX	"#000000ff"
+#define ATO002P_HEX	"#000000ff"
+#define ATO002D_HEX	"#737373ff"
+#define ATO002DP_HEX	"#000000ff"
+
+#define ATO003_HEX	"#000000ff"
+#define ATO003P_HEX	"#000000ff"
+#define ATO003D_HEX	"#737373ff"
+#define ATO003DP_HEX	"#000000ff"
+
+#define ATO004_HEX	"#000000ff"
+#define ATO004P_HEX	"#000000ff"
+#define ATO004D_HEX	"#737373ff"
+
+#define ATO007_HEX	"#3db9ccff"
+#define ATO008_HEX	ATO007_HEX
+
+#define ATO015_HEX	"#3DB9CCFF"
+#define ATO015P_HEX	"#236873FF"
+#define ATO015D_HEX	"#3DB9CC4D"
+
+#define ATO009		250 250 250 255
+#define ATO010		0 0 0 255
+#define ATO011		128 128 128 255
+#define ATO012		128 128 128 255
+#define ATO018		0 0 0 255
+
+/* EOF */

@@ -1,0 +1,1062 @@
+msgid "IDS_EMAIL_POP_FAILED_TO_MOVE"
+msgstr "Errorea mugitzerakoan"
+
+msgid "IDS_ST_OPT_DEFAULT_RINGTONE"
+msgstr "Dei doinu lehenetsia"
+
+msgid "IDS_EMAIL_BODY_MAXIMUM_NUMBER_OF_EMAIL_ACCOUNTS_REACHED"
+msgstr "Gehienezko helbide elektroniko kontu kopurura iritsi zara"
+
+msgid "IDS_ST_OPT_EVERY_PD_HOURS_ABB2"
+msgstr "%d orduro"
+
+msgid "IDS_ST_OPT_EVERY_1_HOUR"
+msgstr "Ordubetero"
+
+msgid "IDS_TPLATFORM_ACBUTTON_DONE_ABB"
+msgstr "EGINA"
+
+msgid "IDS_TPLATFORM_ACBUTTON_CANCEL_ABB"
+msgstr "UTZI"
+
+msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
+msgstr "EZABATU"
+
+msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
+msgstr "Wi-Fi konexioa behar da. Konektatu Wi-Fi sarera eta saiatu berriz."
+
+msgid "IDS_EMAIL_POP_MOBILE_DATA_IS_DISABLED_CONNECT_TO_WI_FI_NETWORK_INSTEAD_OR_ENABLE_MOBILE_DATA_AND_TRY_AGAIN"
+msgstr "Datu mugikorrak ezgaituta daude. Konektatu Wi-Fi sarera bestela, edo gaitu datu mugikorrak eta saiatu berriz."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_CANCELLED"
+msgstr "Deskarga ezeztatua"
+
+msgid "IDS_EMAIL_BODY_TODAY"
+msgstr "Gaur"
+
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Ez dago elementurik erakusteko"
+
+msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
+msgstr "http edo https URLak soilik deskarga daitezke"
+
+msgid "IDS_BR_OPT_WEB_SEARCH"
+msgstr "Web bilaketa"
+
+msgid "IDS_ASEML_POP_THE_SECURITY_POLICY_PREVENTS_THE_USE_OF_POP_AND_IMAP_EMAIL_PROTOCOLS"
+msgstr "Segurtasun politikak POP eta IMAP posta elektronikoko protokoloak erabiltzea galarazten du."
+
+msgid "IDS_ASEML_HEADER_UNABLE_TO_USE_FUNCTION_ABB"
+msgstr "Ezin da funtzioa erabili"
+
+msgid "IDS_EMAIL_TPOP_SYNC_EMAIL_DISABLED_FOR_PS"
+msgstr "Sinkronizatu posta elektronikoa ezgaituta dago %s(e)n."
+
+msgid "IDS_EMAIL_TPOP_SIGNATURE_SAVED"
+msgstr "Sinadura gorde da."
+
+msgid "IDS_EMAIL_TPOP_SERVER_ERROR_OCCURRED_ABB"
+msgstr "Zerbitzari errorea gertatu da."
+
+msgid "IDS_EMAIL_TPOP_SENDING_FAILED"
+msgstr "Bidalketak huts egin du."
+
+msgid "IDS_EMAIL_TPOP_SENDING_EMAIL_ING"
+msgstr "Mezu elektronikoa bidaltzen..."
+
+msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
+msgstr "Mezu elektronikoak bidaltzen..."
+
+msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
+msgstr "Fitxategien neurria aldatzen..."
+
+msgid "IDS_EMAIL_TPOP_RECIPIENT_ALREADY_EXISTS"
+msgstr "Hartzailea badago lehendik."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAIL_ADDRESSES_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "%d helbide elektroniko Bidaltzaile lehenetsietatik kendu dira."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MOVED_TO_SELECTED_FOLDER"
+msgstr "%d mezu elektroniko mugitu dira hautatutako karpetara."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MARKED_AS_UNREAD"
+msgstr "%d mezu elektroniko irakurri gabe gisa markatu dira."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MARKED_AS_READ"
+msgstr "%d mezu elektroniko irakurri gisa markatu dira."
+
+msgid "IDS_EMAIL_TPOP_P1SD_EMAILS_MOVED_TO_P2SS"
+msgstr "%1$d mezu elektroniko %2$s(e)ra mugitu dira."
+
+msgid "IDS_EMAIL_TPOP_NEW_EMAIL_RECEIVED_ABB"
+msgstr "Mezu elek. berri jaso da."
+
+msgid "IDS_EMAIL_TPOP_NETWORK_NOT_AVAILABLE_EMAIL_WILL_BE_SENT_WHEN_CONNECTED_TO_NETWORK"
+msgstr "Sarea ez dago erabilgarri. Mezu elektroniko hau sarera konektatuta zaudenean bidaliko da."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_REGISTERED_DEVICES_REACHED_FOR_THIS_ACCOUNT_DEREGISTER_SOME_DEVICES_AND_TRY_AGAIN"
+msgstr "Kontu honetan ezin da gailu gehiago erregistratu. Kendu gailu batzuk eta saiatu berriz."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_RECIPIENTS_HPD_REACHED"
+msgstr "Gehieneko hartzaile kopurura (%d) iritsi zara"
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
+msgstr "Gehieneko karaktere kopurura iritsi zara."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Gehieneko karaktere kopurura (%d) iritsi zara."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
+msgstr "Mezuaren gehieneko neurrira (%d KB) iritsi zara."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
+msgstr "Mezuaren gehieneko neurria gainditu da. Aurreneko %d KB baino ez dira partekatuko."
+
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Kargatzen..."
+
+msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
+msgstr "Helbide elektroniko baliogabea idatzi da."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_NAME_ALREADY_IN_USE_ABB"
+msgstr "Kar. izena aurretik erabiltzen."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_DELETED_ABB"
+msgstr "Karpeta ezabatu da."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_CREATED"
+msgstr "Karpeta sortu da."
+
+msgid "IDS_EMAIL_TPOP_FILE_SAVED_TO_DOWNLOADS"
+msgstr "Fitxategia Deskargetan gorde da."
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_SIGN_IN_TO_PS"
+msgstr "Ezin izan da %s-(e)n saioa hasi."
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_SAVE_EMAIL"
+msgstr "Ezin izan da mezu elektronikoa gorde."
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_CONNECT_TO_NETWORK"
+msgstr "Ezin izan da sarera konektatu."
+
+msgid "IDS_EMAIL_TPOP_ENTER_AT_LEAST_ONE_VALID_RECIPIENT"
+msgstr "Adierazi gutxienez baliozko hartzaile bat."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_SENT"
+msgstr "Mezu elektronikoa bidali da."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_SAVED_IN_DRAFTS"
+msgstr "Mezua Zirriborroetan gorde da."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_MARKED_AS_UNREAD"
+msgstr "Mezu elektronikoa irakurri gabe gisa markatu da."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "Helbide elektronikoa kendu da Bidaltzaile lehenetsietatik."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ALREADY_ADDED_TO_PRIORITY_SENDERS"
+msgstr "Helbide elektronikoa bidaltzaile lehenetsietan gehituta dago jada."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ADDED_TO_PRIORITY_SENDERS"
+msgstr "Helbide elektronikoa gehitu da Bidaltzaile lehenetsietara."
+
+msgid "IDS_EMAIL_TPOP_DELETING_FOLDER_ING"
+msgstr "Karpeta ezabatzen..."
+
+msgid "IDS_EMAIL_TPOP_CREATING_FOLDER_ING"
+msgstr "Karpeta sortzen..."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_SELECTED_FOLDER"
+msgstr "Mezu elektroniko 1 hautatutako karpetara mugitu da."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_PS"
+msgstr "Mezu elektroniko 1 %s(e)ra mugitu da."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MARKED_AS_UNREAD"
+msgstr "Mezu elektroniko 1 irakurri gabe gisa markatu da."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MARKED_AS_READ"
+msgstr "Mezu elektroniko 1 irakurri gisa markatu da."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "Helbide elektroniko 1 Bidaltzaile lehenetsietatik kendu da."
+
+msgid "IDS_EMAIL_TMBODY_SYNC_SETTINGS"
+msgstr "Sinkronizatze ezarpenak"
+
+msgid "IDS_EMAIL_TMBODY_DEFAULT_SENDING_ACCOUNT"
+msgstr "Lehenetsitako bidalketa kontua"
+
+msgid "IDS_EMAIL_SBODY_SENT_FROM_MY_SAMSUNG_DEVICE"
+msgstr "Bidali nire Samsung gailutik"
+
+msgid "IDS_EMAIL_SBODY_RECEIVE_STATUS_BAR_NOTIFICATIONS_WHEN_EMAILS_ARRIVE"
+msgstr "Jaso egoera barraren jakinarazpenak mezu elektronikoak iristen direnean."
+
+msgid "IDS_EMAIL_SBODY_NO_SUBJECT_M_NOUN"
+msgstr "Ez dago gairik"
+
+msgid "IDS_EMAIL_SBODY_NO_RECIPIENTS_M_NOUN"
+msgstr "Ez dago hartzailerik"
+
+msgid "IDS_EMAIL_POP_YOU_MUST_DOWNLOAD_THE_MESSAGE_BEFORE_YOU_CAN_DOWNLOAD_THE_ATTACHMENT"
+msgstr "Mezua deskargatu behar duzu, eranskina deskargatu aurretik."
+
+msgid "IDS_EMAIL_POP_YOU_HAVE_NOT_YET_CREATED_AN_EMAIL_ACCOUNT_CREATE_AN_EMAIL_ACCOUNT_AND_TRY_AGAIN"
+msgstr "Oraindik ez duzu kontu elektronikorik sortu. Sortu kontu elektronikoa eta saiatu berriz."
+
+msgid "IDS_EMAIL_POP_YOU_CAN_ONLY_LOG_IN_ONCE_EVERY_15_MINUTES"
+msgstr "15 minuturo soilik has dezakezu saioa"
+
+msgid "IDS_EMAIL_POP_YOUR_PASSWORD_CONTAINS_SPACES_MANY_SERVERS_DO_NOT_SUPPORT_PASSWORDS_WITH_SPACES"
+msgstr "Zure pasahitzak zuriuneak ditu. Zerbitzari askok ez dituzte zuriuneak dituzten pasahitzak onartzen."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
+msgstr "Ezin dira hainbat kontutako mezu elektronikoak aldi berean mugitu"
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Ezin da zerbitzarira konektatu"
+
+msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
+msgstr "Mezu elektronikoa idazteko, sortu kontu elektroniko bat."
+
+msgid "IDS_EMAIL_POP_THIS_FILE_TYPE_IS_NOT_SUPPORTED_BY_ANY_APPLICATION_ON_YOUR_DEVICE"
+msgstr "Gailuko aplikazio batek ere ez du fitxategi mota hau onartzen."
+
+msgid "IDS_EMAIL_POP_THIS_EMAIL_WILL_BE_DELETED"
+msgstr "Mezu elektroniko hau ezabatuko da"
+
+msgid "IDS_EMAIL_POP_THIS_EMAIL_HAS_BEEN_DELETED_FROM_THE_SERVER"
+msgstr "Mezu elektroniko hau zerbitzaritik ezabatu da."
+
+msgid "IDS_EMAIL_POP_THE_VCARD_HAS_NOT_BEEN_CREATED_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Ez da vCard sortu. Errore ezezaguna gertatu da."
+
+msgid "IDS_EMAIL_POP_THE_SELECTED_DATA_COULD_NOT_BE_FOUND"
+msgstr "Ezin dira hautatutako datuak aurkitu."
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_TOTAL_SIZE_OF_ATTACHMENTS_HPS_MB_HAS_BEEN_EXCEEDED_REMOVE_SOME_FILES_AND_TRY_AGAIN"
+msgstr "Eranskinen gehieneko neurria (%s MB) gainditu duzu. Kendu fitxategi batzuk eta saiatu berriz."
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_NUMBER_OF_ATTACHMENTS_HPD_HAS_BEEN_REACHED"
+msgstr "Eranskinen gehieneko kopurura (%d) iritsi zara."
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_ATTACHMENT_SIZE_ALLOWED_BY_THE_CURRENT_EXCHANGE_SERVER_POLICY_HAS_BEEN_EXCEEDED"
+msgstr "Oraingo Exchange zerbitzari politikak ahalbidetzen duen gehieneko eranskin neurria gainditu duzu."
+
+msgid "IDS_EMAIL_POP_THE_CURRENT_EXCHANGE_SERVER_POLICY_PREVENTS_ATTACHMENTS_FROM_BEING_DOWNLOADED_TO_MOBILE_DEVICES"
+msgstr "Oraingo Exchange zerbitzari politikak eranskinak gailu mugikorretara deskargatzea galarazten du."
+
+msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE_GO_TO_SETTINGS_POWER_AND_STORAGE_STORAGE_THEN_DELETE_SOME_FILES_AND_TRY_AGAIN"
+msgstr "Ez dago nahikoa espazio gailuaren biltegian. Joan Ezarpenak > Bateria eta biltegia > Biltegia aukerara, ezabatu fitxategi batzuk eta saiatu berriz."
+
+msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE"
+msgstr "Ez dago nahikoa espazio zure gailuaren memorian."
+
+msgid "IDS_EMAIL_POP_SERVER_NOT_AVAILABLE"
+msgstr "Zerbitzaria ez dago eskuragarri"
+
+msgid "IDS_EMAIL_POP_SERVER_INFORMATION_QUERY_FAILED_ENTER_SERVER_INFORMATION_MANUALLY"
+msgstr "Zerbitzari informazioaren eskaerak huts egin du. Adierazi zerbitzari informazioa eskuz."
+
+msgid "IDS_EMAIL_POP_SECURITY_POLICY_RESTRICTS_USE_OF_THIS_ACCOUNT"
+msgstr "Segurtasun politikak kontu honen erabilera mugatzen du"
+
+msgid "IDS_EMAIL_POP_SAVING_EMAIL_ING"
+msgstr "Mezu elektronikoa gordetzen..."
+
+msgid "IDS_EMAIL_POP_SAVE_YOUR_CHANGES_OR_DISCARD_THEM_Q"
+msgstr "Gorde aldaketak edo baztertu?"
+
+msgid "IDS_EMAIL_POP_REMOVING_ACCOUNT_ING"
+msgstr "Kontua kentzen..."
+
+msgid "IDS_EMAIL_POP_PLEASE_FILL_ALL_THE_MANDATORY_FIELDS"
+msgstr "Mesedez, bete derrigorrezko eremu guztiak"
+
+msgid "IDS_EMAIL_POP_ONLY_PART_OF_THE_MESSAGE_HAS_BEEN_DOWNLOADED_IF_YOU_CONTINUE_THE_REST_OF_THE_MESSAGE_MAY_BE_LOST"
+msgstr "Mezuaren zati bat soilik deskargatu da. Jarraitzen baduzu, baliteke mezuaren gainerakoa galtzea."
+
+msgid "IDS_EMAIL_POP_NO_RESPONSE_HAS_BEEN_RECEIVED_FROM_THE_SERVER_TRY_AGAIN_LATER"
+msgstr "Ez da zerbitzariaren erantzunik jaso. Saiatu berriz geroago."
+
+msgid "IDS_EMAIL_POP_NETWORK_BUSY"
+msgstr "Sarea okupatuta"
+
+msgid "IDS_EMAIL_POP_INVALID_OR_INACCESSIBLE_CERTIFICATE"
+msgstr "Ziurtagiri baliogabea edo iristezina"
+
+msgid "IDS_EMAIL_POP_INITIALISING_APPLICATION_ING"
+msgstr "Aplikazioa abiarazten..."
+
+msgid "IDS_EMAIL_POP_HOST_NOT_FOUND"
+msgstr "Ez da ostalaria aurkitu"
+
+msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_OR_NETWORK_NOT_AVAILABLE"
+msgstr "Hegaldi modua gaituta dago edo sarea ez dago erabilgarri"
+
+msgid "IDS_EMAIL_POP_FAILED_TO_START_EMAIL_APPLICATION"
+msgstr "Posta elektronikoko aplikazioaren abiarazpenak huts egin du"
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DOWNLOAD_ATTACHMENT_CHECK_YOUR_NETWORK_CONNECTION_AND_TRY_AGAIN"
+msgstr "Ezin izan da eranskina deskargatu. Egiaztatu zure sare konexioa eta saiatu berriz."
+
+msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
+msgstr "Posta elektronikoa ezabatuta zerbitzaritik"
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Deskarga ez dago eskuragarri"
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Deskargatzen..."
+
+msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
+msgstr "Kontu hau ezabatuz gero, gailuan kontuko mezuak, kontaktuak eta bestelako datuak ezabatuko dira. Ukitu Ezabatu, jarraitzeko."
+
+msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
+msgstr "vCard sortzen..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Konektatzerakoan errorea"
+
+msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
+msgstr "Izen hori duen fitxategia dagoeneko atxiki da."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Autentikatzerakoan akatsa."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Errore ezezaguna gertatu da"
+
+msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
+msgstr "Mezu elektroniko honetako eranskin guztiak mezua birbidali aurretik deskargatuko dira."
+
+msgid "IDS_EMAIL_OPT_VIEW_CONTACT_DETAILS_ABB"
+msgstr "Ikusi kontaktu xehetasunak"
+
+msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
+msgstr "Eguneratu kontaktua"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Partekatu"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Ezarpenak"
+
+msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
+msgstr "Bidali nire buruari"
+
+msgid "IDS_EMAIL_OPT_SEND"
+msgstr "Bidali"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Hautatu denak"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Aukeratu"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Bilatu"
+
+msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
+msgstr "Gorde Zirriborroetan"
+
+msgid "IDS_EMAIL_OPT_REPLY_ALL"
+msgstr "Erantzun denei"
+
+msgid "IDS_EMAIL_OPT_REPLY"
+msgstr "Erantzun"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_SPAM_ABB"
+msgstr "Kendu Spametik"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
+msgstr "Kendu Bidaltzaile lehenetsietatik"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Kendu"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Freskatu"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Itsatsi"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Originala"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
+msgstr "Mugitu hartz. nagusira (Nori)"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_CC"
+msgstr "Mugitu Cc-ra"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_BCC_ABB"
+msgstr "Mugitu Bcc-ra"
+
+msgid "IDS_EMAIL_OPT_MOVE"
+msgstr "Mugitu"
+
+msgid "IDS_EMAIL_OPT_MEDIUM_M_IMAGE_SIZE"
+msgstr "Ertaina"
+
+msgid "IDS_EMAIL_OPT_MARK_AS_UNREAD_ABB"
+msgstr "Markatu irakurri gabe gisa"
+
+msgid "IDS_EMAIL_OPT_MARK_AS_READ_ABB"
+msgstr "Markatu irakurri gisa"
+
+msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
+msgstr "Baxua"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Birbidali"
+
+msgid "IDS_EMAIL_OPT_EDIT"
+msgstr "Editatu"
+
+msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
+msgstr "Ezabatu karpeta"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Ezabatu"
+
+msgid "IDS_EMAIL_OPT_CUT"
+msgstr "Moztu"
+
+msgid "IDS_EMAIL_OPT_CREATE_FOLDER_ABB2"
+msgstr "Sortu karpeta"
+
+msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
+msgstr "Kontaktua sortu"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Kopiatu"
+
+msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
+msgstr "Idatzi mezu elektronikoa"
+
+msgid "IDS_EMAIL_OPT_CLIPBOARD"
+msgstr "Arbela"
+
+msgid "IDS_EMAIL_OPT_CANCEL_SENDING_ABB"
+msgstr "Ezeztatu bidalketa"
+
+msgid "IDS_EMAIL_OPT_ADD_TO_PRIORITY_SENDERS_ABB"
+msgstr "Gehitu bidaltzaile lehenetsiei"
+
+msgid "IDS_EMAIL_OPT_ADD_TO_CONTACTS_ABB2"
+msgstr "Gehitu kontaktuetara"
+
+msgid "IDS_EMAIL_OPT_ADD_CC_BCC"
+msgstr "Gehitu Cc/Bcc"
+
+msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
+msgstr "Gehitu eranskina"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Gehitu kontua"
+
+msgid "IDS_EMAIL_OPT_ADD"
+msgstr "Gehitu"
+
+msgid "IDS_EMAIL_NPBODY_NO_RESULTS_FOUND"
+msgstr "Ez da emaitzarik aurkitu"
+
+msgid "IDS_EMAIL_NPBODY_NO_PRIORITY_SENDERS"
+msgstr "Lehentasunezko bidaltzailerik ez"
+
+msgid "IDS_EMAIL_NPBODY_NO_EMAILS"
+msgstr "Ez dago mezu elektronikorik"
+
+msgid "IDS_EMAIL_MBODY_VIBRATION"
+msgstr "Bibrazioa"
+
+msgid "IDS_EMAIL_MBODY_SIGNATURE"
+msgstr "Sinadura"
+
+msgid "IDS_EMAIL_MBODY_PRIORITY_SENDERS"
+msgstr "Lehent. igorlea"
+
+msgid "IDS_EMAIL_MBODY_NO_EMAIL_ADDRESS_OR_NAME"
+msgstr "Hel. elekt. edo izenik ez"
+
+msgid "IDS_EMAIL_MBODY_NOTIFICATION_SOUND"
+msgstr "Jakinarazpen soinua"
+
+msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
+msgstr "Mezu elek. berriak"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Posta jakinarazpenak"
+
+msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
+msgstr "Editatu sinadura"
+
+msgid "IDS_EMAIL_MBODY_DISPLAY_SIGNATURE"
+msgstr "Erakutsi sinadura"
+
+msgid "IDS_EMAIL_MBODY_DISPLAY_IMAGES"
+msgstr "Erakutsi irudiak"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_SEND_EMAIL_ABB"
+msgstr "Ezin da mezu elektr. bidali"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"
+msgstr "Ezin izan da ekintza gauzatu"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_OPEN_FILE_ABB"
+msgstr "Ezin izan da fitxategia ireki"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_MOVE_EMAILS_ABB"
+msgstr "Ezin dira mezu elek. mugitu"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_DOWNLOAD_ATTACHMENT_ABB"
+msgstr "Ezin da eranskina deskargatu"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_COMPOSE_EMAIL_ABB"
+msgstr "Ezin da mezu elektronikoa idatzi"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
+msgstr "Ezin da eranskina gehitu"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Gaia"
+
+msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
+msgstr "Utzi mezua idazteari"
+
+msgid "IDS_EMAIL_HEADER_STARRED_EMAILS_ABB"
+msgstr "M. elektroniko izartuak"
+
+msgid "IDS_EMAIL_HEADER_SPAMBOX"
+msgstr "Spam postontzia"
+
+msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
+msgstr "Erakutsi karpeta guztiak"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Ezarpenak"
+
+msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
+msgstr "Bidalita"
+
+msgid "IDS_EMAIL_HEADER_SEND_TO_MYSELF_ABB"
+msgstr "Bidali nire buruari"
+
+msgid "IDS_EMAIL_HEADER_SELECT_FOLDER_ABB2"
+msgstr "Aukeratu karpeta"
+
+msgid "IDS_EMAIL_HEADER_SELECT_ALL_ABB"
+msgstr "Hautatu dena"
+
+msgid "IDS_EMAIL_HEADER_SELECT_ACTION_ABB"
+msgstr "Hautatu ekintza"
+
+msgid "IDS_EMAIL_HEADER_RE_C_M_READ_REPORT"
+msgstr "Re:"
+
+msgid "IDS_EMAIL_HEADER_REMOVE_ACCOUNT_ABB"
+msgstr "Kendu kontua"
+
+msgid "IDS_EMAIL_HEADER_RECYCLE_BIN_ABB"
+msgstr "Birziklatze zaborrontzia"
+
+msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
+msgstr "Lehent. bidaltzaileak"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d aukeratuta"
+
+msgid "IDS_EMAIL_HEADER_OUTBOX"
+msgstr "Irteera postontzia"
+
+msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
+msgstr "Ireki mezu elektronikoa"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Jakinarazpenak"
+
+msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
+msgstr "Postontzia"
+
+msgid "IDS_EMAIL_HEADER_INBOX"
+msgstr "Sarrera postontzia"
+
+msgid "IDS_EMAIL_HEADER_IMAGE_QUALITY_ABB"
+msgstr "Irudiaren kalitatea"
+
+msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
+msgstr "(lehen.)"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Orokorra"
+
+msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
+msgstr "Kontu honetako karpetak"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_SAVE_ATTACHMENT_ABB"
+msgstr "Ezin izan da eranskina gorde"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_DELETE_ACCOUNT_ABB"
+msgstr "Ezin izan da kontua ezabatu"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_CONNECT_TO_SERVER_ABB"
+msgstr "Ezin izan da zerbit. konektatu"
+
+msgid "IDS_EMAIL_HEADER_ENTER_NEW_PASSWORD_ABB"
+msgstr "Adierazi pasahitz berria"
+
+msgid "IDS_EMAIL_HEADER_DRAFTS"
+msgstr "Zirriborroak"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ENTIRE_EMAIL_ABB"
+msgstr "Deskargatu mezu elektr. osoa"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENT_HEADER"
+msgstr "Deskargatu eranskina"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
+msgstr "Deskargatu eranskinak"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Ezabatu"
+
+msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
+msgstr "Sortu vCard"
+
+msgid "IDS_EMAIL_HEADER_COMPOSE_ABB"
+msgstr "Sortu"
+
+msgid "IDS_EMAIL_HEADER_COMBINED_INBOX_ABB"
+msgstr "Konbin. sarrera ontzia"
+
+msgid "IDS_EMAIL_HEADER_COMBINED_ACCOUNTS_ABB"
+msgstr "Konbinatutako kontuak"
+
+msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
+msgstr "Eranskinak"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Kontuak"
+
+msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
+msgstr "Bideoak"
+
+msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
+msgstr "Atera argazkia"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Ezarpenak"
+
+msgid "IDS_EMAIL_BUTTON_SEND_ALL"
+msgstr "Bidali denak"
+
+msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
+msgstr "Gorde"
+
+msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
+msgstr "Grab. bideoa"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "Ados"
+
+msgid "IDS_EMAIL_BUTTON_MEMO"
+msgstr "Oroigarria"
+
+msgid "IDS_EMAIL_BUTTON_IMAGES_ABB"
+msgstr "Irudiak"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
+msgstr "Deskargatu mezu elektroniko osoa"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Deskargatu denak"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Egina"
+
+msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
+msgstr "Baztertu"
+
+msgid "IDS_EMAIL_BUTTON_DELETE_ABB4"
+msgstr "Ezabatu"
+
+msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
+msgstr "Sortu"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Jarraitu"
+
+msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
+msgstr "Kontaktuak"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Ezeztatu"
+
+msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
+msgstr "Grabatu audio fitxategia"
+
+msgid "IDS_EMAIL_BUTTON2_CALENDAR"
+msgstr "Egutegia"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Atzo"
+
+msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
+msgstr "Ezin da zerbitzarirako konexioa ireki. Segurtasun errorea gertatu da."
+
+msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
+msgstr "Nori"
+
+msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
+msgstr "Karpeta hau eta haren eduki guztia ezabatuko dira."
+
+msgid "IDS_EMAIL_BODY_SERVER_DOES_NOT_SUPPORT_TLS"
+msgstr "Zerbitzariak ez du TLS onartzen"
+
+msgid "IDS_EMAIL_BODY_SENT_C_M_DATE"
+msgstr "Bidalita:"
+
+msgid "IDS_EMAIL_BODY_PS_MB"
+msgstr "%s MB"
+
+msgid "IDS_EMAIL_BODY_PS_KB"
+msgstr "%s KB"
+
+msgid "IDS_EMAIL_BODY_PS_GB"
+msgstr "%s GB"
+
+msgid "IDS_EMAIL_BODY_PS_B"
+msgstr "%s B"
+
+msgid "IDS_EMAIL_BODY_PD_FILES_ABB"
+msgstr "%d fitx."
+
+msgid "IDS_EMAIL_BODY_ORIGINAL_MESSAGE"
+msgstr "Jatorrizko mezua"
+
+msgid "IDS_EMAIL_BODY_NO_MORE_EMAILS_M_STATUS"
+msgstr "Ez dago beste mezu elektronikorik"
+
+msgid "IDS_EMAIL_BODY_MY_FILES_M_APPLICATION"
+msgstr "Nire Fitxategiak"
+
+msgid "IDS_EMAIL_BODY_MAPS_ABB"
+msgstr "Mapak"
+
+msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
+msgstr "Gehiago kargatzen..."
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Azkeneko eguneratzea"
+
+msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
+msgstr "Sartu jatorrizko mezua"
+
+msgid "IDS_EMAIL_BODY_IMAP4"
+msgstr "IMAP4"
+
+msgid "IDS_EMAIL_BODY_FWD_C"
+msgstr "FWD:"
+
+msgid "IDS_EMAIL_BODY_FROM_MSENDER"
+msgstr "Nork"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Karpetaren izena"
+
+msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
+msgstr "Mug. gora geh. kargatzeko."
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "Helbide elektronikoa"
+
+msgid "IDS_EMAIL_BODY_CC_BCC"
+msgstr "Cc/Bcc"
+
+msgid "IDS_EMAIL_BODY_CC"
+msgstr "Cc"
+
+msgid "IDS_EMAIL_BODY_BCC"
+msgstr "Bcc"
+
+msgid "IDS_EMAIL_BODY_AUDIO_FILES_ABB"
+msgstr "Audio fitx."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_SEND_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Mezu elektronikoak bidali ondoren, hemen erakutsiko dira."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_RECEIVE_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Mezu elektronikoak jaso ondoren, hemen erakutsiko dira."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_MOVE_EMAILS_TO_THIS_FOLDER_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Mezu elektronikoak karpeta honetara mugitu ondoren, hemen erakutsiko dira."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_HAVE_TRIED_TO_SEND_EMAILS_BUT_THEY_FAILED_TO_BE_SENT_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Bidali ezin izan diren mezu elektronikoak bidaltzen saiatu ondoren, hemen erakutsiko dira."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_DELETE_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Mezu elektronikoak ezabatu ondoren, hemen erakutsiko dira."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_PRIORITY_SENDERS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Bidaltzaile lehenetsiak gehitu ondoren, hemen erakutsiko dira."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_PRIORITY_SENDERS_EMAILS_FROM_THEM_WILL_BE_SHOWN_HERE"
+msgstr "Bidaltzaile lehenetsiak gehitu ondoren, haien mezu elektronikoak hemen erakutsiko dira."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_FAVOURITE_EMAILS_BY_TAPPING_THE_STAR_ICON_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Izarren ikonoa ukituz mezu elektroniko gogokoenak gehitu ondoren, hemen erakutsiko dira."
+
+msgid "IDS_EMAIL_BODY_1_FILE_ABB"
+msgstr "Fit. 1"
+
+msgid "IDS_EMAIL_ACBUTTON_MAILBOX_ABB"
+msgstr "POSTONTZIA"
+
+msgid "IDS_MF_HEADER_UNABLE_TO_SAVE_DATA_ABB"
+msgstr "Ezin dira datuak gorde"
+
+msgid "IDS_ST_TPOP_VALIDATING_ACCOUNT_ING_ABB"
+msgstr "Kontua baliozkotzen..."
+
+msgid "IDS_ST_TMBODY_USERNAME"
+msgstr "Erabiltzaile izena"
+
+msgid "IDS_ST_TMBODY_SYNC_WHILE_ROAMING"
+msgstr "Ibiltaritzan sinkronizatu"
+
+msgid "IDS_ST_TMBODY_SYNC"
+msgstr "Sinkronizatu"
+
+msgid "IDS_ST_TMBODY_SERVER_ADDRESS"
+msgstr "Zerbitzariaren helbidea"
+
+msgid "IDS_ST_TMBODY_SENDER_NAME"
+msgstr "Bidaltzailearen izena"
+
+msgid "IDS_ST_TMBODY_PASSWORD"
+msgstr "Pasahitza"
+
+msgid "IDS_ST_TMBODY_ACCOUNT_NAME"
+msgstr "Kontuaren izena"
+
+msgid "IDS_ST_SBODY_TLS"
+msgstr "TLS"
+
+msgid "IDS_ST_SBODY_SSL"
+msgstr "SSL"
+
+msgid "IDS_ST_SBODY_SHOW_PASSWORD_ABB"
+msgstr "Erakutsi pasahitza"
+
+msgid "IDS_ST_SBODY_SET_AS_DEFAULT_ACCOUNT_ABB"
+msgstr "Ezarri lehenetsitako kontu gisa"
+
+msgid "IDS_ST_SBODY_PROCESSING_PLEASE_WAIT_ING_ABB"
+msgstr "Prozesatzen. Itxaron mesedez..."
+
+msgid "IDS_ST_SBODY_POP3"
+msgstr "POP3"
+
+msgid "IDS_ST_SBODY_NOT_SYNCED_YET_M_STATUS"
+msgstr "Oraindik sinkronizatu gabe"
+
+msgid "IDS_ST_SBODY_IMAP"
+msgstr "IMAP"
+
+msgid "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"
+msgstr "Kontu hau gehituta dago"
+
+msgid "IDS_ST_POP_THE_MAXIMUM_NUMBER_OF_EMAIL_ACCOUNTS_HPD_HAS_BEEN_REACHED"
+msgstr "Kontu elektronikoen gehieneko kopurura (%d) iritsi zara."
+
+msgid "IDS_ST_POP_CHECK_THE_EMAIL_ADDRESS_AND_PASSWORD_YOU_HAVE_ENTERED"
+msgstr "Egiaztatu idatzi dituzun helbide elektronikoa eta pasahitza."
+
+msgid "IDS_ST_POP_ALL_DATA_RELATED_TO_THIS_ACCOUNT_WILL_BE_DELETED_FROM_THE_DEVICE"
+msgstr "Kontu honi buruzko datu guztiak ezabatuko dira gailutik"
+
+msgid "IDS_ST_OPT_REMOVE"
+msgstr "Kendu"
+
+msgid "IDS_ST_OPT_PUSH"
+msgstr "Push"
+
+msgid "IDS_ST_OPT_NO_LIMIT"
+msgstr "Mugarik gabe"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Bat ere ez"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Eskuzkoa"
+
+msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
+msgstr "Utzi ez-ibiltar. ezarpenak"
+
+msgid "IDS_ST_OPT_HEADER_ONLY"
+msgstr "Izenburua soilik"
+
+msgid "IDS_ST_OPT_EVERY_PD_MINUTES_ABB"
+msgstr "%d minuturo"
+
+msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
+msgstr "Orduro"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Egunero"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Lehenetsia"
+
+msgid "IDS_ST_MBODY_SYNC_EMAILS"
+msgstr "Sink. mezu elektronikoak"
+
+msgid "IDS_ST_MBODY_SMTP_AUTHENTICATION"
+msgstr "SMTP egiaztapena"
+
+msgid "IDS_ST_MBODY_SERVER_SETTINGS"
+msgstr "Zerbitzari ezarpenak"
+
+msgid "IDS_ST_MBODY_SAME_AS_POP3_IMAP4"
+msgstr "POP3/IMAP4-ren berdina"
+
+msgid "IDS_ST_MBODY_POP3_BEFORE_SMTP"
+msgstr "POP3 SMTP aurretik"
+
+msgid "IDS_ST_MBODY_OTHER"
+msgstr "Bestelakoak"
+
+msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
+msgstr "Posta el. sink. programa"
+
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Oharra"
+
+msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
+msgstr "Ezin da kontua baliozkotu"
+
+msgid "IDS_ST_HEADER_UNABLE_TO_ADD_ACCOUNT_ABB"
+msgstr "Ezin da kontua gehitu"
+
+msgid "IDS_ST_HEADER_SERVER_TYPE_ABB"
+msgstr "Zerbitzari mota"
+
+msgid "IDS_ST_HEADER_SELECT_ACCOUNT_TYPE_ABB"
+msgstr "Hautatu kontu mota"
+
+msgid "IDS_ST_HEADER_SECURITY_TYPE_ABB"
+msgstr "Segurtasuna mota"
+
+msgid "IDS_ST_HEADER_OUTGOING_SERVER_SETTINGS_ABB"
+msgstr "Irteera zerbitzari ezarpenak"
+
+msgid "IDS_ST_HEADER_LIMIT_RETRIEVAL_SIZE"
+msgstr "Mugatu berreskuratze neurria"
+
+msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
+msgstr "Sarrera zerbitzari ezarpenak"
+
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "Helbide elektronikoa"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Hurrengoa"
+
+msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
+msgstr "Eskuz konfig."
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Isila"
+
+msgid "IDS_ST_BODY_PORT"
+msgstr "Ataka"
+
+msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
+msgstr "BIDALI"
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Letraren tamaina"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Letra kolorea"
+
+msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
+msgstr "Karpeta berrizendatu"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
+msgstr "Spam postontzira joan"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_SPAMBOX_ABB"
+msgstr "Kendu Spam ontzitik"
+
+msgid "IDS_EMAIL_OPT_SHOW_TEXT_TOOLS"
+msgstr "Erakutsi testu tresnak"
+
+msgid "IDS_EMAIL_OPT_HIDE_TEXT_TOOLS"
+msgstr "Ezkutatu testu tresnak"
+
+msgid "IDS_EMAIL_HEADER_EMAIL_SETTINGS"
+msgstr "Posta ezarpenak"
+
+msgid "IDS_EMAIL_BODY_SYNCING_ING"
+msgstr "Sinkronizatzen..."
+
+msgid "IDS_EMAIL_BODY_SYNC_FAILED_TRY_LATER"
+msgstr "Sinkronizazioak huts egin du. Saiatu geroago."
+
+msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
+msgstr "Testu hondoko kolorea"
+
+msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
+msgstr "Deskargatuta"
+
+msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
+msgstr "Deskargatu eranskinak automatikoki Wi-Fi sare batera konektatuta zaudenean"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Gordeta"
+
+msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
+msgstr "Gaitu testu aberastua"
+
+msgid "IDS_EMAIL_OPT_DISABLE_RICH_TEXT_ABB2"
+msgstr "Desgaitu testu aberastua"
+
+msgid "IDS_EMAIL_BUTTON_SHOW_ABB"
+msgstr "Erakutsi"
+
+msgid "IDS_EMAIL_BUTTON_HIDE_ABB3"
+msgstr "Ezkutatu"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_SAVE_EMAILS_IN_DRAFTS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Mezu elektronikoak Zirriborroak atalean gorde ondoren, hemen erakutsiko dira."
+
+msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
+msgstr "Gorde guztiak"
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Errorea ezabatzerakoan"
+
+msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
+msgstr "Karpeta berrizendatu da."
+
+msgid "IDS_EMAIL_HEADER_SELECT_EMAILS"
+msgstr "Aukeratu mezu elektronikoak"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_EMAILS_TO_SPAM_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Mezu elektronikoak spam karpetan gehitu ondoren, hemen erakutsiko dira."
+
+msgid "IDS_EMAIL_BUTTON_RENAME_ABB"
+msgstr "Berrizendatu"
+
+msgid "IDS_EMAIL_POP_RENAMING_FOLDER_ING"
+msgstr "Karpetaren izena aldatzen..."
+
+msgid "IDS_EMAIL_POP_NETWORK_NOT_AVAILABLE_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
+msgstr "Sarea ez dago erabilgarri. Mezu hau sarera konektatzen zarenean bidaliko da."
+
+msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
+msgstr "Hegaldi modua gaituta. Mezu hau sarera konektatzen zarenean bidaliko da."
+
