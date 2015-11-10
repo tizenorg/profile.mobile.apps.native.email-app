@@ -1,0 +1,107 @@
+/*
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+#define EC_PREDICTIVE_SEARCH_OUTLINE_SIZE 2
+
+group {
+	name: "ec/predictive_search/base";
+	parts {
+		E_PART_BASE
+		E_PART_PADDING_LEFT(16)
+		E_PART_PADDING_RIGHT(16)
+		E_PART_PADDING_TOP (2)
+		E_PART_PADDING_BOTTOM (2)
+		E_PART_SPACER("ec.padding.left.for.outline",
+			description { state: "default" 0.0;
+				fixed: 1 0;
+				min: 15 0;
+				max: 15 -1;
+				rel1.to: "base";
+				rel2 { relative: 0.0 1.0; to: "base"; }
+				align: 0.0 0.5;
+			)
+		}
+		E_PART_SPACER("ec.padding.right.for.outline",
+			description { state: "default" 0.0;
+				fixed: 1 0;
+				min: 15 0;
+				max: 15 -1;
+				rel1 { relative: 1.0 0.0; to: "base"; }
+				rel2.to: "base";
+				align: 1.0 0.5;
+			)
+		}
+		E_PART_RECT("frame_bg",
+			description { state: "default" 0.0;
+				rel1 { relative: 1.0 0.0; to_x: "ec.padding.left.for.outline"; to_y: "base"; }
+				rel2 { relative: 0.0 1.0; to_x: "ec.padding.right.for.outline"; to_y: "base"; }
+				color: BG_COLOR;
+			}
+		)
+		E_PART_RECT("ec.outline.left",
+			description { state: "default" 0.0;
+				fixed: 1 0;
+				min: EC_PREDICTIVE_SEARCH_OUTLINE_SIZE 0;
+				max: EC_PREDICTIVE_SEARCH_OUTLINE_SIZE -1;
+				rel1.to: "frame_bg";
+				rel2 { relative: 0.0 1.0; to: "frame_bg"; }
+				align: 0.0 0.5;
+				color: BG_COLOR_STROKE;
+			}
+		)
+		E_PART_RECT("ec.outline.right",
+			description { state: "default" 0.0;
+				fixed: 1 0;
+				min: EC_PREDICTIVE_SEARCH_OUTLINE_SIZE 0;
+				max: EC_PREDICTIVE_SEARCH_OUTLINE_SIZE -1;
+				rel1 { relative: 1.0 0.0; to: "frame_bg"; }
+				rel2.to: "frame_bg";
+				align: 1.0 0.5;
+				color: BG_COLOR_STROKE;
+			}
+		)
+		E_PART_RECT("ec.outline.top",
+			description { state: "default" 0.0;
+				fixed: 0 1;
+				min: 0 EC_PREDICTIVE_SEARCH_OUTLINE_SIZE;
+				max: -1 EC_PREDICTIVE_SEARCH_OUTLINE_SIZE;
+				rel1.to: "frame_bg";
+				rel2 { relative: 1.0 0.0; to: "frame_bg"; }
+				align: 0.5 0.0;
+				color: BG_COLOR_STROKE;
+			}
+		)
+		E_PART_RECT("ec.outline.bottom",
+			description { state: "default" 0.0;
+				fixed: 0 1;
+				min: 0 EC_PREDICTIVE_SEARCH_OUTLINE_SIZE;
+				max: -1 EC_PREDICTIVE_SEARCH_OUTLINE_SIZE;
+				rel1 { relative: 0.0 1.0; to: "frame_bg"; }
+				rel2.to: "frame_bg";
+				align: 0.5 1.0;
+				color: BG_COLOR_STROKE;
+			}
+		)
+		E_PART_SWALLOW("ec.swallow.content",
+			description { state: "default" 0.0;
+				rel1 { relative: 1.0 1.0; to_x: "padding.left"; to_y: "padding.top"; }
+				rel2 { relative: 0.0 0.0; to_x: "padding.right"; to_y: "padding.bottom"; }
+				align: 0.5 0.0;
+			}
+		)
+	}
+}

@@ -1,0 +1,1062 @@
+msgid "IDS_EMAIL_POP_FAILED_TO_MOVE"
+msgstr "移動失敗。"
+
+msgid "IDS_ST_OPT_DEFAULT_RINGTONE"
+msgstr "預設鈴聲"
+
+msgid "IDS_EMAIL_BODY_MAXIMUM_NUMBER_OF_EMAIL_ACCOUNTS_REACHED"
+msgstr "已達電子郵件帳戶的數量上限。"
+
+msgid "IDS_ST_OPT_EVERY_PD_HOURS_ABB2"
+msgstr "每 %d 個小時"
+
+msgid "IDS_ST_OPT_EVERY_1_HOUR"
+msgstr "每 1 個小時"
+
+msgid "IDS_TPLATFORM_ACBUTTON_DONE_ABB"
+msgstr "完成"
+
+msgid "IDS_TPLATFORM_ACBUTTON_CANCEL_ABB"
+msgstr "取消"
+
+msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
+msgstr "刪除"
+
+msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
+msgstr "需要 Wi-Fi 連接。連接至 Wi-Fi 網絡並重試。"
+
+msgid "IDS_EMAIL_POP_MOBILE_DATA_IS_DISABLED_CONNECT_TO_WI_FI_NETWORK_INSTEAD_OR_ENABLE_MOBILE_DATA_AND_TRY_AGAIN"
+msgstr "流動數據已停用。請連接 Wi-Fi 網絡或啟用流動數據並重試。"
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_CANCELLED"
+msgstr "下載已取消"
+
+msgid "IDS_EMAIL_BODY_TODAY"
+msgstr "今天"
+
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "沒有要顯示的項目。"
+
+msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
+msgstr "僅能下載 http 或 http 網址。"
+
+msgid "IDS_BR_OPT_WEB_SEARCH"
+msgstr "網絡搜尋"
+
+msgid "IDS_ASEML_POP_THE_SECURITY_POLICY_PREVENTS_THE_USE_OF_POP_AND_IMAP_EMAIL_PROTOCOLS"
+msgstr "安全性政策可防止 POP 與 IMAP 電子郵件通訊協定的使用。"
+
+msgid "IDS_ASEML_HEADER_UNABLE_TO_USE_FUNCTION_ABB"
+msgstr "無法使用功能"
+
+msgid "IDS_EMAIL_TPOP_SYNC_EMAIL_DISABLED_FOR_PS"
+msgstr "已停用 %s 電子郵件的同步。"
+
+msgid "IDS_EMAIL_TPOP_SIGNATURE_SAVED"
+msgstr "簽名已儲存。"
+
+msgid "IDS_EMAIL_TPOP_SERVER_ERROR_OCCURRED_ABB"
+msgstr "發生伺服器錯誤。"
+
+msgid "IDS_EMAIL_TPOP_SENDING_FAILED"
+msgstr "發送失敗。"
+
+msgid "IDS_EMAIL_TPOP_SENDING_EMAIL_ING"
+msgstr "正在發送電子郵件..."
+
+msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
+msgstr "正在發送電子郵件"
+
+msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
+msgstr "正在調整檔案大小..."
+
+msgid "IDS_EMAIL_TPOP_RECIPIENT_ALREADY_EXISTS"
+msgstr "收件人已存在。"
+
+msgid "IDS_EMAIL_TPOP_PD_EMAIL_ADDRESSES_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "%d 個電子郵件地址已從優先寄件人中移除。"
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MOVED_TO_SELECTED_FOLDER"
+msgstr "%d 封電子郵件已移動至選擇的資料夾。"
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MARKED_AS_UNREAD"
+msgstr "%d 封電子郵件已標記為未讀。"
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MARKED_AS_READ"
+msgstr "%d 封電子郵件已標記為已讀。"
+
+msgid "IDS_EMAIL_TPOP_P1SD_EMAILS_MOVED_TO_P2SS"
+msgstr "%1$d 封電子郵件已移動至 %2$s。"
+
+msgid "IDS_EMAIL_TPOP_NEW_EMAIL_RECEIVED_ABB"
+msgstr "已收到新電子郵件。"
+
+msgid "IDS_EMAIL_TPOP_NETWORK_NOT_AVAILABLE_EMAIL_WILL_BE_SENT_WHEN_CONNECTED_TO_NETWORK"
+msgstr "網絡不可用。電子郵件將在連接至網絡時發送。"
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_REGISTERED_DEVICES_REACHED_FOR_THIS_ACCOUNT_DEREGISTER_SOME_DEVICES_AND_TRY_AGAIN"
+msgstr "已達此帳戶可註冊裝置的數量上限。請取消註冊部分裝置並重試。"
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_RECIPIENTS_HPD_REACHED"
+msgstr "已達收件人數量上限 (%d)。"
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
+msgstr "已達字元數量上限。"
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "已達字元數量上限 (%d)"
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
+msgstr "已達訊息大小上限 (%d KB)。"
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
+msgstr "已超過訊息大小上限。將僅共享前 %d KB。"
+
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "正在載入..."
+
+msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
+msgstr "已輸入無效的電子郵件地址。"
+
+msgid "IDS_EMAIL_TPOP_FOLDER_NAME_ALREADY_IN_USE_ABB"
+msgstr "資料夾名稱已被使用。"
+
+msgid "IDS_EMAIL_TPOP_FOLDER_DELETED_ABB"
+msgstr "資料夾已刪除。"
+
+msgid "IDS_EMAIL_TPOP_FOLDER_CREATED"
+msgstr "資料夾已建立。"
+
+msgid "IDS_EMAIL_TPOP_FILE_SAVED_TO_DOWNLOADS"
+msgstr "檔案已儲存至下載項目。"
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_SIGN_IN_TO_PS"
+msgstr "登入至 %s 失敗。"
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_SAVE_EMAIL"
+msgstr "儲存電子郵件失敗。"
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_CONNECT_TO_NETWORK"
+msgstr "連接至網絡失敗。"
+
+msgid "IDS_EMAIL_TPOP_ENTER_AT_LEAST_ONE_VALID_RECIPIENT"
+msgstr "輸入至少一個有效的收件人。"
+
+msgid "IDS_EMAIL_TPOP_EMAIL_SENT"
+msgstr "電子郵件已發送。"
+
+msgid "IDS_EMAIL_TPOP_EMAIL_SAVED_IN_DRAFTS"
+msgstr "電子郵件已儲存至草稿匣。"
+
+msgid "IDS_EMAIL_TPOP_EMAIL_MARKED_AS_UNREAD"
+msgstr "電子郵件已標記為未讀。"
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "電子郵件地址已從優先寄件人中移除。"
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ALREADY_ADDED_TO_PRIORITY_SENDERS"
+msgstr "電子郵件地址已加入至優先寄件人。"
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ADDED_TO_PRIORITY_SENDERS"
+msgstr "電子郵件地址已加入至優先寄件人。"
+
+msgid "IDS_EMAIL_TPOP_DELETING_FOLDER_ING"
+msgstr "正在刪除資料夾..."
+
+msgid "IDS_EMAIL_TPOP_CREATING_FOLDER_ING"
+msgstr "正在建立資料夾..."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_SELECTED_FOLDER"
+msgstr "1 封電子郵件已移動至選擇的資料夾。"
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_PS"
+msgstr "1 封電子郵件已移動至 %s。"
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MARKED_AS_UNREAD"
+msgstr "1 封電子郵件已標記為未讀。"
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MARKED_AS_READ"
+msgstr "1 封電子郵件已標記為已讀。"
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "1 個電子郵件地址已從優先寄件人中移除。"
+
+msgid "IDS_EMAIL_TMBODY_SYNC_SETTINGS"
+msgstr "同步設定"
+
+msgid "IDS_EMAIL_TMBODY_DEFAULT_SENDING_ACCOUNT"
+msgstr "預設發送帳戶"
+
+msgid "IDS_EMAIL_SBODY_SENT_FROM_MY_SAMSUNG_DEVICE"
+msgstr "已從我的三星裝置發送。"
+
+msgid "IDS_EMAIL_SBODY_RECEIVE_STATUS_BAR_NOTIFICATIONS_WHEN_EMAILS_ARRIVE"
+msgstr "收到電子郵件時接收狀態列通知。"
+
+msgid "IDS_EMAIL_SBODY_NO_SUBJECT_M_NOUN"
+msgstr "無主題"
+
+msgid "IDS_EMAIL_SBODY_NO_RECIPIENTS_M_NOUN"
+msgstr "無收件人"
+
+msgid "IDS_EMAIL_POP_YOU_MUST_DOWNLOAD_THE_MESSAGE_BEFORE_YOU_CAN_DOWNLOAD_THE_ATTACHMENT"
+msgstr "必須先下載訊息才能下載附件。"
+
+msgid "IDS_EMAIL_POP_YOU_HAVE_NOT_YET_CREATED_AN_EMAIL_ACCOUNT_CREATE_AN_EMAIL_ACCOUNT_AND_TRY_AGAIN"
+msgstr "您尚未建立電子郵件帳戶。請建立一個電子郵件帳戶並重試。"
+
+msgid "IDS_EMAIL_POP_YOU_CAN_ONLY_LOG_IN_ONCE_EVERY_15_MINUTES"
+msgstr "每 15 分鐘僅可登入一次。"
+
+msgid "IDS_EMAIL_POP_YOUR_PASSWORD_CONTAINS_SPACES_MANY_SERVERS_DO_NOT_SUPPORT_PASSWORDS_WITH_SPACES"
+msgstr "您的密碼含有空格。許多伺服器不支援包含空格的密碼。"
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
+msgstr "無法一次從多個帳戶移動電子郵件。"
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "無法連接到伺服器。"
+
+msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
+msgstr "若要撰寫電子郵件，請建立電子郵件帳戶。"
+
+msgid "IDS_EMAIL_POP_THIS_FILE_TYPE_IS_NOT_SUPPORTED_BY_ANY_APPLICATION_ON_YOUR_DEVICE"
+msgstr "您裝置上的任何應用程式均不支援此檔案類型。"
+
+msgid "IDS_EMAIL_POP_THIS_EMAIL_WILL_BE_DELETED"
+msgstr "將刪除此封電子郵件。"
+
+msgid "IDS_EMAIL_POP_THIS_EMAIL_HAS_BEEN_DELETED_FROM_THE_SERVER"
+msgstr "此電子郵件已從伺服器刪除。"
+
+msgid "IDS_EMAIL_POP_THE_VCARD_HAS_NOT_BEEN_CREATED_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "無法建立 vCard。發生未知錯誤。"
+
+msgid "IDS_EMAIL_POP_THE_SELECTED_DATA_COULD_NOT_BE_FOUND"
+msgstr "找不到選擇的數據。"
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_TOTAL_SIZE_OF_ATTACHMENTS_HPS_MB_HAS_BEEN_EXCEEDED_REMOVE_SOME_FILES_AND_TRY_AGAIN"
+msgstr "已超過附件的總大小 (%s MB) 上限。移除部分檔案並重試。"
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_NUMBER_OF_ATTACHMENTS_HPD_HAS_BEEN_REACHED"
+msgstr "已達附件數量上限 (%d)。"
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_ATTACHMENT_SIZE_ALLOWED_BY_THE_CURRENT_EXCHANGE_SERVER_POLICY_HAS_BEEN_EXCEEDED"
+msgstr "已超過目前 Exchange 伺服器政策允許的附件大小上限。"
+
+msgid "IDS_EMAIL_POP_THE_CURRENT_EXCHANGE_SERVER_POLICY_PREVENTS_ATTACHMENTS_FROM_BEING_DOWNLOADED_TO_MOBILE_DEVICES"
+msgstr "目前 Exchange 伺服器政策可防止下載附件至流動裝置。"
+
+msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE_GO_TO_SETTINGS_POWER_AND_STORAGE_STORAGE_THEN_DELETE_SOME_FILES_AND_TRY_AGAIN"
+msgstr "您的裝置儲存空間不足。請前往設定 > 電源與儲存空間 > 儲存空間，然後刪除部分檔案並重試。"
+
+msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE"
+msgstr "您的裝置記憶體空間不足。"
+
+msgid "IDS_EMAIL_POP_SERVER_NOT_AVAILABLE"
+msgstr "伺服器不可用。"
+
+msgid "IDS_EMAIL_POP_SERVER_INFORMATION_QUERY_FAILED_ENTER_SERVER_INFORMATION_MANUALLY"
+msgstr "伺服器資訊查詢失敗。請手動輸入伺服器資訊。"
+
+msgid "IDS_EMAIL_POP_SECURITY_POLICY_RESTRICTS_USE_OF_THIS_ACCOUNT"
+msgstr "安全政策限制使用此帳戶。"
+
+msgid "IDS_EMAIL_POP_SAVING_EMAIL_ING"
+msgstr "正在儲存電子郵件..."
+
+msgid "IDS_EMAIL_POP_SAVE_YOUR_CHANGES_OR_DISCARD_THEM_Q"
+msgstr "要儲存或捨棄您的變更？"
+
+msgid "IDS_EMAIL_POP_REMOVING_ACCOUNT_ING"
+msgstr "正在移除帳戶..."
+
+msgid "IDS_EMAIL_POP_PLEASE_FILL_ALL_THE_MANDATORY_FIELDS"
+msgstr "請填寫所有必填欄位。"
+
+msgid "IDS_EMAIL_POP_ONLY_PART_OF_THE_MESSAGE_HAS_BEEN_DOWNLOADED_IF_YOU_CONTINUE_THE_REST_OF_THE_MESSAGE_MAY_BE_LOST"
+msgstr "僅部分訊息已下載。若您繼續，訊息的其餘部分可能會遺失。"
+
+msgid "IDS_EMAIL_POP_NO_RESPONSE_HAS_BEEN_RECEIVED_FROM_THE_SERVER_TRY_AGAIN_LATER"
+msgstr "未收到來自伺服器的回應。請稍後再試。"
+
+msgid "IDS_EMAIL_POP_NETWORK_BUSY"
+msgstr "網絡繁忙"
+
+msgid "IDS_EMAIL_POP_INVALID_OR_INACCESSIBLE_CERTIFICATE"
+msgstr "無效或無法存取的證書。"
+
+msgid "IDS_EMAIL_POP_INITIALISING_APPLICATION_ING"
+msgstr "正在初始化應用程式..."
+
+msgid "IDS_EMAIL_POP_HOST_NOT_FOUND"
+msgstr "找不到主機"
+
+msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_OR_NETWORK_NOT_AVAILABLE"
+msgstr "飛行模式已啟用或網絡不可用。"
+
+msgid "IDS_EMAIL_POP_FAILED_TO_START_EMAIL_APPLICATION"
+msgstr "無法啟動電子郵件應用程式。"
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DOWNLOAD_ATTACHMENT_CHECK_YOUR_NETWORK_CONNECTION_AND_TRY_AGAIN"
+msgstr "下載附件失敗。請檢查您的網絡連接並重試。"
+
+msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
+msgstr "電子郵件已從伺服器刪除。"
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "不能下載"
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "正在下載..."
+
+msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
+msgstr "刪除此帳戶也將刪除所有的帳戶訊息、聯絡人及裝置中的其他數據。輕觸刪除以繼續。"
+
+msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
+msgstr "正在建立 vCard..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "連接失敗"
+
+msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
+msgstr "一個擁有此名稱的檔案已附加。"
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "認證失敗"
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "發生未知錯誤。"
+
+msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
+msgstr "轉寄前此電子郵件中的所有附件將會下載。"
+
+msgid "IDS_EMAIL_OPT_VIEW_CONTACT_DETAILS_ABB"
+msgstr "檢視聯絡人詳細資料"
+
+msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
+msgstr "更新聯絡人"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "分享"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "設定"
+
+msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
+msgstr "發送給我自己"
+
+msgid "IDS_EMAIL_OPT_SEND"
+msgstr "發送"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "選擇全部"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "選擇"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "搜尋"
+
+msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
+msgstr "儲存於草稿匣"
+
+msgid "IDS_EMAIL_OPT_REPLY_ALL"
+msgstr "全部回覆"
+
+msgid "IDS_EMAIL_OPT_REPLY"
+msgstr "回覆"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_SPAM_ABB"
+msgstr "從垃圾郵件中移除"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
+msgstr "從優先寄件人移除"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "移除"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "重新整理"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "貼上"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "原圖"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
+msgstr "移動至主要收件人 (至)"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_CC"
+msgstr "移動到抄送"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_BCC_ABB"
+msgstr "移動至密送"
+
+msgid "IDS_EMAIL_OPT_MOVE"
+msgstr "移動"
+
+msgid "IDS_EMAIL_OPT_MEDIUM_M_IMAGE_SIZE"
+msgstr "中"
+
+msgid "IDS_EMAIL_OPT_MARK_AS_UNREAD_ABB"
+msgstr "標記為未讀"
+
+msgid "IDS_EMAIL_OPT_MARK_AS_READ_ABB"
+msgstr "標記為已讀"
+
+msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
+msgstr "低"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "轉寄"
+
+msgid "IDS_EMAIL_OPT_EDIT"
+msgstr "編輯"
+
+msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
+msgstr "刪除資料夾"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "刪除"
+
+msgid "IDS_EMAIL_OPT_CUT"
+msgstr "剪下"
+
+msgid "IDS_EMAIL_OPT_CREATE_FOLDER_ABB2"
+msgstr "建立資料夾"
+
+msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
+msgstr "建立聯絡人"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "複製"
+
+msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
+msgstr "撰寫電子郵件"
+
+msgid "IDS_EMAIL_OPT_CLIPBOARD"
+msgstr "剪貼板"
+
+msgid "IDS_EMAIL_OPT_CANCEL_SENDING_ABB"
+msgstr "取消發送"
+
+msgid "IDS_EMAIL_OPT_ADD_TO_PRIORITY_SENDERS_ABB"
+msgstr "加入至優先寄件人"
+
+msgid "IDS_EMAIL_OPT_ADD_TO_CONTACTS_ABB2"
+msgstr "加入至聯絡人"
+
+msgid "IDS_EMAIL_OPT_ADD_CC_BCC"
+msgstr "加入抄送/密送"
+
+msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
+msgstr "加入附件"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "加入帳戶"
+
+msgid "IDS_EMAIL_OPT_ADD"
+msgstr "加入"
+
+msgid "IDS_EMAIL_NPBODY_NO_RESULTS_FOUND"
+msgstr "無搜尋結果"
+
+msgid "IDS_EMAIL_NPBODY_NO_PRIORITY_SENDERS"
+msgstr "無優先寄件人"
+
+msgid "IDS_EMAIL_NPBODY_NO_EMAILS"
+msgstr "無電子郵件"
+
+msgid "IDS_EMAIL_MBODY_VIBRATION"
+msgstr "震動"
+
+msgid "IDS_EMAIL_MBODY_SIGNATURE"
+msgstr "簽名"
+
+msgid "IDS_EMAIL_MBODY_PRIORITY_SENDERS"
+msgstr "優先寄件人"
+
+msgid "IDS_EMAIL_MBODY_NO_EMAIL_ADDRESS_OR_NAME"
+msgstr "無電子郵件地址或名稱"
+
+msgid "IDS_EMAIL_MBODY_NOTIFICATION_SOUND"
+msgstr "通知聲音"
+
+msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
+msgstr "新電子郵件"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "電子郵件通知"
+
+msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
+msgstr "編輯簽名"
+
+msgid "IDS_EMAIL_MBODY_DISPLAY_SIGNATURE"
+msgstr "顯示簽名"
+
+msgid "IDS_EMAIL_MBODY_DISPLAY_IMAGES"
+msgstr "顯示圖像"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_SEND_EMAIL_ABB"
+msgstr "無法發送電子郵件"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"
+msgstr "無法執行動作"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_OPEN_FILE_ABB"
+msgstr "無法開啟檔案"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_MOVE_EMAILS_ABB"
+msgstr "無法移動電子郵件"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_DOWNLOAD_ATTACHMENT_ABB"
+msgstr "無法下載附件"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_COMPOSE_EMAIL_ABB"
+msgstr "無法撰寫電子郵件"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
+msgstr "無法加入附件"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "主題"
+
+msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
+msgstr "停止撰寫電子郵件"
+
+msgid "IDS_EMAIL_HEADER_STARRED_EMAILS_ABB"
+msgstr "已加星號的電子郵件"
+
+msgid "IDS_EMAIL_HEADER_SPAMBOX"
+msgstr "垃圾訊息匣"
+
+msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
+msgstr "顯示所有資料夾"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "設定"
+
+msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
+msgstr "已發送"
+
+msgid "IDS_EMAIL_HEADER_SEND_TO_MYSELF_ABB"
+msgstr "發送給我自己"
+
+msgid "IDS_EMAIL_HEADER_SELECT_FOLDER_ABB2"
+msgstr "選擇資料夾"
+
+msgid "IDS_EMAIL_HEADER_SELECT_ALL_ABB"
+msgstr "選擇全部"
+
+msgid "IDS_EMAIL_HEADER_SELECT_ACTION_ABB"
+msgstr "選擇動作"
+
+msgid "IDS_EMAIL_HEADER_RE_C_M_READ_REPORT"
+msgstr "回覆："
+
+msgid "IDS_EMAIL_HEADER_REMOVE_ACCOUNT_ABB"
+msgstr "移除帳戶"
+
+msgid "IDS_EMAIL_HEADER_RECYCLE_BIN_ABB"
+msgstr "資源回收桶"
+
+msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
+msgstr "優先寄件人"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d 已選擇"
+
+msgid "IDS_EMAIL_HEADER_OUTBOX"
+msgstr "寄件匣"
+
+msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
+msgstr "開啟電子郵件"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "通知"
+
+msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
+msgstr "郵箱"
+
+msgid "IDS_EMAIL_HEADER_INBOX"
+msgstr "收件匣"
+
+msgid "IDS_EMAIL_HEADER_IMAGE_QUALITY_ABB"
+msgstr "圖像品質"
+
+msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
+msgstr "(預設)"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "一般"
+
+msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
+msgstr "此帳戶的文件夾"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_SAVE_ATTACHMENT_ABB"
+msgstr "儲存附件失敗"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_DELETE_ACCOUNT_ABB"
+msgstr "刪除帳戶失敗"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_CONNECT_TO_SERVER_ABB"
+msgstr "連接至伺服器失敗"
+
+msgid "IDS_EMAIL_HEADER_ENTER_NEW_PASSWORD_ABB"
+msgstr "輸入新密碼"
+
+msgid "IDS_EMAIL_HEADER_DRAFTS"
+msgstr "草稿匣"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ENTIRE_EMAIL_ABB"
+msgstr "下載完整的電子郵件"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENT_HEADER"
+msgstr "下載附件"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
+msgstr "下載附件"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "刪除"
+
+msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
+msgstr "建立 vCard"
+
+msgid "IDS_EMAIL_HEADER_COMPOSE_ABB"
+msgstr "撰寫"
+
+msgid "IDS_EMAIL_HEADER_COMBINED_INBOX_ABB"
+msgstr "組合式收件匣"
+
+msgid "IDS_EMAIL_HEADER_COMBINED_ACCOUNTS_ABB"
+msgstr "已合併帳戶"
+
+msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
+msgstr "附件"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "帳戶"
+
+msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
+msgstr "影片"
+
+msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
+msgstr "拍照"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "設定"
+
+msgid "IDS_EMAIL_BUTTON_SEND_ALL"
+msgstr "發送全部"
+
+msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
+msgstr "儲存"
+
+msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
+msgstr "錄製影片"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "確定"
+
+msgid "IDS_EMAIL_BUTTON_MEMO"
+msgstr "備忘錄"
+
+msgid "IDS_EMAIL_BUTTON_IMAGES_ABB"
+msgstr "圖像"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
+msgstr "下載完整電子郵件"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "全部下載"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "完成"
+
+msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
+msgstr "捨棄"
+
+msgid "IDS_EMAIL_BUTTON_DELETE_ABB4"
+msgstr "刪除"
+
+msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
+msgstr "建立"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "繼續"
+
+msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
+msgstr "聯絡人"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "取消"
+
+msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
+msgstr "錄製音訊檔案"
+
+msgid "IDS_EMAIL_BUTTON2_CALENDAR"
+msgstr "日曆"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "昨天"
+
+msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
+msgstr "無法開啟至伺服器的連線。發生安全性錯誤。"
+
+msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
+msgstr "收件人"
+
+msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
+msgstr "此資料夾及其所有內容將被刪除。"
+
+msgid "IDS_EMAIL_BODY_SERVER_DOES_NOT_SUPPORT_TLS"
+msgstr "伺服器不支援 TLS。"
+
+msgid "IDS_EMAIL_BODY_SENT_C_M_DATE"
+msgstr "已發送："
+
+msgid "IDS_EMAIL_BODY_PS_MB"
+msgstr "%s MB"
+
+msgid "IDS_EMAIL_BODY_PS_KB"
+msgstr "%s KB"
+
+msgid "IDS_EMAIL_BODY_PS_GB"
+msgstr "%s GB"
+
+msgid "IDS_EMAIL_BODY_PS_B"
+msgstr "%s B"
+
+msgid "IDS_EMAIL_BODY_PD_FILES_ABB"
+msgstr "%d 個檔案"
+
+msgid "IDS_EMAIL_BODY_ORIGINAL_MESSAGE"
+msgstr "原有訊息"
+
+msgid "IDS_EMAIL_BODY_NO_MORE_EMAILS_M_STATUS"
+msgstr "無更多電子郵件"
+
+msgid "IDS_EMAIL_BODY_MY_FILES_M_APPLICATION"
+msgstr "我的檔案"
+
+msgid "IDS_EMAIL_BODY_MAPS_ABB"
+msgstr "地圖"
+
+msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
+msgstr "正在載入更多..."
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "最近更新"
+
+msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
+msgstr "包含原有訊息"
+
+msgid "IDS_EMAIL_BODY_IMAP4"
+msgstr "IMAP4"
+
+msgid "IDS_EMAIL_BODY_FWD_C"
+msgstr "轉寄："
+
+msgid "IDS_EMAIL_BODY_FROM_MSENDER"
+msgstr "由"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "資料夾名稱"
+
+msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
+msgstr "向上輕拂以載入更多"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "電子郵件地址"
+
+msgid "IDS_EMAIL_BODY_CC_BCC"
+msgstr "抄送/密送"
+
+msgid "IDS_EMAIL_BODY_CC"
+msgstr "抄送"
+
+msgid "IDS_EMAIL_BODY_BCC"
+msgstr "密送"
+
+msgid "IDS_EMAIL_BODY_AUDIO_FILES_ABB"
+msgstr "音訊檔案"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_SEND_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "發送電子郵件後，將顯示於此。"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_RECEIVE_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "接收電子郵件後，將顯示於此。"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_MOVE_EMAILS_TO_THIS_FOLDER_THEY_WILL_BE_SHOWN_HERE"
+msgstr "將電子郵件移動至此資料夾後，將顯示於此。"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_HAVE_TRIED_TO_SEND_EMAILS_BUT_THEY_FAILED_TO_BE_SENT_THEY_WILL_BE_SHOWN_HERE"
+msgstr "嘗試發送電子郵件但發送失敗後，將顯示於此。"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_DELETE_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "刪除電子郵件後，將顯示於此。"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_PRIORITY_SENDERS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "加入優先寄件人後，將顯示於此。"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_PRIORITY_SENDERS_EMAILS_FROM_THEM_WILL_BE_SHOWN_HERE"
+msgstr "加入優先寄件人後，優先寄件人發送的電子郵件將顯示於此。"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_FAVOURITE_EMAILS_BY_TAPPING_THE_STAR_ICON_THEY_WILL_BE_SHOWN_HERE"
+msgstr "通過輕觸星號圖示加入我的最愛電子郵件後，將顯示於此。"
+
+msgid "IDS_EMAIL_BODY_1_FILE_ABB"
+msgstr "1 個檔案"
+
+msgid "IDS_EMAIL_ACBUTTON_MAILBOX_ABB"
+msgstr "郵箱"
+
+msgid "IDS_MF_HEADER_UNABLE_TO_SAVE_DATA_ABB"
+msgstr "無法儲存數據"
+
+msgid "IDS_ST_TPOP_VALIDATING_ACCOUNT_ING_ABB"
+msgstr "正在驗證帳戶..."
+
+msgid "IDS_ST_TMBODY_USERNAME"
+msgstr "用戶名稱"
+
+msgid "IDS_ST_TMBODY_SYNC_WHILE_ROAMING"
+msgstr "漫遊時同步"
+
+msgid "IDS_ST_TMBODY_SYNC"
+msgstr "同步"
+
+msgid "IDS_ST_TMBODY_SERVER_ADDRESS"
+msgstr "伺服器地址"
+
+msgid "IDS_ST_TMBODY_SENDER_NAME"
+msgstr "寄件人姓名"
+
+msgid "IDS_ST_TMBODY_PASSWORD"
+msgstr "密碼"
+
+msgid "IDS_ST_TMBODY_ACCOUNT_NAME"
+msgstr "帳戶名稱"
+
+msgid "IDS_ST_SBODY_TLS"
+msgstr "TLS"
+
+msgid "IDS_ST_SBODY_SSL"
+msgstr "SSL"
+
+msgid "IDS_ST_SBODY_SHOW_PASSWORD_ABB"
+msgstr "顯示密碼"
+
+msgid "IDS_ST_SBODY_SET_AS_DEFAULT_ACCOUNT_ABB"
+msgstr "設定為預設帳戶"
+
+msgid "IDS_ST_SBODY_PROCESSING_PLEASE_WAIT_ING_ABB"
+msgstr "正在處理。請稍候..."
+
+msgid "IDS_ST_SBODY_POP3"
+msgstr "POP3"
+
+msgid "IDS_ST_SBODY_NOT_SYNCED_YET_M_STATUS"
+msgstr "尚未同步"
+
+msgid "IDS_ST_SBODY_IMAP"
+msgstr "IMAP"
+
+msgid "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"
+msgstr "已加入此帳戶。"
+
+msgid "IDS_ST_POP_THE_MAXIMUM_NUMBER_OF_EMAIL_ACCOUNTS_HPD_HAS_BEEN_REACHED"
+msgstr "已達電子郵件帳戶數量上限 (%d)。"
+
+msgid "IDS_ST_POP_CHECK_THE_EMAIL_ADDRESS_AND_PASSWORD_YOU_HAVE_ENTERED"
+msgstr "檢查您輸入的電子郵件地址與密碼。"
+
+msgid "IDS_ST_POP_ALL_DATA_RELATED_TO_THIS_ACCOUNT_WILL_BE_DELETED_FROM_THE_DEVICE"
+msgstr "所有與此帳戶相關的數據將從裝置刪除。"
+
+msgid "IDS_ST_OPT_REMOVE"
+msgstr "移除"
+
+msgid "IDS_ST_OPT_PUSH"
+msgstr "推送"
+
+msgid "IDS_ST_OPT_NO_LIMIT"
+msgstr "無限制"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "無"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "手動"
+
+msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
+msgstr "保留非漫遊設定"
+
+msgid "IDS_ST_OPT_HEADER_ONLY"
+msgstr "只限標題"
+
+msgid "IDS_ST_OPT_EVERY_PD_MINUTES_ABB"
+msgstr "每 %d 分鐘"
+
+msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
+msgstr "每小時"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "每天"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "預設"
+
+msgid "IDS_ST_MBODY_SYNC_EMAILS"
+msgstr "同步電子郵件"
+
+msgid "IDS_ST_MBODY_SMTP_AUTHENTICATION"
+msgstr "SMTP 認證"
+
+msgid "IDS_ST_MBODY_SERVER_SETTINGS"
+msgstr "伺服器設定"
+
+msgid "IDS_ST_MBODY_SAME_AS_POP3_IMAP4"
+msgstr "與 POP3/IMAP4 相同"
+
+msgid "IDS_ST_MBODY_POP3_BEFORE_SMTP"
+msgstr "SMTP 之前使用 POP3"
+
+msgid "IDS_ST_MBODY_OTHER"
+msgstr "其他"
+
+msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
+msgstr "電子郵件同步日程"
+
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "警告"
+
+msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
+msgstr "無法驗證帳戶"
+
+msgid "IDS_ST_HEADER_UNABLE_TO_ADD_ACCOUNT_ABB"
+msgstr "無法加入帳戶"
+
+msgid "IDS_ST_HEADER_SERVER_TYPE_ABB"
+msgstr "伺服器類型"
+
+msgid "IDS_ST_HEADER_SELECT_ACCOUNT_TYPE_ABB"
+msgstr "選擇帳戶類型"
+
+msgid "IDS_ST_HEADER_SECURITY_TYPE_ABB"
+msgstr "安全性類型"
+
+msgid "IDS_ST_HEADER_OUTGOING_SERVER_SETTINGS_ABB"
+msgstr "外寄伺服器設定"
+
+msgid "IDS_ST_HEADER_LIMIT_RETRIEVAL_SIZE"
+msgstr "限制取回大小"
+
+msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
+msgstr "內送伺服器設定"
+
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "電子郵件"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "下一步"
+
+msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
+msgstr "手動設定"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "靜音"
+
+msgid "IDS_ST_BODY_PORT"
+msgstr "端口"
+
+msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
+msgstr "發送"
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "字體大小"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "字體顏色"
+
+msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
+msgstr "重新命名資料夾"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
+msgstr "移動到垃圾訊息匣"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_SPAMBOX_ABB"
+msgstr "從垃圾郵件匣移除"
+
+msgid "IDS_EMAIL_OPT_SHOW_TEXT_TOOLS"
+msgstr "顯示文字工具"
+
+msgid "IDS_EMAIL_OPT_HIDE_TEXT_TOOLS"
+msgstr "隱藏文字工具"
+
+msgid "IDS_EMAIL_HEADER_EMAIL_SETTINGS"
+msgstr "電子郵件設定"
+
+msgid "IDS_EMAIL_BODY_SYNCING_ING"
+msgstr "正在同步..."
+
+msgid "IDS_EMAIL_BODY_SYNC_FAILED_TRY_LATER"
+msgstr "同步失敗。請稍後再試。"
+
+msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
+msgstr "文字背景顏色"
+
+msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
+msgstr "已下載"
+
+msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
+msgstr "當連接至 Wi-Fi 網絡時自動下載附件"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "已儲存。"
+
+msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
+msgstr "啟用 RTF 文字"
+
+msgid "IDS_EMAIL_OPT_DISABLE_RICH_TEXT_ABB2"
+msgstr "停用 RTF 文字"
+
+msgid "IDS_EMAIL_BUTTON_SHOW_ABB"
+msgstr "顯示"
+
+msgid "IDS_EMAIL_BUTTON_HIDE_ABB3"
+msgstr "隱藏"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_SAVE_EMAILS_IN_DRAFTS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "電子郵件儲存至草稿匣後，將顯示於此。"
+
+msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
+msgstr "全部儲存"
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "刪除失敗。"
+
+msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
+msgstr "資料夾已重新命名。"
+
+msgid "IDS_EMAIL_HEADER_SELECT_EMAILS"
+msgstr "選擇電子郵件"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_EMAILS_TO_SPAM_THEY_WILL_BE_SHOWN_HERE"
+msgstr "在您加入電子郵件至垃圾郵件後，將顯示於此。"
+
+msgid "IDS_EMAIL_BUTTON_RENAME_ABB"
+msgstr "重新命名"
+
+msgid "IDS_EMAIL_POP_RENAMING_FOLDER_ING"
+msgstr "重新命名資料夾..."
+
+msgid "IDS_EMAIL_POP_NETWORK_NOT_AVAILABLE_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
+msgstr "網絡無法使用。此訊息將在您連接至網絡時發送。"
+
+msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
+msgstr "飛行模式已開啟。此訊息將在您連接至網絡時發送。"
+

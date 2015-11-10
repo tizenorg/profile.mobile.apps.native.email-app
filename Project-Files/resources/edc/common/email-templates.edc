@@ -1,0 +1,219 @@
+/*
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+/*
+   ----------------------------------------------------------------
+   |                 |     |                                 |     |
+   |elm.swallow.icon | pad |          elm.text               | pad |
+   |                 |     |                                 |     |
+   ------------------|-----|---------------------------------|     |
+*/
+
+#define SINGLE_LINE_ACCOUNT_FOLDER_ITEM(param_name, param_item_height, param_icon_width, param_left_padding, param_right_padding, param_top_padding, param_bottom_padding) \
+group { name: param_name; \
+	styles { \
+		style { name: "text_style"; \
+			base: "color=#000000FF font=Tizen:style=Regular font_size=40 text_class=list_item ellipsis=1.0"; \
+		} \
+	} \
+	parts { \
+		E_PART_BASE_H(param_item_height) \
+		E_PART_PADDING_TOP(param_top_padding) \
+		E_PART_PADDING_BOTTOM(param_bottom_padding) \
+		E_PART_SWALLOW(elm.swallow.icon, \
+			description { state: "default" 0.0; \
+				state: "default" 0.0; \
+				fixed: 1 0; \
+				rel2 {relative: 0.0 1.0; to: "base";} \
+				min: param_icon_width 0; \
+				max: param_icon_width -1; \
+				align: 0.0 0.5; \
+			}) \
+		E_PART_SPACER(padding.left, \
+			description { state: "default" 0.0; \
+				align: 0.0 0.5; \
+				fixed: 1 0; \
+				rel1 { \
+					relative: 1 0; \
+					to_x: "elm.swallow.icon"; \
+				} \
+				rel2 { \
+					relative: 1 1; \
+					to_x: "elm.swallow.icon"; \
+				} \
+				min: param_left_padding 0; \
+				max: param_left_padding -1; \
+			}) \
+		E_PART_PADDING_RIGHT(param_right_padding) \
+		E_PART_TEXTBLOCK(elm.text, \
+			description { state: "default" 0.0; \
+				rel1 { \
+					relative: 1 1; \
+					to_x: "padding.left"; \
+					to_y: "padding.top"; \
+				} \
+				rel2 { \
+					relative: 0 0; \
+					to_x: "padding.right"; \
+					to_y: "padding.bottom"; \
+				} \
+				align: 0.0 0.5; \
+				text { \
+					style: "text_style"; \
+					min: 0 1; \
+				} \
+			}) \
+	} \
+}
+
+/*
+   ----------------------------------------------------------------
+   |                 |     | elm.text                       |     |
+   |elm.swallow.icon | pad |--------------------------------| pad |
+   |                 |     | elm.text.sub                   |     |
+   ----------------------------------------------------------------
+*/
+
+#define DOUBLE_LINE_ACCOUNT_FOLDER_ITEM(param_name, param_icon_width, param_left_padding, param_right_padding, param_top_padding, param_bottom_padding) \
+group { name: param_name; \
+	styles { \
+		style { name: "main_text_style"; \
+			base: "color=#000000FF font=Tizen:style=Regular font_size=40 text_class=list_item ellipsis=1.0"; \
+		} \
+		style { name: "sub_text_style"; \
+			base: "color=#4C4C4CFF font=Tizen:style=Regular font_size=32 text_class=list_item ellipsis=1.0"; \
+		} \
+	} \
+	parts { \
+		E_PART_SWALLOW(elm.swallow.icon, \
+			description { state: "default" 0.0; \
+				state: "default" 0.0; \
+				fixed: 1 0; \
+				rel2 {relative: 0.0 1.0;} \
+				min: param_icon_width 0; \
+				max: param_icon_width -1; \
+				align: 0.0 0.5; \
+			}) \
+		E_PART_SPACER(padding.left, \
+			description { state: "default" 0.0; \
+				align: 0.0 0.5; \
+				fixed: 1 0; \
+				rel1 { \
+					relative: 1 0; \
+					to_x: "elm.swallow.icon"; \
+				} \
+				rel2 { \
+					relative: 1 1; \
+					to_x: "elm.swallow.icon"; \
+				} \
+				min: param_left_padding 0; \
+				max: param_left_padding -1; \
+			}) \
+		E_PART_PADDING_TOP(param_top_padding) \
+		E_PART_PADDING_BOTTOM(param_bottom_padding) \
+		E_PART_PADDING_RIGHT(param_right_padding) \
+		E_PART_TEXTBLOCK(elm.text, \
+			description { state: "default" 0.0; \
+				align: 0.0 0.5; \
+				rel1 { \
+					relative: 1 1; \
+					to_x: "padding.left"; \
+					to_y: "padding.top"; \
+				} \
+				rel2 { \
+					relative: 0 0; \
+					to_x: "padding.right"; \
+					to_y: "elm.text.sub"; \
+				} \
+				text { \
+					style: "main_text_style"; \
+					min: 0 1; \
+				} \
+			}) \
+		E_PART_TEXTBLOCK(elm.text.sub, \
+			description { state: "default" 0.0; \
+				align: 0.5 1.0; \
+				rel1 { \
+					relative: 1 0; \
+					to_x: "padding.left"; \
+					to_y: "padding.bottom"; \
+				} \
+				rel2 { \
+					relative: 0 0; \
+					to_x: "padding.right"; \
+					to_y: "padding.bottom"; \
+				} \
+				text { \
+					style: "sub_text_style"; \
+					min: 0 1; \
+				} \
+			}) \
+	} \
+}
+
+/*
+   ----------------------------------------------------------------
+   |  pad  |             elm.text                           | pad |
+   |--------------------------------------------------------------|
+   |                                                              |
+   |                     elm.swallow.entry                        |
+   ----------------------------------------------------------------
+*/
+
+
+#define ENTRY_WITH_UPPER_TEXT_DESCRIPTION_LAYOUT(param_name, param_top_padding, param_left_padding, param_right_padding) \
+group { name: param_name; \
+	styles{ \
+		style { name: "entry_text_style"; \
+		base: "color=#000000FF font=Tizen:style=Regular font_size=40 text_class=list_item  ellipsis=1.0"; \
+		} \
+	} \
+	parts { \
+		E_PART_PADDING_TOP(param_top_padding) \
+		E_PART_PADDING_LEFT(param_left_padding) \
+		E_PART_PADDING_RIGHT(param_right_padding) \
+		E_PART_TEXTBLOCK(elm.text, \
+			description { state: "default" 0.0; \
+				align: 0.5 0.0; \
+					rel1 { \
+						relative: 1 1; \
+						to_x: "padding.left"; \
+						to_y: "padding.top"; \
+					} \
+					rel2 { \
+						relative: 0 0; \
+						to_x: "padding.right"; \
+						to_y: "elm.swallow.entry"; \
+					} \
+				text { \
+					style: "entry_text_style"; \
+					min: 0 1; \
+				} \
+			}) \
+		E_PART_SWALLOW(elm.swallow.entry, \
+			description { state: "default" 0.0; \
+				align: 0.5 0.0; \
+				rel1 { \
+					relative: 0 1; \
+					to_y: "elm.text"; \
+				} \
+				rel2 { \
+					relative: 1 1; \
+				} \
+			}) \
+	} \
+}

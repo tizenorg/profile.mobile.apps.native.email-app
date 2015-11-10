@@ -1,0 +1,238 @@
+/*
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+#define EC_IMAGE_VIDEO_PLAY_THUMBNAIL "myfiles_list_icon/my_files_thumbnail_video_play_ic.png"
+
+#define EC_ATTACHMENT_MAX_HEIGHT 120
+#define EC_ATTACHMENT_PADDING_TOP_SIZE 33 // LIST_PADDING_TOP_SIZE
+#define EC_ATTACHMENT_PADDING_BOTTOM_SIZE 33 // LIST_PADDING_BOTTOM_SIZE
+#define EC_ATTACHMENT_LIST_TEXT_MAIN_HEIGHT 54 // LIST_TEXT_MAIN_HEIGHT
+#define EC_ATTACHMENT_LIST_TEXT_SUB_HEIGHT 32 // LIST_TEXT_SUB_HEIGHT
+#define EC_ATTACHMENT_LIST_TEXT_SUB_WIDTH_MAX 130 // LIST_TEXT_SUB_WIDTH_MAX
+#define EC_ATTACHMENT_TEXT_MAIN_SIZE 40
+#define EC_ATTACHMENT_TEXT_SUB_SIZE 32
+#define EC_ATTACHMENT_EXPAND_ICON_SIZE 60 // Need new resource with new size
+
+#define EC_ATTACHMENT_THUMBNAIL_RIGHT_PADDING 17
+#define EC_ATTACHMENT_THUMBNAIL_SIZE 80
+#define EC_ATTACHMENT_THUMBNAIL_WIDTH 80
+
+#define EC_ATTACHMENT_GR_ITEM_MAX_HEIGHT 80
+#define EC_ATTACHMENT_GR_ITEM_PADDING_LEFT_SIZE 32
+#define EC_ATTACHMENT_GR_ITEM_PADDING_RIGHT_SIZE 32
+#define EC_ATTACHMENT_GR_ITEM_TEXT_SIZE 36
+
+group { name: "elm/layout/list/B/type.2/email/default";
+	images {
+		image: EC_IMAGE_VIDEO_PLAY_THUMBNAIL COMP;
+	}
+	parts {
+		E_PART_BASE_WH(EC_ATTACHMENT_THUMBNAIL_WIDTH, EC_ATTACHMENT_MAX_HEIGHT)
+		E_PART_SPACER("ec.padding.left",
+			description { state: "default" 0.0;
+				fixed: 1 0;
+				min: EC_ATTACHMENT_THUMBNAIL_RIGHT_PADDING 0;
+				max: EC_ATTACHMENT_THUMBNAIL_RIGHT_PADDING -1;
+				rel1 { relative: 0.0 0.0; to: "base"; }
+				rel2 { relative: 0.0 1.0; to: "base"; }
+				align: 0 0.5;
+			}
+		)
+		E_PART_SPACER("ec.padding.right",
+			description { state: "default" 0.0;
+				fixed: 1 0;
+				min: 0 0;
+				max: 0 -1;
+				rel1 { relative: 1.0 0.0; to: "base"; }
+				rel2 { relative: 1.0 1.0; to: "base"; }
+				align: 1.0 0.5;
+			}
+		)
+		E_PART_SWALLOW("ec.swallow.content",
+			description { state: "default" 0.0;
+				fixed: 1 1;
+				min: EC_ATTACHMENT_THUMBNAIL_SIZE EC_ATTACHMENT_THUMBNAIL_SIZE;
+				max: EC_ATTACHMENT_THUMBNAIL_SIZE EC_ATTACHMENT_THUMBNAIL_SIZE;
+				rel1 { relative: 1.0 0.0; to_x: "ec.padding.left"; }
+				rel2 { relative: 0.0 1.0; to_x: "ec.padding.right"; }
+				align: 0.0 0.5;
+			}
+		)
+		E_PART_IMAGE("ec.video_play_image",
+			description { state: "default" 0.0;
+				visible: 0;
+			}
+			description { state: "show" 0.0; // To show 'high priority' icon
+				inherit: "default" 0.0;
+				fixed: 1 1;
+				min: EC_ATTACHMENT_THUMBNAIL_SIZE EC_ATTACHMENT_THUMBNAIL_SIZE;
+				max: EC_ATTACHMENT_THUMBNAIL_SIZE EC_ATTACHMENT_THUMBNAIL_SIZE;
+				rel1.to: "ec.swallow.content";
+				rel2.to: "ec.swallow.content";
+				align: 0.5 0.5;
+				visible : 1;
+				image.normal: EC_IMAGE_VIDEO_PLAY_THUMBNAIL;
+			}
+		)
+	}
+	programs {
+		PROGRAM_CHANGE_STATE("show_video_play_image", "ec,state,video_play_image,show", "", "show", 0.0, "ec.video_play_image")
+	}
+}
+
+group {
+	name: "ec/attachment/group_item";
+	parts {
+		E_PART_BASE_H(EC_ATTACHMENT_GR_ITEM_MAX_HEIGHT)
+		E_SWALLOW_BG
+		E_PART_PADDING_LEFT(EC_ATTACHMENT_GR_ITEM_PADDING_LEFT_SIZE)
+		E_PART_PADDING_RIGHT(EC_ATTACHMENT_GR_ITEM_PADDING_RIGHT_SIZE)
+		E_PART_RECT("ec.top.divider",
+			description { state: "default" 0.0;
+				fixed: 0 1;
+				max: -1 2;
+				rel1 {
+					relative: 0.0 0.0;
+				}
+				rel2 {
+					relative: 1.0 0.0;
+					offset: 0 2;
+				}
+				color: W024;
+			}
+		)
+		E_PART_TEXT("ec.text.main",
+			description { state: "default" 0.0;
+				text.min: 0 0;
+				text.align: 0 0.5;
+				text.ellipsis: 0.0;
+				text.size: EC_ATTACHMENT_GR_ITEM_TEXT_SIZE;
+				rel1 { relative: 1.0 0.0; to: "padding.left"; }
+				rel2 { relative: 0.0 1.0; to_x: "ec.swallow.icon"; to_y: "padding.right"; }
+				align: 0 0.5;
+				color: T027L1;
+			}
+		)
+
+		part {
+			name: "ec.swallow.icon";
+			scale: 1;
+			type: SWALLOW;
+			description { state: "default" 0.0;
+				min: EC_ATTACHMENT_EXPAND_ICON_SIZE EC_ATTACHMENT_EXPAND_ICON_SIZE;
+				max: EC_ATTACHMENT_EXPAND_ICON_SIZE EC_ATTACHMENT_EXPAND_ICON_SIZE;
+				fixed: 1 1; 
+				align: 1.0 0.5;
+				rel2 { relative: 0.0 1.0; to: "padding.right"; }
+			}
+		}
+
+		E_PART_RECT("ec.events",
+			mouse_events: 1;
+			repeat_events: 1;
+			ignore_flags: ON_HOLD;
+			description {
+				state: "default" 0.0;
+				color: 0 0 0 0;
+			}
+		)
+	}
+
+	programs {
+		program {
+			name: "clicked";
+			signal: "mouse,clicked,1";
+			source: "ec.events";
+			action: SIGNAL_EMIT "ec,action,clicked" "";
+		}
+	}
+}
+
+group {
+	name: "ec/attachment/base";
+	parts {
+		E_PART_BASE_H (EC_ATTACHMENT_MAX_HEIGHT)
+		E_SWALLOW_BG
+		E_PART_PADDING_TOP (EC_ATTACHMENT_PADDING_TOP_SIZE)
+		E_PART_PADDING_BOTTOM (EC_ATTACHMENT_PADDING_BOTTOM_SIZE)
+		E_PART_SWALLOW("ec.swallow.icon",
+			description { state: "default" 0.0;
+				fixed: 1 1;
+				rel1 { relative: 0.0 0.0; to: "base"; }
+				rel2 { relative: 0.0 1.0; to: "base"; }
+				align: 0 0.5;
+			}
+		)
+		E_PART_PADDING_LEFT_TO("ec.padding.icon.right", "ec.swallow.icon", 32)
+
+		E_PART_TEXT("ec.text.main.left",
+			description { state: "default" 0.0;
+				text.min: 0 1;
+				text.align: 0 0.5;
+				text.ellipsis: 0.0;
+				text.size: EC_ATTACHMENT_TEXT_MAIN_SIZE;
+				min: 0 EC_ATTACHMENT_LIST_TEXT_MAIN_HEIGHT;
+				rel1 { relative: 1.0 1.0; to_x: "ec.padding.icon.right"; to_y: "padding.top"; }
+				rel2 { relative: 0.0 0.0; to_x: "ec.text.sub.right"; to_y: "padding.bottom"; }
+				align: 0 0.5;
+				color: TEXT_BLACK_COLOR;
+			}
+		)
+		E_PART_TEXT("ec.text.sub.right",
+			description { state: "default" 0.0;
+				text.min: 0 1;
+				text.max: 1 0;
+				text.ellipsis: 0.0;
+				text.size: EC_ATTACHMENT_TEXT_SUB_SIZE;
+				min: 0 EC_ATTACHMENT_LIST_TEXT_SUB_HEIGHT;
+				rel1 { relative: 0.0 1.0; to_x: "ec.padding.button.left"; to_y: "padding.top"; offset: -EC_ATTACHMENT_LIST_TEXT_SUB_WIDTH_MAX 0; }
+				rel2 { relative: 0.0 0.0; to_x: "ec.padding.button.left"; to_y: "padding.bottom"; }
+				align: 1.0 0.5;
+				color: T024L1;
+			}
+		)
+		E_PART_PADDING_RIGHT_TO("ec.padding.button.left", "ec.swallow.button", 15)
+
+		E_PART_RECT("ec.events",
+			mouse_events: 1;
+			repeat_events: 1;
+			ignore_flags: ON_HOLD;
+			description {
+				state: "default" 0.0;
+				color: 0 0 0 0;
+			}
+		)
+
+		E_PART_SWALLOW("ec.swallow.button",
+			description { state: "default" 0.0;
+				fixed: 1 1;
+				rel1 { relative: 1.0 0.0; to: "base"; }
+				rel2 { relative: 1.0 1.0; to: "base"; }
+				align: 1 0.5;
+			}
+		)
+	}
+
+	programs {
+		program {
+			name: "clicked";
+			signal: "mouse,clicked,1";
+			source: "ec.events";
+			action: SIGNAL_EMIT "ec,action,clicked" "";
+		}
+	}
+}

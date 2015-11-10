@@ -1,0 +1,1062 @@
+msgid "IDS_EMAIL_POP_FAILED_TO_MOVE"
+msgstr "Kunne ikke flyttes."
+
+msgid "IDS_ST_OPT_DEFAULT_RINGTONE"
+msgstr "Standardringetone"
+
+msgid "IDS_EMAIL_BODY_MAXIMUM_NUMBER_OF_EMAIL_ACCOUNTS_REACHED"
+msgstr "Det maksimale antal e-mailkonti er nået."
+
+msgid "IDS_ST_OPT_EVERY_PD_HOURS_ABB2"
+msgstr "Hver %d. time"
+
+msgid "IDS_ST_OPT_EVERY_1_HOUR"
+msgstr "Hver time"
+
+msgid "IDS_TPLATFORM_ACBUTTON_DONE_ABB"
+msgstr "UDFØRT"
+
+msgid "IDS_TPLATFORM_ACBUTTON_CANCEL_ABB"
+msgstr "ANNULLER"
+
+msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
+msgstr "SLET"
+
+msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
+msgstr "Wi-Fi-forbindelse kræves. Slut til Wi-Fi-netværk, og prøv igen."
+
+msgid "IDS_EMAIL_POP_MOBILE_DATA_IS_DISABLED_CONNECT_TO_WI_FI_NETWORK_INSTEAD_OR_ENABLE_MOBILE_DATA_AND_TRY_AGAIN"
+msgstr "Mobile data deaktiveret. Opret forbindelse til Wi-Fi-netværk i stedet, eller aktivér mobile data og prøv igen."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_CANCELLED"
+msgstr "Download blev annulleret."
+
+msgid "IDS_EMAIL_BODY_TODAY"
+msgstr "I dag"
+
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Der er ingen elementer at vise."
+
+msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
+msgstr "Kun http- eller https-URL'er kan downloadedes."
+
+msgid "IDS_BR_OPT_WEB_SEARCH"
+msgstr "Websøgning"
+
+msgid "IDS_ASEML_POP_THE_SECURITY_POLICY_PREVENTS_THE_USE_OF_POP_AND_IMAP_EMAIL_PROTOCOLS"
+msgstr "Sikkerhedspolitikken forhindrer brugen af e-mailprotokollerne POP og IMAP."
+
+msgid "IDS_ASEML_HEADER_UNABLE_TO_USE_FUNCTION_ABB"
+msgstr "Kan ikke bruge funktionen"
+
+msgid "IDS_EMAIL_TPOP_SYNC_EMAIL_DISABLED_FOR_PS"
+msgstr "Synkronisering af e-mail deaktiveret for %s."
+
+msgid "IDS_EMAIL_TPOP_SIGNATURE_SAVED"
+msgstr "Signatur gemt."
+
+msgid "IDS_EMAIL_TPOP_SERVER_ERROR_OCCURRED_ABB"
+msgstr "Der opstod en serverfejl."
+
+msgid "IDS_EMAIL_TPOP_SENDING_FAILED"
+msgstr "Afsendelsen mislykkedes."
+
+msgid "IDS_EMAIL_TPOP_SENDING_EMAIL_ING"
+msgstr "Sender e-mail ..."
+
+msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
+msgstr "Sender e-mails ..."
+
+msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
+msgstr "Ændrer filstørrelser ..."
+
+msgid "IDS_EMAIL_TPOP_RECIPIENT_ALREADY_EXISTS"
+msgstr "Modtageren findes allerede."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAIL_ADDRESSES_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "%d e-mailadresser er blevet fjernet fra prioritetsafsendere."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MOVED_TO_SELECTED_FOLDER"
+msgstr "%d e-mails blev flyttet til den valgte mappe."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MARKED_AS_UNREAD"
+msgstr "%d e-mails markeret som ulæst."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MARKED_AS_READ"
+msgstr "%d e-mails markeret som læst."
+
+msgid "IDS_EMAIL_TPOP_P1SD_EMAILS_MOVED_TO_P2SS"
+msgstr "%1$d e-mails er blevet flyttet til %2$s."
+
+msgid "IDS_EMAIL_TPOP_NEW_EMAIL_RECEIVED_ABB"
+msgstr "Ny e-mail modtaget."
+
+msgid "IDS_EMAIL_TPOP_NETWORK_NOT_AVAILABLE_EMAIL_WILL_BE_SENT_WHEN_CONNECTED_TO_NETWORK"
+msgstr "Netværket er ikke tilgængeligt. Der vil blive sendt en e-mail, når der er forbindelse til netværket."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_REGISTERED_DEVICES_REACHED_FOR_THIS_ACCOUNT_DEREGISTER_SOME_DEVICES_AND_TRY_AGAIN"
+msgstr "Det maksimale antal registrerede enheder for denne konto er blevet nået. Fjern registreringen af nogle enheder, og prøv igen."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_RECIPIENTS_HPD_REACHED"
+msgstr "Det maksimale antal modtagere (%d) er nået."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
+msgstr "Det maksimale antal tegn er nået."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Det maksimale antal tegn (%d) er nået."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
+msgstr "Maksimal beskedstørrelse (%d KB) nået."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
+msgstr "Den maksimale beskedstørrelse er overskredet. Kun de første %d KB bliver delt."
+
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Indlæser ..."
+
+msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
+msgstr "Der er blevet angivet en ugyldig e-mailadresse."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_NAME_ALREADY_IN_USE_ABB"
+msgstr "Mappenavnet er i brug."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_DELETED_ABB"
+msgstr "Mappen er blevet slettet."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_CREATED"
+msgstr "Mappe oprettet."
+
+msgid "IDS_EMAIL_TPOP_FILE_SAVED_TO_DOWNLOADS"
+msgstr "Filen er blevet gemt under Downloads."
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_SIGN_IN_TO_PS"
+msgstr "Kunne ikke logge ind på %s."
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_SAVE_EMAIL"
+msgstr "Kunne ikke gemme e-mail."
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_CONNECT_TO_NETWORK"
+msgstr "Kunne ikke oprette forbindelse til netværket."
+
+msgid "IDS_EMAIL_TPOP_ENTER_AT_LEAST_ONE_VALID_RECIPIENT"
+msgstr "Angiv mindst én gyldig modtager."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_SENT"
+msgstr "E-mail sendt."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_SAVED_IN_DRAFTS"
+msgstr "E-mailen er blevet gemt i Udkast."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_MARKED_AS_UNREAD"
+msgstr "E-mail markeret som ulæst."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "E-mailadressen er blevet fjernet fra prioritetsafsendere."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ALREADY_ADDED_TO_PRIORITY_SENDERS"
+msgstr "E-mailadressen er allerede blevet føjet til prioritetsafsendere."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ADDED_TO_PRIORITY_SENDERS"
+msgstr "E-mailadressen er blevet føjet til prioritetsafsendere."
+
+msgid "IDS_EMAIL_TPOP_DELETING_FOLDER_ING"
+msgstr "Sletter mappe ..."
+
+msgid "IDS_EMAIL_TPOP_CREATING_FOLDER_ING"
+msgstr "Opretter mappe ..."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_SELECTED_FOLDER"
+msgstr "1 e-mail blev flyttet til den valgte mappe."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_PS"
+msgstr "1 e-mail er blevet flyttet til %s."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MARKED_AS_UNREAD"
+msgstr "1 e-mail markeret som ulæst."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MARKED_AS_READ"
+msgstr "1 e-mail markeret som læst."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "1 e-mailadresse er blevet fjernet fra prioritetsafsendere."
+
+msgid "IDS_EMAIL_TMBODY_SYNC_SETTINGS"
+msgstr "Synkroniseringsindstillinger"
+
+msgid "IDS_EMAIL_TMBODY_DEFAULT_SENDING_ACCOUNT"
+msgstr "Standardkonto til afsendelse"
+
+msgid "IDS_EMAIL_SBODY_SENT_FROM_MY_SAMSUNG_DEVICE"
+msgstr "Sendt fra min Samsung-enhed."
+
+msgid "IDS_EMAIL_SBODY_RECEIVE_STATUS_BAR_NOTIFICATIONS_WHEN_EMAILS_ARRIVE"
+msgstr "Modtag statuslinjemeddelelser, når du får e-mails."
+
+msgid "IDS_EMAIL_SBODY_NO_SUBJECT_M_NOUN"
+msgstr "Intet emne"
+
+msgid "IDS_EMAIL_SBODY_NO_RECIPIENTS_M_NOUN"
+msgstr "Ingen modtagere"
+
+msgid "IDS_EMAIL_POP_YOU_MUST_DOWNLOAD_THE_MESSAGE_BEFORE_YOU_CAN_DOWNLOAD_THE_ATTACHMENT"
+msgstr "Du skal downloade beskeden, før du kan downloade den vedhæftede fil."
+
+msgid "IDS_EMAIL_POP_YOU_HAVE_NOT_YET_CREATED_AN_EMAIL_ACCOUNT_CREATE_AN_EMAIL_ACCOUNT_AND_TRY_AGAIN"
+msgstr "Du har endnu ikke oprettet en e-mailkonto. Opret en e-mailkonto, og prøv igen."
+
+msgid "IDS_EMAIL_POP_YOU_CAN_ONLY_LOG_IN_ONCE_EVERY_15_MINUTES"
+msgstr "Du kan kun logge ind én gang hvert 15. minut."
+
+msgid "IDS_EMAIL_POP_YOUR_PASSWORD_CONTAINS_SPACES_MANY_SERVERS_DO_NOT_SUPPORT_PASSWORDS_WITH_SPACES"
+msgstr "Din adgangskode indeholder mellemrum. Mange servere understøtter ikke adgangskoder med mellemrum."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
+msgstr "Kan ikke flytte e-mails fra flere konti på en gang."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Kan ikke oprette forbindelse til server."
+
+msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
+msgstr "Opret en e-mailkonto for at skrive en e-mail."
+
+msgid "IDS_EMAIL_POP_THIS_FILE_TYPE_IS_NOT_SUPPORTED_BY_ANY_APPLICATION_ON_YOUR_DEVICE"
+msgstr "Denne filtype bliver ikke understøttet af nogen applikationer på din enhed."
+
+msgid "IDS_EMAIL_POP_THIS_EMAIL_WILL_BE_DELETED"
+msgstr "Denne e-mail vil blive slettet."
+
+msgid "IDS_EMAIL_POP_THIS_EMAIL_HAS_BEEN_DELETED_FROM_THE_SERVER"
+msgstr "Denne e-mail er blevet slettet fra serveren."
+
+msgid "IDS_EMAIL_POP_THE_VCARD_HAS_NOT_BEEN_CREATED_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "vCard blev ikke oprettet. Der opstod en ukendt fejl."
+
+msgid "IDS_EMAIL_POP_THE_SELECTED_DATA_COULD_NOT_BE_FOUND"
+msgstr "De valgte data kunne ikke findes."
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_TOTAL_SIZE_OF_ATTACHMENTS_HPS_MB_HAS_BEEN_EXCEEDED_REMOVE_SOME_FILES_AND_TRY_AGAIN"
+msgstr "Den maksimale størrelse for vedhæftede filer er blevet overskredet (%s MB). Fjern nogle filer, og prøv igen."
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_NUMBER_OF_ATTACHMENTS_HPD_HAS_BEEN_REACHED"
+msgstr "Det maksimale antal vedhæftede filer (%d) er nået."
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_ATTACHMENT_SIZE_ALLOWED_BY_THE_CURRENT_EXCHANGE_SERVER_POLICY_HAS_BEEN_EXCEEDED"
+msgstr "Den maksimalt tilladte størrelse på en vedhæftet fil ifølge den aktuelle Exchange-serverpolitik er blevet overskredet."
+
+msgid "IDS_EMAIL_POP_THE_CURRENT_EXCHANGE_SERVER_POLICY_PREVENTS_ATTACHMENTS_FROM_BEING_DOWNLOADED_TO_MOBILE_DEVICES"
+msgstr "Den nuværende Exchange-serverpolitik forhindrer download af vedhæftede filer til mobilenheder."
+
+msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE_GO_TO_SETTINGS_POWER_AND_STORAGE_STORAGE_THEN_DELETE_SOME_FILES_AND_TRY_AGAIN"
+msgstr "Der er ikke tilstrækkelig ledig plads på din enheds lager. Gå til Indstillinger > Strøm og lager > Lagring, slet nogle filer, og prøv igen."
+
+msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE"
+msgstr "Der er ikke tilstrækkkelig plads i enhedens lager."
+
+msgid "IDS_EMAIL_POP_SERVER_NOT_AVAILABLE"
+msgstr "Serveren er ikke tilgængelig."
+
+msgid "IDS_EMAIL_POP_SERVER_INFORMATION_QUERY_FAILED_ENTER_SERVER_INFORMATION_MANUALLY"
+msgstr "Forespørgsel om serveroplysninger mislykkedes. Indtast serveroplysninger manuelt."
+
+msgid "IDS_EMAIL_POP_SECURITY_POLICY_RESTRICTS_USE_OF_THIS_ACCOUNT"
+msgstr "Sikkerhedspolitik begrænser brug af denne konto."
+
+msgid "IDS_EMAIL_POP_SAVING_EMAIL_ING"
+msgstr "Gemmer e-mail ..."
+
+msgid "IDS_EMAIL_POP_SAVE_YOUR_CHANGES_OR_DISCARD_THEM_Q"
+msgstr "Gem dine ændringer eller slet dem?"
+
+msgid "IDS_EMAIL_POP_REMOVING_ACCOUNT_ING"
+msgstr "Fjerner konto..."
+
+msgid "IDS_EMAIL_POP_PLEASE_FILL_ALL_THE_MANDATORY_FIELDS"
+msgstr "Udfyld alle obligatoriske felter."
+
+msgid "IDS_EMAIL_POP_ONLY_PART_OF_THE_MESSAGE_HAS_BEEN_DOWNLOADED_IF_YOU_CONTINUE_THE_REST_OF_THE_MESSAGE_MAY_BE_LOST"
+msgstr "Det er kun en del af beskeden, der er blevet downloadet. Hvis du fortsætter, kan den resterende del af beskeden gå tabt."
+
+msgid "IDS_EMAIL_POP_NO_RESPONSE_HAS_BEEN_RECEIVED_FROM_THE_SERVER_TRY_AGAIN_LATER"
+msgstr "Der er ikke modtaget svar fra serveren. Prøv igen senere."
+
+msgid "IDS_EMAIL_POP_NETWORK_BUSY"
+msgstr "Netværket er optaget."
+
+msgid "IDS_EMAIL_POP_INVALID_OR_INACCESSIBLE_CERTIFICATE"
+msgstr "Ugyldigt eller utilgængeligt certifikat."
+
+msgid "IDS_EMAIL_POP_INITIALISING_APPLICATION_ING"
+msgstr "Initialiserer applikation ..."
+
+msgid "IDS_EMAIL_POP_HOST_NOT_FOUND"
+msgstr "Værten blev ikke fundet."
+
+msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_OR_NETWORK_NOT_AVAILABLE"
+msgstr "Flytilstand er aktiveret, eller netværket er ikke tilgængeligt."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_START_EMAIL_APPLICATION"
+msgstr "Kunne ikke starte e-mailprogram."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DOWNLOAD_ATTACHMENT_CHECK_YOUR_NETWORK_CONNECTION_AND_TRY_AGAIN"
+msgstr "Kunne ikke downloade vedhæftning. Kontroller din netværksforbindelse, og prøv igen."
+
+msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
+msgstr "E-mail slettet fra serveren."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Download mislykkedes."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Downloader ..."
+
+msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
+msgstr "Hvis du sletter denne konto, sletter du også alle kontobeskeder, kontakter og andre data fra enheden. Tryk på Slet for at fortsætte."
+
+msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
+msgstr "Opretter vCard ..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Forbindelsen\nmislykkedes."
+
+msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
+msgstr "Der er allerede blevet vedhæftet en fil med dette navn."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Godkendelse mislykkedes."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Der opstod en ukendt fejl."
+
+msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
+msgstr "Alle vedhæftede filer i denne e-mail vil blive downloadet, før den blive videresendt."
+
+msgid "IDS_EMAIL_OPT_VIEW_CONTACT_DETAILS_ABB"
+msgstr "Se kontaktdetaljer"
+
+msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
+msgstr "Opdater kontakt"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Del"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Indstillinger"
+
+msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
+msgstr "Send til mig selv"
+
+msgid "IDS_EMAIL_OPT_SEND"
+msgstr "Send"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Vælg alle"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Vælg"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Søg"
+
+msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
+msgstr "Gem i Udkast"
+
+msgid "IDS_EMAIL_OPT_REPLY_ALL"
+msgstr "Svar alle"
+
+msgid "IDS_EMAIL_OPT_REPLY"
+msgstr "Svar"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_SPAM_ABB"
+msgstr "Fjern fra Spam"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
+msgstr "Fjern fra prioritetsafsendere"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Fjern"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Opdatér"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Indsæt"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Originalt"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
+msgstr "Flyt til hovedmodtager (Til)"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_CC"
+msgstr "Flyt til Cc"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_BCC_ABB"
+msgstr "Flyt til Bcc"
+
+msgid "IDS_EMAIL_OPT_MOVE"
+msgstr "Flyt"
+
+msgid "IDS_EMAIL_OPT_MEDIUM_M_IMAGE_SIZE"
+msgstr "Mellem"
+
+msgid "IDS_EMAIL_OPT_MARK_AS_UNREAD_ABB"
+msgstr "Marker som ulæst"
+
+msgid "IDS_EMAIL_OPT_MARK_AS_READ_ABB"
+msgstr "Marker som læst"
+
+msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
+msgstr "Lav"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Videresend"
+
+msgid "IDS_EMAIL_OPT_EDIT"
+msgstr "Redigér"
+
+msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
+msgstr "Slet mappe"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Slet"
+
+msgid "IDS_EMAIL_OPT_CUT"
+msgstr "Klip"
+
+msgid "IDS_EMAIL_OPT_CREATE_FOLDER_ABB2"
+msgstr "Opret mappe"
+
+msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
+msgstr "Opret kontakt"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Kopiér"
+
+msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
+msgstr "Skriv e-mail"
+
+msgid "IDS_EMAIL_OPT_CLIPBOARD"
+msgstr "Udklipsholder"
+
+msgid "IDS_EMAIL_OPT_CANCEL_SENDING_ABB"
+msgstr "Annuller afsendelse"
+
+msgid "IDS_EMAIL_OPT_ADD_TO_PRIORITY_SENDERS_ABB"
+msgstr "Føj til prioritetsafsendere"
+
+msgid "IDS_EMAIL_OPT_ADD_TO_CONTACTS_ABB2"
+msgstr "Føj til kontakter"
+
+msgid "IDS_EMAIL_OPT_ADD_CC_BCC"
+msgstr "Tilføj Cc/Bcc"
+
+msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
+msgstr "Tilføj vedhæftet fil"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Tilføj konto"
+
+msgid "IDS_EMAIL_OPT_ADD"
+msgstr "Tilføj"
+
+msgid "IDS_EMAIL_NPBODY_NO_RESULTS_FOUND"
+msgstr "Ingen resultater fundet"
+
+msgid "IDS_EMAIL_NPBODY_NO_PRIORITY_SENDERS"
+msgstr "Ingen prioritetsafsendere"
+
+msgid "IDS_EMAIL_NPBODY_NO_EMAILS"
+msgstr "Ingen e-mails"
+
+msgid "IDS_EMAIL_MBODY_VIBRATION"
+msgstr "Vibration"
+
+msgid "IDS_EMAIL_MBODY_SIGNATURE"
+msgstr "Signatur"
+
+msgid "IDS_EMAIL_MBODY_PRIORITY_SENDERS"
+msgstr "Prioritetsafsendere"
+
+msgid "IDS_EMAIL_MBODY_NO_EMAIL_ADDRESS_OR_NAME"
+msgstr "E-mail eller navn mangler"
+
+msgid "IDS_EMAIL_MBODY_NOTIFICATION_SOUND"
+msgstr "Meddelelseslyd"
+
+msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
+msgstr "Nye e-mails"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Varsler om e-mail"
+
+msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
+msgstr "Redigér signatur"
+
+msgid "IDS_EMAIL_MBODY_DISPLAY_SIGNATURE"
+msgstr "Vis signatur"
+
+msgid "IDS_EMAIL_MBODY_DISPLAY_IMAGES"
+msgstr "Vis billeder"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_SEND_EMAIL_ABB"
+msgstr "Kunne ikke sende e-mail"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"
+msgstr "Kan ikke udføre handlingen"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_OPEN_FILE_ABB"
+msgstr "Kan ikke åbne filen"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_MOVE_EMAILS_ABB"
+msgstr "Kan ikke flytte e-mails"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_DOWNLOAD_ATTACHMENT_ABB"
+msgstr "Kan ikke downloade vedhæftning"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_COMPOSE_EMAIL_ABB"
+msgstr "Kan ikke skrive e-mail"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
+msgstr "Kan ikke vedhæfte fil"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Emne"
+
+msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
+msgstr "Stop skrivning af e-mail"
+
+msgid "IDS_EMAIL_HEADER_STARRED_EMAILS_ABB"
+msgstr "E-mails med stjerne"
+
+msgid "IDS_EMAIL_HEADER_SPAMBOX"
+msgstr "Spambakke"
+
+msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
+msgstr "Vis alle mapper"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Indstillinger"
+
+msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
+msgstr "Sendt"
+
+msgid "IDS_EMAIL_HEADER_SEND_TO_MYSELF_ABB"
+msgstr "Send til mig selv"
+
+msgid "IDS_EMAIL_HEADER_SELECT_FOLDER_ABB2"
+msgstr "Vælg mappe"
+
+msgid "IDS_EMAIL_HEADER_SELECT_ALL_ABB"
+msgstr "Vælg alle"
+
+msgid "IDS_EMAIL_HEADER_SELECT_ACTION_ABB"
+msgstr "Vælg handling"
+
+msgid "IDS_EMAIL_HEADER_RE_C_M_READ_REPORT"
+msgstr "Vedr.:"
+
+msgid "IDS_EMAIL_HEADER_REMOVE_ACCOUNT_ABB"
+msgstr "Fjern konto"
+
+msgid "IDS_EMAIL_HEADER_RECYCLE_BIN_ABB"
+msgstr "Papirkurv"
+
+msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
+msgstr "Prioritetsafsendere"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d valgt"
+
+msgid "IDS_EMAIL_HEADER_OUTBOX"
+msgstr "Udbakke"
+
+msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
+msgstr "Åbn e-mail"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Meddelelser"
+
+msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
+msgstr "Postkasse"
+
+msgid "IDS_EMAIL_HEADER_INBOX"
+msgstr "Indbakke"
+
+msgid "IDS_EMAIL_HEADER_IMAGE_QUALITY_ABB"
+msgstr "Billedkvalitet"
+
+msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
+msgstr "(stand.)"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Generelt"
+
+msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
+msgstr "Mapper for denne konto"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_SAVE_ATTACHMENT_ABB"
+msgstr "Kunne ikke gemme vedhæftet fil"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_DELETE_ACCOUNT_ABB"
+msgstr "Kunne ikke slette kontoen"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_CONNECT_TO_SERVER_ABB"
+msgstr "Kunne ikke opr. serverforb."
+
+msgid "IDS_EMAIL_HEADER_ENTER_NEW_PASSWORD_ABB"
+msgstr "Angiv ny adgangskode"
+
+msgid "IDS_EMAIL_HEADER_DRAFTS"
+msgstr "Udkast"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ENTIRE_EMAIL_ABB"
+msgstr "Download hele e-mailen"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENT_HEADER"
+msgstr "Download vedhæftet fil"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
+msgstr "Download vedhæftede filer"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Slet"
+
+msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
+msgstr "Opret vCard"
+
+msgid "IDS_EMAIL_HEADER_COMPOSE_ABB"
+msgstr "Skriv"
+
+msgid "IDS_EMAIL_HEADER_COMBINED_INBOX_ABB"
+msgstr "Kombineret indbakke"
+
+msgid "IDS_EMAIL_HEADER_COMBINED_ACCOUNTS_ABB"
+msgstr "Kombinerede konti"
+
+msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
+msgstr "Vedhæftede filer"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Konti"
+
+msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
+msgstr "Videoer"
+
+msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
+msgstr "Tag billede"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Indstillinger"
+
+msgid "IDS_EMAIL_BUTTON_SEND_ALL"
+msgstr "Send alle"
+
+msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
+msgstr "Gem"
+
+msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
+msgstr "Optag video"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_MEMO"
+msgstr "Notat"
+
+msgid "IDS_EMAIL_BUTTON_IMAGES_ABB"
+msgstr "Billeder"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
+msgstr "Overfør hele e-mailen"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Download alt"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Udført"
+
+msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
+msgstr "Afvis"
+
+msgid "IDS_EMAIL_BUTTON_DELETE_ABB4"
+msgstr "Slet"
+
+msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
+msgstr "Opret"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Fortsæt"
+
+msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
+msgstr "Kontakter"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Annullér"
+
+msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
+msgstr "Optag lydfil"
+
+msgid "IDS_EMAIL_BUTTON2_CALENDAR"
+msgstr "Kalender"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "I går"
+
+msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
+msgstr "Kan ikke åbne forbindelse til server. Der opstod sikkerhedsfejl."
+
+msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
+msgstr "Til"
+
+msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
+msgstr "Denne mappe og alt dens indhold vil blive slettet."
+
+msgid "IDS_EMAIL_BODY_SERVER_DOES_NOT_SUPPORT_TLS"
+msgstr "Serveren understøtter ikke TLS."
+
+msgid "IDS_EMAIL_BODY_SENT_C_M_DATE"
+msgstr "Sendt:"
+
+msgid "IDS_EMAIL_BODY_PS_MB"
+msgstr "%s MB"
+
+msgid "IDS_EMAIL_BODY_PS_KB"
+msgstr "%s KB"
+
+msgid "IDS_EMAIL_BODY_PS_GB"
+msgstr "%s GB"
+
+msgid "IDS_EMAIL_BODY_PS_B"
+msgstr "%s B"
+
+msgid "IDS_EMAIL_BODY_PD_FILES_ABB"
+msgstr "%d filer"
+
+msgid "IDS_EMAIL_BODY_ORIGINAL_MESSAGE"
+msgstr "Oprindelig meddelelse"
+
+msgid "IDS_EMAIL_BODY_NO_MORE_EMAILS_M_STATUS"
+msgstr "Ikke flere e-mails"
+
+msgid "IDS_EMAIL_BODY_MY_FILES_M_APPLICATION"
+msgstr "Mine filer"
+
+msgid "IDS_EMAIL_BODY_MAPS_ABB"
+msgstr "Kort"
+
+msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
+msgstr "Indlæser flere ..."
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Sidst opdateret"
+
+msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
+msgstr "Medtag oprindelig meddelelse"
+
+msgid "IDS_EMAIL_BODY_IMAP4"
+msgstr "IMAP4"
+
+msgid "IDS_EMAIL_BODY_FWD_C"
+msgstr "Vs:"
+
+msgid "IDS_EMAIL_BODY_FROM_MSENDER"
+msgstr "Fra"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Mappenavn"
+
+msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
+msgstr "Svirp op for at indl. mere"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "E-mailadresse"
+
+msgid "IDS_EMAIL_BODY_CC_BCC"
+msgstr "Cc/Bcc"
+
+msgid "IDS_EMAIL_BODY_CC"
+msgstr "Cc"
+
+msgid "IDS_EMAIL_BODY_BCC"
+msgstr "Bcc"
+
+msgid "IDS_EMAIL_BODY_AUDIO_FILES_ABB"
+msgstr "Lydfiler"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_SEND_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Når du har sendt e-mails, vil de blive vist her."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_RECEIVE_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Når du har modtaget e-mails, vil de blive vist her."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_MOVE_EMAILS_TO_THIS_FOLDER_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Når du har flyttet e-mails til denne mappe, vises de her."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_HAVE_TRIED_TO_SEND_EMAILS_BUT_THEY_FAILED_TO_BE_SENT_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Når du har prøvet at sende e-mails, men hvor det ikke er lykkedes, vil de blive vist her."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_DELETE_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Når du har slettet e-mails, vil de blive vist her."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_PRIORITY_SENDERS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Når du har tilføjet prioritetsafsendere, vil de blive vist her."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_PRIORITY_SENDERS_EMAILS_FROM_THEM_WILL_BE_SHOWN_HERE"
+msgstr "Når du har tilføjet prioritetsafsendere, vises e-mails fra dem her."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_FAVOURITE_EMAILS_BY_TAPPING_THE_STAR_ICON_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Når du har tilføjet yndlings-e-mails ved at trykke på stjerneikonet, vil de blive vist her."
+
+msgid "IDS_EMAIL_BODY_1_FILE_ABB"
+msgstr "1 fil"
+
+msgid "IDS_EMAIL_ACBUTTON_MAILBOX_ABB"
+msgstr "POSTKASSE"
+
+msgid "IDS_MF_HEADER_UNABLE_TO_SAVE_DATA_ABB"
+msgstr "Kan ikke gemme data"
+
+msgid "IDS_ST_TPOP_VALIDATING_ACCOUNT_ING_ABB"
+msgstr "Validerer konto ..."
+
+msgid "IDS_ST_TMBODY_USERNAME"
+msgstr "Brugernavn"
+
+msgid "IDS_ST_TMBODY_SYNC_WHILE_ROAMING"
+msgstr "Synkroniser under roaming"
+
+msgid "IDS_ST_TMBODY_SYNC"
+msgstr "Synkroniser"
+
+msgid "IDS_ST_TMBODY_SERVER_ADDRESS"
+msgstr "Serveradresse"
+
+msgid "IDS_ST_TMBODY_SENDER_NAME"
+msgstr "Afsendernavn"
+
+msgid "IDS_ST_TMBODY_PASSWORD"
+msgstr "Adgangskode"
+
+msgid "IDS_ST_TMBODY_ACCOUNT_NAME"
+msgstr "Kontonavn"
+
+msgid "IDS_ST_SBODY_TLS"
+msgstr "TLS"
+
+msgid "IDS_ST_SBODY_SSL"
+msgstr "SSL"
+
+msgid "IDS_ST_SBODY_SHOW_PASSWORD_ABB"
+msgstr "Vis adgangskode"
+
+msgid "IDS_ST_SBODY_SET_AS_DEFAULT_ACCOUNT_ABB"
+msgstr "Angiv som standardkonto"
+
+msgid "IDS_ST_SBODY_PROCESSING_PLEASE_WAIT_ING_ABB"
+msgstr "Behandler. Vent ..."
+
+msgid "IDS_ST_SBODY_POP3"
+msgstr "POP3"
+
+msgid "IDS_ST_SBODY_NOT_SYNCED_YET_M_STATUS"
+msgstr "Endnu ikke synkroniseret"
+
+msgid "IDS_ST_SBODY_IMAP"
+msgstr "IMAP"
+
+msgid "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"
+msgstr "Denne konto er allerede blevet tilføjet."
+
+msgid "IDS_ST_POP_THE_MAXIMUM_NUMBER_OF_EMAIL_ACCOUNTS_HPD_HAS_BEEN_REACHED"
+msgstr "Det maksimale antal e-mailkonti (%d) er nået."
+
+msgid "IDS_ST_POP_CHECK_THE_EMAIL_ADDRESS_AND_PASSWORD_YOU_HAVE_ENTERED"
+msgstr "Tjek den e-mailadresse og adgangskode, du har indtastet."
+
+msgid "IDS_ST_POP_ALL_DATA_RELATED_TO_THIS_ACCOUNT_WILL_BE_DELETED_FROM_THE_DEVICE"
+msgstr "Alle data relateret til denne konto bliver slettet fra enheden."
+
+msgid "IDS_ST_OPT_REMOVE"
+msgstr "Fjern"
+
+msgid "IDS_ST_OPT_PUSH"
+msgstr "Push"
+
+msgid "IDS_ST_OPT_NO_LIMIT"
+msgstr "Ingen grænse"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Ingen"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Manuelt"
+
+msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
+msgstr "Behold ikke-roaming-indst."
+
+msgid "IDS_ST_OPT_HEADER_ONLY"
+msgstr "Kun titel"
+
+msgid "IDS_ST_OPT_EVERY_PD_MINUTES_ABB"
+msgstr "Hvert %d. minut"
+
+msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
+msgstr "Hver time"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Hver dag"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Standard"
+
+msgid "IDS_ST_MBODY_SYNC_EMAILS"
+msgstr "Synkroniser e-mails"
+
+msgid "IDS_ST_MBODY_SMTP_AUTHENTICATION"
+msgstr "SMTP-godkendelse"
+
+msgid "IDS_ST_MBODY_SERVER_SETTINGS"
+msgstr "Serverindstillinger"
+
+msgid "IDS_ST_MBODY_SAME_AS_POP3_IMAP4"
+msgstr "Samme som POP3/IMAP4"
+
+msgid "IDS_ST_MBODY_POP3_BEFORE_SMTP"
+msgstr "POP3 før SMTP"
+
+msgid "IDS_ST_MBODY_OTHER"
+msgstr "Andet"
+
+msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
+msgstr "E-mailsynkroniseringsplan"
+
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Advarsel"
+
+msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
+msgstr "Kan ikke validere konto"
+
+msgid "IDS_ST_HEADER_UNABLE_TO_ADD_ACCOUNT_ABB"
+msgstr "Kan ikke tilføje konto"
+
+msgid "IDS_ST_HEADER_SERVER_TYPE_ABB"
+msgstr "Servertype"
+
+msgid "IDS_ST_HEADER_SELECT_ACCOUNT_TYPE_ABB"
+msgstr "Vælg kontotype"
+
+msgid "IDS_ST_HEADER_SECURITY_TYPE_ABB"
+msgstr "Sikkerhedstype"
+
+msgid "IDS_ST_HEADER_OUTGOING_SERVER_SETTINGS_ABB"
+msgstr "Indstillinger for udgående server"
+
+msgid "IDS_ST_HEADER_LIMIT_RETRIEVAL_SIZE"
+msgstr "Begræns størrelse for hentning"
+
+msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
+msgstr "Indstillinger for indgående server"
+
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "E-mail"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Næste"
+
+msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
+msgstr "Manuel opsætn."
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Lydløs"
+
+msgid "IDS_ST_BODY_PORT"
+msgstr "Port"
+
+msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
+msgstr "SEND"
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Skriftstørrelse"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Skriftfarve"
+
+msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
+msgstr "Omdøb mappe"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
+msgstr "Flyt til spambakke"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_SPAMBOX_ABB"
+msgstr "Fjern fra Spambakke"
+
+msgid "IDS_EMAIL_OPT_SHOW_TEXT_TOOLS"
+msgstr "Vis tekstværktøjer"
+
+msgid "IDS_EMAIL_OPT_HIDE_TEXT_TOOLS"
+msgstr "Skjul tekstværktøjer"
+
+msgid "IDS_EMAIL_HEADER_EMAIL_SETTINGS"
+msgstr "E-mailindstil."
+
+msgid "IDS_EMAIL_BODY_SYNCING_ING"
+msgstr "Synkroniserer ..."
+
+msgid "IDS_EMAIL_BODY_SYNC_FAILED_TRY_LATER"
+msgstr "Synkronisering mislykkedes. Prøv senere."
+
+msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
+msgstr "Tekstbaggrundsfarve"
+
+msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
+msgstr "Downloadet"
+
+msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
+msgstr "Download vedhæftede filer automatisk, når der er forbindelse til et Wi-Fi-netværk"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Gemt."
+
+msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
+msgstr "Aktiver RTF"
+
+msgid "IDS_EMAIL_OPT_DISABLE_RICH_TEXT_ABB2"
+msgstr "Deaktiver RTF"
+
+msgid "IDS_EMAIL_BUTTON_SHOW_ABB"
+msgstr "Vis"
+
+msgid "IDS_EMAIL_BUTTON_HIDE_ABB3"
+msgstr "Skjul"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_SAVE_EMAILS_IN_DRAFTS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Når du har gemt e-mails i Udkast, vil de blive vist her."
+
+msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
+msgstr "Gem alle"
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Kunne ikke slette."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
+msgstr "Mappen er blevet omdøbt."
+
+msgid "IDS_EMAIL_HEADER_SELECT_EMAILS"
+msgstr "Vælg e-mail"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_EMAILS_TO_SPAM_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Når du har føjet e-mails til spam, vises de her."
+
+msgid "IDS_EMAIL_BUTTON_RENAME_ABB"
+msgstr "Omdøb"
+
+msgid "IDS_EMAIL_POP_RENAMING_FOLDER_ING"
+msgstr "Omdøber mappe ..."
+
+msgid "IDS_EMAIL_POP_NETWORK_NOT_AVAILABLE_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
+msgstr "Netværk ikke tilgængeligt. Denne meddelelse vil blive sendt, når du har forbindelse til netværket."
+
+msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
+msgstr "Flytilstand er aktiveret. Denne meddelelse vil blive sendt, når du har forbindelse til netværket."
+

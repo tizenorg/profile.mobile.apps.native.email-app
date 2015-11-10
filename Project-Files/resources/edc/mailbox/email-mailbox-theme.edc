@@ -1,0 +1,437 @@
+/*
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+#define TITLE_BAR_MIN_HEIGHT	110
+#define TITLE_PADDING_LEFT	32
+
+#define TITLE_1_LINE_PADDING_TOP	15
+#define TITLE_1_LINE_PADDING_BOTTOM	28
+#define TITLE_1_LINE_HEIGHT_MIN		67
+
+#define TITLE_2_LINES_PADDING_TOP	3
+#define TITLE_2_LINES_PADDING_BOTTOM	3
+#define TITLE_MAIN_TEXT_HEIGHT_MIN	57
+#define TITLE_SUB_TEXT_HEIGHT_MIN	38
+
+#define TITLE_MAILBOX_BUTTON_WIDTH	176
+
+#define TITLE_FONT_SIZE		50
+#define TITLE_MAIN_FONT_SIZE	42
+#define TITLE_SUB_FONT_SIZE	28
+
+#define SEARCH_BAR_PADDING_RIGHT_WIDTH	32
+#define SEARCH_BAR_PADDING_LEFT_WIDTH	10
+#define SEARCH_BAR_BACK_BUTTON_PADDING_RIGHT_WIDTH	68 // 10 + 80 + 10 - 32
+#define SEARCH_BAR_BACK_BUTTON_SIZE	80 80
+
+	group
+	{
+		name: "layout.email.mailbox.hd";
+		parts
+		{
+			part {
+				name: "top_bar";
+				type: SWALLOW;
+				scale: 1;
+				description {
+					state: "default" 0.0;
+					fixed: 0 1;
+					align: 0.0 0.0;
+					rel1 { relative: 0.0 0.0; }
+					rel2 { relative: 1.0 0.0; }
+				}
+			}
+
+			part {
+				name: "send_all_bar";
+				type: SWALLOW;
+				scale: 1;
+				description {
+					state: "default" 0.0;
+					fixed: 0 1;
+					align: 0.0 0.0;
+					rel1 { relative: 0.0 1.0; to: "top_bar";}
+					rel2 { relative: 1.0 1.0; to: "top_bar";}
+				}
+			}
+
+			part
+			{
+				name: "list";
+				type: SWALLOW;
+				mouse_events: 1;
+				scale: 1;
+				description {
+					state: "default" 0.0;
+					align: 0.0 0.0;
+					visible: 1;
+					rel1 { relative: 0.0 1.0; to: "send_all_bar";}
+					rel2 { relative: 1.0 1.0;}
+				}
+				description
+				{
+					state: "list_hide" 0.0;
+					inherit: "default" 0.0;
+					visible: 0;
+				}
+			}
+			part
+			{
+				name: "noc";
+				type: SWALLOW;
+				mouse_events: 1;
+				scale: 1;
+				description {
+					state: "default" 0.0;
+					align: 0.0 0.5;
+					visible: 0;
+					rel1 { relative: 0.0 1.0; to: "top_bar";}
+					rel2 { relative: 1.0 1.0;}
+				}
+				description
+				{
+					state: "noc_show" 0.0;
+					inherit: "default" 0.0;
+					visible: 1;
+				}
+			}
+
+		} //end parts
+
+		programs {
+			program {
+					name: "list_show";
+					signal: "show_list";
+					source: "elm";
+					action: STATE_SET "default" 0.0;
+					target: "list";
+					transition: LINEAR 0.1;
+			}
+			program {
+					name: "list_hide";
+					signal: "hide_list";
+					source: "elm";
+					action: STATE_SET "list_hide" 0.0;
+					target: "list";
+					transition: LINEAR 0.1;
+			}
+			program {
+					name: "noc_show";
+					signal: "show_noc";
+					source: "elm";
+					action: STATE_SET "noc_show" 0.0;
+					target: "noc";
+					transition: LINEAR 0.1;
+			}
+			program {
+					name: "noc_hide";
+					signal: "hide_noc";
+					source: "elm";
+					action: STATE_SET "default" 0.0;
+					target: "noc";
+					transition: LINEAR 0.1;
+			}
+		}
+	} //end group
+
+	group { name: "email/layout/send_all_bar";
+		parts{
+			part {
+				name: "bg";
+				type: RECT;
+				scale: 1;
+				description {
+					state: "default" 0.0;
+					color: 255 255 255 255;
+				}
+			}
+
+			part {
+				name: "send_all_bar_base";
+				type: SPACER;
+				scale: 1;
+				description {
+					state: "default" 0.0;
+					min: 0 21;
+					align: 0.0 0.0;
+				}
+			}
+
+			part {
+				name: "top_left_padding";
+				type: SPACER;
+				scale: 1;
+				description {
+					state: "default" 0.0;
+					min: 32 21;
+					fixed: 1 1;
+					align: 0.0 0.0;
+					rel1 { relative: 0.0 0.0; to: "send_all_bar_base"; }
+					rel2 { relative: 0.0 0.0; to: "send_all_bar_base"; }
+				}
+			}
+
+			part {
+				name: "bottom_right_padding";
+				type: SPACER;
+				scale: 1;
+				description {
+					state: "default" 0.0;
+					min: 32 21;
+					fixed: 1 1;
+					align: 1.0 1.0;
+					rel1 { relative: 1.0 1.0; to: "send_all_bar_base"; }
+					rel2 { relative: 1.0 1.0; to: "send_all_bar_base"; }
+				}
+			}
+
+			part {
+				name: "send_all_bar_rect";
+				type: RECT;
+				scale: 1;
+				description {
+					state: "default" 0.0;
+					min: 496 78;
+					max: -1 78;
+					align: 0.0 0.5;
+					rel1 { relative: 1.0 1.0; to: "top_left_padding"; }
+					rel2 { relative: 0.0 0.0; to: "bottom_right_padding"; }
+					color: 0 0 0 0;
+				}
+			}
+
+			part {
+				name: "send_all_bar_button";
+				type: SWALLOW;
+				scale: 1;
+				description {
+					state: "default" 0.0;
+					min: 496 78;
+					max: -1 78;
+					rel1 {
+						relative : 0.0 0.0;
+						to: "send_all_bar_rect";
+					}
+					rel2 {
+						relative : 1.0 1.0;
+						to: "send_all_bar_rect";
+					}
+					align: 0.0 0.5;
+				}
+			}
+		}
+	}
+
+	group { name: "email/layout/searchbar";
+		parts {
+			part {
+				name: "base";
+				type: RECT;
+				scale: 1;
+				description {
+					state: "default" 0.0;
+					color: NAVIFRAME_TITLE_BG;
+				}
+			}
+			E_PART_PADDING_LEFT(SEARCH_BAR_PADDING_LEFT_WIDTH);
+			E_PART_SPACER("padding.button.right",
+				description {
+					state: "default" 0.0;
+					min: SEARCH_BAR_BACK_BUTTON_PADDING_RIGHT_WIDTH 0;
+					fixed: 1 0;
+					rel2.relative: 0.0 1.0;
+					align: 0.0 0.0;
+				}
+			)
+			part {
+				name: "elm.swallow.content";
+				type: SWALLOW;
+				scale: 1;
+				description {
+					state: "default" 0.0;
+					rel1 { relative: 1.0 0.0; to_x: "padding.button.right"; }
+					rel2 { relative: 1.0 1.0;}
+				}
+			}
+			part {
+				name: "elm.swallow.button";
+				type: SWALLOW;
+				scale: 1;
+				description {
+					state: "default" 0.0;
+					fixed: 1 1;
+					min: SEARCH_BAR_BACK_BUTTON_SIZE;
+					max: SEARCH_BAR_BACK_BUTTON_SIZE;
+					rel1 { relative: 1.0 0.0; to_x: "padding.left"; }
+					rel2 { relative: 1.0 1.0; to_x: "padding.left"; }
+					align: 0 0.5;
+				}
+			}
+		}
+	}
+
+	group {
+		name: "email/layout/mailbox_title";
+		styles {
+
+			style { name: "mailbox_title";
+				base: "font=Tizen:style=Condensed font_size="TITLE_FONT_SIZE" color=#ffffff ellipsis=0.5 text_class=tizen";
+				tag:  "br" "\n";
+				tag:  "tab" "\t";
+			}
+
+			style { name: "mailbox_title_main";
+				base: "font=Tizen:style=Condensed font_size="TITLE_MAIN_FONT_SIZE" color=#ffffff ellipsis=0.5 text_class=tizen";
+				tag:  "br" "\n";
+				tag:  "tab" "\t";
+			}
+
+			style { name: "mailbox_title_sub";
+				base: "font=Tizen:style=Condensed font_size="TITLE_SUB_FONT_SIZE" color=#ffffff ellipsis=0.5 text_class=tizen";
+				tag:  "br" "\n";
+				tag:  "tab" "\t";
+			}
+		}
+
+		parts {
+			PART(RECT, "bg",
+				repeat_events: 0;
+				description { state: "default" 0.0;
+					color: NAVIFRAME_TITLE_BG;
+					min: 0 TITLE_BAR_MIN_HEIGHT;
+					max: -1 TITLE_BAR_MIN_HEIGHT;
+				}
+			)
+
+			PART(SPACER, "elm.padding.left",
+				DSC_FROM_L("default" 0.0,
+					min: TITLE_PADDING_LEFT 0;
+					max: TITLE_PADDING_LEFT -1;
+				)
+			)
+
+			PART(SPACER, "elm.padding.right",
+				DSC_FROM_R("default" 0.0,
+					min: MAILBOX_BUTTON_PADDING_RIGHT 0;
+					max: MAILBOX_BUTTON_PADDING_RIGHT -1;
+				)
+			)
+
+			PART(SPACER, "elm.padding.top",
+				DSC_FROM_T("default" 0.0,
+					min: 0 TITLE_1_LINE_PADDING_TOP;
+					max: -1 TITLE_1_LINE_PADDING_TOP;
+				)
+				description { state: "two_lines_mode" 0.0;
+					inherit: "default" 0.0;
+					min: 0 TITLE_2_LINES_PADDING_TOP ;
+					max: -1 TITLE_2_LINES_PADDING_TOP ;
+				}
+			)
+
+			PART(SPACER, "elm.padding.bottom",
+				DSC_FROM_B("default" 0.0,
+					min: 0 TITLE_1_LINE_PADDING_BOTTOM;
+					max: -1 TITLE_1_LINE_PADDING_BOTTOM;
+				)
+				description { state: "two_lines_mode" 0.0;
+					inherit: "default" 0.0;
+					min: 0 TITLE_2_LINES_PADDING_BOTTOM;
+					max: -1 TITLE_2_LINES_PADDING_BOTTOM;
+				}
+			)
+
+			PART(SWALLOW, "mailbox_button",
+				DSC_FROM_R("default" 0.0,
+					min: TITLE_MAILBOX_BUTTON_WIDTH 0;
+					max: TITLE_MAILBOX_BUTTON_WIDTH -1;
+				)
+			)
+
+			PART(TEXTBLOCK, "title.text",
+				DSC_LRT("default" 0.0, "elm.padding.left", "mailbox_button", "elm.padding.top",
+					text {
+						style: "mailbox_title";
+						align: 0.0 0.5;
+						min: 0 1;
+						max: 0 1;
+					}
+
+					min: 0 TITLE_1_LINE_HEIGHT_MIN;
+					max: -1 TITLE_1_LINE_HEIGHT_MIN;
+				)
+
+				description {state: "two_lines_mode" 0.0;
+					inherit: "default" 0.0;
+					text {
+						style: "mailbox_title_main";
+						align: 0.0 1.0;
+						min: 0 1;
+						max: 0 1;
+					}
+					min: 0 TITLE_MAIN_TEXT_HEIGHT_MIN;
+					max: -1 TITLE_MAIN_TEXT_HEIGHT_MIN;
+				}
+
+			)
+
+			PART(TEXTBLOCK, "title.text.sub",
+				DSC_LRB("default" 0.0, "elm.padding.left", "mailbox_button", "elm.padding.bottom",
+					text {
+						style: "mailbox_title_sub";
+						align: 0.0 0.5;
+						min: 0 1;
+						max: 0 1;
+					}
+					min: 0 0;
+					max: 0 0;
+				)
+
+				description { state: "two_lines_mode" 0.0;
+					inherit: "default" 0.0;
+					min: 0 TITLE_SUB_TEXT_HEIGHT_MIN;
+					max: -1 TITLE_SUB_TEXT_HEIGHT_MIN;
+				}
+			)
+		}
+
+		programs{
+			program {
+				name: "two_lines_mode";
+				signal: "two_lines_mode";
+				source: "mailbox";
+				script {
+					set_state(PART:"elm.padding.top", "two_lines_mode", 0.0);
+					set_state(PART:"elm.padding.bottom", "two_lines_mode", 0.0);
+					set_state(PART:"title.text", "two_lines_mode", 0.0);
+					set_state(PART:"title.text.sub", "two_lines_mode", 0.0);
+				}
+			}
+
+			program {
+				name: "single_line_mode";
+				signal: "single_line_mode";
+				source: "mailbox";
+				script {
+					set_state(PART:"title.text", "default", 0.0);
+					set_state(PART:"title.text.sub", "default", 0.0);
+					set_state(PART:"elm.padding.top", "default", 0.0);
+					set_state(PART:"elm.padding.bottom", "default", 0.0);
+				}
+			}
+		}
+	}

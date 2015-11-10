@@ -1,0 +1,120 @@
+/*
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+ 
+#define POPUP_PROGRESSBAR_VIEW_LAYOUT_PADDING_INC 15 27
+#define POPUP_PROGRESSBAR_VIEW_LAYOUT_TEXT_FONT_SIZE_INC 0 38
+#define POPUP_PROGRESSBAR_VIEW_LAYOUT_BG_INC 0 69
+#define POPUP_PROGRESSBAR_VIEW_LAYOUT_BG_MIN_INC 0 161
+
+group { name: "popup_text_progressbar_view_layout";
+   parts {
+      part { name: "bg";
+         type: SPACER;
+         scale: 1;
+         description { state: "default" 0.0;
+            min: POPUP_PROGRESSBAR_VIEW_LAYOUT_BG_MIN_INC;
+            fixed: 1 0;
+         }
+      }
+      part { name: "pad_l_t";
+         type: SPACER;
+         scale: 1;
+         description { state: "default" 0.0;
+            min: POPUP_PROGRESSBAR_VIEW_LAYOUT_PADDING_INC;
+            max: POPUP_PROGRESSBAR_VIEW_LAYOUT_PADDING_INC;
+            fixed: 1 1;
+            rel2.relative: 0.0 0.0;
+            align: 0.0 0.0;
+         }
+      }
+      part { name: "pad_r_t";
+         type: SPACER;
+         scale: 1;
+         description { state: "default" 0.0;
+            min: POPUP_PROGRESSBAR_VIEW_LAYOUT_PADDING_INC;
+            max: POPUP_PROGRESSBAR_VIEW_LAYOUT_PADDING_INC;
+            fixed: 1 1;
+            rel1.relative: 1.0 1.0;
+            align: 1.0 1.0;
+         }
+      }
+      part { name: "elm.text.description.bg";
+         type: SPACER;
+         scale: 1;
+         description { state: "default" 0.0;
+            fixed: 0 1;
+            min: POPUP_PROGRESSBAR_VIEW_LAYOUT_TEXT_FONT_SIZE_INC;
+            rel1 {
+               relative: 1.0 1.0;
+               to: "pad_l_t";
+            }
+            rel2 {
+               relative: 0.0 1.0;
+               to_x: "pad_r_t";
+               to_y: "pad_l_t";
+            }
+            align: 0.0 0.0;
+         }
+      }
+      part { name: "elm.text.description";
+         type: TEXT;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1 {
+               relative: 0.0 0.0;
+               to: "elm.text.description.bg";
+            }
+            rel2 {
+               relative: 1.0 1.0;
+				to: "elm.text.description.bg";
+            }
+            text {
+            	font: "Tizen:style=Regular";
+				size: 32;
+				align: 0.0 0.5;
+            }
+            color: TEXT_BLACK_COLOR;
+         }
+      }
+      part { name: "progressbar_bg";
+         type: SPACER;
+         scale: 1;
+         description { state: "default" 0.0;
+            min: POPUP_PROGRESSBAR_VIEW_LAYOUT_BG_INC;
+            rel1 {
+               relative: 1.0 1.0;
+               to_x: "pad_l_t";
+               to_y: "elm.text.description.bg";
+            }
+            rel2 {
+               relative: 0.0 1.0;
+               to_x: "pad_r_t";
+               to_y: "elm.text.description.bg";
+            }
+            align: 0.0 0.0;
+         }
+      }
+      part { name: "progressbar";
+         type: SWALLOW;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.to: "progressbar_bg";
+            rel2.to: "progressbar_bg";
+         }
+      }
+   }
+}
