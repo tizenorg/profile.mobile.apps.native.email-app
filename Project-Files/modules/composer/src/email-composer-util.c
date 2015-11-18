@@ -56,7 +56,7 @@ static Eina_Bool _util_generate_random_string32(char *inString, int inSize);
 
 EMAIL_DEFINE_GET_EDJ_PATH(email_get_composer_theme_path, "/email-composer-view.edj")
 EMAIL_DEFINE_GET_SHARED_DATA_PATH(email_get_composer_tmp_dir, "/.email-composer-efl")
-EMAIL_DEFINE_GET_PHONE_PATH(email_get_composer_public_tmp_dir, "/.email-composer-efl")
+EMAIL_DEFINE_GET_SHARED_USER_PATH(email_get_composer_public_tmp_dir, "/.email-composer-efl")
 
 static EmailCommonStringType EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
 static EmailCommonStringType EMAIL_COMPOSER_STRING_BUTTON_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };

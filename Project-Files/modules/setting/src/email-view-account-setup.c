@@ -491,6 +491,90 @@ static void _validate_account(void *data)
 	int error_code = 0;
 
 	vd->handle = EMAIL_OP_HANDLE_INITIALIZER;
+
+#ifdef _TESTING_WITH_STATIC_EMAIL_ACC_
+
+	char *address_string = strdup(ugd->new_account->account_name);
+	char *id_string = strdup(ugd->new_account->account_name);
+	char *password_string = strdup(ugd->new_account->incoming_server_password);
+
+	void *user_data = ugd->new_account->user_data;
+	int length = ugd->new_account->user_data_length;
+
+	// free current account
+	free(ugd->new_account);
+	email_account_t *account = malloc(sizeof(email_account_t));
+	memset(account, 0x00, sizeof(email_account_t));
+
+	/* Common Options */
+	account->retrieval_mode                          = EMAIL_IMAP4_RETRIEVAL_MODE_ALL;
+	account->incoming_server_secure_connection	     = 1;
+	account->outgoing_server_type                    = EMAIL_SERVER_TYPE_SMTP;
+	account->auto_download_size			             = 1024*50;
+	account->outgoing_server_use_same_authenticator  = 1;
+	account->auto_resend_times                       = 0;
+	account->pop_before_smtp                         = 0;
+	account->incoming_server_requires_apop           = 0;
+	account->incoming_server_authentication_method   = 0;
+	account->logo_icon_path                          = NULL;
+	account->color_label                             = (128 << 16) | (128 << 8) | (128);
+
+	account->user_data                               = user_data;
+	account->user_data_length  						 = length;
+
+	account->options.priority                        = 3;
+	account->options.keep_local_copy                 = 1;
+	account->options.req_delivery_receipt            = 0;
+	account->options.req_read_receipt                = 0;
+	account->options.download_limit                  = 0;
+	account->options.block_address                   = 1;
+	account->options.block_subject                   = 1;
+	account->options.display_name_from               = NULL;
+	account->options.reply_with_body                 = 1;
+	account->options.forward_with_files              = 1;
+	account->options.add_myname_card                 = 0;
+	account->options.add_signature                   = 0;
+	account->options.signature                       = NULL;
+	account->options.add_my_address_to_bcc           = 0;
+	account->check_interval                          = -1;
+	account->keep_mails_on_pop_server_after_download = 1;
+	account->default_mail_slot_size                  = 20;
+	account->roaming_option                          = EMAIL_ROAMING_OPTION_RESTRICTED_BACKGROUND_TASK;
+	account->peak_interval                           = -1;
+	account->peak_days                               = EMAIL_PEAK_DAYS_MONDAY | EMAIL_PEAK_DAYS_TUEDAY | EMAIL_PEAK_DAYS_THUDAY | EMAIL_PEAK_DAYS_FRIDAY;
+	account->peak_start_time                         = 800;
+	account->peak_end_time                           = 1700;
+
+	account->account_name                            = strdup(address_string);
+	account->user_display_name                       = strdup(id_string);
+	account->user_email_address                      = strdup(address_string);
+	account->reply_to_address                        = strdup(address_string);
+	account->return_address                          = strdup(address_string);
+
+	account->incoming_server_user_name               = strdup(id_string);
+	account->incoming_server_password                = strdup(password_string);
+	account->outgoing_server_user_name               = strdup(id_string);
+	account->outgoing_server_password	             = strdup(password_string);
+
+	account->incoming_server_type  = EMAIL_SERVER_TYPE_IMAP4;
+	account->incoming_server_address = strdup("imap.gmail.com");
+	account->incoming_server_port_number = 993;
+	account->incoming_server_secure_connection	= 1;
+	account->outgoing_server_address = strdup("smtp.gmail.com");
+	account->outgoing_server_port_number = 465;
+	account->outgoing_server_secure_connection = 1;
+	account->outgoing_server_need_authentication   = EMAIL_AUTHENTICATION_METHOD_DEFAULT;
+	account->incoming_server_authentication_method = EMAIL_AUTHENTICATION_METHOD_NO_AUTH;
+	account->account_svc_id = rand()%100;
+
+	ugd->new_account = account;
+
+	free(address_string);
+	free(id_string);
+	free(password_string);
+
+#endif
+
 	if (email_engine_validate_account(ugd->new_account, &(vd->handle), &error_code)) {
 		debug_log("Validate account");
 		_create_validation_popup(vd);

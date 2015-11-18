@@ -454,7 +454,13 @@ static void _save_cb(void *data, Evas_Object *obj, void *event_info)
 	vd->folder_sync_handle = EMAIL_OP_HANDLE_INITIALIZER;
 
 	/* add to account_svc */
+
+#ifdef _TESTING_WITH_ACCOUNT_SVC_
 	error_code = setting_add_account_to_account_svc(ugd->new_account);
+#else
+	error_code = ACCOUNT_ERROR_NONE;
+#endif
+
 	if (error_code == ACCOUNT_ERROR_NONE) {
 		debug_log("succeed to adding account to account-svc");
 		/* add to email_svc */

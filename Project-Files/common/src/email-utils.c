@@ -45,12 +45,18 @@
 #define EMAIL_RES_PATH 			PKGNAME"/res"
 #define EMAIL_DATA_PATH 		PKGNAME"/data"
 #define EMAIL_SHARED_RES_PATH 	PKGNAME"/shared/res"
-#define EMAIL_SHARED_DATA_PATH 	PKGNAME"/shared/data"
+
+// TODO: temporary for application testing
+//#define EMAIL_SHARED_DATA_PATH 	PKGNAME"/shared/data"
+#define EMAIL_SHARED_DATA_PATH 	PKGNAME"/data"
 
 #define EMAIL_FAIL_SAFE_RES_PATH 			tzplatform_mkpath(TZ_SYS_RO_APP, EMAIL_RES_PATH)
 #define EMAIL_FAIL_SAFE_DATA_PATH 			tzplatform_mkpath(TZ_USER_APP, EMAIL_DATA_PATH)
 #define EMAIL_FAIL_SAFE_SHARED_RES_PATH 	tzplatform_mkpath(TZ_SYS_RO_APP, EMAIL_SHARED_RES_PATH)
 #define EMAIL_FAIL_SAFE_SHARED_DATA_PATH 	tzplatform_mkpath(TZ_USER_APP, EMAIL_SHARED_DATA_PATH)
+
+// TODO: temporary for application testing (for public temp folder)
+#define EMAIL_FAIL_SAFE_SHARE_USER_PATH 	tzplatform_getname(TZ_USER_SHARE)
 
 #define EMAIL_FAIL_SAFE_PHONE_STORAGE_PATH 	tzplatform_getname(TZ_USER_CONTENT)
 #define EMAIL_FAIL_SAFE_MMC_STORAGE_PATH	tzplatform_mkpath(TZ_SYS_STORAGE, "sdcard")
@@ -515,6 +521,10 @@ EMAIL_DEFINE_GET_APP_ROOT_PATH(email_get_shared_res_dir, app_get_shared_resource
 
 EMAIL_DEFINE_GET_APP_ROOT_PATH(email_get_shared_data_dir, app_get_shared_data_path,
 		s_info.shared_data_dir, EMAIL_FAIL_SAFE_SHARED_DATA_PATH)
+
+// TODO: temporary for testing
+EMAIL_DEFINE_GET_APP_ROOT_PATH(email_get_shared_user_dir, app_get_shared_data_path,
+		s_info.shared_data_dir, EMAIL_FAIL_SAFE_SHARE_USER_PATH)
 
 EMAIL_DEFINE_GET_IMG_PATH(email_get_img_dir, "");
 EMAIL_DEFINE_GET_MISC_PATH(email_get_misc_dir, "")

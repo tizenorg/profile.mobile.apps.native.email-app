@@ -601,6 +601,9 @@ static COMPOSER_ERROR_TYPE_E _composer_create_temp_folder(const char *root_tmp_f
 {
 	debug_enter();
 
+	debug_warning("root_tmp_folder = %s", root_tmp_folder);
+	debug_warning("tmp_folder = %s", root_tmp_folder);
+
 	if (!email_check_dir_exist(root_tmp_folder)) {
 		if (_composer_make_composer_tmp_dir(root_tmp_folder) != COMPOSER_ERROR_NONE) {
 			return COMPOSER_ERROR_FAIL;

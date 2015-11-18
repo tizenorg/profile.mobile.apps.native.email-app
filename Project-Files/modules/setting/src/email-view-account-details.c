@@ -1616,12 +1616,16 @@ static void _popup_delete_ok_cb(void *data, Evas_Object *obj, void *event_info)
 	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
 
 	int account_id = ugd->account_id;
-	int account_svc_id = account_data->account_svc_id;
 
 	DELETE_EVAS_OBJECT(ugd->popup);
 
 	/* delete account from account_svc */
+#ifdef _TESTING_WITH_ACCOUNT_SVC_
+	int account_svc_id = account_data->account_svc_id;
 	int ret = setting_delete_account_from_account_svc(account_svc_id);
+#else
+	int ret = ACCOUNT_ERROR_NONE;
+#endif
 	if (ret == ACCOUNT_ERROR_NONE) {
 		/* delete account from email_svc */
 		ugd->is_account_deleted_on_this = 1;
