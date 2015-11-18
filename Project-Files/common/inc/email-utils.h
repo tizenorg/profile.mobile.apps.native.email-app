@@ -275,6 +275,7 @@ G_BEGIN_DECLS
 	EMAIL_DEFINE_GET_FMT_STR(func_name, "%s" sub_path, email_get_ ## root_dir_name ## _dir())
 
 #define EMAIL_DEFINE_GET_PHONE_PATH(func_name, sub_path) EMAIL_DEFINE_GET_PATH(func_name, phone_storage, sub_path)
+#define EMAIL_DEFINE_GET_SHARED_USER_PATH(func_name, sub_path) EMAIL_DEFINE_GET_PATH(func_name, shared_user, sub_path)
 
 #define EMAIL_DEFINE_GET_EDJ_PATH(func_name, sub_path) EMAIL_DEFINE_GET_PATH(func_name, res, "/edje" sub_path)
 #define EMAIL_DEFINE_GET_IMG_PATH(func_name, sub_path) EMAIL_DEFINE_GET_PATH(func_name, res, "/images" sub_path)
@@ -352,6 +353,7 @@ EMAIL_API const char *email_get_res_dir();
 EMAIL_API const char *email_get_data_dir();
 EMAIL_API const char *email_get_shared_res_dir();
 EMAIL_API const char *email_get_shared_data_dir();
+EMAIL_API const char *email_get_shared_user_dir();
 
 EMAIL_API const char *email_get_img_dir();
 EMAIL_API const char *email_get_misc_dir();

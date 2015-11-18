@@ -324,12 +324,65 @@ static Elm_Object_Item *_add_ctx_menu_item(EmailMailboxUGD *mailbox_ugd, const c
 	return ctx_menu_item;
 }
 
+static Evas_Object *_add_more_menu_item(EmailMailboxUGD *mailbox_ugd, const char *str, Evas_Object *icon, Evas_Smart_Cb cb)
+{
+	Evas_Object *btn = elm_button_add(mailbox_ugd->base.content);
+	elm_object_text_set(btn, str);
+	elm_object_domain_text_translatable_set(btn, PACKAGE, EINA_TRUE);
+	evas_object_smart_callback_add(btn, "clicked", cb, mailbox_ugd);
+	evas_object_show(btn);
+
+	return btn;
+}
+
 static void _more_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 	retm_if(!data, "data is NULL");
 
 	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
+
+	Evas_Object *bar = elm_object_item_part_content_get(mailbox_ugd->base.navi_item, "toolbar");
+	if (bar) {
+		Evas_Object *bar = elm_object_item_part_content_unset(mailbox_ugd->base.navi_item, "toolbar");
+		evas_object_del(bar);
+		return ;
+	}
+
+	bar = elm_box_add(mailbox_ugd->base.content);
+	elm_box_horizontal_set(bar, EINA_TRUE);
+	elm_box_homogeneous_set(bar, EINA_TRUE);
+	evas_object_show(bar);
+
+	elm_box_pack_end(bar, _add_more_menu_item(mailbox_ugd, "Compose", NULL, _compose_toolbar_clicked_cb));
+	elm_box_pack_end(bar,_add_more_menu_item(mailbox_ugd, "IDS_EMAIL_OPT_REFRESH", NULL, _sync_toolbar_clicked_cb));
+	elm_box_pack_end(bar,_add_more_menu_item(mailbox_ugd, "IDS_EMAIL_OPT_SEARCH", NULL, _search_button_clicked_cb));
+
+	if (g_list_length(mailbox_ugd->mail_list) > 0) {
+		elm_box_pack_end(bar,_add_more_menu_item(mailbox_ugd, "IDS_EMAIL_OPT_DELETE", NULL, _more_edit_delete_mode_cb));
+		if (mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX
+				|| mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_TRASH
+				|| mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_SPAMBOX
+				|| mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_USER_DEFINED) {
+			elm_box_pack_end(bar,_add_more_menu_item(mailbox_ugd, "IDS_EMAIL_OPT_MOVE", NULL, _more_edit_move_mode_cb));
+			if (mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_SPAMBOX) {
+				elm_box_pack_end(bar,_add_more_menu_item(mailbox_ugd, "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX", NULL, _more_edit_spam_mode_cb));
+			} else {
+				elm_box_pack_end(bar,_add_more_menu_item(mailbox_ugd, "IDS_EMAIL_OPT_REMOVE_FROM_SPAM_ABB", NULL, _more_edit_remove_spam_mode_cb));
+			}
+		}
+		if (mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX && mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_DRAFT
+				&& mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_TRASH && mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_SPAMBOX) {
+			elm_box_pack_end(bar,_add_more_menu_item(mailbox_ugd, "IDS_EMAIL_OPT_MARK_AS_READ_ABB", NULL, _more_edit_read_mode_cb));
+			elm_box_pack_end(bar,_add_more_menu_item(mailbox_ugd, "IDS_EMAIL_OPT_MARK_AS_UNREAD_ABB", NULL, _more_edit_unread_mode_cb));
+		}
+	}
+	elm_box_pack_end(bar, _add_more_menu_item(mailbox_ugd, "IDS_EMAIL_OPT_SETTINGS", NULL, _settings_cb));
+
+	elm_object_item_part_content_set(mailbox_ugd->base.navi_item, "toolbar", bar);
+
+	return;
+
 
 	retm_if(mailbox_ugd->composer, "mailbox_ugd->composer(%p) is being shown.", mailbox_ugd->composer);
 	retm_if(mailbox_ugd->viewer, "mailbox_ugd->viewer(%p) is being shown.", mailbox_ugd->viewer);
@@ -377,6 +430,7 @@ static void _more_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_i
 	_move_more_ctxpopup(mailbox_ugd->more_ctxpopup, mailbox_ugd->base.module->win);
 
 	evas_object_show(mailbox_ugd->more_ctxpopup);
+
 }
 
 static void _change_view_for_selection_mode(EmailMailboxUGD *mailbox_ugd)
@@ -439,17 +493,18 @@ void mailbox_create_compose_btn(EmailMailboxUGD *mailbox_ugd)
 //	debug_leave();
 
 	// TODO: temporary instead of floating button
-	Evas_Object *btn = elm_button_add(mailbox_ugd->base.content);
-	evas_object_smart_callback_add(btn, "clicked", _compose_toolbar_clicked_cb, mailbox_ugd);
-	elm_object_part_content_set(mailbox_ugd->base.content, "elm.swallow.floatingbutton", btn);
+//	Evas_Object *btn = elm_button_add(mailbox_ugd->base.content);
+//	evas_object_smart_callback_add(btn, "clicked", _compose_toolbar_clicked_cb, mailbox_ugd);
+//	elm_object_part_content_set(mailbox_ugd->base.content, "elm.swallow.floatingbutton", btn);
+//
+//	Evas_Object *img = elm_layout_add(btn);
+//	elm_layout_file_set(img, email_get_common_theme_path(), EMAIL_IMAGE_COMPOSE_BUTTON);
+//	elm_object_part_content_set(btn, "elm.swallow.content", img);
+//
+//	evas_object_show(img);
+//	evas_object_show(btn);
+//	mailbox_ugd->compose_btn = btn;
 
-	Evas_Object *img = elm_layout_add(btn);
-	elm_layout_file_set(img, email_get_common_theme_path(), EMAIL_IMAGE_COMPOSE_BUTTON);
-	elm_object_part_content_set(btn, "elm.swallow.content", img);
-
-	evas_object_show(img);
-	evas_object_show(btn);
-	mailbox_ugd->compose_btn = btn;
 	debug_leave();
 }
 
