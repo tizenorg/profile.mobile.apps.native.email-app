@@ -422,21 +422,34 @@ void mailbox_create_compose_btn(EmailMailboxUGD *mailbox_ugd)
 	retm_if(!mailbox_ugd, "mailbox_ugd is NULL");
 
 //	Evas_Object *floating_btn = eext_floatingbutton_add(mailbox_ugd->base.content);
-	Evas_Object *floating_btn = elm_button_add(mailbox_ugd->base.content);
-	elm_object_part_content_set(mailbox_ugd->base.content, "elm.swallow.floatingbutton", floating_btn);
-	evas_object_repeat_events_set(floating_btn, EINA_FALSE);
+//	elm_object_part_content_set(mailbox_ugd->base.content, "elm.swallow.floatingbutton", floating_btn);
+//	evas_object_repeat_events_set(floating_btn, EINA_FALSE);
+//
+//	Evas_Object *btn = elm_button_add(floating_btn);
+//	elm_object_part_content_set(floating_btn, "button1", btn);
+//	evas_object_smart_callback_add(btn, "clicked", _compose_toolbar_clicked_cb, mailbox_ugd);
+//
+//	Evas_Object *img = elm_layout_add(btn);
+//	elm_layout_file_set(img, email_get_common_theme_path(), EMAIL_IMAGE_COMPOSE_BUTTON);
+//	elm_object_part_content_set(btn, "elm.swallow.content", img);
+//
+//	evas_object_show(img);
+//	evas_object_show(floating_btn);
+//	mailbox_ugd->compose_btn = floating_btn;
+//	debug_leave();
 
-	Evas_Object *btn = elm_button_add(floating_btn);
-	elm_object_part_content_set(floating_btn, "button1", btn);
+	// TODO: temporary instead of floating button
+	Evas_Object *btn = elm_button_add(mailbox_ugd->base.content);
 	evas_object_smart_callback_add(btn, "clicked", _compose_toolbar_clicked_cb, mailbox_ugd);
+	elm_object_part_content_set(mailbox_ugd->base.content, "elm.swallow.floatingbutton", btn);
 
 	Evas_Object *img = elm_layout_add(btn);
 	elm_layout_file_set(img, email_get_common_theme_path(), EMAIL_IMAGE_COMPOSE_BUTTON);
 	elm_object_part_content_set(btn, "elm.swallow.content", img);
 
 	evas_object_show(img);
-	evas_object_show(floating_btn);
-	mailbox_ugd->compose_btn = floating_btn;
+	evas_object_show(btn);
+	mailbox_ugd->compose_btn = btn;
 	debug_leave();
 }
 
