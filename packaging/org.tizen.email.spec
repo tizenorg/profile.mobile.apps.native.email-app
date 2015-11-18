@@ -143,7 +143,7 @@ pkgdir_maker --create --pkgid=%{name}
 %{_pkg_dir}/bin/email-setting
 %{_pkg_dir}/bin/email-composer
 
-%{_sys_icons_dir}/%{name}.png
+%{_sys_icons_dir}/default/small/%{name}.png
 %{_sys_packages_dir}/%{name}.xml
 %{_sys_license_dir}/%{name}
 %{_sys_smake_dir}/%{name}.efl

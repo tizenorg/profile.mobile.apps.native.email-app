@@ -7,7 +7,7 @@
 		indicatordisplay="true" process-pool="false" hw-acceleration="use-GL" launch_mode="single">
 		<metadata key="http://developer.samsung.com/tizen/metadata/multiwindow"/>
 		<label>Email</label>
-		<icon>/usr/share/icons/org.tizen.email.png</icon>
+		<icon>/usr/share/icons/default/small/org.tizen.email.png</icon>
 		<label xml:lang="ar-ae">البريد الإلكتروني</label>
 		<label xml:lang="az-az">Elektron poçtlar</label>
 		<label xml:lang="bg-bg">Email</label>
@@ -63,7 +63,7 @@
 		<metadata key="http://developer.samsung.com/tizen/metadata/multiwindow"/>
 		<metadata key="http://developer.samsung.com/tizen/metadata/multiwindow/nodisplay"/>
 		<label>Email</label>
-		<icon>/usr/share/icons/org.tizen.email.png</icon>
+		<icon>/usr/share/icons/default/small/org.tizen.email.png</icon>
 		<label xml:lang="ar-ae">البريد الإلكتروني</label>
 		<label xml:lang="az-az">Elektron poçtlar</label>
 		<label xml:lang="bg-bg">Email</label>
@@ -156,7 +156,7 @@
 		<metadata key="http://developer.samsung.com/tizen/metadata/multiwindow"/>
 		<metadata key="http://developer.samsung.com/tizen/metadata/multiwindow/nodisplay"/>
 		<label>Email</label>
-		<icon>/usr/share/icons/org.tizen.email.png</icon>
+		<icon>/usr/share/icons/default/small/org.tizen.email.png</icon>
 		<application-service>
 			<operation name="tizen-email://org.tizen.email/email_setting_notification"/>
 		</application-service>
@@ -166,8 +166,8 @@
 	</ui-application>
 	<account>
 		<account-provider appid="org.tizen.email-setting" providerid="http://www.tizen.org/" multiple-accounts-support="true">
-			<icon section="account">/usr/share/icons/org.tizen.email.png</icon>
-			<icon section="account-small">/usr/share/icons/org.tizen.email.png</icon>
+			<icon section="account">/usr/share/icons/default/small/org.tizen.email.png</icon>
+			<icon section="account-small">/usr/share/icons/default/small/org.tizen.email.png</icon>
 			<label xml:lang="nl-nl">Email</label>
 			<label>Email</label>
 			<label xml:lang="en-gb">Email</label>
