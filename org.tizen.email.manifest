@@ -1,11 +1,5 @@
 <manifest>
-	<define>
-		<domain name="org.tizen.email" />
-	</define>
-	<assign>
-		<filesystem path="/usr/share/icons/default/small/org.tizen.email.png" label="_"/>
-	</assign>
 	<request>
-		<domain name="org.tizen.email" />
+		<domain name="_" />
 	</request>
 </manifest>
