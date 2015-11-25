@@ -16,7 +16,7 @@
  */
 
 #include <account-types.h>
-#include <calendar.h>
+
 #include "email-mailbox.h"
 #include "email-mailbox-toolbar.h"
 #include "email-mailbox-item.h"

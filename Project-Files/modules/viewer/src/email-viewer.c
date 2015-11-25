@@ -23,7 +23,6 @@
 #include <utils_i18n.h>
 #include <app_control.h>
 #include <malloc.h>
-#include <calendar.h>
 #include <notification.h>
 
 #include "email-common-types.h"

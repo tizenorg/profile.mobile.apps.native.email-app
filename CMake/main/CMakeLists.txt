@@ -6,7 +6,7 @@ SET(PACKAGE ${PROJECT_NAME})
 SET(PKGNAME "org.${VENDOR}.${PACKAGE}")
 
 pkg_check_modules(pkgs-email REQUIRED elementary email-service accounts-svc
-	bundle dlog ecore-input contacts-service2 gthread-2.0 efl-extension gio-2.0 capi-base-utils-i18n capi-system-system-settings
+	bundle dlog ecore-input contacts-service2 efl-extension gio-2.0 capi-base-utils-i18n capi-system-system-settings
 	capi-appfw-application)
 
 FOREACH(flag ${pkgs-email_CFLAGS})

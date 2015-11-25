@@ -17,10 +17,7 @@ Requires(post): sys-assert
 Requires: email-service
 BuildRequires: cmake
 BuildRequires: edje-tools
-BuildRequires: embryo-bin
 BuildRequires: gettext-tools
-BuildRequires: boost-devel
-BuildRequires: hash-signer
 BuildRequires: pkgconfig(capi-base-utils-i18n)
 BuildRequires: pkgconfig(email-service)
 BuildRequires: pkgconfig(ecore)
@@ -30,28 +27,22 @@ BuildRequires: pkgconfig(eina)
 BuildRequires: pkgconfig(evas)
 BuildRequires: pkgconfig(glib-2.0)
 BuildRequires: pkgconfig(gio-2.0)
-BuildRequires: pkgconfig(gthread-2.0)
 BuildRequires: pkgconfig(elementary)
 BuildRequires: pkgconfig(chromium-efl)
 BuildRequires: pkgconfig(dlog)
 BuildRequires: pkgconfig(bundle)
 BuildRequires: pkgconfig(capi-appfw-application)
 BuildRequires: pkgconfig(capi-appfw-preference)
-BuildRequires: pkgconfig(capi-appfw-app-manager)
 BuildRequires: pkgconfig(capi-base-common)
 BuildRequires: pkgconfig(contacts-service2)
 BuildRequires: pkgconfig(accounts-svc)
-BuildRequires: pkgconfig(calendar-service2)
 BuildRequires: pkgconfig(notification)
 BuildRequires: pkgconfig(capi-media-metadata-extractor)
 BuildRequires: pkgconfig(capi-media-image-util)
 BuildRequires: pkgconfig(capi-content-media-content)
 BuildRequires: pkgconfig(libexif)
 BuildRequires: pkgconfig(libxml-2.0)
-BuildRequires: pkgconfig(xmlsec1)
-BuildRequires: pkgconfig(xmlsec1-openssl)
 BuildRequires: pkgconfig(capi-system-system-settings)
-BuildRequires: pkgconfig(tapi)
 BuildRequires: pkgconfig(capi-network-connection)
 BuildRequires: pkgconfig(capi-network-wifi)
 BuildRequires: pkgconfig(libpng)
@@ -76,7 +67,7 @@ Description: Native email application
 %define _pkg_dir %{TZ_SYS_RO_APP}/%{name}
 %define _pkg_lib_dir %{_pkg_dir}/lib
 
-%define _sys_icons_dir %{TZ_SYS_RO_ICONS}
+%define _sys_icons_dir %{TZ_SYS_RO_ICONS}/default/small
 %define _sys_packages_dir %{TZ_SYS_RO_PACKAGES}
 %define _sys_license_dir %{TZ_SYS_SHARE}/license
 %define _sys_smake_dir %{TZ_SYS_SMACK}/accesses.d
@@ -143,7 +134,7 @@ pkgdir_maker --create --pkgid=%{name}
 %{_pkg_dir}/bin/email-setting
 %{_pkg_dir}/bin/email-composer
 
-%{_sys_icons_dir}/default/small/%{name}.png
+%{_sys_icons_dir}/%{name}.png
 %{_sys_packages_dir}/%{name}.xml
 %{_sys_license_dir}/%{name}
 %{_sys_smake_dir}/%{name}.efl

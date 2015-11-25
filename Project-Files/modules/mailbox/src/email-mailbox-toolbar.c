@@ -16,7 +16,6 @@
  */
 
 #include <notification.h>
-#include <calendar.h>
 
 #include "email-mailbox.h"
 #include "email-mailbox-toolbar.h"

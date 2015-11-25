@@ -22,7 +22,7 @@ SET(SRCS
 INCLUDE_DIRECTORIES(${CURRENT_SOURCE_DIR}/inc)
 
 SET(email-required-pkgs elementary email-service glib-2.0 gio-2.0 bundle dlog capi-base-utils-i18n
-	capi-appfw-application contacts-service2 calendar-service2 notification capi-system-system-settings efl-extension)
+	capi-appfw-application contacts-service2 notification capi-system-system-settings efl-extension)
 
 pkg_check_modules(pkgs-mailbox REQUIRED "${email-required-pkgs}")
 

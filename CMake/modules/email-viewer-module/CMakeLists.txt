@@ -25,7 +25,7 @@ INCLUDE_DIRECTORIES(${CURRENT_SOURCE_DIR}/inc)
 SET(email-required-pkgs elementary ecore glib-2.0 gobject-2.0
 	notification capi-media-metadata-extractor capi-media-image-util capi-content-media-content
 	email-service gio-2.0 capi-appfw-application chromium-efl capi-system-system-settings
-	contacts-service2 bundle dlog calendar-service2 efl-extension storage capi-base-utils-i18n)
+	contacts-service2 bundle dlog efl-extension storage capi-base-utils-i18n)
 
 pkg_check_modules(pkgs-viewer REQUIRED "${email-required-pkgs}")
 

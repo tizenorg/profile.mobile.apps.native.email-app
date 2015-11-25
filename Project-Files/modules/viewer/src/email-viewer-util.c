@@ -23,7 +23,6 @@
 #include <time.h>
 #include <errno.h>
 #include <notification.h>
-#include <calendar.h>
 #include <storage.h>
 #include <stdarg.h>
 #include <media_content.h>

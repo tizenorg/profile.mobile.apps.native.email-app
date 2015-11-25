@@ -44,7 +44,6 @@ const int EMAIL_ACCOUNT_COLOR[] = {
 	RGB(129, 130, 134)
 };
 
-
 typedef struct _email_setting_op_cancel_s {
 	EmailSettingUGD *ugd;
 	int *op_handle;

@@ -17,12 +17,12 @@ SET(SRCS-common
 )
 
 IF(${ENABLE_ATTACH_PANEL})
-	SET(email-required-pkgs ecore glib-2.0 gobject-2.0 email-service tapi storage
+	SET(email-required-pkgs ecore glib-2.0 gobject-2.0 email-service storage
 		contacts-service2 capi-content-media-content dlog elementary evas eina edje capi-base-utils-i18n
 		accounts-svc capi-network-connection efl-extension capi-content-mime-type capi-system-system-settings
 		capi-appfw-application chromium-efl capi-appfw-preference vconf attach-panel feedback libtzplatform-config)
 ELSE(${ENABLE_ATTACH_PANEL})
-	SET(email-required-pkgs ecore glib-2.0 gobject-2.0 email-service tapi storage
+	SET(email-required-pkgs ecore glib-2.0 gobject-2.0 email-service storage
 		contacts-service2 capi-content-media-content dlog elementary evas eina edje capi-base-utils-i18n
 		accounts-svc capi-network-connection efl-extension capi-content-mime-type capi-system-system-settings
 		capi-appfw-application chromium-efl capi-appfw-preference vconf feedback libtzplatform-config)
