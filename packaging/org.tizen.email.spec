@@ -138,6 +138,3 @@ pkgdir_maker --create --pkgid=%{name}
 %{_sys_packages_dir}/%{name}.xml
 %{_sys_license_dir}/%{name}
 %{_sys_smake_dir}/%{name}.efl
-
-%{_pkg_dir}/author-signature.xml
-%{_pkg_dir}/signature1.xml

@@ -16,8 +16,6 @@
  */
 
 #include <app_control.h>
-
-#include <app_manager.h>
 #include <account.h>
 
 #include "email-popup-utils.h"
