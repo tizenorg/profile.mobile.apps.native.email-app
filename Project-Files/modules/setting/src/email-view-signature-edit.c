@@ -77,13 +77,9 @@ static int _create(email_view_t *self)
 	EmailSettingVD *vd = (EmailSettingVD *)self;
 	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
 
-	if (ugd->add_account) {
-		vd->account_data = ugd->new_account;
-	} else {
-		if (!setting_get_acct_full_data(ugd->account_id, &(vd->account_data))) {
-			debug_error("setting_get_acct_full_data failed");
-			return -1;
-		}
+	if (!setting_get_acct_full_data(ugd->account_id, &(vd->account_data))) {
+		debug_error("setting_get_acct_full_data failed");
+		return -1;
 	}
 
 	EMAIL_SETTING_PRINT_ACCOUNT_INFO(vd->account_data);
