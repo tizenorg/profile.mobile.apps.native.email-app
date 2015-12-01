@@ -42,13 +42,10 @@
 #include "email-setting-string.h"
 #include "email-module-dev.h"
 
-#define VIEW_ST_MAX 20		/* Maximum View Stack */
-
 #define _EDJ(o) elm_layout_edje_get(o)
 
 #define DEFAULT_EMAIL_RINGTONE_PATH "/opt/usr/share/settings/Alerts/Postman(Default_Email).ogg"
 
-typedef enum _ViewType ViewType;
 enum _ViewType {
 	VIEW_SETTING = 1000,
 	VIEW_ACCOUNT_SETUP,
@@ -59,42 +56,9 @@ enum _ViewType {
 	VIEW_NOTIFICATION_SETTING,
 	VIEW_SIGNATURE_SETTING,
 	VIEW_SIGNATURE_EDIT,
-
-	/* error case */
-	VIEW_INVALID,
+	VIEW_INVALID
 };
-
-typedef struct sp_desc EmailSpDesc;
-struct sp_desc {
-	int index;
-	char *id;
-	char *csc_code;
-	char *name;
-	char *name_str_id;
-	char *icon_path;
-	char *sending_address;
-	int sending_port;
-	int sending_security;
-	char *receiving_server_type;
-	char *receiving_address;
-	int receiving_port;
-	int receiving_security;
-	int rgb;
-};
-
-enum {
-	PRIORITY_SENDER_MODE_ADD = 1,
-	PRIORITY_SENDER_MODE_EDIT,
-	PRIORITY_SENDER_MODE_MAX
-};
-
-typedef enum _email_add_account_e {
-	EMAIL_ADD_ACCOUNT_TYPE_EMAIL = 1,		/**<  CSC_FEATURE_DEF_BOOL_EMAIL_PROVIDERS_DISPLAY_ENABLE 0 */
-	EMAIL_ADD_ACCOUNT_TYPE_OTHERS,			/**<  when "Others" is selected */
-	EMAIL_ADD_ACCOUNT_TYPE_CSC,				/**<  CSC_FEATURE_DEF_BOOL_EMAIL_PROVIDERS_DISPLAY_ENABLE 1 */
-} email_add_account_e;
-
-typedef struct ug_data EmailSettingUGD;
+typedef enum _ViewType ViewType;
 
 struct ug_data
 {
@@ -110,21 +74,13 @@ struct ug_data
 
 	/* for adding account */
 	GSList *default_provider_list;
-	char *email_sp;
-	char *email_sp_icon_path;
-	email_add_account_e add_account_type;
 	email_account_t *new_account;
 	email_account_t *account_list;
-	email_protocol_config_t *imap_conf;
-	email_protocol_config_t *pop_conf;
-	email_protocol_config_t *smtp_conf;
 
 	/* view specified variables */
 	int account_count;
 	int account_id;
-	int add_account;
-	int setup_mailbox;
-	int is_account_deleted_on_this;
+	Eina_Bool is_account_deleted_on_this;
 	Eina_Bool is_set_default_account;
 
 	/* for noti mgr */
@@ -135,12 +91,11 @@ struct ug_data
 
 	/* for cancel op */
 	GSList *cancel_op_list;
-	Ecore_Thread *query_thread;
 
 	/* for conformant */
-	int is_keypad;
-	int is_clipboard;
+	Eina_Bool is_keypad;
 };
+typedef struct ug_data EmailSettingUGD;
 
 #endif				/* __EMAIL_SETTING_H__ */
 

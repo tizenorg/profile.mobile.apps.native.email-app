@@ -83,7 +83,6 @@ static email_setting_string_t EMAIL_SETTING_STRING_NO_SERVER_RESPONSE = {PACKAGE
 static email_setting_string_t EMAIL_SETTING_STRING_ACCOUNT_ALREADY_EXISTS = {PACKAGE, "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"};
 static email_setting_string_t EMAIL_SETTING_STRING_AUTHENTICATION_FAILED = {PACKAGE, "IDS_ST_POP_CHECK_THE_EMAIL_ADDRESS_AND_PASSWORD_YOU_HAVE_ENTERED"};
 static email_setting_string_t EMAIL_SETTING_STRING_INCORRECT_USER_NAME_OR_PASSWORD = {PACKAGE, "IDS_ST_POP_CHECK_THE_EMAIL_ADDRESS_AND_PASSWORD_YOU_HAVE_ENTERED"};
-static email_setting_string_t EMAIL_SETTING_STRING_OTHERS = {PACKAGE, "IDS_ST_MBODY_OTHER"};
 static email_setting_string_t EMAIL_SETTING_STRING_UNKNOWN_ERROR = {PACKAGE, "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"};
 static email_setting_string_t EMAIL_SETTING_STRING_EMAIL = {PACKAGE, "IDS_ST_HEADER_EMAIL"};
 static email_setting_string_t EMAIL_SETTING_STRING_CANCEL = {PACKAGE, "IDS_EMAIL_BUTTON_CANCEL"};
@@ -108,6 +107,7 @@ static email_setting_string_t EMAIL_SETTING_STRING_TLS_NOT_SUPPORTED = {PACKAGE,
 static email_setting_string_t EMAIL_SETTING_STRING_TLS_SSL_FAIL = {PACKAGE, "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"};
 static email_setting_string_t EMAIL_SETTING_STRING_WARNING = {PACKAGE, "IDS_ST_HEADER_WARNING"};
 static email_setting_string_t EMAIL_SETTING_STRING_UNABLE_TO_VALIDATE = {PACKAGE, "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"};
+static email_setting_string_t EMAIL_SETTING_STRING_VALIDATING_ACCOUNT_ING = {PACKAGE, "IDS_ST_TPOP_VALIDATING_ACCOUNT_ING_ABB"};
 
 /* not defined in UX */
 static email_setting_string_t EMAIL_SETTING_STRING_MANY_LOGIN_FAIL = {PACKAGE, N_("Too many login failure")};
@@ -1032,7 +1032,7 @@ static void _entry_popup_keypad_down_cb(void *data, Evas_Object *obj, void *even
 		retm_if(!header, "header is NULL!");
 		elm_object_domain_translatable_part_text_set(ugd->popup, "title,text", header->domain, header->id);
 	}
-	ugd->is_keypad = 0;
+	ugd->is_keypad = EINA_FALSE;
 }
 
 static void _entry_popup_keypad_up_cb(void *data, Evas_Object *obj, void *event_info)
@@ -1044,7 +1044,7 @@ static void _entry_popup_keypad_up_cb(void *data, Evas_Object *obj, void *event_
 	rot = elm_win_rotation_get(ugd->base.win);
 	if (rot == 90 || rot == 270)
 		elm_object_part_text_set(ugd->popup, "title,text", NULL);
-	ugd->is_keypad = 1;
+	ugd->is_keypad = EINA_TRUE;
 }
 
 static void _entry_popup_rot_cb(void *data, Evas_Object *obj, void *event_info)
@@ -1139,12 +1139,6 @@ static void _popup_back_with_query_cancel_cb(void *data, Evas_Object *obj, void 
 	retm_if(!ugd, "ugd is NULL");
 
 	DELETE_EVAS_OBJECT(ugd->popup);
-
-	if (ugd->query_thread && !ecore_thread_check(ugd->query_thread)) {
-		ecore_thread_cancel(ugd->query_thread);
-		debug_log("query thread is cancelled: %p", ugd->query_thread);
-		ugd->query_thread = NULL;
-	}
 }
 
 static void _popup_noop_cb(void *data, Evas_Object *obj, void *event_info)
@@ -1211,13 +1205,7 @@ char *setting_get_provider_name(EmailSettingUGD *ugd)
 {
 	debug_enter();
 
-	if (ugd->add_account_type == EMAIL_ADD_ACCOUNT_TYPE_CSC) {
-		return g_strdup(ugd->email_sp);
-	} else if (ugd->add_account_type == EMAIL_ADD_ACCOUNT_TYPE_EMAIL) {
-		return g_strdup(EMAIL_SETTING_STRING_EMAIL.id);
-	} else {
-		return g_strdup(EMAIL_SETTING_STRING_OTHERS.id);
-	}
+	return g_strdup(EMAIL_SETTING_STRING_EMAIL.id);
 }
 
 static void _popup_content_remove(Evas_Object *popup)
@@ -1401,7 +1389,7 @@ static void _keypad_down_cb(void *data, Evas_Object *obj, void *event_info)
 		Elm_Object_Item *navi_it = elm_naviframe_top_item_get(ugd->base.navi);
 		elm_naviframe_item_title_enabled_set(navi_it, EINA_TRUE, EINA_TRUE);
 	}
-	ugd->is_keypad = 0;
+	ugd->is_keypad = EINA_FALSE;
 }
 
 static void _keypad_up_cb(void *data, Evas_Object *obj, void *event_info)
@@ -1417,7 +1405,7 @@ static void _keypad_up_cb(void *data, Evas_Object *obj, void *event_info)
 		Elm_Object_Item *navi_it = elm_naviframe_top_item_get(ugd->base.navi);
 		elm_naviframe_item_title_enabled_set(navi_it, EINA_FALSE, EINA_TRUE);
 	}
-	ugd->is_keypad = 1;
+	ugd->is_keypad = EINA_TRUE;
 }
 
 static void _keypad_rot_cb(void *data, Evas_Object *obj, void *event_info)
@@ -1444,4 +1432,23 @@ static void _keypad_rot_cb(void *data, Evas_Object *obj, void *event_info)
 		}
 	}
 }
+
+void setting_create_account_validation_popup(email_view_t *vd, int *handle)
+{
+	debug_enter();
+
+	retm_if(!vd, "vd is null");
+
+	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
+	email_account_t *account = ugd->new_account;
+
+	debug_secure("account name:%s", account->account_name);
+	debug_secure("email address:%s", account->user_email_address);
+
+	debug_log("Start Account Validation");
+	ugd->popup = setting_get_pb_process_notify(vd,
+			&(EMAIL_SETTING_STRING_VALIDATING_ACCOUNT_ING), 0, NULL, NULL, NULL, NULL,
+			POPUP_BACK_TYPE_DESTROY_WITH_CANCEL_OP, handle);
+}
+
 /* EOF */

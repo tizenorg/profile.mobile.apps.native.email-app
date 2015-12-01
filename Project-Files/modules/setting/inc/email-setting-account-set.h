@@ -21,9 +21,6 @@
 #include "email-setting.h"
 #include "email-setting-utils.h"
 
-/* TODO: Need to remove */
-void setting_set_csc_account(email_view_t *vd);
-
 /**
  * @brief Set up an account setting
  * @remark Operation occurs with default provider.
