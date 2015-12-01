@@ -24,7 +24,7 @@
  * @brief Creates account setup view
  * @param[in]	ugd		Email settings data
  */
-void create_account_setup_view(EmailSettingUGD *ugd, email_add_account_e account_type, char *sp_name, char *sp_icon_path);
+void create_account_setup_view(EmailSettingUGD *ugd);
 
 #endif				/* __EMAIL_VIEW_ACCOUNT_SETUP_H__ */
 

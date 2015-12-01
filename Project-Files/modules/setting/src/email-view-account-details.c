@@ -783,7 +783,6 @@ static void _gl_sel_cb(void *data, Evas_Object *obj, void *event_info)
 	elm_genlist_item_selected_set(item, EINA_FALSE);
 
 	if (li->index == SIGNATURE_LIST_ITEM) {
-		ugd->add_account = 0;
 		create_signature_setting_view(ugd);
 		return;
 	} else if (li->index == NOTIFICATION_LIST_ITEM) {
@@ -1624,7 +1623,7 @@ static void _popup_delete_ok_cb(void *data, Evas_Object *obj, void *event_info)
 	int ret = setting_delete_account_from_account_svc(account_svc_id);
 	if (ret == ACCOUNT_ERROR_NONE) {
 		/* delete account from email_svc */
-		ugd->is_account_deleted_on_this = 1;
+		ugd->is_account_deleted_on_this = EINA_TRUE;
 		ret = email_engine_delete_account(account_id);
 		if (ret) {
 			ugd->popup = setting_get_pb_process_notify(&vd->base,
@@ -1636,7 +1635,7 @@ static void _popup_delete_ok_cb(void *data, Evas_Object *obj, void *event_info)
 			vd->del_timer = ecore_timer_add(3.0, _after_delete_cb, vd);
 			debug_log("delete success");
 		} else {
-			ugd->is_account_deleted_on_this = 0;
+			ugd->is_account_deleted_on_this = EINA_FALSE;
 			ugd->popup = setting_get_notify(&vd->base, &(EMAIL_SETTING_STRING_HEADER_DELETE),
 					&(EMAIL_SETTING_STRING_UNABLE_DELETE), 1,
 					&(EMAIL_SETTING_STRING_OK),

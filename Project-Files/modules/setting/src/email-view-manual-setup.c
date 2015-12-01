@@ -34,10 +34,9 @@ static void _initialize_handle(EmailSettingVD *vd);
 
 static void _push_naviframe(EmailSettingVD *vd);
 static void _create_list(EmailSettingVD *vd);
-static void _create_validation_popup(EmailSettingVD *vd);
-static int _validate_account(void *data);
-static int _check_null_field(EmailSettingVD *vd);
-static int _check_validation_field(EmailSettingVD *vd);
+static void _validate_account(EmailSettingVD *vd);
+static Eina_Bool _check_null_field(EmailSettingVD *vd);
+static Eina_Bool _check_validation_field(EmailSettingVD *vd);
 static void _set_username_before_at(EmailSettingVD *vd);
 static void _set_username_with_email_address(EmailSettingVD *vd);
 static void _read_all_entries(EmailSettingVD *vd);
@@ -46,9 +45,10 @@ static void _update_server_info(EmailSettingVD *vd, email_account_t *account, em
 static void _update_account_capability(EmailSettingVD *vd, const char *capability);
 static void _update_account_smtp_mail_limit_size(EmailSettingVD *vd, const char *mail_limit_size);
 
+static void _perform_account_validation(EmailSettingVD *vd);
 static void _show_finished_cb(void *data, Evas_Object *obj, void *event_info);
-static void _save_cb(void *data, Evas_Object *obj, void *event_info);
-static void _cancel_cb(void *data, Evas_Object *obj, void *event_info);
+static void _next_btn_clicked_cb(void *data, Evas_Object *obj, void *event_info);
+static void _cancel_btn_clicked_cb(void *data, Evas_Object *obj, void *event_info);
 static Eina_Bool _after_validation_cb(void *data);
 static void _popup_ok_cb(void *data, Evas_Object *obj, void *event_info);
 static void _backup_input_cb(void *data, Evas_Object *obj, void *event_info);
@@ -71,8 +71,6 @@ static void _gl_ex_sending_secure_radio_cb(void *data, Evas_Object *obj, void *e
 static void _gl_ex_incoming_type_radio_cb(void *data, Evas_Object *obj, void *event_info);
 static void _gl_ex_incoming_secure_radio_cb(void *data, Evas_Object *obj, void *event_info);
 
-static email_setting_string_t EMAIL_SETTING_STRING_ACCOUNT_ALREADY_EXISTS = {PACKAGE, "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"};
-static email_setting_string_t EMAIL_SETTING_STRING_ALREADY_EXIST = {PACKAGE, "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"};
 static email_setting_string_t EMAIL_SETTING_STRING_EMAIL = {PACKAGE, "IDS_ST_HEADER_EMAIL"};
 static email_setting_string_t EMAIL_SETTING_STRING_IMAP4 = {PACKAGE, "IDS_EMAIL_BODY_IMAP4"};
 static email_setting_string_t EMAIL_SETTING_STRING_INCOMING_MAIL_SERVER_TYPE = {PACKAGE, "IDS_ST_HEADER_SERVER_TYPE_ABB"};
@@ -80,7 +78,6 @@ static email_setting_string_t EMAIL_SETTING_STRING_INCOMING_PORT = {PACKAGE, "ID
 static email_setting_string_t EMAIL_SETTING_STRING_INCOMING_SERVER = {PACKAGE, "IDS_ST_TMBODY_SERVER_ADDRESS"};
 static email_setting_string_t EMAIL_SETTING_STRING_INCOMING_SETTINGS = {PACKAGE, "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"};
 static email_setting_string_t EMAIL_SETTING_STRING_OK = {PACKAGE, "IDS_EMAIL_BUTTON_OK"};
-static email_setting_string_t EMAIL_SETTING_STRING_OTHERS = {PACKAGE, "IDS_ST_MBODY_OTHER"};
 static email_setting_string_t EMAIL_SETTING_STRING_OUTGOING_PORT = {PACKAGE, "IDS_ST_BODY_PORT"};
 static email_setting_string_t EMAIL_SETTING_STRING_OUTGOING_SERVER = {PACKAGE, "IDS_ST_TMBODY_SERVER_ADDRESS"};
 static email_setting_string_t EMAIL_SETTING_STRING_OUTGOING_SETTINGS = {PACKAGE, "IDS_ST_HEADER_OUTGOING_SERVER_SETTINGS_ABB"};
@@ -89,14 +86,14 @@ static email_setting_string_t EMAIL_SETTING_STRING_PWD = {PACKAGE, "IDS_ST_TMBOD
 static email_setting_string_t EMAIL_SETTING_STRING_SECURE_CONNECTION = {PACKAGE, "IDS_ST_HEADER_SECURITY_TYPE_ABB"};
 static email_setting_string_t EMAIL_SETTING_STRING_SSL = {PACKAGE, "IDS_ST_SBODY_SSL"};
 static email_setting_string_t EMAIL_SETTING_STRING_TLS = {PACKAGE, "IDS_ST_SBODY_TLS"};
-static email_setting_string_t EMAIL_SETTING_STRING_UNABLE_TO_ADD_ACCOUNT = {PACKAGE, "IDS_ST_HEADER_UNABLE_TO_ADD_ACCOUNT_ABB"};
 static email_setting_string_t EMAIL_SETTING_STRING_USER_NAME = {PACKAGE, "IDS_ST_TMBODY_USERNAME"};
-static email_setting_string_t EMAIL_SETTING_STRING_VALIDATING_ACCOUNT_ING = {PACKAGE, "IDS_ST_TPOP_VALIDATING_ACCOUNT_ING_ABB"};
-static email_setting_string_t EMAIL_SETTING_STRING_WARNING = {PACKAGE, "IDS_ST_HEADER_WARNING"};
-static email_setting_string_t EMAIL_SETTING_STRING_FILL_MANDATORY_FIELDS = {PACKAGE, "IDS_EMAIL_POP_PLEASE_FILL_ALL_THE_MANDATORY_FIELDS"};
 static email_setting_string_t EMAIL_SETTING_STRING_OFF = {PACKAGE, "IDS_ST_OPT_NONE"};
 static email_setting_string_t EMAIL_SETTING_STRING_NEXT = {PACKAGE, "IDS_ST_BUTTON_NEXT"};
 static email_setting_string_t EMAIL_SETTING_STRING_CANCEL = {PACKAGE, "IDS_EMAIL_BUTTON_CANCEL"};
+static email_setting_string_t EMAIL_SETTING_STRING_WARNING = {PACKAGE, "IDS_ST_HEADER_WARNING"};
+static email_setting_string_t EMAIL_SETTING_STRING_FILL_MANDATORY_FIELDS = {PACKAGE, "IDS_EMAIL_POP_PLEASE_FILL_ALL_THE_MANDATORY_FIELDS"};
+static email_setting_string_t EMAIL_SETTING_STRING_ACCOUNT_ALREADY_EXISTS = {PACKAGE, "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"};
+static email_setting_string_t EMAIL_SETTING_STRING_UNABLE_TO_ADD_ACCOUNT = {PACKAGE, "IDS_ST_HEADER_UNABLE_TO_ADD_ACCOUNT_ABB"};
 
 enum {
 	USERNAME_LIST_ITEM = 1,
@@ -178,16 +175,6 @@ static int _create(email_view_t *self)
 	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
 
 	vd->account = ugd->new_account;
-
-	if (ugd->add_account_type == EMAIL_ADD_ACCOUNT_TYPE_OTHERS) {
-		if (!vd->account->incoming_server_address) {
-			/* if this is not default provider */
-			vd->account->incoming_server_type = EMAIL_SERVER_TYPE_POP3;
-			vd->account->incoming_server_secure_connection = 0;
-			vd->account->outgoing_server_secure_connection = 0;
-		}
-	}
-
 	vd->base.content = setting_add_inner_layout(&vd->base);
 	_push_naviframe(vd);
 
@@ -266,36 +253,24 @@ static void _destroy(email_view_t *self)
 static void _push_naviframe(EmailSettingVD *vd)
 {
 	debug_enter();
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
-	Elm_Object_Item *navi_it = NULL;
-	Evas_Object *next_btn = NULL;
-	Evas_Object *cancel_btn = NULL;
 
-	if (ugd->add_account_type == EMAIL_ADD_ACCOUNT_TYPE_OTHERS) {
-		navi_it = email_module_view_push(&vd->base, EMAIL_SETTING_STRING_OTHERS.id, 0);
-		elm_object_item_domain_text_translatable_set(navi_it, EMAIL_SETTING_STRING_OTHERS.domain, EINA_TRUE);
-	} else if (ugd->add_account_type == EMAIL_ADD_ACCOUNT_TYPE_CSC) {
-		navi_it = email_module_view_push(&vd->base, ugd->email_sp, 0);
-	} else {
-		navi_it = email_module_view_push(&vd->base, EMAIL_SETTING_STRING_EMAIL.id, 0);
-		elm_object_item_domain_text_translatable_set(navi_it, EMAIL_SETTING_STRING_EMAIL.domain, EINA_TRUE);
-	}
+	Elm_Object_Item *navi_it = email_module_view_push(&vd->base, EMAIL_SETTING_STRING_EMAIL.id, 0);
+	elm_object_item_domain_text_translatable_set(navi_it, EMAIL_SETTING_STRING_EMAIL.domain, EINA_TRUE);
 
-	Evas_Object *btn_ly = NULL;
-	btn_ly = elm_layout_add(vd->base.content);
+	Evas_Object *btn_ly = elm_layout_add(vd->base.content);
 	elm_layout_file_set(btn_ly, email_get_setting_theme_path(), "two_bottom_btn");
 
-	cancel_btn = elm_button_add(vd->base.module->navi);
+	Evas_Object *cancel_btn = elm_button_add(vd->base.module->navi);
 	elm_object_style_set(cancel_btn, "bottom");
 	elm_object_domain_translatable_text_set(cancel_btn, EMAIL_SETTING_STRING_CANCEL.domain, EMAIL_SETTING_STRING_CANCEL.id);
-	evas_object_smart_callback_add(cancel_btn, "clicked", _cancel_cb, vd);
+	evas_object_smart_callback_add(cancel_btn, "clicked", _cancel_btn_clicked_cb, vd);
 	elm_layout_content_set(btn_ly, "btn1.swallow", cancel_btn);
 
-	vd->next_btn = next_btn = elm_button_add(vd->base.module->navi);
-	elm_object_style_set(next_btn, "bottom");
-	elm_object_domain_translatable_text_set(next_btn, EMAIL_SETTING_STRING_NEXT.domain, EMAIL_SETTING_STRING_NEXT.id);
-	evas_object_smart_callback_add(next_btn, "clicked", _save_cb, vd);
-	elm_layout_content_set(btn_ly, "btn2.swallow", next_btn);
+	vd->next_btn = elm_button_add(vd->base.module->navi);
+	elm_object_style_set(vd->next_btn, "bottom");
+	elm_object_domain_translatable_text_set(vd->next_btn, EMAIL_SETTING_STRING_NEXT.domain, EMAIL_SETTING_STRING_NEXT.id);
+	evas_object_smart_callback_add(vd->next_btn, "clicked", _next_btn_clicked_cb, vd);
+	elm_layout_content_set(btn_ly, "btn2.swallow", vd->next_btn);
 
 	elm_object_item_part_content_set(navi_it, "toolbar", btn_ly);
 
@@ -485,66 +460,44 @@ static void _create_list(EmailSettingVD *vd)
 	elm_object_part_content_set(vd->base.content, "elm.swallow.content", vd->genlist);
 }
 
-static int _validate_account(void *data)
-{
-	debug_enter();
-	EmailSettingVD *vd = data;
-
-	retvm_if(!vd, FALSE, "view data is null");
-
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
-	int error_code = 0;
-
-	vd->handle = EMAIL_OP_HANDLE_INITIALIZER;
-	if (email_engine_validate_account(ugd->new_account, &(vd->handle), &error_code)) {
-		debug_log("Validate account");
-		_create_validation_popup(vd);
-	} else {
-		debug_error("Fail to make account");
-		if (error_code == EMAIL_ERROR_ALREADY_EXISTS)
-			ugd->popup = setting_get_notify(&vd->base,
-					&(EMAIL_SETTING_STRING_WARNING),
-					&(EMAIL_SETTING_STRING_ALREADY_EXIST), 1,
-					&(EMAIL_SETTING_STRING_OK),
-					_popup_ok_cb, NULL, NULL);
-		else
-			ugd->popup = setting_get_notify(&vd->base,
-					&(EMAIL_SETTING_STRING_WARNING),
-					&(EMAIL_SETTING_STRING_UNABLE_TO_ADD_ACCOUNT), 1,
-					&(EMAIL_SETTING_STRING_OK),
-					_popup_ok_cb, NULL, NULL);
-	}
-	return TRUE;
-}
-
-static void _create_validation_popup(EmailSettingVD *vd)
+static void _validate_account(EmailSettingVD *vd)
 {
 	debug_enter();
 
 	retm_if(!vd, "view data is null");
 
 	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
-	email_account_t *account = vd->account;
+	int error_code = 0;
 
-	debug_secure("account name: %s", account->account_name);
-	debug_secure("email address: %s", account->user_email_address);
+	vd->handle = EMAIL_OP_HANDLE_INITIALIZER;
 
-	debug_log("Start Account Validation");
-	ugd->popup = setting_get_pb_process_notify(&vd->base, &(EMAIL_SETTING_STRING_VALIDATING_ACCOUNT_ING), 0,
-			NULL, NULL,
-			NULL, NULL,
-			POPUP_BACK_TYPE_DESTROY_WITH_CANCEL_OP, &(vd->handle));
+	if (email_engine_validate_account(ugd->new_account, &(vd->handle), &error_code)) {
+		debug_log("Validate account");
+		setting_create_account_validation_popup(&vd->base, &(vd->handle));
+	} else {
+		if (error_code == EMAIL_ERROR_ALREADY_EXISTS) {
+			ugd->popup = setting_get_notify(&vd->base,
+					&(EMAIL_SETTING_STRING_WARNING),
+					&(EMAIL_SETTING_STRING_ACCOUNT_ALREADY_EXISTS), 1,
+					&(EMAIL_SETTING_STRING_OK), _popup_ok_cb, NULL, NULL);
+		} else {
+			ugd->popup = setting_get_notify(&vd->base,
+					&(EMAIL_SETTING_STRING_WARNING),
+					&(EMAIL_SETTING_STRING_UNABLE_TO_ADD_ACCOUNT), 1,
+					&(EMAIL_SETTING_STRING_OK), _popup_ok_cb, NULL, NULL);
+		}
+	}
 }
 
-static int _check_validation_field(EmailSettingVD *vd)
+static Eina_Bool _check_validation_field(EmailSettingVD *vd)
 {
 	debug_enter();
-	int ret = 1;
-
 	GSList *l = vd->list_items;
 
-	if (!l)
-		ret = 0;
+	Eina_Bool ret = EINA_TRUE;
+	if (!l) {
+		ret = EINA_FALSE;
+	}
 
 	while (l) {
 		ListItemData *li = l->data;
@@ -554,7 +507,7 @@ static int _check_validation_field(EmailSettingVD *vd)
 				li->index != INCOMING_SETTING_TITLE_LIST_ITEM &&
 				li->index != INCOMING_SECURE_CONN_LIST_ITEM) {
 			if (li->entry_str == NULL || !g_strcmp0(li->entry_str, "")) {
-				ret = 0;
+				ret = EINA_FALSE;
 				break;
 			}
 		}
@@ -566,7 +519,7 @@ static int _check_validation_field(EmailSettingVD *vd)
 	return ret;
 }
 
-static int _check_null_field(EmailSettingVD *vd)
+static Eina_Bool _check_null_field(EmailSettingVD *vd)
 {
 	debug_enter();
 	email_account_t *account = vd->account;
@@ -585,9 +538,9 @@ static int _check_null_field(EmailSettingVD *vd)
 			!STR_VALID(account->outgoing_server_address) ||
 			account->incoming_server_port_number == 0 ||
 			account->outgoing_server_port_number == 0) {
-		return FALSE;
+		return EINA_FALSE;
 	} else {
-		return TRUE;
+		return EINA_TRUE;
 	}
 }
 
@@ -596,7 +549,6 @@ static void _read_all_entries(EmailSettingVD *vd)
 	debug_enter();
 	GSList *l = NULL;
 	email_account_t *account = NULL;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
 
 	account = vd->account;
 	l = vd->list_items;
@@ -611,17 +563,9 @@ static void _read_all_entries(EmailSettingVD *vd)
 	while (l) {
 		ListItemData *li = l->data;
 		if (li->index == USERNAME_LIST_ITEM) {
-			char *buf = NULL;
-
-			if (ugd->add_account_type == EMAIL_ADD_ACCOUNT_TYPE_OTHERS) {
-				FREE(account->account_name);
-				account->account_name = g_strdup(li->entry_str);
-			}
-			buf = g_strdup(li->entry_str);
-			account->incoming_server_user_name = g_strdup(buf);
-			account->outgoing_server_user_name = g_strdup(buf);
-			account->user_display_name = g_strdup(buf);
-			FREE(buf);
+			account->incoming_server_user_name = g_strdup(li->entry_str);
+			account->outgoing_server_user_name = g_strdup(li->entry_str);
+			account->user_display_name = g_strdup(li->entry_str);
 		} else if (li->index == PASSWORD_LIST_ITEM) {
 			account->incoming_server_password = g_strdup(li->entry_str);
 		} else if (li->index == OUTGOING_SERVER_LIST_ITEM) {
@@ -637,54 +581,44 @@ static void _read_all_entries(EmailSettingVD *vd)
 	}
 }
 
-static void _save_cb(void *data, Evas_Object *obj, void *event_info)
+static void _perform_account_validation(EmailSettingVD *vd)
 {
-	debug_enter();
-	EmailSettingVD *vd = data;
-	EmailSettingUGD *ugd = NULL;
-	email_account_t *account = NULL;
-	char *buf = NULL;
-	int ret = 0;
-
-	retm_if(!vd, "vd is NULL");
-
-	ugd = (EmailSettingUGD *)vd->base.module;
-	account = vd->account;
+	email_account_t *account = vd->account;
+	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
 
 	/* Save the data */
 	_read_all_entries(vd);
 
 	/* check Null field */
-	ret = _check_null_field(vd);
-	if (!ret) {
-		debug_error("empty space in account info");
-		ugd->popup = setting_get_notify(&vd->base,
+	if (!_check_null_field(vd)) {
+		ugd->popup = setting_get_notify(&(vd->base),
 				&(EMAIL_SETTING_STRING_WARNING),
 				&(EMAIL_SETTING_STRING_FILL_MANDATORY_FIELDS), 1,
-				&(EMAIL_SETTING_STRING_OK),
-				_popup_ok_cb, NULL, NULL);
+				&(EMAIL_SETTING_STRING_OK), _popup_ok_cb, NULL, NULL);
 		return;
 	}
 
 	/* check duplication account */
-	buf = g_strdup(account->user_email_address);
-	ret = setting_is_duplicate_account(buf);
-	if (ret < 0) {
-		ugd->popup = setting_get_notify(&vd->base,
+	if (setting_is_duplicate_account(account->user_email_address) < 0) {
+		ugd->popup = setting_get_notify(&(vd->base),
 				&(EMAIL_SETTING_STRING_WARNING),
 				&(EMAIL_SETTING_STRING_ACCOUNT_ALREADY_EXISTS), 1,
-				&(EMAIL_SETTING_STRING_OK),
-				_popup_ok_cb, NULL, NULL);
-
-		g_free(buf);
+				&(EMAIL_SETTING_STRING_OK), _popup_ok_cb, NULL, NULL);
 		return;
 	}
-	g_free(buf);
 
 	_validate_account(vd);
 }
 
-static void _cancel_cb(void *data, Evas_Object *obj, void *event_info)
+static void _next_btn_clicked_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	debug_enter();
+	retm_if(!data, "data is NULL");
+
+	_perform_account_validation(data);
+}
+
+static void _cancel_btn_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 	retm_if(!data, "data is NULL");
@@ -730,8 +664,6 @@ static void _popup_ok_cb(void *data, Evas_Object *obj, void *event_info)
 	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
 
 	DELETE_EVAS_OBJECT(ugd->popup);
-
-	elm_object_disabled_set(vd->next_btn, EINA_FALSE);
 }
 
 static void _backup_input_cb(void *data, Evas_Object *obj, void *event_info)
@@ -740,9 +672,6 @@ static void _backup_input_cb(void *data, Evas_Object *obj, void *event_info)
 	ListItemData *li = data;
 
 	if (li) {
-		EmailSettingVD *vd = li->vd;
-		int valid = 0;
-
 		char *val = setting_get_entry_str(obj);
 		if (val && strlen(val) > 0) {
 			free(li->entry_str);
@@ -753,10 +682,8 @@ static void _backup_input_cb(void *data, Evas_Object *obj, void *event_info)
 			}
 		}
 
-		valid = _check_validation_field(vd);
-
 		if (li->index == OUTGOING_PORT_LIST_ITEM) {
-			elm_entry_input_panel_return_key_disabled_set(li->editfield.entry, !valid);
+			elm_entry_input_panel_return_key_disabled_set(li->editfield.entry, !_check_validation_field(li->vd));
 		}
 		free(val);
 	}
@@ -808,7 +735,7 @@ static void _return_key_cb(void *data, Evas_Object *obj, void *event_info)
 			next_entry = entry_smtp_port;
 		elm_object_focus_set(next_entry, EINA_TRUE);
 	} else {
-		_save_cb(vd, NULL, NULL);
+		_perform_account_validation(vd);
 	}
 }
 
@@ -902,18 +829,19 @@ static Evas_Object *_gl_ef_server_settings_get_content_cb(void *data, Evas_Objec
 			elm_entry_context_menu_disabled_set(li->editfield.entry, EINA_TRUE);
 		}
 
-		if (li->index == OUTGOING_SERVER_LIST_ITEM)
+		if (li->index == OUTGOING_SERVER_LIST_ITEM) {
 			li->entry_limit = setting_set_input_entry_limit(li->editfield.entry,
 					0, EMAIL_LIMIT_OUTGOING_SERVER_LENGTH);
-		else if (li->index == OUTGOING_PORT_LIST_ITEM)
+		} else if (li->index == OUTGOING_PORT_LIST_ITEM) {
 			li->entry_limit = setting_set_input_entry_limit(li->editfield.entry,
 					0, EMAIL_LIMIT_OUTGOING_PORT_LENGTH);
-		else if (li->index == INCOMING_SERVER_LIST_ITEM)
+		} else if (li->index == INCOMING_SERVER_LIST_ITEM) {
 			li->entry_limit = setting_set_input_entry_limit(li->editfield.entry,
 					0, EMAIL_LIMIT_INCOMING_SERVER_LENGTH);
-		else if (li->index == INCOMING_PORT_LIST_ITEM)
+		} else if (li->index == INCOMING_PORT_LIST_ITEM) {
 			li->entry_limit = setting_set_input_entry_limit(li->editfield.entry,
 					0, EMAIL_LIMIT_INCOMING_PORT_LENGTH);
+		}
 
 		elm_entry_cnp_mode_set(li->editfield.entry, ELM_CNP_MODE_PLAINTEXT);
 		elm_entry_editable_set(li->editfield.entry, TRUE);
@@ -921,9 +849,9 @@ static Evas_Object *_gl_ef_server_settings_get_content_cb(void *data, Evas_Objec
 		if (li->index == OUTGOING_PORT_LIST_ITEM) {
 			elm_entry_input_panel_return_key_type_set(li->editfield.entry, ELM_INPUT_PANEL_RETURN_KEY_TYPE_DONE);
 			elm_entry_input_panel_return_key_disabled_set(li->editfield.entry, EINA_TRUE);
-		}
-		else
+		} else {
 			elm_entry_input_panel_return_key_type_set(li->editfield.entry, ELM_INPUT_PANEL_RETURN_KEY_TYPE_NEXT);
+		}
 		setting_set_entry_str(li->editfield.entry, li->entry_str);
 
 		evas_object_propagate_events_set(li->editfield.entry, EINA_TRUE);
@@ -931,19 +859,19 @@ static Evas_Object *_gl_ef_server_settings_get_content_cb(void *data, Evas_Objec
 		evas_object_smart_callback_add(li->editfield.entry, "preedit,changed", _backup_input_cb, li);
 		evas_object_smart_callback_add(li->editfield.entry, "activated", _return_key_cb, li);
 
-		if (li->index == OUTGOING_SERVER_LIST_ITEM)
+		if (li->index == OUTGOING_SERVER_LIST_ITEM) {
 			elm_object_domain_translatable_part_text_set(li->editfield.entry, "elm.guide",
 					EMAIL_SETTING_STRING_OUTGOING_SERVER.domain, EMAIL_SETTING_STRING_OUTGOING_SERVER.id);
-		else if (li->index == OUTGOING_PORT_LIST_ITEM)
+		} else if (li->index == OUTGOING_PORT_LIST_ITEM) {
 			elm_object_domain_translatable_part_text_set(li->editfield.entry, "elm.guide",
 					EMAIL_SETTING_STRING_OUTGOING_PORT.domain, EMAIL_SETTING_STRING_OUTGOING_PORT.id);
-		else if (li->index == INCOMING_SERVER_LIST_ITEM)
+		} else if (li->index == INCOMING_SERVER_LIST_ITEM) {
 			elm_object_domain_translatable_part_text_set(li->editfield.entry, "elm.guide",
 					EMAIL_SETTING_STRING_INCOMING_SERVER.domain, EMAIL_SETTING_STRING_INCOMING_SERVER.id);
-		else if (li->index == INCOMING_PORT_LIST_ITEM)
+		} else if (li->index == INCOMING_PORT_LIST_ITEM) {
 			elm_object_domain_translatable_part_text_set(li->editfield.entry, "elm.guide",
 					EMAIL_SETTING_STRING_INCOMING_PORT.domain, EMAIL_SETTING_STRING_INCOMING_PORT.id);
-
+		}
 		return li->editfield.layout;
 	}
 
@@ -1394,26 +1322,10 @@ static void _update_server_info(EmailSettingVD *vd, email_account_t *account, em
 	retm_if(!vd, "vd is NULL");
 	retm_if(!account, "account is NULL");
 
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
-	email_protocol_config_t *conf = NULL;
-
-	if (server == EMAIL_SERVER_TYPE_IMAP4 && ugd->imap_conf)
-		conf = ugd->imap_conf;
-	else if (server == EMAIL_SERVER_TYPE_POP3 && ugd->pop_conf)
-		conf = ugd->pop_conf;
-	else
-		conf = NULL;
-
-	account->incoming_server_type = server;
-	if (conf) {
-		account->incoming_server_address = g_strdup(conf->server_addr);
-		account->incoming_server_port_number = conf->port_number;
-		account->incoming_server_secure_connection = conf->security_type;
+	if (server == EMAIL_SERVER_TYPE_IMAP4) {
+		setting_set_others_account_server_default_type(account, 0, 1, -1);
 	} else {
-		if (server == EMAIL_SERVER_TYPE_IMAP4)
-			setting_set_others_account_server_default_type(account, 0, 1, -1);
-		else
-			setting_set_others_account_server_default_type(account, 1, 1, -1);
+		setting_set_others_account_server_default_type(account, 1, 1, -1);
 	}
 
 	GSList *l = vd->list_items;
@@ -1442,21 +1354,20 @@ static void _set_username_before_at(EmailSettingVD *vd)
 
 	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
 	email_account_t *account = ugd->new_account;
-	char *buf = NULL;
 
-	if (account->incoming_server_user_name)
+	if (account->incoming_server_user_name){
 		free(account->incoming_server_user_name);
-	if (account->outgoing_server_user_name)
+	}
+	if (account->outgoing_server_user_name) {
 		free(account->outgoing_server_user_name);
+	}
 
-	buf = g_strdup(account->user_email_address);
+	char *buf = g_strdup(account->user_email_address);
 	account->incoming_server_user_name = g_strdup(strtok(buf, "@"));
 	account->outgoing_server_user_name = g_strdup(account->incoming_server_user_name);
+	g_free(buf);
 
 	debug_secure("retry to validate with user name: %s", account->incoming_server_user_name);
-
-	if (buf)
-		free(buf);
 }
 
 static void _set_username_with_email_address(EmailSettingVD *vd)
@@ -1467,21 +1378,20 @@ static void _set_username_with_email_address(EmailSettingVD *vd)
 
 	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
 	email_account_t *account = ugd->new_account;
-	char *buf = NULL;
 
-	if (account->incoming_server_user_name)
+	if (account->incoming_server_user_name) {
 		free(account->incoming_server_user_name);
-	if (account->outgoing_server_user_name)
+	}
+	if (account->outgoing_server_user_name) {
 		free(account->outgoing_server_user_name);
+	}
 
-	buf = g_strdup(account->user_email_address);
-	account->incoming_server_user_name = g_strdup(buf);
-	account->outgoing_server_user_name = g_strdup(buf);
+	if (account->user_email_address) {
+		account->incoming_server_user_name = strdup(account->user_email_address);
+		account->outgoing_server_user_name = strdup(account->user_email_address);
+	}
 
 	debug_secure("retry to validate with user name: %s", account->incoming_server_user_name);
-
-	if (buf)
-		free(buf);
 }
 
 static void _show_finished_cb(void *data, Evas_Object *obj, void *event_info)

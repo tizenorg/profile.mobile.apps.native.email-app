@@ -284,7 +284,7 @@ static void _add_account_cb(void *data, Evas_Object *obj, void *event_info)
 
 	DELETE_EVAS_OBJECT(vd->ctx_popup);
 
-	create_account_setup_view(ugd, ugd->add_account_type, NULL, NULL);
+	create_account_setup_view(ugd);
 }
 
 static int _update_list(EmailSettingVD *vd)

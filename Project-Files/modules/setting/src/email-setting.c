@@ -88,8 +88,6 @@ static int _setting_create(email_module_t *self, app_control_h params)
 
 	bindtextdomain(PACKAGE, email_get_locale_dir());
 
-	ugd->add_account_type = EMAIL_ADD_ACCOUNT_TYPE_EMAIL;
-
 	ugd->filter_listener.cb_data = ugd;
 	ugd->filter_listener.destroy_request_cb = _filter_destroy_request_cb;
 
@@ -123,7 +121,7 @@ static int _setting_create(email_module_t *self, app_control_h params)
 		create_setting_view(ugd);
 		break;
 	case VIEW_ACCOUNT_SETUP:
-		create_account_setup_view(ugd, ugd->add_account_type, NULL, NULL);
+		create_account_setup_view(ugd);
 		break;
 	case VIEW_ACCOUNT_DETAILS:
 		create_account_details_view(ugd);
@@ -163,7 +161,6 @@ static void _setting_on_event(email_module_t *self, email_module_event_e event)
 	}
 
 	debug_log("is_keypad: %d", ugd->is_keypad);
-	debug_log("is_clipboard: %d", ugd->is_clipboard);
 	debug_log("event: %d", event);
 
 	return;
@@ -201,9 +198,6 @@ static void _setting_destroy(email_module_t *self)
 		app_control_destroy(ugd->app_control_google_eas);
 		ugd->app_control_google_eas = NULL;
 	}
-
-	FREE(ugd->email_sp);
-	FREE(ugd->email_sp_icon_path);
 
 	/* ICU */
 	setting_close_icu_pattern_generator();
@@ -426,7 +420,7 @@ static void _account_deleted_cb(int account_id, email_setting_response_data *res
 
 	retm_if(!response, "response data is NULL");
 	retm_if(ugd->account_id != response->account_id, "account_id is different");
-	retm_if(ugd->is_account_deleted_on_this == 1, "account is deleted on this ug");
+	retm_if(ugd->is_account_deleted_on_this, "account is deleted on this ug");
 
 	debug_log("account is deleted. Let's destroyed");
 	email_module_make_destroy_request(&ugd->base);
