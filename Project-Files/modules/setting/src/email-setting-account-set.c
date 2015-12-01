@@ -24,7 +24,7 @@
 
 static email_setting_string_t EMAIL_SETTING_STRING_SENT_FROM_SAMSUNG_MOBILE = {PACKAGE, "IDS_EMAIL_SBODY_SENT_FROM_MY_SAMSUNG_DEVICE"};
 
-#define ACOOUNT_ICON_PATH tzplatform_mkpath(TZ_SYS_RO_ICONS, "org.tizen.email.png")
+#define ACCOUNT_ICON_PATH tzplatform_mkpath(TZ_SYS_RO_ICONS, "org.tizen.email.png")
 #define DEFAULT_SIGNATURE EMAIL_SETTING_STRING_SENT_FROM_SAMSUNG_MOBILE.id
 #define DEFAULT_EMAIL_SIZE 1024*50
 
@@ -34,7 +34,6 @@ static char *_get_default_server_address(char *email_addr, int account_type, int
 static void _set_default_setting_to_account(email_view_t *vd, email_account_t *account);
 static void _set_setting_account_provider_info_to_email_account_t(email_account_t *account, setting_account_provider_info_t *info);
 static void _set_setting_account_server_info_to_email_account_t(email_account_t *account, setting_account_server_info_t *info);
-char *_get_logo_path(email_view_t *vd);
 
 int setting_is_in_default_provider_list(email_view_t *vd, const char *email_addr)
 {
@@ -150,24 +149,6 @@ void setting_set_others_account_server_default_type(email_account_t *account, in
 	}
 }
 
-void setting_set_csc_account(email_view_t *vd)
-{
-	debug_enter();
-
-	retm_if(!vd, "vd is NULL");
-
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
-	email_account_t *account = NULL;
-	account = ugd->new_account;
-
-	retm_if(!account, "account is NULL");
-
-	/* set default common setting */
-	_set_default_setting_to_account(vd, account);
-
-	_account_info_print(account);
-}
-
 static void _set_display_name_with_email_addr(char *email_addr, char **display_name)
 {
 	debug_enter();
@@ -267,8 +248,8 @@ static void _set_default_setting_to_account(email_view_t *vd, email_account_t *a
 	account->options.forward_with_files = 1;
 	account->options.add_myname_card = 0;
 	account->options.add_signature = 1;
-	account->options.signature = g_strdup(DEFAULT_SIGNATURE);
-	account->logo_icon_path = _get_logo_path(vd);
+	account->options.signature = strdup(DEFAULT_SIGNATURE);
+	account->logo_icon_path = strdup(ACCOUNT_ICON_PATH);
 	account->outgoing_server_type = EMAIL_SERVER_TYPE_SMTP;
 	account->outgoing_server_need_authentication = EMAIL_AUTHENTICATION_METHOD_DEFAULT;
 	account->incoming_server_authentication_method = EMAIL_AUTHENTICATION_METHOD_NO_AUTH;
@@ -348,12 +329,4 @@ void _set_setting_account_server_info_to_email_account_t(email_account_t *accoun
 	}
 }
 
-char *_get_logo_path(email_view_t *vd)
-{
-	debug_enter();
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
-	if (ugd->email_sp_icon_path)
-		return g_strdup(ugd->email_sp_icon_path);
-	return g_strdup(ACOOUNT_ICON_PATH);
-}
 /* EOF */

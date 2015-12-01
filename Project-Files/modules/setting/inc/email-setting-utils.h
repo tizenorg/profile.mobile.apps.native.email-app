@@ -84,19 +84,6 @@
 		} \
 	} while (0)
 
-typedef enum {
-	FOLDER_TYPE_NONE = 0,
-	FOLDER_TYPE_INBOX,
-	FOLDER_TYPE_SENTBOX,
-	FOLDER_TYPE_TRASH,
-	FOLDER_TYPE_DRAFTBOX,
-	FOLDER_TYPE_SPAMBOX,
-	FOLDER_TYPE_OUTBOX,
-	FOLDER_TYPE_ALL_EMAILS,
-	FOLDER_TYPE_SEARCH_RESULT,
-	FOLDER_TYPE_USER_DEFINED = 0xFF,
-	FOLDER_TYPE_MAX
-} SETTING_FOLDER_TYPE_ID;	/* TODO: This enum can be replaced with email_mailbox_type_e. */
 
 typedef enum {
 	POPUP_ENTRY_EDITFIELD,
@@ -416,6 +403,13 @@ void setting_register_keypad_rot_cb(EmailSettingUGD *ugd);
  * @param[in]	ugd		Email settings data
  */
 void setting_deregister_keypad_rot_cb(EmailSettingUGD *ugd);
+
+/**
+ * @brief The function creates account validation popup
+ * @param[in]	vd			View data
+ * @param[in]	handle		The data pointer to be passed to cb func.
+ */
+void setting_create_account_validation_popup(email_view_t *vd, int *handle);
 
 #endif				/* __EMAIL_SETTING_UTILS_H__ */
 

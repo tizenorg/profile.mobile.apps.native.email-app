@@ -89,14 +89,11 @@ static int _create(email_view_t *self)
 	EmailSettingVD *vd = (EmailSettingVD *)self;
 	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
 
-	if (ugd->add_account) {
-		vd->account_data = ugd->new_account;
-	} else {
-		if (!setting_get_acct_full_data(ugd->account_id, &(vd->account_data))) {
-			debug_error("setting_get_acct_full_data failed");
-			return -1;
-		}
+	if (!setting_get_acct_full_data(ugd->account_id, &(vd->account_data))) {
+		debug_error("setting_get_acct_full_data failed");
+		return -1;
 	}
+
 	EMAIL_SETTING_PRINT_ACCOUNT_INFO(vd->account_data);
 	vd->base.content = setting_add_inner_layout(&vd->base);
 	_push_naviframe(vd);
@@ -132,19 +129,17 @@ static void _update_list(EmailSettingVD *vd)
 	}
 
 	/* read account info again. */
-	if (ugd->add_account) {
-		vd->account_data = ugd->new_account;
-	} else {
-		if (vd->account_data) {
-			email_engine_free_account_list(&vd->account_data, 1);
-			vd->account_data = NULL;
-		}
 
-		if (!setting_get_acct_full_data(ugd->account_id, &vd->account_data)) {
-			debug_error("setting_get_acct_full_data failed");
-			return;
-		}
+	if (vd->account_data) {
+		email_engine_free_account_list(&vd->account_data, 1);
+		vd->account_data = NULL;
 	}
+
+	if (!setting_get_acct_full_data(ugd->account_id, &vd->account_data)) {
+		debug_error("setting_get_acct_full_data failed");
+		return;
+	}
+
 	EMAIL_SETTING_PRINT_ACCOUNT_INFO(vd->account_data);
 
 	_create_list(vd);
