@@ -215,9 +215,8 @@ static void _backup_input_cb(void *data, Evas_Object *obj, void *event_info)
 
 	EmailSettingVD *vd = data;
 
-	char *val = setting_get_entry_str(obj);
 	FREE(vd->entry_str);
-	vd->entry_str = val;
+	vd->entry_str = setting_get_entry_str(obj);
 }
 
 static Eina_Bool _startup_focus_cb(void *data)

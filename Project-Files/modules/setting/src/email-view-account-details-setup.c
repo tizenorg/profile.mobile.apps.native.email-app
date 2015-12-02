@@ -1167,7 +1167,7 @@ static void _account_popup_entry_changed_cb(void *data, Evas_Object *obj, void *
 	Evas_Object *entry = elm_layout_content_get(entry_layout, "elm.swallow.content");
 	char *val = setting_get_entry_str(entry);
 
-	if (val && strlen(val) > 0) {
+	if (val && strcmp(val, "")) {
 		elm_entry_input_panel_return_key_disabled_set(obj, EINA_FALSE);
 		elm_object_disabled_set(evas_object_data_get(obj, EMAIL_SETTING_POPUP_BUTTON), EINA_FALSE);
 	} else {
