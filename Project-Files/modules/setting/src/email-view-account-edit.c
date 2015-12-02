@@ -743,18 +743,12 @@ static void _popup_ok_cb(void *data, Evas_Object *obj, void *event_info)
 
 static void _backup_input_cb(void *data, Evas_Object *obj, void *event_info)
 {
+	retm_if(!data, "data is NULL");
+
 	ListItemData *li = data;
 
-	if (li) {
-		char *val = setting_get_entry_str(obj);
-		if (val && strlen(val) > 0) {
-			FREE(li->entry_str);
-			if (!(li->entry_str = strdup(val))) {
-				debug_error("strdup() to li->entry_str - failed error ");
-			}
-		}
-		free(val);
-	}
+	FREE(li->entry_str);
+	li->entry_str = setting_get_entry_str(obj);
 }
 
 static char *_gl_secure_text_get_cb(void *data, Evas_Object *obj, const char *part)
