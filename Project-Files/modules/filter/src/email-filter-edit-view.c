@@ -35,7 +35,7 @@ static void _entry_changed_cb(void *data, Evas_Object *obj, void *event_info);
 static void _contact_button_clicked_cb(void *data, Evas_Object *obj, void *event_info);
 static Evas_Object *_gl_content_get_cb(void *data, Evas_Object *obj, const char *part);
 static void _contact_app_reply_cb(void *data, app_control_result_e result, app_control_h reply);
-static int _checking_is_dup_rule(EmailFilterVD *vd, email_rule_t *filter_rule, FilterOperationType op_type);
+static int _checking_is_dup_rule(EmailFilterVD *vd, email_rule_t *filter_rule);
 
 static Evas_Object *_create_list(EmailFilterVD *vd);
 static void _launch_contact_app(EmailFilterVD *vd);
@@ -44,7 +44,8 @@ static int _get_field_validation(EmailFilterVD *vd);
 static void _done_key_disabled_set(EmailFilterVD *vd, Eina_Bool disabled);
 
 static email_filter_string_t EMAIL_FILTER_STRING_ALREADY_ADDED = {PACKAGE, "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ALREADY_ADDED_TO_PRIORITY_SENDERS"};
-static email_filter_string_t EMAIL_FILTER_STRING_ENTER_EMAIL_ADDRESS = {PACKAGE, "IDS_EMAIL_BODY_EMAIL_ADDRESS"};
+static email_filter_string_t EMAIL_FILTER_STRING_EMAIL_ADDRESS = {PACKAGE, "IDS_EMAIL_BODY_EMAIL_ADDRESS"};
+static email_filter_string_t EMAIL_SETTING_STRING_ADD_PRIORITY_SENDER = {PACKAGE, "IDS_EMAIL_OPT_ADD"};
 static email_filter_string_t EMAIL_SETTING_STRING_EDIT_PRIORITY_SENDER = {PACKAGE, "IDS_EMAIL_OPT_EDIT"};
 static email_filter_string_t EMAIL_FILTER_STRING_DONE_TITLE_BTN = {PACKAGE, "IDS_TPLATFORM_ACBUTTON_DONE_ABB"};
 static email_filter_string_t EMAIL_FILTER_STRING_CANCEL_TITLE_BTN = {PACKAGE, "IDS_TPLATFORM_ACBUTTON_CANCEL_ABB"};
@@ -52,6 +53,7 @@ static email_filter_string_t EMAIL_FILTER_STRING_CANCEL_TITLE_BTN = {PACKAGE, "I
 /* Internal structure */
 struct _EmailFilterEditVD {
 	email_view_t base;
+	filter_edit_view_mode mode;
 
 	Evas_Object *done_btn;
 	Evas_Object *genlist;
@@ -77,23 +79,22 @@ typedef struct _ListItemData {
 	EmailFilterVD *vd;
 } ListItemData;
 
-void create_filter_edit_view(EmailFilterUGD *ugd, int filter_id)
+void create_filter_edit_view(EmailFilterUGD *ugd, filter_edit_view_mode mode, int filter_id)
 {
 	debug_enter();
 	retm_if(!ugd, "ug data is null");
 
-	email_rule_t *filter_rule = NULL;
-	email_get_rule(filter_id, &filter_rule);
-	retm_if(!filter_rule, "filter_rule to be edited is null");
-
 	EmailFilterVD *vd = calloc(1, sizeof(EmailFilterVD));
-	if (!vd) {
-		debug_error("view data is null");
-		email_free_rule(&filter_rule, 1);
-		return;
+	retm_if(!vd, "view data is null");
+
+	if (mode == FILTER_EDIT_VIEW_MODE_EDIT_EXISTENT) {
+		email_rule_t *filter_rule = NULL;
+		email_get_rule(filter_id, &filter_rule);
+		retvm_if(!filter_rule, free(vd), "filter_rule to be edited is null");
+		vd->filter_rule = filter_rule;
 	}
 
-	vd->filter_rule = filter_rule;
+	vd->mode = mode;
 
 	vd->base.create = _create;
 	vd->base.destroy = _destroy;
@@ -107,6 +108,7 @@ void create_filter_edit_view(EmailFilterUGD *ugd, int filter_id)
 static int _create(email_view_t *self)
 {
 	debug_enter();
+	retvm_if(!self, -1, "self is null");
 
 	EmailFilterVD *vd = (EmailFilterVD *)self;
 	EmailFilterUGD *ugd = (EmailFilterUGD *)vd->base.module;
@@ -125,10 +127,14 @@ static int _create(email_view_t *self)
 	vd->genlist = genlist = _create_list(vd);
 	elm_object_part_content_set(layout, "elm.swallow.content", genlist);
 
-	navi_it = email_module_view_push(&vd->base, EMAIL_SETTING_STRING_EDIT_PRIORITY_SENDER.id, 0);
-	elm_object_item_domain_text_translatable_set(navi_it, EMAIL_SETTING_STRING_EDIT_PRIORITY_SENDER.domain, EINA_TRUE);
-
-	email_filter_add_conformant_callback(ugd);
+	email_filter_string_t *title = NULL;
+	if (vd->mode == FILTER_EDIT_VIEW_MODE_ADD_NEW) {
+		title = &EMAIL_SETTING_STRING_ADD_PRIORITY_SENDER;
+	} else {
+		title = &EMAIL_SETTING_STRING_EDIT_PRIORITY_SENDER;
+	}
+	navi_it = email_module_view_push(&vd->base, title->id, 0);
+	elm_object_item_domain_text_translatable_set(navi_it, title->domain, EINA_TRUE);
 
 	cancel_btn = elm_button_add(ugd->base.navi);
 	elm_object_style_set(cancel_btn, "naviframe/title_left");
@@ -142,8 +148,11 @@ static int _create(email_view_t *self)
 	evas_object_smart_callback_add(done_btn, "clicked", _done_cb, vd);
 	elm_object_item_part_content_set(navi_it, "title_right_btn", done_btn);
 
-	if (_get_field_validation(vd) == 0)
+	if (_get_field_validation(vd) == 0) {
 		elm_object_disabled_set(done_btn, EINA_TRUE);
+	}
+
+	email_filter_add_conformant_callback(ugd);
 
 	return 0;
 }
@@ -151,7 +160,6 @@ static int _create(email_view_t *self)
 static void _destroy(email_view_t *self)
 {
 	debug_enter();
-
 	retm_if(!self, "self is NULL");
 
 	EmailFilterVD *vd = (EmailFilterVD *)self;
@@ -162,10 +170,7 @@ static void _destroy(email_view_t *self)
 	EMAIL_GENLIST_ITC_FREE(vd->itc2);
 	EMAIL_GENLIST_ITC_FREE(vd->itc3);
 
-	if (vd->original_priority_addr) {
-		free(vd->original_priority_addr);
-		vd->original_priority_addr = NULL;
-	}
+	FREE(vd->original_priority_addr);
 
 	GSList *l = vd->list_items;
 	while (l) {
@@ -200,15 +205,77 @@ static void _update(email_view_t *self, int flags)
 	}
 }
 
-static void _done_cb(void *data, Evas_Object *obj, void *event_info)
+static void _add_new_rule(EmailFilterVD *vd)
 {
 	debug_enter();
-	EmailFilterVD *vd = data;
+
 	EmailFilterUGD *ugd = (EmailFilterUGD *)vd->base.module;
 	email_rule_t *filter_rule = NULL;
 	int ret = EMAIL_ERROR_NONE;
+	Evas_Object *done_btn = vd->done_btn;
 
-	filter_rule = vd->filter_rule;
+	evas_object_smart_callback_del(done_btn, "clicked", _done_cb);
+
+	filter_rule = calloc(1, sizeof(email_rule_t));
+	retm_if(!filter_rule, "memory allocation failed");
+
+	filter_rule->account_id = 0;
+	filter_rule->faction = EMAIL_FILTER_MOVE;
+	filter_rule->target_mailbox_id = 0;
+	filter_rule->flag1 = 1;
+	filter_rule->flag2 = RULE_TYPE_EXACTLY;
+	filter_rule->type = EMAIL_PRIORITY_SENDER;
+
+	GSList *l = vd->list_items;
+	while (l) {
+		ListItemData *li = l->data;
+		if (li->index == EMAIL_FILTER_ADD_SENDER) {
+			filter_rule->value2 = g_strdup(li->entry_str);
+		}
+		l = g_slist_next(l);
+	}
+
+	if (_checking_is_dup_rule(vd, filter_rule)) {
+		debug_warning("this rule already exist!");
+		ret = notification_status_message_post(email_get_email_string(EMAIL_FILTER_STRING_ALREADY_ADDED.id));
+		if (ret != NOTIFICATION_ERROR_NONE) {
+			debug_log("fail to notification_status_message_post() : %d\n", ret);
+		}
+		email_free_rule(&filter_rule, 1);
+		evas_object_smart_callback_add(done_btn, "clicked", _done_cb, vd);
+		return;
+	}
+
+	ret = email_add_rule(filter_rule);
+	if (ret != EMAIL_ERROR_NONE) {
+		debug_warning("email_add_rule failed: %d", ret);
+	} else {
+		debug_secure("email_add_rule success: %s", filter_rule->filter_name);
+		ret = email_apply_rule(filter_rule->filter_id);
+		if (ret != EMAIL_ERROR_NONE) {
+			debug_warning("email_apply_rule failed: %d", ret);
+		} else {
+			debug_log("email_apply_rule success");
+			email_filter_publish_changed_noti(ugd);
+		}
+	}
+	email_free_rule(&filter_rule, 1);
+
+	email_module_exit_view(&vd->base);
+
+	debug_leave();
+}
+
+static void _apply_rule_changes(EmailFilterVD *vd)
+{
+	debug_enter();
+
+	EmailFilterUGD *ugd = (EmailFilterUGD *)vd->base.module;
+	email_rule_t *filter_rule = vd->filter_rule;
+	int ret = EMAIL_ERROR_NONE;
+	Evas_Object *done_btn = vd->done_btn;
+
+	evas_object_smart_callback_del(done_btn, "clicked", _done_cb);
 
 	GSList *l = vd->list_items;
 	while (l) {
@@ -220,19 +287,20 @@ static void _done_cb(void *data, Evas_Object *obj, void *event_info)
 		l = g_slist_next(l);
 	}
 
-	if (_checking_is_dup_rule(vd, filter_rule, ugd->op_type)) {
+	if (_checking_is_dup_rule(vd, filter_rule)) {
 		debug_warning("this rule already exist!");
 		ret = notification_status_message_post(email_get_email_string(EMAIL_FILTER_STRING_ALREADY_ADDED.id));
 		if (ret != NOTIFICATION_ERROR_NONE) {
 			debug_log("fail to notification_status_message_post() : %d\n", ret);
 		}
+		evas_object_smart_callback_add(done_btn, "clicked", _done_cb, vd);
 		return;
 	}
 
 	ret = email_update_rule(filter_rule->filter_id, filter_rule);
-	if (ret != EMAIL_ERROR_NONE)
+	if (ret != EMAIL_ERROR_NONE) {
 		debug_warning("email_update_rule failed: %d", ret);
-	else {
+	} else {
 		debug_secure("email_update_rule success: %s", filter_rule->filter_name);
 		ret = email_apply_rule(filter_rule->filter_id);
 		if (ret != EMAIL_ERROR_NONE) {
@@ -244,6 +312,22 @@ static void _done_cb(void *data, Evas_Object *obj, void *event_info)
 	}
 
 	email_module_exit_view(&vd->base);
+
+	debug_leave();
+}
+
+static void _done_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	debug_enter();
+	retm_if(!data, "data is NULL");
+
+	EmailFilterVD *vd = data;
+
+	if (vd->mode == FILTER_EDIT_VIEW_MODE_ADD_NEW) {
+		return _add_new_rule(vd);
+	} else {
+		return _apply_rule_changes(vd);
+	}
 }
 
 static void _cancel_cb(void *data, Evas_Object *obj, void *event_info)
@@ -257,6 +341,7 @@ static void _cancel_cb(void *data, Evas_Object *obj, void *event_info)
 static void _activate(email_view_t *self, email_view_state prev_state)
 {
 	debug_enter();
+
 	retm_if(!self, "self is NULL");
 
 	if (prev_state != EV_STATE_CREATED) {
@@ -283,12 +368,10 @@ static void _on_back_key(email_view_t *self)
 static Evas_Object *_create_list(EmailFilterVD *vd)
 {
 	debug_enter();
+
 	ListItemData *li = NULL;
 	Evas_Object *genlist = NULL;
 	Elm_Object_Item *git = NULL;
-	email_rule_t *filter_rule = NULL;
-
-	filter_rule = vd->filter_rule;
 
 	genlist = elm_genlist_add(vd->base.content);
 	elm_genlist_mode_set(genlist, ELM_LIST_COMPRESS);
@@ -304,8 +387,16 @@ static Evas_Object *_create_list(EmailFilterVD *vd)
 
 	li->index = EMAIL_FILTER_ADD_SENDER;
 	li->vd = vd;
-	li->entry_str = g_strdup(filter_rule->value2);
-	vd->original_priority_addr = g_strdup(filter_rule->value2);
+
+	if (vd->mode == FILTER_EDIT_VIEW_MODE_ADD_NEW) {
+		EmailFilterUGD *ugd = (EmailFilterUGD *)vd->base.module;
+		li->entry_str = g_strdup(ugd->param_filter_addr);
+	} else {
+		email_rule_t *filter_rule = vd->filter_rule;
+		li->entry_str = g_strdup(filter_rule->value2);
+		vd->original_priority_addr = g_strdup(filter_rule->value2);
+	}
+
 	li->it = git = elm_genlist_item_append(genlist, vd->itc3, li, NULL,
 			ELM_GENLIST_ITEM_NONE, NULL, NULL);
 	elm_genlist_item_select_mode_set(git, ELM_OBJECT_SELECT_MODE_ALWAYS);
@@ -328,7 +419,7 @@ static Evas_Object *_gl_content_get_cb(void *data, Evas_Object *obj, const char 
 			elm_entry_input_panel_layout_set(li->editfield.entry, ELM_INPUT_PANEL_LAYOUT_EMAIL);
 
 			elm_object_domain_translatable_part_text_set(li->editfield.entry, "elm.guide",
-					EMAIL_FILTER_STRING_ENTER_EMAIL_ADDRESS.domain, EMAIL_FILTER_STRING_ENTER_EMAIL_ADDRESS.id);
+					EMAIL_FILTER_STRING_EMAIL_ADDRESS.domain, EMAIL_FILTER_STRING_EMAIL_ADDRESS.id);
 			li->entry_limit = email_filter_set_input_entry_limit(&vd->base, li->editfield.entry, 0, EMAIL_LIMIT_EMAIL_ADDRESS_LENGTH);
 
 			if (li->entry_str) {
@@ -369,21 +460,22 @@ static void _entry_changed_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 
+	retm_if(!data, "data is NULL");
+
 	ListItemData *li = data;
+	EmailFilterVD *vd = li->vd;
 
-	if (li) {
-		EmailFilterVD *vd = li->vd;
-		if (li->entry_str) {
-			free(li->entry_str);
-			li->entry_str = NULL;
-		}
+	if (li->entry_str) {
+		free(li->entry_str);
+		li->entry_str = NULL;
+	}
 
-		li->entry_str = elm_entry_markup_to_utf8(elm_entry_entry_get(obj));
+	li->entry_str = elm_entry_markup_to_utf8(elm_entry_entry_get(obj));
 
-		if (_get_field_validation(vd) == 0)
-			_done_key_disabled_set(vd, EINA_TRUE);
-		else
-			_done_key_disabled_set(vd, EINA_FALSE);
+	if (_get_field_validation(vd) == 0) {
+		_done_key_disabled_set(vd, EINA_TRUE);
+	} else {
+		_done_key_disabled_set(vd, EINA_FALSE);
 	}
 
 	debug_leave();
@@ -392,6 +484,7 @@ static void _entry_changed_cb(void *data, Evas_Object *obj, void *event_info)
 static void _contact_button_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
+
 	EmailFilterVD *vd = data;
 
 	_launch_contact_app(vd);
@@ -400,8 +493,8 @@ static void _contact_button_clicked_cb(void *data, Evas_Object *obj, void *event
 static void _launch_contact_app(EmailFilterVD *vd)
 {
 	debug_enter();
-	app_control_h service = NULL;
 
+	app_control_h service = NULL;
 	email_launched_app_listener_t listener = { 0 };
 	int ret = 0;
 	listener.cb_data = vd;
@@ -443,6 +536,7 @@ FINISH:
 static void _contact_app_reply_cb(void *data, app_control_result_e result, app_control_h reply)
 {
 	debug_enter();
+
 	EmailFilterVD *vd = data;
 	char *filter_addr = NULL;
 	char **filter_addr_id_arr = NULL;
@@ -494,6 +588,7 @@ static void _contact_app_reply_cb(void *data, app_control_result_e result, app_c
 static char *_get_filter_address_by_id(int id)
 {
 	debug_enter();
+
 	int ret = -1;
 	contacts_record_h record = NULL;
 	char *filter_addr = NULL;
@@ -525,6 +620,7 @@ CATCH:
 static int _get_field_validation(EmailFilterVD *vd)
 {
 	debug_enter();
+
 	int is_valid_sender = 1;
 	int is_sender = 1;
 
@@ -548,6 +644,7 @@ static int _get_field_validation(EmailFilterVD *vd)
 static void _return_key_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
+
 	ListItemData *li = data;
 	retm_if(!li, "ListItemData is NULL");
 
@@ -572,31 +669,33 @@ static void _done_key_disabled_set(EmailFilterVD *vd, Eina_Bool disabled)
 	}
 }
 
-static int _checking_is_dup_rule(EmailFilterVD *vd, email_rule_t *filter_rule, FilterOperationType op_type)
+static int _checking_is_dup_rule(EmailFilterVD *vd, email_rule_t *filter_rule)
 {
 	debug_enter();
+
 	email_rule_t *rule_list = NULL;
 	int ret = 0;
 	int count;
 	char *input_str = NULL;
 	char *compare_str = NULL;
-	char *original_str = NULL;
 	int i = 0;
 
 	retvm_if(!vd, 0, "vd is NULL");
 	retvm_if(!filter_rule, 0, "filter_rule is NULL");
 
 	input_str = filter_rule->value2;
-	original_str = vd->original_priority_addr;
 
 	ret = email_get_rule_list(&rule_list, &count);
 	retvm_if(ret != EMAIL_ERROR_NONE, 0, "email_get_rule_list failed: %d", ret);
 
 	ret = 0;
 	for (i = 0; i < count; i++) {
-		if (rule_list[i].type == EMAIL_PRIORITY_SENDER)
+		if (rule_list[i].type == EMAIL_PRIORITY_SENDER) {
 			compare_str = rule_list[i].value2;
-		if (!g_strcmp0(input_str, compare_str) && g_strcmp0(original_str, compare_str)) {
+		}
+		if (!g_strcmp0(input_str, compare_str) &&
+				((vd->mode == FILTER_EDIT_VIEW_MODE_EDIT_EXISTENT && g_strcmp0(vd->original_priority_addr, compare_str))
+				|| vd->mode == FILTER_EDIT_VIEW_MODE_ADD_NEW)) {
 			ret = 1;
 			break;
 		}

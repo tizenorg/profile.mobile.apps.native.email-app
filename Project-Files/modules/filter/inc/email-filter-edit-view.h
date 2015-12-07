@@ -20,13 +20,20 @@
 #ifndef _email_filter_edit_H_
 #define _email_filter_edit_H_
 
+enum _filter_edit_view_mode {
+	FILTER_EDIT_VIEW_MODE_ADD_NEW,
+	FILTER_EDIT_VIEW_MODE_EDIT_EXISTENT
+};
+typedef enum _filter_edit_view_mode filter_edit_view_mode;
+
 /**
  * @brief Create filter edit view
  *
  * @param[in]	ugd			Email Filter data
- * @param[in]	filter_id	id of filter rule which should be modified
+ * @param[in]	mode		Edit view mode
+ * @param[in]	filter_id	Id of filter rule which should be modified if mode is edit
  *
  */
-void create_filter_edit_view(EmailFilterUGD *ugd, int filter_id);
+void create_filter_edit_view(EmailFilterUGD *ugd, filter_edit_view_mode mode, int filter_id);
 
 #endif

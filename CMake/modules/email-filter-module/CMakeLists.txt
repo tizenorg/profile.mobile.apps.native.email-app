@@ -6,7 +6,6 @@ SET(CURRENT_SOURCE_DIR "${PROJECT_MODULES_DIR}/filter")
 SET(SRCS
 	${CURRENT_SOURCE_DIR}/src/email-filter.c
 	${CURRENT_SOURCE_DIR}/src/email-filter-list-view.c
-	${CURRENT_SOURCE_DIR}/src/email-filter-add-view.c
 	${CURRENT_SOURCE_DIR}/src/email-filter-edit-view.c
 	${CURRENT_SOURCE_DIR}/src/email-filter-delete-view.c
 )

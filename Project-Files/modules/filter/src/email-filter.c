@@ -23,7 +23,7 @@
 #include <contacts.h>
 #include "email-filter.h"
 #include "email-filter-list-view.h"
-#include "email-filter-add-view.h"
+#include "email-filter-edit-view.h"
 #include "email-utils.h"
 
 EMAIL_DEFINE_GET_EDJ_PATH(email_get_filter_theme_path, "/email-filter.edj")
@@ -57,7 +57,7 @@ static int _filter_create(email_module_t *self, app_control_h params)
 			create_filter_list_view(ugd);
 			break;
 		case EMAIL_FILTER_VIEW_ADD_FILTER:
-			create_filter_add_view(ugd);
+			create_filter_edit_view(ugd, FILTER_EDIT_VIEW_MODE_ADD_NEW, 0);
 			break;
 		case EMAIL_FILTER_VIEW_DELETE_FILTER:
 		case EMAIL_FILTER_VIEW_EDIT_FILTER:

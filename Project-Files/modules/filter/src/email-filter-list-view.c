@@ -17,7 +17,6 @@
 
 #include <contacts.h>
 #include "email-filter-list-view.h"
-#include "email-filter-add-view.h"
 #include "email-filter-edit-view.h"
 #include "email-filter-delete-view.h"
 
@@ -235,7 +234,7 @@ static void _add_filter_cb(void *data, Evas_Object *obj, void *event_info)
 
 	DELETE_EVAS_OBJECT(vd->ctx_popup);
 
-	create_filter_add_view(ugd);
+	create_filter_edit_view(ugd, FILTER_EDIT_VIEW_MODE_ADD_NEW, 0);
 }
 
 static void _delete_filter_cb(void *data, Evas_Object *obj, void *event_info)
@@ -432,7 +431,9 @@ static void _gl_sel_cb(void *data, Evas_Object *obj, void *event_info)
 
 	elm_genlist_item_selected_set(item, EINA_FALSE);
 
-	create_filter_edit_view(ugd, li->filter_rule->filter_id);
+	create_filter_edit_view(ugd,
+			FILTER_EDIT_VIEW_MODE_EDIT_EXISTENT,
+			li->filter_rule->filter_id);
 }
 
 
