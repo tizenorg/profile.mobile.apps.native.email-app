@@ -70,7 +70,6 @@ Description: Native email application
 %define _sys_icons_dir %{TZ_SYS_RO_ICONS}/default/small
 %define _sys_packages_dir %{TZ_SYS_RO_PACKAGES}
 %define _sys_license_dir %{TZ_SYS_SHARE}/license
-%define _sys_smake_dir %{TZ_SYS_SMACK}/accesses.d
 
 export CFLAGS="${CFLAGS} -Wall -fvisibility=hidden"
 export CXXFLAGS="${CXXFLAGS} -Wall -fvisibility=hidden"
@@ -91,8 +90,7 @@ cmake ../../CMake -DCMAKE_INSTALL_PREFIX=%{_pkg_dir} \
 	-DENABLE_ATTACH_PANEL=%{_enable_attach_panel} \
 	-DSYS_ICONS_DIR=%{_sys_icons_dir} \
 	-DSYS_PACKAGES_DIR=%{_sys_packages_dir} \
-	-DSYS_LICENSE_DIR=%{_sys_license_dir} \
-	-DSYS_SMACK_DIR=%{_sys_smake_dir}
+	-DSYS_LICENSE_DIR=%{_sys_license_dir}
 make
 
 %install
@@ -137,4 +135,3 @@ pkgdir_maker --create --pkgid=%{name}
 %{_sys_icons_dir}/%{name}.png
 %{_sys_packages_dir}/%{name}.xml
 %{_sys_license_dir}/%{name}
-%{_sys_smake_dir}/%{name}.efl
