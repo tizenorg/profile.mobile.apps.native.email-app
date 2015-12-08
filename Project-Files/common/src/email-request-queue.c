@@ -19,15 +19,14 @@
 #include "email-debug.h"
 #include "email-utils.h"
 
-typedef enum _email_message_type email_message_type;
+typedef enum _email_message_type email_message_type_e;
 enum _email_message_type {
 	EMAIL_MESSAGE_TYPE_FEEDBACK = 0,
 	EMAIL_MESSAGE_TYPE_END
 };
 
 typedef struct _email_request_queue email_request_queue_t;
-struct _email_request_queue
-{
+struct _email_request_queue {
 	Eina_Lock mutex;
 	Eina_Condition condition;
 	Ecore_Thread *process_thread;
@@ -38,13 +37,13 @@ struct _email_request_queue
 
 typedef struct _email_request email_request_t;
 struct _email_request {
-	email_request_type type;
+	email_request_type_e type;
 	void *user_data;
 	Eina_Bool is_canceled;
 	email_request_queue_t *rqueue;
 };
 
-typedef struct _email_request_cbs email_thread_cbs;
+typedef struct _email_request_cbs email_thread_cbs_t;
 struct _email_request_cbs {
 	heavy_req_cb heavy_cb;
 	notify_req_cb notify_cb;
@@ -55,10 +54,10 @@ typedef struct _email_message email_message_t;
 struct _email_message {
 	email_request_t *request;
 	void *data;
-	email_message_type type;
+	email_message_type_e type;
 };
 
-static email_thread_cbs _g_request_cbs[EMAIL_REQUEST_TYPE_MAX];
+static email_thread_cbs_t _g_request_cbs[EMAIL_REQUEST_TYPE_MAX];
 
 static void _email_request_queue_clear_data(email_request_queue_t *rqueue);
 static void _email_request_send_end_feedback(email_request_t *request);
@@ -124,7 +123,7 @@ EMAIL_API void email_request_queue_destroy(email_request_queue_h rqueue)
 	debug_leave();
 }
 
-EMAIL_API Eina_Bool email_request_queue_add_request(email_request_queue_h rqueue, email_request_type req_type, void *user_data)
+EMAIL_API Eina_Bool email_request_queue_add_request(email_request_queue_h rqueue, email_request_type_e req_type, void *user_data)
 {
 	debug_enter();
 
@@ -214,7 +213,7 @@ EMAIL_API void email_request_send_feedback(email_request_h request, void *msg_da
 	ecore_thread_feedback(req->rqueue->process_thread, msg);
 }
 
-EMAIL_API void email_register_request_cbs(email_request_type req_type,
+EMAIL_API void email_register_request_cbs(email_request_type_e req_type,
 		heavy_req_cb heavy_cb,
 		notify_req_cb notify_cb,
 		end_req_cb end_cb)
@@ -230,7 +229,7 @@ EMAIL_API void email_register_request_cbs(email_request_type req_type,
 	debug_leave();
 }
 
-EMAIL_API void email_unregister_request_cbs(email_request_type req_type)
+EMAIL_API void email_unregister_request_cbs(email_request_type_e req_type)
 {
 	debug_enter();
 
@@ -311,7 +310,7 @@ static void _email_request_notify_cb(void *data, Ecore_Thread *thd, void* messag
 
 	email_message_t *msg = (email_message_t*)message;
 	email_request_t *req = msg->request;
-	email_request_type cur_req_type = req->type;
+	email_request_type_e cur_req_type = req->type;
 
 
 	switch(msg->type) {

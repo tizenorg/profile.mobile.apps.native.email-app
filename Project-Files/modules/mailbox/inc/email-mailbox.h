@@ -104,7 +104,7 @@ typedef struct ug_data EmailMailboxUGD;
 struct ug_data {
 	email_view_t base;
 
-	EmailRunType run_type;
+	email_run_type_e run_type;
 	int start_mail_id;
 	bool initialized;
 	bool started;
@@ -186,7 +186,7 @@ struct ug_data {
 	bool b_format_24hour;
 
 	EmailMailboxMode mode;
-	EmailSortType sort_type;
+	email_sort_type_e sort_type;
 	EmailMailboxSortby sort_type_index;
 
 	int move_status;

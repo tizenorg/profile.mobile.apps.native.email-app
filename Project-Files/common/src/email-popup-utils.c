@@ -22,17 +22,18 @@
 
 #define COMMON_POPUP_SHOW_TIMEOUT_SEC 0.4
 
-static struct info {
+typedef struct _info {
 	Evas_Object *popup;
 	Ecore_Timer *popup_show_timer;
+} info_t;
 
-} s_info = {
+static info_t s_info = {
 	.popup = NULL,
 	.popup_show_timer = NULL
 };
 
 static void _common_util_create_popup_button(Evas_Object *popup, const char *part,
-		EmailCommonStringType btn_text, Evas_Smart_Cb click_cb, void *cb_data);
+		email_string_t btn_text, Evas_Smart_Cb click_cb, void *cb_data);
 
 static void _common_util_show_popup_with_timer();
 static Eina_Bool _common_util_show_popup_timer_cb(void *data);
@@ -67,7 +68,7 @@ static void _common_util_show_popup_with_timer()
 }
 
 static void _common_util_create_popup_button(Evas_Object *popup, const char *part,
-		EmailCommonStringType btn_text, Evas_Smart_Cb click_cb, void *cb_data)
+		email_string_t btn_text, Evas_Smart_Cb click_cb, void *cb_data)
 {
 	Evas_Object *btn = elm_button_add(popup);
 	elm_object_style_set(btn, "bottom");
@@ -83,10 +84,10 @@ static void _common_util_create_popup_button(Evas_Object *popup, const char *par
 	evas_object_smart_callback_add(btn, "clicked", click_cb, cb_data);
 }
 
-Evas_Object *common_util_create_popup(Evas_Object *parent, EmailCommonStringType title,
-		Evas_Smart_Cb btn1_click_cb, EmailCommonStringType btn1_text,
-		Evas_Smart_Cb btn2_click_cb, EmailCommonStringType btn2_text,
-		Evas_Smart_Cb btn3_click_cb, EmailCommonStringType btn3_text,
+Evas_Object *common_util_create_popup(Evas_Object *parent, email_string_t title,
+		Evas_Smart_Cb btn1_click_cb, email_string_t btn1_text,
+		Evas_Smart_Cb btn2_click_cb, email_string_t btn2_text,
+		Evas_Smart_Cb btn3_click_cb, email_string_t btn3_text,
 		Evas_Smart_Cb cancel_cb, Eina_Bool need_ime_hide, void *cb_data)
 {
 	debug_enter();

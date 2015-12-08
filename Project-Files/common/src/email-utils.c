@@ -112,7 +112,7 @@ typedef struct {
 	Eina_List *callbacks_list;
 } EmailSystemSettingsKeyEntry;
 
-static EmailFileTypeMIME email_mime_type[] = {
+static email_file_type_mime_t email_mime_type[] = {
 	/* EMAIL_FILE_TYPE_IMAGE */
 	{"image/png", EMAIL_FILE_TYPE_IMAGE},
 	{"image/jpeg", EMAIL_FILE_TYPE_IMAGE},
@@ -552,7 +552,7 @@ EMAIL_API bool email_get_group_order(int i)
 	return b_hide_status[i];
 }
 
-EMAIL_API EMAIL_FILE_TYPE email_get_file_type_from_mime_type(const char *mime_type)
+EMAIL_API email_file_type_e email_get_file_type_from_mime_type(const char *mime_type)
 {
 	debug_enter();
 
@@ -560,9 +560,9 @@ EMAIL_API EMAIL_FILE_TYPE email_get_file_type_from_mime_type(const char *mime_ty
 
 	debug_secure("mime_type: (%s)", mime_type);
 
-	EMAIL_FILE_TYPE ftype = EMAIL_FILE_TYPE_ETC;
+	email_file_type_e ftype = EMAIL_FILE_TYPE_ETC;
 
-	EmailFileTypeMIME *mtype = email_mime_type;
+	email_file_type_mime_t *mtype = email_mime_type;
 	while (mtype && mtype->mime) {
 		if (!g_strcmp0(mime_type, mtype->mime)) {
 			ftype = mtype->type;
@@ -575,7 +575,7 @@ EMAIL_API EMAIL_FILE_TYPE email_get_file_type_from_mime_type(const char *mime_ty
 	return ftype;
 }
 
-EMAIL_API const char *email_get_icon_path_from_file_type(EMAIL_FILE_TYPE ftype)
+EMAIL_API const char *email_get_icon_path_from_file_type(email_file_type_e ftype)
 {
 	static char buff[EMAIL_SMALL_PATH_MAX] = {'\0'};
 	snprintf(buff, sizeof(buff), "%s/" EMAIL_MIME_ICON_SUB_DIR "/%s",
@@ -2905,11 +2905,11 @@ EMAIL_API inline char *email_get_email_string(const char *string_id)
 	return dgettext(PACKAGE, string_id);
 }
 
-EMAIL_API EMAIL_NETWORK_STATUS email_get_network_state(void)
+EMAIL_API email_network_status_e email_get_network_state(void)
 {
 	debug_enter();
 
-	EMAIL_NETWORK_STATUS ret = EMAIL_NETWORK_STATUS_AVAILABLE;
+	email_network_status_e ret = EMAIL_NETWORK_STATUS_AVAILABLE;
 	connection_type_e net_state = CONNECTION_TYPE_DISCONNECTED;
 	connection_cellular_state_e cellular_state = CONNECTION_CELLULAR_STATE_OUT_OF_SERVICE;
 	connection_h connection = NULL;
@@ -3186,7 +3186,7 @@ EMAIL_API Evas_Object *email_util_create_password_changed_popup(
 
 	Evas_Object *layout = NULL;
 	Evas_Object *btn = NULL;
-	EmailAccountInfo *account_info = NULL;
+	email_account_info_t *account_info = NULL;
 	Passwd_Popup_Data *pdata = (Passwd_Popup_Data *)calloc(1, sizeof(Passwd_Popup_Data));
 	retvm_if(!pdata, NULL, "calloc fail");
 
@@ -3741,10 +3741,10 @@ EMAIL_API int email_preview_attachment_file(email_module_t *module, const char *
 }
 
 
-EMAIL_API EmailExtSaveErrType email_prepare_temp_file_path(const int index, const char *tmp_root_dir, const char *src_file_path, char **dst_file_path)
+EMAIL_API email_ext_save_err_type_e email_prepare_temp_file_path(const int index, const char *tmp_root_dir, const char *src_file_path, char **dst_file_path)
 {
 	debug_enter();
-	EmailExtSaveErrType ret_val = EMAIL_EXT_SAVE_ERR_NONE;
+	email_ext_save_err_type_e ret_val = EMAIL_EXT_SAVE_ERR_NONE;
 	bool skip_check_exist = false;
 
 	if (!*dst_file_path) {

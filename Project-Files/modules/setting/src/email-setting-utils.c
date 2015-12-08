@@ -56,7 +56,7 @@ static const char *setting_locale = NULL;
 
 static void _entry_maxlength_reached_cb(void *data, Evas_Object *obj, void *event_info);
 static void _register_popup_back_callback(Evas_Object *popup, Eext_Event_Cb back_cb, void *data);
-static void _register_entry_popup_rot_callback(Evas_Object *popup, EmailSettingUGD *ugd, const email_setting_string_t *header);
+static void _register_entry_popup_rot_callback(Evas_Object *popup, EmailSettingUGD *ugd, const email_string_t *header);
 static void _entry_popup_keypad_down_cb(void *data, Evas_Object *obj, void *event_info);
 static void _entry_popup_keypad_up_cb(void *data, Evas_Object *obj, void *event_info);
 static void _entry_popup_rot_cb(void *data, Evas_Object *obj, void *event_info);
@@ -78,41 +78,41 @@ static void _network_popup_cancel_cb(void *data, Evas_Object *obj, void *event_i
 
 static void _remove_locale_postfix(char *locale);
 
-static email_setting_string_t EMAIL_SETTING_STRING_CANCEL_USER = {PACKAGE, "IDS_EMAIL_POP_CANCELLED"};
-static email_setting_string_t EMAIL_SETTING_STRING_NO_SERVER_RESPONSE = {PACKAGE, "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"};
-static email_setting_string_t EMAIL_SETTING_STRING_ACCOUNT_ALREADY_EXISTS = {PACKAGE, "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"};
-static email_setting_string_t EMAIL_SETTING_STRING_AUTHENTICATION_FAILED = {PACKAGE, "IDS_ST_POP_CHECK_THE_EMAIL_ADDRESS_AND_PASSWORD_YOU_HAVE_ENTERED"};
-static email_setting_string_t EMAIL_SETTING_STRING_INCORRECT_USER_NAME_OR_PASSWORD = {PACKAGE, "IDS_ST_POP_CHECK_THE_EMAIL_ADDRESS_AND_PASSWORD_YOU_HAVE_ENTERED"};
-static email_setting_string_t EMAIL_SETTING_STRING_UNKNOWN_ERROR = {PACKAGE, "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"};
-static email_setting_string_t EMAIL_SETTING_STRING_EMAIL = {PACKAGE, "IDS_ST_HEADER_EMAIL"};
-static email_setting_string_t EMAIL_SETTING_STRING_CANCEL = {PACKAGE, "IDS_EMAIL_BUTTON_CANCEL"};
-static email_setting_string_t EMAIL_SETTING_STRING_MOBILE_DATA_DISABLED = {PACKAGE, "IDS_EMAIL_POP_MOBILE_DATA_IS_DISABLED_CONNECT_TO_WI_FI_NETWORK_INSTEAD_OR_ENABLE_MOBILE_DATA_AND_TRY_AGAIN"};
-static email_setting_string_t EMAIL_SETTING_STRING_MAX_ACCOUNT = {PACKAGE, "IDS_ST_POP_THE_MAXIMUM_NUMBER_OF_EMAIL_ACCOUNTS_HPD_HAS_BEEN_REACHED"};
-static email_setting_string_t EMAIL_SETTING_STRING_WIFI_REQUIRED = {PACKAGE, "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"};
-static email_setting_string_t EMAIL_SETTING_STRING_DEVICE_STORAGE_FULL = {PACKAGE, "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE"};
-static email_setting_string_t EMAIL_SETTING_STRING_ONLY_LOG_15_MIN = {PACKAGE, "IDS_EMAIL_POP_YOU_CAN_ONLY_LOG_IN_ONCE_EVERY_15_MINUTES"};
-static email_setting_string_t EMAIL_SETTING_STRING_VALIDATE_ACCOUNT_FAIL = {PACKAGE, "IDS_ST_POP_CHECK_THE_EMAIL_ADDRESS_AND_PASSWORD_YOU_HAVE_ENTERED"};
-static email_setting_string_t EMAIL_SETTING_STRING_CONNECTION_FAIL = {PACKAGE, "IDS_EMAIL_POP_CONNECTION_FAILED"};
-static email_setting_string_t EMAIL_SETTING_STRING_EMAIL_DELETED_FROM_SERVER = {PACKAGE, "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"};
-static email_setting_string_t EMAIL_SETTING_STRING_HOST_NOT_FOUND = {PACKAGE, "IDS_EMAIL_POP_HOST_NOT_FOUND"};
-static email_setting_string_t EMAIL_SETTING_STRING_MAX_CHAR_REACHED = {PACKAGE, "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"};
-static email_setting_string_t EMAIL_SETTING_STRING_NETWORK_BUSY = {PACKAGE, "IDS_EMAIL_POP_NETWORK_BUSY"};
-static email_setting_string_t EMAIL_SETTING_STRING_NETWORK_UNAVAIL = {PACKAGE, "IDS_EMAIL_TPOP_FAILED_TO_CONNECT_TO_NETWORK"};
-static email_setting_string_t EMAIL_SETTING_STRING_SERVER_NOT_AVAILABLE = {PACKAGE, "IDS_EMAIL_POP_SERVER_NOT_AVAILABLE"};
-static email_setting_string_t EMAIL_SETTING_STRING_NO_NETWORK_CONNECTION = {PACKAGE, "IDS_EMAIL_TPOP_FAILED_TO_CONNECT_TO_NETWORK"};
-static email_setting_string_t EMAIL_SETTING_STRING_FLIGHT_ENABLE = {PACKAGE, "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_OR_NETWORK_NOT_AVAILABLE"};
-static email_setting_string_t EMAIL_SETTING_STRING_CERT_FAIL = {PACKAGE, "IDS_EMAIL_POP_INVALID_OR_INACCESSIBLE_CERTIFICATE"};
-static email_setting_string_t EMAIL_SETTING_STRING_FAIL_SECURITY_POLICY = {PACKAGE, "IDS_EMAIL_POP_SECURITY_POLICY_RESTRICTS_USE_OF_THIS_ACCOUNT"};
-static email_setting_string_t EMAIL_SETTING_STRING_TLS_NOT_SUPPORTED = {PACKAGE, "IDS_EMAIL_BODY_SERVER_DOES_NOT_SUPPORT_TLS"};
-static email_setting_string_t EMAIL_SETTING_STRING_TLS_SSL_FAIL = {PACKAGE, "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"};
-static email_setting_string_t EMAIL_SETTING_STRING_WARNING = {PACKAGE, "IDS_ST_HEADER_WARNING"};
-static email_setting_string_t EMAIL_SETTING_STRING_UNABLE_TO_VALIDATE = {PACKAGE, "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"};
-static email_setting_string_t EMAIL_SETTING_STRING_VALIDATING_ACCOUNT_ING = {PACKAGE, "IDS_ST_TPOP_VALIDATING_ACCOUNT_ING_ABB"};
+static email_string_t EMAIL_SETTING_STRING_CANCEL_USER = {PACKAGE, "IDS_EMAIL_POP_CANCELLED"};
+static email_string_t EMAIL_SETTING_STRING_NO_SERVER_RESPONSE = {PACKAGE, "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"};
+static email_string_t EMAIL_SETTING_STRING_ACCOUNT_ALREADY_EXISTS = {PACKAGE, "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"};
+static email_string_t EMAIL_SETTING_STRING_AUTHENTICATION_FAILED = {PACKAGE, "IDS_ST_POP_CHECK_THE_EMAIL_ADDRESS_AND_PASSWORD_YOU_HAVE_ENTERED"};
+static email_string_t EMAIL_SETTING_STRING_INCORRECT_USER_NAME_OR_PASSWORD = {PACKAGE, "IDS_ST_POP_CHECK_THE_EMAIL_ADDRESS_AND_PASSWORD_YOU_HAVE_ENTERED"};
+static email_string_t EMAIL_SETTING_STRING_UNKNOWN_ERROR = {PACKAGE, "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"};
+static email_string_t EMAIL_SETTING_STRING_EMAIL = {PACKAGE, "IDS_ST_HEADER_EMAIL"};
+static email_string_t EMAIL_SETTING_STRING_CANCEL = {PACKAGE, "IDS_EMAIL_BUTTON_CANCEL"};
+static email_string_t EMAIL_SETTING_STRING_MOBILE_DATA_DISABLED = {PACKAGE, "IDS_EMAIL_POP_MOBILE_DATA_IS_DISABLED_CONNECT_TO_WI_FI_NETWORK_INSTEAD_OR_ENABLE_MOBILE_DATA_AND_TRY_AGAIN"};
+static email_string_t EMAIL_SETTING_STRING_MAX_ACCOUNT = {PACKAGE, "IDS_ST_POP_THE_MAXIMUM_NUMBER_OF_EMAIL_ACCOUNTS_HPD_HAS_BEEN_REACHED"};
+static email_string_t EMAIL_SETTING_STRING_WIFI_REQUIRED = {PACKAGE, "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"};
+static email_string_t EMAIL_SETTING_STRING_DEVICE_STORAGE_FULL = {PACKAGE, "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE"};
+static email_string_t EMAIL_SETTING_STRING_ONLY_LOG_15_MIN = {PACKAGE, "IDS_EMAIL_POP_YOU_CAN_ONLY_LOG_IN_ONCE_EVERY_15_MINUTES"};
+static email_string_t EMAIL_SETTING_STRING_VALIDATE_ACCOUNT_FAIL = {PACKAGE, "IDS_ST_POP_CHECK_THE_EMAIL_ADDRESS_AND_PASSWORD_YOU_HAVE_ENTERED"};
+static email_string_t EMAIL_SETTING_STRING_CONNECTION_FAIL = {PACKAGE, "IDS_EMAIL_POP_CONNECTION_FAILED"};
+static email_string_t EMAIL_SETTING_STRING_EMAIL_DELETED_FROM_SERVER = {PACKAGE, "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"};
+static email_string_t EMAIL_SETTING_STRING_HOST_NOT_FOUND = {PACKAGE, "IDS_EMAIL_POP_HOST_NOT_FOUND"};
+static email_string_t EMAIL_SETTING_STRING_MAX_CHAR_REACHED = {PACKAGE, "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"};
+static email_string_t EMAIL_SETTING_STRING_NETWORK_BUSY = {PACKAGE, "IDS_EMAIL_POP_NETWORK_BUSY"};
+static email_string_t EMAIL_SETTING_STRING_NETWORK_UNAVAIL = {PACKAGE, "IDS_EMAIL_TPOP_FAILED_TO_CONNECT_TO_NETWORK"};
+static email_string_t EMAIL_SETTING_STRING_SERVER_NOT_AVAILABLE = {PACKAGE, "IDS_EMAIL_POP_SERVER_NOT_AVAILABLE"};
+static email_string_t EMAIL_SETTING_STRING_NO_NETWORK_CONNECTION = {PACKAGE, "IDS_EMAIL_TPOP_FAILED_TO_CONNECT_TO_NETWORK"};
+static email_string_t EMAIL_SETTING_STRING_FLIGHT_ENABLE = {PACKAGE, "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_OR_NETWORK_NOT_AVAILABLE"};
+static email_string_t EMAIL_SETTING_STRING_CERT_FAIL = {PACKAGE, "IDS_EMAIL_POP_INVALID_OR_INACCESSIBLE_CERTIFICATE"};
+static email_string_t EMAIL_SETTING_STRING_FAIL_SECURITY_POLICY = {PACKAGE, "IDS_EMAIL_POP_SECURITY_POLICY_RESTRICTS_USE_OF_THIS_ACCOUNT"};
+static email_string_t EMAIL_SETTING_STRING_TLS_NOT_SUPPORTED = {PACKAGE, "IDS_EMAIL_BODY_SERVER_DOES_NOT_SUPPORT_TLS"};
+static email_string_t EMAIL_SETTING_STRING_TLS_SSL_FAIL = {PACKAGE, "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"};
+static email_string_t EMAIL_SETTING_STRING_WARNING = {PACKAGE, "IDS_ST_HEADER_WARNING"};
+static email_string_t EMAIL_SETTING_STRING_UNABLE_TO_VALIDATE = {PACKAGE, "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"};
+static email_string_t EMAIL_SETTING_STRING_VALIDATING_ACCOUNT_ING = {PACKAGE, "IDS_ST_TPOP_VALIDATING_ACCOUNT_ING_ABB"};
 
 /* not defined in UX */
-static email_setting_string_t EMAIL_SETTING_STRING_MANY_LOGIN_FAIL = {PACKAGE, N_("Too many login failure")};
-static email_setting_string_t EMAIL_SETTING_STRING_DATA_NETWORK = {PACKAGE, N_("Data network")};
-static email_setting_string_t EMAIL_SETTING_STRING_WIFI = {PACKAGE, N_("Wi-Fi")};
+static email_string_t EMAIL_SETTING_STRING_MANY_LOGIN_FAIL = {PACKAGE, N_("Too many login failure")};
+static email_string_t EMAIL_SETTING_STRING_DATA_NETWORK = {PACKAGE, N_("Data network")};
+static email_string_t EMAIL_SETTING_STRING_WIFI = {PACKAGE, N_("Wi-Fi")};
 
 EMAIL_DEFINE_GET_EDJ_PATH(email_get_setting_theme_path, "/email-setting-theme.edj")
 
@@ -330,9 +330,9 @@ char *setting_get_datetime_format_text(const char *skeleton, void *time)
 	return g_strdup(formattedString);
 }
 
-Evas_Object *setting_get_notify(email_view_t *vd, const email_setting_string_t *header,
-		const email_setting_string_t *content, int btn_num, const email_setting_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
-		const email_setting_string_t *btn2_lb, Evas_Smart_Cb resp_cb2)
+Evas_Object *setting_get_notify(email_view_t *vd, const email_string_t *header,
+		const email_string_t *content, int btn_num, const email_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
+		const email_string_t *btn2_lb, Evas_Smart_Cb resp_cb2)
 {
 	debug_enter();
 
@@ -390,9 +390,9 @@ Evas_Object *setting_get_notify(email_view_t *vd, const email_setting_string_t *
 	return notify;
 }
 
-Evas_Object *setting_get_pb_process_notify(email_view_t *vd, const email_setting_string_t *header,
-		int btn_num, const email_setting_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
-		const email_setting_string_t *btn2_lb, Evas_Smart_Cb resp_cb2, EMAIL_SETTING_POPUP_BACK_TYPE back_type, int *op_handle)
+Evas_Object *setting_get_pb_process_notify(email_view_t *vd, const email_string_t *header,
+		int btn_num, const email_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
+		const email_string_t *btn2_lb, Evas_Smart_Cb resp_cb2, EMAIL_SETTING_POPUP_BACK_TYPE back_type, int *op_handle)
 {
 	debug_enter();
 
@@ -480,9 +480,9 @@ Evas_Object *setting_get_pb_process_notify(email_view_t *vd, const email_setting
 	return notify;
 }
 
-Evas_Object *setting_get_empty_content_notify(email_view_t *vd, const email_setting_string_t *header,
-		int btn_num, const email_setting_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
-		const email_setting_string_t *btn2_lb, Evas_Smart_Cb resp_cb2)
+Evas_Object *setting_get_empty_content_notify(email_view_t *vd, const email_string_t *header,
+		int btn_num, const email_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
+		const email_string_t *btn2_lb, Evas_Smart_Cb resp_cb2)
 {
 	debug_enter();
 	Evas_Object *notify = NULL;
@@ -532,9 +532,9 @@ Evas_Object *setting_get_empty_content_notify(email_view_t *vd, const email_sett
 	return notify;
 }
 
-Evas_Object *setting_get_entry_content_notify(email_view_t *vd, const email_setting_string_t *header, const char *entry_text,
-		int btn_num, const email_setting_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
-		const email_setting_string_t *btn2_lb, Evas_Smart_Cb resp_cb2, SETTINGS_POPUP_ENTRY_TYPE popup_type)
+Evas_Object *setting_get_entry_content_notify(email_view_t *vd, const email_string_t *header, const char *entry_text,
+		int btn_num, const email_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
+		const email_string_t *btn2_lb, Evas_Smart_Cb resp_cb2, SETTINGS_POPUP_ENTRY_TYPE popup_type)
 {
 	debug_enter();
 	Evas_Object *notify = NULL;
@@ -613,7 +613,7 @@ Eina_Bool setting_get_network_failure_notify(email_view_t *vd)
 
 	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
 	Eina_Bool ret = EINA_TRUE;
-	EMAIL_NETWORK_STATUS status;
+	email_network_status_e status;
 
 	status = email_get_network_state();
 	if (status == EMAIL_NETWORK_STATUS_AVAILABLE) {
@@ -745,11 +745,11 @@ void setting_delete_enter(char *string)
 	}
 }
 
-const email_setting_string_t *setting_get_service_fail_type(int type)
+const email_string_t *setting_get_service_fail_type(int type)
 {
 	debug_enter();
 
-	const email_setting_string_t *ret = NULL;
+	const email_string_t *ret = NULL;
 	if (type == EMAIL_ERROR_NETWORK_TOO_BUSY) {
 		ret = &(EMAIL_SETTING_STRING_NETWORK_BUSY);
 	} else if (type == EMAIL_ERROR_LOGIN_ALLOWED_EVERY_15_MINS) {
@@ -803,11 +803,11 @@ const email_setting_string_t *setting_get_service_fail_type(int type)
 	return ret;
 }
 
-const email_setting_string_t *setting_get_service_fail_type_header(int type)
+const email_string_t *setting_get_service_fail_type_header(int type)
 {
 	debug_enter();
 
-	const email_setting_string_t *ret = NULL;
+	const email_string_t *ret = NULL;
 	if (type == EMAIL_ERROR_VALIDATE_ACCOUNT ||
 			type == EMAIL_ERROR_AUTHENTICATE ||
 			type == EMAIL_ERROR_LOGIN_FAILURE) {
@@ -1007,7 +1007,7 @@ static void _register_popup_back_callback(Evas_Object *popup, Eext_Event_Cb back
 	}
 }
 
-static void _register_entry_popup_rot_callback(Evas_Object *popup, EmailSettingUGD *ugd, const email_setting_string_t *header)
+static void _register_entry_popup_rot_callback(Evas_Object *popup, EmailSettingUGD *ugd, const email_string_t *header)
 {
 	debug_enter();
 
@@ -1028,7 +1028,7 @@ static void _entry_popup_keypad_down_cb(void *data, Evas_Object *obj, void *even
 
 	rot = elm_win_rotation_get(ugd->base.win);
 	if (rot == 90 || rot == 270) {
-		const email_setting_string_t *header = (const email_setting_string_t *)evas_object_data_get(ugd->popup, "_header");
+		const email_string_t *header = (const email_string_t *)evas_object_data_get(ugd->popup, "_header");
 		retm_if(!header, "header is NULL!");
 		elm_object_domain_translatable_part_text_set(ugd->popup, "title,text", header->domain, header->id);
 	}
@@ -1052,7 +1052,7 @@ static void _entry_popup_rot_cb(void *data, Evas_Object *obj, void *event_info)
 	debug_enter();
 	EmailSettingUGD *ugd = data;
 	int rot = -1;
-	const email_setting_string_t *header = (const email_setting_string_t *)evas_object_data_get(ugd->popup, "_header");
+	const email_string_t *header = (const email_string_t *)evas_object_data_get(ugd->popup, "_header");
 	retm_if(!header, "header is NULL!");
 
 	rot = elm_win_rotation_get(obj);
@@ -1193,7 +1193,7 @@ static void _generate_best_pattern(const char *locale, i18n_uchar *customSkeleto
 	i18n_udate_destroy(formatter);
 }
 
-inline char *email_setting_gettext(email_setting_string_t t)
+inline char *email_setting_gettext(email_string_t t)
 {
 	if (!strcmp(t.domain, SYSTEM_STRING))
 		return dgettext(SYSTEM_STRING, t.id);
@@ -1269,7 +1269,7 @@ static void _data_setting_launch_cb(void *data, Evas_Object *obj, void *event_in
 	debug_enter();
 	email_view_t *vd = data;
 	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
-	EMAIL_NETWORK_STATUS status = (int)(ptrdiff_t)evas_object_data_get(ugd->popup, EMAIL_SETTING_POPUP_NET_ERROR_CODE_KEY);
+	email_network_status_e status = (int)(ptrdiff_t)evas_object_data_get(ugd->popup, EMAIL_SETTING_POPUP_NET_ERROR_CODE_KEY);
 	app_control_h b;
 	int ret;
 

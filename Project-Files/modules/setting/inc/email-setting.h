@@ -39,7 +39,6 @@
 #include "email-locale.h"
 #include "email-utils.h"
 #include "email-common-types.h"
-#include "email-setting-string.h"
 #include "email-module-dev.h"
 
 #define _EDJ(o) elm_layout_edje_get(o)

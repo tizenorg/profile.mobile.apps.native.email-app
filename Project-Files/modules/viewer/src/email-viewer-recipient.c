@@ -32,8 +32,8 @@
 static Elm_Genlist_Item_Class recipient_popup_itc;
 static Elm_Genlist_Item_Class add_to_contact_popup_itc;
 
-static email_viewer_string_t EMAIL_VIEWER_BUTTON_CANCEL = { PACKAGE, "IDS_EMAIL_BUTTON_CANCEL" };
-static email_viewer_string_t EMAIL_VIEWER_STRING_NULL = { NULL, NULL };
+static email_string_t EMAIL_VIEWER_BUTTON_CANCEL = { PACKAGE, "IDS_EMAIL_BUTTON_CANCEL" };
+static email_string_t EMAIL_VIEWER_STRING_NULL = { NULL, NULL };
 
 /* for the recipient popup list */
 typedef struct _Item_Data {
@@ -129,7 +129,7 @@ static void _recipient_mbe_selected_cb(void *data, Evas_Object *obj, void *event
 	debug_secure("recipient_address:%s", ug_data->recipient_address);
 
 	email_delete_contacts_list(&ug_data->recipient_contact_list_item);
-	ug_data->recipient_contact_list_item = (EMAIL_CONTACT_LIST_INFO_S *)email_contact_search_by_email(ug_data, ug_data->recipient_address);
+	ug_data->recipient_contact_list_item = (email_contact_list_info_t *)email_contact_search_by_email(ug_data, ug_data->recipient_address);
 
 	char *popup_title = NULL;
 	if ((addrs_info->display_name) && (g_strcmp0(addrs_info->display_name, addrs_info->address))) {
@@ -146,7 +146,7 @@ static void _recipient_mbe_selected_cb(void *data, Evas_Object *obj, void *event
 		popup_title = g_strdup(addrs_info->address);
 	}
 
-	email_viewer_string_t EMAIL_VIEWER_STR_NO_TRANSITION = { NULL, popup_title };
+	email_string_t EMAIL_VIEWER_STR_NO_TRANSITION = { NULL, popup_title };
 	ug_data->notify = util_create_notify_with_list(ug_data, EMAIL_VIEWER_STR_NO_TRANSITION, EMAIL_VIEWER_STRING_NULL, 1, EMAIL_VIEWER_BUTTON_CANCEL,
 			_recipient_popup_response_cb, EMAIL_VIEWER_STRING_NULL, NULL, NULL);
 
@@ -340,7 +340,7 @@ void recipient_add_to_contact_selection_popup(void *data, char *contact_data, VI
 	debug_secure("selected_name:[%s]", ug_data->selected_name);
 	debug_secure("popup_title:[%s]", popup_title);
 
-	email_viewer_string_t EMAIL_VIEWER_STR_NO_TRANSITION = { NULL, popup_title };
+	email_string_t EMAIL_VIEWER_STR_NO_TRANSITION = { NULL, popup_title };
 	ug_data->notify = util_create_notify_with_list(ug_data, EMAIL_VIEWER_STR_NO_TRANSITION, EMAIL_VIEWER_STRING_NULL, 1, EMAIL_VIEWER_BUTTON_CANCEL,
 			_recipient_popup_response_cb, EMAIL_VIEWER_STRING_NULL, NULL, NULL);
 

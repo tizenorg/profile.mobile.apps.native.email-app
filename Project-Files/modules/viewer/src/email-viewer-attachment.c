@@ -53,7 +53,7 @@ static VIEWER_ERROR_TYPE_E _save_and_preview_attachment(EV_attachment_data *aid)
 static VIEWER_ERROR_TYPE_E _ensure_save_thread(EmailViewerUGD *ug_data);
 static void _stop_save_thread(EmailViewerUGD *ug_data);
 static void *_attachment_save_thread_run(void *data);
-static EmailExtSaveErrType _viewer_save_attachment_on_disk(EV_attachment_data *aid);
+static email_ext_save_err_type_e _viewer_save_attachment_on_disk(EV_attachment_data *aid);
 
 static VIEWER_ERROR_TYPE_E _ensure_update_timer(EmailViewerUGD *ug_data);
 static void _stop_update_timer(EmailViewerUGD *ug_data);
@@ -104,10 +104,10 @@ static Evas_Object *_viewer_create_attachment_view_ly(void *data);
 static gboolean _viewer_notify_attachment_process_copy_cb(void *data, float percentage);
 Evas_Object *_viewer_attachment_create_save_cancel_toolbar_btn(Evas_Object *layout, EmailViewerUGD *ug_data);
 
-static email_viewer_string_t EMAIL_VIEWER_STRING_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
-static email_viewer_string_t EMAIL_VIEWER_UNABLE_TO_DOWNLOAD_ATTACH = { PACKAGE, "IDS_EMAIL_HEADER_UNABLE_TO_DOWNLOAD_ATTACHMENT_ABB" };
-static email_viewer_string_t EMAIL_VIEWER_STRING_NULL = { NULL, NULL };
-static email_viewer_string_t EMAIL_VIEWER_BODY_FIRST_DOWNLOAD_MESSAGE = { PACKAGE, "IDS_EMAIL_POP_YOU_MUST_DOWNLOAD_THE_MESSAGE_BEFORE_YOU_CAN_DOWNLOAD_THE_ATTACHMENT" };
+static email_string_t EMAIL_VIEWER_STRING_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
+static email_string_t EMAIL_VIEWER_UNABLE_TO_DOWNLOAD_ATTACH = { PACKAGE, "IDS_EMAIL_HEADER_UNABLE_TO_DOWNLOAD_ATTACHMENT_ABB" };
+static email_string_t EMAIL_VIEWER_STRING_NULL = { NULL, NULL };
+static email_string_t EMAIL_VIEWER_BODY_FIRST_DOWNLOAD_MESSAGE = { PACKAGE, "IDS_EMAIL_POP_YOU_MUST_DOWNLOAD_THE_MESSAGE_BEFORE_YOU_CAN_DOWNLOAD_THE_ATTACHMENT" };
 
 /*
  * Definition for static functions
@@ -125,8 +125,8 @@ static void _popup_response_cb(void *data, Evas_Object *obj, void *event_info)
 
 static void _create_unable_to_save_attachment_popup(EmailViewerUGD *ug_data)
 {
-	email_viewer_string_t title = { PACKAGE, "IDS_EMAIL_HEADER_FAILED_TO_SAVE_ATTACHMENT_ABB" };
-	email_viewer_string_t content = { PACKAGE, "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED" };
+	email_string_t title = { PACKAGE, "IDS_EMAIL_HEADER_FAILED_TO_SAVE_ATTACHMENT_ABB" };
+	email_string_t content = { PACKAGE, "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED" };
 	util_create_notify(ug_data, title, content, 1, EMAIL_VIEWER_STRING_OK,
 			_popup_response_cb, EMAIL_VIEWER_STRING_NULL, NULL, NULL);
 }
@@ -390,7 +390,7 @@ static VIEWER_ERROR_TYPE_E _save_and_preview_attachment(EV_attachment_data *aid)
 	}
 
 	if (aid == ug_data->preview_aid) {
-		EmailExtSaveErrType r =  email_prepare_temp_file_path(info->index, ug_data->temp_preview_folder_path, info->path, &aid->preview_path);
+		email_ext_save_err_type_e r =  email_prepare_temp_file_path(info->index, ug_data->temp_preview_folder_path, info->path, &aid->preview_path);
 		if (r == EMAIL_EXT_SAVE_ERR_ALREADY_EXIST) {
 			debug_log("Already saved. Showing the preview...");
 			viewer_show_attachment_preview(aid);
@@ -501,12 +501,12 @@ static void *_attachment_save_thread_run(void *data)
 	return NULL;
 }
 
-static EmailExtSaveErrType _viewer_save_attachment_on_disk(EV_attachment_data *aid)
+static email_ext_save_err_type_e _viewer_save_attachment_on_disk(EV_attachment_data *aid)
 {
 	debug_enter();
 	retvm_if(aid == NULL, EMAIL_EXT_SAVE_ERR_UNKNOWN, "Invalid parameter: aid[NULL]");
 
-	EmailExtSaveErrType ret = EMAIL_EXT_SAVE_ERR_NONE;
+	email_ext_save_err_type_e ret = EMAIL_EXT_SAVE_ERR_NONE;
 
 	if (aid->save_for_preview) {
 		ret = viewer_save_attachment_for_preview(aid, _viewer_notify_attachment_process_copy_cb);
@@ -1058,7 +1058,7 @@ static Evas_Object *_viewer_create_gl_item_icon_file_type(Evas_Object *parent, c
 	evas_object_size_hint_align_set(obj, EVAS_HINT_FILL, EVAS_HINT_FILL);
 	evas_object_size_hint_weight_set(obj, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_propagate_events_set(obj, EINA_TRUE);
-	EmailFileTypeMIME mime_type;
+	email_file_type_mime_t mime_type;
 	char *mime_str = email_get_mime_type_from_file(attachment_path);
 	mime_type.mime = mime_str;
 	mime_type.type = email_get_file_type_from_mime_type(mime_type.mime);

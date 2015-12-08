@@ -171,9 +171,4 @@ struct _EmailViewerIdlerData {
 	void *data;
 };
 
-typedef struct _email_viewer_string_t {
-	const char *domain;
-	const char *id;
-} email_viewer_string_t;
-
 #endif /* __EMAIL_VIEWER_TYPES_H__ */

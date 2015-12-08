@@ -71,29 +71,29 @@ static void _gl_ex_sending_secure_radio_cb(void *data, Evas_Object *obj, void *e
 static void _gl_ex_incoming_type_radio_cb(void *data, Evas_Object *obj, void *event_info);
 static void _gl_ex_incoming_secure_radio_cb(void *data, Evas_Object *obj, void *event_info);
 
-static email_setting_string_t EMAIL_SETTING_STRING_EMAIL = {PACKAGE, "IDS_ST_HEADER_EMAIL"};
-static email_setting_string_t EMAIL_SETTING_STRING_IMAP4 = {PACKAGE, "IDS_EMAIL_BODY_IMAP4"};
-static email_setting_string_t EMAIL_SETTING_STRING_INCOMING_MAIL_SERVER_TYPE = {PACKAGE, "IDS_ST_HEADER_SERVER_TYPE_ABB"};
-static email_setting_string_t EMAIL_SETTING_STRING_INCOMING_PORT = {PACKAGE, "IDS_ST_BODY_PORT"};
-static email_setting_string_t EMAIL_SETTING_STRING_INCOMING_SERVER = {PACKAGE, "IDS_ST_TMBODY_SERVER_ADDRESS"};
-static email_setting_string_t EMAIL_SETTING_STRING_INCOMING_SETTINGS = {PACKAGE, "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"};
-static email_setting_string_t EMAIL_SETTING_STRING_OK = {PACKAGE, "IDS_EMAIL_BUTTON_OK"};
-static email_setting_string_t EMAIL_SETTING_STRING_OUTGOING_PORT = {PACKAGE, "IDS_ST_BODY_PORT"};
-static email_setting_string_t EMAIL_SETTING_STRING_OUTGOING_SERVER = {PACKAGE, "IDS_ST_TMBODY_SERVER_ADDRESS"};
-static email_setting_string_t EMAIL_SETTING_STRING_OUTGOING_SETTINGS = {PACKAGE, "IDS_ST_HEADER_OUTGOING_SERVER_SETTINGS_ABB"};
-static email_setting_string_t EMAIL_SETTING_STRING_POP3 = {PACKAGE, "IDS_ST_SBODY_POP3"};
-static email_setting_string_t EMAIL_SETTING_STRING_PWD = {PACKAGE, "IDS_ST_TMBODY_PASSWORD"};
-static email_setting_string_t EMAIL_SETTING_STRING_SECURE_CONNECTION = {PACKAGE, "IDS_ST_HEADER_SECURITY_TYPE_ABB"};
-static email_setting_string_t EMAIL_SETTING_STRING_SSL = {PACKAGE, "IDS_ST_SBODY_SSL"};
-static email_setting_string_t EMAIL_SETTING_STRING_TLS = {PACKAGE, "IDS_ST_SBODY_TLS"};
-static email_setting_string_t EMAIL_SETTING_STRING_USER_NAME = {PACKAGE, "IDS_ST_TMBODY_USERNAME"};
-static email_setting_string_t EMAIL_SETTING_STRING_OFF = {PACKAGE, "IDS_ST_OPT_NONE"};
-static email_setting_string_t EMAIL_SETTING_STRING_NEXT = {PACKAGE, "IDS_ST_BUTTON_NEXT"};
-static email_setting_string_t EMAIL_SETTING_STRING_CANCEL = {PACKAGE, "IDS_EMAIL_BUTTON_CANCEL"};
-static email_setting_string_t EMAIL_SETTING_STRING_WARNING = {PACKAGE, "IDS_ST_HEADER_WARNING"};
-static email_setting_string_t EMAIL_SETTING_STRING_FILL_MANDATORY_FIELDS = {PACKAGE, "IDS_EMAIL_POP_PLEASE_FILL_ALL_THE_MANDATORY_FIELDS"};
-static email_setting_string_t EMAIL_SETTING_STRING_ACCOUNT_ALREADY_EXISTS = {PACKAGE, "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"};
-static email_setting_string_t EMAIL_SETTING_STRING_UNABLE_TO_ADD_ACCOUNT = {PACKAGE, "IDS_ST_HEADER_UNABLE_TO_ADD_ACCOUNT_ABB"};
+static email_string_t EMAIL_SETTING_STRING_EMAIL = {PACKAGE, "IDS_ST_HEADER_EMAIL"};
+static email_string_t EMAIL_SETTING_STRING_IMAP4 = {PACKAGE, "IDS_EMAIL_BODY_IMAP4"};
+static email_string_t EMAIL_SETTING_STRING_INCOMING_MAIL_SERVER_TYPE = {PACKAGE, "IDS_ST_HEADER_SERVER_TYPE_ABB"};
+static email_string_t EMAIL_SETTING_STRING_INCOMING_PORT = {PACKAGE, "IDS_ST_BODY_PORT"};
+static email_string_t EMAIL_SETTING_STRING_INCOMING_SERVER = {PACKAGE, "IDS_ST_TMBODY_SERVER_ADDRESS"};
+static email_string_t EMAIL_SETTING_STRING_INCOMING_SETTINGS = {PACKAGE, "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"};
+static email_string_t EMAIL_SETTING_STRING_OK = {PACKAGE, "IDS_EMAIL_BUTTON_OK"};
+static email_string_t EMAIL_SETTING_STRING_OUTGOING_PORT = {PACKAGE, "IDS_ST_BODY_PORT"};
+static email_string_t EMAIL_SETTING_STRING_OUTGOING_SERVER = {PACKAGE, "IDS_ST_TMBODY_SERVER_ADDRESS"};
+static email_string_t EMAIL_SETTING_STRING_OUTGOING_SETTINGS = {PACKAGE, "IDS_ST_HEADER_OUTGOING_SERVER_SETTINGS_ABB"};
+static email_string_t EMAIL_SETTING_STRING_POP3 = {PACKAGE, "IDS_ST_SBODY_POP3"};
+static email_string_t EMAIL_SETTING_STRING_PWD = {PACKAGE, "IDS_ST_TMBODY_PASSWORD"};
+static email_string_t EMAIL_SETTING_STRING_SECURE_CONNECTION = {PACKAGE, "IDS_ST_HEADER_SECURITY_TYPE_ABB"};
+static email_string_t EMAIL_SETTING_STRING_SSL = {PACKAGE, "IDS_ST_SBODY_SSL"};
+static email_string_t EMAIL_SETTING_STRING_TLS = {PACKAGE, "IDS_ST_SBODY_TLS"};
+static email_string_t EMAIL_SETTING_STRING_USER_NAME = {PACKAGE, "IDS_ST_TMBODY_USERNAME"};
+static email_string_t EMAIL_SETTING_STRING_OFF = {PACKAGE, "IDS_ST_OPT_NONE"};
+static email_string_t EMAIL_SETTING_STRING_NEXT = {PACKAGE, "IDS_ST_BUTTON_NEXT"};
+static email_string_t EMAIL_SETTING_STRING_CANCEL = {PACKAGE, "IDS_EMAIL_BUTTON_CANCEL"};
+static email_string_t EMAIL_SETTING_STRING_WARNING = {PACKAGE, "IDS_ST_HEADER_WARNING"};
+static email_string_t EMAIL_SETTING_STRING_FILL_MANDATORY_FIELDS = {PACKAGE, "IDS_EMAIL_POP_PLEASE_FILL_ALL_THE_MANDATORY_FIELDS"};
+static email_string_t EMAIL_SETTING_STRING_ACCOUNT_ALREADY_EXISTS = {PACKAGE, "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"};
+static email_string_t EMAIL_SETTING_STRING_UNABLE_TO_ADD_ACCOUNT = {PACKAGE, "IDS_ST_HEADER_UNABLE_TO_ADD_ACCOUNT_ABB"};
 
 enum {
 	USERNAME_LIST_ITEM = 1,
@@ -1255,8 +1255,8 @@ static void _account_validate_cb(int account_id, email_setting_response_data *re
 	} else {
 		vd->is_retry_validate_with_username = 0;
 		if (response->err != EMAIL_ERROR_CANCELLED) {
-			const email_setting_string_t *err_msg = setting_get_service_fail_type(response->err);
-			const email_setting_string_t *header = setting_get_service_fail_type_header(response->err);
+			const email_string_t *err_msg = setting_get_service_fail_type(response->err);
+			const email_string_t *header = setting_get_service_fail_type_header(response->err);
 			ugd->popup = setting_get_notify(&vd->base,
 					header, err_msg, 1,
 					&(EMAIL_SETTING_STRING_OK),

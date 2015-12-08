@@ -1951,7 +1951,7 @@ static void _popup_renamefolder_cb(void *data, Evas_Object *obj, void *event_inf
 		prev_folder_name = account_util_convert_mutf7_to_utf8(item_data->mailbox_name);
 	}
 
-	email_account_string_t EMAIL_ACCOUNT_HEADER_RENAME_FOLDER = { PACKAGE, "IDS_EMAIL_OPT_RENAME_FOLDER"};
+	email_string_t EMAIL_ACCOUNT_HEADER_RENAME_FOLDER = { PACKAGE, "IDS_EMAIL_OPT_RENAME_FOLDER"};
 	account_create_entry_popup(ug_data, EMAIL_ACCOUNT_HEADER_RENAME_FOLDER, prev_folder_name, NULL,
 			_rename_folder_cancel_cb, _mouseup_cb, _rename_folder_ok_cb,
 			_rename_folder_cancel_cb, "IDS_EMAIL_BUTTON_CANCEL",
@@ -2087,7 +2087,7 @@ static void _popup_newfolder_cb(void *data, Evas_Object *obj, void *event_info)
 
 	EmailAccountUGD *ug_data = (EmailAccountUGD *)data;
 
-	email_account_string_t EMAIL_ACCOUNT_HEADER_CREATE_FOLDER = { PACKAGE, "IDS_EMAIL_OPT_CREATE_FOLDER_ABB2"};
+	email_string_t EMAIL_ACCOUNT_HEADER_CREATE_FOLDER = { PACKAGE, "IDS_EMAIL_OPT_CREATE_FOLDER_ABB2"};
 	account_create_entry_popup(ug_data, EMAIL_ACCOUNT_HEADER_CREATE_FOLDER, NULL, NULL,
 			_create_folder_popup_cancel_cb, _mouseup_cb, _create_folder_ok_cb,
 			_create_folder_popup_cancel_cb, "IDS_EMAIL_BUTTON_CANCEL",
@@ -2397,7 +2397,7 @@ void account_folder_newfolder(void *data, Evas_Object *obj, void *event_info)
 
 	EmailAccountUGD *ug_data = (EmailAccountUGD *)data;
 
-	email_account_string_t EMAIL_ACCOUNT_HEADER_CREATE_FOLDER = { PACKAGE, "IDS_EMAIL_OPT_CREATE_FOLDER_ABB2"};
+	email_string_t EMAIL_ACCOUNT_HEADER_CREATE_FOLDER = { PACKAGE, "IDS_EMAIL_OPT_CREATE_FOLDER_ABB2"};
 	account_create_entry_popup(ug_data, EMAIL_ACCOUNT_HEADER_CREATE_FOLDER, NULL, NULL,
 			_create_folder_popup_cancel_cb, _mouseup_cb, _create_folder_ok_cb,
 			_create_folder_popup_cancel_cb, "IDS_EMAIL_BUTTON_CANCEL",

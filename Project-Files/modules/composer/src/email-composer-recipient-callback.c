@@ -58,7 +58,7 @@ static void _recipient_mbe_dnd_accept_cb(void *data, Evas_Object *obj, Eina_Bool
 static void _recipient_mbe_dnd_dragdone_cb(void *data, Evas_Object *obj);
 static Eina_Bool _recipient_mbe_dnd_dragdone_reset_cb(void *data);*/
 
-static EmailCommonStringType EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
+static email_string_t EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
 
 static bool edit_mode = false;
 static Elm_Genlist_Item_Class select_address_itc;
@@ -423,7 +423,7 @@ static void _recipient_mbe_popup_add_to_contact_selection_popup(void *data)
 	elm_object_focus_allow_set(ugd->ewk_btn, EINA_FALSE);
 	elm_object_tree_focus_allow_set(ugd->composer_layout, EINA_FALSE);
 
-	EmailCommonStringType EMAIL_COMPOSER_STRING_NO_TRANSITION = { NULL, title_str };
+	email_string_t EMAIL_COMPOSER_STRING_NO_TRANSITION = { NULL, title_str };
 
 	ugd->composer_popup = common_util_create_popup(ugd->base.module->win,
 			EMAIL_COMPOSER_STRING_NO_TRANSITION,
@@ -713,7 +713,7 @@ void _recipient_mbe_selected_cb(void *data, Evas_Object *obj, void *event_info)
 		title_str = g_strdup(ai->address);
 	}
 
-	EmailCommonStringType EMAIL_COMPOSER_STRING_NO_TRANSITION = { NULL, title_str };
+	email_string_t EMAIL_COMPOSER_STRING_NO_TRANSITION = { NULL, title_str };
 
 	ugd->composer_popup = common_util_create_popup(ugd->base.module->win,
 			EMAIL_COMPOSER_STRING_NO_TRANSITION,

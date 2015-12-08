@@ -61,7 +61,7 @@ typedef struct add_remaining_mail_req_data {
 	email_mail_list_item_t *mail_list;
 	int start;
 	int count;
-	EmailSearchData *search_data;
+	email_search_data_t *search_data;
 	EmailMailboxUGD *mailbox_ugd;
 } AddRemainingMailReqData;
 

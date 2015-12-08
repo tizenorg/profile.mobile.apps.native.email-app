@@ -48,7 +48,7 @@ static void _show_attach_panel(EmailComposerUGD *ugd);
 static void _attach_panel_reply_cb(void *data, const char **path_array, int array_len);
 #endif
 
-static EmailCommonStringType EMAIL_COMPOSER_STRING_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED = { PACKAGE, "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED" };
+static email_string_t EMAIL_COMPOSER_STRING_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED = { PACKAGE, "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED" };
 
 
 /*

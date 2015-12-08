@@ -80,7 +80,7 @@ static void _mailbox_on_back_key(email_view_t *self);
 static int _mailbox_initialize(EmailMailboxUGD *mailbox_ugd);
 static void _mailbox_finalize(EmailMailboxUGD *mailbox_ugd);
 
-static EmailRunType _mailbox_params_get_run_type(app_control_h params);
+static email_run_type_e _mailbox_params_get_run_type(app_control_h params);
 static int _mailbox_params_get_account_id(app_control_h params);
 static int _mailbox_params_get_mail_id(app_control_h params);
 
@@ -261,11 +261,11 @@ static int _mailbox_create_account_setting_module(EmailMailboxUGD *mailbox_ugd)
 	return 0;
 }
 
-static EmailRunType _mailbox_params_get_run_type(app_control_h params)
+static email_run_type_e _mailbox_params_get_run_type(app_control_h params)
 {
 	debug_enter();
 
-	EmailRunType result = RUN_TYPE_UNKNOWN;
+	email_run_type_e result = RUN_TYPE_UNKNOWN;
 
 	char *operation = NULL;
 	bool is_operation_default = false;
@@ -339,7 +339,7 @@ static int _mailbox_create(email_view_t *self)
 
 	int ret = 0;
 	int default_account_id = 0;
-	EmailRunType run_type = mailbox_ugd->run_type;
+	email_run_type_e run_type = mailbox_ugd->run_type;
 
 	if (!email_engine_initialize()) {
 		debug_error("Failed to initialize email engine");
@@ -661,7 +661,7 @@ static void _mailbox_on_message(email_module_t *self, app_control_h msg)
 
 	EmailMailboxModule *md = (EmailMailboxModule *)self;
 	EmailMailboxUGD *mailbox_ugd = &md->view;
-	EmailRunType run_type = _mailbox_params_get_run_type(msg);
+	email_run_type_e run_type = _mailbox_params_get_run_type(msg);
 
 	if (!mailbox_ugd->initialized && (_mailbox_initialize(mailbox_ugd) != 0)) {
 		debug_error("Initialize failed!");

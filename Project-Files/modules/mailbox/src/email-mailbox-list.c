@@ -95,23 +95,23 @@ static void _insert_mail_item_to_list_from_noti(EmailMailboxUGD *mailbox_ugd, Ma
 static gint _compare_mail_item_order(gconstpointer a, gconstpointer b);
 
 /* get mail list */
-static email_mail_list_item_t *_mailbox_get_mail_list(EmailMailboxUGD *mailbox_ugd, const EmailSearchData *search_data, int *mail_count);
-static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_id(int account_id, int mailbox_id, int sort_type, int thread_id, const EmailSearchData *search_data, int *mail_count);
-static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_type(int account_id, int mailbox_type, int sort_type, int thread_id, const EmailSearchData *search_data, int *mail_count);
-static email_mail_list_item_t *_mailbox_get_priority_sender_mail_list(int sort_type, int thread_id, const EmailSearchData *search_data, int *mail_count);
-static email_mail_list_item_t *_mailbox_get_favourite_mail_list(int sort_type, int thread_id, const EmailSearchData *search_data, int *mail_count);
+static email_mail_list_item_t *_mailbox_get_mail_list(EmailMailboxUGD *mailbox_ugd, const email_search_data_t *search_data, int *mail_count);
+static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_id(int account_id, int mailbox_id, int sort_type, int thread_id, const email_search_data_t *search_data, int *mail_count);
+static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_type(int account_id, int mailbox_type, int sort_type, int thread_id, const email_search_data_t *search_data, int *mail_count);
+static email_mail_list_item_t *_mailbox_get_priority_sender_mail_list(int sort_type, int thread_id, const email_search_data_t *search_data, int *mail_count);
+static email_mail_list_item_t *_mailbox_get_favourite_mail_list(int sort_type, int thread_id, const email_search_data_t *search_data, int *mail_count);
 
-static int _get_filter_cnt_for_search_data(const EmailSearchData *search_data);
-static void _add_search_data_into_filter_list(const EmailSearchData *search_data, email_list_filter_t *filter_list, int *current_index);
-static void _make_sorting_rule_list(EmailSortType sort_type, int account_id, email_list_sorting_rule_t *sorting_rule_list);
+static int _get_filter_cnt_for_search_data(const email_search_data_t *search_data);
+static void _add_search_data_into_filter_list(const email_search_data_t *search_data, email_list_filter_t *filter_list, int *current_index);
+static void _make_sorting_rule_list(email_sort_type_e sort_type, int account_id, email_list_sorting_rule_t *sorting_rule_list);
 
 /* mail list */
-static void _mailbox_make_list(EmailMailboxUGD *mailbox_ugd, const EmailSearchData *search_data);
-static void _mailbox_make_remaining_items(EmailMailboxUGD *mailbox_ugd, const EmailSearchData *search_data,
+static void _mailbox_make_list(EmailMailboxUGD *mailbox_ugd, const email_search_data_t *search_data);
+static void _mailbox_make_remaining_items(EmailMailboxUGD *mailbox_ugd, const email_search_data_t *search_data,
 		email_mail_list_item_t *mail_list, int mail_count);
 static void _mailbox_clear_list(EmailMailboxUGD *mailbox_ugd);
 static void _mailbox_free_req_data(AddRemainingMailReqData **req);
-static EmailSearchData *_clone_search_data(const EmailSearchData *search_data);
+static email_search_data_t *_clone_search_data(const email_search_data_t *search_data);
 
 /* system settings callbacks */
 static void _mailbox_system_font_change_cb(system_settings_key_e key, void *data);
@@ -126,7 +126,7 @@ static void _mailbox_check_cache_init(EmailMailboxCheckCache *cache, const char 
 static void _mailbox_check_cache_free(EmailMailboxCheckCache *cache);
 static Evas_Object *_mailbox_check_cache_get_obj(EmailMailboxCheckCache *cache, Evas_Object *parent);
 static void _mailbox_check_cache_release_obj(EmailMailboxCheckCache *cache, Evas_Object *obj);
-static void _mailbox_list_insert_n_mails(EmailMailboxUGD *mailbox_ugd, email_mail_list_item_t* mail_list, int count, const EmailSearchData *search_data);
+static void _mailbox_list_insert_n_mails(EmailMailboxUGD *mailbox_ugd, email_mail_list_item_t* mail_list, int count, const email_search_data_t *search_data);
 /*
  * Definition for static functions
  */
@@ -946,7 +946,7 @@ gint _compare_mail_item_order(gconstpointer a, gconstpointer b)
 	return ret;
 }
 
-static email_mail_list_item_t *_mailbox_get_mail_list(EmailMailboxUGD *mailbox_ugd, const EmailSearchData *search_data, int *mail_count)
+static email_mail_list_item_t *_mailbox_get_mail_list(EmailMailboxUGD *mailbox_ugd, const email_search_data_t *search_data, int *mail_count)
 {
 	debug_enter();
 
@@ -994,7 +994,7 @@ static email_mail_list_item_t *_mailbox_get_mail_list(EmailMailboxUGD *mailbox_u
 	return mail_data;
 }
 
-static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_id(int account_id, int mailbox_id, int sort_type, int thread_id, const EmailSearchData *search_data, int *mail_count)
+static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_id(int account_id, int mailbox_id, int sort_type, int thread_id, const email_search_data_t *search_data, int *mail_count)
 {
 	debug_log("account_id: %d, mailbox_id: %d, sort_type: %d, thread_id : %d", account_id, mailbox_id, sort_type, thread_id);
 
@@ -1132,7 +1132,7 @@ static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_id(int account_
 	return mail_list;
 }
 
-static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_type(int account_id, int mailbox_type, int sort_type, int thread_id, const EmailSearchData *search_data, int *mail_count)
+static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_type(int account_id, int mailbox_type, int sort_type, int thread_id, const email_search_data_t *search_data, int *mail_count)
 {
 	debug_log("account_id: %d, mailbox_type: %d, sort_type: %d, thread_id : %d", account_id, mailbox_type, sort_type, thread_id);
 
@@ -1266,7 +1266,7 @@ static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_type(int accoun
 	return mail_list;
 }
 
-static email_mail_list_item_t *_mailbox_get_priority_sender_mail_list(int sort_type, int thread_id, const EmailSearchData *search_data, int *mail_count)
+static email_mail_list_item_t *_mailbox_get_priority_sender_mail_list(int sort_type, int thread_id, const email_search_data_t *search_data, int *mail_count)
 {
 	debug_log("sort_type: %d", sort_type);
 
@@ -1365,7 +1365,7 @@ static email_mail_list_item_t *_mailbox_get_priority_sender_mail_list(int sort_t
 	return mail_list;
 }
 
-static email_mail_list_item_t *_mailbox_get_favourite_mail_list(int sort_type, int thread_id, const EmailSearchData *search_data, int *mail_count)
+static email_mail_list_item_t *_mailbox_get_favourite_mail_list(int sort_type, int thread_id, const email_search_data_t *search_data, int *mail_count)
 {
 	debug_log("sort_type: %d, thread_id: %d", sort_type, thread_id);
 
@@ -1487,7 +1487,7 @@ static email_mail_list_item_t *_mailbox_get_favourite_mail_list(int sort_type, i
 	return mail_list;
 }
 
-static int _get_filter_cnt_for_search_data(const EmailSearchData *search_data)
+static int _get_filter_cnt_for_search_data(const email_search_data_t *search_data)
 {
 	debug_enter();
 
@@ -1522,7 +1522,7 @@ static int _get_filter_cnt_for_search_data(const EmailSearchData *search_data)
 
 }
 
-static void _add_search_data_into_filter_list(const EmailSearchData *search_data, email_list_filter_t *filter_list, int *current_index)
+static void _add_search_data_into_filter_list(const email_search_data_t *search_data, email_list_filter_t *filter_list, int *current_index)
 {
 	debug_enter();
 
@@ -1625,7 +1625,7 @@ static void _add_search_data_into_filter_list(const EmailSearchData *search_data
 	debug_leave();
 }
 
-static void _make_sorting_rule_list(EmailSortType sort_type, int account_id, email_list_sorting_rule_t *sorting_rule_list)
+static void _make_sorting_rule_list(email_sort_type_e sort_type, int account_id, email_list_sorting_rule_t *sorting_rule_list)
 {
 	debug_enter();
 
@@ -1738,7 +1738,7 @@ static void _make_sorting_rule_list(EmailSortType sort_type, int account_id, ema
 	}
 }
 
-static void _mailbox_make_list(EmailMailboxUGD *mailbox_ugd, const EmailSearchData *search_data)
+static void _mailbox_make_list(EmailMailboxUGD *mailbox_ugd, const email_search_data_t *search_data)
 {
 	debug_enter();
 
@@ -1813,12 +1813,12 @@ static void _mailbox_make_list(EmailMailboxUGD *mailbox_ugd, const EmailSearchDa
 	debug_leave();
 }
 
-static void _mailbox_make_remaining_items(EmailMailboxUGD *mailbox_ugd, const EmailSearchData *search_data,
+static void _mailbox_make_remaining_items(EmailMailboxUGD *mailbox_ugd, const email_search_data_t *search_data,
 		email_mail_list_item_t *mail_list, int mail_count)
 {
 	debug_enter();
 
-	EmailSearchData *search_data_clone = NULL;
+	email_search_data_t *search_data_clone = NULL;
 	AddRemainingMailReqData *req = NULL;
 
 	while (true) {
@@ -1907,12 +1907,12 @@ static void _mailbox_free_req_data(AddRemainingMailReqData **req)
 	}
 }
 
-static EmailSearchData *_clone_search_data(const EmailSearchData *search_data)
+static email_search_data_t *_clone_search_data(const email_search_data_t *search_data)
 {
 	debug_enter();
 	retvm_if(!search_data, NULL, "search_data is NULL");
 
-	EmailSearchData *search_data_clone = calloc(1, sizeof(EmailSearchData));
+	email_search_data_t *search_data_clone = calloc(1, sizeof(email_search_data_t));
 	retvm_if(!search_data_clone, NULL, "search_data_clone memory alloc failed");
 
 	if (search_data->body_text)
@@ -1926,7 +1926,6 @@ static EmailSearchData *_clone_search_data(const EmailSearchData *search_data)
 
 	search_data_clone->from_time = search_data->from_time;
 	search_data_clone->to_time = search_data->to_time;
-	search_data_clone->server_item = search_data->server_item;
 
 	return search_data_clone;
 }
@@ -2056,7 +2055,7 @@ static void _mailbox_get_recipient_display_information(const gchar *addr_list, c
 
 }
 
-static void _mailbox_list_insert_n_mails(EmailMailboxUGD *mailbox_ugd, email_mail_list_item_t *mail_list, int count, const EmailSearchData *search_data)
+static void _mailbox_list_insert_n_mails(EmailMailboxUGD *mailbox_ugd, email_mail_list_item_t *mail_list, int count, const email_search_data_t *search_data)
 {
 	debug_enter();
 	retm_if(!mailbox_ugd, "mailbox_ugd is NULL");
@@ -2160,7 +2159,7 @@ void mailbox_list_system_settings_callback_unregister()
 		debug_error("email_unregister_accessibility_font_size_changed_callback failed");
 }
 
-void mailbox_list_refresh(EmailMailboxUGD *mailbox_ugd, const EmailSearchData *search_data)
+void mailbox_list_refresh(EmailMailboxUGD *mailbox_ugd, const email_search_data_t *search_data)
 {
 	debug_enter();
 	_mailbox_clear_list(mailbox_ugd);
@@ -2238,7 +2237,7 @@ void mailbox_list_remove_mail_item(EmailMailboxUGD *mailbox_ugd, MailItemData *l
 	mailbox_list_free_mail_item_data(ld);
 }
 
-MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t *mail_info, const EmailSearchData *search_data, EmailMailboxUGD *mailbox_ugd)
+MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t *mail_info, const email_search_data_t *search_data, EmailMailboxUGD *mailbox_ugd)
 {
 	retvm_if(!mail_info, NULL, "mail_info is NULL");
 
@@ -2704,7 +2703,7 @@ bool mailbox_check_searched_mail(int mail_id, void *data)
 
 	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
 
-	EmailSearchData *search_data = mailbox_make_search_data(mailbox_ugd);
+	email_search_data_t *search_data = mailbox_make_search_data(mailbox_ugd);
 
 	if (search_data)
 		cnt_filter_list += _get_filter_cnt_for_search_data(search_data);

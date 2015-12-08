@@ -37,9 +37,9 @@ static char *_gl_text_get_cb(void *data, Evas_Object *obj, const char *part);
 static Evas_Object *_gl_content_get_cb(void *data, Evas_Object *obj, const char *part);
 static void _gl_sel_cb(void *data, Evas_Object *obj, void *event_info);
 
-static email_setting_string_t EMAIL_SETTING_STRING_SHOW_SIGNATURE = {PACKAGE, "IDS_EMAIL_MBODY_DISPLAY_SIGNATURE"};
-static email_setting_string_t EMAIL_SETTING_STRING_EDIT_SIGNATURE = {PACKAGE, "IDS_EMAIL_MBODY_EDIT_SIGNATURE"};
-static email_setting_string_t EMAIL_SETTING_STRING_SIGNATURE = {PACKAGE, "IDS_EMAIL_MBODY_SIGNATURE"};
+static email_string_t EMAIL_SETTING_STRING_SHOW_SIGNATURE = {PACKAGE, "IDS_EMAIL_MBODY_DISPLAY_SIGNATURE"};
+static email_string_t EMAIL_SETTING_STRING_EDIT_SIGNATURE = {PACKAGE, "IDS_EMAIL_MBODY_EDIT_SIGNATURE"};
+static email_string_t EMAIL_SETTING_STRING_SIGNATURE = {PACKAGE, "IDS_EMAIL_MBODY_SIGNATURE"};
 
 enum {
 	EMAIL_SETTING_SHOW_SIGNATURE = -1000,

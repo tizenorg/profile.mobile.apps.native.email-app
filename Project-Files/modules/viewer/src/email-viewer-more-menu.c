@@ -273,7 +273,7 @@ void viewer_create_more_ctxpopup(EmailViewerUGD *ug_data)
 	}
 
 	if (mail_info != NULL && mail_info->save_status != EMAIL_MAIL_STATUS_SENDING && mail_info->save_status != EMAIL_MAIL_STATUS_SEND_WAIT) {
-		EMAIL_CONTACT_LIST_INFO_S *contact_list_item = email_contact_search_by_email(ug_data, ug_data->sender_address);
+		email_contact_list_info_t *contact_list_item = email_contact_search_by_email(ug_data, ug_data->sender_address);
 			if (contact_list_item) {
 				debug_log("Sender address is listed in contacts DB, person ID:%d", contact_list_item->person_id);
 				int index = contact_list_item->person_id;;

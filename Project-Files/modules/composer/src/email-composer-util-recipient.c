@@ -204,7 +204,7 @@ void composer_util_recp_clear_mbe(Evas_Object *obj)
 	debug_leave();
 }
 
-void composer_util_recp_delete_contact_item(EMAIL_CONTACT_LIST_INFO_S *contact_item)
+void composer_util_recp_delete_contact_item(email_contact_list_info_t *contact_item)
 {
 	if (contact_item) {
 		g_free(contact_item->display);
@@ -221,7 +221,7 @@ void composer_util_recp_delete_contacts_list(Eina_List *list)
 	retm_if(!list, "Invalid parameter: list is NULL!");
 
 	Eina_List *l = NULL;
-	EMAIL_CONTACT_LIST_INFO_S *item = NULL;
+	email_contact_list_info_t *item = NULL;
 
 	EINA_LIST_FOREACH(list, l, item) {
 		composer_util_recp_delete_contact_item(item);
@@ -236,13 +236,13 @@ void *composer_util_recp_search_contact_by_id(EmailComposerUGD *ugd, int search_
 	debug_enter();
 
 	int ret = CONTACTS_ERROR_NONE;
-	EMAIL_CONTACT_LIST_INFO_S *contacts_list_item = NULL;
+	email_contact_list_info_t *contacts_list_item = NULL;
 	contacts_list_h list = NULL;
 
 	ret = email_get_contacts_list_int(CONTACTS_MATCH_EQUAL, &list, search_id);
 	retvm_if(!list, NULL, "list is NULL!");
 
-	contacts_list_item = (EMAIL_CONTACT_LIST_INFO_S *)calloc(1, sizeof(EMAIL_CONTACT_LIST_INFO_S));
+	contacts_list_item = (email_contact_list_info_t *)calloc(1, sizeof(email_contact_list_info_t));
 	if (!contacts_list_item) {
 		debug_error("memory allocation failed");
 		contacts_list_destroy(list, EINA_TRUE);
@@ -270,13 +270,13 @@ void *composer_util_recp_search_contact_by_email(EmailComposerUGD *ugd, const ch
 	debug_enter();
 
 	int ret = CONTACTS_ERROR_NONE;
-	EMAIL_CONTACT_LIST_INFO_S *contacts_list_item = NULL;
+	email_contact_list_info_t *contacts_list_item = NULL;
 	contacts_list_h list = NULL;
 
 	ret = email_get_contacts_list(CONTACTS_MATCH_FULLSTRING, &list, search_word, EMAIL_SEARCH_CONTACT_BY_EMAIL);
 	retvm_if(!list, NULL, "list is NULL!");
 
-	contacts_list_item = (EMAIL_CONTACT_LIST_INFO_S *)calloc(1, sizeof(EMAIL_CONTACT_LIST_INFO_S));
+	contacts_list_item = (email_contact_list_info_t *)calloc(1, sizeof(email_contact_list_info_t));
 	if (!contacts_list_item) {
 		debug_error("memory allocation failed");
 		contacts_list_destroy(list, EINA_TRUE);
@@ -380,7 +380,7 @@ EmailRecpInfo *composer_util_recp_make_recipient_info(void *data, const char *em
 	snprintf(ai->address, sizeof(ai->address), "%s", addr);
 	ri->email_list = eina_list_append(ri->email_list, ai);
 
-	EMAIL_CONTACT_LIST_INFO_S *contact_list_item = (EMAIL_CONTACT_LIST_INFO_S *)composer_util_recp_search_contact_by_email(ugd, ai->address);
+	email_contact_list_info_t *contact_list_item = (email_contact_list_info_t *)composer_util_recp_search_contact_by_email(ugd, ai->address);
 	if (contact_list_item) {
 		if (!ri->display_name) {
 			ri->display_name = g_strdup(contact_list_item->display_name);

@@ -51,7 +51,7 @@ EMAIL_API int email_get_contacts_list_int(contacts_match_int_flag_e match, conta
 	return ct_ret;
 }
 
-EMAIL_API int email_get_contacts_list(contacts_match_str_flag_e match, contacts_list_h *list, const char *search_word, EmailContactSearchType search_type)
+EMAIL_API int email_get_contacts_list(contacts_match_str_flag_e match, contacts_list_h *list, const char *search_word, email_contact_search_type_e search_type)
 {
 	debug_enter();
 	int ct_ret = CONTACTS_ERROR_NONE;
@@ -133,7 +133,7 @@ EMAIL_API int email_get_contacts_last_name(contacts_record_h record, char **last
 	return ct_ret;
 }
 
-EMAIL_API int email_get_contacts_list_info(contacts_list_h list, EMAIL_CONTACT_LIST_INFO_S *ct_list_info)
+EMAIL_API int email_get_contacts_list_info(contacts_list_h list, email_contact_list_info_t *ct_list_info)
 {
 	debug_enter();
 	int index = 0;
@@ -265,7 +265,7 @@ EMAIL_API int email_get_phone_log(contacts_match_str_flag_e match, contacts_list
 	return ct_ret;
 }
 
-EMAIL_API int email_get_phone_log_info(contacts_list_h list, EMAIL_CONTACT_LIST_INFO_S *ct_list_info)
+EMAIL_API int email_get_phone_log_info(contacts_list_h list, email_contact_list_info_t *ct_list_info)
 {
 	debug_enter();
 	int ct_ret = CONTACTS_ERROR_NONE;
@@ -306,7 +306,7 @@ EMAIL_API void *email_contact_search_by_email(void *ug_data, const char *search_
 	debug_enter();
 	retvm_if(ug_data == NULL, NULL, "Invalid parameter: ug_data[NULL]");
 	int ct_ret = CONTACTS_ERROR_NONE;
-	EMAIL_CONTACT_LIST_INFO_S *contacts_list_item = NULL;
+	email_contact_list_info_t *contacts_list_item = NULL;
 	contacts_list_h list = NULL;
 
 	ct_ret = email_get_contacts_list(CONTACTS_MATCH_FULLSTRING, &list, search_word, EMAIL_SEARCH_CONTACT_BY_EMAIL);
@@ -335,7 +335,7 @@ EMAIL_API void *email_contact_search_by_email(void *ug_data, const char *search_
 	return contacts_list_item;
 }
 
-EMAIL_API void email_delete_contacts_list(EMAIL_CONTACT_LIST_INFO_S **contacts_list_item)
+EMAIL_API void email_delete_contacts_list(email_contact_list_info_t **contacts_list_item)
 {
 	debug_enter();
 	retm_if(!contacts_list_item || !*contacts_list_item, "Invalid parameter: contacts_list_item[NULL]");

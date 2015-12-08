@@ -43,12 +43,12 @@ static char *_get_filter_address_by_id(int id);
 static int _get_field_validation(EmailFilterVD *vd);
 static void _done_key_disabled_set(EmailFilterVD *vd, Eina_Bool disabled);
 
-static email_filter_string_t EMAIL_FILTER_STRING_ALREADY_ADDED = {PACKAGE, "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ALREADY_ADDED_TO_PRIORITY_SENDERS"};
-static email_filter_string_t EMAIL_FILTER_STRING_EMAIL_ADDRESS = {PACKAGE, "IDS_EMAIL_BODY_EMAIL_ADDRESS"};
-static email_filter_string_t EMAIL_SETTING_STRING_ADD_PRIORITY_SENDER = {PACKAGE, "IDS_EMAIL_OPT_ADD"};
-static email_filter_string_t EMAIL_SETTING_STRING_EDIT_PRIORITY_SENDER = {PACKAGE, "IDS_EMAIL_OPT_EDIT"};
-static email_filter_string_t EMAIL_FILTER_STRING_DONE_TITLE_BTN = {PACKAGE, "IDS_TPLATFORM_ACBUTTON_DONE_ABB"};
-static email_filter_string_t EMAIL_FILTER_STRING_CANCEL_TITLE_BTN = {PACKAGE, "IDS_TPLATFORM_ACBUTTON_CANCEL_ABB"};
+static email_string_t EMAIL_FILTER_STRING_ALREADY_ADDED = {PACKAGE, "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ALREADY_ADDED_TO_PRIORITY_SENDERS"};
+static email_string_t EMAIL_FILTER_STRING_EMAIL_ADDRESS = {PACKAGE, "IDS_EMAIL_BODY_EMAIL_ADDRESS"};
+static email_string_t EMAIL_SETTING_STRING_ADD_PRIORITY_SENDER = {PACKAGE, "IDS_EMAIL_OPT_ADD"};
+static email_string_t EMAIL_SETTING_STRING_EDIT_PRIORITY_SENDER = {PACKAGE, "IDS_EMAIL_OPT_EDIT"};
+static email_string_t EMAIL_FILTER_STRING_DONE_TITLE_BTN = {PACKAGE, "IDS_TPLATFORM_ACBUTTON_DONE_ABB"};
+static email_string_t EMAIL_FILTER_STRING_CANCEL_TITLE_BTN = {PACKAGE, "IDS_TPLATFORM_ACBUTTON_CANCEL_ABB"};
 
 /* Internal structure */
 struct _EmailFilterEditVD {
@@ -127,7 +127,7 @@ static int _create(email_view_t *self)
 	vd->genlist = genlist = _create_list(vd);
 	elm_object_part_content_set(layout, "elm.swallow.content", genlist);
 
-	email_filter_string_t *title = NULL;
+	email_string_t *title = NULL;
 	if (vd->mode == FILTER_EDIT_VIEW_MODE_ADD_NEW) {
 		title = &EMAIL_SETTING_STRING_ADD_PRIORITY_SENDER;
 	} else {

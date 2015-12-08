@@ -80,8 +80,8 @@ enum EXIF_ORIENTATION {
  *
  * @return Evas_Object instance with suitable popup, otherwise NULL
  */
-Evas_Object *composer_util_popup_create(EmailComposerUGD *ugd, EmailCommonStringType t_title, EmailCommonStringType t_content, Evas_Smart_Cb response_cb,
-                                        EmailCommonStringType t_btn1_lb, EmailCommonStringType t_btn2_lb, EmailCommonStringType t_btn3_lb);
+Evas_Object *composer_util_popup_create(EmailComposerUGD *ugd, email_string_t t_title, email_string_t t_content, Evas_Smart_Cb response_cb,
+                                        email_string_t t_btn1_lb, email_string_t t_btn2_lb, email_string_t t_btn3_lb);
 
 /**
  * @brief Create horizontal progress popup composers utility
@@ -96,8 +96,8 @@ Evas_Object *composer_util_popup_create(EmailComposerUGD *ugd, EmailCommonString
  *
  * @return Evas_Object instance with suitable popup, otherwise NULL
  */
-Evas_Object *composer_util_popup_create_with_progress_horizontal(EmailComposerUGD *ugd, EmailCommonStringType t_title, EmailCommonStringType t_content, Evas_Smart_Cb response_cb,
-																EmailCommonStringType t_btn1_lb, EmailCommonStringType t_btn2_lb, EmailCommonStringType t_btn3_lb);
+Evas_Object *composer_util_popup_create_with_progress_horizontal(EmailComposerUGD *ugd, email_string_t t_title, email_string_t t_content, Evas_Smart_Cb response_cb,
+																email_string_t t_btn1_lb, email_string_t t_btn2_lb, email_string_t t_btn3_lb);
 
 /**
  * @brief Callback popup response
@@ -131,7 +131,7 @@ void composer_util_popup_resize_popup_for_rotation(Evas_Object *popup, Eina_Bool
  *
  */
 void composer_util_popup_create_account_list_popup(void *data, Evas_Smart_Cb response_cb, Evas_Smart_Cb selected_cb, const char *style,
-													EmailCommonStringType t_title, EmailCommonStringType t_btn1_lb, EmailCommonStringType t_btn2_lb);
+													email_string_t t_title, email_string_t t_btn1_lb, email_string_t t_btn2_lb);
 
 /**
  * @brief Provides translation for popup
@@ -298,7 +298,7 @@ void composer_util_recp_clear_mbe(Evas_Object *obj);
  * @param[in]	contact_item		Email contact list info data
  *
  */
-void composer_util_recp_delete_contact_item(EMAIL_CONTACT_LIST_INFO_S *contact_item);
+void composer_util_recp_delete_contact_item(email_contact_list_info_t *contact_item);
 
 /**
  * @brief Clear/free email contact list info data from contacts list

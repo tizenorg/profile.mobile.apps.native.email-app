@@ -46,13 +46,13 @@ static void _check_changed_cb(void *data, Evas_Object *obj, void *event_info);
 static void _show_selected_item_count(EmailFilterVD *vd);
 static void _cancel_cb(void *data, Evas_Object *obj, void *event_info);
 
-static email_filter_string_t EMAIL_FILTER_STRING_NO_PRIORITY_SENDERS = {PACKAGE, "IDS_EMAIL_NPBODY_NO_PRIORITY_SENDERS"};
-static email_filter_string_t EMAIL_FILTER_STRING_REMOVED_ONE_PRIORITY_SENDERS = {PACKAGE, "IDS_EMAIL_TPOP_1_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"};
-static email_filter_string_t EMAIL_FILTER_STRING_REMOVED_MORE_PRIORITY_SENDERS = {PACKAGE, "IDS_EMAIL_TPOP_PD_EMAIL_ADDRESSES_REMOVED_FROM_PRIORITY_SENDERS"};
-static email_filter_string_t EMAIL_FILTER_STRING_SELECT_ALL = {PACKAGE, "IDS_EMAIL_HEADER_SELECT_ALL_ABB"};
-static email_filter_string_t EMAIL_FILTER_STRING_SELECTED = {PACKAGE, "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"};
-static email_filter_string_t EMAIL_FILTER_STRING_DONE_TITLE_BTN = {PACKAGE, "IDS_TPLATFORM_ACBUTTON_DONE_ABB"};
-static email_filter_string_t EMAIL_FILTER_STRING_CANCEL_TITLE_BTN = {PACKAGE, "IDS_TPLATFORM_ACBUTTON_CANCEL_ABB"};
+static email_string_t EMAIL_FILTER_STRING_NO_PRIORITY_SENDERS = {PACKAGE, "IDS_EMAIL_NPBODY_NO_PRIORITY_SENDERS"};
+static email_string_t EMAIL_FILTER_STRING_REMOVED_ONE_PRIORITY_SENDERS = {PACKAGE, "IDS_EMAIL_TPOP_1_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"};
+static email_string_t EMAIL_FILTER_STRING_REMOVED_MORE_PRIORITY_SENDERS = {PACKAGE, "IDS_EMAIL_TPOP_PD_EMAIL_ADDRESSES_REMOVED_FROM_PRIORITY_SENDERS"};
+static email_string_t EMAIL_FILTER_STRING_SELECT_ALL = {PACKAGE, "IDS_EMAIL_HEADER_SELECT_ALL_ABB"};
+static email_string_t EMAIL_FILTER_STRING_SELECTED = {PACKAGE, "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"};
+static email_string_t EMAIL_FILTER_STRING_DONE_TITLE_BTN = {PACKAGE, "IDS_TPLATFORM_ACBUTTON_DONE_ABB"};
+static email_string_t EMAIL_FILTER_STRING_CANCEL_TITLE_BTN = {PACKAGE, "IDS_TPLATFORM_ACBUTTON_CANCEL_ABB"};
 
 /* Internal structure */
 struct _EmailFilterDeleteVD {
@@ -298,7 +298,7 @@ static void _delete_filter_cb(void *data, Evas_Object *obj, void *event_info)
 	if (count > 1) {
 		char str[255] = {0, };
 		snprintf(str, sizeof(str), dgettext(EMAIL_FILTER_STRING_REMOVED_MORE_PRIORITY_SENDERS.domain, EMAIL_FILTER_STRING_REMOVED_MORE_PRIORITY_SENDERS.id), count);
-		email_filter_string_t EMAIL_FILTER_STRING_REMOVED_PRIORITY_SENDERS = {PACKAGE, str};
+		email_string_t EMAIL_FILTER_STRING_REMOVED_PRIORITY_SENDERS = {PACKAGE, str};
 		ret = notification_status_message_post(email_get_email_string(EMAIL_FILTER_STRING_REMOVED_PRIORITY_SENDERS.id));
 	} else {
 		ret = notification_status_message_post(email_get_email_string(EMAIL_FILTER_STRING_REMOVED_ONE_PRIORITY_SENDERS.id));

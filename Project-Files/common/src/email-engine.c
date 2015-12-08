@@ -500,7 +500,7 @@ EMAIL_API void email_engine_free_mailbox_list(GList **list)
 	gint i = 0;
 
 	LIST_ITER_START(i, mailbox_list) {
-		EmailMailboxListInfo *info = (EmailMailboxListInfo *) LIST_ITER_GET_DATA(i, mailbox_list);
+		email_mailbox_list_info_t *info = (email_mailbox_list_info_t *) LIST_ITER_GET_DATA(i, mailbox_list);
 		if (info) {
 			if (info->name) {
 				g_free(info->name);
@@ -529,13 +529,13 @@ EMAIL_API void email_engine_free_mailbox_list(GList **list)
 	}
 }
 
-EMAIL_API EmailMailboxListInfo *email_engine_get_mailbox_info(gint account_id, const gchar *folder_name)
+EMAIL_API email_mailbox_list_info_t *email_engine_get_mailbox_info(gint account_id, const gchar *folder_name)
 {
 	debug_enter();
 	RETURN_VAL_IF_FAIL(account_id > ACCOUNT_MIN, NULL);
 	RETURN_VAL_IF_FAIL(STR_VALID(folder_name), NULL);
 
-	EmailMailboxListInfo *info = NULL;
+	email_mailbox_list_info_t *info = NULL;
 	email_mailbox_t *mailbox_list = NULL;
 	int err = 0;
 	int count = 0;
@@ -560,7 +560,7 @@ EMAIL_API EmailMailboxListInfo *email_engine_get_mailbox_info(gint account_id, c
 
 		if (STR_CMP(mailbox_list[i].mailbox_name, folder_name)) {
 
-			info = g_new0(EmailMailboxListInfo, 1);
+			info = g_new0(email_mailbox_list_info_t, 1);
 
 			if (info != NULL) {
 				if (STR_VALID(mailbox_list[i].mailbox_name)) {
@@ -608,12 +608,12 @@ error:
 	return info;
 }
 
-EMAIL_API void email_engine_free_mailbox_info(EmailMailboxListInfo **info)
+EMAIL_API void email_engine_free_mailbox_info(email_mailbox_list_info_t **info)
 {
 	debug_enter();
 	RETURN_IF_FAIL(*info != NULL);
 
-	EmailMailboxListInfo *d = (*info);
+	email_mailbox_list_info_t *d = (*info);
 
 	if (d != NULL) {
 		if (d->name) {
@@ -642,9 +642,9 @@ EMAIL_API void email_engine_free_mail_list(GList **list)
 	RETURN_IF_FAIL(list != NULL);
 
 	GList *cur = g_list_first(*list);
-	EmailMailboxInfo *item = NULL;
+	email_mailbox_info_t *item = NULL;
 	while (cur) {
-		item = (EmailMailboxInfo *) g_list_nth_data(cur, 0);
+		item = (email_mailbox_info_t *) g_list_nth_data(cur, 0);
 		FREE(item);
 		cur = g_list_next(cur);
 	}
@@ -1258,14 +1258,14 @@ error:
 	return attachment_path;
 }
 
-EMAIL_API gboolean email_engine_get_account_info(gint account_id, EmailAccountInfo **account_info)
+EMAIL_API gboolean email_engine_get_account_info(gint account_id, email_account_info_t **account_info)
 {
 	debug_enter();
 	RETURN_VAL_IF_FAIL(account_id > ACCOUNT_MIN, FALSE);
 
 	(*account_info) = NULL;
 
-	EmailAccountInfo *info = (EmailAccountInfo *) calloc(1, sizeof(EmailAccountInfo));
+	email_account_info_t *info = (email_account_info_t *) calloc(1, sizeof(email_account_info_t));
 
 	if (info == NULL) {
 		debug_critical("failed to memory allocation");
@@ -1346,7 +1346,7 @@ error:
 	return FALSE;
 }
 
-EMAIL_API gboolean email_engine_set_account_info(gint account_id, EmailAccountInfo *account_info)
+EMAIL_API gboolean email_engine_set_account_info(gint account_id, email_account_info_t *account_info)
 {
 	debug_enter();
 	RETURN_VAL_IF_FAIL(account_id > ACCOUNT_MIN, FALSE);
@@ -1434,12 +1434,12 @@ EMAIL_API gboolean email_engine_set_account_info(gint account_id, EmailAccountIn
 	return TRUE;
 }
 
-EMAIL_API void email_engine_free_account_info(EmailAccountInfo **account_info)
+EMAIL_API void email_engine_free_account_info(email_account_info_t **account_info)
 {
 	debug_enter();
 	RETURN_IF_FAIL(*account_info != NULL);
 
-	EmailAccountInfo *info = (*account_info);
+	email_account_info_t *info = (*account_info);
 
 	if (STR_VALID(info->account_name)) {
 		free(info->account_name);
@@ -1508,7 +1508,7 @@ EMAIL_API GList *email_engine_get_ca_mailbox_list_using_glist(int account_id)
 	*/
 
 	for (i = 0; i < count; i++) {
-		EmailMailboxNameAndAlias *nameandalias = calloc(1, sizeof(EmailMailboxNameAndAlias));
+		email_mailbox_name_and_alias_t *nameandalias = calloc(1, sizeof(email_mailbox_name_and_alias_t));
 		if (mailbox_list[i].mailbox_name == NULL) {
 			debug_critical("mailbox_list[%d].name is null", i);
 			free(nameandalias);
@@ -1554,7 +1554,7 @@ EMAIL_API void email_engine_free_ca_mailbox_list_using_glist(GList **mailbox_lis
 	int i = 0;
 
 	for (i = 0; i < list_cnt; i++) {
-		EmailMailboxNameAndAlias *nameandalias = (EmailMailboxNameAndAlias *) g_list_nth_data(list, i);
+		email_mailbox_name_and_alias_t *nameandalias = (email_mailbox_name_and_alias_t *) g_list_nth_data(list, i);
 		if (nameandalias == NULL) {
 			debug_warning("nameandalias is NULL");
 		} else {
@@ -1626,7 +1626,7 @@ EMAIL_API GList *email_engine_get_mail_list_data(email_mail_list_item_t *mailbox
 	int i = 0;
 
 	for (i = 0; i < mail_count; ++i) {
-		EmailMailboxInfo *mailbox_info = g_new0(EmailMailboxInfo, 1);
+		email_mailbox_info_t *mailbox_info = g_new0(email_mailbox_info_t, 1);
 
 		/* uid. */
 		mailbox_info->uid = mailbox_data[i].mail_id;

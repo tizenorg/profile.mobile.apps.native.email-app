@@ -19,7 +19,7 @@
 #define _email_filter_H_
 
 #undef LOG_TAG
-#define LOG_TAG "EMAIL_SETTING"
+#define LOG_TAG "EMAIL_FILTER"
 
 #include <Elementary.h>
 #include <glib.h>
@@ -33,15 +33,6 @@
 #include "email-module-dev.h"
 
 #define _EDJ(o) elm_layout_edje_get(o)
-
-/**
- * @brief Localized string resource data which contains string domain and string id
- *
- */
-typedef struct _email_filter_string_t {
-	const char *domain;
-	const char *id;
-} email_filter_string_t;
 
 /**
  * @brief Email Filter supported operations enumeration
@@ -77,14 +68,13 @@ typedef struct ug_data
 	FilterOperationType op_type;
 
 	char *param_filter_addr;
-	char *param_filter_subject;
 
 	/* base layout variable */
 	Evas_Object *more_btn;
 
 	/* keypad management variables*/
-	int is_keypad;
-	int is_conformant;
+	Eina_Bool is_keypad;
+	Eina_Bool is_conformant;
 
 } EmailFilterUGD;
 

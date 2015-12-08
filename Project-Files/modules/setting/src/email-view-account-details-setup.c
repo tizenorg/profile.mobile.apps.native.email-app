@@ -82,29 +82,29 @@ static void _gl_ex_sync_radio_cb(void *data, Evas_Object *obj, void *event_info)
 #define SYNC_SCHEDULE_ITEM_COUNT 8
 static int sync_schedule[SYNC_SCHEDULE_ITEM_COUNT] = { 0, -1, 10, 30, 60, 180, 360, 1440 };
 
-static email_setting_string_t EMAIL_SETTING_STRING_SYNC_SETTINGS = {PACKAGE, "IDS_EMAIL_TMBODY_SYNC_SETTINGS"};
-static email_setting_string_t EMAIL_SETTING_STRING_CANCEL = {PACKAGE, "IDS_EMAIL_BUTTON_CANCEL"};
-static email_setting_string_t EMAIL_SETTING_STRING_OK = {PACKAGE, "IDS_EMAIL_BUTTON_OK"};
+static email_string_t EMAIL_SETTING_STRING_SYNC_SETTINGS = {PACKAGE, "IDS_EMAIL_TMBODY_SYNC_SETTINGS"};
+static email_string_t EMAIL_SETTING_STRING_CANCEL = {PACKAGE, "IDS_EMAIL_BUTTON_CANCEL"};
+static email_string_t EMAIL_SETTING_STRING_OK = {PACKAGE, "IDS_EMAIL_BUTTON_OK"};
 
-static email_setting_string_t EMAIL_SETTING_STRING_EMAIL = {PACKAGE, "IDS_ST_HEADER_EMAIL"};
-static email_setting_string_t EMAIL_SETTING_STRING_ACCOUNT_NAME = {PACKAGE, "IDS_ST_TMBODY_ACCOUNT_NAME"};
-static email_setting_string_t EMAIL_SETTING_STRING_SENDER_NAME = {PACKAGE, "IDS_ST_TMBODY_SENDER_NAME"};
-static email_setting_string_t EMAIL_SETTING_STRING_DONE = {PACKAGE, "IDS_EMAIL_BUTTON_DONE"};
-static email_setting_string_t EMAIL_SETTING_STRING_EMAIL_SYNC = {PACKAGE, "IDS_ST_MBODY_SYNC_EMAILS"};
-static email_setting_string_t EMAIL_SETTING_STRING_NOT_SYNCED_YET = {PACKAGE, "IDS_ST_SBODY_NOT_SYNCED_YET_M_STATUS"};
-static email_setting_string_t EMAIL_SETTING_STRING_WHILE_ROAMING = {PACKAGE, "IDS_ST_TMBODY_SYNC_WHILE_ROAMING"};
-static email_setting_string_t EMAIL_SETTING_STRING_EMAIL_SYNC_SCHEDULE = {PACKAGE, "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"};
-static email_setting_string_t EMAIL_SETTING_STRING_E_1H = {PACKAGE, "IDS_ST_OPT_EVERY_HOUR_ABB"};
-static email_setting_string_t EMAIL_SETTING_STRING_PUSH = {PACKAGE, "IDS_ST_OPT_PUSH"};
-static email_setting_string_t EMAIL_SETTING_STRING_EVERY_DAY = {PACKAGE, "IDS_ST_OPT_EVERY_DAY"};
-static email_setting_string_t EMAIL_SETTING_STRING_PD_H = {PACKAGE, "IDS_ST_OPT_EVERY_PD_HOURS_ABB2"};
-static email_setting_string_t EMAIL_SETTING_STRING_PD_MIN = {PACKAGE, "IDS_ST_OPT_EVERY_PD_MINUTES_ABB"};
-static email_setting_string_t EMAIL_SETTING_STRING_MANUAL = {PACKAGE, "IDS_ST_OPT_MANUAL"};
-static email_setting_string_t EMAIL_SETTING_STRING_USE_ABOVE_SETTINGS = {PACKAGE, "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"};
-static email_setting_string_t EMAIL_SETTING_STRING_WARNING = {PACKAGE, "IDS_ST_HEADER_WARNING"};
-static email_setting_string_t EMAIL_SETTING_STRING_ALREADY_EXIST = {PACKAGE, "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"};
-static email_setting_string_t EMAIL_SETTING_STRING_UNABLE_TO_ADD_ACCOUNT = {PACKAGE, "IDS_ST_HEADER_UNABLE_TO_ADD_ACCOUNT_ABB"};
-static email_setting_string_t EMAIL_SETTING_STRING_PROCESSING = {PACKAGE, "IDS_ST_SBODY_PROCESSING_PLEASE_WAIT_ING_ABB"};
+static email_string_t EMAIL_SETTING_STRING_EMAIL = {PACKAGE, "IDS_ST_HEADER_EMAIL"};
+static email_string_t EMAIL_SETTING_STRING_ACCOUNT_NAME = {PACKAGE, "IDS_ST_TMBODY_ACCOUNT_NAME"};
+static email_string_t EMAIL_SETTING_STRING_SENDER_NAME = {PACKAGE, "IDS_ST_TMBODY_SENDER_NAME"};
+static email_string_t EMAIL_SETTING_STRING_DONE = {PACKAGE, "IDS_EMAIL_BUTTON_DONE"};
+static email_string_t EMAIL_SETTING_STRING_EMAIL_SYNC = {PACKAGE, "IDS_ST_MBODY_SYNC_EMAILS"};
+static email_string_t EMAIL_SETTING_STRING_NOT_SYNCED_YET = {PACKAGE, "IDS_ST_SBODY_NOT_SYNCED_YET_M_STATUS"};
+static email_string_t EMAIL_SETTING_STRING_WHILE_ROAMING = {PACKAGE, "IDS_ST_TMBODY_SYNC_WHILE_ROAMING"};
+static email_string_t EMAIL_SETTING_STRING_EMAIL_SYNC_SCHEDULE = {PACKAGE, "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"};
+static email_string_t EMAIL_SETTING_STRING_E_1H = {PACKAGE, "IDS_ST_OPT_EVERY_HOUR_ABB"};
+static email_string_t EMAIL_SETTING_STRING_PUSH = {PACKAGE, "IDS_ST_OPT_PUSH"};
+static email_string_t EMAIL_SETTING_STRING_EVERY_DAY = {PACKAGE, "IDS_ST_OPT_EVERY_DAY"};
+static email_string_t EMAIL_SETTING_STRING_PD_H = {PACKAGE, "IDS_ST_OPT_EVERY_PD_HOURS_ABB2"};
+static email_string_t EMAIL_SETTING_STRING_PD_MIN = {PACKAGE, "IDS_ST_OPT_EVERY_PD_MINUTES_ABB"};
+static email_string_t EMAIL_SETTING_STRING_MANUAL = {PACKAGE, "IDS_ST_OPT_MANUAL"};
+static email_string_t EMAIL_SETTING_STRING_USE_ABOVE_SETTINGS = {PACKAGE, "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"};
+static email_string_t EMAIL_SETTING_STRING_WARNING = {PACKAGE, "IDS_ST_HEADER_WARNING"};
+static email_string_t EMAIL_SETTING_STRING_ALREADY_EXIST = {PACKAGE, "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"};
+static email_string_t EMAIL_SETTING_STRING_UNABLE_TO_ADD_ACCOUNT = {PACKAGE, "IDS_ST_HEADER_UNABLE_TO_ADD_ACCOUNT_ABB"};
+static email_string_t EMAIL_SETTING_STRING_PROCESSING = {PACKAGE, "IDS_ST_SBODY_PROCESSING_PLEASE_WAIT_ING_ABB"};
 
 enum {
 	ACCOUNT_NAME_LIST_ITEM = 1,
@@ -477,8 +477,8 @@ static void _save_cb(void *data, Evas_Object *obj, void *event_info)
 		} else {
 			debug_error("failed to adding account to email-service");
 			if (error_code != EMAIL_ERROR_NONE) {
-				const email_setting_string_t *type = setting_get_service_fail_type(error_code);
-				const email_setting_string_t *header = setting_get_service_fail_type_header(error_code);
+				const email_string_t *type = setting_get_service_fail_type(error_code);
+				const email_string_t *header = setting_get_service_fail_type_header(error_code);
 				ugd->popup = setting_get_notify(&vd->base,
 						header,
 						type,

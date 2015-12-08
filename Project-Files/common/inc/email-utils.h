@@ -319,12 +319,12 @@ typedef enum {
 	EMAIL_FILE_TYPE_ETC,
 	EMAIL_FILE_TYPE_UNSUPPORTED,
 	EMAIL_FILE_TYPE_MAX
-} EMAIL_FILE_TYPE;
+} email_file_type_e;
 
 typedef struct {
 	const char *mime;
-	EMAIL_FILE_TYPE type;
-} EmailFileTypeMIME;
+	email_file_type_e type;
+} email_file_type_mime_t;
 
 typedef enum {
 	EMAIL_NETWORK_STATUS_AVAILABLE = 0,
@@ -333,7 +333,7 @@ typedef enum {
 	EMAIL_NETWORK_STATUS_MOBILE_DATA_DISABLED = -3,
 	EMAIL_NETWORK_STATUS_ROAMING_OFF = -4,
 	EMAIL_NETWORK_STATUS_MOBILE_DATA_LIMIT_EXCEED = -5
-} EMAIL_NETWORK_STATUS;
+} email_network_status_e;
 
 /*
  * Exported functions.
@@ -370,10 +370,10 @@ EMAIL_API const char *email_get_mmc_storage_url();
 EMAIL_API void email_set_group_order(int i, bool hide);
 EMAIL_API bool email_get_group_order(int i);
 
-EMAIL_API EMAIL_NETWORK_STATUS email_get_network_state(void);
+EMAIL_API email_network_status_e email_get_network_state(void);
 
-EMAIL_API EMAIL_FILE_TYPE email_get_file_type_from_mime_type(const char *mime_type);
-EMAIL_API const char *email_get_icon_path_from_file_type(EMAIL_FILE_TYPE ftype);
+EMAIL_API email_file_type_e email_get_file_type_from_mime_type(const char *mime_type);
+EMAIL_API const char *email_get_icon_path_from_file_type(email_file_type_e ftype);
 
 EMAIL_API char *email_get_current_theme_name(void);
 
@@ -524,7 +524,7 @@ EMAIL_API bool email_params_get_str(app_control_h params, const char *key, char 
 EMAIL_API bool email_params_get_str_opt(app_control_h params, const char *key, char *result, int result_size);
 
 EMAIL_API int email_preview_attachment_file(email_module_t *module, const char *path, email_launched_app_listener_t *listener);
-EMAIL_API EmailExtSaveErrType email_prepare_temp_file_path(const int index,const char *tmp_root_dir, const char *src_file_path, char **dst_file_path);
+EMAIL_API email_ext_save_err_type_e email_prepare_temp_file_path(const int index,const char *tmp_root_dir, const char *src_file_path, char **dst_file_path);
 /*
  * Memory trace utility.
  */
@@ -563,10 +563,10 @@ EMAIL_API EmailExtSaveErrType email_prepare_temp_file_path(const int index,const
 typedef struct {
 	void *ug_data;
 	void *data;
-}EmailCommonTimerData;
+}email_common_timer_data_t;
 
 #define COMMON_GET_TIMER_DATA(tdata, type, name, data) \
-	EmailCommonTimerData *tdata = (EmailCommonTimerData *)data; \
+	email_common_timer_data_t *tdata = (email_common_timer_data_t *)data; \
 	type *name = tdata->ug_data
 
 G_END_DECLS

@@ -21,20 +21,20 @@
 #include "email-media-content.h"
 
 static int _media_content_destroy_filter(filter_h filter);
-static int _media_content_create_filter(filter_h *filter, email_condition_s *condition);
-static void _media_content_free_condition(email_condition_s **condition);
-static email_condition_s *_media_content_condition_create(char *condition);
+static int _media_content_create_filter(filter_h *filter, email_condition_t *condition);
+static void _media_content_free_condition(email_condition_t **condition);
+static email_condition_t *_media_content_condition_create(char *condition);
 
-static email_condition_s *_media_content_condition_create(char *condition)
+static email_condition_t *_media_content_condition_create(char *condition)
 {
 	debug_enter();
 
-	email_condition_s *filter = NULL;
+	email_condition_t *filter = NULL;
 
-	filter = (email_condition_s *)calloc(1, sizeof(email_condition_s));
+	filter = (email_condition_t *)calloc(1, sizeof(email_condition_t));
 	retvm_if(filter == NULL, NULL, "filter is NULL");
 
-	memset(filter, 0, sizeof(email_condition_s));
+	memset(filter, 0, sizeof(email_condition_t));
 
 	debug_secure("condition [%s]", condition);
 	filter->cond = condition;
@@ -47,7 +47,7 @@ static email_condition_s *_media_content_condition_create(char *condition)
 	return filter;
 }
 
-static void _media_content_free_condition(email_condition_s **condition)
+static void _media_content_free_condition(email_condition_t **condition)
 {
 	debug_enter();
 
@@ -60,7 +60,7 @@ static void _media_content_free_condition(email_condition_s **condition)
 	debug_leave();
 }
 
-static int _media_content_create_filter(filter_h *filter, email_condition_s *condition)
+static int _media_content_create_filter(filter_h *filter, email_condition_t *condition)
 {
 	debug_enter();
 
@@ -129,7 +129,7 @@ int email_media_content_data_get(void *data, char *condition, bool (*func) (medi
 {
 	debug_enter();
 
-	email_condition_s *temp_condition = NULL;
+	email_condition_t *temp_condition = NULL;
 	filter_h filter = NULL;
 	temp_condition = _media_content_condition_create(condition);
 
@@ -161,7 +161,7 @@ static bool _email_get_media_thumbnail_cb(media_info_h media, void *data)
 	debug_enter();
 
 	retvm_if(data == NULL, -1, "data is NULL");
-	email_media_data *tmp_data = (email_media_data *)data;
+	email_media_data_t *tmp_data = (email_media_data_t *)data;
 
 	media_info_clone(tmp_data->media, media);
 	media_info_get_thumbnail_path(media, &(tmp_data->thumb_path));
@@ -178,8 +178,8 @@ EMAIL_API int email_media_content_get_image_thumbnail(const char *file_path, cha
 
 	int error_code = 0;
 	int err = 0;
-	email_media_data tmp_data;
-	memset(&tmp_data, 0x00, sizeof(email_media_data));
+	email_media_data_t tmp_data;
+	memset(&tmp_data, 0x00, sizeof(email_media_data_t));
 	tmp_data.file_path = file_path;
 	media_info_h *media = (media_info_h *)calloc(1, sizeof(media_info_h));
 	tmp_data.media = media;

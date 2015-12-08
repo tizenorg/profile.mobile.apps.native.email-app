@@ -48,11 +48,11 @@ static void _attachment_ui_group_clicked_cb(void *data, Evas_Object *obj, const 
 static void _attachment_ui_group_update_icon(EmailComposerUGD *ugd);
 static void _attachment_ui_group_create_layout(EmailComposerUGD *ugd, Evas_Object *parent);
 
-static EmailCommonStringType EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
-static EmailCommonStringType EMAIL_COMPOSER_STRING_BUTTON_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
+static email_string_t EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
+static email_string_t EMAIL_COMPOSER_STRING_BUTTON_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
 
-static EmailCommonStringType EMAIL_COMPOSER_STRING_UNABLE_TO_OPEN_FILE = { PACKAGE, "IDS_EMAIL_HEADER_UNABLE_TO_OPEN_FILE_ABB" };
-static EmailCommonStringType EMAIL_COMPOSER_STRING_UNABLE_TO_DISPLAY_ATTACHMENT = { NULL, N_("Unable to display attachment.") };
+static email_string_t EMAIL_COMPOSER_STRING_UNABLE_TO_OPEN_FILE = { PACKAGE, "IDS_EMAIL_HEADER_UNABLE_TO_OPEN_FILE_ABB" };
+static email_string_t EMAIL_COMPOSER_STRING_UNABLE_TO_DISPLAY_ATTACHMENT = { NULL, N_("Unable to display attachment.") };
 
 /*
  * Definition for static functions
@@ -248,7 +248,7 @@ static Evas_Object *_attachment_thumbnail_create_thumbnail(EmailComposerUGD *ugd
 
 	char *mime_type = NULL;
 	char *thumb_path = NULL;
-	EMAIL_FILE_TYPE ftype = EMAIL_FILE_TYPE_ETC;
+	email_file_type_e ftype = EMAIL_FILE_TYPE_ETC;
 	Evas_Object *icon = evas_object_image_filled_add(evas_object_evas_get(parent));
 
 	debug_secure("filename: (%s)", filename);

@@ -119,7 +119,7 @@ struct ug_data {
 	char *recipient_name;
 	char *selected_address;
 	char *selected_name;
-	EMAIL_CONTACT_LIST_INFO_S *recipient_contact_list_item;
+	email_contact_list_info_t *recipient_contact_list_item;
 
 	/* arguments */
 	int account_id;
@@ -322,7 +322,7 @@ struct _ev_attachment_data_tag {
 	EV_attachment_state state;
 	int download_handle;
 	char *preview_path;
-	EmailExtSaveErrType save_result;
+	email_ext_save_err_type_e save_result;
 	bool is_saving;
 	bool save_for_preview;
 	bool saving_was_started;

@@ -74,12 +74,12 @@ static char *_header_reply_popup_text_get(void *data, Evas_Object *obj, const ch
 
 
 /*popup string definitions*/
-static email_viewer_string_t EMAIL_VIEWER_STRING_NULL = { NULL, NULL };
-static email_viewer_string_t EMAIL_VIEWER_STRING_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
-static email_viewer_string_t EMAIL_VIEWER_POP_ERROR = { PACKAGE, "IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB" };
-static email_viewer_string_t EMAIL_VIEWER_BUTTON_CANCEL = { PACKAGE, "IDS_EMAIL_BUTTON_CANCEL" };
-static email_viewer_string_t EMAIL_VIEWER_STR_REPLY_OPTIONS = { PACKAGE, "IDS_EMAIL_HEADER_SELECT_ACTION_ABB" };
-static email_viewer_string_t EMAIL_VIEWER_STR_FAILED_TO_SET_FAVOURITE = { NULL, N_("Failed to set favourite") };
+static email_string_t EMAIL_VIEWER_STRING_NULL = { NULL, NULL };
+static email_string_t EMAIL_VIEWER_STRING_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
+static email_string_t EMAIL_VIEWER_POP_ERROR = { PACKAGE, "IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB" };
+static email_string_t EMAIL_VIEWER_BUTTON_CANCEL = { PACKAGE, "IDS_EMAIL_BUTTON_CANCEL" };
+static email_string_t EMAIL_VIEWER_STR_REPLY_OPTIONS = { PACKAGE, "IDS_EMAIL_HEADER_SELECT_ACTION_ABB" };
+static email_string_t EMAIL_VIEWER_STR_FAILED_TO_SET_FAVOURITE = { NULL, N_("Failed to set favourite") };
 
 /*
  * Definition for static functions

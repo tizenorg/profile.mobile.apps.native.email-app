@@ -47,11 +47,11 @@ static void _filter_destroy_request_cb(void *data, email_module_h module);
 
 static void _popup_ok_cb(void *data, Evas_Object *obj, void *event_info);
 
-static void _create_launching_fail_popup(EmailSettingUGD *ugd, const email_setting_string_t *content);
+static void _create_launching_fail_popup(EmailSettingUGD *ugd, const email_string_t *content);
 
-static email_setting_string_t EMAIL_SETTING_STRING_OK = {PACKAGE, "IDS_EMAIL_BUTTON_OK"};
-static email_setting_string_t EMAIL_SETTING_STRING_FAILED_TO_START_EMAIL_APPLICATION = {PACKAGE, "IDS_EMAIL_POP_FAILED_TO_START_EMAIL_APPLICATION"};
-static email_setting_string_t EMAIL_SETTING_STRING_WARNING = {PACKAGE, "IDS_ST_HEADER_WARNING"};
+static email_string_t EMAIL_SETTING_STRING_OK = {PACKAGE, "IDS_EMAIL_BUTTON_OK"};
+static email_string_t EMAIL_SETTING_STRING_FAILED_TO_START_EMAIL_APPLICATION = {PACKAGE, "IDS_EMAIL_POP_FAILED_TO_START_EMAIL_APPLICATION"};
+static email_string_t EMAIL_SETTING_STRING_WARNING = {PACKAGE, "IDS_ST_HEADER_WARNING"};
 
 EMAIL_API email_module_t *email_module_alloc()
 {
@@ -426,7 +426,7 @@ static void _account_deleted_cb(int account_id, email_setting_response_data *res
 	email_module_make_destroy_request(&ugd->base);
 }
 
-static void _create_launching_fail_popup(EmailSettingUGD *ugd, const email_setting_string_t *content)
+static void _create_launching_fail_popup(EmailSettingUGD *ugd, const email_string_t *content)
 {
 	debug_enter();
 	Evas_Object *popup = elm_popup_add(ugd->base.win);

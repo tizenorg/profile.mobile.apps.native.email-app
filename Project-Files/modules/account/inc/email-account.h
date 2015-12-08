@@ -55,11 +55,6 @@
 #define EMAIL_HANDLE_INVALID 0
 #define SEARCH_TAG_LEN		50
 
-typedef struct _email_account_string_t {
-	const char *domain;
-	const char *id;
-} email_account_string_t;
-
 typedef enum {
 	ACC_FOLDER_VIEW_MODE_UNKNOWN = -1,
 	ACC_FOLDER_COMBINED_VIEW_MODE,

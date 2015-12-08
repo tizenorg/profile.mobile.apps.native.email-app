@@ -62,24 +62,24 @@ static void _gl_sel_cb(void *data, Evas_Object *obj, void *event_info);
 
 static void _create_account_type_chooser_popup(EmailSettingVD *vd);
 
-static email_setting_string_t EMAIL_SETTING_STRING_EMAIL_ADDRESS = {PACKAGE, "IDS_EMAIL_BODY_EMAIL_ADDRESS"};
-static email_setting_string_t EMAIL_SETTING_STRING_NEXT = {PACKAGE, "IDS_ST_BUTTON_NEXT"};
-static email_setting_string_t EMAIL_SETTING_STRING_OK = {PACKAGE, "IDS_EMAIL_BUTTON_OK"};
-static email_setting_string_t EMAIL_SETTING_STRING_EMAIL = {PACKAGE, "IDS_ST_HEADER_EMAIL"};
-static email_setting_string_t EMAIL_SETTING_STRING_IMAP = {PACKAGE, "IDS_ST_SBODY_IMAP"};
-static email_setting_string_t EMAIL_SETTING_STRING_MANUAL_SETUP = {PACKAGE, "IDS_ST_BUTTON_MANUAL_SETUP_ABB"};
-static email_setting_string_t EMAIL_SETTING_STRING_POP3 = {PACKAGE, "IDS_ST_SBODY_POP3"};
-static email_setting_string_t EMAIL_SETTING_STRING_SELECT_TYPE_OF_ACCOUNT = {PACKAGE, "IDS_ST_HEADER_SELECT_ACCOUNT_TYPE_ABB"};
-static email_setting_string_t EMAIL_SETTING_STRING_SEND_EMAIL_FROM_THIS_ACCOUNT_BY_DEFAULT = {PACKAGE, "IDS_ST_SBODY_SET_AS_DEFAULT_ACCOUNT_ABB"};
-static email_setting_string_t EMAIL_SETTING_STRING_SHOW_PASSWORD = {PACKAGE, "IDS_ST_SBODY_SHOW_PASSWORD_ABB"};
-static email_setting_string_t EMAIL_SETTING_STRING_ENTER_PASS = {PACKAGE, "IDS_ST_TMBODY_PASSWORD"};
-static email_setting_string_t EMAIL_SETTING_STRING_WARNING = {PACKAGE, "IDS_ST_HEADER_WARNING"};
-static email_setting_string_t EMAIL_SETTING_STRING_SK_ADD_ACCOUNT = {PACKAGE, "IDS_EMAIL_OPT_ADD_ACCOUNT"};
-static email_setting_string_t EMAIL_SETTING_STRING_INVALID_EMAIL_ADDRESS = {PACKAGE, "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"};
-static email_setting_string_t EMAIL_SETTING_STRING_UNABLE_TO_ADD_ACCOUNT = {PACKAGE, "IDS_ST_HEADER_UNABLE_TO_ADD_ACCOUNT_ABB"};
-static email_setting_string_t EMAIL_SETTING_STRING_FILL_MANDATORY_FIELDS = {PACKAGE, "IDS_EMAIL_POP_PLEASE_FILL_ALL_THE_MANDATORY_FIELDS"};
-static email_setting_string_t EMAIL_SETTING_STRING_SERVER_QUERY_FAIL = {PACKAGE, "IDS_EMAIL_POP_SERVER_INFORMATION_QUERY_FAILED_ENTER_SERVER_INFORMATION_MANUALLY"};
-static email_setting_string_t EMAIL_SETTING_STRING_ACCOUNT_ALREADY_EXISTS = {PACKAGE, "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"};
+static email_string_t EMAIL_SETTING_STRING_EMAIL_ADDRESS = {PACKAGE, "IDS_EMAIL_BODY_EMAIL_ADDRESS"};
+static email_string_t EMAIL_SETTING_STRING_NEXT = {PACKAGE, "IDS_ST_BUTTON_NEXT"};
+static email_string_t EMAIL_SETTING_STRING_OK = {PACKAGE, "IDS_EMAIL_BUTTON_OK"};
+static email_string_t EMAIL_SETTING_STRING_EMAIL = {PACKAGE, "IDS_ST_HEADER_EMAIL"};
+static email_string_t EMAIL_SETTING_STRING_IMAP = {PACKAGE, "IDS_ST_SBODY_IMAP"};
+static email_string_t EMAIL_SETTING_STRING_MANUAL_SETUP = {PACKAGE, "IDS_ST_BUTTON_MANUAL_SETUP_ABB"};
+static email_string_t EMAIL_SETTING_STRING_POP3 = {PACKAGE, "IDS_ST_SBODY_POP3"};
+static email_string_t EMAIL_SETTING_STRING_SELECT_TYPE_OF_ACCOUNT = {PACKAGE, "IDS_ST_HEADER_SELECT_ACCOUNT_TYPE_ABB"};
+static email_string_t EMAIL_SETTING_STRING_SEND_EMAIL_FROM_THIS_ACCOUNT_BY_DEFAULT = {PACKAGE, "IDS_ST_SBODY_SET_AS_DEFAULT_ACCOUNT_ABB"};
+static email_string_t EMAIL_SETTING_STRING_SHOW_PASSWORD = {PACKAGE, "IDS_ST_SBODY_SHOW_PASSWORD_ABB"};
+static email_string_t EMAIL_SETTING_STRING_ENTER_PASS = {PACKAGE, "IDS_ST_TMBODY_PASSWORD"};
+static email_string_t EMAIL_SETTING_STRING_WARNING = {PACKAGE, "IDS_ST_HEADER_WARNING"};
+static email_string_t EMAIL_SETTING_STRING_SK_ADD_ACCOUNT = {PACKAGE, "IDS_EMAIL_OPT_ADD_ACCOUNT"};
+static email_string_t EMAIL_SETTING_STRING_INVALID_EMAIL_ADDRESS = {PACKAGE, "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"};
+static email_string_t EMAIL_SETTING_STRING_UNABLE_TO_ADD_ACCOUNT = {PACKAGE, "IDS_ST_HEADER_UNABLE_TO_ADD_ACCOUNT_ABB"};
+static email_string_t EMAIL_SETTING_STRING_FILL_MANDATORY_FIELDS = {PACKAGE, "IDS_EMAIL_POP_PLEASE_FILL_ALL_THE_MANDATORY_FIELDS"};
+static email_string_t EMAIL_SETTING_STRING_SERVER_QUERY_FAIL = {PACKAGE, "IDS_EMAIL_POP_SERVER_INFORMATION_QUERY_FAILED_ENTER_SERVER_INFORMATION_MANUALLY"};
+static email_string_t EMAIL_SETTING_STRING_ACCOUNT_ALREADY_EXISTS = {PACKAGE, "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"};
 
 enum {
 	EMAIL_ADDRESS_LIST_ITEM = 1,
@@ -792,8 +792,8 @@ static void _account_validate_cb(int account_id, email_setting_response_data *re
 	} else {
 		vd->is_retry_validate_with_username = 0;
 		if (response->err != EMAIL_ERROR_CANCELLED) {
-			const email_setting_string_t *type = setting_get_service_fail_type(response->err);
-			const email_setting_string_t *header = setting_get_service_fail_type_header(response->err);
+			const email_string_t *type = setting_get_service_fail_type(response->err);
+			const email_string_t *header = setting_get_service_fail_type_header(response->err);
 			ugd->popup = setting_get_notify(&vd->base,
 					header,
 					type, 1, &(EMAIL_SETTING_STRING_OK),

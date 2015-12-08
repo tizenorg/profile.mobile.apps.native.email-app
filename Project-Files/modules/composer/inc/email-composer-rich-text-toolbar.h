@@ -28,8 +28,8 @@ typedef struct {
 	Eina_Bool is_bold;
 	Eina_Bool is_italic;
 	Eina_Bool is_underline;
-	EmailRGBA font_color;
-	EmailRGBA bg_color;
+	email_rgba_t font_color;
+	email_rgba_t bg_color;
 } FontStyleParams;
 
 /**

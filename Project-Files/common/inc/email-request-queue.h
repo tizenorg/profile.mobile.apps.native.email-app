@@ -20,7 +20,7 @@
 
 #include "email-common-types.h"
 
-typedef enum _email_request_type email_request_type;
+typedef enum _email_request_type email_request_type_e;
 enum _email_request_type {
 	EMAIL_REQUEST_TYPE_ADD_REMAINING_MAIL = 0,
 	EMAIL_REQUEST_TYPE_MOVE_MAIL,
@@ -36,12 +36,12 @@ typedef void (*heavy_req_cb)(email_request_h request);
 typedef void (*notify_req_cb)(email_request_h request, void *msg_data);
 typedef void (*end_req_cb)(email_request_h request);
 
-EMAIL_API void email_register_request_cbs(email_request_type req_type, heavy_req_cb heavy_cb, notify_req_cb notify_cb, end_req_cb end_cb);
-EMAIL_API void email_unregister_request_cbs(email_request_type req_type);
+EMAIL_API void email_register_request_cbs(email_request_type_e req_type, heavy_req_cb heavy_cb, notify_req_cb notify_cb, end_req_cb end_cb);
+EMAIL_API void email_unregister_request_cbs(email_request_type_e req_type);
 
 EMAIL_API email_request_queue_h email_request_queue_create();
 EMAIL_API void email_request_queue_destroy(email_request_queue_h rqueue);
-EMAIL_API Eina_Bool email_request_queue_add_request(email_request_queue_h rqueue, email_request_type req_type, void *user_data);
+EMAIL_API Eina_Bool email_request_queue_add_request(email_request_queue_h rqueue, email_request_type_e req_type, void *user_data);
 EMAIL_API void email_request_queue_cancel_all_requests(email_request_queue_h rqueue);
 
 EMAIL_API void *email_request_get_data(email_request_h request);

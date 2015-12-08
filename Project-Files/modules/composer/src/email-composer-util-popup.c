@@ -32,14 +32,14 @@
  */
 
 static Elm_Genlist_Item_Class account_list_itc;
-static EmailCommonStringType EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
+static email_string_t EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
 
 /*
  * Definitions for static & exported functions
  */
 
-Evas_Object *composer_util_popup_create(EmailComposerUGD *ugd, EmailCommonStringType t_title, EmailCommonStringType t_content, Evas_Smart_Cb response_cb,
-                                        EmailCommonStringType t_btn1_lb, EmailCommonStringType t_btn2_lb, EmailCommonStringType t_btn3_lb)
+Evas_Object *composer_util_popup_create(EmailComposerUGD *ugd, email_string_t t_title, email_string_t t_content, Evas_Smart_Cb response_cb,
+                                        email_string_t t_btn1_lb, email_string_t t_btn2_lb, email_string_t t_btn3_lb)
 {
 	debug_enter();
 
@@ -61,8 +61,8 @@ Evas_Object *composer_util_popup_create(EmailComposerUGD *ugd, EmailCommonString
 	return popup;
 }
 
-Evas_Object *composer_util_popup_create_with_progress_horizontal(EmailComposerUGD *ugd, EmailCommonStringType t_title, EmailCommonStringType t_content, Evas_Smart_Cb response_cb,
-                                                                 EmailCommonStringType t_btn1_lb, EmailCommonStringType t_btn2_lb, EmailCommonStringType t_btn3_lb)
+Evas_Object *composer_util_popup_create_with_progress_horizontal(EmailComposerUGD *ugd, email_string_t t_title, email_string_t t_content, Evas_Smart_Cb response_cb,
+                                                                 email_string_t t_btn1_lb, email_string_t t_btn2_lb, email_string_t t_btn3_lb)
 {
 	debug_enter();
 
@@ -182,7 +182,7 @@ static char *__composer_util_popup_account_gl_text_get(void *data, Evas_Object *
 }
 
 void composer_util_popup_create_account_list_popup(void *data, Evas_Smart_Cb response_cb, Evas_Smart_Cb selected_cb, const char *style,
-                                                   EmailCommonStringType t_title, EmailCommonStringType t_btn1_lb, EmailCommonStringType t_btn2_lb)
+                                                   email_string_t t_title, email_string_t t_btn1_lb, email_string_t t_btn2_lb)
 {
 	debug_enter();
 

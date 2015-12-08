@@ -58,13 +58,13 @@ EMAIL_DEFINE_GET_EDJ_PATH(email_get_composer_theme_path, "/email-composer-view.e
 EMAIL_DEFINE_GET_SHARED_DATA_PATH(email_get_composer_tmp_dir, "/.email-composer-efl")
 EMAIL_DEFINE_GET_PHONE_PATH(email_get_composer_public_tmp_dir, "/.email-composer-efl")
 
-static EmailCommonStringType EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
-static EmailCommonStringType EMAIL_COMPOSER_STRING_BUTTON_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
+static email_string_t EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
+static email_string_t EMAIL_COMPOSER_STRING_BUTTON_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
 
-static EmailCommonStringType EMAIL_COMPOSER_STRING_UNABLE_TO_OPEN_FILE = { PACKAGE, "IDS_EMAIL_HEADER_UNABLE_TO_OPEN_FILE_ABB" };
-static EmailCommonStringType EMAIL_COMPOSER_STRING_UNABLE_TO_DISPLAY_ATTACHMENT = { NULL, N_("Unable to display attachment.") };
+static email_string_t EMAIL_COMPOSER_STRING_UNABLE_TO_OPEN_FILE = { PACKAGE, "IDS_EMAIL_HEADER_UNABLE_TO_OPEN_FILE_ABB" };
+static email_string_t EMAIL_COMPOSER_STRING_UNABLE_TO_DISPLAY_ATTACHMENT = { NULL, N_("Unable to display attachment.") };
 
-static EmailCommonStringType EMAIL_COMPOSER_STRING_CREATING_VCARD = { PACKAGE, "IDS_EMAIL_POP_CREATING_VCARD_ING" };
+static email_string_t EMAIL_COMPOSER_STRING_CREATING_VCARD = { PACKAGE, "IDS_EMAIL_POP_CREATING_VCARD_ING" };
 
 static char *_composer_util_convert_dayformat(const char *format_str)
 {
@@ -743,7 +743,7 @@ void composer_util_focus_set_focus_with_idler(void *data, Evas_Object *target)
 
 	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
 
-	EmailCommonTimerData *tdata = (EmailCommonTimerData *)calloc(1, sizeof(EmailCommonTimerData));
+	email_common_timer_data_t *tdata = (email_common_timer_data_t *)calloc(1, sizeof(email_common_timer_data_t));
 	retm_if(!tdata, "tdata is NULL");
 	tdata->ug_data = (void *)ugd;
 	tdata->data = (void *)target;
@@ -1212,14 +1212,14 @@ char *composer_util_strip_quotation_marks_in_email_address(const char *email_add
 	return elm_entry_utf8_to_markup(buf); /* markup string will be returnd. */
 }
 
-EmailExtSaveErrType _composer_util_save_attachment_for_preview(ComposerAttachmentItemData *attachment_item_data)
+email_ext_save_err_type_e _composer_util_save_attachment_for_preview(ComposerAttachmentItemData *attachment_item_data)
 {
 	debug_enter();
 	retvm_if(attachment_item_data == NULL, EMAIL_EXT_SAVE_ERR_UNKNOWN, "Invalid parameter: aid[NULL]");
 	EmailComposerUGD *ugd = (EmailComposerUGD *)attachment_item_data->ugd;
 	email_attachment_data_t *attachment = attachment_item_data->attachment_data;
 
-	EmailExtSaveErrType ret = email_prepare_temp_file_path(attachment->attachment_id, composer_util_file_get_temp_dirname(), attachment->attachment_path, &attachment_item_data->preview_path);
+	email_ext_save_err_type_e ret = email_prepare_temp_file_path(attachment->attachment_id, composer_util_file_get_temp_dirname(), attachment->attachment_path, &attachment_item_data->preview_path);
 	if (ret == EMAIL_EXT_SAVE_ERR_ALREADY_EXIST) {
 		return EMAIL_EXT_SAVE_ERR_NONE;
 	}

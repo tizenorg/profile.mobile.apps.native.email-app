@@ -812,15 +812,15 @@ static void _noti_mgr_on_gdbus_event_receive(GDBusConnection *connection,
 						err_msg = _noti_mgr_get_service_fail_type(data4, ug_data);
 					}
 
-					email_viewer_string_t EMAIL_VIEWER_FAIL_MSG = { NULL, err_msg};
+					email_string_t EMAIL_VIEWER_FAIL_MSG = { NULL, err_msg};
 					ug_data->translation_string_id1 = strdup(err_msg);
 					ug_data->str_format1 = strdup("%s");
 					ug_data->package_type1 = PACKAGE_TYPE_NOT_AVAILABLE;
 					ug_data->popup_element_type = POPUP_ELEMENT_TYPE_CONTENT;
 
-					email_viewer_string_t title = { PACKAGE, "IDS_EMAIL_HEADER_UNABLE_TO_DOWNLOAD_ATTACHMENT_ABB" };
-					email_viewer_string_t btn = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
-					email_viewer_string_t null_str = { NULL, NULL };
+					email_string_t title = { PACKAGE, "IDS_EMAIL_HEADER_UNABLE_TO_DOWNLOAD_ATTACHMENT_ABB" };
+					email_string_t btn = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
+					email_string_t null_str = { NULL, NULL };
 
 					util_create_notify(ug_data, title, EMAIL_VIEWER_FAIL_MSG, 1,
 							btn, _noti_mgr_popup_response_cb, null_str, NULL, NULL);

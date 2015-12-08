@@ -44,7 +44,7 @@ typedef struct {
 	gint mailbox_id;
 	time_t datetime;
 	gint priority;
-	gint flags;		/* See EmailMailStatusType in email-types.h. */
+	gint flags;		/* See email_mail_status_type_e in email-types.h. */
 	gboolean seen : 1;
 	gboolean attachments : 1;
 	gboolean lock : 1;
@@ -56,7 +56,7 @@ typedef struct {
 	gint thread_id;
 	gint thread_count;
 	gint save_status;
-} EmailMailboxInfo;
+} email_mailbox_info_t;
 
 typedef struct {
 	gchar *name;
@@ -67,14 +67,7 @@ typedef struct {
 	gboolean has_archived;
 	gint unread_count;
 	GList *sub_list;
-} EmailMailboxListInfo;
-
-typedef struct {
-	gchar *name;
-	gchar *mail_addr;
-	gchar *thumb_path;
-	gint account_id;
-} EmailAccountListInfo;
+} email_mailbox_list_info_t;
 
 typedef struct {
 	gchar *account_name;
@@ -93,7 +86,14 @@ typedef struct {
 	gint smtp_ssl;
 	gint receiving_ssl;
 	gint download_mode;
-} EmailAccountInfo;
+} email_account_info_t;
+
+typedef struct {
+	gchar *name;
+	gchar *mail_addr;
+	gchar *thumb_path;
+	gint account_id;
+} email_account_list_info_t;
 
 #define GET_ALIAS_FROM_FULL_ADDRESS(full_address, address, len) \
 		({\
@@ -160,8 +160,8 @@ EMAIL_API gchar *email_engine_get_mailbox_service_name(const gchar *folder_name)
 
 /* See EmailMailboxListInfo. */
 EMAIL_API void email_engine_free_mailbox_list(GList **list);
-EMAIL_API EmailMailboxListInfo *email_engine_get_mailbox_info(gint account_id, const gchar *folder_name);
-EMAIL_API void email_engine_free_mailbox_info(EmailMailboxListInfo **info);
+EMAIL_API email_mailbox_list_info_t *email_engine_get_mailbox_info(gint account_id, const gchar *folder_name);
+EMAIL_API void email_engine_free_mailbox_info(email_mailbox_list_info_t **info);
 
 /* See EmailMailboxInfo. */
 EMAIL_API int email_engine_get_enabled_mail_count(gint account_id, const gchar *folder_name, gint thread_id, int sort_type, bool thread_view);
@@ -170,7 +170,7 @@ EMAIL_API void email_engine_free_mail_list(GList **list);
 EMAIL_API guint email_engine_get_mail_list(int account_id, int mailbox_id, email_mail_list_item_t **mail_list, int *mail_count);
 EMAIL_API guint email_engine_get_mail_list_count(gint account_id, const gchar *folder_name);
 
-EMAIL_API gboolean email_engine_get_mail_info(gint mail_id, gint account_id, const gchar *folder_name, EmailMailboxInfo *info);
+EMAIL_API gboolean email_engine_get_mail_info(gint mail_id, gint account_id, const gchar *folder_name, email_mailbox_info_t *info);
 EMAIL_API gboolean email_engine_sync_folder(gint account_id, int mailbox_id, int *handle);
 EMAIL_API gboolean email_engine_sync_all_folder(gint account_id, int *handle1, int *handle2);
 EMAIL_API void email_engine_stop_working(gint account_id, int handle);
@@ -203,9 +203,9 @@ EMAIL_API gboolean email_engine_get_sending_status(gint account_id, const gchar 
 EMAIL_API gchar *email_engine_get_attachment_path(gint attach_id);	/* g_free(). */
 EMAIL_API gint email_engine_get_attachment_id(gint account_id, const gchar *folder_name, gint mail_id, gint index);
 
-EMAIL_API gboolean email_engine_get_account_info(gint account_id, EmailAccountInfo **account_info);
-EMAIL_API gboolean email_engine_set_account_info(gint account_id, EmailAccountInfo *account_info);
-EMAIL_API void email_engine_free_account_info(EmailAccountInfo **account_info);
+EMAIL_API gboolean email_engine_get_account_info(gint account_id, email_account_info_t **account_info);
+EMAIL_API gboolean email_engine_set_account_info(gint account_id, email_account_info_t *account_info);
+EMAIL_API void email_engine_free_account_info(email_account_info_t **account_info);
 
 EMAIL_API gchar *email_engine_get_mailbox_by_mail_id(gint mail_id);
 EMAIL_API int email_engine_get_ca_mailbox_list(int account_id, email_mailbox_t **mailbox_list);

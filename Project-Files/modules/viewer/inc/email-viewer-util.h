@@ -63,9 +63,9 @@ Evas_Object *util_notify_genlist_add(Evas_Object *parent);
  *
  * @return Evas_Object with suitable popup, otherwise NULL
  */
-Evas_Object *util_create_notify_with_list(EmailViewerUGD *ug_data, email_viewer_string_t t_header, email_viewer_string_t t_content,
-						int btn_num, email_viewer_string_t t_btn1_lb, popup_cb resp_cb1,
-						email_viewer_string_t t_btn2_lb, popup_cb resp_cb2, popup_cb resp_block_cb);
+Evas_Object *util_create_notify_with_list(EmailViewerUGD *ug_data, email_string_t t_header, email_string_t t_content,
+						int btn_num, email_string_t t_btn1_lb, popup_cb resp_cb1,
+						email_string_t t_btn2_lb, popup_cb resp_cb2, popup_cb resp_block_cb);
 
 /**
  * @brief Creates and show notification popup list
@@ -81,9 +81,9 @@ Evas_Object *util_create_notify_with_list(EmailViewerUGD *ug_data, email_viewer_
  * @param[in]	resp_block_cb		Response callback function for Blocked Event area
  *
  */
-void util_create_notify(EmailViewerUGD *ug_data, email_viewer_string_t t_header, email_viewer_string_t t_content,
-						int btn_num, email_viewer_string_t t_btn1_lb, popup_cb resp_cb1,
-						email_viewer_string_t t_btn2_lb, popup_cb resp_cb2, popup_cb resp_block_cb);
+void util_create_notify(EmailViewerUGD *ug_data, email_string_t t_header, email_string_t t_content,
+						int btn_num, email_string_t t_btn1_lb, popup_cb resp_cb1,
+						email_string_t t_btn2_lb, popup_cb resp_cb2, popup_cb resp_block_cb);
 
 /**
  * @brief Find folder ID using folder type
@@ -177,7 +177,7 @@ void viewer_create_email(EmailViewerUGD *ug_data, const char *email_address);
  *
  * @return Error code from EmailExtSaveErrType enum
  */
-EmailExtSaveErrType viewer_save_attachment_in_downloads(EV_attachment_data *aid, gboolean(*copy_file_cb) (void *data, float percentage));
+email_ext_save_err_type_e viewer_save_attachment_in_downloads(EV_attachment_data *aid, gboolean(*copy_file_cb) (void *data, float percentage));
 
 /**
  * @brief Save attached file and preview with progress notofication
@@ -187,7 +187,7 @@ EmailExtSaveErrType viewer_save_attachment_in_downloads(EV_attachment_data *aid,
  *
  * @return Error code from EmailExtSaveErrType enum
  */
-EmailExtSaveErrType viewer_save_attachment_for_preview(EV_attachment_data *aid, gboolean(*copy_file_cb) (void *data, float percentage));
+email_ext_save_err_type_e viewer_save_attachment_for_preview(EV_attachment_data *aid, gboolean(*copy_file_cb) (void *data, float percentage));
 
 /**
  * @brief Preview attachment
@@ -232,7 +232,7 @@ void viewer_storage_full_popup_response_cb(void *data, Evas_Object *obj, void *e
  * @param[in]	resp_cb			Callback function for back button response
  *
  */
-void viewer_create_down_progress(void *data, email_viewer_string_t title, popup_cb resp_cb);
+void viewer_create_down_progress(void *data, email_string_t title, popup_cb resp_cb);
 
 /**
  * @brief Destroy popup downloading callback

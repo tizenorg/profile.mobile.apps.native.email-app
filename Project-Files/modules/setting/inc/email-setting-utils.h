@@ -152,9 +152,9 @@ const char *email_get_setting_theme_path();
  * @param[in]	resp_cb2	Evas_Smart callback function data for button #2
  * @return Evas_Object with suitable popup notification, otherwise NULL
  */
-Evas_Object *setting_get_notify(email_view_t *vd, const email_setting_string_t *header,
-		const email_setting_string_t *content, int btn_num, const email_setting_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
-		const email_setting_string_t *btn2_lb, Evas_Smart_Cb resp_cb2);
+Evas_Object *setting_get_notify(email_view_t *vd, const email_string_t *header,
+		const email_string_t *content, int btn_num, const email_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
+		const email_string_t *btn2_lb, Evas_Smart_Cb resp_cb2);
 
 /**
  * @brief Provides process popup notification
@@ -169,9 +169,9 @@ Evas_Object *setting_get_notify(email_view_t *vd, const email_setting_string_t *
  * @param[in]	op_handle	The data pointer to be passed to cb func.
  * @return Evas_Object with suitable popup notification, otherwise NULL
  */
-Evas_Object *setting_get_pb_process_notify(email_view_t *vd, const email_setting_string_t *header,
-		int btn_num, const email_setting_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
-		const email_setting_string_t *btn2_lb, Evas_Smart_Cb resp_cb2, EMAIL_SETTING_POPUP_BACK_TYPE back_type, int *op_handle);
+Evas_Object *setting_get_pb_process_notify(email_view_t *vd, const email_string_t *header,
+		int btn_num, const email_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
+		const email_string_t *btn2_lb, Evas_Smart_Cb resp_cb2, EMAIL_SETTING_POPUP_BACK_TYPE back_type, int *op_handle);
 
 /**
  * @brief Provides empty popup notification
@@ -184,9 +184,9 @@ Evas_Object *setting_get_pb_process_notify(email_view_t *vd, const email_setting
  * @param[in]	resp_cb2	Evas_Smart callback function data for button #2
  * @return Evas_Object with suitable popup notification, otherwise NULL
  */
-Evas_Object *setting_get_empty_content_notify(email_view_t *vd, const email_setting_string_t *header,
-		int btn_num, const email_setting_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
-		const email_setting_string_t *btn2_lb, Evas_Smart_Cb resp_cb2);
+Evas_Object *setting_get_empty_content_notify(email_view_t *vd, const email_string_t *header,
+		int btn_num, const email_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
+		const email_string_t *btn2_lb, Evas_Smart_Cb resp_cb2);
 
 /**
  * @brief Provides entry popup notification
@@ -200,9 +200,9 @@ Evas_Object *setting_get_empty_content_notify(email_view_t *vd, const email_sett
  * @param[in]	popup_type	Popup entry type
  * @return Evas_Object with suitable popup notification, otherwise NULL
  */
-Evas_Object *setting_get_entry_content_notify(email_view_t *vd, const email_setting_string_t *header,const char *entry_text,
-		int btn_num, const email_setting_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
-		const email_setting_string_t *btn2_lb, Evas_Smart_Cb resp_cb2, SETTINGS_POPUP_ENTRY_TYPE popup_type);
+Evas_Object *setting_get_entry_content_notify(email_view_t *vd, const email_string_t *header,const char *entry_text,
+		int btn_num, const email_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
+		const email_string_t *btn2_lb, Evas_Smart_Cb resp_cb2, SETTINGS_POPUP_ENTRY_TYPE popup_type);
 
 /**
  * @brief Provides network failure popup notification
@@ -313,14 +313,14 @@ void setting_delete_enter(char *string);
  * @param[in]	type		Type that represent service fail
  * @return Structure with failure string on success or NULL if an error occurred
  */
-const email_setting_string_t *setting_get_service_fail_type(int type);
+const email_string_t *setting_get_service_fail_type(int type);
 
 /**
  * @brief Get service failure type structure for header
  * @param[in]	type		Type that represent service fail
  * @return Structure with failure string on success or NULL if an error occurred
  */
-const email_setting_string_t *setting_get_service_fail_type_header(int type);
+const email_string_t *setting_get_service_fail_type_header(int type);
 
 /**
  * @brief Inserts the account details to the account database.
@@ -388,7 +388,7 @@ char *setting_get_provider_name(EmailSettingUGD *ugd);
  * @param[in]	t		Email string setting data
  * @return The translated text string on success, otherwise NULL. It should be freed.
  */
-inline char *email_setting_gettext(email_setting_string_t t);
+inline char *email_setting_gettext(email_string_t t);
 
 /**
  * @brief The function registers callbacks for: 1) "virtualkeypad,state,on" 2) "virtualkeypad,state,off"

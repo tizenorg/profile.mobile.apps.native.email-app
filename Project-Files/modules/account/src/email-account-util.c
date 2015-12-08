@@ -334,7 +334,7 @@ char *account_get_user_email_address(int account_id)
 }
 
 
-Evas_Object *account_create_entry_popup(EmailAccountUGD *ug_data, email_account_string_t t_title,
+Evas_Object *account_create_entry_popup(EmailAccountUGD *ug_data, email_string_t t_title,
 		const char *entry_text, const char *entry_selection_text,
 		Evas_Smart_Cb _back_response_cb, Evas_Object_Event_Cb _mouse_up_response_cb, Evas_Smart_Cb _done_key_cb,
 		Evas_Smart_Cb btn1_response_cb, const char *btn1_text, Evas_Smart_Cb btn2_response_cb, const char *btn2_text)
@@ -450,7 +450,7 @@ Evas_Object *account_create_entry_popup(EmailAccountUGD *ug_data, email_account_
 	evas_object_smart_callback_add(editfield.entry, "activated", _done_key_cb, ug_data);
 	evas_object_smart_callback_add(editfield.entry, "changed", _entry_changed_cb, ug_data);
 	evas_object_smart_callback_add(editfield.entry, "preedit,changed", _entry_changed_cb, ug_data);
-	email_account_string_t EMAIL_ACCOUNT_FOLDER_NAME = { PACKAGE, "IDS_EMAIL_BODY_FOLDER_NAME"};
+	email_string_t EMAIL_ACCOUNT_FOLDER_NAME = { PACKAGE, "IDS_EMAIL_BODY_FOLDER_NAME"};
 	elm_object_domain_translatable_part_text_set(editfield.entry, "elm.guide", EMAIL_ACCOUNT_FOLDER_NAME.domain, EMAIL_ACCOUNT_FOLDER_NAME.id);
 
 	ug_data->entry = editfield.entry;

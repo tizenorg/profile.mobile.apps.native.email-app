@@ -19,7 +19,7 @@
 #define __EMAIL_MEDIA_CONTENT_H_DEF__
 #include <media_content.h>
 
-typedef struct _email_condition_s {
+typedef struct {
 	char *cond;
 	media_content_collation_e collate_type;
 	media_content_order_e sort_type;
@@ -27,13 +27,13 @@ typedef struct _email_condition_s {
 	int offset;
 	int count;
 	bool with_meta;
-} email_condition_s;
+} email_condition_t;
 
-typedef struct _email_media_data {
+typedef struct {
 	const char *file_path;
 	char *thumb_path;
 	media_info_h *media;
-} email_media_data;
+} email_media_data_t;
 
 EMAIL_API int email_media_content_get_image_thumbnail(const char *file_path, char **thumbnail_path);
 

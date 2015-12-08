@@ -52,20 +52,20 @@
 /* Global Val */
 EmailViewerUGD *_g_md = NULL; /* TODO Need more investigation why we need this global variable. */
 
-static email_viewer_string_t EMAIL_VIEWER_POPUP_DOWNLOADING = { PACKAGE, "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB" };
-static email_viewer_string_t EMAIL_VIEWER_STRING_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
-static email_viewer_string_t EMAIL_VIEWER_STRING_CANCEL = { PACKAGE, "IDS_EMAIL_BUTTON_CANCEL" };
-static email_viewer_string_t EMAIL_VIEWER_HEADER_UNABLE_TO_PERFORM_ACTION = { PACKAGE, "IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB" };
-static email_viewer_string_t EMAIL_VIEWER_UNKNOWN_ERROR_HAS_OCCURED = { PACKAGE, "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED" };
-static email_viewer_string_t EMAIL_VIEWER_HEADER_UNAVAILABLE = { PACKAGE, "IDS_ASEML_HEADER_UNABLE_TO_USE_FUNCTION_ABB" };
-static email_viewer_string_t EMAIL_VIEWER_POP_SECURITY_POLICY_RESTRICTS_USE_OF_POP_IMAP_EMAIL = { PACKAGE, "IDS_ASEML_POP_THE_SECURITY_POLICY_PREVENTS_THE_USE_OF_POP_AND_IMAP_EMAIL_PROTOCOLS" };
-static email_viewer_string_t EMAIL_VIEWER_POP_FAILED_TO_START_EMAIL_APPLICATION = { PACKAGE, "IDS_EMAIL_POP_FAILED_TO_START_EMAIL_APPLICATION" };
-static email_viewer_string_t EMAIL_VIEWER_BODY_SELECTED_DATA_NOT_FOUND = { PACKAGE, "IDS_EMAIL_POP_THE_SELECTED_DATA_COULD_NOT_BE_FOUND" };
-static email_viewer_string_t EMAIL_VIEWER_POP_THERE_IS_NO_ACCOUNT_CREATE_A_NEW_ACCOUNT_FIRST = { PACKAGE, "IDS_EMAIL_POP_YOU_HAVE_NOT_YET_CREATED_AN_EMAIL_ACCOUNT_CREATE_AN_EMAIL_ACCOUNT_AND_TRY_AGAIN" };
-static email_viewer_string_t EMAIL_VIEWER_HEADER_DOWNLOAD_ENTIRE_EMAIL = { PACKAGE, "IDS_EMAIL_HEADER_DOWNLOAD_ENTIRE_EMAIL_ABB" };
-static email_viewer_string_t EMAIL_VIEWER_POP_PARTIAL_BODY_DOWNLOADED_REST_LOST = { PACKAGE, "IDS_EMAIL_POP_ONLY_PART_OF_THE_MESSAGE_HAS_BEEN_DOWNLOADED_IF_YOU_CONTINUE_THE_REST_OF_THE_MESSAGE_MAY_BE_LOST" };
-static email_viewer_string_t EMAIL_VIEWER_BUTTON_CONTINUE = { PACKAGE, "IDS_EMAIL_BUTTON_CONTINUE_ABB" };
-static email_viewer_string_t EMAIL_VIEWER_STRING_NULL = { NULL, NULL };
+static email_string_t EMAIL_VIEWER_POPUP_DOWNLOADING = { PACKAGE, "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB" };
+static email_string_t EMAIL_VIEWER_STRING_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
+static email_string_t EMAIL_VIEWER_STRING_CANCEL = { PACKAGE, "IDS_EMAIL_BUTTON_CANCEL" };
+static email_string_t EMAIL_VIEWER_HEADER_UNABLE_TO_PERFORM_ACTION = { PACKAGE, "IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB" };
+static email_string_t EMAIL_VIEWER_UNKNOWN_ERROR_HAS_OCCURED = { PACKAGE, "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED" };
+static email_string_t EMAIL_VIEWER_HEADER_UNAVAILABLE = { PACKAGE, "IDS_ASEML_HEADER_UNABLE_TO_USE_FUNCTION_ABB" };
+static email_string_t EMAIL_VIEWER_POP_SECURITY_POLICY_RESTRICTS_USE_OF_POP_IMAP_EMAIL = { PACKAGE, "IDS_ASEML_POP_THE_SECURITY_POLICY_PREVENTS_THE_USE_OF_POP_AND_IMAP_EMAIL_PROTOCOLS" };
+static email_string_t EMAIL_VIEWER_POP_FAILED_TO_START_EMAIL_APPLICATION = { PACKAGE, "IDS_EMAIL_POP_FAILED_TO_START_EMAIL_APPLICATION" };
+static email_string_t EMAIL_VIEWER_BODY_SELECTED_DATA_NOT_FOUND = { PACKAGE, "IDS_EMAIL_POP_THE_SELECTED_DATA_COULD_NOT_BE_FOUND" };
+static email_string_t EMAIL_VIEWER_POP_THERE_IS_NO_ACCOUNT_CREATE_A_NEW_ACCOUNT_FIRST = { PACKAGE, "IDS_EMAIL_POP_YOU_HAVE_NOT_YET_CREATED_AN_EMAIL_ACCOUNT_CREATE_AN_EMAIL_ACCOUNT_AND_TRY_AGAIN" };
+static email_string_t EMAIL_VIEWER_HEADER_DOWNLOAD_ENTIRE_EMAIL = { PACKAGE, "IDS_EMAIL_HEADER_DOWNLOAD_ENTIRE_EMAIL_ABB" };
+static email_string_t EMAIL_VIEWER_POP_PARTIAL_BODY_DOWNLOADED_REST_LOST = { PACKAGE, "IDS_EMAIL_POP_ONLY_PART_OF_THE_MESSAGE_HAS_BEEN_DOWNLOADED_IF_YOU_CONTINUE_THE_REST_OF_THE_MESSAGE_MAY_BE_LOST" };
+static email_string_t EMAIL_VIEWER_BUTTON_CONTINUE = { PACKAGE, "IDS_EMAIL_BUTTON_CONTINUE_ABB" };
+static email_string_t EMAIL_VIEWER_STRING_NULL = { NULL, NULL };
 
 /* module */
 static int _viewer_module_create(email_module_t *self, app_control_h params);
@@ -402,8 +402,8 @@ static VIEWER_ERROR_TYPE_E _viewer_process_error_popup(EmailViewerUGD *ug_data)
 
 		case VIEWER_ERROR_STORAGE_FULL:
 			debug_warning("Lauching viewer failed! VIEWER_ERROR_STORAGE_FULL");
-			email_viewer_string_t content = { PACKAGE, "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE_GO_TO_SETTINGS_POWER_AND_STORAGE_STORAGE_THEN_DELETE_SOME_FILES_AND_TRY_AGAIN" };
-			email_viewer_string_t btn2 = { PACKAGE, "IDS_EMAIL_BUTTON_SETTINGS" };
+			email_string_t content = { PACKAGE, "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE_GO_TO_SETTINGS_POWER_AND_STORAGE_STORAGE_THEN_DELETE_SOME_FILES_AND_TRY_AGAIN" };
+			email_string_t btn2 = { PACKAGE, "IDS_EMAIL_BUTTON_SETTINGS" };
 			util_create_notify(ug_data, EMAIL_VIEWER_HEADER_UNABLE_TO_PERFORM_ACTION, content, 2,
 						EMAIL_VIEWER_STRING_OK, _popup_response_to_destroy_cb,
 						btn2, viewer_storage_full_popup_response_cb, NULL);
@@ -1317,7 +1317,7 @@ void viewer_delete_evas_objects(EmailViewerUGD *ug_data, Eina_Bool isHide)
 	if (NULL != ug_data->folder_list) {
 		int i = 0;
 		LIST_ITER_START(i, ug_data->folder_list) {
-			EmailMailboxNameAndAlias *nameandalias = (EmailMailboxNameAndAlias *)LIST_ITER_GET_DATA(i, ug_data->folder_list);
+			email_mailbox_name_and_alias_t *nameandalias = (email_mailbox_name_and_alias_t *)LIST_ITER_GET_DATA(i, ug_data->folder_list);
 			FREE(nameandalias->name);
 			FREE(nameandalias->alias);
 			FREE(nameandalias);
@@ -1497,9 +1497,9 @@ void _delete_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_
 
 	DELETE_EVAS_OBJECT(ug_data->con_popup);
 
-	email_viewer_string_t title = { PACKAGE, "IDS_EMAIL_HEADER_DELETE" };
-	email_viewer_string_t content = { PACKAGE, "IDS_EMAIL_POP_THIS_EMAIL_WILL_BE_DELETED" };
-	email_viewer_string_t btn2 = { PACKAGE, "IDS_EMAIL_BUTTON_DELETE_ABB4" };
+	email_string_t title = { PACKAGE, "IDS_EMAIL_HEADER_DELETE" };
+	email_string_t content = { PACKAGE, "IDS_EMAIL_POP_THIS_EMAIL_WILL_BE_DELETED" };
+	email_string_t btn2 = { PACKAGE, "IDS_EMAIL_BUTTON_DELETE_ABB4" };
 	util_create_notify(ug_data, title, content, 2,
 			EMAIL_VIEWER_STRING_CANCEL, _popup_response_cb,
 			btn2, _popup_response_delete_ok_cb, NULL);

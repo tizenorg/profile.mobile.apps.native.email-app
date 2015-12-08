@@ -1102,7 +1102,7 @@ void composer_recipient_display_error_string(void *data, MBE_VALIDATION_ERROR er
 		ugd->prev_toast_error = (int)err;
 		ugd->timer_duplicate_toast_in_reciepients = ecore_timer_add(3.0f, _recipient_timer_duplicate_toast_cb, ugd);
 
-		EmailCommonTimerData *tdata = (EmailCommonTimerData *)calloc(1, sizeof(EmailCommonTimerData));
+		email_common_timer_data_t *tdata = (email_common_timer_data_t *)calloc(1, sizeof(email_common_timer_data_t));
 		retm_if(!tdata, "tdata is NULL!");
 		tdata->ug_data = (void *)ugd;
 		tdata->data = (void *)err;
@@ -1113,7 +1113,7 @@ void composer_recipient_display_error_string(void *data, MBE_VALIDATION_ERROR er
 		ugd->prev_toast_error = (int)err;
 		ugd->timer_duplicate_toast_in_reciepients = ecore_timer_add(3.0f, _recipient_timer_duplicate_toast_cb, ugd);
 
-		EmailCommonTimerData *tdata = (EmailCommonTimerData *)calloc(1, sizeof(EmailCommonTimerData));
+		email_common_timer_data_t *tdata = (email_common_timer_data_t *)calloc(1, sizeof(email_common_timer_data_t));
 		retm_if(!tdata, "tdata is NULL!");
 		tdata->ug_data = (void *)ugd;
 		tdata->data = (void *)err;

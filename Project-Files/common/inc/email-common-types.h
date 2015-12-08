@@ -38,11 +38,6 @@
 #define MAX_RECPT_LEN			(MAX_STR_LEN * 8 + 1)
 #define MIN_FREE_SPACE			(5) /* MB */
 #define MAX_ACCOUNT_COUNT		10
-#define EMAIL_ALL_FILTER_BOX	-1
-
-/* define operation type */
-#define EMAIL_OPERATION_OPEN_NEW_ACCOUNT			"http://tizen.org/email/operation/open_new_account"
-#define EMAIL_ACCOUNT_SUPPORTS_CAPABILITY_EMAIL		"http://tizen.org/account/capability/email"
 
 /* define bundle key */
 #define EMAIL_BUNDLE_KEY_NEW_ACCOUNT_ID				"NEW_ACCOUNT_ID"
@@ -57,110 +52,49 @@
 #define EMAIL_BUNDLE_KEY_IS_MAILBOX_EDIT_MODE		"MAILBOX_EDIT_MODE"
 #define EMAIL_BUNDLE_KEY_MOVE_SRC_MAILBOX_ID		"MOVE_SRC_MAILBOX_ID"
 #define EMAIL_BUNDLE_KEY_ARRAY_SELECTED_MAIL_IDS	"SELECTED_MAIL_IDS"
-#define EMAIL_BUNDLE_KEY_ACCOUNT_COLOR				"ACCOUNT_COLOR"
-#define EMAIL_BUNDLE_KEY_ATTACHFILE				"ATTACHFILE"
 #define EMAIL_BUNDLE_KEY_VIEW_TYPE				"VIEW_TYPE"
 #define EMAIL_BUNDLE_KEY_RUN_TYPE				"RUN_TYPE"
 #define EMAIL_BUNDLE_KEY_MAIL_ID				"MAIL_ID"
 #define EMAIL_BUNDLE_KEY_FIRST_LANDSCAPE		"bFirstLandscape"
 #define EMAIL_BUNDLE_KEY_MSG					"MSG"
-#define EMAIL_BUNDLE_KEY_LAUNCHER				"LAUNCHER"
 #define EMAIL_BUNDLE_KEY_TO						"TO"
 #define EMAIL_BUNDLE_KEY_CC						"CC"
 #define EMAIL_BUNDLE_KEY_BCC					"BCC"
 #define EMAIL_BUNDLE_KEY_SUBJECT				"SUBJECT"
 #define EMAIL_BUNDLE_KEY_BODY					"BODY"
 #define EMAIL_BUNDLE_KEY_ATTACHMENT				"ATTACHMENT"
-#define EMAIL_BUNDLE_KEY_ESP_NAME				"ESP_NAME"
-#define EMAIL_BUNDLE_KEY_REFRESH_ACCOUNT		"REFRESH_ACCOUNT"
 #define EMAIL_BUNDLE_KEY_MAILBOX_TYPE			"MAILBOX_TYPE"
-#define EMAIL_BUNDLE_KEY_FILTER_ID				"FILTER_ID"
-#define EMAIL_BUNDLE_KEY_CALENDAR_ID			"CALENDAR_ID"
-#define EMAIL_BUNDLE_KEY_ONLY_THIS_OCCURENCE	"ONLY_THIS_OCCURRENCE"
-#define EMAIL_BUNDLE_KEY_INSTANCE_ID_DATE		"INSTANCE_ID_DATE"
 #define EMAIL_BUNDLE_KEY_MAIL_INDEX				"MAIL_INDEX"
 
-#define EMAIL_BUNDLE_KEY_CONTACT_TYPE				"type"
-#define EMAIL_BUNDLE_KEY_MYFILE_PATH				"path"
-#define EMAIL_BUNDLE_KEY_MYFILE_SELECT_TYPE			"select_type"
-#define EMAIL_BUNDLE_KEY_MYFILE_FILE_TYPE			"file_type"
-#define EMAIL_BUNDLE_KEY_GALLERY_LAUNCH_TYPE		"launch-type"
-#define EMAIL_BUNDLE_KEY_GALLERY_FILE_TYPE			"file-type"
-#define EMAIL_BUNDLE_KEY_VOICE_REC_CALLER			"CALLER"
-#define EMAIL_BUNDLE_KEY_VOICE_REC_SIZE				"SIZE"
-#define EMAIL_BUNDLE_KEY_VOICE_REC_QUALITY			"QUALITY"
-#define EMAIL_BUNDLE_KEY_CAMERA_CALLER				"CALLER"
-#define EMAIL_BUNDLE_KEY_CAMERA_RESOLUTION			"RESOLUTION"
-#define EMAIL_BUNDLE_KEY_CALENDAR_MODE				"mode"
-#define EMAIL_BUNDLE_KEY_CALENDAR_MAX				"max"
-#define EMAIL_BUNDLE_KEY_IMAGE_VIEWER_SAVE_FILE		"SaveFile"
-#define EMAIL_BUNDLE_KEY_IMAGE_VIEWER_VIEW_MODE		"View Mode"
-#define EMAIL_BUNDLE_KEY_IMAGE_VIEWER_SETAS_TYPE	"Setas type"
-#define EMAIL_BUNDLE_KEY_IMAGE_VIEWER_PATH			"Path"
-#define EMAIL_BUNDLE_KEY_CALENDAR_EDIT_ACCOUNT_ID	"account_id"
-#define EMAIL_BUNDLE_KEY_CALENDAR_EDIT_CALENDAR_ID	"calendar_id"
-#define EMAIL_BUNDLE_KEY_CALENDAR_EDIT_CREATE_MODE	"create_mode"
-#define EMAIL_BUNDLE_KEY_CALENDAR_EDIT_MAIL_ID		"mail_id"
-#define EMAIL_BUNDLE_KEY_CALENDAR_EDIT_MAILBOX_ID	"mailbox_id"
-#define EMAIL_BUNDLE_KEY_CALENDAR_EDIT_INDEX		"index"
-#define EMAIL_BUNDLE_KEY_CALENDAR_EDIT_NOTE			"note"
-#define EMAIL_BUNDLE_KEY_MESSAGE_TO					"TO"
-#define EMAIL_BUNDLE_KEY_CAMERA_LIMIT				"LIMIT"
-#define EMAIL_BUNDLE_KEY_VIDEO_PLAYER_LAUNCH_APP	"launching_application"
-#define EMAIL_BUNDLE_KEY_SELECTED_CERT				"selected-cert"
-#define EMAIL_BUNDLE_KEY_MISC_WORK_TYPE				"email_misc_work_type"
-#define EMAIL_BUNDLE_KEY_TTS_ACCOUNT_ID				"tts_email_account_id"
-#define EMAIL_BUNDLE_KEY_TTS_MAIL_ID				"tts_email_id"
-#define EMAIL_BUNDLE_KEY_SCHEDULED_TIME				"scheduled_time"
-#define EMAIL_BUNDLE_KEY_MISC_DELAY_SENDING_TYPE	"delay_sending_type"
-#define EMAIL_BUNDLE_KEY_MISC_POPUP_STRING			"popup_string"
-#define EMAIL_BUNDLE_KEY_FILTER_OPERATION			"filter_op"
-#define EMAIL_BUNDLE_KEY_FILTER_MODE				"filter_mode"
-#define EMAIL_BUNDLE_KEY_FILTER_SUBJECT				"filter_subject"
-#define EMAIL_BUNDLE_KEY_FILTER_ADDR				"filter_addr"
+#define EMAIL_BUNDLE_KEY_MYFILE_PATH			"path"
 
-/* define ug name */
-
-#define UG_NAME_MESSAGE_COMPOSER	"msg-composer-efl"
-#define UG_NAME_MAP					"maps-lite-ug"
-
-#define APP_NAME_EMAIL	"org.tizen.email"
+#define EMAIL_BUNDLE_KEY_FILTER_OPERATION		"filter_op"
+#define EMAIL_BUNDLE_KEY_FILTER_MODE			"filter_mode"
+#define EMAIL_BUNDLE_KEY_FILTER_ADDR			"filter_addr"
 
 /* define bundle value */
-#define EMAIL_BUNDLE_VAL_ALL_ACCOUNT			"ALL_ACCOUNT"
-#define EMAIL_BUNDLE_VAL_SINGLE_ACCOUNT			"SINGLE_ACCOUNT"
-#define EMAIL_BUNDLE_VAL_PRIORITY_SENDER		"PRIORITY_SENDER"
-#define EMAIL_BUNDLE_VAL_SCHEDULED_OUTBOX		"SCHEDULED_OUTBOX"
-#define EMAIL_BUNDLE_VAL_FILTER_INBOX			"FILTER_INBOX"
-#define EMAIL_BUNDLE_VAL_LAUNCH_MAILBOX			"LAUNCH_MAILBOX"
+#define EMAIL_BUNDLE_VAL_ALL_ACCOUNT				"ALL_ACCOUNT"
+#define EMAIL_BUNDLE_VAL_SINGLE_ACCOUNT				"SINGLE_ACCOUNT"
+#define EMAIL_BUNDLE_VAL_PRIORITY_SENDER			"PRIORITY_SENDER"
+#define EMAIL_BUNDLE_VAL_SCHEDULED_OUTBOX			"SCHEDULED_OUTBOX"
+#define EMAIL_BUNDLE_VAL_FILTER_INBOX				"FILTER_INBOX"
 
-#define EMAIL_BUNDLE_VAL_SORTBY_UNREAD			"SORTBY_UNREAD"
-#define EMAIL_BUNDLE_VAL_SORTBY_FAVOURITES		"SORTBY_FAVOURITES"
-#define EMAIL_BUNDLE_VAL_SORTBY_ATTACH			"SORTBY_ATTACH"
-#define EMAIL_BUNDLE_VAL_SORTBY_PRIORITY		"SORTBY_PRIORITY"
-#define EMAIL_BUNDLE_VAL_LAUNCH_VIEWER			"LAUNCH_VIEWER"
-
-#define EMAIL_BUNDLE_VAL_NEXT_MSG				"NEXT_MSG"
-#define EMAIL_BUNDLE_VAL_PREV_MSG				"PREV_MSG"
-#define EMAIL_BUNDLE_VAL_INBOX					"INBOX"
+#define EMAIL_BUNDLE_VAL_NEXT_MSG					"NEXT_MSG"
+#define EMAIL_BUNDLE_VAL_PREV_MSG					"PREV_MSG"
 #define EMAIL_BUNDLE_VAL_EMAIL_COMPOSER_SAVE_DRAFT	"SAVE_DRAFT"
 
-#define EMAIL_BUNDLE_VAL_VIEW_SETTING			"VIEW_SETTING"
-#define EMAIL_BUNDLE_VAL_VIEW_ACCOUNT_SETUP		"VIEW_ACCOUNT_SETUP"
+#define EMAIL_BUNDLE_VAL_VIEW_SETTING				"VIEW_SETTING"
+#define EMAIL_BUNDLE_VAL_VIEW_ACCOUNT_SETUP			"VIEW_ACCOUNT_SETUP"
 
-#define EMAIL_BUNDLE_VAL_VIEWER_RESTORE_VIEW			"VIEWER_RESTORE_VIEW"
-#define EMAIL_BUNDLE_VAL_VIEWER_DESTROY_VIEW			"VIEWER_DESTROY_VIEW"
-
-#define EMAIL_BUNDLE_VAL_MYFILE_RESULT			"result"
-#define EMAIL_BUNDLE_VAL_CONTACTS_PERSON_LIST	"person_id_list"
-#define EMAIL_BUNDLE_VAL_CONTACTS_SHARING_OP	"contact_sharing_settings"
+#define EMAIL_BUNDLE_VAL_VIEWER_RESTORE_VIEW		"VIEWER_RESTORE_VIEW"
+#define EMAIL_BUNDLE_VAL_VIEWER_DESTROY_VIEW		"VIEWER_DESTROY_VIEW"
 
 #define EMAIL_BUNDLE_VAL_FILTER_OPERATION_FILTER	"filter_op_filter"
 #define EMAIL_BUNDLE_VAL_FILTER_OPERATION_BLOCK		"filter_op_block"
 #define EMAIL_BUNDLE_VAL_FILTER_OPERATION_PS		"filter_op_priority_sender"
 
-#define EMAIL_BUNDLE_VAL_FILTER_ADD					"filter_add"
-#define EMAIL_BUNDLE_VAL_FILTER_LIST				"filter_list"
+#define EMAIL_BUNDLE_VAL_FILTER_ADD		"filter_add"
+#define EMAIL_BUNDLE_VAL_FILTER_LIST	"filter_list"
 
 #define EMAIL_URI_NOTIFICATION_SETTING 	"tizen-email://org.tizen.email/email_setting_notification"
 #define EMAIL_URI_SIGNATURE_SETTING 	"tizen-email://org.tizen.email/email_setting_signature"
@@ -189,28 +123,8 @@
 #define EMAIL_LIMIT_OUTGOING_PORT_LENGTH 5
 #define EMAIL_LIMIT_SIGNATURE_LENGTH 4096
 #define EMAIL_LIMIT_COMPOSER_SUBJECT_LENGTH 1024
-#define EMAIL_LIMIT_TEXT_TEMPLATE_LENGTH 256
-#define EMAIL_LIMIT_FILTER_NAME_LENGTH 256
 
-typedef enum
-{
-	EMAIL_FONT_SIZE_DEFAULT = 0,/**<Global device font size */
-	EMAIL_FONT_SIZE_SMALL, /**< A small size */
-	EMAIL_FONT_SIZE_MEDIUM, /**< A medium size */
-	EMAIL_FONT_SIZE_LARGE, /**< A large size */
-	EMAIL_FONT_SIZE_EXTRA_LARGE, /**< A extra large size */
-	EMAIL_FONT_SIZE_HUGE, /**< A huge size */
-	EMAIL_FONT_SIZE_MAX
-} EmailFontSizeType;
-
-typedef enum {
-	EMAIL_FONT_SIZE_VALUE_SMALL = 24,	//36,
-	EMAIL_FONT_SIZE_VALUE_MEDIUM = 35,	//44,
-	EMAIL_FONT_SIZE_VALUE_LARGE = 55,	//64,
-	EMAIL_FONT_SIZE_VALUE_EXTRA_LARGE = 75,	//81,
-	EMAIL_FONT_SIZE_VALUE_HUGE = 92,	//98,
-	EMAIL_FONT_SIZE_VALUE_MAX
-} EmailFontSizeValue;
+#define GDBUS_SIGNAL_SUBSCRIBE_FAILURE -1
 
 typedef enum {
 	RUN_TYPE_UNKNOWN = -1,
@@ -231,12 +145,12 @@ typedef enum {
 	RUN_EML_FORWARD = 15,
 	RUN_EML_REPLY_ALL = 16,
 	RUN_TYPE_MAX
-} EmailRunType;
+} email_run_type_e;
 
 typedef enum {
 	EMAIL_STATUS_REPLY = (1 << 3),
 	EMAIL_STATUS_FORWARD = (1 << 7)
-} EmailMailStatusType;
+} email_mail_status_type_e;
 
 typedef enum {
 	EMAIL_SORT_NONE,
@@ -256,24 +170,24 @@ typedef enum {
 	EMAIL_SORT_SIZE_SMALLEST,
 	EMAIL_SORT_SIZE_LARGEST,
 	EMAIL_SORT_MAX,
-} EmailSortType;
+} email_sort_type_e;
 
 typedef enum {
 	EMAIL_GET_MAIL_THREAD = -1,
 	EMAIL_GET_MAIL_NORMAL = 0,
-} EmailGetMailType;
+} email_get_mail_type_e;
 
 typedef enum {
 	EMAIL_EXT_SAVE_ERR_NONE = 0,
 	EMAIL_EXT_SAVE_ERR_ALREADY_EXIST,
 	EMAIL_EXT_SAVE_ERR_NO_FREE_SPACE,
 	EMAIL_EXT_SAVE_ERR_UNKNOWN
-} EmailExtSaveErrType;
+} email_ext_save_err_type_e;
 
 typedef enum
 {
 	EMAIL_MOVE_VIEW_NORMAL = 0,
-} MoveViewMode;
+} email_move_view_mode_e;
 
 typedef struct {
 	gchar *name;
@@ -283,7 +197,7 @@ typedef struct {
 	int unread_count;
 	int total_mail_count_on_local;
 	int total_mail_count_on_server;
-} EmailMailboxNameAndAlias;
+} email_mailbox_name_and_alias_t;
 
 typedef struct {
 	int show_images;
@@ -304,50 +218,45 @@ typedef struct {
 	int flag_type;
 	time_t from_time;
 	time_t to_time;
-	gboolean server_item;
-} EmailSearchData;
+} email_search_data_t;
 
 typedef enum {
 	EMAIL_SEARCH_CONTACT_MIN = 0,
 	EMAIL_SEARCH_CONTACT_BY_NAME = EMAIL_SEARCH_CONTACT_MIN,
 	EMAIL_SEARCH_CONTACT_BY_EMAIL,
 	EMAIL_SEARCH_CONTACT_MAX
-} EmailContactSearchType;
+} email_contact_search_type_e;
 
 typedef enum {
 	EMAIL_SEARCH_CONTACT_ORIGIN_MIN = 0,
 	EMAIL_SEARCH_CONTACT_ORIGIN_CONTACTS = EMAIL_SEARCH_CONTACT_ORIGIN_MIN,
 	EMAIL_SEARCH_CONTACT_ORIGIN_RECENT,
 	EMAIL_SEARCH_CONTACT_ORIGIN_MAX
-} EmailContactSearchOriginType;
+} email_contact_search_origin_type_e;
 
 typedef enum {
 	EF_MULTILINE = 1,
 	EF_CLEAR_BTN = 2,
 	EF_PASSWORD = 4,
 	EF_TITLE_SEARCH = 8,
-
-} EmailEditfieldType;
-
+} email_editfield_type_e;
 
 typedef struct {
 	Evas_Object *layout;
 	Evas_Object *entry;
 } email_editfield_t;
 
-typedef struct _EmailCommonStringType {
+typedef struct {
 	const char *domain;
 	const char *id;
-} EmailCommonStringType;
-
-#define GDBUS_SIGNAL_SUBSCRIBE_FAILURE -1
+} email_string_t;
 
 typedef struct {
 	int red;
 	int green;
 	int blue;
 	int alpha;
-} EmailRGBA;
+} email_rgba_t;
 
 #endif	/* _EMAIL_COMMON_TYPES_H_ */
 

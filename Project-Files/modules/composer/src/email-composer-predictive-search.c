@@ -137,7 +137,7 @@ static void __composer_ps_gl_sel(void *data, Evas_Object *obj, void *event_info)
 
 	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
 	Elm_Object_Item *item = (Elm_Object_Item *)event_info;
-	EMAIL_CONTACT_LIST_INFO_S *contact_info = (EMAIL_CONTACT_LIST_INFO_S *)elm_object_item_data_get(item);
+	email_contact_list_info_t *contact_info = (email_contact_list_info_t *)elm_object_item_data_get(item);
 	Evas_Object *mbe = NULL;
 
 	elm_genlist_item_selected_set(item, EINA_FALSE);
@@ -170,7 +170,7 @@ static void __composer_ps_gl_sel(void *data, Evas_Object *obj, void *event_info)
 
 static char *__composer_pslines_gl_text_get(void *data, Evas_Object *obj, const char *part)
 {
-	EMAIL_CONTACT_LIST_INFO_S *contact_info = (EMAIL_CONTACT_LIST_INFO_S *)data;
+	email_contact_list_info_t *contact_info = (email_contact_list_info_t *)data;
 	EmailComposerUGD *ugd = contact_info->ugd;
 	char *ret = NULL;
 	if (contact_info->contact_origin == EMAIL_SEARCH_CONTACT_ORIGIN_CONTACTS) {
@@ -314,7 +314,7 @@ static void __composer_ps_append_result(EmailComposerUGD *ugd, Eina_List *predic
 	retm_if(!predict_list, "Invalid parameter: ugd is NULL!");
 
 	Eina_List *l = NULL;
-	EMAIL_CONTACT_LIST_INFO_S *item = NULL;
+	email_contact_list_info_t *item = NULL;
 	ugd->ps_is_item_from_contact_add = EINA_FALSE;
 	EINA_LIST_FOREACH(predict_list, l, item) {
 		if (item->contact_origin == EMAIL_SEARCH_CONTACT_ORIGIN_CONTACTS) {
@@ -338,7 +338,7 @@ static Eina_List *__composer_ps_search_through_list(Eina_List *src, const char *
 
 	Eina_List *result = NULL;
 	Eina_List *l = NULL;
-	EMAIL_CONTACT_LIST_INFO_S *item = NULL;
+	email_contact_list_info_t *item = NULL;
 
 	EINA_LIST_FOREACH(src, l, item) {
 		if (item && (strcasestr(item->display_name, search_word) || (item->email_address && (strcasestr(item->email_address, search_word))))) {
@@ -379,7 +379,7 @@ static Eina_List *__composer_ps_search_contacts(EmailComposerUGD *ugd, const cha
 		}
 
 		while (ret == CONTACTS_ERROR_NONE) {
-			EMAIL_CONTACT_LIST_INFO_S *contact_info = (EMAIL_CONTACT_LIST_INFO_S *)calloc(1, sizeof(EMAIL_CONTACT_LIST_INFO_S));
+			email_contact_list_info_t *contact_info = (email_contact_list_info_t *)calloc(1, sizeof(email_contact_list_info_t));
 			if (!contact_info) {
 				debug_error("Failed to allocate memory for contact_info!");
 				ret = contacts_list_next(list);
@@ -467,7 +467,7 @@ static Eina_List *__composer_ps_search_recents(EmailComposerUGD *ugd, const char
 	}
 
 	while (ret == CONTACTS_ERROR_NONE) {
-		EMAIL_CONTACT_LIST_INFO_S *contact_info = (EMAIL_CONTACT_LIST_INFO_S *)calloc(1, sizeof(EMAIL_CONTACT_LIST_INFO_S));
+		email_contact_list_info_t *contact_info = (email_contact_list_info_t *)calloc(1, sizeof(email_contact_list_info_t));
 		if (!contact_info) {
 			debug_error("Failed to allocate memory for contact_info!");
 			ret = contacts_list_next(list);

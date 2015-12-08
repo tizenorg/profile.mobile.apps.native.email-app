@@ -41,11 +41,11 @@ static Eina_Bool _attachment_resize_image_do_resize_on_thread(void *data);
 static char *_attachment_resize_image_gl_text_get(void *data, Evas_Object *obj, const char *part);
 static void _attachment_resize_image_gl_sel(void *data, Evas_Object *obj, void *event_info);
 
-static EmailCommonStringType EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
-static EmailCommonStringType EMAIL_COMPOSER_STRING_BUTTON_CANCEL = { PACKAGE, "IDS_EMAIL_BUTTON_CANCEL" };
-static EmailCommonStringType EMAIL_COMPOSER_STRING_HEADER_IMAGE_QUALITY_ABB = { PACKAGE, "IDS_EMAIL_HEADER_IMAGE_QUALITY_ABB" };
-static EmailCommonStringType EMAIL_COMPOSER_STRING_OPT_ADD_ATTACHMENT_ABB = { PACKAGE, "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB" };
-static EmailCommonStringType EMAIL_COMPOSER_STRING_POP_RESIZNG_ING = { PACKAGE, "IDS_EMAIL_TPOP_RESIZING_FILES_ING" };
+static email_string_t EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
+static email_string_t EMAIL_COMPOSER_STRING_BUTTON_CANCEL = { PACKAGE, "IDS_EMAIL_BUTTON_CANCEL" };
+static email_string_t EMAIL_COMPOSER_STRING_HEADER_IMAGE_QUALITY_ABB = { PACKAGE, "IDS_EMAIL_HEADER_IMAGE_QUALITY_ABB" };
+static email_string_t EMAIL_COMPOSER_STRING_OPT_ADD_ATTACHMENT_ABB = { PACKAGE, "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB" };
+static email_string_t EMAIL_COMPOSER_STRING_POP_RESIZNG_ING = { PACKAGE, "IDS_EMAIL_TPOP_RESIZING_FILES_ING" };
 
 enum {
 	RESIZE_IMAGE_SMALL_SIZE = 10,

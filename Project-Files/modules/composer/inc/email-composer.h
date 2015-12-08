@@ -336,8 +336,8 @@ struct ug_data {
 
 	Evas_Object *richtext_font_size_radio_group;
 	int richtext_font_size_pixels;
-	EmailRGBA richtext_font_color;
-	EmailRGBA richtext_bg_color;
+	email_rgba_t richtext_font_color;
+	email_rgba_t richtext_bg_color;
 	Evas_Object *richtext_colorselector;
 	RichButtonState richtext_button_list[RICH_TEXT_TYPE_COUNT];
 	Eina_Bool richtext_is_disable;

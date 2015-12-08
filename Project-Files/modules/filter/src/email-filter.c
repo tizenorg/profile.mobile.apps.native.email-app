@@ -127,17 +127,9 @@ static EmailFilterViewType _parse_option(EmailFilterUGD *ugd, app_control_h data
 		debug_log("filter list view start");
 		return EMAIL_FILTER_VIEW_FILTER_LIST;
 	} else if (!strcmp(operation_mode, EMAIL_BUNDLE_VAL_FILTER_ADD)) {
-		char *filter_addr = NULL;
-		char *filter_subject = NULL;
-
-		app_control_get_extra_data(data, EMAIL_BUNDLE_KEY_FILTER_ADDR, &filter_addr);
-		app_control_get_extra_data(data, EMAIL_BUNDLE_KEY_FILTER_SUBJECT, &filter_subject);
-
-		ugd->param_filter_addr = filter_addr;
-		ugd->param_filter_subject = filter_subject;
-
+		app_control_get_extra_data(data, EMAIL_BUNDLE_KEY_FILTER_ADDR, &ugd->param_filter_addr);
 		free(operation_mode);
-		debug_secure("filter add view start: subject[%s], address[%s]", filter_subject, filter_addr);
+		debug_secure("filter add view start: address[%s]", ugd->param_filter_addr);
 		return EMAIL_FILTER_VIEW_ADD_FILTER;
 	}
 
@@ -167,7 +159,7 @@ void email_filter_add_conformant_callback(EmailFilterUGD *ugd)
 {
 	debug_enter();
 
-	ugd->is_conformant = 1;
+	ugd->is_conformant = EINA_TRUE;
 
 	evas_object_smart_callback_add(ugd->base.conform, "virtualkeypad,state,on", _keypad_up_cb, ugd);
 	evas_object_smart_callback_add(ugd->base.conform, "virtualkeypad,state,off", _keypad_down_cb, ugd);
@@ -179,7 +171,7 @@ void email_filter_del_conformant_callback(EmailFilterUGD *ugd)
 {
 	debug_enter();
 
-	ugd->is_conformant = 0;
+	ugd->is_conformant = EINA_FALSE;
 
 	evas_object_smart_callback_del(ugd->base.conform, "virtualkeypad,state,on", _keypad_up_cb);
 	evas_object_smart_callback_del(ugd->base.conform, "virtualkeypad,state,off", _keypad_down_cb);
@@ -210,7 +202,7 @@ static void _keypad_down_cb(void *data, Evas_Object *obj, void *event_info)
 	debug_enter();
 	EmailFilterUGD *ugd = data;
 
-	ugd->is_keypad = 0;
+	ugd->is_keypad = EINA_FALSE;
 
 	_title_show(ugd);
 }
@@ -222,7 +214,7 @@ static void _keypad_up_cb(void *data, Evas_Object *obj, void *event_info)
 
 	int rot = elm_win_rotation_get(ugd->base.win);
 
-	ugd->is_keypad = 1;
+	ugd->is_keypad = EINA_TRUE;
 
 	if (rot == EM_EVENT_ROTATE_LANDSCAPE ||
 		rot == EM_EVENT_ROTATE_LANDSCAPE_UPSIDEDOWN) {

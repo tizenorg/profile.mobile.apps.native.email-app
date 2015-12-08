@@ -100,7 +100,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 		int mailid = 0;
 		int mailbox_id = 0;
 		int err = 0;
-		EmailSortType sort_type = mailbox_ugd->sort_type;
+		email_sort_type_e sort_type = mailbox_ugd->sort_type;
 		email_mailbox_type_e mailbox_type = EMAIL_MAILBOX_TYPE_NONE;
 		email_mailbox_t *mailbox = NULL;
 		email_account_t *account = NULL;

@@ -230,7 +230,7 @@ void mailbox_finish_search_mode(EmailMailboxUGD *mailbox_ugd)
 	mailbox_show_compose_btn(mailbox_ugd);
 }
 
-void mailbox_free_mailbox_search_data(EmailSearchData *search_data)
+void mailbox_free_mailbox_search_data(email_search_data_t *search_data)
 {
 	debug_enter();
 	if (!search_data) {
@@ -331,12 +331,12 @@ void mailbox_change_search_layout_state(EmailMailboxUGD *mailbox_ugd, bool show_
 
 }
 
-EmailSearchData *mailbox_make_search_data(EmailMailboxUGD *mailbox_ugd)
+email_search_data_t *mailbox_make_search_data(EmailMailboxUGD *mailbox_ugd)
 {
 	debug_enter();
 	retvm_if(!mailbox_ugd, NULL, "mailbox_ugd is NULL");
 
-	EmailSearchData *search_data = calloc(1, sizeof(EmailSearchData));
+	email_search_data_t *search_data = calloc(1, sizeof(email_search_data_t));
 	retvm_if(!search_data, NULL, "search_data memory alloc failed");
 
 	search_data->subject = (char *)elm_entry_markup_to_utf8(elm_object_text_get(mailbox_ugd->search_editfield.entry));
@@ -361,7 +361,7 @@ int mailbox_show_search_result(EmailMailboxUGD *mailbox_ugd)
 	if (!mailbox_ugd)
 		return 0;
 
-	EmailSearchData *search_data = mailbox_make_search_data(mailbox_ugd);
+	email_search_data_t *search_data = mailbox_make_search_data(mailbox_ugd);
 
 	mailbox_list_refresh(mailbox_ugd, search_data);
 

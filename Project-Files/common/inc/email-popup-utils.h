@@ -29,10 +29,10 @@
 #define COMMON_EVAS_DATA_NAME_POPUP_ITEM_COUNT "popup_item_count"
 #define COMMON_EVAS_DATA_NAME_POPUP_ITEM_HEIGHT "popup_item_height"
 
-EMAIL_API Evas_Object *common_util_create_popup(Evas_Object *parent, EmailCommonStringType title,
-		Evas_Smart_Cb btn1_click_cb, EmailCommonStringType btn1_text,
-		Evas_Smart_Cb btn2_click_cb, EmailCommonStringType btn2_text,
-		Evas_Smart_Cb btn3_click_cb, EmailCommonStringType btn3_text,
+EMAIL_API Evas_Object *common_util_create_popup(Evas_Object *parent, email_string_t title,
+		Evas_Smart_Cb btn1_click_cb, email_string_t btn1_text,
+		Evas_Smart_Cb btn2_click_cb, email_string_t btn2_text,
+		Evas_Smart_Cb btn3_click_cb, email_string_t btn3_text,
 		Evas_Smart_Cb cancel_cb, Eina_Bool need_ime_hide, void *cb_data);
 
 EMAIL_API void common_util_popup_display_genlist(Evas_Object *popup, Evas_Object *genlist, Eina_Bool is_horizontal, int item_height, int item_count);

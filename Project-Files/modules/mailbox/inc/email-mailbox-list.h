@@ -49,7 +49,7 @@ void mailbox_list_system_settings_callback_unregister();
  * @param[in]	mailbox_ugd		Email mailbox data
  * @param[in]	search_data		Email search data
  */
-void mailbox_list_refresh(EmailMailboxUGD *mailbox_ugd, const EmailSearchData *search_data);
+void mailbox_list_refresh(EmailMailboxUGD *mailbox_ugd, const email_search_data_t *search_data);
 
 /**
  * @brief Insert item to Mailbox genlist
@@ -79,7 +79,7 @@ void mailbox_list_remove_mail_item(EmailMailboxUGD * mailbox_ugd, MailItemData *
  * @param[in]	mailbox_ugd		Email Mailbox data
  * @return MailItemData structure or NULL if none or an error occurred
  */
-MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t* mail_info, const EmailSearchData *search_data, EmailMailboxUGD *mailbox_ugd);
+MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t* mail_info, const email_search_data_t *search_data, EmailMailboxUGD *mailbox_ugd);
 
 /**
  * @brief Get Mail Item data structure from Mail List by Mail ID

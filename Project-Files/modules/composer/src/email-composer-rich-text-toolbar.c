@@ -64,7 +64,7 @@ static char *_rich_text_button_list[RICH_TEXT_TYPE_COUNT] = {
 		"ec/toolbar/button/fontbgcolor"
 };
 
-static EmailRGBA _default_font_colors[] = {
+static email_rgba_t _default_font_colors[] = {
 		{0, 0, 0, 255},
 		{255, 255, 255, 255}
 };
@@ -99,7 +99,7 @@ static void _delete_popup(EmailComposerUGD *ugd);
 
 /* Color selector popup */
 static void _create_colorselector_popup(EmailComposerUGD *ugd, RichTextTypes type);
-static Evas_Object *_create_colorselector_popup_content(EmailComposerUGD *ugd, EmailRGBA rich_text_color, Evas_Object *parent, RichTextTypes type);
+static Evas_Object *_create_colorselector_popup_content(EmailComposerUGD *ugd, email_rgba_t rich_text_color, Evas_Object *parent, RichTextTypes type);
 static Evas_Object *_create_colorselector(Evas_Object *layout, EmailComposerUGD *ugd, RichTextTypes type);
 static void _font_color_response_cb(void *data, Evas_Object *obj, void *event_info);
 static void _bg_color_response_cb(void *data, Evas_Object *obj, void *event_info);
@@ -124,12 +124,12 @@ static void _insert_box_padding_item(Evas_Object *box, BoxItemPaddingType type);
 
 static void _font_properties_script_exec_cb(Evas_Object *obj, const char *result_value, void *user_data);
 
-static EmailCommonStringType EMAIL_COMPOSER_HEADER_TEXT_BACKGROUND_COLOUR = { PACKAGE, "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR" };
-static EmailCommonStringType EMAIL_COMPOSER_HEADER_TEXT_COLOUR = { PACKAGE, "IDS_EMAIL_BODY_FONT_COLOUR" };
-static EmailCommonStringType EMAIL_COMPOSER_OPT_FONT_SIZE = { PACKAGE, "IDS_EMAIL_BODY_FONT_SIZE" };
-static EmailCommonStringType EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
-static EmailCommonStringType EMAIL_COMPOSER_STRING_CANCEL = { PACKAGE, "IDS_EMAIL_BUTTON_CANCEL" };
-static EmailCommonStringType EMAIL_COMPOSER_SK_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
+static email_string_t EMAIL_COMPOSER_HEADER_TEXT_BACKGROUND_COLOUR = { PACKAGE, "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR" };
+static email_string_t EMAIL_COMPOSER_HEADER_TEXT_COLOUR = { PACKAGE, "IDS_EMAIL_BODY_FONT_COLOUR" };
+static email_string_t EMAIL_COMPOSER_OPT_FONT_SIZE = { PACKAGE, "IDS_EMAIL_BODY_FONT_SIZE" };
+static email_string_t EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
+static email_string_t EMAIL_COMPOSER_STRING_CANCEL = { PACKAGE, "IDS_EMAIL_BUTTON_CANCEL" };
+static email_string_t EMAIL_COMPOSER_SK_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
 
 static RichTextTypes _get_pressed_button_type(EmailComposerUGD *ugd, Evas_Object *button)
 {
@@ -260,8 +260,8 @@ static Evas_Object *_create_colorselector(Evas_Object *box, EmailComposerUGD *ug
 
 	const Eina_List *color_list = NULL, *cur_list = NULL;
 	Elm_Object_Item *cur_it = NULL;
-	EmailRGBA *rgb = NULL;
-	EmailRGBA rgb_it;
+	email_rgba_t *rgb = NULL;
+	email_rgba_t rgb_it;
 
 	Evas_Object *colorselector = elm_colorselector_add(box);
 	Elm_Colorselector_Mode mode = ELM_COLORSELECTOR_PALETTE;
@@ -300,7 +300,7 @@ static Evas_Object *_create_colorselector(Evas_Object *box, EmailComposerUGD *ug
 	return colorselector;
 }
 
-static Evas_Object *_create_colorselector_popup_content(EmailComposerUGD *ugd, EmailRGBA rich_text_color, Evas_Object *parent, RichTextTypes type)
+static Evas_Object *_create_colorselector_popup_content(EmailComposerUGD *ugd, email_rgba_t rich_text_color, Evas_Object *parent, RichTextTypes type)
 {
 	debug_enter();
 
@@ -323,7 +323,7 @@ static void _update_color_button_after_color_pick(EmailComposerUGD *ugd, RichTex
 {
 	debug_enter();
 
-	EmailRGBA *color_cur = NULL;
+	email_rgba_t *color_cur = NULL;
 	char *operation = NULL;
 
 	if (type == RICH_TEXT_TYPE_FONT_COLOR) {
@@ -492,9 +492,9 @@ static void _create_colorselector_popup(EmailComposerUGD *ugd, RichTextTypes typ
 	retm_if(ugd == NULL, "ugd is NULL!");
 
 	Evas_Object *content = NULL;
-	EmailRGBA *color_cur = NULL;
+	email_rgba_t *color_cur = NULL;
 	button_click_cb button_ok_cb = NULL;
-	EmailCommonStringType *string_type = NULL;
+	email_string_t *string_type = NULL;
 
 	if (type == RICH_TEXT_TYPE_FONT_COLOR) {
 		color_cur = &ugd->richtext_font_color;
@@ -617,7 +617,7 @@ static void _update_property_button_state(EmailComposerUGD *ugd, RichTextTypes t
 static void _update_color_button_state(EmailComposerUGD *ugd, RichTextTypes type)
 {
 	Evas_Object *button = NULL;
-	EmailRGBA *color = NULL;
+	email_rgba_t *color = NULL;
 
 	if (type == RICH_TEXT_TYPE_FONT_COLOR) {
 		button = ugd->richtext_button_list[RICH_TEXT_TYPE_FONT_COLOR].button;
@@ -693,7 +693,7 @@ static Evas_Object *_create_button(EmailComposerUGD *ugd, Evas_Object *parent, R
 
 	if (type == RICH_TEXT_TYPE_FONT_COLOR || type == RICH_TEXT_TYPE_BACKGROUND_COLOR) {
 
-		EmailRGBA *color = NULL;
+		email_rgba_t *color = NULL;
 		switch (type) {
 		case RICH_TEXT_TYPE_FONT_COLOR:
 			color = &ugd->richtext_font_color;

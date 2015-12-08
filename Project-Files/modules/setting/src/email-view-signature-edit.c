@@ -34,11 +34,11 @@ static void _done_cb(void *data, Evas_Object *obj, void *event_info);
 static void _backup_input_cb(void *data, Evas_Object *obj, void *event_info);
 static Eina_Bool _startup_focus_cb(void *data);
 
-static email_setting_string_t EMAIL_SETTING_STRING_SIGNATURE = {PACKAGE, "IDS_EMAIL_MBODY_SIGNATURE"};
-static email_setting_string_t EMAIL_SETTING_STRING_EDIT_SIGNATURE = {PACKAGE, "IDS_EMAIL_MBODY_EDIT_SIGNATURE"};
-static email_setting_string_t EMAIL_SETTING_STRING_SIGNATURE_SAVED = {PACKAGE, "IDS_EMAIL_TPOP_SIGNATURE_SAVED"};
-static email_setting_string_t EMAIL_SETTING_STRING_DONE_TITLE_BTN = {PACKAGE, "IDS_TPLATFORM_ACBUTTON_DONE_ABB"};
-static email_setting_string_t EMAIL_SETTING_STRING_CANCEL_TITLE_BTN = {PACKAGE, "IDS_TPLATFORM_ACBUTTON_CANCEL_ABB"};
+static email_string_t EMAIL_SETTING_STRING_SIGNATURE = {PACKAGE, "IDS_EMAIL_MBODY_SIGNATURE"};
+static email_string_t EMAIL_SETTING_STRING_EDIT_SIGNATURE = {PACKAGE, "IDS_EMAIL_MBODY_EDIT_SIGNATURE"};
+static email_string_t EMAIL_SETTING_STRING_SIGNATURE_SAVED = {PACKAGE, "IDS_EMAIL_TPOP_SIGNATURE_SAVED"};
+static email_string_t EMAIL_SETTING_STRING_DONE_TITLE_BTN = {PACKAGE, "IDS_TPLATFORM_ACBUTTON_DONE_ABB"};
+static email_string_t EMAIL_SETTING_STRING_CANCEL_TITLE_BTN = {PACKAGE, "IDS_TPLATFORM_ACBUTTON_CANCEL_ABB"};
 
 struct view_data {
 	email_view_t base;

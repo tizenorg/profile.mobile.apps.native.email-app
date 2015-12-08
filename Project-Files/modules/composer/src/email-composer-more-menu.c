@@ -49,8 +49,8 @@ static void _tomyself_append_myaddress(void *data, int index);
 static void _tomyself_gl_sel(void *data, Evas_Object *obj, void *event_info);
 static void _more_menu_ctxpopup_back_cb(void *data, Evas_Object *obj, void *event_info);
 
-static EmailCommonStringType EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
-static EmailCommonStringType EMAIL_COMPOSER_STRING_HEADER_SELECT_EMAIL_ADDRESS = { PACKAGE, "IDS_EMAIL_HEADER_SEND_TO_MYSELF_ABB" };
+static email_string_t EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
+static email_string_t EMAIL_COMPOSER_STRING_HEADER_SELECT_EMAIL_ADDRESS = { PACKAGE, "IDS_EMAIL_HEADER_SEND_TO_MYSELF_ABB" };
 
 
 /*

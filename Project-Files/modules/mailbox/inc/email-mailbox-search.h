@@ -28,7 +28,7 @@ void mailbox_finish_search_mode(EmailMailboxUGD *mailbox_ugd);
  * @brief Free Email search data
  * @param[in]	search_data		Email search data
  */
-void mailbox_free_mailbox_search_data(EmailSearchData *search_data);
+void mailbox_free_mailbox_search_data(email_search_data_t *search_data);
 
 /**
  * @brief Callback that provides click on search button
@@ -47,7 +47,7 @@ void mailbox_change_search_layout_state(EmailMailboxUGD *mailbox_ugd, bool show_
  * @brief Create and initialize Email search data
  * @param[in]	data				User data (Email mailbox data)
  */
-EmailSearchData *mailbox_make_search_data(EmailMailboxUGD *mailbox_ugd);
+email_search_data_t *mailbox_make_search_data(EmailMailboxUGD *mailbox_ugd);
 
 /**
  * @brief Show search result

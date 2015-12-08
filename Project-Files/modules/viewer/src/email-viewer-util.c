@@ -40,13 +40,13 @@
 #include "email-viewer-logic.h"
 #include "email-viewer-header.h"
 
-static email_viewer_string_t EMAIL_VIEWER_POP_ERROR = { PACKAGE, "IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB" };
-static email_viewer_string_t EMAIL_VIEWER_STRING_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
-static email_viewer_string_t EMAIL_VIEWER_HEADER_UNABLE_TO_OPEN_FILE = { PACKAGE, "IDS_EMAIL_HEADER_UNABLE_TO_OPEN_FILE_ABB" };
-static email_viewer_string_t EMAIL_VIEWER_POP_THIS_FILE_TYPE_IS_NOT_SUPPORTED = { PACKAGE, "IDS_EMAIL_POP_THIS_FILE_TYPE_IS_NOT_SUPPORTED_BY_ANY_APPLICATION_ON_YOUR_DEVICE" };
-static email_viewer_string_t EMAIL_VIEWER_POP_FAILED_TO_DELETE = { PACKAGE, N_("IDS_EMAIL_POP_FAILED_TO_DELETE") };
-static email_viewer_string_t EMAIL_VIEWER_POP_FAILED_TO_MOVE = { PACKAGE, N_("IDS_EMAIL_POP_FAILED_TO_MOVE") };
-static email_viewer_string_t EMAIL_VIEWER_STRING_NULL = { NULL, NULL };
+static email_string_t EMAIL_VIEWER_POP_ERROR = { PACKAGE, "IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB" };
+static email_string_t EMAIL_VIEWER_STRING_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
+static email_string_t EMAIL_VIEWER_HEADER_UNABLE_TO_OPEN_FILE = { PACKAGE, "IDS_EMAIL_HEADER_UNABLE_TO_OPEN_FILE_ABB" };
+static email_string_t EMAIL_VIEWER_POP_THIS_FILE_TYPE_IS_NOT_SUPPORTED = { PACKAGE, "IDS_EMAIL_POP_THIS_FILE_TYPE_IS_NOT_SUPPORTED_BY_ANY_APPLICATION_ON_YOUR_DEVICE" };
+static email_string_t EMAIL_VIEWER_POP_FAILED_TO_DELETE = { PACKAGE, N_("IDS_EMAIL_POP_FAILED_TO_DELETE") };
+static email_string_t EMAIL_VIEWER_POP_FAILED_TO_MOVE = { PACKAGE, N_("IDS_EMAIL_POP_FAILED_TO_MOVE") };
+static email_string_t EMAIL_VIEWER_STRING_NULL = { NULL, NULL };
 
 
 typedef enum {
@@ -153,9 +153,9 @@ static void _popup_content_remove(Evas_Object *popup)
 
 }
 
-Evas_Object *util_create_notify_with_list(EmailViewerUGD *ug_data, email_viewer_string_t t_header, email_viewer_string_t t_content,
-						int btn_num, email_viewer_string_t t_btn1_lb, popup_cb resp_cb1,
-						email_viewer_string_t t_btn2_lb, popup_cb resp_cb2, popup_cb resp_block_cb)
+Evas_Object *util_create_notify_with_list(EmailViewerUGD *ug_data, email_string_t t_header, email_string_t t_content,
+						int btn_num, email_string_t t_btn1_lb, popup_cb resp_cb1,
+						email_string_t t_btn2_lb, popup_cb resp_cb2, popup_cb resp_block_cb)
 {
 	debug_enter();
 	retvm_if(ug_data == NULL, NULL, "Invalid parameter: ug_data[NULL]");
@@ -255,9 +255,9 @@ Evas_Object *util_create_notify_with_list(EmailViewerUGD *ug_data, email_viewer_
 	return notify;
 }
 
-void util_create_notify(EmailViewerUGD *ug_data, email_viewer_string_t t_header, email_viewer_string_t t_content,
-						int btn_num, email_viewer_string_t t_btn1_lb, popup_cb resp_cb1,
-						email_viewer_string_t t_btn2_lb, popup_cb resp_cb2, popup_cb resp_block_cb)
+void util_create_notify(EmailViewerUGD *ug_data, email_string_t t_header, email_string_t t_content,
+						int btn_num, email_string_t t_btn1_lb, popup_cb resp_cb1,
+						email_string_t t_btn2_lb, popup_cb resp_cb2, popup_cb resp_block_cb)
 {
 	debug_enter();
 	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
@@ -351,7 +351,7 @@ int _find_folder_id_using_folder_type(EmailViewerUGD *ug_data, email_mailbox_typ
 	debug_log("mailbox_type:%d", mailbox_type);
 
 	LIST_ITER_START(i, ug_data->folder_list) {
-		EmailMailboxNameAndAlias *nameandalias = (EmailMailboxNameAndAlias *) LIST_ITER_GET_DATA(i, ug_data->folder_list);
+		email_mailbox_name_and_alias_t *nameandalias = (email_mailbox_name_and_alias_t *) LIST_ITER_GET_DATA(i, ug_data->folder_list);
 		int folder_id = nameandalias->mailbox_id;
 		if (mailbox_type == nameandalias->mailbox_type) {
 			debug_secure("folder_id: %d, name: %s, alias: %s", folder_id, nameandalias->name, nameandalias->alias);
@@ -372,7 +372,7 @@ int _find_folder_type_using_folder_id(EmailViewerUGD *ug_data, int mailbox_id)
 	debug_log("mailbox_id:%d", mailbox_id);
 
 	LIST_ITER_START(i, ug_data->folder_list) {
-		EmailMailboxNameAndAlias *nameandalias = (EmailMailboxNameAndAlias *) LIST_ITER_GET_DATA(i, ug_data->folder_list);
+		email_mailbox_name_and_alias_t *nameandalias = (email_mailbox_name_and_alias_t *) LIST_ITER_GET_DATA(i, ug_data->folder_list);
 		int folder_type = nameandalias->mailbox_type;
 		if (mailbox_id == nameandalias->mailbox_id) {
 			debug_secure("folder_type: %d, name: %s, alias: %s", folder_type, nameandalias->name, nameandalias->alias);
@@ -802,7 +802,7 @@ void viewer_create_email(EmailViewerUGD *ug_data, const char *email_address)
 
 }
 
-EmailExtSaveErrType viewer_save_attachment_in_downloads(EV_attachment_data *aid, gboolean(*copy_file_cb) (void *data, float percentage))
+email_ext_save_err_type_e viewer_save_attachment_in_downloads(EV_attachment_data *aid, gboolean(*copy_file_cb) (void *data, float percentage))
 {
 	debug_enter();
 	retvm_if(aid == NULL, EMAIL_EXT_SAVE_ERR_UNKNOWN, "Invalid parameter: aid[NULL]");
@@ -810,7 +810,7 @@ EmailExtSaveErrType viewer_save_attachment_in_downloads(EV_attachment_data *aid,
 
 	debug_secure("attachment file path = %s", info->path);
 
-	EmailExtSaveErrType ret_val = EMAIL_EXT_SAVE_ERR_NONE;
+	email_ext_save_err_type_e ret_val = EMAIL_EXT_SAVE_ERR_NONE;
 	int mc_ret = 0;
 	gchar new_path[MAX_PATH_LEN] = {'\0'};
 
@@ -847,7 +847,7 @@ EmailExtSaveErrType viewer_save_attachment_in_downloads(EV_attachment_data *aid,
 	return ret_val;
 }
 
-EmailExtSaveErrType viewer_save_attachment_for_preview(EV_attachment_data *aid, gboolean(*copy_file_cb) (void *data, float percentage))
+email_ext_save_err_type_e viewer_save_attachment_for_preview(EV_attachment_data *aid, gboolean(*copy_file_cb) (void *data, float percentage))
 {
 	debug_enter();
 	retvm_if(aid == NULL, EMAIL_EXT_SAVE_ERR_UNKNOWN, "Invalid parameter: aid[NULL]");
@@ -855,7 +855,7 @@ EmailExtSaveErrType viewer_save_attachment_for_preview(EV_attachment_data *aid, 
 
 	debug_secure("attachment file path = %s", info->path);
 
-	EmailExtSaveErrType ret_val = EMAIL_EXT_SAVE_ERR_NONE;
+	email_ext_save_err_type_e ret_val = EMAIL_EXT_SAVE_ERR_NONE;
 	gboolean saved = FALSE;
 
 	if (!aid->preview_path) {
@@ -944,8 +944,8 @@ void viewer_show_storage_full_popup(EmailViewerUGD *ug_data)
 		return;
 	}
 	ug_data->is_storage_full_popup_shown = EINA_TRUE;
-	email_viewer_string_t content = { PACKAGE, "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE_GO_TO_SETTINGS_POWER_AND_STORAGE_STORAGE_THEN_DELETE_SOME_FILES_AND_TRY_AGAIN" };
-	email_viewer_string_t btn2 = { PACKAGE, "IDS_EMAIL_BUTTON_SETTINGS" };
+	email_string_t content = { PACKAGE, "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE_GO_TO_SETTINGS_POWER_AND_STORAGE_STORAGE_THEN_DELETE_SOME_FILES_AND_TRY_AGAIN" };
+	email_string_t btn2 = { PACKAGE, "IDS_EMAIL_BUTTON_SETTINGS" };
 	util_create_notify(ug_data, EMAIL_VIEWER_POP_ERROR, content, 2,
 			EMAIL_VIEWER_STRING_OK, _popup_response_cb,
 			btn2, viewer_storage_full_popup_response_cb, NULL);
@@ -1008,7 +1008,7 @@ void viewer_storage_full_popup_response_cb(void *data, Evas_Object *obj, void *e
 	debug_leave();
 }
 
-void viewer_create_down_progress(void *data, email_viewer_string_t t, popup_cb resp_cb)
+void viewer_create_down_progress(void *data, email_string_t t, popup_cb resp_cb)
 {
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");

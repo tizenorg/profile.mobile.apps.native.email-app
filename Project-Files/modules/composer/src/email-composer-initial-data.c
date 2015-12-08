@@ -66,10 +66,10 @@ static void _recp_append_string(gchar **dst, gchar *src);
 
 static void _recp_append_extra_data_array(gchar **dst, app_control_h app_control, const char *data_key);
 
-static EmailCommonStringType EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
-static EmailCommonStringType EMAIL_COMPOSER_STRING_BUTTON_CANCEL = { PACKAGE, "IDS_EMAIL_BUTTON_CANCEL" };
-static EmailCommonStringType EMAIL_COMPOSER_STRING_HEADER_OPEN_EMAIL = { PACKAGE, "IDS_EMAIL_HEADER_OPEN_EMAIL" };
-static EmailCommonStringType EMAIL_COMPOSER_STRING_TPOP_LOADING_ING = { PACKAGE, "IDS_EMAIL_TPOP_LOADING_ING" };
+static email_string_t EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
+static email_string_t EMAIL_COMPOSER_STRING_BUTTON_CANCEL = { PACKAGE, "IDS_EMAIL_BUTTON_CANCEL" };
+static email_string_t EMAIL_COMPOSER_STRING_HEADER_OPEN_EMAIL = { PACKAGE, "IDS_EMAIL_HEADER_OPEN_EMAIL" };
+static email_string_t EMAIL_COMPOSER_STRING_TPOP_LOADING_ING = { PACKAGE, "IDS_EMAIL_TPOP_LOADING_ING" };
 
 
 /*
