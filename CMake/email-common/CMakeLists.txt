@@ -16,6 +16,22 @@ SET(SRCS-common
 	${PROJECT_COMMON_DIR}/src/email-color-box.c
 )
 
+IF(${TIZEN_2_4})
+
+IF(${ENABLE_ATTACH_PANEL})
+	SET(email-required-pkgs ecore glib-2.0 gobject-2.0 email-service storage
+		contacts-service2 capi-content-media-content dlog elementary evas eina edje capi-base-utils-i18n
+		accounts-svc capi-network-connection efl-extension capi-content-mime-type capi-system-system-settings
+		capi-appfw-application ewebkit2 capi-appfw-preference vconf attach-panel feedback)
+ELSE(${ENABLE_ATTACH_PANEL})
+	SET(email-required-pkgs ecore glib-2.0 gobject-2.0 email-service storage
+		contacts-service2 capi-content-media-content dlog elementary evas eina edje capi-base-utils-i18n
+		accounts-svc capi-network-connection efl-extension capi-content-mime-type capi-system-system-settings
+		capi-appfw-application ewebkit2 capi-appfw-preference vconf feedback)
+ENDIF(${ENABLE_ATTACH_PANEL})
+
+ELSE(${TIZEN_2_4})
+
 IF(${ENABLE_ATTACH_PANEL})
 	SET(email-required-pkgs ecore glib-2.0 gobject-2.0 email-service storage
 		contacts-service2 capi-content-media-content dlog elementary evas eina edje capi-base-utils-i18n
@@ -27,6 +43,9 @@ ELSE(${ENABLE_ATTACH_PANEL})
 		accounts-svc capi-network-connection efl-extension capi-content-mime-type capi-system-system-settings
 		capi-appfw-application chromium-efl capi-appfw-preference vconf feedback libtzplatform-config)
 ENDIF(${ENABLE_ATTACH_PANEL})
+
+ENDIF(${TIZEN_2_4})
+
 
 pkg_check_modules(pkgs-common REQUIRED "${email-required-pkgs}")
 

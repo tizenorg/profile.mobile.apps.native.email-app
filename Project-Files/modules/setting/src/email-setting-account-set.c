@@ -20,13 +20,17 @@
 #include "email-setting-account-set.h"
 #include "email-setting-utils.h"
 
+#ifdef _TIZEN_2_4_BUILD_
+#define ACCOUNT_ICON_PATH "/usr/share/icons/default/small/org.tizen.email.png"
+#else
 #include <tzplatform_config.h>
+#define ACCOUNT_ICON_PATH tzplatform_mkpath(TZ_SYS_RO_ICONS, "/default/small/org.tizen.email.png")
+#endif
 
-static email_string_t EMAIL_SETTING_STRING_SENT_FROM_SAMSUNG_MOBILE = {PACKAGE, "IDS_EMAIL_SBODY_SENT_FROM_MY_SAMSUNG_DEVICE"};
-
-#define ACCOUNT_ICON_PATH tzplatform_mkpath(TZ_SYS_RO_ICONS, "org.tizen.email.png")
 #define DEFAULT_SIGNATURE EMAIL_SETTING_STRING_SENT_FROM_SAMSUNG_MOBILE.id
 #define DEFAULT_EMAIL_SIZE 1024*50
+
+static email_string_t EMAIL_SETTING_STRING_SENT_FROM_SAMSUNG_MOBILE = {PACKAGE, "IDS_EMAIL_SBODY_SENT_FROM_MY_SAMSUNG_DEVICE"};
 
 static void _account_info_print(email_account_t *account);
 static void _set_display_name_with_email_addr(char *email_addr, char **display_name);
