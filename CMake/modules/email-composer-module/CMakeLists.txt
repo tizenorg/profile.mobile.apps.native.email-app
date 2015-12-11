@@ -27,10 +27,17 @@ SET(SRCS
 
 INCLUDE_DIRECTORIES(${CURRENT_SOURCE_DIR}/inc)
 
+IF(${TIZEN_2_4})
+SET(email-required-pkgs ecore glib-2.0 gobject-2.0 gio-2.0 elementary capi-appfw-application
+	capi-media-metadata-extractor capi-media-image-util notification evas dlog email-service contacts-service2
+	libexif ewebkit2 bundle efl-extension capi-system-system-settings
+	capi-network-connection capi-network-wifi libpng storage capi-content-media-content)
+ELSE(${TIZEN_2_4})
 SET(email-required-pkgs ecore glib-2.0 gobject-2.0 gio-2.0 elementary capi-appfw-application
 	capi-media-metadata-extractor capi-media-image-util notification evas dlog email-service contacts-service2
 	libexif chromium-efl bundle efl-extension capi-system-system-settings
 	capi-network-connection capi-network-wifi libpng storage capi-content-media-content)
+ENDIF(${TIZEN_2_4})
 
 pkg_check_modules(pkgs-composer REQUIRED "${email-required-pkgs}")
 

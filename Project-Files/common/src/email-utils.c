@@ -36,11 +36,34 @@
 #include <app_preference.h>
 #include <vconf.h>
 #include <feedback.h>
-#include <tzplatform_config.h>
 
 #include "email-utils.h"
 #include "email-locale.h"
 #include "email-engine.h"
+
+#ifdef _TIZEN_2_4_BUILD_
+
+#define EMAIL_FAIL_SAFE_RW_PATH	"/opt/usr/apps/" PKGNAME
+
+#ifdef _EMAIL_GBS_BUILD_
+#define EMAIL_FAIL_SAFE_R_PATH	"/usr/apps/" PKGNAME
+#else
+#define EMAIL_FAIL_SAFE_R_PATH	EMAIL_FAIL_SAFE_RW_PATH
+#endif
+
+#define EMAIL_FAIL_SAFE_RES_PATH 			EMAIL_FAIL_SAFE_R_PATH "/res"
+#define EMAIL_FAIL_SAFE_DATA_PATH 			EMAIL_FAIL_SAFE_RW_PATH "/data"
+#define EMAIL_FAIL_SAFE_SHARED_RES_PATH 	EMAIL_FAIL_SAFE_R_PATH "/shared/res"
+#define EMAIL_FAIL_SAFE_SHARED_DATA_PATH 	EMAIL_FAIL_SAFE_RW_PATH "/shared/data"
+
+#define EMAIL_FAIL_SAFE_PHONE_STORAGE_PATH 	"/opt/usr/media"
+#define EMAIL_FAIL_SAFE_MMC_STORAGE_PATH	"/opt/storage/sdcard"
+
+#define EMAIL_ETC_LOCALTIME_PATH 			"/opt/etc/localtime"
+
+#else
+
+#include <tzplatform_config.h>
 
 #define EMAIL_RES_PATH 			PKGNAME"/res"
 #define EMAIL_DATA_PATH 		PKGNAME"/data"
@@ -54,10 +77,13 @@
 
 #define EMAIL_FAIL_SAFE_PHONE_STORAGE_PATH 	tzplatform_getenv(TZ_USER_CONTENT)
 #define EMAIL_FAIL_SAFE_MMC_STORAGE_PATH	tzplatform_mkpath(TZ_SYS_STORAGE, "sdcard")
-#define EMAIL_FAIL_SAFE_DOWNLOADS_DIR 		"Downloads"
-#define EMAIL_FAIL_SAFE_SOUNDS_DIR 			"Sounds"
 
 #define EMAIL_ETC_LOCALTIME_PATH 			tzplatform_mkpath(TZ_SYS_ETC, "localtime")
+
+#endif
+
+#define EMAIL_FAIL_SAFE_DOWNLOADS_DIR 		"Downloads"
+#define EMAIL_FAIL_SAFE_SOUNDS_DIR 			"Sounds"
 
 #define EMAIL_FILE_URL_FMT "file://%s"
 

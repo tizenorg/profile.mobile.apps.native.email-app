@@ -33,7 +33,12 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gio/gio.h>
+
+#ifdef _TIZEN_2_4_BUILD_
+#include <EWebKit.h>
+#else
 #include <ewk_chromium.h>
+#endif
 
 #include "email-utils.h"
 #include "email-utils-contacts.h"
@@ -54,6 +59,35 @@
 #define debug_enter_scroller()					do { debug_trace(" * Enter *"); } while (0)
 #define debug_leave_scroller()					do { debug_trace(" * Leave *"); } while (0)
 #define debug_log_scroller(fmt, args...)			do { LOGI(fmt, ##args); } while (0)
+#endif
+
+#ifdef _TIZEN_2_4_BUILD_
+/* Suppress "implicit declaration of function" warning */
+char *ewk_hit_test_link_uri_get(void *hit_test);
+char *ewk_hit_test_link_title_get(void *hit_test);
+char *ewk_hit_test_link_label_get(void *hit_test);
+char *ewk_hit_test_image_uri_get(void *hit_test);
+char *ewk_hit_test_media_uri_get(void *hit_test);
+char *ewk_hit_test_tag_name_get(void *hit_test);
+char *ewk_hit_test_node_value_get(void *hit_test);
+char *ewk_hit_test_image_buffer_get(void *hit_test);
+unsigned int ewk_hit_test_image_buffer_length_get(void *hit_test);
+char *ewk_hit_test_image_file_name_extension_get(void *hit_test);
+void ewk_hit_test_free(void *hit_test);
+const char *ewk_view_text_selection_text_get(Evas_Object *view);
+
+void ewk_view_vertical_panning_hold_set(Evas_Object *view, Eina_Bool value);
+void ewk_view_scroll_size_get(Evas_Object *view, Evas_Coord *w, Evas_Coord *h);
+void ewk_view_orientation_send(Evas_Object *, int);
+Eina_Bool ewk_view_text_selection_clear(Evas_Object *);
+Eina_Bool ewk_view_visibility_set(Evas_Object *, Eina_Bool);
+
+void ewk_settings_webkit_text_size_adjust_enabled_set(Ewk_Settings *settings, Eina_Bool value);
+void ewk_settings_extra_feature_set(Ewk_Settings *, const char *, Eina_Bool);
+
+void ewk_context_did_start_download_callback_set(Ewk_Context *, void (*)(const char *, void *), void *);
+void ewk_context_cache_clear(Ewk_Context *);
+void ewk_context_notify_low_memory(Ewk_Context *);
 #endif
 
 typedef struct _ev_attachment_data_tag EV_attachment_data;

@@ -19,7 +19,12 @@
 #define __EMAIL_COMPOSER_H__
 
 #include <gio/gio.h>
+
+#ifdef _TIZEN_2_4_BUILD_
+#include <EWebKit.h>
+#else
 #include <ewk_chromium.h>
+#endif
 
 #include "email-locale.h"
 #include "email-utils.h"
@@ -29,6 +34,34 @@
 
 #undef LOG_TAG
 #define LOG_TAG "EMAIL_COMPOSER"
+
+#ifdef _TIZEN_2_4_BUILD_
+/**
+ * @brief Suppress "implicit declaration of function" warning
+ */
+typedef struct Ewk_Console_Message_Tag Ewk_Console_Message;
+
+/**
+ * @brief Forward declaration
+ */
+Eina_Bool ewk_view_command_execute(Evas_Object *, char *, char *);
+void ewk_view_vertical_panning_hold_set(Evas_Object *, Eina_Bool);
+void ewk_view_scroll_size_get(Evas_Object *, int *, int *);
+void ewk_view_split_scroll_overflow_enabled_set(Evas_Object *, Eina_Bool);
+void ewk_settings_select_word_automatically_set(Ewk_Settings *, Eina_Bool);
+void ewk_settings_clear_text_selection_automatically_set(Ewk_Settings *, Eina_Bool);
+Eina_Bool ewk_view_plain_text_get(Evas_Object *, void *, void *);
+void ewk_settings_uses_keypad_without_user_action_set(Ewk_Settings *, Eina_Bool);
+void ewk_view_draws_transparent_background_set(Evas_Object *, Eina_Bool);
+void ewk_settings_extra_feature_set(Ewk_Settings *, const char *, Eina_Bool);
+void ewk_context_cache_clear(Ewk_Context *);
+void ewk_context_notify_low_memory(Ewk_Context *);
+Eina_Bool ewk_view_text_selection_clear(Evas_Object *);
+
+const char *ewk_console_message_text_get(Ewk_Console_Message *msg);
+unsigned ewk_console_message_line_get(Ewk_Console_Message *msg);
+
+#endif
 
 typedef struct ug_data EmailComposerUGD;
 
