@@ -39,12 +39,11 @@ static char *_gl_group_text_get(void *data, Evas_Object *obj, const char *part);
 static void _gl_grouptitle_del(void *data, Evas_Object *obj);
 static void _gl_del(void *data, Evas_Object *obj);
 static void _open_allacc_boxtype(void *data, Evas_Object *obj, void *event_info);
-static void _popup_newfolder_cb(void *data, Evas_Object *obj, void *event_info);
 static void _create_folder_popup_cancel_cb(void *data, Evas_Object *obj, void *event_info);
 static void _create_folder_ok_cb(void *data, Evas_Object *obj, void *event_info);
 
 static void _popup_delfolder_cb(void *data, Evas_Object *obj, void *event_info);
-static void _delete_con_cb(void *data, Evas_Object *obj, void *event_info);
+static void _delete_folder_ok_cb(void *data, Evas_Object *obj, void *event_info);
 
 static void _popup_renamefolder_cb(void *data, Evas_Object *obj, void *event_info);
 static void _rename_folder_cancel_cb(void *data, Evas_Object *obj, void *event_info);
@@ -57,13 +56,9 @@ static void _popup_fail_cb(void *data, Evas_Object *obj, void *event_info, int e
 static void _popup_progress_cb(void *data, Evas_Object *obj, void *event_info);
 
 static void _update_folder_view_after_folder_action(void *data);
-static void _update_folder_list_after_folder_delete_action(void *data, int action_type, int mailbox_id, bool show_success_popup);
-static void _update_folder_list_after_folder_action(void *data, int action_type, int mailbox_id, bool show_success_popup);
+static void _update_folder_list_after_folder_delete_action(void *data, int mailbox_id, bool show_success_popup);
+static void _update_folder_list_after_folder_create_action(void *data, int mailbox_id, bool show_success_popup);
 
-static void _add_root_item_in_genlist(void *data);
-static void _gl_root_item_del(void *data, Evas_Object *obj);
-static char *_gl_label_get_for_root_item(void *data, Evas_Object *obj, const char *part);
-static void _gl_root_item_sel(void *data, Evas_Object *obj, void *event_info);
 static bool _check_folder_name_exists(EmailAccountUGD *ug_data, const char *mailbox_name);
 /* If true returned, *out_mailbox_name and *out_mailbox_alias has to be freed manually via free() */
 static bool _generate_email_name_and_alias(EmailAccountUGD *ug_data, char **out_mailbox_name, char **out_mailbox_alias);
@@ -131,21 +126,6 @@ void account_init_genlist_item_class_for_single_folder_list(EmailAccountUGD *ug_
 	itc_group->func.state_get = NULL;
 	itc_group->func.del = _gl_grouptitle_del;
 	ug_data->itc_group = itc_group;
-
-	Elm_Genlist_Item_Class *itc_root = elm_genlist_item_class_new();
-	if (!itc_root){
-		debug_error("itc_root is NULL - allocation memory failed");
-		EMAIL_GENLIST_ITC_FREE(ug_data->itc_account_name);
-		EMAIL_GENLIST_ITC_FREE(ug_data->itc_single);
-		EMAIL_GENLIST_ITC_FREE(ug_data->itc_group);
-		return;
-	}
-	itc_root->item_style = "type1";
-	itc_root->func.text_get = _gl_label_get_for_root_item;
-	itc_root->func.content_get = NULL;
-	itc_root->func.state_get = NULL;
-	itc_root->func.del = _gl_root_item_del;
-	ug_data->itc_root = itc_root;
 
 }
 
@@ -274,11 +254,7 @@ static void _gl_sel_single(void *data, Evas_Object *obj, void *event_info)
 	Item_Data *tree_item_data = (Item_Data *)data;
 	EmailAccountUGD *ug_data = tree_item_data->ug_data;
 
-	if (ACC_FOLDER_CREATE == ug_data->folder_mode) {
-		ug_data->it = it;
-		_popup_newfolder_cb(ug_data, obj, event_info);
-
-	} else if (ACC_FOLDER_DELETE == ug_data->folder_mode) {
+	if (ACC_FOLDER_DELETE == ug_data->folder_mode) {
 		ug_data->it = it;
 		_popup_delfolder_cb(ug_data, obj, event_info);
 
@@ -367,20 +343,10 @@ static bool _generate_email_name_and_alias(EmailAccountUGD *ug_data, char **out_
 	*out_mailbox_name = NULL;
 	*out_mailbox_alias = NULL;
 
-	Elm_Object_Item *it = ug_data->it;
-	retv_if(!it, false);
-	Item_Data *tree_item_data = elm_object_item_data_get(it);
-	retv_if(!tree_item_data, false);
-
-	email_mailbox_t *mlist = (email_mailbox_t *)tree_item_data->mailbox_list;
-	retv_if(!mlist && (ug_data->it != ug_data->root_item), false);
-
 	retv_if(!elm_object_text_get(ug_data->entry), false);
 	char *mailbox_alias = elm_entry_markup_to_utf8(elm_object_text_get(ug_data->entry));
 	retv_if(!mailbox_alias, false);
 	email_util_strrtrim(mailbox_alias);
-
-	debug_log("root folder is selected");
 
 	*out_mailbox_name = strdup(mailbox_alias);
 	*out_mailbox_alias = mailbox_alias;
@@ -644,17 +610,11 @@ void account_create_folder_create_view(void *data)
 
 	if (ug_data->folder_mode == ACC_FOLDER_NONE) {
 		ug_data->folder_mode = ACC_FOLDER_CREATE;
-
-		_add_root_item_in_genlist(data);
 		account_update_folder_item_dim_state(data);
 
 	} else if (ug_data->folder_mode == ACC_FOLDER_CREATE) {
 		ug_data->folder_mode = ACC_FOLDER_NONE;
 
-		if (ug_data->root_item) {
-			elm_object_item_del(ug_data->root_item);
-			ug_data->root_item = NULL;
-		}
 		account_update_folder_item_dim_state(data);
 		account_update_view_title(data);
 	}
@@ -757,7 +717,7 @@ void account_gdbus_event_account_receive(GDBusConnection *connection,
 
 			if (ug_data->emf_handle != EMAIL_HANDLE_INVALID) {
 				debug_log("Native account folder added.");
-				_update_folder_list_after_folder_action(ug_data, ACC_FOLDER_ACTION_CREATE, data2, false);
+				_update_folder_list_after_folder_create_action(ug_data, data2, false);
 			} else {
 				if (ug_data->account_id == account_id) {
 					int account_type = GET_ACCOUNT_SERVER_TYPE(account_id);
@@ -766,7 +726,7 @@ void account_gdbus_event_account_receive(GDBusConnection *connection,
 						ug_data->need_refresh++;
 					} else if (account_type == EMAIL_SERVER_TYPE_POP3) {
 						debug_log("POP account folder added.");
-						_update_folder_list_after_folder_action(ug_data, ACC_FOLDER_ACTION_CREATE, data2, true);
+						_update_folder_list_after_folder_create_action(ug_data, data2, true);
 					} else {
 						debug_log("folder update(add) is occurred regardless of user's intention.");
 						_finish_folder_view(ug_data, NULL, NULL);
@@ -788,7 +748,7 @@ void account_gdbus_event_account_receive(GDBusConnection *connection,
 			if (ug_data->emf_handle != EMAIL_HANDLE_INVALID) {
 				if (ug_data->target_mailbox_id == data2) {
 					debug_log("NOTI_MAILBOX_DELETE");
-					_update_folder_list_after_folder_delete_action(ug_data, ACC_FOLDER_ACTION_DELETE, data2, false);
+					_update_folder_list_after_folder_delete_action(ug_data, data2, false);
 				} else {
 					debug_log("Mailbox is deleted.(sub-folder is deleted)");
 				}
@@ -800,7 +760,7 @@ void account_gdbus_event_account_receive(GDBusConnection *connection,
 						ug_data->need_refresh++;
 					} else if (account_type == EMAIL_SERVER_TYPE_POP3) {
 						debug_log("POP account folder deleted.");
-						_update_folder_list_after_folder_delete_action(ug_data, ACC_FOLDER_ACTION_DELETE, data2, true);
+						_update_folder_list_after_folder_delete_action(ug_data, data2, true);
 					} else {
 						debug_log("folder update(delete) is occurred regardless of user's intention.");
 						_finish_folder_view(ug_data, NULL, NULL);
@@ -1260,7 +1220,7 @@ static void _gl_grouptitle_del(void *data, Evas_Object *obj)
 	FREE(item_data);
 }
 
-static void _update_folder_list_after_folder_delete_action(void *data, int action_type, int mailbox_id, bool show_success_popup)
+static void _update_folder_list_after_folder_delete_action(void *data, int mailbox_id, bool show_success_popup)
 {
 	debug_enter();
 	EmailAccountUGD *ug_data = (EmailAccountUGD *) data;
@@ -1355,7 +1315,7 @@ static void _update_folder_list_after_folder_delete_action(void *data, int actio
 
 }
 
-static void _update_folder_list_after_folder_action(void *data, int action_type, int mailbox_id, bool show_success_popup)
+static void _update_folder_list_after_folder_create_action(void *data, int mailbox_id, bool show_success_popup)
 {
 	debug_enter();
 	EmailAccountUGD *ug_data = (EmailAccountUGD *) data;
@@ -1367,11 +1327,6 @@ static void _update_folder_list_after_folder_action(void *data, int action_type,
 	if (ug_data->popup) {
 		evas_object_del(ug_data->popup);
 		ug_data->popup = NULL;
-	}
-
-	if (!(ug_data->it)) {
-		debug_log("ug_data->it is NULL");
-		return;
 	}
 
 	Item_Data *tree_item_data = NULL;
@@ -1391,79 +1346,71 @@ static void _update_folder_list_after_folder_action(void *data, int action_type,
 		goto FINISH;
 	}
 
-	if (ug_data->it == ug_data->root_item) {
-		Elm_Object_Item *it = ug_data->group_title_item;
-		Item_Data *next_item_data = NULL;
-		tree_item_data = calloc(1, sizeof(Item_Data));
-		if (!tree_item_data) {
-			debug_error("tree_item_data is NULL - allocation memory failed");
-			goto FINISH;
-		}
-		tree_item_data->ug_data = ug_data;
-		tree_item_data->mailbox_type = selected_mailbox->mailbox_type;
-		tree_item_data->unread_count = selected_mailbox->unread_count;
-		tree_item_data->total_mail_count_on_local = selected_mailbox->total_mail_count_on_local;
-		tree_item_data->mailbox_id = mailbox_id;
-		tree_item_data->mailbox_list = selected_mailbox;
+	Elm_Object_Item *it = ug_data->group_title_item;
+	Item_Data *next_item_data = NULL;
+	tree_item_data = calloc(1, sizeof(Item_Data));
+	if (!tree_item_data) {
+		debug_error("tree_item_data is NULL - allocation memory failed");
+		goto FINISH;
+	}
+	tree_item_data->ug_data = ug_data;
+	tree_item_data->mailbox_type = selected_mailbox->mailbox_type;
+	tree_item_data->unread_count = selected_mailbox->unread_count;
+	tree_item_data->total_mail_count_on_local = selected_mailbox->total_mail_count_on_local;
+	tree_item_data->mailbox_id = mailbox_id;
+	tree_item_data->mailbox_list = selected_mailbox;
 
-		if (selected_mailbox->mailbox_name) {
-			tree_item_data->mailbox_name = strdup(selected_mailbox->mailbox_name);
-		}
+	if (selected_mailbox->mailbox_name) {
+		tree_item_data->mailbox_name = strdup(selected_mailbox->mailbox_name);
+	}
 
-		if (selected_mailbox->alias) {
-			tree_item_data->alias_name = strdup(selected_mailbox->alias);
-		}
+	if (selected_mailbox->alias) {
+		tree_item_data->alias_name = strdup(selected_mailbox->alias);
+	}
 
-		tree_item_data->b_scheduled_outbox = 0;
+	tree_item_data->b_scheduled_outbox = 0;
 
-		while (it) {
-			it = elm_genlist_item_next_get(it);
-			next_item_data = (Item_Data *)elm_object_item_data_get((const Elm_Object_Item *)it);
-			if (next_item_data) {
-				/* debug_secure("next_item_data: %s, selected_mailbox: %s", next_item_data->mailbox_name, selected_mailbox->mailbox_name); */
+	while (it) {
+		it = elm_genlist_item_next_get(it);
+		next_item_data = (Item_Data *)elm_object_item_data_get((const Elm_Object_Item *)it);
+		if (next_item_data) {
+			/* debug_secure("next_item_data: %s, selected_mailbox: %s", next_item_data->mailbox_name, selected_mailbox->mailbox_name); */
 
-				if (next_item_data->mailbox_name && g_strcmp0(next_item_data->mailbox_name, selected_mailbox->mailbox_name) > 0
-						&& (next_item_data->mailbox_type > EMAIL_MAILBOX_TYPE_OUTBOX)) {
-					tree_item_data->it = elm_genlist_item_insert_before(ug_data->gl, ug_data->itc_single,
-							tree_item_data, NULL, it, ELM_GENLIST_ITEM_NONE, _gl_sel_single, tree_item_data);
-					/* debug_log("add item, tree_item_data->it : %p", tree_item_data->it); */
-					item_inserted = true;
-					break;
-				}
+			if (next_item_data->mailbox_name && g_strcmp0(next_item_data->mailbox_name, selected_mailbox->mailbox_name) > 0
+					&& (next_item_data->mailbox_type > EMAIL_MAILBOX_TYPE_OUTBOX)) {
+				tree_item_data->it = elm_genlist_item_insert_before(ug_data->gl, ug_data->itc_single,
+						tree_item_data, NULL, it, ELM_GENLIST_ITEM_NONE, _gl_sel_single, tree_item_data);
+				/* debug_log("add item, tree_item_data->it : %p", tree_item_data->it); */
+				item_inserted = true;
+				break;
 			}
 		}
+	}
 
-		if (!item_inserted && ug_data->group_title_item) {
-			tree_item_data->it = elm_genlist_item_insert_after(ug_data->gl, ug_data->itc_single, tree_item_data, NULL, ug_data->group_title_item, ELM_GENLIST_ITEM_NONE, _gl_sel_single, tree_item_data); /*ug_data->it */
-		} else if (!item_inserted) {
-			if (!ug_data->group_title_item) {
-				Item_Data *group_item_data = calloc(1, sizeof(Item_Data));
-				if (!group_item_data) {
-					debug_error("group_item_data is NULL - allocation memory failed");
-					free(tree_item_data->mailbox_name);
-					free(tree_item_data->alias_name);
-					free(tree_item_data);
-					goto FINISH;
-				}
-				group_item_data->ug_data = ug_data;
-				group_item_data->it = elm_genlist_item_append(ug_data->gl, ug_data->itc_group, group_item_data, NULL, ELM_GENLIST_ITEM_NONE, NULL, NULL);
-				ug_data->group_title_item = group_item_data->it;
-				elm_genlist_item_select_mode_set(group_item_data->it, ELM_OBJECT_SELECT_MODE_DISPLAY_ONLY);
-				debug_log("group item is not existed, Add group_item_data->it : %p", group_item_data->it);
+	if (!item_inserted && ug_data->group_title_item) {
+		tree_item_data->it = elm_genlist_item_insert_after(ug_data->gl, ug_data->itc_single, tree_item_data, NULL, ug_data->group_title_item, ELM_GENLIST_ITEM_NONE, _gl_sel_single, tree_item_data);
+	} else if (!item_inserted) {
+		if (!ug_data->group_title_item) {
+			Item_Data *group_item_data = calloc(1, sizeof(Item_Data));
+			if (!group_item_data) {
+				debug_error("group_item_data is NULL - allocation memory failed");
+				free(tree_item_data->mailbox_name);
+				free(tree_item_data->alias_name);
+				free(tree_item_data);
+				goto FINISH;
 			}
-			tree_item_data->it = elm_genlist_item_append(ug_data->gl, ug_data->itc_single, tree_item_data, NULL, ELM_GENLIST_ITEM_NONE, _gl_sel_single, tree_item_data); /* ug_data->it */
+			group_item_data->ug_data = ug_data;
+			group_item_data->it = elm_genlist_item_append(ug_data->gl, ug_data->itc_group, group_item_data, NULL, ELM_GENLIST_ITEM_NONE, NULL, NULL);
+			ug_data->group_title_item = group_item_data->it;
+			elm_genlist_item_select_mode_set(group_item_data->it, ELM_OBJECT_SELECT_MODE_DISPLAY_ONLY);
+			debug_log("group item is not existed, Add group_item_data->it : %p", group_item_data->it);
 		}
+		tree_item_data->it = elm_genlist_item_append(ug_data->gl, ug_data->itc_single, tree_item_data, NULL, ELM_GENLIST_ITEM_NONE, _gl_sel_single, tree_item_data);
 	}
 
 FINISH:
-	ug_data->it = NULL;
 	ug_data->move_from_item = NULL;
 	ug_data->target_mailbox_id = -1;
-
-	if (ug_data->root_item) {
-		elm_object_item_del(ug_data->root_item);
-		ug_data->root_item = NULL;
-	}
 
 	_update_folder_view_after_folder_action(data);
 
@@ -1839,7 +1786,7 @@ static void _open_allacc_boxtype(void *data, Evas_Object *obj, void *event_info)
 	app_control_destroy(service);
 }
 
-static void _delete_con_cb(void *data, Evas_Object *obj, void *event_info)
+static void _delete_folder_ok_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 	RETURN_IF_FAIL(data != NULL);
@@ -1913,7 +1860,6 @@ static void _popup_delfolder_cb(void *data, Evas_Object *obj, void *event_info)
 		evas_object_size_hint_weight_set(notify, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 		elm_object_domain_translatable_part_text_set(notify, "title,text", PACKAGE, "IDS_EMAIL_HEADER_DELETE");
 		elm_object_domain_translatable_text_set(notify, PACKAGE, "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED");
-		/* elm_object_domain_translatable_text_set(notify, PACKAGE, "IDS_EMAIL_POP_DELETE_THIS_EMAIL_Q"); */
 
 		Evas_Object *btn1 = elm_button_add(notify);
 		elm_object_style_set(btn1, "popup");
@@ -1925,7 +1871,7 @@ static void _popup_delfolder_cb(void *data, Evas_Object *obj, void *event_info)
 		elm_object_style_set(btn2, "popup");
 		elm_object_domain_translatable_text_set(btn2, PACKAGE, "IDS_EMAIL_BUTTON_DELETE_ABB4");
 		elm_object_part_content_set(notify, "button2", btn2);
-		evas_object_smart_callback_add(btn2, "clicked", _delete_con_cb, ug_data);
+		evas_object_smart_callback_add(btn2, "clicked", _delete_folder_ok_cb, ug_data);
 
 		ug_data->popup = notify;
 		evas_object_show(notify);
@@ -2072,20 +2018,6 @@ static void _create_folder_ok_cb(void *data, Evas_Object *obj, void *event_info)
 	}
 	free(mailbox_alias);
 	free(mailbox_name);
-}
-
-static void _popup_newfolder_cb(void *data, Evas_Object *obj, void *event_info)
-{
-	debug_enter();
-	RETURN_IF_FAIL(data != NULL);
-
-	EmailAccountUGD *ug_data = (EmailAccountUGD *)data;
-
-	email_string_t EMAIL_ACCOUNT_HEADER_CREATE_FOLDER = { PACKAGE, "IDS_EMAIL_OPT_CREATE_FOLDER_ABB2"};
-	account_create_entry_popup(ug_data, EMAIL_ACCOUNT_HEADER_CREATE_FOLDER, NULL, NULL,
-			_create_folder_popup_cancel_cb, _create_folder_ok_cb,
-			_create_folder_popup_cancel_cb, "IDS_EMAIL_BUTTON_CANCEL",
-			_create_folder_ok_cb, "IDS_EMAIL_BUTTON_CREATE_ABB2");
 }
 
 static void _create_folder_popup_cancel_cb(void *data, Evas_Object *obj, void *event_info)
@@ -2294,67 +2226,6 @@ static void _popup_progress_cb(void *data, Evas_Object *obj, void *event_info)
 
 	ug_data->popup = popup;
 	evas_object_show(popup);
-}
-
-static void _add_root_item_in_genlist(void *data)
-{
-	debug_enter();
-	RETURN_IF_FAIL(data != NULL);
-
-	EmailAccountUGD *ug_data = (EmailAccountUGD *)data;
-
-	Item_Data *next_data = (Item_Data *)elm_object_item_data_get(elm_genlist_first_item_get(ug_data->gl));
-	if (next_data == NULL) {
-		debug_log("next_data is NULL");
-		return;
-	}
-	Item_Data *item_data = calloc(1, sizeof(Item_Data));
-	retm_if(!item_data, "item_data is NULL!");
-	item_data->ug_data = ug_data;
-	item_data->it = elm_genlist_item_prepend(ug_data->gl, ug_data->itc_root,
-			item_data, NULL, ELM_GENLIST_ITEM_NONE, _gl_root_item_sel, item_data);
-	ug_data->root_item = item_data->it;
-	debug_leave();
-}
-
-static void _gl_root_item_del(void *data, Evas_Object *obj)
-{
-	Item_Data *item_data = (Item_Data *)data;
-	if (!item_data) {
-		debug_log("item_data is NULL");
-		return;
-	}
-	EmailAccountUGD *ug_data = item_data->ug_data;
-	if (ug_data) {
-		ug_data->root_item = NULL;
-		debug_log("Reset root_item");
-	}
-	FREE(item_data);
-}
-
-static char *_gl_label_get_for_root_item(void *data, Evas_Object *obj, const char *part)
-{
-	if (!strcmp(part, "elm.text")) {
-		return strdup(N_("Root"));
-	}
-	return NULL;
-}
-
-
-static void _gl_root_item_sel(void *data, Evas_Object *obj, void *event_info)
-{
-	debug_enter();
-	RETURN_IF_FAIL(data != NULL);
-
-	Item_Data *item_data = (Item_Data *)data;
-	EmailAccountUGD *ug_data = item_data->ug_data;
-
-	elm_genlist_item_selected_set(item_data->it, 0);
-
-	if (ACC_FOLDER_CREATE == ug_data->folder_mode) {
-		ug_data->it = item_data->it;
-		_popup_newfolder_cb(ug_data, obj, event_info);
-	}
 }
 
 void account_folder_newfolder(void *data, Evas_Object *obj, void *event_info)

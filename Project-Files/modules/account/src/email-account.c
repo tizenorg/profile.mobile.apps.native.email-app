@@ -510,10 +510,7 @@ static void _folder_create_btn_click_cb(void *data, Evas_Object *obj, void *even
 	DELETE_EVAS_OBJECT(ug_data->more_ctxpopup);
 
 	ug_data->editmode = true;
-
 	account_create_folder_create_view(ug_data);
-
-	ug_data->it = ug_data->root_item;
 	account_folder_newfolder(ug_data, obj, event_info);
 	debug_leave();
 }
@@ -595,7 +592,6 @@ static void _clear_all_genlist_item_class(EmailAccountUGD *ug_data)
 		EMAIL_GENLIST_ITC_FREE(ug_data->itc_account_item);
 		EMAIL_GENLIST_ITC_FREE(ug_data->itc_combined);
 		EMAIL_GENLIST_ITC_FREE(ug_data->itc_group);
-		EMAIL_GENLIST_ITC_FREE(ug_data->itc_root);
 		EMAIL_GENLIST_ITC_FREE(ug_data->itc_single);
 		EMAIL_GENLIST_ITC_FREE(ug_data->itc_account_name);
 	}
