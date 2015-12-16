@@ -60,9 +60,6 @@ static void _update_folder_view_after_folder_action(void *data);
 static void _update_folder_list_after_folder_delete_action(void *data, int action_type, int mailbox_id, bool show_success_popup);
 static void _update_folder_list_after_folder_action(void *data, int action_type, int mailbox_id, bool show_success_popup);
 
-static void _mouseup_cb(void *data, Evas *e, Evas_Object *obj, void *event_info);
-static void _folder_popup_mouseup_cb(void *data, Evas *e, Evas_Object *obj, void *event_info);
-
 static void _add_root_item_in_genlist(void *data);
 static void _gl_root_item_del(void *data, Evas_Object *obj);
 static char *_gl_label_get_for_root_item(void *data, Evas_Object *obj, const char *part);
@@ -1906,7 +1903,6 @@ static void _popup_delfolder_cb(void *data, Evas_Object *obj, void *event_info)
 		elm_object_part_content_set(popup, "button1", btn1);
 		evas_object_smart_callback_add(btn1, "clicked", _popup_destroy_cb, ug_data);
 		ug_data->popup = popup;
-		evas_object_event_callback_add(popup, EVAS_CALLBACK_MOUSE_UP, _mouseup_cb, ug_data);
 		evas_object_show(popup);
 	} else {
 		ug_data->folder_mode = ACC_FOLDER_DELETE;
@@ -1932,8 +1928,6 @@ static void _popup_delfolder_cb(void *data, Evas_Object *obj, void *event_info)
 		evas_object_smart_callback_add(btn2, "clicked", _delete_con_cb, ug_data);
 
 		ug_data->popup = notify;
-		evas_object_event_callback_add(notify, EVAS_CALLBACK_MOUSE_UP, _folder_popup_mouseup_cb, ug_data);
-
 		evas_object_show(notify);
 	}
 }
@@ -1953,7 +1947,7 @@ static void _popup_renamefolder_cb(void *data, Evas_Object *obj, void *event_inf
 
 	email_string_t EMAIL_ACCOUNT_HEADER_RENAME_FOLDER = { PACKAGE, "IDS_EMAIL_OPT_RENAME_FOLDER"};
 	account_create_entry_popup(ug_data, EMAIL_ACCOUNT_HEADER_RENAME_FOLDER, prev_folder_name, NULL,
-			_rename_folder_cancel_cb, _mouseup_cb, _rename_folder_ok_cb,
+			_rename_folder_cancel_cb, _rename_folder_ok_cb,
 			_rename_folder_cancel_cb, "IDS_EMAIL_BUTTON_CANCEL",
 			_rename_folder_ok_cb, "IDS_EMAIL_BUTTON_RENAME_ABB");
 	FREE(prev_folder_name);
@@ -2089,7 +2083,7 @@ static void _popup_newfolder_cb(void *data, Evas_Object *obj, void *event_info)
 
 	email_string_t EMAIL_ACCOUNT_HEADER_CREATE_FOLDER = { PACKAGE, "IDS_EMAIL_OPT_CREATE_FOLDER_ABB2"};
 	account_create_entry_popup(ug_data, EMAIL_ACCOUNT_HEADER_CREATE_FOLDER, NULL, NULL,
-			_create_folder_popup_cancel_cb, _mouseup_cb, _create_folder_ok_cb,
+			_create_folder_popup_cancel_cb, _create_folder_ok_cb,
 			_create_folder_popup_cancel_cb, "IDS_EMAIL_BUTTON_CANCEL",
 			_create_folder_ok_cb, "IDS_EMAIL_BUTTON_CREATE_ABB2");
 }
@@ -2302,33 +2296,6 @@ static void _popup_progress_cb(void *data, Evas_Object *obj, void *event_info)
 	evas_object_show(popup);
 }
 
-static void _mouseup_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
-{
-	Evas_Event_Mouse_Up *ev = event_info;
-	if (ev->button == 3) { /* if mouse right button is up */
-		_popup_destroy_cb(data, obj, NULL);
-	}
-}
-
-static void _folder_popup_mouseup_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
-{
-	Evas_Event_Mouse_Up *ev = event_info;
-	if (ev->button == 3) { /* if mouse right button is up */
-		_back_button_cb(data, obj, NULL);
-	}
-}
-
-/*
-static void _folder_progress_popup_mouseup_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
-{
-	Evas_Event_Mouse_Up *ev = event_info;
-	if (ev->button == 3) // if mouse right button is up
-	{
-		_cancel_button_cb(data, obj, NULL);
-	}
-}
-*/
-
 static void _add_root_item_in_genlist(void *data)
 {
 	debug_enter();
@@ -2399,7 +2366,7 @@ void account_folder_newfolder(void *data, Evas_Object *obj, void *event_info)
 
 	email_string_t EMAIL_ACCOUNT_HEADER_CREATE_FOLDER = { PACKAGE, "IDS_EMAIL_OPT_CREATE_FOLDER_ABB2"};
 	account_create_entry_popup(ug_data, EMAIL_ACCOUNT_HEADER_CREATE_FOLDER, NULL, NULL,
-			_create_folder_popup_cancel_cb, _mouseup_cb, _create_folder_ok_cb,
+			_create_folder_popup_cancel_cb, _create_folder_ok_cb,
 			_create_folder_popup_cancel_cb, "IDS_EMAIL_BUTTON_CANCEL",
 			_create_folder_ok_cb, "IDS_EMAIL_BUTTON_CREATE_ABB2");
 }
