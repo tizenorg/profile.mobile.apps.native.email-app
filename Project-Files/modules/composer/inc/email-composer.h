@@ -57,10 +57,9 @@ void ewk_settings_extra_feature_set(Ewk_Settings *, const char *, Eina_Bool);
 void ewk_context_cache_clear(Ewk_Context *);
 void ewk_context_notify_low_memory(Ewk_Context *);
 Eina_Bool ewk_view_text_selection_clear(Evas_Object *);
-
 const char *ewk_console_message_text_get(Ewk_Console_Message *msg);
 unsigned ewk_console_message_line_get(Ewk_Console_Message *msg);
-
+void ewk_view_orientation_send(Evas_Object *, int);
 #endif
 
 typedef struct ug_data EmailComposerUGD;
