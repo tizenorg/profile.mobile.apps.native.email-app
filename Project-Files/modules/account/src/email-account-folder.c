@@ -717,6 +717,7 @@ void account_gdbus_event_account_receive(GDBusConnection *connection,
 
 			if (ug_data->emf_handle != EMAIL_HANDLE_INVALID) {
 				debug_log("Native account folder added.");
+				_popup_success_cb(ug_data, NULL, NULL);
 				_update_folder_list_after_folder_create_action(ug_data, data2, false);
 			} else {
 				if (ug_data->account_id == account_id) {
@@ -748,6 +749,7 @@ void account_gdbus_event_account_receive(GDBusConnection *connection,
 			if (ug_data->emf_handle != EMAIL_HANDLE_INVALID) {
 				if (ug_data->target_mailbox_id == data2) {
 					debug_log("NOTI_MAILBOX_DELETE");
+					_popup_success_cb(ug_data, NULL, NULL);
 					_update_folder_list_after_folder_delete_action(ug_data, data2, false);
 				} else {
 					debug_log("Mailbox is deleted.(sub-folder is deleted)");
@@ -786,6 +788,7 @@ void account_gdbus_event_account_receive(GDBusConnection *connection,
 				debug_log("EAS account folder moved");
 			}
 			break;
+
 		case NOTI_MAILBOX_RENAME:
 			account_id = data1;
 
@@ -794,6 +797,10 @@ void account_gdbus_event_account_receive(GDBusConnection *connection,
 				|| ug_data->folder_view_mode == ACC_FOLDER_MOVE_MAIL_VIEW_MODE) {
 				G_FREE(data3);
 				return;
+			}
+
+			if (ug_data->target_mailbox_id == data2) {
+				_popup_success_cb(ug_data, NULL, NULL);
 			}
 
 			if (ug_data->emf_handle != EMAIL_HANDLE_INVALID) {
@@ -858,7 +865,6 @@ void account_gdbus_event_account_receive(GDBusConnection *connection,
 				account_color_list_update(ug_data, account_id, account->color_label);
 				email_engine_free_account_list(&account, 1);
 			}
-
 			break;
 
 		case NOTI_ACCOUNT_DELETE:
@@ -897,27 +903,6 @@ void account_gdbus_event_account_receive(GDBusConnection *connection,
 			err_msg = data4;
 			debug_log("email_handle: %d, err_msg: %d", email_handle, err_msg);
 
-		case NOTI_ADD_MAILBOX_START:
-			debug_log("NOTI_ADD_MAILBOX_START");
-			break;
-
-		case NOTI_ADD_MAILBOX_CANCEL:
-			debug_log("NOTI_ADD_MAILBOX_CANCEL");
-			break;
-
-		case NOTI_ADD_MAILBOX_FINISH:
-			debug_log("NOTI_ADD_MAILBOX_FINISH, account_id [%d], folder_view_mode[%d]", account_id, ug_data->folder_view_mode);
-			if (ug_data->folder_view_mode == ACC_FOLDER_ACCOUNT_LIST_VIEW_MODE
-				|| ug_data->folder_view_mode == ACC_FOLDER_MOVE_MAIL_VIEW_MODE) {
-				G_FREE(data2);
-				return;
-			}
-			debug_log("NOTI_ADD_MAILBOX_FINISH");
-			if (ug_data->emf_handle != EMAIL_HANDLE_INVALID) {
-				_popup_success_cb(ug_data, NULL, NULL);
-			}
-			break;
-
 		case NOTI_ADD_MAILBOX_FAIL:
 			debug_log("NOTI_ADD_MAILBOX_FAIL, account_id [%d], folder_view_mode[%d]", account_id, ug_data->folder_view_mode);
 			if (ug_data->folder_view_mode == ACC_FOLDER_ACCOUNT_LIST_VIEW_MODE
@@ -925,29 +910,7 @@ void account_gdbus_event_account_receive(GDBusConnection *connection,
 				G_FREE(data2);
 				return;
 			}
-
 			_popup_fail_cb(ug_data, NULL, NULL, data4);
-			break;
-
-		case NOTI_DELETE_MAILBOX_START:
-			debug_log("NOTI_DELETE_MAILBOX_START");
-			break;
-
-		case NOTI_DELETE_MAILBOX_CANCEL:
-			debug_log("NOTI_DELETE_MAILBOX_CANCEL");
-			break;
-
-		case NOTI_DELETE_MAILBOX_FINISH:
-			debug_log("NOTI_DELETE_MAILBOX_FINISH, account_id [%d], folder_view_mode[%d]", account_id, ug_data->folder_view_mode);
-			if (ug_data->folder_view_mode == ACC_FOLDER_ACCOUNT_LIST_VIEW_MODE
-					|| ug_data->folder_view_mode == ACC_FOLDER_MOVE_MAIL_VIEW_MODE) {
-				G_FREE(data2);
-				return;
-			}
-			debug_log("NOTI_DELETE_MAILBOX_FINISH");
-			if (ug_data->target_mailbox_id == data1) {
-				_popup_success_cb(ug_data, NULL, NULL);
-			}
 			break;
 
 		case NOTI_DELETE_MAILBOX_FAIL:
@@ -957,25 +920,7 @@ void account_gdbus_event_account_receive(GDBusConnection *connection,
 				G_FREE(data2);
 				return;
 			}
-
 			_popup_fail_cb(ug_data, NULL, NULL, data4);
-			break;
-
-		case NOTI_RENAME_MAILBOX_START:
-			debug_log("NOTI_RENAME_MAILBOX_START");
-			break;
-
-		case NOTI_RENAME_MAILBOX_FINISH:
-			debug_log("NOTI_RENAME_MAILBOX_FINISH, account_id [%d], folder_view_mode[%d]", account_id, ug_data->folder_view_mode);
-			if (ug_data->folder_view_mode == ACC_FOLDER_ACCOUNT_LIST_VIEW_MODE
-				|| ug_data->folder_view_mode == ACC_FOLDER_MOVE_MAIL_VIEW_MODE) {
-				G_FREE(data2);
-				return;
-			}
-			debug_log("NOTI_RENAME_MAILBOX_FINISH");
-			if (ug_data->target_mailbox_id == data1) {
-				_popup_success_cb(ug_data, NULL, NULL);
-			}
 			break;
 
 		case NOTI_RENAME_MAILBOX_FAIL:
@@ -985,12 +930,7 @@ void account_gdbus_event_account_receive(GDBusConnection *connection,
 				G_FREE(data2);
 				return;
 			}
-
 			_popup_fail_cb(ug_data, NULL, NULL, data4);
-			break;
-
-		case NOTI_RENAME_MAILBOX_CANCEL:
-			debug_log("NOTI_RENAME_MAILBOX_CANCEL");
 			break;
 
 		case NOTI_SYNC_IMAP_MAILBOX_LIST_FINISH:
@@ -1020,7 +960,6 @@ void account_gdbus_event_account_receive(GDBusConnection *connection,
 				_update_mail_count_on_folder_view(ug_data, data1);
 			}
 			break;
-
 
 		default:
 			debug_warning("unknown type");
