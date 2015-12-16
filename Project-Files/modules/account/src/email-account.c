@@ -398,20 +398,16 @@ int _create_fullview(EmailAccountUGD *ug_data)
 	ug_data->base.content = elm_layout_add(ug_data->base.module->win);
 	elm_layout_theme_set(ug_data->base.content, "layout", "application", "default");
 	evas_object_size_hint_weight_set(ug_data->base.content, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	/*elm_win_resize_object_add(ug_data->win, ug_data->navi_content);*/
+	email_module_view_push(&ug_data->base, NULL, 0);
 
 	debug_log("folder_view_mode %d", ug_data->folder_view_mode);
-
 	if (ug_data->folder_view_mode == ACC_FOLDER_MOVE_MAIL_VIEW_MODE) {
-		email_module_view_push(&ug_data->base, NULL, 0);
 		elm_object_item_domain_translatable_text_set(ug_data->base.navi_item, PACKAGE, "IDS_EMAIL_HEADER_SELECT_FOLDER_ABB2");
 	} else if (ug_data->folder_view_mode == ACC_FOLDER_ACCOUNT_LIST_VIEW_MODE) {
-		email_module_view_push(&ug_data->base, NULL, 0);
 		elm_object_item_domain_translatable_text_set(ug_data->base.navi_item, PACKAGE, "IDS_EMAIL_HEADER_MAILBOX_ABB");
 		ug_data->more_btn = _create_title_btn(ug_data->base.module->navi, NULL, _account_more_clicked_cb, ug_data);
 		elm_object_item_part_content_set(ug_data->base.navi_item, "toolbar_more_btn", ug_data->more_btn);
 	} else {
-		email_module_view_push(&ug_data->base, NULL, 0);
 		ug_data->more_btn = _create_title_btn(ug_data->base.module->navi, NULL, _account_more_clicked_cb, ug_data);
 		elm_object_item_part_content_set(ug_data->base.navi_item, "toolbar_more_btn", ug_data->more_btn);
 
@@ -954,18 +950,4 @@ static int _get_accounts_data(int *account_count, email_account_t **account_list
 
 	return 0;
 }
-
-Evas_Object *account_create_account_color_bar(Evas_Object *parent, unsigned int color)
-{
-	Evas_Object *color_bar = evas_object_rectangle_add(evas_object_evas_get(parent));
-	int r = R_MASKING(color);
-	int g = G_MASKING(color);
-	int b = B_MASKING(color);
-	int a = A_MASKING(color);
-
-	evas_object_size_hint_fill_set(color_bar, EVAS_HINT_FILL, EVAS_HINT_FILL);
-	evas_object_color_set(color_bar, r, g, b, a);
-	return color_bar;
-}
-
 /* EOF */

@@ -82,6 +82,7 @@ static char *_get_account_item_text_for_single_subitem(Account_Item_Data *item_d
 static void _check_account_list_zoom_state(EmailAccountUGD *ug_data);
 static int _convert_account_list_item_type(EmailAccountUGD *ug_data, int account_id, int mailbox_type);
 static char *_create_account_list_item_text(Account_Item_Data *item_data, const char *text);
+static Evas_Object *_create_account_subitem_color_bar(Evas_Object *parent, unsigned int color);
 
 int account_create_account_list_view(EmailAccountUGD *ug_data)
 {
@@ -509,7 +510,7 @@ static Evas_Object *_gl_account_content_get_for_single_subitem(void *data, Evas_
 		evas_object_size_hint_align_set(full_item_ly, EVAS_HINT_FILL, EVAS_HINT_FILL);
 
 		int account_color = account_color_list_get_account_color(item_data->ug_data, item_data->account_id);
-		Evas_Object *color_bar = account_create_account_color_bar(full_item_ly, account_color);
+		Evas_Object *color_bar = _create_account_subitem_color_bar(full_item_ly, account_color);
 		elm_object_part_content_set(full_item_ly, "elm.swallow.icon", color_bar);
 
 		elm_object_part_text_set(full_item_ly, "elm.text", _get_account_item_text_for_single_subitem(item_data));
@@ -572,6 +573,19 @@ static void  _gl_account_group_list_item_sel(void *data, Evas_Object *obj, void 
 	elm_genlist_item_fields_update(group_item_data->it, "elm.swallow.end", ELM_GENLIST_ITEM_FIELD_CONTENT);
 
 	debug_leave();
+}
+
+static Evas_Object *_create_account_subitem_color_bar(Evas_Object *parent, unsigned int color)
+{
+	Evas_Object *color_bar = evas_object_rectangle_add(evas_object_evas_get(parent));
+	int r = R_MASKING(color);
+	int g = G_MASKING(color);
+	int b = B_MASKING(color);
+	int a = A_MASKING(color);
+
+	evas_object_size_hint_fill_set(color_bar, EVAS_HINT_FILL, EVAS_HINT_FILL);
+	evas_object_color_set(color_bar, r, g, b, a);
+	return color_bar;
 }
 
 static char *_create_account_list_item_text(Account_Item_Data *item_data, const char *text)

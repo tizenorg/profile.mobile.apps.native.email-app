@@ -250,7 +250,6 @@ void account_gdbus_event_account_receive(GDBusConnection *connection,
 											gpointer data);
 
 void account_show_all_folder(EmailAccountUGD *ug_data);
-Evas_Object *account_create_account_color_bar(Evas_Object *parent, unsigned int color);
 
 #endif	/* __EMAIL_ACCOUNT_H__ */
 
