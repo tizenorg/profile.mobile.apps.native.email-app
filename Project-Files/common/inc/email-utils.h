@@ -283,6 +283,10 @@ G_BEGIN_DECLS
 #define EMAIL_DEFINE_SHARED_RES_PATH(func_name, sub_path) EMAIL_DEFINE_GET_PATH(func_name, shared_res, sub_path)
 #define EMAIL_DEFINE_GET_SHARED_DATA_PATH(func_name, sub_path) EMAIL_DEFINE_GET_PATH(func_name, shared_data, sub_path)
 
+#ifdef _SAVE_IN_USER_SHARE_DIR_
+#define EMAIL_DEFINE_GET_USER_SHARE_PATH(func_name, sub_path) EMAIL_DEFINE_GET_PATH(func_name, user_share, sub_path);
+#endif
+
 #define IF_NULL_FREE_2GSTRA_AND_RETURN(i_ptr, str_arr1, str_arr2) \
 	({\
 		if (!i_ptr) {\
@@ -352,6 +356,10 @@ EMAIL_API const char *email_get_res_dir();
 EMAIL_API const char *email_get_data_dir();
 EMAIL_API const char *email_get_shared_res_dir();
 EMAIL_API const char *email_get_shared_data_dir();
+
+#ifdef _SAVE_IN_USER_SHARE_DIR_
+EMAIL_API const char *email_get_user_share_dir();
+#endif
 
 EMAIL_API const char *email_get_img_dir();
 EMAIL_API const char *email_get_misc_dir();

@@ -601,21 +601,19 @@ static COMPOSER_ERROR_TYPE_E _composer_create_temp_folder(const char *root_tmp_f
 {
 	debug_enter();
 
+	retvm_if(!root_tmp_folder, COMPOSER_ERROR_INVALID_ARG, "root_tmp_folder is NULL");
+	retvm_if(!tmp_folder, COMPOSER_ERROR_INVALID_ARG, "tmp_folder is NULL");
+
 	if (!email_check_dir_exist(root_tmp_folder)) {
-		if (_composer_make_composer_tmp_dir(root_tmp_folder) != COMPOSER_ERROR_NONE) {
-			return COMPOSER_ERROR_FAIL;
-		}
+		int res = _composer_make_composer_tmp_dir(root_tmp_folder);
+		retvm_if(res != COMPOSER_ERROR_NONE, res, "_composer_make_composer_tmp_dir() for '%s' failed", root_tmp_folder);
 	}
 
-	retvm_if(!tmp_folder, COMPOSER_ERROR_FAIL, "composer_get_temp_dirname() failed!");
-
-	debug_secure("temp folder name: (%s)", tmp_folder);
 	if (!email_check_dir_exist(tmp_folder)) {
-		if (_composer_make_composer_tmp_dir(tmp_folder) != COMPOSER_ERROR_NONE) {
-			return COMPOSER_ERROR_FAIL;
-		}
+		int res = _composer_make_composer_tmp_dir(tmp_folder);
+		retvm_if(res != COMPOSER_ERROR_NONE, res, "_composer_make_composer_tmp_dir() for '%s' failed", tmp_folder);
 	} else {
-		debug_log("Email temp folder already exists!");
+		debug_log("Email temp folder '%s' already exists!", tmp_folder);
 	}
 
 	debug_leave();
