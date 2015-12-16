@@ -68,6 +68,7 @@
 #define EMAIL_RES_PATH 			PKGNAME"/res"
 #define EMAIL_DATA_PATH 		PKGNAME"/data"
 #define EMAIL_SHARED_RES_PATH 	PKGNAME"/shared/res"
+
 #define EMAIL_SHARED_DATA_PATH 	PKGNAME"/shared/data"
 
 #define EMAIL_FAIL_SAFE_RES_PATH 			tzplatform_mkpath(TZ_SYS_RO_APP, EMAIL_RES_PATH)
@@ -79,6 +80,10 @@
 #define EMAIL_FAIL_SAFE_MMC_STORAGE_PATH	tzplatform_mkpath(TZ_SYS_STORAGE, "sdcard")
 
 #define EMAIL_ETC_LOCALTIME_PATH 			tzplatform_mkpath(TZ_SYS_ETC, "localtime")
+
+#ifdef _SAVE_IN_USER_SHARE_DIR_
+#define EMAIL_FAIL_USER_SHARE_PATH			tzplatform_getenv(TZ_USER_SHARE)
+#endif
 
 #endif
 
@@ -350,6 +355,9 @@ static struct info {
 	char data_dir[EMAIL_SMALL_PATH_MAX];
 	char shared_res_dir[EMAIL_SMALL_PATH_MAX];
 	char shared_data_dir[EMAIL_SMALL_PATH_MAX];
+#ifdef _SAVE_IN_USER_SHARE_DIR_
+	char user_share_dir[EMAIL_SMALL_PATH_MAX];
+#endif
 
 	char phone_storage_dir[EMAIL_SMALL_PATH_MAX];
 	char mmc_storage_dir[EMAIL_SMALL_PATH_MAX];
@@ -366,6 +374,9 @@ static struct info {
 	.data_dir = {'\0'},
 	.shared_res_dir = {'\0'},
 	.shared_data_dir = {'\0'},
+#ifdef _SAVE_IN_USER_SHARE_DIR_
+	.user_share_dir = {'\0'},
+#endif
 
 	.phone_storage_dir = {'\0'},
 	.mmc_storage_dir = {'\0'},
@@ -542,9 +553,14 @@ EMAIL_DEFINE_GET_APP_ROOT_PATH(email_get_shared_res_dir, app_get_shared_resource
 EMAIL_DEFINE_GET_APP_ROOT_PATH(email_get_shared_data_dir, app_get_shared_data_path,
 		s_info.shared_data_dir, EMAIL_FAIL_SAFE_SHARED_DATA_PATH)
 
-EMAIL_DEFINE_GET_IMG_PATH(email_get_img_dir, "");
+#ifdef _SAVE_IN_USER_SHARE_DIR_
+EMAIL_DEFINE_GET_APP_ROOT_PATH(email_get_user_share_dir, NULL,
+		s_info.user_share_dir, EMAIL_FAIL_USER_SHARE_PATH)
+#endif
+
+EMAIL_DEFINE_GET_IMG_PATH(email_get_img_dir, "")
 EMAIL_DEFINE_GET_MISC_PATH(email_get_misc_dir, "")
-EMAIL_DEFINE_GET_PATH(email_get_locale_dir, res, "/locale");
+EMAIL_DEFINE_GET_PATH(email_get_locale_dir, res, "/locale")
 
 EMAIL_DEFINE_GET_EDJ_PATH(email_get_common_theme_path, "/email-common-theme.edj")
 
