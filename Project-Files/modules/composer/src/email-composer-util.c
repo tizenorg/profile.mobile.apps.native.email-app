@@ -55,8 +55,14 @@ static void _composer_vcard_save_popup_cancel_cb(void *data, Evas_Object *obj, v
 static Eina_Bool _util_generate_random_string32(char *inString, int inSize);
 
 EMAIL_DEFINE_GET_EDJ_PATH(email_get_composer_theme_path, "/email-composer-view.edj")
+
+#ifdef _SAVE_IN_USER_SHARE_DIR_
+EMAIL_DEFINE_GET_USER_SHARE_PATH(email_get_composer_tmp_dir, "/.email-composer-efl")
+EMAIL_DEFINE_GET_USER_SHARE_PATH(email_get_composer_public_tmp_dir, "/.email-composer-efl")
+#else
 EMAIL_DEFINE_GET_SHARED_DATA_PATH(email_get_composer_tmp_dir, "/.email-composer-efl")
 EMAIL_DEFINE_GET_PHONE_PATH(email_get_composer_public_tmp_dir, "/.email-composer-efl")
+#endif
 
 static email_string_t EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
 static email_string_t EMAIL_COMPOSER_STRING_BUTTON_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
@@ -571,8 +577,12 @@ const char *composer_util_file_get_temp_dirname()
 const char *composer_util_file_get_public_temp_dirname()
 {
 	debug_enter();
+#ifdef _SAVE_IN_USER_SHARE_DIR_
+	return composer_util_file_get_temp_dirname();
+#else
 	static char ec_dirname[BUF_LEN_L] = {'\0'};
 	return _composer_util_file_get_unique_dirname(email_get_composer_public_tmp_dir(), ec_dirname);
+#endif
 }
 
 Eina_List *composer_util_make_array_to_list(const char **path_array, int path_len)
