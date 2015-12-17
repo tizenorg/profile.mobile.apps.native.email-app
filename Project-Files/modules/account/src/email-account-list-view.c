@@ -107,7 +107,6 @@ static int _create_account_all_account_list(EmailAccountUGD *ug_data)
 	debug_enter();
 	retvm_if(!ug_data, 0, "EmailAccountUGD is NULL");
 
-	int err = 0;
 	int i = 0;
 	int total_count = 0, unread_count = 0;
 	int inserted_cnt = 0;
@@ -121,14 +120,12 @@ static int _create_account_all_account_list(EmailAccountUGD *ug_data)
 	memset(all_acc_is_inserted, 0, sizeof(all_acc_is_inserted));
 
 	Evas_Object *gl = ug_data->gl;
-	email_account_t *account_list = NULL;
-	int account_count = 0;
 	Account_Item_Data *item_data = NULL, *group_item_data = NULL;
 
-	err = email_engine_get_account_list(&account_count, &account_list);
-	if (err == FALSE || !account_list) {
-		debug_warning("email_engine_get_account_list failed");
+	if (!ug_data->account_list) {
+			debug_warning("Email account list is NULL");
 	} else {
+
 		int index = ACCOUNT_LIST_COMBINED_INBOX;
 
 		for (index = ACCOUNT_LIST_COMBINED_INBOX; index < ACCOUNT_LIST_COMBINED_MAX; index++) {
@@ -142,7 +139,7 @@ static int _create_account_all_account_list(EmailAccountUGD *ug_data)
 				all_acc_is_inserted[ACCOUNT_LIST_COMBINED_INBOX] = true;
 			}
 			break;
-#ifndef _FEATURE_PRIORITY_SENDER_DISABLE_
+	#ifndef _FEATURE_PRIORITY_SENDER_DISABLE_
 			case ACCOUNT_LIST_PRIORITY_INBOX:
 			{
 				if (email_get_priority_sender_mail_count_ex(&total_count, &unread_count)) {
@@ -152,7 +149,7 @@ static int _create_account_all_account_list(EmailAccountUGD *ug_data)
 				all_acc_is_inserted[ACCOUNT_LIST_PRIORITY_INBOX] = true;
 			}
 			break;
-#endif
+	#endif
 
 			case ACCOUNT_LIST_STARRED:
 			{
@@ -207,7 +204,6 @@ static int _create_account_all_account_list(EmailAccountUGD *ug_data)
 
 	item_data = calloc(1, sizeof(Account_Item_Data));
 	if (!item_data) {
-		email_engine_free_account_list(&account_list, account_count);
 		debug_error("tree_item_data is NULL - allocation memory failed");
 		return 0;
 	}
@@ -228,7 +224,6 @@ static int _create_account_all_account_list(EmailAccountUGD *ug_data)
 
 		item_data = calloc(1, sizeof(Account_Item_Data));
 		if (!item_data) {
-			email_engine_free_account_list(&account_list, account_count);
 			debug_error("item_data is NULL - allocation memory failed");
 			return inserted_cnt;
 		}
@@ -245,11 +240,10 @@ static int _create_account_all_account_list(EmailAccountUGD *ug_data)
 	}
 
 	/* Add sing account list */
-	if (account_list) {
-		for (i = 0; i < account_count; i++) {
-			_create_account_single_accout_list(ug_data, account_list[i].account_id, i+1);
+	if (ug_data->account_list) {
+		for (i = 0; i < ug_data->account_count; i++) {
+			_create_account_single_accout_list(ug_data, ug_data->account_list[i].account_id, i+1);
 		}
-		email_engine_free_account_list(&account_list, account_count);
 	}
 
 	debug_log("inserted_cnt : %d", inserted_cnt);
