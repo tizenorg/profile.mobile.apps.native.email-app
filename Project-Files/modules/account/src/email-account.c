@@ -608,7 +608,18 @@ int account_create_list(EmailAccountUGD *ug_data)
 	int inserted_cnt = 0;
 	int err = 0;
 
-	account_destroy_view(ug_data);
+	DELETE_EVAS_OBJECT(ug_data->popup);
+	DELETE_EVAS_OBJECT(ug_data->more_ctxpopup);
+	if (!ug_data->gl) {
+		gl = elm_genlist_add(ug_data->base.module->navi);
+		elm_scroller_policy_set(gl, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_AUTO);
+		elm_genlist_homogeneous_set(gl, EINA_TRUE);
+		elm_genlist_mode_set(gl, ELM_LIST_COMPRESS);
+		elm_genlist_block_count_set(gl, EMAIL_GENLIST_MAX_BLOCK_ITEMS_COUNT);
+		ug_data->gl = gl;
+	} else {
+		elm_genlist_clear(ug_data->gl);
+	}
 
 	/* If one account only. Set as the account. */
 	int i = 0;
@@ -619,12 +630,6 @@ int account_create_list(EmailAccountUGD *ug_data)
 	}
 
 	debug_log("current account_id: %d", ug_data->account_id);
-
-	gl = elm_genlist_add(ug_data->base.module->navi);
-	elm_scroller_policy_set(gl, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_AUTO);
-	elm_genlist_mode_set(gl, ELM_LIST_COMPRESS);
-	elm_genlist_block_count_set(gl, EMAIL_GENLIST_MAX_BLOCK_ITEMS_COUNT);
-	ug_data->gl = gl;
 
 	if (ug_data->folder_view_mode == ACC_FOLDER_COMBINED_VIEW_MODE) {
 		inserted_cnt = account_create_combined_folder_list(ug_data);
@@ -851,18 +856,9 @@ void account_destroy_view(EmailAccountUGD *ug_data)
 	int i = 0;
 	int err = 0;
 
-	if (ug_data->popup) {
-		evas_object_del(ug_data->popup);
-		ug_data->popup = NULL;
-	}
-
+	DELETE_EVAS_OBJECT(ug_data->popup);
 	DELETE_EVAS_OBJECT(ug_data->more_ctxpopup);
-
-	if (ug_data->gl) {
-		elm_genlist_clear(ug_data->gl);
-		evas_object_del(ug_data->gl);
-		ug_data->gl = NULL;
-	}
+	DELETE_EVAS_OBJECT(ug_data->gl);
 
 	if (ug_data->folder_view_mode == ACC_FOLDER_MOVE_MAIL_VIEW_MODE) {
 		if (ug_data->account_list && ug_data->move_list) {
