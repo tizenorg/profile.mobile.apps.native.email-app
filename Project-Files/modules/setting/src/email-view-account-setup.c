@@ -534,6 +534,7 @@ static void _read_all_entries(EmailSettingVD *vd)
 	FREE(account->incoming_server_password);
 
 	account->user_email_address = g_strdup(vd->str_email_address);
+	account->account_name = g_strdup(vd->str_email_address);
 	account->incoming_server_password = g_strdup(vd->str_password);
 }
 
