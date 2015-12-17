@@ -713,22 +713,3 @@ void account_color_list_update(EmailAccountUGD *ug_data, int account_id, int upd
 		}
 	}
 }
-
-void account_color_list_remove(EmailAccountUGD *ug_data, int account_id)
-{
-	debug_enter();
-	retm_if(account_id <= 0 || !ug_data, "invalid parameter, account_id : %d", account_id);
-	debug_log("account_id : %d", account_id);
-
-	if (ug_data->account_color_list) {
-		GList *cur = NULL;
-		EmailAccountColor *account_color_data = NULL;
-		G_LIST_FOREACH(ug_data->account_color_list, cur, account_color_data) {
-			if (account_color_data->account_id == account_id) {
-				ug_data->account_color_list = g_list_remove(ug_data->account_color_list, account_color_data);
-				FREE(account_color_data);
-				break;
-			}
-		}
-	}
-}
