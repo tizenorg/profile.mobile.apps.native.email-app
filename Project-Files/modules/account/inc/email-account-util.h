@@ -29,8 +29,6 @@
 void account_stop_emf_job(EmailAccountUGD *ug_data, int handle);
 void account_sync_cancel_all(EmailAccountUGD *ug_data);
 
-gboolean account_free_folder_list_node_data(GNode *node, gpointer data);
-
 char *account_convert_folder_alias_by_mailbox(email_mailbox_t *mlist);
 char *account_convert_folder_alias_by_mailbox_type(email_mailbox_type_e mailbox_type);
 

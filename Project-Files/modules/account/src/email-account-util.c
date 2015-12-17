@@ -151,27 +151,6 @@ char *account_util_convert_mutf7_to_utf8(char *mailbox_name)
 	return result_mailbox_name;
 }
 
-gboolean account_free_folder_list_node_data(GNode *node, gpointer data)
-{
-	if (!node) {
-		debug_log("node is NULL");
-		return FALSE;
-	}
-
-	if (!(node->data)) {
-		debug_log("node data is NULL");
-		return FALSE;
-	}
-
-	email_mailbox_t *node_data = (email_mailbox_t *)node->data;
-
-	if (node_data) {
-		email_free_mailbox(&node_data, 1);
-	}
-
-	return FALSE;
-}
-
 char *account_convert_folder_alias_by_mailbox(email_mailbox_t *mlist)
 {
 	if (!mlist) {
