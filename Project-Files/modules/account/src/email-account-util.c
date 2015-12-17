@@ -336,7 +336,7 @@ char *account_get_user_email_address(int account_id)
 
 Evas_Object *account_create_entry_popup(EmailAccountUGD *ug_data, email_string_t t_title,
 		const char *entry_text, const char *entry_selection_text,
-		Evas_Smart_Cb _back_response_cb, Evas_Object_Event_Cb _mouse_up_response_cb, Evas_Smart_Cb _done_key_cb,
+		Evas_Smart_Cb _back_response_cb, Evas_Smart_Cb _done_key_cb,
 		Evas_Smart_Cb btn1_response_cb, const char *btn1_text, Evas_Smart_Cb btn2_response_cb, const char *btn2_text)
 {
 	debug_enter();
@@ -356,8 +356,8 @@ Evas_Object *account_create_entry_popup(EmailAccountUGD *ug_data, email_string_t
 		ug_data->popup = NULL;
 	}
 
-	if (!_back_response_cb || !_mouse_up_response_cb || !_done_key_cb) {
-		debug_log("_response_cb or _mouse_up_response_cb or _done_key_cb is NULL");
+	if (!_back_response_cb || !_done_key_cb) {
+		debug_log("_response_cb or _done_key_cb is NULL");
 		return NULL;
 	}
 
@@ -457,9 +457,7 @@ Evas_Object *account_create_entry_popup(EmailAccountUGD *ug_data, email_string_t
 	ug_data->popup = popup;
 	ug_data->popup_ok_btn = btn2;
 
-	evas_object_event_callback_add(popup, EVAS_CALLBACK_MOUSE_UP, _mouse_up_response_cb, ug_data);
 	elm_object_focus_set(editfield.entry, EINA_TRUE);
-
 	_register_entry_popup_rot_callback(popup, ug_data, t_title.id);
 
 	return popup;
