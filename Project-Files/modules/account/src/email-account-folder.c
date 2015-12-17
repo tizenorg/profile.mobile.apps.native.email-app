@@ -867,14 +867,6 @@ void account_gdbus_event_account_receive(GDBusConnection *connection,
 			}
 			break;
 
-		case NOTI_ACCOUNT_DELETE:
-			debug_log("NOTI_ACCOUNT_DELETE");
-			account_id = data1;
-
-			ug_data->account_count--;
-			account_color_list_remove(ug_data, account_id);
-			break;
-
 		default:
 			debug_log("Uninterested notification");
 			break;

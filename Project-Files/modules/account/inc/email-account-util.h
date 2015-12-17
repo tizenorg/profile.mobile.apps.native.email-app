@@ -49,7 +49,6 @@ int account_color_list_get_account_color(EmailAccountUGD *ug_data, int account_i
 void account_color_list_free(EmailAccountUGD *ug_data);
 void account_color_list_add(EmailAccountUGD *ug_data, int account_id, int account_color);
 void account_color_list_update(EmailAccountUGD *ug_data, int account_id, int update_color);
-void account_color_list_remove(EmailAccountUGD *ug_data, int account_id);
 
 const char *email_get_account_theme_path();
 
