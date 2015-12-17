@@ -67,7 +67,6 @@ static int _account_module_create(email_module_t *self, app_control_h params)
 	EmailAccountModule *md = (EmailAccountModule *)self;
 	EmailAccountUGD *ug_data = &md->view;
 	char *argv[5] = { 0 };
-	int account_count = 0;
 	email_account_t *account_list = NULL;
 	int ret = APP_CONTROL_ERROR_NONE;
 
@@ -123,6 +122,11 @@ static int _account_module_create(email_module_t *self, app_control_h params)
 		}
 	}
 
+	if(_get_accounts_data(&ug_data->account_count, &ug_data->account_list)) {
+		debug_critical("get accounts data failed");
+		return -1;
+	}
+
 	if (argv[3]) {
 		is_account_list_ug = atoi(argv[3]);
 		g_free(argv[3]);
@@ -132,16 +136,10 @@ static int _account_module_create(email_module_t *self, app_control_h params)
 			if (argv[4]) {
 
 				debug_log("mailbox_mode:%s", argv[4]);
-
-				if (_get_accounts_data(&account_count, &account_list) != 0) {
-					debug_critical("get accounts data failed");
-					return -1;
-				}
-
 				if (g_strcmp0(argv[4], EMAIL_BUNDLE_VAL_PRIORITY_SENDER) == 0) {
 					ug_data->mailbox_mode = ACC_MAILBOX_TYPE_PRIORITY_INBOX;
 					ug_data->mailbox_type = EMAIL_MAILBOX_TYPE_PRIORITY_SENDERS;
-					if (account_count == 1) {
+					if (ug_data->account_count == 1) {
 						ug_data->folder_view_mode = ACC_FOLDER_SINGLE_VIEW_MODE;
 					} else {
 						ug_data->folder_view_mode = ACC_FOLDER_ACCOUNT_LIST_VIEW_MODE;
@@ -149,12 +147,12 @@ static int _account_module_create(email_module_t *self, app_control_h params)
 				} else if (g_strcmp0(argv[4], EMAIL_BUNDLE_VAL_FILTER_INBOX) == 0) {
 					ug_data->mailbox_mode = ACC_MAILBOX_TYPE_FLAGGED;
 					ug_data->mailbox_type = EMAIL_MAILBOX_TYPE_FLAGGED;
-					if (account_count == 1) {
+					if (ug_data->account_count == 1) {
 						ug_data->folder_view_mode = ACC_FOLDER_SINGLE_VIEW_MODE;
 					} else {
 						ug_data->folder_view_mode = ACC_FOLDER_ACCOUNT_LIST_VIEW_MODE;
 					}
-				} else if (g_strcmp0(argv[4], EMAIL_BUNDLE_VAL_ALL_ACCOUNT) == 0 || account_count > 1) {
+				} else if (g_strcmp0(argv[4], EMAIL_BUNDLE_VAL_ALL_ACCOUNT) == 0 || ug_data->account_count > 1) {
 					ug_data->mailbox_mode = ACC_MAILBOX_TYPE_ALL_ACCOUNT;
 					ug_data->folder_view_mode = ACC_FOLDER_ACCOUNT_LIST_VIEW_MODE;
 				} else {
@@ -244,17 +242,13 @@ static int _account_module_create(email_module_t *self, app_control_h params)
 		if (ug_data->account_id > 0) {
 			ug_data->folder_view_mode = ACC_FOLDER_SINGLE_VIEW_MODE;
 		} else if (ug_data->account_id == 0) {
-			if (account_count == 1) {
+			if (ug_data->account_count == 1) {
 				ug_data->folder_view_mode = ACC_FOLDER_SINGLE_VIEW_MODE;
 				ug_data->account_id = account_list[0].account_id;
 			} else {
 				ug_data->folder_view_mode = ACC_FOLDER_COMBINED_VIEW_MODE;
 			}
 		}
-	}
-
-	if (account_list) {
-		email_engine_free_account_list(&account_list, account_count);
 	}
 
 	md->view.base.create = _account_create;
@@ -342,6 +336,16 @@ static void _account_destroy(email_view_t *self)
 	if (ug_data->popup) {
 		evas_object_del(ug_data->popup);
 		ug_data->popup = NULL;
+	}
+
+	if (ug_data->account_list) {
+		debug_log("count of account: %d", ug_data->account_count);
+		int err = email_engine_free_account_list(&(ug_data->account_list), ug_data->account_count);
+		if (err == 0) {
+			debug_critical("fail to free account - err(%d)", err);
+		}
+		ug_data->account_list = NULL;
+		ug_data->account_count = 0;
 	}
 }
 
@@ -602,17 +606,11 @@ int account_create_list(EmailAccountUGD *ug_data)
 	debug_enter();
 	Evas_Object *gl = NULL;
 	int inserted_cnt = 0;
+	int err = 0;
 
 	account_destroy_view(ug_data);
 
 	/* If one account only. Set as the account. */
-
-	int err = _get_accounts_data(&ug_data->account_count, &ug_data->account_list);
-	if (err != 0) {
-		debug_log("get accounts data failed");
-		return 0;
-	}
-
 	int i = 0;
 	if (ug_data->account_list && (ug_data->account_count > 0)) {
 		for (; i < ug_data->account_count; i++) {
@@ -867,7 +865,7 @@ void account_destroy_view(EmailAccountUGD *ug_data)
 	}
 
 	if (ug_data->folder_view_mode == ACC_FOLDER_MOVE_MAIL_VIEW_MODE) {
-		if (ug_data->account_list) {
+		if (ug_data->account_list && ug_data->move_list) {
 			email_move_list *move_list = ug_data->move_list;
 			for (i = 0; i < ug_data->account_count; i++) {
 				if (move_list[i].mailbox_list) {
@@ -882,16 +880,6 @@ void account_destroy_view(EmailAccountUGD *ug_data)
 		}
 	} else if (ug_data->folder_view_mode == ACC_FOLDER_ACCOUNT_LIST_VIEW_MODE) {
 		G_LIST_FREE(ug_data->account_group_list);
-	}
-
-	if (ug_data->account_list) {
-		debug_log("count of account: %d", ug_data->account_count);
-		err = email_engine_free_account_list(&(ug_data->account_list), ug_data->account_count);
-		if (err == 0) {
-			debug_critical("fail to free account - err(%d)", err);
-		}
-		ug_data->account_list = NULL;
-		ug_data->account_count = 0;
 	}
 }
 
