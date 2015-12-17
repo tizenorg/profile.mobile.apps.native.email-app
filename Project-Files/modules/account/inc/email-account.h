@@ -156,11 +156,9 @@ struct ug_data
 
 	Elm_Object_Item *group_title_item;
 	Elm_Object_Item *it;
-	Elm_Object_Item *root_item;
 	Elm_Object_Item *move_from_item;
 
 	Elm_Genlist_Item_Class *itc_combined;
-	Elm_Genlist_Item_Class *itc_root;
 	Elm_Genlist_Item_Class *itc_account_name;
 	Elm_Genlist_Item_Class *itc_single;
 	Elm_Genlist_Item_Class *itc_group;
