@@ -56,6 +56,10 @@
 
 group { name: "elm/genlist/item/email_mailbox/default";
 
+	alias: "elm/genlist/item_compress/email_mailbox/default";
+	alias: "elm/genlist/tree/email_mailbox/default";
+	alias: "elm/genlist/tree_compress/email_mailbox/default";
+
 	data.item: "texts" "email.data.text email.sender.text email.subject.text";
 	data.item: "contents" "account_colorbar email.star.icon email.status.icon email.attachment.icon select_checkbox_icon";
 
