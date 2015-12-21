@@ -201,7 +201,8 @@ static void _toolbar_more_btn_cb(void *data, Evas_Object *obj, void *event_info)
 	DELETE_EVAS_OBJECT(vd->ctx_popup);
 	vd->ctx_popup = elm_ctxpopup_add(ugd->base.win);
 	elm_ctxpopup_auto_hide_disabled_set(vd->ctx_popup, EINA_TRUE);
-	elm_object_style_set(vd->ctx_popup, "more/default");
+	/* TODO: Should be uncommented when "more/default" style will be supported. */
+//	elm_object_style_set(vd->ctx_popup, "more/default");
 	eext_object_event_callback_add(vd->ctx_popup, EEXT_CALLBACK_BACK, _ctxpopup_dismissed_cb, vd);
 	eext_object_event_callback_add(vd->ctx_popup, EEXT_CALLBACK_MORE, _ctxpopup_dismissed_cb, vd);
 	evas_object_smart_callback_add(vd->ctx_popup, "dismissed", _ctxpopup_dismissed_cb, vd);

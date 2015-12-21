@@ -825,7 +825,9 @@ static void _account_more_clicked_cb(void *data, Evas_Object *obj, void *event_i
 	if (ug_data->editmode == false) {
 		ug_data->more_ctxpopup = elm_ctxpopup_add(ug_data->base.module->win);
 		elm_ctxpopup_auto_hide_disabled_set(ug_data->more_ctxpopup, EINA_TRUE);
-		elm_object_style_set(ug_data->more_ctxpopup, "more/default");
+
+		/* TODO: Should be uncommented when "more/default" style will be supported. */
+//		elm_object_style_set(ug_data->more_ctxpopup, "more/default");
 
 		eext_object_event_callback_add(ug_data->more_ctxpopup, EEXT_CALLBACK_BACK, _account_more_ctxpopup_dismissed_cb, ug_data);
 		eext_object_event_callback_add(ug_data->more_ctxpopup, EEXT_CALLBACK_MORE, _account_more_ctxpopup_dismissed_cb, ug_data);
