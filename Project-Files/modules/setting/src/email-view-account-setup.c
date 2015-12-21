@@ -305,6 +305,7 @@ static void _create_list(EmailSettingVD *vd)
 
 	vd->genlist = elm_genlist_add(vd->base.content);
 	elm_genlist_mode_set(vd->genlist, ELM_LIST_COMPRESS);
+	elm_genlist_homogeneous_set(vd->genlist, EINA_TRUE);
 	elm_scroller_policy_set(vd->genlist, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_AUTO);
 
 	vd->itc1 = setting_get_genlist_class_item("full", NULL, _gl_content_get_cb, NULL, NULL);
@@ -483,7 +484,6 @@ static void _create_account_type_chooser_popup(EmailSettingVD *vd)
 	Elm_Genlist_Item_Class *itc = setting_get_genlist_class_item("type1", _popup_list_text_get_cb, NULL, NULL, NULL);
 
 	Evas_Object *genlist = elm_genlist_add(ugd->popup);
-	elm_object_style_set(genlist, "popup");
 	elm_genlist_homogeneous_set(genlist, EINA_TRUE);
 	elm_scroller_policy_set(genlist, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_AUTO);
 	elm_scroller_content_min_limit(genlist, EINA_FALSE, EINA_TRUE);

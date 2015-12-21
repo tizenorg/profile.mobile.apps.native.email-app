@@ -273,6 +273,7 @@ static Evas_Object *_create_rule_list_layout(EmailFilterVD *vd, email_rule_t *fi
 
 	genlist = elm_genlist_add(content_ly);
 	elm_genlist_mode_set(genlist, ELM_LIST_COMPRESS);
+	elm_genlist_homogeneous_set(genlist, EINA_TRUE);
 	elm_scroller_policy_set(genlist, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_AUTO);
 	vd->genlist = genlist;
 

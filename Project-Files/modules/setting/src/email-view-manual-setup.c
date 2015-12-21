@@ -293,6 +293,7 @@ static void _create_list(EmailSettingVD *vd)
 
 	vd->genlist = elm_genlist_add(vd->base.content);
 	elm_genlist_mode_set(vd->genlist, ELM_LIST_COMPRESS);
+	elm_genlist_homogeneous_set(vd->genlist, EINA_TRUE);
 	elm_scroller_policy_set(vd->genlist, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_AUTO);
 
 	vd->sending_secure_radio_grp = elm_radio_add(vd->genlist);
@@ -1025,8 +1026,6 @@ static Evas_Object *_get_option_genlist(Evas_Object *parent, ListItemData *li)
 	if (li) {
 		EmailSettingVD *vd = li->vd;
 		genlist = elm_genlist_add(parent);
-		elm_object_style_set(genlist, "popup");
-
 		elm_genlist_homogeneous_set(genlist, EINA_TRUE);
 		elm_scroller_policy_set(genlist, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_AUTO);
 		elm_scroller_content_min_limit(genlist, EINA_FALSE, EINA_TRUE);

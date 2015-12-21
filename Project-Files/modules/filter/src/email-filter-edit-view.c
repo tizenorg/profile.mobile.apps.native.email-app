@@ -375,6 +375,7 @@ static Evas_Object *_create_list(EmailFilterVD *vd)
 
 	genlist = elm_genlist_add(vd->base.content);
 	elm_genlist_mode_set(genlist, ELM_LIST_COMPRESS);
+	elm_genlist_homogeneous_set(genlist, EINA_TRUE);
 	elm_scroller_policy_set(genlist, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_OFF);
 	elm_genlist_select_mode_set(genlist, ELM_OBJECT_SELECT_MODE_NONE);
 	elm_genlist_highlight_mode_set(genlist, EINA_FALSE);

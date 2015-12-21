@@ -464,6 +464,7 @@ static void _create_font_size_popup(EmailComposerUGD *ugd)
 	evas_object_data_set(genlist, RICHTEXT_TOOLBAR_DATA_NAME, ugd);
 	evas_object_size_hint_weight_set(genlist, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_size_hint_align_set(genlist, EVAS_HINT_FILL, EVAS_HINT_FILL);
+	elm_genlist_homogeneous_set(genlist, EINA_TRUE);
 
 	int index = 0;
 	for (; index < sizeof(_rich_text_font_sizes) / sizeof(_rich_text_font_sizes[0]); index++) {
