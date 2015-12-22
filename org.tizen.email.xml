@@ -185,5 +185,6 @@
 		<privilege>http://tizen.org/privilege/email</privilege>
 		<privilege>http://tizen.org/privilege/account.read</privilege>
 		<privilege>http://tizen.org/privilege/account.write</privilege>
+		<privilege>http://tizen.org/privilege/network.get</privilege>
 	</privileges>
 </manifest>
