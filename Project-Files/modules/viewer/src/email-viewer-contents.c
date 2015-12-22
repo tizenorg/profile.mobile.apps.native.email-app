@@ -52,6 +52,7 @@ typedef enum {
 #ifdef _WEBKIT_CONSOLE_MESSAGE_LOG
 static void _webview_console_message(void *data, Evas_Object *obj, void *event_info);
 #endif
+static void _webview_load_started_cb(void *data, Evas_Object *obj, void *event_info);
 static void _webview_load_finished_cb(void *data, Evas_Object *obj, void *event_info);
 static void _webview_policy_navigation_decide_cb(void *data, Evas_Object *obj, void *event_info);
 static void _webview_load_error_cb(void *data, Evas_Object *obj, void *event_info);
@@ -210,6 +211,11 @@ static void _check_show_image_cb(Evas_Object *o, const char *result, void *data)
 	_create_combined_scroller_and_resize_webview(ug_data);
 }
 
+static void _webview_load_started_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	debug_enter();
+}
+
 static void _webview_load_finished_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
@@ -359,11 +365,6 @@ static void _webview_load_noemptylayout_finished_cb(void *data, Evas_Object *obj
 	debug_log("set b_load_finished");
 	ug_data->b_load_finished = EINA_TRUE;
 	debug_leave();
-}
-
-static void _webview_load_progress_started_cb(void *data, Evas_Object *obj, void *event_info)
-{
-	debug_enter();
 }
 
 static void _webview_load_progress_cb(void *data, Evas_Object *obj, void *event_info)
@@ -910,9 +911,9 @@ void viewer_webkit_add_callbacks(void *data)
 		evas_object_smart_callback_add(ug_data->webview, "edge,left", _webview_edge_left_cb, ug_data);
 		evas_object_smart_callback_add(ug_data->webview, "edge,right", _webview_edge_right_cb, ug_data);
 
+		evas_object_smart_callback_add(ug_data->webview, "load,started", _webview_load_started_cb, ug_data);
 		evas_object_smart_callback_add(ug_data->webview, "load,finished", _webview_load_finished_cb, ug_data);
 		evas_object_smart_callback_add(ug_data->webview, "load,nonemptylayout,finished", _webview_load_noemptylayout_finished_cb, ug_data);
-		evas_object_smart_callback_add(ug_data->webview, "load,progress,started", _webview_load_progress_started_cb, ug_data);
 		evas_object_smart_callback_add(ug_data->webview, "load,progress", _webview_load_progress_cb, ug_data);
 		evas_object_smart_callback_add(ug_data->webview, "load,error", _webview_load_error_cb, ug_data);
 		evas_object_smart_callback_add(ug_data->webview, "policy,navigation,decide", _webview_policy_navigation_decide_cb, ug_data);
@@ -951,9 +952,9 @@ void viewer_webkit_del_callbacks(void *data)
 		evas_object_smart_callback_del_full(ug_data->webview, "edge,left", _webview_edge_left_cb, ug_data);
 		evas_object_smart_callback_del_full(ug_data->webview, "edge,right", _webview_edge_right_cb, ug_data);
 
+		evas_object_smart_callback_del_full(ug_data->webview, "load,started", _webview_load_started_cb, ug_data);
 		evas_object_smart_callback_del_full(ug_data->webview, "load,finished", _webview_load_finished_cb, ug_data);
 		evas_object_smart_callback_del_full(ug_data->webview, "load,nonemptylayout,finished", _webview_load_noemptylayout_finished_cb, ug_data);
-		evas_object_smart_callback_del_full(ug_data->webview, "load,progress,started", _webview_load_progress_started_cb, ug_data);
 		evas_object_smart_callback_del_full(ug_data->webview, "load,progress", _webview_load_progress_cb, ug_data);
 		evas_object_smart_callback_del_full(ug_data->webview, "load,error", _webview_load_error_cb, ug_data);
 		evas_object_smart_callback_del_full(ug_data->webview, "policy,navigation,decide", _webview_policy_navigation_decide_cb, ug_data);
