@@ -219,6 +219,11 @@ static void _webview_load_started_cb(void *data, Evas_Object *obj, void *event_i
 static void _webview_load_finished_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
+
+#ifdef _EWK_LOAD_NONEMPTY_LAYOUT_FINISHED_CB_UNAVAILABLE_
+	_webview_load_noemptylayout_finished_cb(data, obj, NULL);
+#endif
+
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
 	retm_if(ug_data->mail_info == NULL, "ug_data->mail_info is NULL!");
@@ -913,7 +918,9 @@ void viewer_webkit_add_callbacks(void *data)
 
 		evas_object_smart_callback_add(ug_data->webview, "load,started", _webview_load_started_cb, ug_data);
 		evas_object_smart_callback_add(ug_data->webview, "load,finished", _webview_load_finished_cb, ug_data);
+#ifndef _EWK_LOAD_NONEMPTY_LAYOUT_FINISHED_CB_UNAVAILABLE_
 		evas_object_smart_callback_add(ug_data->webview, "load,nonemptylayout,finished", _webview_load_noemptylayout_finished_cb, ug_data);
+#endif
 		evas_object_smart_callback_add(ug_data->webview, "load,progress", _webview_load_progress_cb, ug_data);
 		evas_object_smart_callback_add(ug_data->webview, "load,error", _webview_load_error_cb, ug_data);
 		evas_object_smart_callback_add(ug_data->webview, "policy,navigation,decide", _webview_policy_navigation_decide_cb, ug_data);
@@ -954,7 +961,9 @@ void viewer_webkit_del_callbacks(void *data)
 
 		evas_object_smart_callback_del_full(ug_data->webview, "load,started", _webview_load_started_cb, ug_data);
 		evas_object_smart_callback_del_full(ug_data->webview, "load,finished", _webview_load_finished_cb, ug_data);
+#ifndef _EWK_LOAD_NONEMPTY_LAYOUT_FINISHED_CB_UNAVAILABLE_
 		evas_object_smart_callback_del_full(ug_data->webview, "load,nonemptylayout,finished", _webview_load_noemptylayout_finished_cb, ug_data);
+#endif
 		evas_object_smart_callback_del_full(ug_data->webview, "load,progress", _webview_load_progress_cb, ug_data);
 		evas_object_smart_callback_del_full(ug_data->webview, "load,error", _webview_load_error_cb, ug_data);
 		evas_object_smart_callback_del_full(ug_data->webview, "policy,navigation,decide", _webview_policy_navigation_decide_cb, ug_data);

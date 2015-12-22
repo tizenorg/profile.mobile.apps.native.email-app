@@ -839,7 +839,13 @@ void composer_webkit_add_callbacks(Evas_Object *ewk_view, void *data)
 
 	evas_object_smart_callback_add(ewk_view, "load,progress", _ewk_view_load_progress_cb, ugd);
 	evas_object_smart_callback_add(ewk_view, "load,error", _ewk_view_load_error_cb, ugd);
+
+#ifndef _EWK_LOAD_NONEMPTY_LAYOUT_FINISHED_CB_UNAVAILABLE_
 	evas_object_smart_callback_add(ewk_view, "load,nonemptylayout,finished", _ewk_view_load_nonemptylayout_finished_cb, ugd);
+#else
+	evas_object_smart_callback_add(ewk_view, "load,finished", _ewk_view_load_nonemptylayout_finished_cb, ugd);
+#endif
+
 	evas_object_smart_callback_add(ewk_view, "policy,navigation,decide", _ewk_view_policy_navigation_decide_cb, ugd);
 	evas_object_smart_callback_add(ewk_view, "contextmenu,customize", _ewk_view_contextmenu_customize_cb, ugd);
 
@@ -865,7 +871,13 @@ void composer_webkit_del_callbacks(Evas_Object *ewk_view, void *data)
 
 	evas_object_smart_callback_del_full(ewk_view, "load,progress", _ewk_view_load_progress_cb, ugd);
 	evas_object_smart_callback_del_full(ewk_view, "load,error", _ewk_view_load_error_cb, ugd);
+
+#ifndef _EWK_LOAD_NONEMPTY_LAYOUT_FINISHED_CB_UNAVAILABLE_
 	evas_object_smart_callback_del_full(ewk_view, "load,nonemptylayout,finished", _ewk_view_load_nonemptylayout_finished_cb, ugd);
+#else
+	evas_object_smart_callback_del_full(ewk_view, "load,finished", _ewk_view_load_nonemptylayout_finished_cb, ugd);
+#endif
+
 	evas_object_smart_callback_del_full(ewk_view, "policy,navigation,decide", _ewk_view_policy_navigation_decide_cb, ugd);
 	evas_object_smart_callback_del_full(ewk_view, "contextmenu,customize", _ewk_view_contextmenu_customize_cb, ugd);
 
