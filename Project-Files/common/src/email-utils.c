@@ -116,7 +116,6 @@
 #define EMAIL_BUFF_SIZE_BIG 128
 #define EMAIL_BUFF_SIZE_HUG 256
 #define EMAIL_BUFF_SIZE_4K 4096
-static bool b_hide_status[EMAIL_STR_SIZE] = {'\0'};
 
 EMAIL_API const char *locale = NULL;
 static bool is_24_hr_format = false;
@@ -344,11 +343,6 @@ enum {
 	EMAIL_GROUP_PRIORITY_LOW,
 	EMAIL_GROUP_MAX,
 };
-
-
-static gint _g_time_rev_set = 0;
-static gint _g_time_rev = 0;
-static bool _g_viewer_launched_on_mailbox = false;
 
 static struct info {
 	char res_dir[EMAIL_SMALL_PATH_MAX];
@@ -584,16 +578,6 @@ const char *email_get_mmc_storage_url()
 	return result;
 }
 
-EMAIL_API void email_set_group_order(int i, bool hide)
-{
-	b_hide_status[i] = hide;
-}
-
-EMAIL_API bool email_get_group_order(int i)
-{
-	return b_hide_status[i];
-}
-
 EMAIL_API email_file_type_e email_get_file_type_from_mime_type(const char *mime_type)
 {
 	debug_enter();
@@ -625,37 +609,6 @@ EMAIL_API const char *email_get_icon_path_from_file_type(email_file_type_e ftype
 	return buff;
 }
 
-EMAIL_API char *email_get_current_theme_name(void)
-{
-	char *theme_name = NULL;
-	char *save_ptr = NULL;
-
-	/* Get current theme path. Return value is a full path of theme file. ex) blue-hd:default */
-	const char *current_theme_path = elm_theme_get(NULL);
-	debug_secure("current_theme_path [%s]", current_theme_path);
-
-	if (current_theme_path == NULL) {
-		debug_log("current_theme_path is NULL !!");
-		return NULL;
-	}
-
-	theme_name = strdup(current_theme_path);
-	if (theme_name == NULL) {
-		debug_log("theme_name is NULL !!");
-		return NULL;
-	}
-
-	theme_name = strtok_r(theme_name, ":", &save_ptr);
-	if (theme_name == NULL) {
-		debug_log("theme_name is NULL !!");
-		return NULL;
-	}
-
-	debug_secure("theme_name [%s]", theme_name);
-
-	return theme_name;
-}
-
 EMAIL_API gboolean email_check_file_exist(const gchar * path)
 {
 	debug_enter();
@@ -676,56 +629,6 @@ EMAIL_API gboolean email_check_dir_exist(const gchar * path)
 		return FALSE;
 	}
 	return TRUE;
-}
-
-EMAIL_API gboolean email_check_hidden(const gchar * file)
-{
-	debug_enter();
-	RETURN_VAL_IF_FAIL(STR_VALID(file), FALSE);
-
-	if (file[0] == '.') {
-		return TRUE;
-	}
-	return FALSE;
-}
-
-EMAIL_API gchar *email_parse_get_title_from_path(const gchar *path)
-{
-	debug_enter();
-	RETURN_VAL_IF_FAIL(STR_VALID(path), NULL);
-
-	guint index = 0;
-
-	gchar *file_path = g_strdup(path);
-	file_path = g_strstrip(file_path);
-	gchar **token_list = g_strsplit_set(file_path, "/", -1);
-	g_free(file_path);	/* MUST BE. */
-
-	RETURN_VAL_IF_FAIL(token_list != NULL, NULL);
-
-	while (token_list[index] != NULL) {
-		index++;
-	}
-
-	gchar *file_name = g_strdup(token_list[index - 1]);
-
-	g_strfreev(token_list);	/* MUST BE. */
-	token_list = NULL;
-
-	if (file_name)
-		token_list = g_strsplit_set(file_name, ".", -1);
-
-	g_free(file_name);	/* MUST BE. */
-
-	RETURN_VAL_IF_FAIL(token_list != NULL, NULL);
-
-	gchar *title = g_strdup(token_list[0]);
-
-	g_strfreev(token_list);	/* MUST BE. */
-
-	debug_secure("title name: %s", title);
-
-	return title;
 }
 
 EMAIL_API gchar *email_parse_get_title_from_filename(const gchar *filename)
@@ -790,33 +693,6 @@ EMAIL_API gchar *email_parse_get_filename_from_path(const gchar *path)
 	debug_secure("file name (%s)", file_name_without_ext);
 
 	return file_name_without_ext;
-}
-
-EMAIL_API gchar *email_parse_get_filenameext_from_path(const gchar *path)
-{
-	debug_enter();
-	RETURN_VAL_IF_FAIL(STR_VALID(path), NULL);
-
-	guint index = 0;
-
-	gchar *file_path = g_strdup(path);
-	file_path = g_strstrip(file_path);
-	gchar **token_list = g_strsplit_set(file_path, "/", -1);
-	g_free(file_path);	/* MUST BE. */
-
-	RETURN_VAL_IF_FAIL(token_list != NULL, NULL);
-
-	while (token_list[index] != NULL) {
-		index++;
-	}
-
-	gchar *file_name = g_strdup(token_list[index - 1]);
-
-	g_strfreev(token_list);	/* MUST BE. */
-
-	debug_secure("file name (%s)", file_name);
-
-	return file_name;
 }
 
 EMAIL_API void email_parse_get_filename_n_ext_from_path(const gchar *path, gchar **ret_file_name, gchar **ret_ext)
@@ -900,16 +776,6 @@ EMAIL_API gchar *email_parse_get_ext_from_filename(const gchar *filename)
 	return ext;
 }
 
-EMAIL_API gchar *email_get_temp_dirname(const gchar *tmp_folder_path)
-{
-	debug_enter();
-	debug_secure("tmp_folder_path (%s)", tmp_folder_path);
-	pid_t pid = getpid();
-	char *dirname = g_strdup_printf("%s/%d", tmp_folder_path, pid);
-	debug_leave();
-	return dirname;
-}
-
 EMAIL_API gboolean email_save_file(const gchar *path, const gchar *buf, gsize len)
 {
 	debug_enter();
@@ -959,29 +825,6 @@ EMAIL_API gchar *email_get_buff_from_file(const gchar *path, guint max_kbyte)
 	}
 
 	return content;
-}
-
-EMAIL_API void email_dump_buff(const gchar *buff, const gchar *name)
-{
-	debug_enter();
-	RETURN_IF_FAIL(STR_VALID(buff));
-
-	tzset();	/* MUST BE. */
-	time_t now = time(NULL);
-	struct tm *t = localtime(&now);
-	retm_if(!t, "localtime() - failed");
-
-	gchar buff_path[MAX_PATH_LEN] = "\0";
-
-	g_snprintf(buff_path, sizeof(buff_path), "%s/%04d.%02d.%02d[%02dH.%02dM.%02dS]_%s.html",
-			email_get_phone_tmp_dir(),
-			t->tm_year + 1900, t->tm_mon, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, name);
-	debug_secure("path [%s]", buff_path);
-
-	gboolean result = email_save_file(buff_path, buff, STR_LEN((gchar *)buff));
-	if (!result) {
-		debug_log("email_save_file fail!");
-	}
 }
 
 EMAIL_API char *email_body_encoding_convert(char *text_content, char *from_charset, char *to_charset)
@@ -1277,103 +1120,6 @@ EMAIL_API gboolean email_get_recipient_info(const gchar *_recipient, gchar **_ni
 	return res;
 }
 
-EMAIL_API gchar *email_get_sync_name_list(const gchar *recipient)
-{
-#define COMMA_S ","
-#define COMMA_C ','
-	debug_enter();
-	RETURN_VAL_IF_FAIL(STR_VALID(recipient), NULL);
-
-	gchar *addr_list = g_strdup(recipient);
-	gchar *stx = g_strdup_printf("%c", 0x02);
-	const gchar etx = 0x03;
-
-	/* removes leading & trailing spaces. */
-	addr_list = g_strstrip(addr_list);
-
-	gchar **token_list = g_strsplit_set(addr_list, stx, -1);
-
-	if (addr_list != NULL) {
-		g_free(addr_list);
-	}
-
-	g_free(stx);
-
-	RETURN_VAL_IF_FAIL(token_list != NULL, NULL);
-
-	gchar *sync_list = NULL;
-	guint index = 1;
-
-	while (token_list[index] != NULL) {
-
-		gchar *token = strchr(token_list[index], etx);
-
-		if (token != NULL && STR_LEN(token) > 1) {
-
-			gchar *temp = sync_list;
-
-			if (index == 1) {
-				sync_list = g_strdup_printf("%s", token + 1);
-			} else {
-				sync_list = g_strdup_printf("%s%s", temp, token + 1);
-			}
-
-			if (temp != NULL) {
-				g_free(temp);	/* MUST BE. */
-			}
-		}
-
-		index++;
-	}
-
-	g_strfreev(token_list);	/* MUST BE. */
-
-	return sync_list;
-}
-
-EMAIL_API guint email_get_recipient_count(const gchar *recipients)
-{
-	debug_enter();
-	RETURN_VAL_IF_FAIL(STR_VALID(recipients), 0);
-
-	guint index = 0;
-
-	gchar *addr_list = g_strdup(recipients);
-
-	/* removes leading & trailing spaces. */
-	addr_list = g_strstrip(addr_list);
-
-	gchar **token_list = g_strsplit_set(addr_list, ",", -1);
-
-	if (addr_list != NULL) {
-		g_free(addr_list);
-	}
-
-	RETURN_VAL_IF_FAIL(token_list != NULL, 0);
-
-	while (token_list[index] != NULL) {
-		index++;
-	}
-
-	g_strfreev(token_list);	/* MUST BE. */
-
-	return index;
-}
-
-EMAIL_API gchar *email_cut_text_by_char_len(const gchar *text, gint len)
-{
-	debug_enter();
-	RETURN_VAL_IF_FAIL(STR_VALID(text), NULL);
-	RETURN_VAL_IF_FAIL(len > 0, NULL);
-
-	gchar *offset = g_utf8_offset_to_pointer(text, len);
-	gchar *ret_text = (gchar *)g_malloc0(offset - text + 1);
-
-	STR_NCPY(ret_text, (gchar *)text, offset - text);
-
-	return ret_text;
-}
-
 EMAIL_API gchar *email_cut_text_by_byte_len(const gchar *text, gint len)
 {
 	debug_enter();
@@ -1388,98 +1134,6 @@ EMAIL_API gchar *email_cut_text_by_byte_len(const gchar *text, gint len)
 	STR_NCPY(ret_text, (gchar *)text, offset - text);
 
 	return ret_text;
-}
-
-EMAIL_API int email_get_default_first_day_of_week()
-{
-	i18n_error_code_e status = I18N_ERROR_NONE;
-	i18n_uchar utf16_timezone[EMAIL_BUFF_SIZE_MID] = {0};
-	char timezone[EMAIL_BUFF_SIZE_SML] = {'\0'};
-	int first_day_of_week = 0, len = 0;
-	int default_first_day_of_week = -1;
-	char *locale_tmp = NULL;
-
-	int res = system_settings_get_value_string(SYSTEM_SETTINGS_KEY_LOCALE_COUNTRY, &locale_tmp);
-	if (res != SYSTEM_SETTINGS_ERROR_NONE || locale_tmp == NULL) {
-		debug_critical("system_settings_get_value_string() failed. res = %d, local = %s", res, locale_tmp);
-		FREE(locale_tmp);
-		return default_first_day_of_week;
-	}
-
-	status = i18n_ulocale_set_default(locale_tmp);
-	if (status != I18N_ERROR_NONE) {
-		debug_critical("i18n_ulocale_set_default() failed: %d", status);
-		FREE(locale_tmp);
-		return default_first_day_of_week;
-	}
-
-	FREE(locale_tmp);
-
-	i18n_ustring_copy_ua_n(utf16_timezone, timezone, sizeof(timezone));
-	len = i18n_ustring_get_length(utf16_timezone);
-
-	i18n_ucalendar_h cal = NULL;
-	i18n_ucalendar_create(utf16_timezone, len, locale, I18N_UCALENDAR_TRADITIONAL, &cal);
-	retvm_if(!cal, -1, "cal is null");
-
-	i18n_ucalendar_get_attribute(cal, I18N_UCALENDAR_FIRST_DAY_OF_WEEK, &first_day_of_week);
-
-	i18n_ucalendar_destroy(cal);
-
-	return first_day_of_week - 1;
-}
-
-EMAIL_API bool email_time_isequal(time_t first_time_t, time_t second_time_t)
-{
-	return first_time_t == second_time_t ? TRUE : FALSE;
-}
-
-EMAIL_API bool email_time_isbigger(time_t first_time_t, time_t second_time_t)
-{
-	return first_time_t > second_time_t ? TRUE : FALSE;
-}
-
-EMAIL_API time_t email_convert_datetime(const char *datetime_str/* YYYYMMDDHHMMSS */)
-{
-	debug_enter();
-	RETURN_VAL_IF_FAIL(STR_VALID(datetime_str), -1);
-
-	char buf[EMAIL_BUFF_SIZE_TIN] = "\0";
-	struct tm t;
-
-	memset(&t, 0, sizeof(struct tm));
-
-	/* Year. */
-	memset(buf, 0, sizeof(buf));
-	snprintf(buf, sizeof(buf), "%.4s", datetime_str);
-	t.tm_year = atoi(buf) - 1900;
-
-	/* Month. */
-	memset(buf, 0, sizeof(buf));
-	snprintf(buf, sizeof(buf), "%.2s", datetime_str + 4);
-	t.tm_mon = atoi(buf) - 1;
-
-	/* Day. */
-	memset(buf, 0, sizeof(buf));
-	snprintf(buf, sizeof(buf), "%.2s", datetime_str + 6);
-	t.tm_mday = atoi(buf);
-
-	/* Hour. */
-	memset(buf, 0, sizeof(buf));
-	snprintf(buf, sizeof(buf), "%.2s", datetime_str + 8);
-	t.tm_hour = atoi(buf);
-
-	/* Minute. */
-	memset(buf, 0, sizeof(buf));
-	snprintf(buf, sizeof(buf), "%.2s", datetime_str + 10);
-	t.tm_min = atoi(buf);
-
-	/* Second. */
-	memset(buf, 0, sizeof(buf));
-	snprintf(buf, sizeof(buf), "%.2s", datetime_str + 12);
-	t.tm_sec = atoi(buf);
-
-	return mktime(&t) + email_get_time_revision();
 }
 
 static int is_today(struct tm *req_tm, struct tm *now_tm)
@@ -1816,140 +1470,6 @@ EMAIL_API char *email_get_timezone_str(void)
 	return g_strdup(buf + 20); /* Asia/Seoul */
 }
 
-gint _email_get_default_clock_time_zone(void)
-{
-	guint time_zone = email_get_timezone_in_minutes("+09");
-	debug_secure("time_zone: %d", time_zone);
-	return time_zone;
-}
-
-EMAIL_API gint email_get_clock_time_zone(void)
-{
-	debug_enter();
-	char *time_zone_str = NULL;
-	char *display_name = NULL;
-	guint time_zone = 0;
-	i18n_timezone_h tzone = NULL;
-
-	int res = system_settings_get_value_string(
-			SYSTEM_SETTINGS_KEY_LOCALE_TIMEZONE,
-			&time_zone_str);
-
-	if (res != SYSTEM_SETTINGS_ERROR_NONE || time_zone_str == NULL) {
-		debug_error("unable to get system timezone"
-				"res = %d, timezone = %s", res, time_zone_str);
-
-		FREE(time_zone_str);
-		return _email_get_default_clock_time_zone();
-	}
-
-	debug_secure("timezone string: %s", time_zone_str);
-
-	res = i18n_timezone_create(&tzone, time_zone_str);
-	if (res != I18N_ERROR_NONE) {
-		debug_error("failed to create timezone handler. res = %d", res);
-		FREE(time_zone_str);
-		return _email_get_default_clock_time_zone();
-	}
-
-	res = i18n_timezone_get_display_name_with_type(tzone,
-			email_get_day_light_saving(),
-			I18N_TIMEZONE_DISPLAY_TYPE_LONG_GMT,
-			&display_name);
-
-	if (res != I18N_ERROR_NONE || display_name == NULL) {
-		debug_error("failed to get timezone display name. "
-				"res = %d, display_name = %s", res, display_name);
-		time_zone = _email_get_default_clock_time_zone();
-	} else {
-		char buf[MAX_STR_LEN] = {'\0'};
-		snprintf(buf, MAX_STR_LEN, "%s", display_name + EMAIL_GMT_NAME_SIZE);
-		time_zone = email_get_timezone_in_minutes(buf);
-		debug_secure("time_zone: %d", time_zone);
-	}
-
-	i18n_timezone_destroy(tzone);
-	FREE(display_name);
-	FREE(time_zone_str);
-
-	return time_zone;
-}
-
-EMAIL_API gboolean email_get_day_light_saving(void)
-{
-	debug_enter();
-	int dst = 0;
-	struct tm *ts;
-	time_t ctime;
-
-	ctime = time(NULL);
-	ts = localtime(&ctime);
-
-	if (!ts) {
-		return FALSE;
-	}
-
-	dst = ts->tm_isdst;
-	debug_secure("day light saving is %d", dst);
-
-	return (dst == 1 ? TRUE : FALSE);
-}
-
-EMAIL_API int email_get_timezone_in_minutes(char *str)
-{
-	debug_enter();
-	int sign = 1;
-	int temp_int = 0;
-	int i = 0;
-
-	for (i = 0; i < strlen(str); ++i) {
-		if (str[i] == ':') {
-			str[i] = '.';
-			break;
-		}
-	}
-
-	double temp_float = atof(str);
-	debug_log("temp_float: %f", temp_float);
-	temp_float = temp_float * 10;
-	temp_int = temp_float;
-
-	if (temp_int > 0) {
-		sign = 1;
-	} else {
-		sign = -1;
-	}
-
-	temp_int = temp_int * sign;
-
-	if (temp_int % 10 != 0) {
-		temp_int = temp_int / 10;
-		return (sign * (60 * temp_int + 30));
-	} else {
-		temp_int = temp_int / 10;
-		return (sign * 60 * temp_int);
-	}
-}
-
-EMAIL_API gint email_get_time_revision(void)
-{
-	debug_enter();
-
-	if (_g_time_rev_set)
-		return _g_time_rev;
-
-	guint tz_val = email_get_clock_time_zone() * 60;
-
-	gboolean dst_enabled = email_get_day_light_saving();
-
-	guint dst = dst_enabled ? 3600 : 0;
-
-	_g_time_rev_set = 1;
-	_g_time_rev = tz_val + dst;
-
-	return (tz_val + dst);
-}
-
 EMAIL_API int email_create_folder(const char *path)
 {
 	debug_enter();
@@ -2088,35 +1608,6 @@ EMAIL_API gboolean email_copy_file_feedback(const char *src_full_path, const cha
 	}
 
 	return result;
-}
-
-
-static int termination_flag = 0;
-static int pause_flag = 1;
-
-EMAIL_API void set_app_terminated()
-{
-	termination_flag = 1;
-}
-
-EMAIL_API int get_app_terminated()
-{
-	return termination_flag;
-}
-
-EMAIL_API void set_app_paused()
-{
-	pause_flag = 1;
-}
-
-EMAIL_API void reset_app_paused()
-{
-	pause_flag = 0;
-}
-
-EMAIL_API int get_app_paused()
-{
-	return pause_flag;
 }
 
 EMAIL_API char *email_util_strrtrim(char *s)
@@ -2427,40 +1918,6 @@ EMAIL_API bool email_is_smime_cert_attachment(const char *mime_type)
 	if (!g_ascii_strcasecmp(mime_type, EMAIL_MIME_TYPE_ENCRYPTED) ||
 		!g_ascii_strcasecmp(mime_type, EMAIL_MIME_TYPE_SIGNED) ||
 		!g_ascii_strcasecmp(mime_type, EMAIL_MIME_TYPE_ENCRYPTED_X) ||
-		!g_ascii_strcasecmp(mime_type, EMAIL_MIME_TYPE_SIGNED_X)) {
-		ret = true;
-	}
-
-	debug_leave();
-	return ret;
-}
-
-EMAIL_API bool email_is_encryption_cert_attachment(const char *mime_type)
-{
-	debug_enter();
-
-	retvm_if(!mime_type, false, "Invalid parameter: mime_type is NULL!");
-
-	bool ret = false;
-
-	if (!g_ascii_strcasecmp(mime_type, EMAIL_MIME_TYPE_ENCRYPTED) ||
-		!g_ascii_strcasecmp(mime_type, EMAIL_MIME_TYPE_ENCRYPTED_X)) {
-		ret = true;
-	}
-
-	debug_leave();
-	return ret;
-}
-
-EMAIL_API bool email_is_signing_cert_attachment(const char *mime_type)
-{
-	debug_enter();
-
-	retvm_if(!mime_type, false, "Invalid parameter: mime_type is NULL!");
-
-	bool ret = false;
-
-	if (!g_ascii_strcasecmp(mime_type, EMAIL_MIME_TYPE_SIGNED) ||
 		!g_ascii_strcasecmp(mime_type, EMAIL_MIME_TYPE_SIGNED_X)) {
 		ret = true;
 	}
@@ -2981,16 +2438,6 @@ CATCH:
 		connection_destroy(connection);
 	debug_log("network status result: %d", ret);
 	return ret;
-}
-
-EMAIL_API void email_set_viewer_launched_on_mailbox_flag(bool value)
-{
-	_g_viewer_launched_on_mailbox = value;
-}
-
-EMAIL_API bool email_get_viewer_launched_on_mailbox_flag()
-{
-	return _g_viewer_launched_on_mailbox;
 }
 
 EMAIL_API Elm_Genlist_Item_Class *email_util_get_genlist_item_class(const char *style,

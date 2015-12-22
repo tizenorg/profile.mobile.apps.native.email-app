@@ -2,7 +2,6 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 PROJECT(email-common C)
 
 SET(SRCS-common
-	${PROJECT_COMMON_DIR}/src/email-debug.c
 	${PROJECT_COMMON_DIR}/src/email-engine.c
 	${PROJECT_COMMON_DIR}/src/email-html-converter.c
 	${PROJECT_COMMON_DIR}/src/email-utils.c

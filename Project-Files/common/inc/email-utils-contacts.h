@@ -42,20 +42,14 @@ typedef struct _email_contact_list_info {
 /*
  * Exported fuctions.
  */
-EMAIL_API char *get_email_type_str(int type);
 
 EMAIL_API int email_get_contacts_list_int(contacts_match_int_flag_e match, contacts_list_h *list, int search_num);
 EMAIL_API int email_get_contacts_list(contacts_match_str_flag_e match, contacts_list_h *list, const char *search_word, email_contact_search_type_e search_type);
-EMAIL_API int email_get_contacts_index(contacts_record_h record, int *index);
 EMAIL_API int email_get_contacts_display_name(contacts_record_h record, char **display_name);
-EMAIL_API int email_get_contacts_email_address(contacts_record_h record, char **email_addr);
-EMAIL_API int email_get_contacts_first_name(contacts_record_h record, char **first_name);
-EMAIL_API int email_get_contacts_last_name(contacts_record_h record, char **last_name);
 EMAIL_API int email_get_contacts_list_info(contacts_list_h list, email_contact_list_info_t *contact_list_info);
 EMAIL_API int email_get_phone_log(contacts_match_str_flag_e match, contacts_list_h *list, const char *search_word);
 EMAIL_API int email_get_phone_log_info(contacts_list_h list, email_contact_list_info_t *ct_list_info);
 EMAIL_API int email_get_last_contact_in_contact_list(contacts_list_h list, contacts_record_h *last_contact);
-EMAIL_API int email_num_id_get_contacts_record(int num_id, contacts_record_h *out_record);
 EMAIL_API void *email_contact_search_by_email(void *ug_data, const char *search_word);
 EMAIL_API void email_delete_contacts_list(email_contact_list_info_t **contacts_list_item);
 

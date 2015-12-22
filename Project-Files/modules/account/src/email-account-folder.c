@@ -674,11 +674,6 @@ void account_gdbus_event_account_receive(GDBusConnection *connection,
 {
 	debug_enter();
 
-
-	if (get_app_terminated()) {
-		debug_log("App is in terminating");
-		return;
-	}
 	debug_secure("Object path=%s, interface name=%s, signal name=%s", object_path, interface_name, signal_name);
 	EmailAccountUGD *ug_data = (EmailAccountUGD *)data;
 

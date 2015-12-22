@@ -211,34 +211,6 @@ G_BEGIN_DECLS
 		x = NULL; \
 	} while (0)
 
-#undef UPDATE_HELP_OBJECT
-#define UPDATE_HELP_OBJECT(x, new_indicating_obj) \
-	do { \
-		if (x) { \
-			email_update_help_obj(x, new_indicating_obj); \
-		} \
-	} while (0)
-
-#undef UPDATE_HELP_OBJECT_ITEM
-#define UPDATE_HELP_OBJECT_ITEM(x) \
-	do { \
-		if (x) { \
-			email_update_help_obj_item(x); \
-		} \
-	} while (0)
-
-#undef SHOW_EVAS_OBJECT
-#define SHOW_EVAS_OBJECT(x) \
-	do { \
-		if (x) evas_object_show(x); \
-	} while (0)
-
-#undef HIDE_EVAS_OBJECT
-#define HIDE_EVAS_OBJECT(x) \
-	do { \
-		if (x) evas_object_hide(x); \
-	} while (0)
-
 /*utf8 util*/
 #define UTF8_VALIDATE(from, len) \
 	({\
@@ -375,57 +347,36 @@ EMAIL_API const char *email_get_res_url();
 EMAIL_API const char *email_get_phone_storage_url();
 EMAIL_API const char *email_get_mmc_storage_url();
 
-EMAIL_API void email_set_group_order(int i, bool hide);
-EMAIL_API bool email_get_group_order(int i);
-
 EMAIL_API email_network_status_e email_get_network_state(void);
 
 EMAIL_API email_file_type_e email_get_file_type_from_mime_type(const char *mime_type);
 EMAIL_API const char *email_get_icon_path_from_file_type(email_file_type_e ftype);
 
-EMAIL_API char *email_get_current_theme_name(void);
-
 EMAIL_API gboolean email_check_dir_exist(const gchar *path);
-EMAIL_API gboolean email_check_hidden(const gchar *file);
 EMAIL_API gboolean email_check_file_exist(const gchar *path);
 
-EMAIL_API gchar *email_parse_get_title_from_path(const gchar *path);	/* g_free(). */
 EMAIL_API gchar *email_parse_get_title_from_filename(const gchar *title);	/* g_free(). */
 EMAIL_API gchar *email_parse_get_filepath_from_path(const gchar *path);	/* g_free(). */
 EMAIL_API gchar *email_parse_get_ext_from_filename(const gchar *filename);	/* g_free(). */
 EMAIL_API gchar *email_parse_get_filename_from_path(const gchar *path);	/* g_free(). */
-EMAIL_API gchar *email_parse_get_filenameext_from_path(const gchar *path);	/* g_free(). */
 EMAIL_API void email_parse_get_filename_n_ext_from_path(const gchar *path, gchar **ret_file_name, gchar **ret_ext);
 
-EMAIL_API gchar *email_get_temp_dirname(const gchar *tmp_folder_path);
 EMAIL_API gboolean email_save_file(const gchar *path, const gchar *buf, gsize len);
 EMAIL_API gchar *email_get_buff_from_file(const gchar *path, guint max_kbyte);	/* g_free(). */
-EMAIL_API void email_dump_buff(const gchar *buff, const gchar *name);
 EMAIL_API char *email_body_encoding_convert(char *text_content, char *from_charset, char *to_charset);
 EMAIL_API gchar *email_get_file_size_string(guint64 size);	/* g_free(). */
 EMAIL_API guint64 email_get_file_size(const gchar *path);
 
 EMAIL_API gboolean email_get_address_validation(const char *address);
 EMAIL_API gboolean email_get_recipient_info(const gchar *_recipient, gchar **_nick, gchar **_addr);
-EMAIL_API gchar *email_get_sync_name_list(const gchar *recipient);	/* g_free(). */
-EMAIL_API guint email_get_recipient_count(const gchar *recipient);
 
-EMAIL_API gchar *email_cut_text_by_char_len(const gchar *text, gint len);	/* g_free(). */
 EMAIL_API gchar *email_cut_text_by_byte_len(const gchar *text, gint len);	/* g_free(). */
 
 EMAIL_API char *email_get_str_datetime(const time_t time_val);
 EMAIL_API char *email_get_date_text(const char *locale, char *skeleton, void *time);
 EMAIL_API char *email_get_date_text_with_formatter(void *formatter, void *time);
 
-EMAIL_API int email_get_default_first_day_of_week();
-EMAIL_API bool email_time_isequal(time_t first_time_t, time_t second_time_t);
-EMAIL_API bool email_time_isbigger(time_t first_time_t, time_t second_time_t);
-EMAIL_API time_t email_convert_datetime(const char *datetime_str);
 EMAIL_API char *email_get_timezone_str(void);
-EMAIL_API gint email_get_clock_time_zone(void);
-EMAIL_API gboolean email_get_day_light_saving(void);
-EMAIL_API gint email_get_time_revision(void);
-EMAIL_API int email_get_timezone_in_minutes(char *str);
 
 EMAIL_API int email_create_folder(const char *path);
 EMAIL_API gboolean email_copy_file_feedback(const char *src_full_path, const char *dest_full_path, gboolean(*copy_file_cb) (void *data, float percentage), void *cb_data);
@@ -452,20 +403,12 @@ EMAIL_API int email_unregister_timezone_changed_callback(system_settings_changed
 EMAIL_API int email_register_accessibility_font_size_changed_callback(system_settings_changed_cb func, void *data);
 EMAIL_API int email_unregister_accessibility_font_size_changed_callback(system_settings_changed_cb func);
 
-EMAIL_API void set_app_terminated();
-EMAIL_API int get_app_terminated();
-EMAIL_API void set_app_paused();
-EMAIL_API void reset_app_paused();
-EMAIL_API int get_app_paused();
-
 EMAIL_API char *email_util_strrtrim(char *s);
 EMAIL_API char *email_util_strltrim(char *s);
 EMAIL_API char *email_util_strtrim(char *s);
 
 EMAIL_API char *email_get_mime_type_from_file(const char *path);
 EMAIL_API bool email_is_smime_cert_attachment(const char *mime_type);
-EMAIL_API bool email_is_encryption_cert_attachment(const char *mime_type);
-EMAIL_API bool email_is_signing_cert_attachment(const char *mime_type);
 
 EMAIL_API int email_get_deleted_flag_mail_count(int account_id);
 EMAIL_API int email_get_favourite_mail_count(bool unread_only);
@@ -482,9 +425,6 @@ EMAIL_API char *email_get_datetime_format(void);
 
 EMAIL_API inline char *email_get_system_string(const char *string_id);
 EMAIL_API inline char *email_get_email_string(const char *string_id);
-
-EMAIL_API void email_set_viewer_launched_on_mailbox_flag(bool value);
-EMAIL_API bool email_get_viewer_launched_on_mailbox_flag();
 
 EMAIL_API Elm_Genlist_Item_Class* email_util_get_genlist_item_class(const char *style,
 		Elm_Gen_Item_Text_Get_Cb text_get,
@@ -541,32 +481,6 @@ EMAIL_API email_ext_save_err_type_e email_prepare_temp_file_path(const int index
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
-
-#define email_trace_memory() \
-	do { \
-		char dev[1024] = "\0"; \
-		pid_t pid = getpid(); \
-		snprintf(dev, sizeof(dev), "/proc/%d/status", pid); \
-		int fd = open(dev, O_RDONLY); \
-		if (fd) { \
-			int nread = 0; \
-			char read_buf[1024] = "\0"; \
-			while ((nread = read(fd, read_buf, sizeof(read_buf))) > 0) { \
-				char *substr = strstr(read_buf, "VmRSS:"); \
-				int i = 0; \
-				for (i = 0; substr[i] != '\0'; ++i) { \
-					if (substr[i] == '\n') { \
-						break; \
-					} \
-				} \
-				char buf[512] = "\0"; \
-				strncpy(buf, substr, i); \
-				buf[i + 1] = '\0'; \
-				debug_warning("\t%s", buf); \
-			} \
-			close(fd); \
-		} \
-	} while (0)
 
 typedef struct {
 	void *ug_data;

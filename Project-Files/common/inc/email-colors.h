@@ -27,7 +27,6 @@
 #define B0211_C 0xFA /* Core GUI Item BG gray color */
 
 #define TRANSPARENT				0, 0, 0, 0
-#define COLOR_BACK_BTN 			61, 185, 204, 255
 #define COLOR_BLACK 			0, 0, 0, 255
 #define COLOR_WHITE				255, 255, 255, 255
 #define COLOR_GRAY				245, 245, 242, 255

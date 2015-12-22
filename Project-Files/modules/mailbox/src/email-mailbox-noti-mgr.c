@@ -70,10 +70,6 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 {
 	debug_enter();
 
-	if (get_app_terminated()) {
-		debug_warning("App is in terminating");
-		return;
-	}
 	debug_secure("Object path=%s, interface name=%s, signal name=%s", object_path, interface_name, signal_name);
 	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
 

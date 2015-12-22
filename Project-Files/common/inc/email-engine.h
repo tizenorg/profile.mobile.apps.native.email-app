@@ -29,7 +29,6 @@ G_BEGIN_DECLS
 #define TAG_LEN		50 /*tag for hightlight keyword <color=#ff0000>key</>*/
 #define FROM_LEN		100
 #define SUBJECT_LEN	100
-#define FOLDER_LEN	100
 #define ADDR_LEN		320
 #define RECIPIENT_LEN	100
 
@@ -164,25 +163,16 @@ EMAIL_API email_mailbox_list_info_t *email_engine_get_mailbox_info(gint account_
 EMAIL_API void email_engine_free_mailbox_info(email_mailbox_list_info_t **info);
 
 /* See EmailMailboxInfo. */
-EMAIL_API int email_engine_get_enabled_mail_count(gint account_id, const gchar *folder_name, gint thread_id, int sort_type, bool thread_view);
-EMAIL_API void email_engine_get_mail_list_ex(gint account_id, const gchar *folder_name, gint thread_id, int start_index, int limit_count, const gchar *match, int sort_type, bool thread_view, int search_type, email_mail_list_item_t **mailbox_data, int *mail_count);
 EMAIL_API void email_engine_free_mail_list(GList **list);
 EMAIL_API guint email_engine_get_mail_list(int account_id, int mailbox_id, email_mail_list_item_t **mail_list, int *mail_count);
 EMAIL_API guint email_engine_get_mail_list_count(gint account_id, const gchar *folder_name);
 
-EMAIL_API gboolean email_engine_get_mail_info(gint mail_id, gint account_id, const gchar *folder_name, email_mailbox_info_t *info);
 EMAIL_API gboolean email_engine_sync_folder(gint account_id, int mailbox_id, int *handle);
 EMAIL_API gboolean email_engine_sync_all_folder(gint account_id, int *handle1, int *handle2);
 EMAIL_API void email_engine_stop_working(gint account_id, int handle);
 
-EMAIL_API gchar *email_engine_get_mail_sender(gint account_id, const gchar *folder_name, gint mail_id);	/* g_free(). */
-EMAIL_API gchar *email_engine_get_mail_valid_sender(gint account_id, const gchar *folder_name, gint mail_id);	/* g_free(). */
-EMAIL_API gchar *email_engine_get_mail_recipient(gint account_id, const gchar *folder_name, gint mail_id);	/* g_free(). */
-EMAIL_API GList *email_engine_get_mail_sender_list(gint account_id, gint curr_account_id, const gchar *folder_name, gint mail_id);
 EMAIL_API void email_engine_free_mail_sender_list(GList **list);
 
-EMAIL_API gboolean email_engine_check_lock(gint account_id, const gchar *folder_name, gint mail_id);
-EMAIL_API gboolean email_engine_set_lock_toggle(gint account_id, const gchar *folder_name, gint mail_id);
 EMAIL_API gboolean email_engine_check_seen_mail(gint account_id, gint mail_id);
 EMAIL_API gboolean email_engine_check_draft_mail(gint account_id, gint mail_id);
 EMAIL_API int email_engine_check_body_download(int mail_id);
@@ -196,25 +186,19 @@ EMAIL_API gboolean email_engine_move_mail(gint account_id, int mailbox_id, gint 
 EMAIL_API gboolean email_engine_move_mail_list(gint account_id, const int mailbox_id, GList *id_list);
 EMAIL_API gboolean email_engine_move_all_mail(gint account_id, int old_mailbox_id, int new_mailbox_id);
 EMAIL_API gint email_engine_get_unread_mail_count(gint account_id, const gchar *folder_name);
-EMAIL_API gint email_engine_get_mail_status(gint account_id, const gchar *folder_name, gint mail_id);
-EMAIL_API gboolean email_engine_update_mail_status(gint account_id, const gchar *folder_name, gint mail_id, gint status);
-EMAIL_API gboolean email_engine_get_sending_status(gint account_id, const gchar *folder_name, gint mail_id);
 
 EMAIL_API gchar *email_engine_get_attachment_path(gint attach_id);	/* g_free(). */
-EMAIL_API gint email_engine_get_attachment_id(gint account_id, const gchar *folder_name, gint mail_id, gint index);
 
 EMAIL_API gboolean email_engine_get_account_info(gint account_id, email_account_info_t **account_info);
 EMAIL_API gboolean email_engine_set_account_info(gint account_id, email_account_info_t *account_info);
 EMAIL_API void email_engine_free_account_info(email_account_info_t **account_info);
 
-EMAIL_API gchar *email_engine_get_mailbox_by_mail_id(gint mail_id);
 EMAIL_API int email_engine_get_ca_mailbox_list(int account_id, email_mailbox_t **mailbox_list);
 EMAIL_API void email_engine_free_ca_mailbox_list(email_mailbox_t **mailbox_list, int count);
 EMAIL_API gchar *email_engine_convert_from_folder_to_srcbox(gint account_id, email_mailbox_type_e mailbox_type);
 EMAIL_API GList *email_engine_get_ca_mailbox_list_using_glist(int account_id);
 EMAIL_API void email_engine_free_ca_mailbox_list_using_glist(GList **mailbox_list);
 EMAIL_API GList *email_engine_get_mail_list_data(email_mail_list_item_t *mailbox_data, int mail_count, const char *folder_name, const char *key);
-EMAIL_API email_mailbox_type_e email_engine_get_mailbox_type(int account_id, char *p_folder_name);
 EMAIL_API gboolean email_engine_get_smtp_mail_size(gint account_id, int *handle);
 
 EMAIL_API int email_engine_get_max_account_id(void);

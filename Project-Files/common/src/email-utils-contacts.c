@@ -93,43 +93,11 @@ EMAIL_API int email_get_last_contact_in_contact_list(contacts_list_h list, conta
 	return ct_ret;
 }
 
-EMAIL_API int email_get_contacts_index(contacts_record_h record, int *index)
-{
-	debug_enter();
-	int ct_ret = CONTACTS_ERROR_NONE;
-	ct_ret = contacts_record_get_int(record, _contacts_contact_email.contact_id, index);
-	return ct_ret;
-}
-
 EMAIL_API int email_get_contacts_display_name(contacts_record_h record, char **display_name)
 {
 	debug_enter();
 	int ct_ret = CONTACTS_ERROR_NONE;
 	ct_ret = contacts_record_get_str_p(record, _contacts_contact_email.display_name, display_name);
-	return ct_ret;
-}
-
-EMAIL_API int email_get_contacts_email_address(contacts_record_h record, char **email_addr)
-{
-	debug_enter();
-	int ct_ret = CONTACTS_ERROR_NONE;
-	ct_ret = contacts_record_get_str_p(record, _contacts_contact_email.email, email_addr);
-	return ct_ret;
-}
-
-EMAIL_API int email_get_contacts_first_name(contacts_record_h record, char **first_name)
-{
-	debug_enter();
-	int ct_ret = CONTACTS_ERROR_NONE;
-	ct_ret = contacts_record_get_str_p(record, _contacts_name.first, first_name);
-	return ct_ret;
-}
-
-EMAIL_API int email_get_contacts_last_name(contacts_record_h record, char **last_name)
-{
-	debug_enter();
-	int ct_ret = CONTACTS_ERROR_NONE;
-	ct_ret = contacts_record_get_str_p(record, _contacts_name.last, last_name);
 	return ct_ret;
 }
 
@@ -284,20 +252,6 @@ EMAIL_API int email_get_phone_log_info(contacts_list_h list, email_contact_list_
 		}
 	}
 
-	return ct_ret;
-}
-
-EMAIL_API int email_num_id_get_contacts_record(int num_id, contacts_record_h *out_record)
-{
-	debug_enter();
-	int ct_ret = CONTACTS_ERROR_NONE;
-
-	/* get record email */
-	ct_ret = contacts_db_get_record(_contacts_contact_email._uri, num_id, out_record);
-	if (ct_ret != CONTACTS_ERROR_NONE) {
-		debug_log("_contacts_number, db_get_record is failed : ct_ret = [%d]", ct_ret);
-		return ct_ret;
-	}
 	return ct_ret;
 }
 
