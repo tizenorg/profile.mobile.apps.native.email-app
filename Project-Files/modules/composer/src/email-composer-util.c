@@ -58,7 +58,6 @@ EMAIL_DEFINE_GET_EDJ_PATH(email_get_composer_theme_path, "/email-composer-view.e
 
 #ifdef _SAVE_IN_USER_SHARE_DIR_
 EMAIL_DEFINE_GET_USER_SHARE_PATH(email_get_composer_tmp_dir, "/.email-composer-efl")
-EMAIL_DEFINE_GET_USER_SHARE_PATH(email_get_composer_public_tmp_dir, "/.email-composer-efl")
 #else
 EMAIL_DEFINE_GET_SHARED_DATA_PATH(email_get_composer_tmp_dir, "/.email-composer-efl")
 EMAIL_DEFINE_GET_PHONE_PATH(email_get_composer_public_tmp_dir, "/.email-composer-efl")

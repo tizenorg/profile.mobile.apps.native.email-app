@@ -630,9 +630,11 @@ static COMPOSER_ERROR_TYPE_E _composer_create_temp_folders()
 			composer_util_file_get_temp_dirname());
 	retvm_if(ret != COMPOSER_ERROR_NONE, ret, "_composer_create_temp_folder() failed! ret:[%d]", ret);
 
+#ifndef _SAVE_IN_USER_SHARE_DIR_
 	ret = _composer_create_temp_folder(email_get_composer_public_tmp_dir(),
 			composer_util_file_get_public_temp_dirname());
 	retvm_if(ret != COMPOSER_ERROR_NONE, ret, "_composer_create_temp_folder() failed! ret:[%d]", ret);
+#endif
 
 	debug_leave();
 	return COMPOSER_ERROR_NONE;
@@ -741,11 +743,11 @@ static void _composer_remove_temp_folders()
 	if (!email_file_recursive_rm(composer_util_file_get_temp_dirname())) {
 		debug_warning("email_file_recursive_rm() failed!");
 	}
-
+#ifndef _SAVE_IN_USER_SHARE_DIR_
 	if (!email_file_recursive_rm(composer_util_file_get_public_temp_dirname())) {
 		debug_warning("email_file_recursive_rm() failed!");
 	}
-
+#endif
 	debug_leave();
 }
 
