@@ -399,9 +399,6 @@ static void _noti_mgr_on_gdbus_event_receive(GDBusConnection *connection,
 		case NOTI_ACCOUNT_UPDATE:
 			/* DATA1[account_id] */
 			debug_log("NOTI_ACCOUNT_UPDATE (account_id:%d)", data1);
-			if (get_app_paused()) {
-				debug_log("account updated during pause status");
-			}
 			break;
 
 		case NOTI_MAIL_UPDATE:

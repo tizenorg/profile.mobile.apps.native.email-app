@@ -40,7 +40,6 @@
 #define MAX_ACCOUNT_COUNT		10
 
 /* define bundle key */
-#define EMAIL_BUNDLE_KEY_NEW_ACCOUNT_ID				"NEW_ACCOUNT_ID"
 #define EMAIL_BUNDLE_KEY_ACCOUNT_TYPE				"ACCOUNT_TYPE"
 #define EMAIL_BUNDLE_KEY_ACCOUNT_ID					"ACCOUNT_ID"
 #define EMAIL_BUNDLE_KEY_MAILBOX					"MAILBOX_ID"
@@ -55,6 +54,7 @@
 #define EMAIL_BUNDLE_KEY_VIEW_TYPE				"VIEW_TYPE"
 #define EMAIL_BUNDLE_KEY_RUN_TYPE				"RUN_TYPE"
 #define EMAIL_BUNDLE_KEY_MAIL_ID				"MAIL_ID"
+//TODO This bundle gets in Viewer module but nobody set it. Can be removed after Viewer module refactoring
 #define EMAIL_BUNDLE_KEY_FIRST_LANDSCAPE		"bFirstLandscape"
 #define EMAIL_BUNDLE_KEY_MSG					"MSG"
 #define EMAIL_BUNDLE_KEY_TO						"TO"
@@ -70,12 +70,14 @@
 
 #define EMAIL_BUNDLE_KEY_FILTER_OPERATION		"filter_op"
 #define EMAIL_BUNDLE_KEY_FILTER_MODE			"filter_mode"
+//TODO This bundle gets in Filter module but it never set. It can be removed by Filter refactoring
 #define EMAIL_BUNDLE_KEY_FILTER_ADDR			"filter_addr"
 
 /* define bundle value */
 #define EMAIL_BUNDLE_VAL_ALL_ACCOUNT				"ALL_ACCOUNT"
 #define EMAIL_BUNDLE_VAL_SINGLE_ACCOUNT				"SINGLE_ACCOUNT"
 #define EMAIL_BUNDLE_VAL_PRIORITY_SENDER			"PRIORITY_SENDER"
+//TODO This bundle gets in Account module but it never set. It can be removed by Account refactoring
 #define EMAIL_BUNDLE_VAL_SCHEDULED_OUTBOX			"SCHEDULED_OUTBOX"
 #define EMAIL_BUNDLE_VAL_FILTER_INBOX				"FILTER_INBOX"
 
@@ -89,7 +91,7 @@
 #define EMAIL_BUNDLE_VAL_VIEWER_RESTORE_VIEW		"VIEWER_RESTORE_VIEW"
 #define EMAIL_BUNDLE_VAL_VIEWER_DESTROY_VIEW		"VIEWER_DESTROY_VIEW"
 
-#define EMAIL_BUNDLE_VAL_FILTER_OPERATION_FILTER	"filter_op_filter"
+//TODO This bundle checks in Filter module but it never set. It can be removed by Filter refactoring
 #define EMAIL_BUNDLE_VAL_FILTER_OPERATION_BLOCK		"filter_op_block"
 #define EMAIL_BUNDLE_VAL_FILTER_OPERATION_PS		"filter_op_priority_sender"
 
