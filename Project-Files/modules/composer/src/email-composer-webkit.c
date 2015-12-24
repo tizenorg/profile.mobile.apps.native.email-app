@@ -749,7 +749,10 @@ static Evas_Object *_webkit_create_ewk_view(Evas_Object *parent, EmailComposerUG
 	ewk_view_vertical_panning_hold_set(ewk_view, EINA_TRUE);
 	/*evas_object_propagate_events_set(ewkview, EINA_FALSE);*/
 	ewk_view_split_scroll_overflow_enabled_set(ewk_view, EINA_TRUE);
+
+#ifdef _TIZEN_2_4_BUILD_
 	ewk_view_orientation_send(ewk_view, 90);
+#endif
 
 	/* To modify background color of webkit, following parts should be modified as well.
 	 * 1. here / 2. background-color in css / 3. color_class of webview_bg part in edc file
