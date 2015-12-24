@@ -275,7 +275,7 @@ void viewer_create_more_ctxpopup(EmailViewerUGD *ug_data)
 	}
 
 	if (mail_info != NULL && mail_info->save_status != EMAIL_MAIL_STATUS_SENDING && mail_info->save_status != EMAIL_MAIL_STATUS_SEND_WAIT) {
-		email_contact_list_info_t *contact_list_item = email_contact_search_by_email(ug_data, ug_data->sender_address);
+		email_contact_list_info_t *contact_list_item = email_contacts_get_contact_info_by_email_address(ug_data->sender_address);
 			if (contact_list_item) {
 				debug_log("Sender address is listed in contacts DB, person ID:%d", contact_list_item->person_id);
 				int index = contact_list_item->person_id;;
@@ -287,7 +287,7 @@ void viewer_create_more_ctxpopup(EmailViewerUGD *ug_data)
 				debug_log("Sender address is not listed in contacts DB");
 				ctx_menu_item = elm_ctxpopup_item_append(ug_data->con_popup, "IDS_EMAIL_OPT_ADD_TO_CONTACTS_ABB2", icon, viewer_ctxpopup_add_contact_cb, ug_data);
 			}
-		email_delete_contacts_list(&contact_list_item);
+			email_contacts_delete_contact_info(&contact_list_item);
 	}
 
 	elm_object_item_domain_text_translatable_set(ctx_menu_item, PACKAGE, EINA_TRUE);

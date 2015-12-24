@@ -54,9 +54,6 @@ static void composer_ps_selected_recipient_content_get(EmailComposerUGD *ugd, Ev
 
 static void __composer_ps_append_result(EmailComposerUGD *ugd, Eina_List *predict_list, Elm_Object_Item *parent);
 static Eina_List *__composer_ps_search_through_list(Eina_List *src, const char *search_word);
-static Eina_List *__composer_ps_search_contacts(EmailComposerUGD *ugd, const char *search_word);
-static Eina_List *__composer_ps_search_recents(EmailComposerUGD *ugd, const char *search_word);
-
 
 /*
  * Definition for static functions
@@ -151,7 +148,15 @@ static void __composer_ps_gl_sel(void *data, Evas_Object *obj, void *event_info)
 	}
 	retm_if(!mbe, "Invalid entry is selected!");
 
-	EmailRecpInfo *ri = composer_util_recp_make_recipient_info(ugd, contact_info->email_address);
+	EmailRecpInfo *ri = NULL;
+	if(contact_info->contact_origin == EMAIL_SEARCH_CONTACT_ORIGIN_CONTACTS && contact_info->display_name) {
+		ri = composer_util_recp_make_recipient_info_with_display_name(contact_info->email_address, contact_info->display_name);
+		ri->email_id = contact_info->email_id;
+	} else {
+		ri = composer_util_recp_make_recipient_info(contact_info->email_address);
+		ri->email_id = 0;
+	}
+
 	if (ri) {
 		elm_entry_entry_set(ugd->selected_entry, "");
 		char *markup_name = elm_entry_utf8_to_markup(ri->display_name);
@@ -171,7 +176,9 @@ static void __composer_ps_gl_sel(void *data, Evas_Object *obj, void *event_info)
 static char *__composer_pslines_gl_text_get(void *data, Evas_Object *obj, const char *part)
 {
 	email_contact_list_info_t *contact_info = (email_contact_list_info_t *)data;
-	EmailComposerUGD *ugd = contact_info->ugd;
+	EmailComposerUGD *ugd = (EmailComposerUGD *)contact_info->ugd;
+	retvm_if(!ugd, NULL, "Failed to get ugd");
+
 	char *ret = NULL;
 	if (contact_info->contact_origin == EMAIL_SEARCH_CONTACT_ORIGIN_CONTACTS) {
 		if (!g_strcmp0(part, "elm.text")) {
@@ -316,6 +323,7 @@ static void __composer_ps_append_result(EmailComposerUGD *ugd, Eina_List *predic
 	Eina_List *l = NULL;
 	email_contact_list_info_t *item = NULL;
 	EINA_LIST_FOREACH(predict_list, l, item) {
+		item->ugd = ugd;
 		elm_genlist_item_append(ugd->ps_genlist, &__ps_itc, item, NULL, ELM_GENLIST_ITEM_NONE, __composer_ps_gl_sel, ugd);
 	}
 
@@ -343,172 +351,6 @@ static Eina_List *__composer_ps_search_through_list(Eina_List *src, const char *
 
 	debug_leave();
 	return result;
-}
-
-static Eina_List *__composer_ps_search_contacts(EmailComposerUGD *ugd, const char *search_word)
-{
-	debug_enter();
-
-	retvm_if(!ugd, NULL, "Invalid parameter: ugd is NULL!");
-	retvm_if(!search_word, NULL, "Invalid parameter: search_word is NULL!");
-
-	int ret = CONTACTS_ERROR_NONE;
-	Eina_List *contacts_list = NULL;
-	char buf[2 * EMAIL_LIMIT_EMAIL_ADDRESS_LENGTH + 1] = { 0, };
-	int index = 0;
-
-	for (index = EMAIL_SEARCH_CONTACT_MIN; index < EMAIL_SEARCH_CONTACT_MAX; index++) {
-		contacts_list_h list = NULL;
-
-		ret = email_get_contacts_list(CONTACTS_MATCH_CONTAINS, &list, search_word, index);
-		if (!list) {
-			debug_warning("list is NULL! type:[%d]", index);
-			continue;
-		}
-
-		int list_count = 0;
-		ret = contacts_list_get_count(list, &list_count);
-		if ((list_count == 0) || (ret != CONTACTS_ERROR_NONE)) {
-			contacts_list_destroy(list, EINA_TRUE);
-			continue;
-		}
-
-		while (ret == CONTACTS_ERROR_NONE) {
-			email_contact_list_info_t *contact_info = (email_contact_list_info_t *)calloc(1, sizeof(email_contact_list_info_t));
-			if (!contact_info) {
-				debug_error("Failed to allocate memory for contact_info!");
-				ret = contacts_list_next(list);
-				continue;
-			}
-
-			ret = email_get_contacts_list_info(list, contact_info);
-			if (ret != CONTACTS_ERROR_NONE) {
-				debug_error("email_get_contacts_list_info() failed! ret:[%d]", ret);
-				composer_util_recp_delete_contact_item(contact_info);
-				ret = contacts_list_next(list);
-				continue;
-			}
-
-			if (contact_info->email_address) {
-				contact_info->ugd = ugd;
-				contact_info->contact_origin = EMAIL_SEARCH_CONTACT_ORIGIN_CONTACTS;
-
-				/* Note: for email address in contacts app, it should be omitted if display_name and email_address is the same. */
-				memset(buf, 0x0, sizeof(buf));
-				strncpy(buf, contact_info->email_address, EMAIL_LIMIT_EMAIL_ADDRESS_LENGTH);
-				strncat(buf, contact_info->display_name, EMAIL_LIMIT_EMAIL_ADDRESS_LENGTH);
-
-				if (eina_hash_find(ugd->ps_hash, buf) != NULL) {
-					debug_log("There's a duplicate entry! Omitting!");
-					composer_util_recp_delete_contact_item(contact_info);
-				} else {
-					eina_hash_add(ugd->ps_hash, buf, contact_info);
-					contacts_list = eina_list_append(contacts_list, contact_info);
-
-					memset(buf, 0x0, sizeof(buf));
-					snprintf(buf, sizeof(buf), "%s", contact_info->email_address);
-					if (eina_hash_find(ugd->ps_hash, buf) == NULL) {
-						eina_hash_add(ugd->ps_hash, buf, contact_info);
-					}
-				}
-			} else {
-				debug_log("There's no email addresses on the contact! Freeing!");
-				composer_util_recp_delete_contact_item(contact_info);
-			}
-
-			ret = contacts_list_next(list);
-		}
-
-		ret = contacts_list_destroy(list, EINA_TRUE);
-		debug_warning_if(ret != CONTACTS_ERROR_NONE, "contacts_list_destroy() failed! ret:(%d)", ret);
-	}
-
-	debug_leave();
-	return contacts_list;
-}
-
-static Eina_List *__composer_ps_search_recents(EmailComposerUGD *ugd, const char *search_word)
-{
-	debug_enter();
-
-	retvm_if(!ugd, NULL, "Invalid parameter: ugd is NULL!");
-	retvm_if(!search_word, NULL, "Invalid parameter: search_word is NULL!");
-
-	int ret = CONTACTS_ERROR_NONE;
-	Eina_List *contacts_list = NULL;
-	contacts_list_h list = NULL;
-	char buf[EMAIL_LIMIT_EMAIL_ADDRESS_LENGTH + 1] = { 0, };
-
-	ret = email_get_phone_log(CONTACTS_MATCH_CONTAINS, &list, search_word);
-	if (ret != CONTACTS_ERROR_NONE) {
-		if (list) {
-			contacts_list_destroy(list, EINA_TRUE);
-		}
-		return NULL;
-	} else if (!list) {
-		return NULL;
-	}
-
-	int list_count = 0;
-	ret = contacts_list_get_count(list, &list_count);
-	if(ret != CONTACTS_ERROR_NONE) {
-		debug_error("contacts_list_get_count() failed! ret:(%d)", ret);
-		contacts_list_destroy(list, EINA_TRUE);
-		return NULL;
-	} else if (list_count == 0) {
-		debug_error("list count is 0!");
-		contacts_list_destroy(list, EINA_TRUE);
-		return NULL;
-	}
-
-	while (ret == CONTACTS_ERROR_NONE) {
-		email_contact_list_info_t *contact_info = (email_contact_list_info_t *)calloc(1, sizeof(email_contact_list_info_t));
-		if (!contact_info) {
-			debug_error("Failed to allocate memory for contact_info!");
-			ret = contacts_list_next(list);
-			continue;
-		}
-
-		ret = email_get_phone_log_info(list, contact_info);
-		if (ret != CONTACTS_ERROR_NONE) {
-			debug_error("email_get_phone_log_info() failed! ret:[%d]", ret);
-			composer_util_recp_delete_contact_item(contact_info);
-			ret = contacts_list_next(list);
-			continue;
-		}
-
-		if (contact_info->email_address) {
-			contact_info->ugd = ugd;
-			contact_info->contact_origin = EMAIL_SEARCH_CONTACT_ORIGIN_RECENT;
-
-			char *tmp = contact_info->email_address;
-			contact_info->email_address = g_ascii_strdown(tmp, -1); /* Need to use with case insensitive. */
-			g_free(tmp);
-
-			/* Note: for email address in recent, it should be omitted if there's the same email_address in the list */
-			memset(buf, 0x0, sizeof(buf));
-			strncpy(buf, contact_info->email_address, EMAIL_LIMIT_EMAIL_ADDRESS_LENGTH);
-
-			if (eina_hash_find(ugd->ps_hash, buf) != NULL) {
-				debug_log("There's a duplicate entry! Omitting!");
-				composer_util_recp_delete_contact_item(contact_info);
-			} else {
-				eina_hash_add(ugd->ps_hash, buf, contact_info);
-				contacts_list = eina_list_append(contacts_list, contact_info);
-			}
-		} else {
-			debug_log("There's no email addresses on the contact! Freeing!");
-			composer_util_recp_delete_contact_item(contact_info);
-		}
-
-		ret = contacts_list_next(list);
-	}
-
-	ret = contacts_list_destroy(list, EINA_TRUE);
-	debug_warning_if(ret != CONTACTS_ERROR_NONE, "contacts_list_destroy() failed! ret:(%d)", ret);
-
-	debug_leave();
-	return contacts_list;
 }
 
 static int _composer_ps_genlist_item_max_height_calculate(EmailComposerUGD  *ugd)
@@ -660,15 +502,8 @@ void composer_ps_start_search(void *data)
 
 	/* Retrieve contacts list from contacts db & phonelog db. If there's the list already searched, use it instead. */
 	if (!ugd->ps_contacts_list) {
-		if (!ugd->ps_hash) {
-			ugd->ps_hash = eina_hash_string_superfast_new(NULL); /* Hash for omitting duplicate entries. */
-		}
-		retm_if(!ugd->ps_hash, "ugd->ps_hash is NULL!");
 
-		Eina_List *contacts_list = __composer_ps_search_contacts(ugd, ugd->ps_keyword); /* Retrieve contacts list from contacts db */
-		Eina_List *recents_list = __composer_ps_search_recents(ugd, ugd->ps_keyword); /* Retrieve contacts list from phonelog db */
-
-		ugd->ps_contacts_list = eina_list_merge(contacts_list, recents_list); /* contacts_list is cached for future use. */
+		ugd->ps_contacts_list = email_contacts_search_contacts_by_keyword(ugd->ps_keyword); /* contacts_list is cached for future use. */
 		ps_list = eina_list_clone(ugd->ps_contacts_list);
 	} else {
 		ps_list = __composer_ps_search_through_list(ugd->ps_contacts_list, ugd->ps_keyword); /* cached contacts_list is used here. */
@@ -703,11 +538,6 @@ void composer_ps_stop_search(void *data)
 
 	if (ugd->ps_is_runnig) {
 		__composer_ps_destroy_view(ugd);
-	}
-
-	if (ugd->ps_hash) {
-		eina_hash_free(ugd->ps_hash);
-		ugd->ps_hash = NULL;
 	}
 
 	if (ugd->ps_contacts_list) {

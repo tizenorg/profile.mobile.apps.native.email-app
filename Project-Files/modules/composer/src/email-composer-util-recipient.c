@@ -16,7 +16,6 @@
  */
 
 #include <Elementary.h>
-#include <contacts.h>
 
 #include "email-debug.h"
 #include "email-utils.h"
@@ -204,16 +203,6 @@ void composer_util_recp_clear_mbe(Evas_Object *obj)
 	debug_leave();
 }
 
-void composer_util_recp_delete_contact_item(email_contact_list_info_t *contact_item)
-{
-	if (contact_item) {
-		g_free(contact_item->display);
-		g_free(contact_item->email_address);
-		g_free(contact_item->image_path);
-		g_free(contact_item);
-	}
-}
-
 void composer_util_recp_delete_contacts_list(Eina_List *list)
 {
 	debug_enter();
@@ -224,79 +213,11 @@ void composer_util_recp_delete_contacts_list(Eina_List *list)
 	email_contact_list_info_t *item = NULL;
 
 	EINA_LIST_FOREACH(list, l, item) {
-		composer_util_recp_delete_contact_item(item);
+		email_contacts_delete_contact_info(&item);
 	}
 	DELETE_LIST_OBJECT(list);
 
 	debug_leave();
-}
-
-void *composer_util_recp_search_contact_by_id(EmailComposerUGD *ugd, int search_id)
-{
-	debug_enter();
-
-	int ret = CONTACTS_ERROR_NONE;
-	email_contact_list_info_t *contacts_list_item = NULL;
-	contacts_list_h list = NULL;
-
-	ret = email_get_contacts_list_int(CONTACTS_MATCH_EQUAL, &list, search_id);
-	retvm_if(!list, NULL, "list is NULL!");
-
-	contacts_list_item = (email_contact_list_info_t *)calloc(1, sizeof(email_contact_list_info_t));
-	if (!contacts_list_item) {
-		debug_error("memory allocation failed");
-		contacts_list_destroy(list, EINA_TRUE);
-		return NULL;
-	}
-	contacts_list_item->ugd = (void *)ugd;
-
-	ret = email_get_contacts_list_info(list, contacts_list_item);
-	if (ret != CONTACTS_ERROR_NONE) {
-		composer_util_recp_delete_contact_item(contacts_list_item);
-		contacts_list_destroy(list, EINA_TRUE);
-		return NULL;
-	}
-
-	debug_log("email_get_contacts_list_info() - ret:[%d], contacts_list_item:[%p]", ret, contacts_list_item);
-
-	contacts_list_destroy(list, EINA_TRUE);
-
-	debug_leave();
-	return contacts_list_item;
-}
-
-void *composer_util_recp_search_contact_by_email(EmailComposerUGD *ugd, const char *search_word)
-{
-	debug_enter();
-
-	int ret = CONTACTS_ERROR_NONE;
-	email_contact_list_info_t *contacts_list_item = NULL;
-	contacts_list_h list = NULL;
-
-	ret = email_get_contacts_list(CONTACTS_MATCH_FULLSTRING, &list, search_word, EMAIL_SEARCH_CONTACT_BY_EMAIL);
-	retvm_if(!list, NULL, "list is NULL!");
-
-	contacts_list_item = (email_contact_list_info_t *)calloc(1, sizeof(email_contact_list_info_t));
-	if (!contacts_list_item) {
-		debug_error("memory allocation failed");
-		contacts_list_destroy(list, EINA_TRUE);
-		return NULL;
-	}
-	contacts_list_item->ugd = (void *)ugd;
-
-	ret = email_get_contacts_list_info(list, contacts_list_item);
-	if (ret != CONTACTS_ERROR_NONE) {
-		composer_util_recp_delete_contact_item(contacts_list_item);
-		contacts_list_destroy(list, EINA_TRUE);
-		return NULL;
-	}
-
-	debug_log("email_get_contacts_list_info() - ret:[%d], contacts_list_item:[%p]", ret, contacts_list_item);
-
-	contacts_list_destroy(list, EINA_TRUE);
-
-	debug_leave();
-	return contacts_list_item;
 }
 
 static char *_util_recp_escaping_email_display_name(char *display_name, int len)
@@ -341,14 +262,11 @@ static char *_util_recp_escaping_email_display_name(char *display_name, int len)
 	return name;
 }
 
-EmailRecpInfo *composer_util_recp_make_recipient_info(void *data, const char *email_address)
+EmailRecpInfo *composer_util_recp_make_recipient_info(const char *email_address)
 {
 	debug_enter();
-
-	retvm_if(!data, NULL, "Invalid parameter: data is NULL!");
 	retvm_if(!email_address, NULL, "Invalid parameter: email_address is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
 	char *nick = NULL;
 	char *addr = NULL;
 
@@ -380,28 +298,23 @@ EmailRecpInfo *composer_util_recp_make_recipient_info(void *data, const char *em
 	snprintf(ai->address, sizeof(ai->address), "%s", addr);
 	ri->email_list = eina_list_append(ri->email_list, ai);
 
-	email_contact_list_info_t *contact_list_item = (email_contact_list_info_t *)composer_util_recp_search_contact_by_email(ugd, ai->address);
-	if (contact_list_item) {
-		if (!ri->display_name) {
-			ri->display_name = g_strdup(contact_list_item->display_name);
-		}
-		ri->person_id = contact_list_item->person_id;
-		composer_util_recp_delete_contact_item(contact_list_item);
+	email_contact_list_info_t *contact_info = email_contacts_get_contact_info_by_email_address(ai->address);
+	if (contact_info) {
+		ri->display_name = g_strdup(contact_info->display_name);
+		ri->email_id = contact_info->email_id;
 	} else {
-		if (!ri->display_name) {
-			ri->display_name = g_strdup(ai->address);
-		}
-		ri->person_id = 0;
+		FREE(ri->display_name);
+		ri->display_name = g_strdup(ai->address);
+		ri->email_id = 0;
 	}
 
 	/* nick is used on ri->display_name */
 	free(addr);
-
 	debug_leave();
 	return ri;
 }
 
-EmailRecpInfo *composer_util_recp_make_recipient_info_with_from_address(char *email_address, char *display_name)
+EmailRecpInfo *composer_util_recp_make_recipient_info_with_display_name(char *email_address, char *display_name)
 {
 	debug_enter();
 

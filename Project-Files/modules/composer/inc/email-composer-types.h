@@ -184,8 +184,8 @@ typedef struct {
  * @brief Email Recipient info data
  */
 typedef struct {
-	int person_id;
 	int selected_email_idx;
+	int email_id;
 	Eina_Bool is_always_bcc;
 	gchar *display_name;	/* Specific display name of recipient */
 	Eina_List *email_list;
