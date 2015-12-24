@@ -26,6 +26,7 @@
 #include <app.h>
 #include <app_common.h>
 
+#include "email-utils-contacts.h"
 #include "email-composer.h"
 #include "email-composer-util.h"
 #include "email-composer-attachment.h"
@@ -443,7 +444,7 @@ static COMPOSER_ERROR_TYPE_E _composer_prepare_vcard(void *data)
 
 	if (ugd->shared_contacts_count == 1) {
 		int id = (ugd->shared_contact_id_list ? ugd->shared_contact_id_list[0] : ugd->shared_contact_id);
-		file_path = composer_create_vcard_from_id(id, ugd->is_sharing_my_profile);
+		file_path = email_contacts_create_vcard_from_id(id, composer_util_file_get_temp_dirname(), ugd->is_sharing_my_profile);
 	} else {
 		ugd->vcard_save_timer = ecore_timer_add(COMPOSER_VCARD_SAVE_POPUP_SHOW_MIN_TIME_SEC,
 				_composer_vcard_save_timer_cb, ugd);
@@ -465,8 +466,8 @@ static COMPOSER_ERROR_TYPE_E _composer_prepare_vcard(void *data)
 
 		debug_log("Generating in main thread...");
 
-		file_path = composer_create_vcard_from_id_list(
-				ugd->shared_contact_id_list, ugd->shared_contacts_count, NULL);
+		file_path = email_contacts_create_vcard_from_id_list(ugd->shared_contact_id_list, ugd->shared_contacts_count,
+				composer_util_file_get_temp_dirname(), NULL);
 	}
 
 	if (!file_path) {
@@ -488,8 +489,8 @@ static void *_composer_vcard_save_worker(void *data)
 
 	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
 
-	ugd->vcard_file_path = composer_create_vcard_from_id_list(
-			ugd->shared_contact_id_list, ugd->shared_contacts_count, &ugd->vcard_save_cancel);
+	ugd->vcard_file_path = email_contacts_create_vcard_from_id_list(
+			ugd->shared_contact_id_list, ugd->shared_contacts_count, composer_util_file_get_temp_dirname(), &ugd->vcard_save_cancel);
 	if (!ugd->vcard_file_path) {
 		debug_error("Failed to generate vCard file!");
 		ugd->is_vcard_create_error = EINA_TRUE;
@@ -677,8 +678,8 @@ static COMPOSER_ERROR_TYPE_E _composer_initialize_services(void *data)
 		return COMPOSER_ERROR_ENGINE_INIT_FAILED;
 	}
 
-	ct_ret = contacts_connect();
-	retvm_if(ct_ret != CONTACTS_ERROR_NONE, COMPOSER_ERROR_SERVICE_INIT_FAIL, "contacts_connect() failed! ct_ret:[%d]", ct_ret);
+	ct_ret = email_contacts_init_service();
+	retvm_if(ct_ret != CONTACTS_ERROR_NONE, COMPOSER_ERROR_SERVICE_INIT_FAIL, "email_contacts_init_service() failed! ct_ret:[%d]", ct_ret);
 
 	ret = _composer_initialize_dbus(ugd);
 	retvm_if(ret != COMPOSER_ERROR_NONE, ret, "_composer_initialize_dbus() failed! ret:[%d]", ret);
@@ -772,8 +773,8 @@ static void _composer_finalize_services(void *data)
 
 	_composer_finalize_dbus(ugd);
 
-	ct_ret = contacts_disconnect();
-	debug_warning_if(ct_ret != CONTACTS_ERROR_NONE, "contacts_disconnect() failed! ct_ret:[%d]", ct_ret);
+	ct_ret = email_contacts_finalize_service();
+	debug_warning_if(ct_ret != CONTACTS_ERROR_NONE, "email_contacts_finalize_service() failed! ct_ret:[%d]", ct_ret);
 
 	email_engine_finalize();
 
@@ -1674,27 +1675,36 @@ static void _composer_contacts_update_recp_info_for_mbe(EmailComposerUGD *ugd, E
 			debug_warning("selected_ai is NULL!");
 			continue;
 		}
-
-		email_contact_list_info_t *contact_list_item = email_contact_search_by_email(ugd, selected_ai->address);
-		if (!contact_list_item || !contact_list_item->display_name[0]) {
-			elm_object_item_text_set(item, selected_ai->address);
+		email_contact_list_info_t *contact_info = NULL;
+		contact_info = email_contacts_get_contact_info_by_email_id(ri->email_id);
+		if(!contact_info) {
+			debug_log("Contact no longer listed in db");
+			ri->email_id = 0;
+			char *address = strdup(selected_ai->address);
+			EmailAddressInfo *ai = NULL;
+			EINA_LIST_FREE(ri->email_list, ai) {
+				FREE(ai);
+			}
+			g_free(ri->display_name);
+			ri = composer_util_recp_make_recipient_info(address);
+			elm_object_item_text_set(item, ri->display_name);
+			free(address);
 		} else {
-			char *temp = elm_entry_utf8_to_markup(contact_list_item->display_name);
-			elm_object_item_text_set(item, temp);
-			free(temp);
-		}
-		email_delete_contacts_list(&contact_list_item);
+			g_free(ri->display_name);
+			if (!contact_info->display_name[0]) {
+				elm_object_item_text_set(item, selected_ai->address);
+				ri->display_name = g_strdup(selected_ai->address);
+			} else {
+				char *temp = elm_entry_utf8_to_markup(contact_info->display_name);
+				ri->display_name = g_strdup(contact_info->display_name);
+				elm_object_item_text_set(item, temp);
+				free(temp);
+			}
 
-		char *address = strdup(selected_ai->address);
-		g_free(ri->display_name);
-		EmailAddressInfo *ai = NULL;
-		EINA_LIST_FREE(ri->email_list, ai) {
-			FREE(ai);
+			email_contacts_delete_contact_info(&contact_info);
 		}
-		ri = composer_util_recp_make_recipient_info(ugd, address);
+
 		elm_object_item_data_set(item, ri);
-		free(address);
-
 		item = elm_multibuttonentry_item_next_get(item);
 
 	}

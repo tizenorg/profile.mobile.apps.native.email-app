@@ -16,6 +16,7 @@
  */
 
 #include <notification.h>
+#include "email-utils-contacts.h"
 #include "email-filter-edit-view.h"
 #include "email-common-contact-defines.h"
 
@@ -39,7 +40,6 @@ static int _checking_is_dup_rule(EmailFilterVD *vd, email_rule_t *filter_rule);
 
 static Evas_Object *_create_list(EmailFilterVD *vd);
 static void _launch_contact_app(EmailFilterVD *vd);
-static char *_get_filter_address_by_id(int id);
 static int _get_field_validation(EmailFilterVD *vd);
 static void _done_key_disabled_set(EmailFilterVD *vd, Eina_Bool disabled);
 
@@ -539,7 +539,6 @@ static void _contact_app_reply_cb(void *data, app_control_result_e result, app_c
 	debug_enter();
 
 	EmailFilterVD *vd = data;
-	char *filter_addr = NULL;
 	char **filter_addr_id_arr = NULL;
 	int id = -1;
 	int len = 0;
@@ -553,7 +552,7 @@ static void _contact_app_reply_cb(void *data, app_control_result_e result, app_c
 	}
 
 	id = atoi(filter_addr_id_arr[0]);
-	debug_log("contact id: %d", id);
+	debug_log("email id: %d", id);
 
 	int i = 0;
 	for (; i < len; i++) {
@@ -561,13 +560,14 @@ static void _contact_app_reply_cb(void *data, app_control_result_e result, app_c
 	}
 	free(filter_addr_id_arr);
 
-	filter_addr = _get_filter_address_by_id(id);
-	if (!filter_addr) {
-		debug_error("filter address is NULL");
+	email_contact_list_info_t *contact_info = email_contacts_get_contact_info_by_email_id(id);
+	if (!contact_info || !contact_info->email_address) {
+		debug_error("contact_data is NULL");
+		email_contacts_delete_contact_info(&contact_info);
 		return;
 	}
-	debug_secure("filter address: %s", filter_addr);
 
+	debug_secure("filter address: %s", contact_info->email_address);
 	GSList *l = vd->list_items;
 	while (l) {
 		ListItemData *li = l->data;
@@ -576,46 +576,14 @@ static void _contact_app_reply_cb(void *data, app_control_result_e result, app_c
 				free(li->entry_str);
 				li->entry_str = NULL;
 			}
-			li->entry_str = g_strdup(filter_addr);
+			li->entry_str = strdup(contact_info->email_address);
 			elm_entry_entry_set(li->editfield.entry, li->entry_str);
 			break;
 		}
 		l = g_slist_next(l);
 	}
 
-	FREE(filter_addr);
-}
-
-static char *_get_filter_address_by_id(int id)
-{
-	debug_enter();
-
-	int ret = -1;
-	contacts_record_h record = NULL;
-	char *filter_addr = NULL;
-
-	ret = contacts_connect();
-	retvm_if(ret != CONTACTS_ERROR_NONE, NULL, "contacts_connect failed :%d", ret);
-
-	ret = contacts_db_get_record(_contacts_email._uri, id, &record);
-	if (ret != CONTACTS_ERROR_NONE) {
-		debug_error("contacts_db_get_record failed: %d", ret);
-		goto CATCH;
-	}
-
-	ret = contacts_record_get_str(record, _contacts_email.email, &filter_addr);
-	if (ret != CONTACTS_ERROR_NONE) {
-		debug_error("contacts_record_get_str failed: %d", ret);
-		goto CATCH;
-	}
-
-	contacts_record_destroy(record, true);
-	contacts_disconnect();
-	return filter_addr;
-CATCH:
-	contacts_record_destroy(record, true);
-	contacts_disconnect();
-	return NULL;
+	email_contacts_delete_contact_info(&contact_info);
 }
 
 static int _get_field_validation(EmailFilterVD *vd)

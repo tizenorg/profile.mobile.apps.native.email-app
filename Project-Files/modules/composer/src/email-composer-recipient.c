@@ -230,7 +230,7 @@ static void _recipient_from_button_update_text(EmailComposerUGD *ugd, email_acco
 		snprintf(from_display_name, sizeof(from_display_name), "%s", account->user_email_address);
 	}
 
-	EmailRecpInfo *ri = composer_util_recp_make_recipient_info_with_from_address(account->user_email_address, from_display_name);
+	EmailRecpInfo *ri = composer_util_recp_make_recipient_info_with_display_name(account->user_email_address, from_display_name);
 	if (ri) {
 		char *markup_name = elm_entry_utf8_to_markup(ri->display_name);
 		elm_object_part_text_set(ugd->recp_from_btn, "elm.text", markup_name);
@@ -240,7 +240,7 @@ static void _recipient_from_button_update_text(EmailComposerUGD *ugd, email_acco
 		EINA_LIST_FREE(ri->email_list, ai) {
 			FREE(ai);
 		}
-		FREE(ri->display_name);
+		g_free(ri->display_name);
 		free(ri);
 	}
 
@@ -1146,7 +1146,7 @@ Eina_Bool composer_recipient_mbe_validate_email_address_list(void *data, Evas_Ob
 
 			MBE_VALIDATION_ERROR err = _recipient_mbe_validate_email_address(ugd, obj, split_email[i]);
 			if (err == MBE_VALIDATION_ERROR_NONE) {
-				EmailRecpInfo *ri = composer_util_recp_make_recipient_info(ugd, split_email[i]);
+				EmailRecpInfo *ri = composer_util_recp_make_recipient_info(split_email[i]);
 				if (ri) {
 					char *markup_name = elm_entry_utf8_to_markup(ri->display_name);
 					elm_multibuttonentry_item_append(obj, markup_name, NULL, ri);
@@ -1297,7 +1297,7 @@ void composer_recipient_append_myaddress(void *data, email_account_t *account)
 	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
 
 	Evas_Object *dest_mbe = NULL;
-	EmailRecpInfo *ri = composer_util_recp_make_recipient_info_with_from_address(account->user_email_address, account->account_name);
+	EmailRecpInfo *ri = composer_util_recp_make_recipient_info_with_display_name(account->user_email_address, account->account_name);
 	retm_if(!ri, "ri is NULL!");
 
 	ri->is_always_bcc = true;

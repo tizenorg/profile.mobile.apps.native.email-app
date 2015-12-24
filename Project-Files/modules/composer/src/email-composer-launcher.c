@@ -36,9 +36,6 @@
 static void _launch_app_recipient_contacts_reply_cb(void *data, app_control_result_e result, app_control_h reply);
 static void _preview_attachment_close_cb(void *data);
 
-static contacts_list_h _get_person_email_list_by_person_id(int person_id);
-static contacts_list_h _get_person_email_list_by_email_id(int person_id);
-
 static int _composer_pick_contacts_set_params(EmailComposerUGD *ugd, app_control_h svc_handle);
 static int _composer_add_update_contact_launch(EmailComposerUGD *ugd,
 		const char *operation,
@@ -141,85 +138,7 @@ static int _composer_add_update_contact_set_params(EmailComposerUGD *ugd,
 	return COMPOSER_ERROR_NONE;
 }
 
-static contacts_list_h _get_person_email_list_by_person_id(int person_id)
-{
-	debug_enter();
 
-	int ret = CONTACTS_ERROR_NONE;
-	contacts_list_h list = NULL;
-	contacts_query_h query = NULL;
-	contacts_filter_h filter = NULL;
-
-	ret = contacts_query_create(_contacts_person_email._uri, &query);
-	retvm_if(ret != CONTACTS_ERROR_NONE, NULL, "contacts_query_create() failed! ret:[%d]");
-
-	ret = contacts_filter_create(_contacts_person_email._uri, &filter);
-	gotom_if(ret != CONTACTS_ERROR_NONE, FUNC_EXIT, "contacts_filter_create() failed! ret:[%d]");
-
-	ret = contacts_filter_add_int(filter, _contacts_person_email.person_id, CONTACTS_MATCH_EQUAL, person_id);
-	gotom_if(ret != CONTACTS_ERROR_NONE, FUNC_EXIT, "contacts_filter_add_int() failed! ret:[%d]");
-
-	ret = contacts_query_set_filter(query, filter);
-	gotom_if(ret != CONTACTS_ERROR_NONE, FUNC_EXIT, "contacts_query_set_filter() failed! ret:[%d]");
-
-	ret = contacts_db_get_records_with_query(query, 0, 0, &list);
-	gotom_if(ret != CONTACTS_ERROR_NONE, FUNC_EXIT, "contacts_db_get_records_with_query() failed! ret:[%d]");
-
-FUNC_EXIT:
-	if (filter) {
-		ret = contacts_filter_destroy(filter);
-		debug_warning_if(ret != CONTACTS_ERROR_NONE, "contacts_filter_destroy() failed! ret:[%d]");
-	}
-
-	if (query) {
-		ret = contacts_query_destroy(query);
-		debug_warning_if(ret != CONTACTS_ERROR_NONE, "contacts_query_destroy() failed! ret:[%d]");
-	}
-
-	debug_leave();
-	return list;
-}
-
-static contacts_list_h _get_person_email_list_by_email_id(int person_id)
-{
-	debug_enter();
-
-	debug_enter();
-
-	int ret = CONTACTS_ERROR_NONE;
-	contacts_list_h list = NULL;
-	contacts_query_h query = NULL;
-	contacts_filter_h filter = NULL;
-
-	ret = contacts_query_create(_contacts_person_email._uri, &query);
-	retvm_if(ret != CONTACTS_ERROR_NONE, NULL, "contacts_query_create() failed! ret:[%d]");
-
-	ret = contacts_filter_create(_contacts_person_email._uri, &filter);
-	gotom_if(ret != CONTACTS_ERROR_NONE, FUNC_EXIT, "contacts_filter_create() failed! ret:[%d]");
-
-	ret = contacts_filter_add_int(filter, _contacts_person_email.email_id, CONTACTS_MATCH_EQUAL, person_id);
-	gotom_if(ret != CONTACTS_ERROR_NONE, FUNC_EXIT, "contacts_filter_add_int() failed! ret:[%d]");
-
-	ret = contacts_query_set_filter(query, filter);
-	gotom_if(ret != CONTACTS_ERROR_NONE, FUNC_EXIT, "contacts_query_set_filter() failed! ret:[%d]");
-
-	ret = contacts_db_get_records_with_query(query, 0, 0, &list);
-	gotom_if(ret != CONTACTS_ERROR_NONE, FUNC_EXIT, "contacts_db_get_records_with_query() failed! ret:[%d]");
-
-FUNC_EXIT:
-	if (filter) {
-		ret = contacts_filter_destroy(filter);
-		debug_warning_if(ret != CONTACTS_ERROR_NONE, "contacts_filter_destroy() failed! ret:[%d]");
-	}
-
-	if (query) {
-		ret = contacts_query_destroy(query);
-		debug_warning_if(ret != CONTACTS_ERROR_NONE, "contacts_query_destroy() failed! ret:[%d]");
-	}
-
-	debug_leave();
-	return list;
-}
 
 static void _launch_app_recipient_contacts_reply_cb(void *data, app_control_result_e result, app_control_h reply)
 {
@@ -240,109 +159,58 @@ static void _launch_app_recipient_contacts_reply_cb(void *data, app_control_resu
 
 	for (i = 0; i < len ; i++) {
 
-		int person_id = 0;
-		char *display_name = NULL;
-		contacts_list_h person_email_list = NULL;
-		contacts_record_h h_person_email = NULL;
 		bool is_display_name_duplicate = false;
 		int res_email_id = atoi(return_value[i]);
 
-		person_email_list = _get_person_email_list_by_email_id(res_email_id);
-		if (!person_email_list) {
-			debug_warning("There's no person for email_id:(%d)", res_email_id);
+		email_contact_list_info_t *contact_data = email_contacts_get_contact_info_by_email_id(res_email_id);
+		if (!contact_data) {
+			debug_warning("There's no contact information for email_id:(%d)", res_email_id);
 			continue;
 		}
-
-		ret = contacts_list_get_current_record_p(person_email_list, &h_person_email);
-		if (ret != CONTACTS_ERROR_NONE) {
-			debug_warning("contacts_list_get_current_record_p() failed (%d)", ret);
-			contacts_list_destroy(person_email_list, true);
-			continue;
-		}
-
-		ret = contacts_record_get_str(h_person_email, _contacts_person_email.display_name, &display_name);
-		if (ret != CONTACTS_ERROR_NONE) {
-			debug_error("contacts_record_get_str failed: %d", ret);
-		}
-
-		ret = contacts_record_get_int(h_person_email, _contacts_person_email.person_id, &person_id);
-		if (ret != CONTACTS_ERROR_NONE) {
-			debug_error("contacts_record_get_int failed: %d", ret);
-		}
-
-		contacts_list_destroy(person_email_list, true);
-		person_email_list = NULL;
 
 		EmailRecpInfo *ri = (EmailRecpInfo *)calloc(1, sizeof(EmailRecpInfo));
 		if (!ri) {
 			debug_error("Memory allocation failed!");
 			continue;
 		}
-		ri->person_id = person_id;
-		ri->display_name = display_name;
+		ri->email_id = res_email_id;
+		ri->display_name = g_strdup(contact_data->display_name);
 
-		person_email_list = _get_person_email_list_by_person_id(person_id);
-		if (!person_email_list) {
-			debug_warning("There's no person for person_id:(%d)", person_id);
-			free(ri);
-			continue;
+		if ((eina_list_count(ri->email_list) == FIRST_EMAIL_ADD) && (!g_strcmp0(ri->display_name, contact_data->email_address))) {
+			is_display_name_duplicate = true;
+
+			char *validated_disp_name = NULL;
+			char *validated_add = NULL;
+			email_get_recipient_info(contact_data->email_address, &validated_disp_name, &validated_add);
+			if (is_display_name_duplicate && validated_disp_name) {
+				g_free(ri->display_name);
+				ri->display_name = g_strdup(validated_disp_name);
+			}
+			FREE(contact_data->email_address);
+			contact_data->email_address = strdup(validated_add);
+
+			FREE(validated_disp_name);
+			FREE(validated_add);
 		}
 
-		do {
-			contacts_record_h h_record = NULL;
-			contacts_list_get_current_record_p(person_email_list, &h_record);
+		ri->selected_email_idx = eina_list_count(ri->email_list);
+		debug_log("selected_email_idx:[%d]", ri->selected_email_idx);
 
-			if (h_record) {
+		ri->selected_email_idx = eina_list_count(ri->email_list);
+		debug_log("selected_email_idx:[%d]", ri->selected_email_idx);
 
-				char *email_address = NULL;
-				bool b_free_email_address = FALSE;
-				int email_type = 0;
-				int email_id = 0;
+		EmailAddressInfo *ai = (EmailAddressInfo *)calloc(1, sizeof(EmailAddressInfo));
+		if (ai) {
+			snprintf(ai->address, sizeof(ai->address), "%s", contact_data->email_address);
+			ai->type = contact_data->email_type;
+			ri->email_list = eina_list_append(ri->email_list, ai);
 
-				contacts_record_get_str_p(h_record, _contacts_person_email.email, &email_address);
-				contacts_record_get_int(h_record, _contacts_person_email.type, &email_type);
-				contacts_record_get_int(h_record, _contacts_person_email.email_id, &email_id);
-
-				if ((eina_list_count(ri->email_list) == FIRST_EMAIL_ADD) && (!g_strcmp0(ri->display_name, email_address))) {
-					is_display_name_duplicate = true;
-
-					char *validated_disp_name = NULL;
-					char *validated_add = NULL;
-					email_get_recipient_info(email_address, &validated_disp_name, &validated_add);
-					if (is_display_name_duplicate && validated_disp_name) {
-						FREE(display_name);
-						ri->display_name = g_strdup(validated_disp_name);
-					}
-					email_address = g_strdup(validated_add);
-					b_free_email_address = TRUE;
-					FREE(validated_disp_name);
-					FREE(validated_add);
-				}
-
-				if (res_email_id == email_id) {
-					ri->selected_email_idx = eina_list_count(ri->email_list);
-					debug_log("selected_email_idx:[%d]", ri->selected_email_idx);
-				}
-
-				EmailAddressInfo *ai = (EmailAddressInfo *)calloc(1, sizeof(EmailAddressInfo));
-				if (ai) {
-					snprintf(ai->address, sizeof(ai->address), "%s", email_address);
-					ai->type = email_type;
-					ri->email_list = eina_list_append(ri->email_list, ai);
-
-					debug_secure("[%d] address:(%s), type:(%d)", eina_list_count(ri->email_list), ai->address, ai->type);
-				}
-				if (b_free_email_address) {
-					FREE(email_address);
-				}
-			}
-			ret = contacts_list_next(person_email_list);
-		} while (ret == CONTACTS_ERROR_NONE);
-
-		ret = contacts_list_destroy(person_email_list, true);
-		debug_warning_if(ret != CONTACTS_ERROR_NONE, "contacts_list_destroy() is failed (%d)", ret);
+			debug_secure("[%d] address:(%s), type:(%d)", eina_list_count(ri->email_list), ai->address, ai->type);
+		}
+		email_contacts_delete_contact_info(&contact_data);
 
 		char *markup_name = elm_entry_utf8_to_markup(ri->display_name);
+
 		if (ugd->selected_entry == ugd->recp_to_entry.entry) {
 			elm_multibuttonentry_item_append(ugd->recp_to_mbe, markup_name, NULL, ri);
 		} else if (ugd->selected_entry == ugd->recp_cc_entry.entry) {
@@ -351,12 +219,8 @@ static void _launch_app_recipient_contacts_reply_cb(void *data, app_control_resu
 			elm_multibuttonentry_item_append(ugd->recp_bcc_mbe, markup_name, NULL, ri);
 		} else {
 			debug_error("Not matched!!");
-
-			if (ri) {
-				if (ri->display_name)
-					free(ri->display_name);
-				free(ri);
-			}
+			g_free(ri->display_name);
+			FREE(ri);
 		}
 		FREE(markup_name);
 	}
