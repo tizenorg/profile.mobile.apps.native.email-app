@@ -293,14 +293,6 @@ Eina_Bool composer_util_recp_is_mbe_empty(void *data);
 void composer_util_recp_clear_mbe(Evas_Object *obj);
 
 /**
- * @brief Clear/free email contact list info data
- *
- * @param[in]	contact_item		Email contact list info data
- *
- */
-void composer_util_recp_delete_contact_item(email_contact_list_info_t *contact_item);
-
-/**
  * @brief Clear/free email contact list info data from contacts list
  *
  * @param[in]	list		List with email contact list info data
@@ -309,44 +301,23 @@ void composer_util_recp_delete_contact_item(email_contact_list_info_t *contact_i
 void composer_util_recp_delete_contacts_list(Eina_List *list);
 
 /**
- * @brief Search recipient by ID in DB
- *
- * @param[in]	ugd				Email composer data
- * @param[in]	search_id		ID to be searched
- *
- * @return List of contacts, otherwise NULL
- */
-void *composer_util_recp_search_contact_by_id(EmailComposerUGD *ugd, int search_id);
-
-/**
- * @brief Search recipient by ID in email
- *
- * @param[in]	ugd				Email composer data
- * @param[in]	search_word		Word to be searched
- *
- * @return List of contacts, otherwise NULL
- */
-void *composer_util_recp_search_contact_by_email(EmailComposerUGD *ugd, const char *search_word);
-
-/**
  * @brief Create Email recipient info of recipient
  *
- * @param[in]	data				User data (Email composer data)
  * @param[in]	email_address		Email address name
  *
  * @return Email recipient info data instance with suitable data, otherwise NULL
  */
-EmailRecpInfo *composer_util_recp_make_recipient_info(void *data, const char *email_address);
+EmailRecpInfo *composer_util_recp_make_recipient_info(const char *email_address);
 
 /**
- * @brief Create Email recipient info of recipient with "from address"
+ * @brief Create Email recipient info of recipient with preset display name
  *
  * @param[in]	email_address		Email address name
  * @param[in]	display_name		Display name
  *
  * @return Email recipient info data instance with suitable data, otherwise NULL
  */
-EmailRecpInfo *composer_util_recp_make_recipient_info_with_from_address(char *email_address, char *display_name);
+EmailRecpInfo *composer_util_recp_make_recipient_info_with_display_name(char *email_address, char *display_name);
 
 /**
  * @brief Set recipient display address from multibuttonentry to destination string
@@ -721,27 +692,6 @@ void composer_util_network_state_noti_post();
  */
 void composer_util_update_attach_panel_bundles(EmailComposerUGD *ugd);
 #endif
-
-/**
- * @brief Create vcard (.vcf) from email ID
- *
- * @param[in]	id				Email ID
- * @param[in]	my_profile		To specify what contact information would be created in .vcf, myself or another person
- *
- * @return The vcard path string to (.vcf) on success, otherwise NULL. It should be freed.
- */
-char *composer_create_vcard_from_id(int id, Eina_Bool my_profile);
-
-/**
- * @brief Create vcard from list of IDs
- *
- * @param[in]	id_list		List of Ids
- * @param[in]	count		Count of IDs
- * @param[in]	cancel		Execution of this function that runs as job thread may be canceled by this variable
- *
- * @return The vcard path string to (.vcf) on success, otherwise NULL. It should be freed.
- */
-char *composer_create_vcard_from_id_list(const int *id_list, int count, volatile Eina_Bool *cancel);
 
 /**
  * @brief Creates popup for creating vcard

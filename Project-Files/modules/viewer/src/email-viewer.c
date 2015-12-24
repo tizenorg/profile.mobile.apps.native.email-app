@@ -266,8 +266,8 @@ static VIEWER_ERROR_TYPE_E _initialize_services(void *data)
 		return VIEWER_ERROR_ENGINE_INIT_FAILED;
 	}
 
-	if (contacts_connect() != CONTACTS_ERROR_NONE) {
-		debug_error("Fail of contacts_connect !!!");
+	if (email_contacts_init_service() != CONTACTS_ERROR_NONE) {
+		debug_error("Fail of email_contacts_init_service !!!");
 		return VIEWER_ERROR_SERVICE_INIT_FAIL;
 	}
 
@@ -1359,7 +1359,7 @@ void viewer_delete_evas_objects(EmailViewerUGD *ug_data, Eina_Bool isHide)
 
 	FREE(ug_data->selected_address);
 	FREE(ug_data->selected_name);
-	email_delete_contacts_list(&ug_data->recipient_contact_list_item);
+	email_contacts_delete_contact_info(&ug_data->recipient_contact_list_item);
 
 	debug_leave();
 }
@@ -1908,8 +1908,8 @@ static void _destroy_viewer(EmailViewerUGD *ug_data)
 	noti_mgr_dbus_receiver_remove(ug_data);
 
 	email_engine_finalize();
-	int ct_ret = contacts_disconnect();
-	debug_warning_if(ct_ret != CONTACTS_ERROR_NONE, "contacts_disconnect() failed! ct_ret:[%d]", ct_ret);
+	int ct_ret = email_contacts_finalize_service();
+	debug_warning_if(ct_ret != CONTACTS_ERROR_NONE, "email_contacts_finalize_service() failed! ct_ret:[%d]", ct_ret);
 	_viewer_deinitialize_theme(ug_data);
 	_g_md = NULL;
 

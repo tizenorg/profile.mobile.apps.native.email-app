@@ -15,7 +15,6 @@
  *
  */
 
-#include <contacts.h>
 #include "email-filter-list-view.h"
 #include "email-filter-edit-view.h"
 #include "email-filter-delete-view.h"
@@ -82,8 +81,7 @@ typedef struct _ListItemData {
 	Eina_Bool is_checked;
 	EmailFilterVD *vd;
 	email_rule_t *filter_rule;
-	contacts_list_h ct_list;
-	contacts_record_h ct_value;
+	char *contact_name;
 } ListItemData;
 
 void create_filter_list_view(EmailFilterUGD *ugd)
@@ -150,10 +148,7 @@ static void _update_list(EmailFilterVD *vd)
 	GSList *l = vd->list_items;
 	while (l) {
 		ListItemData *li = l->data;
-		if (li->ct_list)
-			contacts_list_destroy(li->ct_list, 1);
-		li->ct_list = NULL;
-		li->ct_value = NULL;
+		FREE(li->contact_name);
 		FREE(li);
 		l = g_slist_next(l);
 	}
@@ -201,10 +196,7 @@ static void _destroy(email_view_t *self)
 	GSList *l = vd->list_items;
 	while (l) {
 		ListItemData *li = l->data;
-		if (li->ct_list)
-			contacts_list_destroy(li->ct_list, 1);
-		li->ct_list = NULL;
-		li->ct_value = NULL;
+		FREE(li->contact_name);
 		FREE(li);
 		l = g_slist_next(l);
 	}
@@ -262,7 +254,6 @@ static Evas_Object *_create_rule_list_layout(EmailFilterVD *vd, email_rule_t *fi
 	EmailFilterUGD *ugd = (EmailFilterUGD *)vd->base.module;
 	Evas_Object *content_ly = NULL;
 	Evas_Object *genlist = NULL;
-	Elm_Object_Item *git = NULL;
 	ListItemData *li = NULL;
 	int i = 0;
 
@@ -298,17 +289,18 @@ static Evas_Object *_create_rule_list_layout(EmailFilterVD *vd, email_rule_t *fi
 		li->filter_rule = filter_rule_list + i;
 		if (ugd->op_type == EMAIL_FILTER_OPERATION_PRIORITY_SERNDER &&
 				STR_VALID(li->filter_rule->value2)) {
-			contacts_list_h ct_list = NULL;
-			contacts_record_h ct_val = NULL;
-			email_get_contacts_list(CONTACTS_MATCH_FULLSTRING, &ct_list, li->filter_rule->value2, EMAIL_SEARCH_CONTACT_BY_EMAIL);
-			li->ct_list = ct_list;
-			email_get_last_contact_in_contact_list(ct_list, &ct_val);
-			li->ct_value = ct_val;
+			char *contact_name = NULL;
+			int ret = email_contacts_get_contact_name_by_email_address(li->filter_rule->value2, &contact_name);
+			if (ret == CONTACTS_ERROR_NONE) {
+				li->contact_name = contact_name;
+			} else {
+				li->contact_name = NULL;
+			}
 		}
-		li->it = git = elm_genlist_item_append(genlist,
-				li->ct_value ? &(vd->itc2) : &(vd->itc1), li, NULL,
+		li->it = elm_genlist_item_append(genlist,
+				li->contact_name ? &(vd->itc2) : &(vd->itc1), li, NULL,
 				ELM_GENLIST_ITEM_NONE, _gl_sel_cb, li);
-		elm_genlist_item_select_mode_set(git, ELM_OBJECT_SELECT_MODE_ALWAYS);
+		elm_genlist_item_select_mode_set(li->it, ELM_OBJECT_SELECT_MODE_ALWAYS);
 		vd->list_items = g_slist_append(vd->list_items, li);
 	}
 
@@ -412,9 +404,7 @@ static char *_gl_text_get_cb2(void *data, Evas_Object *obj, const char *part)
 	if (li) {
 		email_rule_t *filter_rule = li->filter_rule;
 		if (!strcmp(part, "elm.text") && filter_rule) {
-			char *name = NULL;
-			email_get_contacts_display_name(li->ct_value, &name);
-			return elm_entry_utf8_to_markup(name);
+			return elm_entry_utf8_to_markup(li->contact_name);
 		} else if (!strcmp(part, "elm.text.sub") && filter_rule) {
 			return elm_entry_utf8_to_markup(filter_rule->value2);
 		}

@@ -86,7 +86,8 @@ static void _recipient_popup_response_cb(void *data, Evas_Object *obj, void *eve
 	DELETE_EVAS_OBJECT(ug_data->notify);
 	FREE(ug_data->selected_address);
 	FREE(ug_data->selected_name);
-	email_delete_contacts_list(&ug_data->recipient_contact_list_item);
+	email_contacts_delete_contact_info(&ug_data->recipient_contact_list_item);
+	debug_log("After Delete: %p", ug_data->recipient_contact_list_item);
 	debug_leave();
 }
 
@@ -128,8 +129,8 @@ static void _recipient_mbe_selected_cb(void *data, Evas_Object *obj, void *event
 	debug_secure("display_name:%s", ug_data->recipient_name);
 	debug_secure("recipient_address:%s", ug_data->recipient_address);
 
-	email_delete_contacts_list(&ug_data->recipient_contact_list_item);
-	ug_data->recipient_contact_list_item = (email_contact_list_info_t *)email_contact_search_by_email(ug_data, ug_data->recipient_address);
+	email_contacts_delete_contact_info(&ug_data->recipient_contact_list_item);
+	ug_data->recipient_contact_list_item = email_contacts_get_contact_info_by_email_address(ug_data->recipient_address);
 
 	char *popup_title = NULL;
 	if ((addrs_info->display_name) && (g_strcmp0(addrs_info->display_name, addrs_info->address))) {
@@ -230,7 +231,7 @@ static void _recipient_popup_genlist_sel(void *data, Evas_Object *obj, void *eve
 				char index_str[BUF_LEN_T] = { 0, };
 				snprintf(index_str, sizeof(index_str), "%d", ug_data->recipient_contact_list_item->person_id);
 				viewer_view_contact_detail(ug_data, g_strdup(index_str));
-				email_delete_contacts_list(&ug_data->recipient_contact_list_item);
+				email_contacts_delete_contact_info(&ug_data->recipient_contact_list_item);
 			} else {
 				ug_data->create_contact_arg = CONTACTUI_REQ_ADD_EMAIL;
 				DELETE_EVAS_OBJECT(ug_data->notify);

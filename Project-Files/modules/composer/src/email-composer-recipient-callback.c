@@ -213,7 +213,7 @@ static void _recipient_mbe_popup_edit(EmailComposerUGD *ugd)
 		}
 		retm_if(!mbe, "Invalid entry is selected!");
 
-		ri = composer_util_recp_make_recipient_info(ugd, existing_text);
+		ri = composer_util_recp_make_recipient_info(existing_text);
 		if (ri) {
 			char *markup_name = elm_entry_utf8_to_markup(ri->display_name);
 			elm_multibuttonentry_item_append(mbe, markup_name, NULL, ri);
@@ -587,7 +587,7 @@ void _recipient_mbe_added_cb(void *data, Evas_Object *obj, void *event_info)
 			return;
 		}
 
-		ri = composer_util_recp_make_recipient_info(ugd, email_address);
+		ri = composer_util_recp_make_recipient_info(email_address);
 		if (!ri) {
 			debug_error("ri is NULL!");
 			elm_object_item_del(item);
@@ -740,7 +740,7 @@ void _recipient_mbe_selected_cb(void *data, Evas_Object *obj, void *event_info)
 
 	recipient_select_menu[RECP_SELECT_MENU_REMOVE] = EINA_TRUE;
 	recipient_select_menu[RECP_SELECT_MENU_EDIT] = EINA_TRUE;
-	if (ri->person_id <= 0) {
+	if (ri->email_id == 0) {
 		recipient_select_menu[RECP_SELECT_MENU_ADD_TO_CONTACTS] = EINA_TRUE;
 	}
 	if (ugd->cc_added) {
@@ -955,7 +955,7 @@ void _recipient_entry_keyup_cb(void *data, Evas *e, Evas_Object *obj, void *even
 		}
 
 		char *enter_word = elm_entry_markup_to_utf8(elm_entry_entry_get(obj));
-		EmailRecpInfo *ri = composer_util_recp_make_recipient_info(ugd, enter_word);
+		EmailRecpInfo *ri = composer_util_recp_make_recipient_info(enter_word);
 		if (ri) {
 			char *markup_name = elm_entry_utf8_to_markup(ri->display_name);
 			Elm_Object_Item *it = elm_multibuttonentry_item_append(mbe, markup_name, NULL, ri);
