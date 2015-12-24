@@ -16,11 +16,7 @@ ExcludeArch: %{arm} %ix86 x86_64
 # set value 1 for Tizen 2.4 build
 %define _tizen_2_4 0
 
-%if 0%{?_tizen_2_4}
 %define _enable_attach_panel 1
-%else
-%define _enable_attach_panel 0
-%endif
 
 Requires(post): sys-assert
 Requires: email-service
