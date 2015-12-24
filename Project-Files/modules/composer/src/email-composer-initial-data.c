@@ -126,7 +126,7 @@ static Eina_Bool _initial_data_mbe_append_recipients(EmailComposerUGD *ugd, Evas
 			if ((ugd->composer_type == RUN_COMPOSER_REPLY_ALL) && (g_strstr_len(recipients_list[count], strlen(recipients_list[count]), ugd->account_info->selected_account->user_email_address)))
 				continue;
 
-			EmailRecpInfo *ri = composer_util_recp_make_recipient_info(ugd, recipients_list[count]);
+			EmailRecpInfo *ri = composer_util_recp_make_recipient_info(recipients_list[count]);
 			if (ri) {
 				char *markup_name = elm_entry_utf8_to_markup(ri->display_name);
 				elm_multibuttonentry_item_append(mbe, markup_name, NULL, ri);
@@ -560,7 +560,7 @@ static void _initial_data_set_mail_to_recipients(EmailComposerUGD *ugd)
 		}
 
 		if (to_be_added_sender_address) {
-			EmailRecpInfo *ri = composer_util_recp_make_recipient_info(ugd, to_be_added_sender_address);
+			EmailRecpInfo *ri = composer_util_recp_make_recipient_info(to_be_added_sender_address);
 			if (ri) {
 				char *markup_name = elm_entry_utf8_to_markup(ri->display_name);
 				elm_multibuttonentry_item_append(ugd->recp_to_mbe, markup_name, NULL, ri);

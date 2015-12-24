@@ -20,7 +20,8 @@
 #endif
 
 #include <notification.h>
-#include <contacts.h>
+
+#include "email-utils-contacts.h"
 #include "email-filter.h"
 #include "email-filter-list-view.h"
 #include "email-filter-edit-view.h"
@@ -48,9 +49,8 @@ static int _filter_create(email_module_t *self, app_control_h params)
 
 	bindtextdomain(PACKAGE, email_get_locale_dir());
 
-	/* contact service */
-	contacts_error_e err = contacts_connect();
-	debug_warning_if(err != CONTACTS_ERROR_NONE, "contacts_connect failed: %d", err);
+	int err = email_contacts_init_service();
+	debug_warning_if(err != CONTACTS_ERROR_NONE, "email_contacts_init_service failed: %d", err);
 
 	switch (_parse_option(ugd, params)) {
 		case EMAIL_FILTER_VIEW_FILTER_LIST:
@@ -75,7 +75,9 @@ static void _filter_destroy(email_module_t *self)
 	if (!self)
 		return;
 
-	contacts_disconnect();
+	int err = email_contacts_finalize_service();
+	debug_warning_if(err != CONTACTS_ERROR_NONE, "email_contacts_finalize_service failed: %d", err);
+
 }
 
 static void _filter_on_event(email_module_t *self, email_module_event_e event)

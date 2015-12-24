@@ -19,7 +19,6 @@
 #define _EMAIL_UTILS_CONTACTS_H_
 
 #include <contacts.h>
-
 #include "email-common-types.h"
 
 G_BEGIN_DECLS
@@ -30,6 +29,7 @@ G_BEGIN_DECLS
 typedef struct _email_contact_list_info {
 	int index;
 	int person_id;
+	int email_id;
 	char *display;
 	char *email_address;
 	char *image_path;
@@ -42,22 +42,19 @@ typedef struct _email_contact_list_info {
 /*
  * Exported fuctions.
  */
-EMAIL_API char *get_email_type_str(int type);
+EMAIL_API int email_contacts_init_service();
+EMAIL_API int email_contacts_finalize_service();
 
-EMAIL_API int email_get_contacts_list_int(contacts_match_int_flag_e match, contacts_list_h *list, int search_num);
-EMAIL_API int email_get_contacts_list(contacts_match_str_flag_e match, contacts_list_h *list, const char *search_word, email_contact_search_type_e search_type);
-EMAIL_API int email_get_contacts_index(contacts_record_h record, int *index);
-EMAIL_API int email_get_contacts_display_name(contacts_record_h record, char **display_name);
-EMAIL_API int email_get_contacts_email_address(contacts_record_h record, char **email_addr);
-EMAIL_API int email_get_contacts_first_name(contacts_record_h record, char **first_name);
-EMAIL_API int email_get_contacts_last_name(contacts_record_h record, char **last_name);
-EMAIL_API int email_get_contacts_list_info(contacts_list_h list, email_contact_list_info_t *contact_list_info);
-EMAIL_API int email_get_phone_log(contacts_match_str_flag_e match, contacts_list_h *list, const char *search_word);
-EMAIL_API int email_get_phone_log_info(contacts_list_h list, email_contact_list_info_t *ct_list_info);
-EMAIL_API int email_get_last_contact_in_contact_list(contacts_list_h list, contacts_record_h *last_contact);
-EMAIL_API int email_num_id_get_contacts_record(int num_id, contacts_record_h *out_record);
-EMAIL_API void *email_contact_search_by_email(void *ug_data, const char *search_word);
-EMAIL_API void email_delete_contacts_list(email_contact_list_info_t **contacts_list_item);
+EMAIL_API email_contact_list_info_t *email_contacts_get_contact_info_by_email_id(int email_id);
+EMAIL_API email_contact_list_info_t *email_contacts_get_contact_info_by_email_address(const char *email_address);
+EMAIL_API void email_contacts_delete_contact_info(email_contact_list_info_t *contacts_list_item);
+EMAIL_API Eina_List *email_contacts_search_contacts_by_keyword(const char *search_word);
+
+EMAIL_API int email_contacts_get_email_address_by_contact_id(int contact_id, char **email_address);
+EMAIL_API int email_contacts_get_contact_name_by_email_address(char *email_address, char **contact_name);
+
+EMAIL_API char *email_contacts_create_vcard_from_id(int id, const char *vcard_dir_path, Eina_Bool my_profile);
+EMAIL_API char *email_contacts_create_vcard_from_id_list(const int *id_list, int count, const char *vcard_dir_path, volatile Eina_Bool *cancel);
 
 G_END_DECLS
 #endif	/* _EMAIL_UTILS_CONTACTS_H_ */

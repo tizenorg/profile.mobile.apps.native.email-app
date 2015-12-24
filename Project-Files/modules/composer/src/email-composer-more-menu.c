@@ -303,7 +303,7 @@ static void _tomyself_append_myaddress(void *data, int index)
 		ugd->selected_entry = ugd->recp_to_entry.entry; /* To set focus to 'to' mbe */
 	}
 
-	EmailRecpInfo *ri = composer_util_recp_make_recipient_info_with_from_address(ugd->account_info->account_list[index].user_email_address, ugd->account_info->account_list[index].user_display_name);
+	EmailRecpInfo *ri = composer_util_recp_make_recipient_info_with_display_name(ugd->account_info->account_list[index].user_email_address, ugd->account_info->account_list[index].user_display_name);
 	retm_if(!ri, "Memory allocation failed!");
 
 	char *markup_name = elm_entry_utf8_to_markup(ri->display_name);

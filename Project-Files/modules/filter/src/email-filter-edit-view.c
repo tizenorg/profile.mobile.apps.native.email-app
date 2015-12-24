@@ -16,6 +16,7 @@
  */
 
 #include <notification.h>
+#include "email-utils-contacts.h"
 #include "email-filter-edit-view.h"
 #include "email-common-contact-defines.h"
 
@@ -39,7 +40,6 @@ static int _checking_is_dup_rule(EmailFilterVD *vd, email_rule_t *filter_rule);
 
 static Evas_Object *_create_list(EmailFilterVD *vd);
 static void _launch_contact_app(EmailFilterVD *vd);
-static char *_get_filter_address_by_id(int id);
 static int _get_field_validation(EmailFilterVD *vd);
 static void _done_key_disabled_set(EmailFilterVD *vd, Eina_Bool disabled);
 
@@ -561,13 +561,13 @@ static void _contact_app_reply_cb(void *data, app_control_result_e result, app_c
 	}
 	free(filter_addr_id_arr);
 
-	filter_addr = _get_filter_address_by_id(id);
-	if (!filter_addr) {
+	ret = email_contacts_get_email_address_by_contact_id(id, &filter_addr);
+	if (!filter_addr || ret != CONTACTS_ERROR_NONE) {
 		debug_error("filter address is NULL");
 		return;
 	}
-	debug_secure("filter address: %s", filter_addr);
 
+	debug_secure("filter address: %s", filter_addr);
 	GSList *l = vd->list_items;
 	while (l) {
 		ListItemData *li = l->data;
@@ -584,38 +584,6 @@ static void _contact_app_reply_cb(void *data, app_control_result_e result, app_c
 	}
 
 	FREE(filter_addr);
-}
-
-static char *_get_filter_address_by_id(int id)
-{
-	debug_enter();
-
-	int ret = -1;
-	contacts_record_h record = NULL;
-	char *filter_addr = NULL;
-
-	ret = contacts_connect();
-	retvm_if(ret != CONTACTS_ERROR_NONE, NULL, "contacts_connect failed :%d", ret);
-
-	ret = contacts_db_get_record(_contacts_email._uri, id, &record);
-	if (ret != CONTACTS_ERROR_NONE) {
-		debug_error("contacts_db_get_record failed: %d", ret);
-		goto CATCH;
-	}
-
-	ret = contacts_record_get_str(record, _contacts_email.email, &filter_addr);
-	if (ret != CONTACTS_ERROR_NONE) {
-		debug_error("contacts_record_get_str failed: %d", ret);
-		goto CATCH;
-	}
-
-	contacts_record_destroy(record, true);
-	contacts_disconnect();
-	return filter_addr;
-CATCH:
-	contacts_record_destroy(record, true);
-	contacts_disconnect();
-	return NULL;
 }
 
 static int _get_field_validation(EmailFilterVD *vd)
