@@ -18,7 +18,6 @@ ExcludeArch: %{arm} %ix86 x86_64
 
 %define _enable_attach_panel 1
 
-Requires(post): sys-assert
 Requires: email-service
 BuildRequires: cmake
 BuildRequires: edje-tools
