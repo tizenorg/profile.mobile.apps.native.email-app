@@ -208,9 +208,9 @@ static char *__composer_ps_insert_match_tag(char *input, char *matched_word)
 	char *string = NULL;
 	char *first = NULL, *matched = NULL, *last = NULL;
 
-	char *temp = g_strndup(input, found - input);
+	char *temp = strndup(input, found - input);
 	first = elm_entry_utf8_to_markup(temp);
-	matched = elm_entry_utf8_to_markup(matched_word);
+	matched = strndup(found, strlen(matched_word));
 	last = elm_entry_utf8_to_markup(input + strlen(matched_word) + (temp ? strlen(temp) : 0));
 	g_free(temp);
 
@@ -315,12 +315,7 @@ static void __composer_ps_append_result(EmailComposerUGD *ugd, Eina_List *predic
 
 	Eina_List *l = NULL;
 	email_contact_list_info_t *item = NULL;
-	ugd->ps_is_item_from_contact_add = EINA_FALSE;
 	EINA_LIST_FOREACH(predict_list, l, item) {
-		if (item->contact_origin == EMAIL_SEARCH_CONTACT_ORIGIN_CONTACTS) {
-			ugd->ps_is_item_from_contact_add = EINA_TRUE;
-		}
-
 		elm_genlist_item_append(ugd->ps_genlist, &__ps_itc, item, NULL, ELM_GENLIST_ITEM_NONE, __composer_ps_gl_sel, ugd);
 	}
 

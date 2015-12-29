@@ -797,16 +797,6 @@ void _recipient_entry_changed_cb(void *data, Evas_Object *obj, void *event_info)
 	/* Because of elm_entry_entry_set(), this callback can be called even though the entry doesn't have the focus. */
 	ret_if(ugd->selected_entry != obj);
 
-	/* XXX: check this
-	 * While predictive search list is destroying, we set the layouts to the proper position again.
-	 * when we call elm_object_part_content_set() to set the layout, mbe changed callback is called.
-	 * See __composer_ps_unset_contents()
-	 */
-	if (ugd->ps_while_destroying_list) {
-		debug_log("==> while destroying predictive list!!");
-		return;
-	}
-
 	const char *entry_str = elm_entry_entry_get(obj);
 	retm_if(!entry_str, "entry_str is [NULL]");
 	if (elm_entry_is_empty(obj) || strcmp(entry_str, "<br/>") == 0) {
