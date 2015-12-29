@@ -215,8 +215,6 @@ struct ug_data {
 	/* Related to predictive search */
 	char ps_keyword[EMAIL_LIMIT_EMAIL_ADDRESS_LENGTH + 1];
 	Eina_Bool ps_is_runnig;
-	Eina_Bool ps_while_destroying_list;
-	Eina_Bool ps_is_item_from_contact_add;
 
 	Eina_Hash *ps_hash;
 	Eina_List *ps_contacts_list;
