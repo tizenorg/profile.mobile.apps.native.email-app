@@ -341,10 +341,7 @@ static void _more_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_i
 	mailbox_ugd->more_ctxpopup = elm_ctxpopup_add(mailbox_ugd->base.module->win);
 
 	elm_ctxpopup_auto_hide_disabled_set(mailbox_ugd->more_ctxpopup, EINA_TRUE);
-
-	/* TODO: Should be uncommented when "more/default" style will be supported. */
-//	elm_object_style_set(mailbox_ugd->more_ctxpopup, "more/default");
-
+	elm_object_style_set(mailbox_ugd->more_ctxpopup, "more/default");
 	eext_object_event_callback_add(mailbox_ugd->more_ctxpopup, EEXT_CALLBACK_BACK, _more_ctxpopup_back_cb, mailbox_ugd);
 	eext_object_event_callback_add(mailbox_ugd->more_ctxpopup, EEXT_CALLBACK_MORE, _more_ctxpopup_back_cb, mailbox_ugd);
 	evas_object_smart_callback_add(mailbox_ugd->more_ctxpopup, "dismissed", _more_ctxpopup_dismissed_cb, mailbox_ugd);
