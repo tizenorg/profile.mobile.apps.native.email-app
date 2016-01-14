@@ -217,9 +217,7 @@ void viewer_create_more_ctxpopup(EmailViewerUGD *ug_data)
 	retm_if(ug_data->con_popup == NULL, "cannot create context popup: ug_data->con_popup[NULL]");
 
 	elm_ctxpopup_auto_hide_disabled_set(ug_data->con_popup, EINA_TRUE);
-
-	/* TODO: Should be uncommented when "more/default" style will be supported. */
-//	elm_object_style_set(ug_data->con_popup, "more/default");
+	elm_object_style_set(ug_data->con_popup, "more/default");
 	elm_ctxpopup_direction_priority_set(ug_data->con_popup,
 							ELM_CTXPOPUP_DIRECTION_UP,
 							ELM_CTXPOPUP_DIRECTION_UNKNOWN,

@@ -377,8 +377,7 @@ void composer_more_menu_clicked_cb(void *data, Evas_Object *obj, void *event_inf
 	DELETE_EVAS_OBJECT(ugd->context_popup);
 
 	ugd->context_popup = elm_ctxpopup_add(ugd->base.module->win);
-	/* TODO: Should be uncommented when "more/default" style will be supported. */
-//	elm_object_style_set(ugd->context_popup, "more/default");
+	elm_object_style_set(ugd->context_popup, "more/default");
 	elm_ctxpopup_direction_priority_set(ugd->context_popup, ELM_CTXPOPUP_DIRECTION_UP, ELM_CTXPOPUP_DIRECTION_UNKNOWN, ELM_CTXPOPUP_DIRECTION_UNKNOWN, ELM_CTXPOPUP_DIRECTION_UNKNOWN);
 	elm_ctxpopup_auto_hide_disabled_set(ugd->context_popup, EINA_TRUE);
 
