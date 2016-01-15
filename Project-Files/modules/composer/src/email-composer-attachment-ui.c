@@ -443,7 +443,7 @@ static void _attachment_ui_item_create_delete_button(ComposerAttachmentItemData 
 	debug_enter();
 
 	Evas_Object *button_layout = elm_layout_add(parent);
-	elm_layout_theme_set(button_layout, "layout", "list/C/type.2", "default");
+	elm_layout_file_set(button_layout, email_get_composer_theme_path(), "ec/attachment/layout/clear_button");
 
 	Evas_Object *delete_button = elm_button_add(button_layout);
 	elm_object_style_set(delete_button, "icon_expand_delete");
@@ -452,7 +452,7 @@ static void _attachment_ui_item_create_delete_button(ComposerAttachmentItemData 
 	evas_object_smart_callback_add(delete_button, "clicked", _attachment_ui_item_delete_button_clicked_cb, attachment_item_data);
 	evas_object_show(button_layout);
 
-	elm_layout_content_set(button_layout, "elm.swallow.content", delete_button);
+	elm_layout_content_set(button_layout, "ec.swallow.content", delete_button);
 	elm_object_part_content_set(parent, "ec.swallow.button", button_layout);
 
 	debug_leave();
