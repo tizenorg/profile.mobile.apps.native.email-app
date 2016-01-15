@@ -36,6 +36,9 @@
 #define EC_ATTACHMENT_GR_ITEM_PADDING_RIGHT_SIZE 32
 #define EC_ATTACHMENT_GR_ITEM_TEXT_SIZE 36
 
+#define EC_ATTACHMENT_LAYOUT_BUTTON_SIZE 60 60
+#define EC_ATTACHMENT_LAYOUT_BUTTON_RIGHT_PADDING_W 17
+
 group { name: "elm/layout/list/B/type.2/email/default";
 	images {
 		image: EC_IMAGE_VIDEO_PLAY_THUMBNAIL COMP;
@@ -159,6 +162,30 @@ group {
 			source: "ec.events";
 			action: SIGNAL_EMIT "ec,action,clicked" "";
 		}
+	}
+}
+
+group { name: "ec/attachment/layout/clear_button";
+	parts {
+		E_PART_SPACER("ec.padding.right",
+			description { state: "default" 0.0;
+				fixed: 1 0;
+				align: 1.0 0.5;
+				rel1.relative: 1.0 0.0;
+				min: EC_ATTACHMENT_LAYOUT_BUTTON_RIGHT_PADDING_W 0;
+				max: EC_ATTACHMENT_LAYOUT_BUTTON_RIGHT_PADDING_W -1;
+			}
+		)
+		E_PART_SWALLOW("ec.swallow.content",
+			description { state: "default" 0.0;
+				rel2 {
+					relative: 0 1;
+					to_x: "ec.padding.right";
+				}
+				min: EC_ATTACHMENT_LAYOUT_BUTTON_SIZE;
+				max: EC_ATTACHMENT_LAYOUT_BUTTON_SIZE;
+			}
+		)
 	}
 }
 
