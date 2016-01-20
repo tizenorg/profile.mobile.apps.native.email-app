@@ -434,8 +434,14 @@ static void _recipient_from_button_clicked_cb(void *data, Evas_Object *obj, void
 		return;
 	}
 
+	if (ugd->recp_from_ctxpopup) {
+		_recipient_from_ctxpopup_dismissed_cb(ugd, NULL, NULL);
+		return;
+	}
+
 	Evas_Object *ctxpopup = elm_ctxpopup_add(ugd->base.module->navi);
-	elm_object_style_set(ctxpopup, "dropdown/list");
+	// TODO: Remove comment when "dropdown/list" style will be available
+	//elm_object_style_set(ctxpopup, "dropdown/list");
 	elm_ctxpopup_auto_hide_disabled_set(ctxpopup, EINA_TRUE);
 	elm_ctxpopup_direction_priority_set(ctxpopup, ELM_CTXPOPUP_DIRECTION_DOWN, ELM_CTXPOPUP_DIRECTION_UNKNOWN, ELM_CTXPOPUP_DIRECTION_UNKNOWN, ELM_CTXPOPUP_DIRECTION_UNKNOWN);
 
