@@ -174,7 +174,6 @@ group { name: param_name; \
    ----------------------------------------------------------------
 */
 
-
 #define ENTRY_WITH_UPPER_TEXT_DESCRIPTION_LAYOUT(param_name, param_top_padding, param_left_padding, param_right_padding) \
 group { name: param_name; \
 	styles{ \
@@ -195,9 +194,9 @@ group { name: param_name; \
 						to_y: "padding.top"; \
 					} \
 					rel2 { \
-						relative: 0 0; \
+						relative: 0 1; \
 						to_x: "padding.right"; \
-						to_y: "elm.swallow.entry"; \
+						to_y: "padding.top"; \
 					} \
 				text { \
 					style: "entry_text_style"; \
