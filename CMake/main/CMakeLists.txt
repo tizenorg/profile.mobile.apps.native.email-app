@@ -5,20 +5,16 @@ SET(VENDOR "tizen")
 SET(PACKAGE ${PROJECT_NAME})
 SET(PKGNAME "org.${VENDOR}.${PACKAGE}")
 
-pkg_check_modules(pkgs-email REQUIRED elementary email-service accounts-svc
-	bundle dlog ecore-input contacts-service2 efl-extension gio-2.0 capi-base-utils-i18n capi-system-system-settings
-	capi-appfw-application)
-
-FOREACH(flag ${pkgs-email_CFLAGS})
-	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")
-ENDFOREACH(flag)
-
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS} -fpie")
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fpie")
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pie")
 
-ADD_SUBDIRECTORY(email)
-ADD_SUBDIRECTORY(email-setting)
-ADD_SUBDIRECTORY(email-composer)
+IF(${BUILD_SHARED_LIBS})
+	ADD_SUBDIRECTORY(email-single)
+	ADD_SUBDIRECTORY(email-setting)
+	ADD_SUBDIRECTORY(email-composer)
+ELSE(${BUILD_SHARED_LIBS})
+	ADD_SUBDIRECTORY(email)
+ENDIF(${BUILD_SHARED_LIBS})
 
 # install manifest file
 INSTALL(FILES ${PROJECT_ROOT_DIR}/${PKGNAME}.xml DESTINATION ${PACKAGEDIR})

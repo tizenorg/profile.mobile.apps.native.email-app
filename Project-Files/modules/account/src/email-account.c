@@ -368,7 +368,11 @@ static void _account_update(email_view_t *self, int flags)
 	}
 }
 
+#ifdef SHARED_MODULES_FEATURE
 EMAIL_API email_module_t *email_module_alloc()
+#else
+email_module_t *account_module_alloc()
+#endif
 {
 	debug_enter();
 

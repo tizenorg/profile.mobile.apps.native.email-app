@@ -29,6 +29,10 @@ IF(${ENABLE_ATTACH_PANEL})
 	ADD_DEFINITIONS("-DATTACH_PANEL_FEATURE")
 ENDIF(${ENABLE_ATTACH_PANEL})
 
+IF(${BUILD_SHARED_LIBS})
+	ADD_DEFINITIONS("-DSHARED_MODULES_FEATURE")
+ENDIF(${BUILD_SHARED_LIBS})
+
 # Set definitions to be used to compile edcs
 SET(EDJE_CC_DEFINITIONS "")
 
@@ -45,7 +49,7 @@ IF("${ARCH}" STREQUAL "armv7l")
 	SET(CMAKE_C_FLAGS_RELEASE "-mabi=aapcs-linux -O2")
 ENDIF("${ARCH}" STREQUAL "armv7l")
 
-SET(BASE_C_FLAGS "${CMAKE_C_FLAGS} -fdata-sections -ffunction-sections -Wl,--gc-sections -Werror")
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fdata-sections -ffunction-sections -Wl,--gc-sections -Werror")
 
 INCLUDE(FindPkgConfig)
 
@@ -77,15 +81,36 @@ SET(PROJECT_PO_DIR "${PROJECT_RESOURCES_DIR}/po")
 SET(PROJECT_COMMON_INCLUDE "${PROJECT_COMMON_DIR}/inc")
 INCLUDE_DIRECTORIES(${PROJECT_COMMON_INCLUDE})
 
+SET(email-required-pkgs ecore glib-2.0 gobject-2.0 email-service storage
+	contacts-service2 capi-content-media-content dlog elementary evas eina edje capi-base-utils-i18n
+	accounts-svc capi-network-connection efl-extension capi-content-mime-type capi-system-system-settings
+	capi-appfw-application capi-appfw-preference vconf feedback notification gio-2.0 capi-media-image-util
+	libpng capi-media-metadata-extractor libexif libxml-2.0)
+
+IF(${TIZEN_2_4})
+	SET(email-required-pkgs ${email-required-pkgs} ewebkit2)
+ELSE(${TIZEN_2_4})
+	SET(email-required-pkgs ${email-required-pkgs} chromium-efl libtzplatform-config)
+ENDIF(${TIZEN_2_4})
+
+IF(${ENABLE_ATTACH_PANEL})
+	SET(email-required-pkgs ${email-required-pkgs} attach-panel)
+ENDIF(${ENABLE_ATTACH_PANEL})
+
+pkg_check_modules(pkgs-email REQUIRED ${email-required-pkgs})
+
+FOREACH(flag ${pkgs-email_CFLAGS})
+	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")
+ENDFOREACH(flag)
+
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS}")
+
 # Add your submodule directory name
 
 ADD_SUBDIRECTORY(po)
 
-SET(CMAKE_C_FLAGS "${BASE_C_FLAGS} -fpic")
-
 ADD_SUBDIRECTORY(email-common)
-ADD_SUBDIRECTORY(modules)
 
-SET(CMAKE_C_FLAGS ${BASE_C_FLAGS})
+ADD_SUBDIRECTORY(modules)
 
 ADD_SUBDIRECTORY(main)

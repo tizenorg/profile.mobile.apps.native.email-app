@@ -53,7 +53,11 @@ static email_string_t EMAIL_SETTING_STRING_OK = {PACKAGE, "IDS_EMAIL_BUTTON_OK"}
 static email_string_t EMAIL_SETTING_STRING_FAILED_TO_START_EMAIL_APPLICATION = {PACKAGE, "IDS_EMAIL_POP_FAILED_TO_START_EMAIL_APPLICATION"};
 static email_string_t EMAIL_SETTING_STRING_WARNING = {PACKAGE, "IDS_ST_HEADER_WARNING"};
 
+#ifdef SHARED_MODULES_FEATURE
 EMAIL_API email_module_t *email_module_alloc()
+#else
+email_module_t *setting_module_alloc()
+#endif
 {
 	debug_enter();
 

@@ -122,7 +122,11 @@ static Eina_Bool _viewer_launch_email_application_cb(void *data);
 static int _construct_viewer_data(EmailViewerUGD *ug_data);
 static void _destroy_viewer(EmailViewerUGD *ug_data);
 
+#ifdef SHARED_MODULES_FEATURE
 EMAIL_API email_module_t *email_module_alloc()
+#else
+email_module_t *viewer_module_alloc()
+#endif
 {
 	debug_enter();
 

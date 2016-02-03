@@ -70,7 +70,9 @@ typedef struct {
  *
  * @return name of the .so file or NULL on error
  */
+#ifdef SHARED_MODULES_FEATURE
 static const char *_get_module_lib_name(email_module_type_e module_type);
+#endif
 
 /**
  * email_module_mgr
@@ -476,6 +478,7 @@ static void _email_view_back_btn_cb(void *data, Evas_Object *obj, void *event_in
  * utils
  */
 
+#ifdef SHARED_MODULES_FEATURE
 const char *_get_module_lib_name(email_module_type_e module_type)
 {
 	switch (module_type) {
@@ -489,6 +492,7 @@ const char *_get_module_lib_name(email_module_type_e module_type)
 		return NULL;
 	}
 }
+#endif
 
 /**
  * email_module_mgr
@@ -718,6 +722,7 @@ bool email_module_mgr_is_in_compressed_mode()
 	return (evas_object_size_hint_display_mode_get(MODULE_MGR.navi) == EVAS_DISPLAY_MODE_COMPRESS);
 }
 
+#ifdef SHARED_MODULES_FEATURE
 email_module_t *_email_module_mgr_alloc_module(email_module_type_e module_type)
 {
 	debug_enter();
@@ -773,6 +778,29 @@ email_module_t *_email_module_mgr_alloc_module(email_module_type_e module_type)
 	debug_leave();
 	return module;
 }
+#else
+email_module_t *mailbox_module_alloc();
+email_module_t *viewer_module_alloc();
+email_module_t *composer_module_alloc();
+email_module_t *account_module_alloc();
+email_module_t *setting_module_alloc();
+email_module_t *filter_module_alloc();
+
+email_module_t *_email_module_mgr_alloc_module(email_module_type_e module_type)
+{
+	switch (module_type) {
+	case EMAIL_MODULE_MAILBOX:	return mailbox_module_alloc();
+	case EMAIL_MODULE_VIEWER:	return viewer_module_alloc();
+	case EMAIL_MODULE_COMPOSER:	return composer_module_alloc();
+	case EMAIL_MODULE_ACCOUNT:	return account_module_alloc();
+	case EMAIL_MODULE_SETTING:	return setting_module_alloc();
+	case EMAIL_MODULE_FILTER:	return filter_module_alloc();
+	default:
+		debug_error("Unknown module type: %d", module_type);
+		return NULL;
+	}
+}
+#endif
 
 email_module_h _email_module_mgr_create_module(email_module_type_e module_type, app_control_h params,
 		email_module_listener_t *listener, email_module_t *parent)
