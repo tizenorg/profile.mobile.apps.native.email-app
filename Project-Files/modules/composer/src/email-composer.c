@@ -1732,7 +1732,11 @@ static void _composer_contacts_update_recp_info_for_recipients(EmailComposerUGD 
 /*
  * Definition for exported functions
  */
+#ifdef SHARED_MODULES_FEATURE
 EMAIL_API email_module_t *email_module_alloc()
+#else
+email_module_t *composer_module_alloc()
+#endif
 {
 	debug_enter();
 

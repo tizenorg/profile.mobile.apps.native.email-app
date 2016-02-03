@@ -21,20 +21,13 @@ SET(SRCS
 
 INCLUDE_DIRECTORIES(${CURRENT_SOURCE_DIR}/inc)
 
-SET(email-required-pkgs elementary email-service glib-2.0 gio-2.0 bundle dlog capi-base-utils-i18n
-	capi-appfw-application contacts-service2 notification capi-system-system-settings efl-extension)
-
-pkg_check_modules(pkgs-mailbox REQUIRED "${email-required-pkgs}")
-
-FOREACH(flag ${pkgs-mailbox_CFLAGS})
-	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")
-ENDFOREACH(flag)
-
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS}")
-
-ADD_LIBRARY(${PROJECT_NAME} SHARED ${SRCS})
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} email-common ${pkgs-mailbox_LDFLAGS})
-INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${LIBDIR})
+IF(${BUILD_SHARED_LIBS})
+	ADD_LIBRARY(${PROJECT_NAME} SHARED ${SRCS})
+	TARGET_LINK_LIBRARIES(${PROJECT_NAME} email-common ${pkgs-email_LDFLAGS})
+	INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${LIBDIR})
+ELSE(${BUILD_SHARED_LIBS})
+	ADD_LIBRARY(${PROJECT_NAME} STATIC ${SRCS})
+ENDIF(${BUILD_SHARED_LIBS})
 
 ADD_CUSTOM_COMMAND(
 		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/email-mailbox.edj

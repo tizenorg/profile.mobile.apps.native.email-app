@@ -485,7 +485,11 @@ static bool _app_create_module(app_data_t *ad, app_control_h params)
 	listener.result_cb = _app_module_result_cb;
 	listener.destroy_request_cb = _app_module_destroy_request_cb;
 
+#ifdef SHARED_MODULES_FEATURE
 	email_module_h module = email_module_mgr_create_root_module(APP_MODULE_TYPE, params, &listener);
+#else
+	email_module_h module = email_module_mgr_create_root_module(EMAIL_MODULE_MAILBOX, params, &listener);
+#endif
 	if (!module) {
 		debug_error("Module creation failed.");
 		return false;

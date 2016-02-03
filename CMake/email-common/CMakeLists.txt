@@ -15,48 +15,15 @@ SET(SRCS-common
 	${PROJECT_COMMON_DIR}/src/email-color-box.c
 )
 
-IF(${TIZEN_2_4})
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS} -fpic")
 
-IF(${ENABLE_ATTACH_PANEL})
-	SET(email-required-pkgs ecore glib-2.0 gobject-2.0 email-service storage
-		contacts-service2 capi-content-media-content dlog elementary evas eina edje capi-base-utils-i18n
-		accounts-svc capi-network-connection efl-extension capi-content-mime-type capi-system-system-settings
-		capi-appfw-application ewebkit2 capi-appfw-preference vconf attach-panel feedback)
-ELSE(${ENABLE_ATTACH_PANEL})
-	SET(email-required-pkgs ecore glib-2.0 gobject-2.0 email-service storage
-		contacts-service2 capi-content-media-content dlog elementary evas eina edje capi-base-utils-i18n
-		accounts-svc capi-network-connection efl-extension capi-content-mime-type capi-system-system-settings
-		capi-appfw-application ewebkit2 capi-appfw-preference vconf feedback)
-ENDIF(${ENABLE_ATTACH_PANEL})
-
-ELSE(${TIZEN_2_4})
-
-IF(${ENABLE_ATTACH_PANEL})
-	SET(email-required-pkgs ecore glib-2.0 gobject-2.0 email-service storage
-		contacts-service2 capi-content-media-content dlog elementary evas eina edje capi-base-utils-i18n
-		accounts-svc capi-network-connection efl-extension capi-content-mime-type capi-system-system-settings
-		capi-appfw-application chromium-efl capi-appfw-preference vconf attach-panel feedback libtzplatform-config)
-ELSE(${ENABLE_ATTACH_PANEL})
-	SET(email-required-pkgs ecore glib-2.0 gobject-2.0 email-service storage
-		contacts-service2 capi-content-media-content dlog elementary evas eina edje capi-base-utils-i18n
-		accounts-svc capi-network-connection efl-extension capi-content-mime-type capi-system-system-settings
-		capi-appfw-application chromium-efl capi-appfw-preference vconf feedback libtzplatform-config)
-ENDIF(${ENABLE_ATTACH_PANEL})
-
-ENDIF(${TIZEN_2_4})
-
-
-pkg_check_modules(pkgs-common REQUIRED "${email-required-pkgs}")
-
-FOREACH(flag ${pkgs-common_CFLAGS})
-	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")
-ENDFOREACH(flag)
-
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS}")
-
-ADD_LIBRARY(${PROJECT_NAME} SHARED ${SRCS-common})
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} dl ${pkgs-common_LDFLAGS})
-INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${LIBDIR})
+IF(${BUILD_SHARED_LIBS})
+	ADD_LIBRARY(${PROJECT_NAME} SHARED ${SRCS-common})
+	TARGET_LINK_LIBRARIES(${PROJECT_NAME} dl ${pkgs-email_LDFLAGS})
+	INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${LIBDIR})
+ELSE(${BUILD_SHARED_LIBS})
+	ADD_LIBRARY(${PROJECT_NAME} STATIC ${SRCS-common})
+ENDIF(${BUILD_SHARED_LIBS})
 
 ADD_CUSTOM_COMMAND(
 		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/email-common-theme.edj
@@ -76,4 +43,3 @@ ADD_CUSTOM_COMMAND(
 )
 ADD_CUSTOM_TARGET(email-common-theme.edj ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/email-common-theme.edj)
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/email-common-theme.edj DESTINATION ${EDJDIR})
-
