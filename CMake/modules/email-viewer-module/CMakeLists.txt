@@ -22,31 +22,13 @@ SET(SRCS
 
 INCLUDE_DIRECTORIES(${CURRENT_SOURCE_DIR}/inc)
 
-IF(${TIZEN_2_4})
-SET(email-required-pkgs elementary ecore glib-2.0 gobject-2.0
-	notification capi-media-metadata-extractor capi-media-image-util capi-content-media-content
-	email-service gio-2.0 capi-appfw-application ewebkit2 capi-system-system-settings
-	contacts-service2 bundle dlog efl-extension storage capi-base-utils-i18n)
-ELSE(${TIZEN_2_4})
-SET(email-required-pkgs elementary ecore glib-2.0 gobject-2.0
-	notification capi-media-metadata-extractor capi-media-image-util capi-content-media-content
-	email-service gio-2.0 capi-appfw-application chromium-efl capi-system-system-settings
-	contacts-service2 bundle dlog efl-extension storage capi-base-utils-i18n)
-ENDIF(${TIZEN_2_4})
-
-pkg_check_modules(pkgs-viewer REQUIRED "${email-required-pkgs}")
-
-FOREACH(flag ${pkgs-viewer_CFLAGS})
-	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")
-ENDFOREACH(flag)
-
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS}")
-
-#ADD_DEFINITIONS("-D_WEBKIT_CONSOLE_MESSAGE_LOG")
-
-ADD_LIBRARY(${PROJECT_NAME} SHARED ${SRCS})
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} email-common ${pkgs-viewer_LDFLAGS})
-INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${LIBDIR})
+IF(${BUILD_SHARED_LIBS})
+	ADD_LIBRARY(${PROJECT_NAME} SHARED ${SRCS})
+	TARGET_LINK_LIBRARIES(${PROJECT_NAME} email-common ${pkgs-email_LDFLAGS})
+	INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${LIBDIR})
+ELSE(${BUILD_SHARED_LIBS})
+	ADD_LIBRARY(${PROJECT_NAME} STATIC ${SRCS})
+ENDIF(${BUILD_SHARED_LIBS})
 
 ADD_CUSTOM_COMMAND(
 		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/email-viewer.edj

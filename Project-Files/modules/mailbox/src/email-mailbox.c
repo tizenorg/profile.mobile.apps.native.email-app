@@ -1285,7 +1285,11 @@ static void _mailbox_on_back_key(email_view_t *self)
  * Definition for exported functions
  */
 
+#ifdef SHARED_MODULES_FEATURE
 EMAIL_API email_module_t *email_module_alloc()
+#else
+email_module_t *mailbox_module_alloc()
+#endif
 {
 	debug_enter();
 

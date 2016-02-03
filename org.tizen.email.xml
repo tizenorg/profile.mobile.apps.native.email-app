@@ -1,191 +1,163 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns="http://tizen.org/ns/packages" package="org.tizen.email" api-version="2.4" version="0.9.34" install-location="internal-only">
-	<label>Email</label>
-	<author email="minnsoo.kim@samsung.com" href="www.samsung.com">Minsoo Kim</author>
-	<description>Email Application</description>
-	<ui-application appid="org.tizen.email" exec="/usr/apps/org.tizen.email/bin/email" nodisplay="false" taskmanage="true" multiple="false" type = "capp" mainapp = "true"
-		indicatordisplay="true" process-pool="false" hw-acceleration="use-GL" launch_mode="single">
-		<metadata key="http://developer.samsung.com/tizen/metadata/multiwindow"/>
-		<label>Email</label>
-		<icon>/usr/share/icons/default/small/org.tizen.email.png</icon>
-		<label xml:lang="ar-ae">البريد الإلكتروني</label>
-		<label xml:lang="az-az">Elektron poçtlar</label>
-		<label xml:lang="bg-bg">Email</label>
-		<label xml:lang="ca-es">Correu electrònic</label>
-		<label xml:lang="cs-cz">E-mail</label>
-		<label xml:lang="da-dk">E-mail</label>
-		<label xml:lang="de-de">E-Mail</label>
-		<label xml:lang="el-gr">Email</label>
-		<label xml:lang="en-gb">Email</label>
-		<label xml:lang="en-ph">Email</label>
-		<label xml:lang="en-us">Email</label>
-		<label xml:lang="es-es">Correo electrónico</label>
-		<label xml:lang="es-us">Correo</label>
-		<label xml:lang="et-ee">E-post</label>
-		<label xml:lang="eu-es">Helbide elektronikoa</label>
-		<label xml:lang="fi-fi">Sähköposti</label>
-		<label xml:lang="fr-fr">E-mail</label>
-		<label xml:lang="fr-ca">Courriel</label>
-		<label xml:lang="ga-ie">R-phost</label>
-		<label xml:lang="gl-es">Correo electrónico</label>
-		<label xml:lang="hi-in">ईमेल</label>
-		<label xml:lang="hr-hr">Email</label>
-		<label xml:lang="hu-hu">E-mail</label>
-		<label xml:lang="hy-am">Էլ.փոստ</label>
-		<label xml:lang="is-is">Tölvupóstur</label>
-		<label xml:lang="it-it">E-mail</label>
-		<label xml:lang="ja-jp">Eメール</label>
-		<label xml:lang="ka-ge">ელ-ფოსტა</label>
-		<label xml:lang="kk-kz">Эл. пошта</label>
-		<label xml:lang="ko-kr">이메일</label>
-		<label xml:lang="lt-lt">El. paštas</label>
-		<label xml:lang="lv-lv">E-pasts</label>
-		<label xml:lang="mk-mk">Е-пошта</label>
-		<label xml:lang="nb-no">E-post</label>
-		<label xml:lang="nl-nl">E-mail</label>
-		<label xml:lang="pl-pl">E-mail</label>
-		<label xml:lang="pt-br">E-mail</label>
-		<label xml:lang="pt-pt">E-mail</label>
-		<label xml:lang="ro-ro">Email</label>
-		<label xml:lang="ru-ru">E-mail</label>
-		<label xml:lang="sk-sk">E-mail</label>
-		<label xml:lang="sl-si">E-pošta</label>
-		<label xml:lang="sr-rs">E-pošta</label>
-		<label xml:lang="sv-se">E-post</label>
-		<label xml:lang="tr-tr">E-posta</label>
-		<label xml:lang="uk-ua">Email</label>
-		<label xml:lang="uz-uz">E-pochta</label>
-		<label xml:lang="zh-cn">电子邮件</label>
-		<label xml:lang="zh-hk">電子郵件</label>
-		<label xml:lang="zh-tw">電子郵件</label>
-	</ui-application>
-	<ui-application appid="org.tizen.email-composer" exec="/usr/apps/org.tizen.email/bin/email-composer" hw-acceleration="use-GL" nodisplay="true" multiple="true" type="capp" taskmanage="false" process-pool="false" launch_mode="caller">
-		<metadata key="http://developer.samsung.com/tizen/metadata/multiwindow"/>
-		<metadata key="http://developer.samsung.com/tizen/metadata/multiwindow/nodisplay"/>
-		<label>Email</label>
-		<icon>/usr/share/icons/default/small/org.tizen.email.png</icon>
-		<label xml:lang="ar-ae">البريد الإلكتروني</label>
-		<label xml:lang="az-az">Elektron poçtlar</label>
-		<label xml:lang="bg-bg">Email</label>
-		<label xml:lang="ca-es">Correu electrònic</label>
-		<label xml:lang="cs-cz">E-mail</label>
-		<label xml:lang="da-dk">E-mail</label>
-		<label xml:lang="de-de">E-Mail</label>
-		<label xml:lang="el-gr">Email</label>
-		<label xml:lang="en-gb">Email</label>
-		<label xml:lang="en-ph">Email</label>
-		<label xml:lang="en-us">Email</label>
-		<label xml:lang="es-es">Correo electrónico</label>
-		<label xml:lang="es-us">Correo</label>
-		<label xml:lang="et-ee">E-post</label>
-		<label xml:lang="eu-es">Helbide elektronikoa</label>
-		<label xml:lang="fi-fi">Sähköposti</label>
-		<label xml:lang="fr-fr">E-mail</label>
-		<label xml:lang="fr-ca">Courriel</label>
-		<label xml:lang="ga-ie">R-phost</label>
-		<label xml:lang="gl-es">Correo electrónico</label>
-		<label xml:lang="hi-in">ईमेल</label>
-		<label xml:lang="hr-hr">Email</label>
-		<label xml:lang="hu-hu">E-mail</label>
-		<label xml:lang="hy-am">Էլ.փոստ</label>
-		<label xml:lang="is-is">Tölvupóstur</label>
-		<label xml:lang="it-it">E-mail</label>
-		<label xml:lang="ja-jp">Eメール</label>
-		<label xml:lang="ka-ge">ელ-ფოსტა</label>
-		<label xml:lang="kk-kz">Эл. пошта</label>
-		<label xml:lang="ko-kr">이메일</label>
-		<label xml:lang="lt-lt">El. paštas</label>
-		<label xml:lang="lv-lv">E-pasts</label>
-		<label xml:lang="mk-mk">Е-пошта</label>
-		<label xml:lang="nb-no">E-post</label>
-		<label xml:lang="nl-nl">E-mail</label>
-		<label xml:lang="pl-pl">E-mail</label>
-		<label xml:lang="pt-br">E-mail</label>
-		<label xml:lang="pt-pt">E-mail</label>
-		<label xml:lang="ro-ro">Email</label>
-		<label xml:lang="ru-ru">E-mail</label>
-		<label xml:lang="sk-sk">E-mail</label>
-		<label xml:lang="sl-si">E-pošta</label>
-		<label xml:lang="sr-rs">E-pošta</label>
-		<label xml:lang="sv-se">E-post</label>
-		<label xml:lang="tr-tr">E-posta</label>
-		<label xml:lang="uk-ua">Email</label>
-		<label xml:lang="uz-uz">E-pochta</label>
-		<label xml:lang="zh-cn">电子邮件</label>
-		<label xml:lang="zh-hk">電子郵件</label>
-		<label xml:lang="zh-tw">電子郵件</label>
-
-		<application-service>
-			<operation name="http://tizen.org/appcontrol/operation/compose"/>
-		</application-service>
-		<application-service>
-			<operation name="http://tizen.org/appcontrol/operation/compose"/>
-			<uri name="mailto"/>
-		</application-service>
-
-		<application-service>
-			<operation name="http://tizen.org/appcontrol/operation/share_text"/>
-		</application-service>
-		<application-service>
-			<operation name="http://tizen.org/appcontrol/operation/share_text"/>
-			<uri name="mailto"/>
-		</application-service>
-
-		<application-service>
-			<operation name="http://tizen.org/appcontrol/operation/share"/>
-			<mime name="*/*"/>
-		</application-service>
-		<application-service>
-			<operation name="http://tizen.org/appcontrol/operation/share"/>
-			<mime name="*/*"/>
-			<uri name="mailto"/>
-		</application-service>
-
-		<application-service>
-			<operation name="http://tizen.org/appcontrol/operation/multi_share"/>
-			<mime name="*/*"/>
-		</application-service>
-		<application-service>
-			<operation name="http://tizen.org/appcontrol/operation/multi_share"/>
-			<mime name="*/*"/>
-			<uri name="mailto"/>
-		</application-service>
-
-	</ui-application>
-	<ui-application appid="org.tizen.email-setting" exec="/usr/apps/org.tizen.email/bin/email-setting" hw-acceleration="use-GL" nodisplay="true" multiple="true" type="capp" taskmanage="false" process-pool="false" launch_mode="caller">
-		<metadata key="http://developer.samsung.com/tizen/metadata/multiwindow"/>
-		<metadata key="http://developer.samsung.com/tizen/metadata/multiwindow/nodisplay"/>
-		<label>Email</label>
-		<icon>/usr/share/icons/default/small/org.tizen.email.png</icon>
-		<application-service>
-			<operation name="tizen-email://org.tizen.email/email_setting_notification"/>
-		</application-service>
-		<application-service>
-			<operation name="tizen-email://org.tizen.email/email_setting_signature"/>
-		</application-service>
-	</ui-application>
-	<account>
-		<account-provider appid="org.tizen.email-setting" providerid="http://www.tizen.org/" multiple-accounts-support="true">
-			<icon section="account">/usr/share/icons/default/small/org.tizen.email.png</icon>
-			<icon section="account-small">/usr/share/icons/default/small/org.tizen.email.png</icon>
-			<label xml:lang="nl-nl">Email</label>
-			<label>Email</label>
-			<label xml:lang="en-gb">Email</label>
-			<capability>http://tizen.org/account/capability/email</capability>
-		</account-provider>
-	</account>
-	<privileges>
-		<privilege>http://tizen.org/privilege/mediastorage</privilege>
-		<privilege>http://tizen.org/privilege/externalstorage</privilege>
-		<privilege>http://tizen.org/privilege/appmanager.launch</privilege>
-		<privilege>http://tizen.org/privilege/camera</privilege>
-		<privilege>http://tizen.org/privilege/recorder</privilege>
-		<privilege>http://tizen.org/privilege/notification</privilege>
-		<privilege>http://tizen.org/privilege/haptic</privilege>
-		<privilege>http://tizen.org/privilege/email</privilege>
-		<privilege>http://tizen.org/privilege/account.read</privilege>
-		<privilege>http://tizen.org/privilege/account.write</privilege>
-		<privilege>http://tizen.org/privilege/network.get</privilege>
-		<privilege>http://tizen.org/privilege/contact.read</privilege>
-	</privileges>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<manifest xmlns="http://tizen.org/ns/packages" api-version="3.0" package="org.tizen.email" version="0.9.34">
+    <profile name="mobile"/>
+    <description>Email Application</description>
+    <ui-application appid="org.tizen.email" exec="/usr/apps/org.tizen.email/bin/email" hw-acceleration="on" launch_mode="single" multiple="false" nodisplay="false" taskmanage="true" type="capp">
+        <icon>org.tizen.email.png</icon>
+        <label>Email</label>
+        <label xml:lang="ar-ae">البريد الإلكتروني</label>
+        <label xml:lang="az-az">Elektron poçtlar</label>
+        <label xml:lang="bg-bg">Email</label>
+        <label xml:lang="ca-es">Correu electrònic</label>
+        <label xml:lang="cs-cz">E-mail</label>
+        <label xml:lang="da-dk">E-mail</label>
+        <label xml:lang="de-de">E-Mail</label>
+        <label xml:lang="el-gr">Email</label>
+        <label xml:lang="en-gb">Email</label>
+        <label xml:lang="en-ph">Email</label>
+        <label xml:lang="en-us">Email</label>
+        <label xml:lang="es-es">Correo electrónico</label>
+        <label xml:lang="es-us">Correo</label>
+        <label xml:lang="et-ee">E-post</label>
+        <label xml:lang="eu-es">Helbide elektronikoa</label>
+        <label xml:lang="fi-fi">Sähköposti</label>
+        <label xml:lang="fr-fr">E-mail</label>
+        <label xml:lang="fr-ca">Courriel</label>
+        <label xml:lang="ga-ie">R-phost</label>
+        <label xml:lang="gl-es">Correo electrónico</label>
+        <label xml:lang="hi-in">ईमेल</label>
+        <label xml:lang="hr-hr">Email</label>
+        <label xml:lang="hu-hu">E-mail</label>
+        <label xml:lang="hy-am">Էլ.փոստ</label>
+        <label xml:lang="is-is">Tölvupóstur</label>
+        <label xml:lang="it-it">E-mail</label>
+        <label xml:lang="ja-jp">Eメール</label>
+        <label xml:lang="ka-ge">ელ-ფოსტა</label>
+        <label xml:lang="kk-kz">Эл. пошта</label>
+        <label xml:lang="ko-kr">이메일</label>
+        <label xml:lang="lt-lt">El. paštas</label>
+        <label xml:lang="lv-lv">E-pasts</label>
+        <label xml:lang="mk-mk">Е-пошта</label>
+        <label xml:lang="nb-no">E-post</label>
+        <label xml:lang="nl-nl">E-mail</label>
+        <label xml:lang="pl-pl">E-mail</label>
+        <label xml:lang="pt-br">E-mail</label>
+        <label xml:lang="pt-pt">E-mail</label>
+        <label xml:lang="ro-ro">Email</label>
+        <label xml:lang="ru-ru">E-mail</label>
+        <label xml:lang="sk-sk">E-mail</label>
+        <label xml:lang="sl-si">E-pošta</label>
+        <label xml:lang="sr-rs">E-pošta</label>
+        <label xml:lang="sv-se">E-post</label>
+        <label xml:lang="tr-tr">E-posta</label>
+        <label xml:lang="uk-ua">Email</label>
+        <label xml:lang="uz-uz">E-pochta</label>
+        <label xml:lang="zh-cn">电子邮件</label>
+        <label xml:lang="zh-hk">電子郵件</label>
+        <label xml:lang="zh-tw">電子郵件</label>
+        <app-control>
+            <operation name="http://tizen.org/appcontrol/operation/compose"/>
+        </app-control>
+        <app-control>
+            <operation name="http://tizen.org/appcontrol/operation/compose"/>
+            <uri name="mailto"/>
+        </app-control>
+        <app-control>
+            <operation name="http://tizen.org/appcontrol/operation/share_text"/>
+        </app-control>
+        <app-control>
+            <operation name="http://tizen.org/appcontrol/operation/share_text"/>
+            <uri name="mailto"/>
+        </app-control>
+        <app-control>
+            <operation name="http://tizen.org/appcontrol/operation/share"/>
+            <mime name="*/*&quot;"/>
+        </app-control>
+        <app-control>
+            <operation name="http://tizen.org/appcontrol/operation/share"/>
+            <uri name="mailto"/>
+            <mime name="*/*&quot;"/>
+        </app-control>
+        <app-control>
+            <operation name="http://tizen.org/appcontrol/operation/multi_share"/>
+            <mime name="application/xhtml+xml"/>
+        </app-control>
+        <app-control>
+            <operation name="http://tizen.org/appcontrol/operation/multi_share"/>
+            <uri name="mailto"/>
+            <mime name="*/*"/>
+        </app-control>
+    </ui-application>
+    <account>
+        <account-provider appid="org.tizen.email" multiple-accounts-support="true" providerid="http://www.tizen.org/">
+            <icon section="account">org.tizen.email.png</icon>
+            <icon section="account-small">org.tizen.email.png</icon>
+            <label>Email</label>
+            <label xml:lang="ar-ae">البريد الإلكتروني</label>
+            <label xml:lang="az-az">Elektron poçtlar</label>
+            <label xml:lang="bg-bg">Email</label>
+            <label xml:lang="ca-es">Correu electrònic</label>
+            <label xml:lang="cs-cz">E-mail</label>
+            <label xml:lang="da-dk">E-mail</label>
+            <label xml:lang="de-de">E-Mail</label>
+            <label xml:lang="el-gr">Email</label>
+            <label xml:lang="en-gb">Email</label>
+            <label xml:lang="en-ph">Email</label>
+            <label xml:lang="en-us">Email</label>
+            <label xml:lang="es-es">Correo electrónico</label>
+            <label xml:lang="es-us">Correo</label>
+            <label xml:lang="et-ee">E-post</label>
+            <label xml:lang="eu-es">Helbide elektronikoa</label>
+            <label xml:lang="fi-fi">Sähköposti</label>
+            <label xml:lang="fr-fr">E-mail</label>
+            <label xml:lang="fr-ca">Courriel</label>
+            <label xml:lang="ga-ie">R-phost</label>
+            <label xml:lang="gl-es">Correo electrónico</label>
+            <label xml:lang="hi-in">ईमेल</label>
+            <label xml:lang="hr-hr">Email</label>
+            <label xml:lang="hu-hu">E-mail</label>
+            <label xml:lang="hy-am">Էլ.փոստ</label>
+            <label xml:lang="is-is">Tölvupóstur</label>
+            <label xml:lang="it-it">E-mail</label>
+            <label xml:lang="ja-jp">Eメール</label>
+            <label xml:lang="ka-ge">ელ-ფოსტა</label>
+            <label xml:lang="kk-kz">Эл. пошта</label>
+            <label xml:lang="ko-kr">이메일</label>
+            <label xml:lang="lt-lt">El. paštas</label>
+            <label xml:lang="lv-lv">E-pasts</label>
+            <label xml:lang="mk-mk">Е-пошта</label>
+            <label xml:lang="nb-no">E-post</label>
+            <label xml:lang="nl-nl">E-mail</label>
+            <label xml:lang="pl-pl">E-mail</label>
+            <label xml:lang="pt-br">E-mail</label>
+            <label xml:lang="pt-pt">E-mail</label>
+            <label xml:lang="ro-ro">Email</label>
+            <label xml:lang="ru-ru">E-mail</label>
+            <label xml:lang="sk-sk">E-mail</label>
+            <label xml:lang="sl-si">E-pošta</label>
+            <label xml:lang="sr-rs">E-pošta</label>
+            <label xml:lang="sv-se">E-post</label>
+            <label xml:lang="tr-tr">E-posta</label>
+            <label xml:lang="uk-ua">Email</label>
+            <label xml:lang="uz-uz">E-pochta</label>
+            <label xml:lang="zh-cn">电子邮件</label>
+            <label xml:lang="zh-hk">電子郵件</label>
+            <label xml:lang="zh-tw">電子郵件</label>
+            <capability>http://tizen.org/account/capability/email</capability>
+        </account-provider>
+    </account>
+    <privileges>
+        <privilege>http://tizen.org/privilege/recorder</privilege>
+        <privilege>http://tizen.org/privilege/account.write</privilege>
+        <privilege>http://tizen.org/privilege/network.get</privilege>
+        <privilege>http://tizen.org/privilege/mediastorage</privilege>
+        <privilege>http://tizen.org/privilege/camera</privilege>
+        <privilege>http://tizen.org/privilege/notification</privilege>
+        <privilege>http://tizen.org/privilege/appmanager.launch</privilege>
+        <privilege>http://tizen.org/privilege/haptic</privilege>
+        <privilege>http://tizen.org/privilege/account.read</privilege>
+        <privilege>http://tizen.org/privilege/email</privilege>
+        <privilege>http://tizen.org/privilege/externalstorage</privilege>
+        <privilege>http://tizen.org/privilege/contact.read</privilege>
+    </privileges>
 </manifest>

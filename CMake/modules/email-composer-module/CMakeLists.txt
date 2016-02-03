@@ -27,30 +27,13 @@ SET(SRCS
 
 INCLUDE_DIRECTORIES(${CURRENT_SOURCE_DIR}/inc)
 
-IF(${TIZEN_2_4})
-SET(email-required-pkgs ecore glib-2.0 gobject-2.0 gio-2.0 elementary capi-appfw-application
-	capi-media-metadata-extractor capi-media-image-util notification evas dlog email-service contacts-service2
-	libexif ewebkit2 bundle efl-extension capi-system-system-settings
-	capi-network-connection capi-network-wifi libpng storage capi-content-media-content)
-ELSE(${TIZEN_2_4})
-SET(email-required-pkgs ecore glib-2.0 gobject-2.0 gio-2.0 elementary capi-appfw-application
-	capi-media-metadata-extractor capi-media-image-util notification evas dlog email-service contacts-service2
-	libexif chromium-efl bundle efl-extension capi-system-system-settings
-	capi-network-connection capi-network-wifi libpng storage capi-content-media-content)
-ENDIF(${TIZEN_2_4})
-
-pkg_check_modules(pkgs-composer REQUIRED "${email-required-pkgs}")
-
-FOREACH(flag ${pkgs-composer_CFLAGS})
-	SET(EXTRA_FLAGS "${EXTRA_FLAGS} ${flag}")
-ENDFOREACH(flag)
-
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_FLAGS}")
-#SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,nodelete")
-
-ADD_LIBRARY(${PROJECT_NAME} SHARED ${SRCS})
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} email-common rt ${pkgs-composer_LDFLAGS})
-INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${LIBDIR})
+IF(${BUILD_SHARED_LIBS})
+	ADD_LIBRARY(${PROJECT_NAME} SHARED ${SRCS})
+	TARGET_LINK_LIBRARIES(${PROJECT_NAME} email-common rt ${pkgs-email_LDFLAGS})
+	INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${LIBDIR})
+ELSE(${BUILD_SHARED_LIBS})
+	ADD_LIBRARY(${PROJECT_NAME} STATIC ${SRCS})
+ENDIF(${BUILD_SHARED_LIBS})
 
 ADD_CUSTOM_COMMAND(
 		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/email-composer-view.edj

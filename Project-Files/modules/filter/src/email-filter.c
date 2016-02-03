@@ -140,7 +140,11 @@ static EmailFilterViewType _parse_option(EmailFilterUGD *ugd, app_control_h data
 	return EMAIL_FILTER_VIEW_INVALID;
 }
 
+#ifdef SHARED_MODULES_FEATURE
 EMAIL_API email_module_t *email_module_alloc()
+#else
+email_module_t *filter_module_alloc()
+#endif
 {
 	debug_enter();
 

@@ -18,6 +18,8 @@ ExcludeArch: %{arm} %ix86 x86_64
 
 %define _enable_attach_panel 1
 
+%define _build_shared_libs 1
+
 Requires: email-service
 BuildRequires: cmake
 BuildRequires: edje-tools
@@ -113,6 +115,7 @@ cd %{_tmp_buld_dir}
 
 cmake ../../CMake -DCMAKE_INSTALL_PREFIX=%{_pkg_dir} \
 	-DENABLE_ATTACH_PANEL=%{_enable_attach_panel} \
+	-DBUILD_SHARED_LIBS=%{_build_shared_libs} \
 	-DSYS_ICONS_DIR=%{_sys_icons_dir} \
 	-DSYS_PACKAGES_DIR=%{_sys_packages_dir} \
 %if 0%{?_tizen_2_4}
@@ -166,7 +169,9 @@ pkgdir_maker --create --pkgid=%{name}
 %{_sys_smack_dir}/%{name}.efl
 %endif
 
+%if 0%{?_build_shared_libs}
 %{_pkg_lib_dir}/*.so
+%endif
 
 %{_pkg_dir}/res/edje/email-common-theme.edj
 %{_pkg_dir}/res/edje/email-setting-theme.edj
@@ -180,8 +185,11 @@ pkgdir_maker --create --pkgid=%{name}
 %{_pkg_dir}/res/misc/*
 
 %{_pkg_dir}/bin/email
+
+%if 0%{?_build_shared_libs}
 %{_pkg_dir}/bin/email-setting
 %{_pkg_dir}/bin/email-composer
+%endif
 
 %{_sys_icons_dir}/%{name}.png
 %{_sys_packages_dir}/%{name}.xml

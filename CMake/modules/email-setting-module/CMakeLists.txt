@@ -21,21 +21,13 @@ SET(SRCS
 
 INCLUDE_DIRECTORIES(${CURRENT_SOURCE_DIR}/inc)
 
-SET(email-required-pkgs ecore glib-2.0 gobject-2.0 elementary notification email-service
-	bundle dlog gio-2.0 capi-appfw-application contacts-service2 capi-base-utils-i18n
-	accounts-svc capi-system-system-settings efl-extension libxml-2.0 capi-media-metadata-extractor)
-
-pkg_check_modules(pkgs-setting REQUIRED "${email-required-pkgs}")
-	
-FOREACH(flag ${pkgs-setting_CFLAGS})
-	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")
-ENDFOREACH(flag)
-
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS}")
-
-ADD_LIBRARY(${PROJECT_NAME} SHARED ${SRCS})
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} email-common ${pkgs-setting_LDFLAGS})
-INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${LIBDIR})
+IF(${BUILD_SHARED_LIBS})
+	ADD_LIBRARY(${PROJECT_NAME} SHARED ${SRCS})
+	TARGET_LINK_LIBRARIES(${PROJECT_NAME} email-common ${pkgs-email_LDFLAGS})
+	INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${LIBDIR})
+ELSE(${BUILD_SHARED_LIBS})
+	ADD_LIBRARY(${PROJECT_NAME} STATIC ${SRCS})
+ENDIF(${BUILD_SHARED_LIBS})
 
 ADD_CUSTOM_COMMAND(
 		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/email-setting-theme.edj
