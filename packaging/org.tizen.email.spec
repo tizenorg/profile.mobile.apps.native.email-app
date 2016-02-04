@@ -18,7 +18,7 @@ ExcludeArch: %{arm} %ix86 x86_64
 
 %define _enable_attach_panel 1
 
-%define _build_shared_libs 1
+%define _build_shared_libs 0
 
 Requires: email-service
 BuildRequires: cmake

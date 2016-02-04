@@ -19,6 +19,7 @@
 #include <system_settings.h>
 #include <Elementary.h>
 #include <utils_i18n.h>
+#include <account-types.h>
 
 #include "email-module.h"
 #include "email-utils.h"
@@ -79,6 +80,7 @@ static bool _app_register_callbacks(app_data_t *ad);
 
 static void _app_finalize(app_data_t *ad);
 
+static email_module_type_e _app_get_module_type(app_control_h params);
 static bool _app_create_module(app_data_t *ad, app_control_h params);
 static bool _app_recreate_module(app_data_t *ad);
 
@@ -131,7 +133,7 @@ void _app_control_cb(app_control_h app_control, void *user_data)
 		debug_log("Sending message to the module...");
 		email_module_send_message(ad->module, app_control);
 	} else {
-		debug_warning("Module manager in transiton state. Ingoring message...");
+		debug_warning("Module manager in transition state. Ignoring message...");
 	}
 
 	debug_leave();
@@ -475,6 +477,47 @@ void _app_finalize(app_data_t *ad)
 	email_engine_finalize_force();
 }
 
+static email_module_type_e _app_get_module_type(app_control_h params)
+{
+#ifdef SHARED_MODULES_FEATURE
+	return APP_MODULE_TYPE;
+#endif
+
+	email_module_type_e module_type = EMAIL_MODULE_MAILBOX;
+
+	app_control_launch_mode_e launch_mode = APP_CONTROL_LAUNCH_MODE_SINGLE;
+	int r = app_control_get_launch_mode(params, &launch_mode);
+	if (r != APP_CONTROL_ERROR_NONE) {
+		debug_log("app_control_get_launch_mode(): failed (%d)", r);
+		return module_type;
+	}
+
+	if (launch_mode != APP_CONTROL_LAUNCH_MODE_SINGLE) {
+		char *operation = NULL;
+		r = app_control_get_operation(params, &operation);
+		if (r != APP_CONTROL_ERROR_NONE) {
+			debug_error("app_control_get_operation(): failed (%d)", r);
+			return module_type;
+		}
+		if (operation) {
+			if ((strcmp(operation, APP_CONTROL_OPERATION_COMPOSE) == 0) ||
+				(strcmp(operation, APP_CONTROL_OPERATION_SHARE) == 0) ||
+				(strcmp(operation, APP_CONTROL_OPERATION_MULTI_SHARE) == 0) ||
+				(strcmp(operation, APP_CONTROL_OPERATION_SHARE_TEXT) == 0)) {
+				module_type = EMAIL_MODULE_COMPOSER;
+			} if ((strcmp(operation, ACCOUNT_OPERATION_SIGNIN) == 0) ||
+				  (strcmp(operation, ACCOUNT_OPERATION_VIEW) == 0)) {
+				module_type = EMAIL_MODULE_SETTING;
+			}
+			FREE(operation);
+		}
+	}
+
+	debug_log("module_type: %d", (int)module_type);
+
+	return module_type;
+}
+
 static bool _app_create_module(app_data_t *ad, app_control_h params)
 {
 	debug_enter();
@@ -485,11 +528,8 @@ static bool _app_create_module(app_data_t *ad, app_control_h params)
 	listener.result_cb = _app_module_result_cb;
 	listener.destroy_request_cb = _app_module_destroy_request_cb;
 
-#ifdef SHARED_MODULES_FEATURE
-	email_module_h module = email_module_mgr_create_root_module(APP_MODULE_TYPE, params, &listener);
-#else
-	email_module_h module = email_module_mgr_create_root_module(EMAIL_MODULE_MAILBOX, params, &listener);
-#endif
+	email_module_h module = email_module_mgr_create_root_module(
+			_app_get_module_type(params), params, &listener);
 	if (!module) {
 		debug_error("Module creation failed.");
 		return false;
