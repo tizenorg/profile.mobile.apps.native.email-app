@@ -21,7 +21,8 @@
 #include "email-setting-utils.h"
 
 #ifdef _TIZEN_2_4_BUILD_
-#define ACCOUNT_ICON_PATH "/usr/share/icons/default/small/org.tizen.email.png"
+EMAIL_DEFINE_SHARED_RES_PATH(_get_account_icon_dir, "/org.tizen.email.png");
+#define ACCOUNT_ICON_PATH _get_account_icon_dir()
 #else
 #include <tzplatform_config.h>
 #define ACCOUNT_ICON_PATH tzplatform_mkpath(TZ_SYS_RO_ICONS, "/default/small/org.tizen.email.png")

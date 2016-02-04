@@ -85,7 +85,7 @@ Description: Native email application
 %define _pkg_lib_dir %{_pkg_dir}/lib
 %define _pkg_shared_dir %{_pkg_dir}/shared
 %define _opt_pkg_dir %{_opt_dir}/%{_pkg_dir}
-%define _sys_icons_dir %{_share_dir}/icons/default/small
+%define _sys_icons_dir %{_pkg_shared_dir}/res
 %define _sys_packages_dir %{_share_dir}/packages
 %define _sys_license_dir %{_share_dir}/license
 %define _sys_smack_dir /etc/smack/accesses.d
