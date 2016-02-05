@@ -18,7 +18,6 @@
 #ifndef __EMAIL_COMPOSER_UTIL_H__
 #define __EMAIL_COMPOSER_UTIL_H__
 
-#include <png.h>
 #include "email-utils-contacts.h"
 
 /**
@@ -664,7 +663,6 @@ void composer_util_show_preview(ComposerAttachmentItemData *attach_item_data);
  */
 void composer_util_network_state_noti_post();
 
-#ifdef ATTACH_PANEL_FEATURE
 /**
  * @brief Update attach panel bundles
  *
@@ -672,7 +670,6 @@ void composer_util_network_state_noti_post();
  *
  */
 void composer_util_update_attach_panel_bundles(EmailComposerUGD *ugd);
-#endif
 
 /**
  * @brief Creates popup for creating vcard

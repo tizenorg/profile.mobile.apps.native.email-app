@@ -35,6 +35,9 @@
 
 #define APP_HANDLERS_COUNT 4
 
+#ifndef SHARED_MODULES_FEATURE
+#define APP_USE_SIG
+#endif
 #ifdef APP_USE_SIG
 int g_email_sig_to_handle[] = {SIGILL, SIGABRT, SIGFPE, SIGSEGV};
 #define APP_SIG_COUNT ((int)(sizeof(g_email_sig_to_handle) / sizeof(g_email_sig_to_handle[0])))

@@ -711,11 +711,7 @@ static Eina_Bool __composer_util_focus_set_focus_idler_cb(void *data)
 
 	ugd->idler_set_focus = NULL;
 
-#ifdef ATTACH_PANEL_FEATURE
 	if (!entry && !ugd->base.module->is_attach_panel_launched && (ugd->selected_entry != ugd->ewk_view)) {
-#else
-	if (!entry && (ugd->selected_entry != ugd->ewk_view)) {
-#endif
 		entry = ugd->selected_entry;
 	}
 
@@ -1246,7 +1242,6 @@ void composer_util_show_preview(ComposerAttachmentItemData *attach_item_data)
 	return;
 }
 
-#ifdef ATTACH_PANEL_FEATURE
 void composer_util_update_attach_panel_bundles(EmailComposerUGD *ugd)
 {
 	debug_enter();
@@ -1274,7 +1269,6 @@ void composer_util_update_attach_panel_bundles(EmailComposerUGD *ugd)
 
 	debug_leave();
 }
-#endif
 
 void composer_util_set_entry_text_style(Evas_Object *entry)
 {

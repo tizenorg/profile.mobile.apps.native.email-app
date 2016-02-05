@@ -114,18 +114,18 @@ G_BEGIN_DECLS
 
 #else	/* _DEBUG */
 
-#define debug_trace(fmt, args...)
-#define debug_log(fmt, args...)
-#define debug_warning(fmt, args...)
-#define debug_error(fmt, args...)
-#define debug_critical(fmt, args...)
-#define debug_fatal(fmt, args...)
+#define debug_trace(fmt, args...) do { NOP("" fmt, ##args); } while (0)
+#define debug_log(fmt, args...) do { NOP("" fmt, ##args); } while (0)
+#define debug_warning(fmt, args...) do { NOP("" fmt, ##args); } while (0)
+#define debug_error(fmt, args...) do { NOP("" fmt, ##args); } while (0)
+#define debug_critical(fmt, args...) do { NOP("" fmt, ##args); } while (0)
+#define debug_fatal(fmt, args...) do { NOP("" fmt, ##args); } while (0)
 
 #define debug_trace_if(fmt, args...)
 #define debug_log_if(fmt, args...)
-#define debug_warning_if(fmt, args...)
-#define debug_error_if(fmt, args...)
-#define debug_fatal_if(fmt, args...)
+#define debug_warning_if(expr, fmt, args...) do { if (expr) NOP("" fmt, ##args); } while (0)
+#define debug_error_if(expr, fmt, args...) do { if (expr) NOP("" fmt, ##args); } while (0)
+#define debug_fatal_if(expr, fmt, args...) do { if (expr) NOP("" fmt, ##args); } while (0)
 
 #define debug_secure_trace(fmt, args...)
 #define debug_secure(fmt, args...)

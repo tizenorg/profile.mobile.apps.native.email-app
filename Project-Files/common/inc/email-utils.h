@@ -409,8 +409,8 @@ EMAIL_API void email_set_is_inbox_active(bool is_active);
 
 EMAIL_API char *email_get_datetime_format(void);
 
-EMAIL_API inline char *email_get_system_string(const char *string_id);
-EMAIL_API inline char *email_get_email_string(const char *string_id);
+EMAIL_API char *email_get_system_string(const char *string_id);
+EMAIL_API char *email_get_email_string(const char *string_id);
 
 EMAIL_API Elm_Genlist_Item_Class* email_util_get_genlist_item_class(const char *style,
 		Elm_Gen_Item_Text_Get_Cb text_get,

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <manifest xmlns="http://tizen.org/ns/packages" api-version="3.0" package="org.tizen.email" version="0.9.34">
-    <profile name="mobile"/>
     <description>Email Application</description>
+    <profile name="mobile"/>
     <ui-application appid="org.tizen.email" exec="email" hw-acceleration="on" launch_mode="caller" multiple="false" nodisplay="false" taskmanage="true" type="capp">
-        <icon>org.tizen.email.png</icon>
         <label>Email</label>
         <label xml:lang="ar-ae">البريد الإلكتروني</label>
         <label xml:lang="az-az">Elektron poçtlar</label>
@@ -55,6 +54,7 @@
         <label xml:lang="zh-cn">电子邮件</label>
         <label xml:lang="zh-hk">電子郵件</label>
         <label xml:lang="zh-tw">電子郵件</label>
+        <icon>org.tizen.email.png</icon>
         <app-control>
             <operation name="http://tizen.org/appcontrol/operation/compose"/>
         </app-control>
@@ -92,7 +92,6 @@
         <account-provider appid="org.tizen.email" multiple-accounts-support="true" providerid="http://www.tizen.org/">
             <icon section="account">org.tizen.email.png</icon>
             <icon section="account-small">org.tizen.email.png</icon>
-            <label>Email</label>
             <label xml:lang="ar-ae">البريد الإلكتروني</label>
             <label xml:lang="az-az">Elektron poçtlar</label>
             <label xml:lang="bg-bg">Email</label>
@@ -143,6 +142,7 @@
             <label xml:lang="zh-cn">电子邮件</label>
             <label xml:lang="zh-hk">電子郵件</label>
             <label xml:lang="zh-tw">電子郵件</label>
+            <label>Email</label>
             <capability>http://tizen.org/account/capability/email</capability>
         </account-provider>
     </account>
@@ -153,11 +153,11 @@
         <privilege>http://tizen.org/privilege/mediastorage</privilege>
         <privilege>http://tizen.org/privilege/camera</privilege>
         <privilege>http://tizen.org/privilege/notification</privilege>
-        <privilege>http://tizen.org/privilege/appmanager.launch</privilege>
         <privilege>http://tizen.org/privilege/haptic</privilege>
+        <privilege>http://tizen.org/privilege/appmanager.launch</privilege>
         <privilege>http://tizen.org/privilege/account.read</privilege>
         <privilege>http://tizen.org/privilege/email</privilege>
-        <privilege>http://tizen.org/privilege/externalstorage</privilege>
         <privilege>http://tizen.org/privilege/contact.read</privilege>
+        <privilege>http://tizen.org/privilege/externalstorage</privilege>
     </privileges>
 </manifest>

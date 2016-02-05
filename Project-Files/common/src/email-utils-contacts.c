@@ -729,9 +729,7 @@ EMAIL_API int email_contacts_get_contact_name_by_email_address(char *email_addre
 			return ret;
 	}
 
-	if (contact_info->display_name) {
-		*contact_name = strdup(contact_info->display_name);
-	}
+	*contact_name = strdup(contact_info->display_name);
 
 	email_contacts_delete_contact_info(&contact_info);
 

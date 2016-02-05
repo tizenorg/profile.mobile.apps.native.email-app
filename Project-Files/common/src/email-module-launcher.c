@@ -1,8 +1,6 @@
 #include "email-module-dev.h"
 
-#ifdef ATTACH_PANEL_FEATURE
 #include <attach_panel.h>
-#endif
 
 #include "email-debug.h"
 
@@ -45,7 +43,6 @@ static void _email_module_terminate_any_launched_app(email_module_t *module, boo
  */
 static void _email_module_reset_app_launch_state(email_module_t *module, bool notify_close, bool reset_listener);
 
-#ifdef ATTACH_PANEL_FEATURE
 /**
  * @brief Frees attach panel if it was created
  *
@@ -68,7 +65,6 @@ static void _email_module_free_attach_panel_bundles(email_module_t *module);
  */
 static void _email_module_free_attach_panel_bundle(email_module_t *module,
 		email_attach_panel_category_type_e category_type);
-#endif
 
 /**
  * @brief Handler method of the launched application reply callback
@@ -91,7 +87,6 @@ static void _email_module_app_reply_cb(app_control_h request, app_control_h repl
  */
 static Eina_Bool _email_module_app_timer_cb(void *data);
 
-#ifdef ATTACH_PANEL_FEATURE
 /**
  * @brief Creates attach panel with categories and registered callbacks
  *
@@ -139,7 +134,6 @@ static void _email_module_attach_panel_event_cb(attach_panel_h attach_panel,
 		attach_panel_event_e event,
 		void *event_info,
 		void *user_data);
-#endif
 
 int email_module_launch_app(email_module_t *module, email_launch_app_type_e app_type,
 		app_control_h params, email_launched_app_listener_t *listener)
@@ -229,7 +223,7 @@ int email_module_launch_app(email_module_t *module, email_launch_app_type_e app_
 
 	return -1;
 }
-#ifdef ATTACH_PANEL_FEATURE
+
 int email_module_launch_attach_panel(email_module_t *module, email_attach_panel_listener_t *listener)
 {
 	debug_enter();
@@ -309,7 +303,6 @@ int email_module_set_attach_panel_category_bundle(email_module_t *module,
 	debug_leave();
 	return 0;
 }
-#endif
 
 void email_module_terminate_any_launched_app(email_module_t *module, bool notify_close)
 {
@@ -366,10 +359,8 @@ void _email_module_handle_launcher_finalize(email_module_t *module)
 	/* Terminating launched application and attach panel if any */
 	_email_module_terminate_any_launched_app(module, false);
 
-#ifdef ATTACH_PANEL_FEATURE
 	/* Free attach panel category bundles */
 	_email_module_free_attach_panel_bundles(module);
-#endif
 
 	debug_leave();
 }
@@ -391,7 +382,6 @@ void _email_module_terminate_any_launched_app(email_module_t *module, bool notif
 
 	}
 
-#ifdef ATTACH_PANEL_FEATURE
 	/* If attach panel was launched */
 	if (module->is_attach_panel_launched) {
 		debug_log("Closing attach panel");
@@ -402,7 +392,6 @@ void _email_module_terminate_any_launched_app(email_module_t *module, bool notif
 
 	/* Free the attach panel in any case */
 	_email_module_free_attach_panel(module);
-#endif
 }
 
 void _email_module_reset_app_launch_state(email_module_t *module, bool notify_close, bool reset_listener)
@@ -442,7 +431,6 @@ void _email_module_reset_app_launch_state(email_module_t *module, bool notify_cl
 	}
 }
 
-#ifdef ATTACH_PANEL_FEATURE
 void _email_module_free_attach_panel(email_module_t *module)
 {
 	debug_enter();
@@ -475,7 +463,6 @@ void _email_module_free_attach_panel_bundle(email_module_t *module,
 		module->_attach_panel_bundles[category_type] = NULL;
 	}
 }
-#endif
 
 void _email_module_app_reply_cb(app_control_h request, app_control_h reply,
 		app_control_result_e result, void *user_data)
@@ -541,7 +528,6 @@ Eina_Bool _email_module_app_timer_cb(void *data)
 	return ECORE_CALLBACK_CANCEL;
 }
 
-#ifdef ATTACH_PANEL_FEATURE
 int _email_module_create_attach_panel(email_module_t *module)
 {
 	debug_enter();
@@ -716,4 +702,3 @@ void _email_module_attach_panel_event_cb(attach_panel_h attach_panel,
 		break;
 	}
 }
-#endif

@@ -383,9 +383,7 @@ struct ug_data {
 	Eina_Bool is_sharing_my_profile;
 	Eina_Bool is_vcard_create_error;
 
-#ifdef ATTACH_PANEL_FEATURE
 	attach_panel_h attach_panel;
-#endif
 };
 
 /**

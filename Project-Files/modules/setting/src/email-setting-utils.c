@@ -1193,7 +1193,7 @@ static void _generate_best_pattern(const char *locale, i18n_uchar *customSkeleto
 	i18n_udate_destroy(formatter);
 }
 
-inline char *email_setting_gettext(email_string_t t)
+char *email_setting_gettext(email_string_t t)
 {
 	if (!strcmp(t.domain, SYSTEM_STRING))
 		return dgettext(SYSTEM_STRING, t.id);
@@ -1440,10 +1440,12 @@ void setting_create_account_validation_popup(email_view_t *vd, int *handle)
 	retm_if(!vd, "vd is null");
 
 	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
-	email_account_t *account = ugd->new_account;
 
+#ifdef _DEBUG
+	email_account_t *account = ugd->new_account;
 	debug_secure("account name:%s", account->account_name);
 	debug_secure("email address:%s", account->user_email_address);
+#endif
 
 	debug_log("Start Account Validation");
 	ugd->popup = setting_get_pb_process_notify(vd,

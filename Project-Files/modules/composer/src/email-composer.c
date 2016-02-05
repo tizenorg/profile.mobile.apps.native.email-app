@@ -412,9 +412,7 @@ static COMPOSER_ERROR_TYPE_E _composer_initialize_account_data(void *data)
 		account_info->max_sending_size = account_info->original_account->outgoing_server_size_limit / 1.5;
 	}
 
-#ifdef ATTACH_PANEL_FEATURE
 	composer_util_update_attach_panel_bundles(ugd);
-#endif
 
 	debug_log("outgoing_server_size_limit:%d, max_sending_size:%d", account_info->original_account->outgoing_server_size_limit, account_info->max_sending_size);
 
