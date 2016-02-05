@@ -253,11 +253,6 @@ G_BEGIN_DECLS
 #define EMAIL_DEFINE_GET_MISC_PATH(func_name, sub_path) EMAIL_DEFINE_GET_PATH(func_name, res, "/misc" sub_path)
 #define EMAIL_DEFINE_GET_DATA_PATH(func_name, sub_path) EMAIL_DEFINE_GET_PATH(func_name, data, sub_path)
 #define EMAIL_DEFINE_SHARED_RES_PATH(func_name, sub_path) EMAIL_DEFINE_GET_PATH(func_name, shared_res, sub_path)
-#define EMAIL_DEFINE_GET_SHARED_DATA_PATH(func_name, sub_path) EMAIL_DEFINE_GET_PATH(func_name, shared_data, sub_path)
-
-#ifdef _SAVE_IN_USER_SHARE_DIR_
-#define EMAIL_DEFINE_GET_USER_SHARE_PATH(func_name, sub_path) EMAIL_DEFINE_GET_PATH(func_name, user_share, sub_path);
-#endif
 
 #define IF_NULL_FREE_2GSTRA_AND_RETURN(i_ptr, str_arr1, str_arr2) \
 	({\
@@ -321,17 +316,10 @@ EMAIL_API const char *email_get_phone_storage_dir();
 EMAIL_API const char *email_get_mmc_storage_dir();
 
 EMAIL_API const char *email_get_phone_downloads_dir();
-EMAIL_API const char *email_get_phone_sounds_dir();
-EMAIL_API const char *email_get_phone_tmp_dir();
 
 EMAIL_API const char *email_get_res_dir();
 EMAIL_API const char *email_get_data_dir();
 EMAIL_API const char *email_get_shared_res_dir();
-EMAIL_API const char *email_get_shared_data_dir();
-
-#ifdef _SAVE_IN_USER_SHARE_DIR_
-EMAIL_API const char *email_get_user_share_dir();
-#endif
 
 EMAIL_API const char *email_get_img_dir();
 EMAIL_API const char *email_get_misc_dir();
@@ -375,8 +363,6 @@ EMAIL_API gchar *email_cut_text_by_byte_len(const gchar *text, gint len);	/* g_f
 EMAIL_API char *email_get_str_datetime(const time_t time_val);
 EMAIL_API char *email_get_date_text(const char *locale, char *skeleton, void *time);
 EMAIL_API char *email_get_date_text_with_formatter(void *formatter, void *time);
-
-EMAIL_API char *email_get_timezone_str(void);
 
 EMAIL_API int email_create_folder(const char *path);
 EMAIL_API gboolean email_copy_file_feedback(const char *src_full_path, const char *dest_full_path, gboolean(*copy_file_cb) (void *data, float percentage), void *cb_data);

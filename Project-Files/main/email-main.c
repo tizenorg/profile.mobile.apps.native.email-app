@@ -224,27 +224,6 @@ void _app_timezone_change_cb(system_settings_key_e key, void *data)
 {
 	debug_enter();
 
-	char *timezone_id = NULL;
-	i18n_uchar utimezone_id[512] = { 0, };
-	i18n_error_code_e status = I18N_ERROR_NONE;
-
-	timezone_id = email_get_timezone_str();
-	if (!timezone_id) {
-		debug_critical("timezone_id is NULL");
-		return;
-	}
-	debug_secure("timezone_id : %s", timezone_id);
-
-	i18n_ustring_copy_ua(utimezone_id, timezone_id);
-
-	status = i18n_ucalendar_set_default_timezone(utimezone_id);
-	if (status != I18N_ERROR_NONE) {
-		debug_critical("i18n_ucalendar_set_default_timezone() failed: %d", status);
-		return;
-	}
-
-	free(timezone_id);
-
 	email_mutex_lock();
 	email_close_pattern_generator();
 	email_open_pattern_generator();

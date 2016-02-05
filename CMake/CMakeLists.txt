@@ -18,7 +18,6 @@ IF(${TIZEN_2_4})
 	SET(SMACKDIR ${SYS_SMACK_DIR})
 	ADD_DEFINITIONS("-D_TIZEN_2_4_BUILD_")
 ELSE(${TIZEN_2_4})
-	ADD_DEFINITIONS("-D_SAVE_IN_USER_SHARE_DIR_")
 	ADD_DEFINITIONS("-D_EWK_LOAD_NONEMPTY_LAYOUT_FINISHED_CB_UNAVAILABLE_")
 ENDIF(${TIZEN_2_4})
 
@@ -90,7 +89,7 @@ SET(email-required-pkgs ecore glib-2.0 gobject-2.0 email-service storage
 IF(${TIZEN_2_4})
 	SET(email-required-pkgs ${email-required-pkgs} ewebkit2)
 ELSE(${TIZEN_2_4})
-	SET(email-required-pkgs ${email-required-pkgs} chromium-efl libtzplatform-config)
+	SET(email-required-pkgs ${email-required-pkgs} chromium-efl)
 ENDIF(${TIZEN_2_4})
 
 IF(${ENABLE_ATTACH_PANEL})

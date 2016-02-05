@@ -335,10 +335,6 @@ const char *email_get_composer_theme_path();
  * @brief elm util function to get tmp dir
  */
 const char *email_get_composer_tmp_dir();
-/**
- * @brief elm util function to get public tmp dir
- */
-const char *email_get_composer_public_tmp_dir();
 
 /**
  * @brief Get string encoded to datetime format
@@ -475,13 +471,6 @@ Eina_Bool composer_util_file_get_temp_filename(const char *src_file_path, char *
  * @return The default temp dirname string on success, otherwise NULL. It should be freed.
  */
 const char *composer_util_file_get_temp_dirname();
-
-/**
- * @brief Get public dirname
- *
- * @return The public dirname string on success, otherwise NULL. It should be freed.
- */
-const char *composer_util_file_get_public_temp_dirname();
 
 /**
  * @brief Converts string array to list

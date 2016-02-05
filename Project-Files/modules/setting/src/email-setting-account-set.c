@@ -20,13 +20,7 @@
 #include "email-setting-account-set.h"
 #include "email-setting-utils.h"
 
-#ifdef _TIZEN_2_4_BUILD_
-EMAIL_DEFINE_SHARED_RES_PATH(_get_account_icon_dir, "/org.tizen.email.png");
-#define ACCOUNT_ICON_PATH _get_account_icon_dir()
-#else
-#include <tzplatform_config.h>
-#define ACCOUNT_ICON_PATH tzplatform_mkpath(TZ_SYS_RO_ICONS, "/default/small/org.tizen.email.png")
-#endif
+EMAIL_DEFINE_SHARED_RES_PATH(_get_account_icon_path, "/org.tizen.email.png")
 
 #define DEFAULT_SIGNATURE EMAIL_SETTING_STRING_SENT_FROM_SAMSUNG_MOBILE.id
 #define DEFAULT_EMAIL_SIZE 1024*50
@@ -254,7 +248,7 @@ static void _set_default_setting_to_account(email_view_t *vd, email_account_t *a
 	account->options.add_myname_card = 0;
 	account->options.add_signature = 1;
 	account->options.signature = g_strdup(DEFAULT_SIGNATURE);
-	account->logo_icon_path = g_strdup(ACCOUNT_ICON_PATH);
+	account->logo_icon_path = g_strdup(_get_account_icon_path());
 	account->outgoing_server_type = EMAIL_SERVER_TYPE_SMTP;
 	account->outgoing_server_need_authentication = EMAIL_AUTHENTICATION_METHOD_DEFAULT;
 	account->incoming_server_authentication_method = EMAIL_AUTHENTICATION_METHOD_NO_AUTH;

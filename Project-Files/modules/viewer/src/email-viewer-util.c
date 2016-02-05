@@ -77,11 +77,7 @@ static void _mouseup_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
 
 EMAIL_DEFINE_GET_EDJ_PATH(email_get_viewer_theme_path, "/email-viewer.edj")
 
-#ifdef _SAVE_IN_USER_SHARE_DIR_
-EMAIL_DEFINE_GET_USER_SHARE_PATH(email_get_viewer_tmp_dir, "/.email-viewer-efl")
-#else
-EMAIL_DEFINE_GET_SHARED_DATA_PATH(email_get_viewer_tmp_dir, "/.email-viewer-efl")
-#endif
+EMAIL_DEFINE_GET_DATA_PATH(email_get_viewer_tmp_dir, "/.email-viewer-efl")
 
 Evas_Object *util_notify_genlist_add(Evas_Object *parent)
 {

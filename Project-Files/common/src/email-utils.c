@@ -41,52 +41,6 @@
 #include "email-locale.h"
 #include "email-engine.h"
 
-#ifdef _TIZEN_2_4_BUILD_
-
-#define EMAIL_FAIL_SAFE_RW_PATH	"/opt/usr/apps/" PKGNAME
-
-#ifdef _EMAIL_GBS_BUILD_
-#define EMAIL_FAIL_SAFE_R_PATH	"/usr/apps/" PKGNAME
-#else
-#define EMAIL_FAIL_SAFE_R_PATH	EMAIL_FAIL_SAFE_RW_PATH
-#endif
-
-#define EMAIL_FAIL_SAFE_RES_PATH 			EMAIL_FAIL_SAFE_R_PATH "/res"
-#define EMAIL_FAIL_SAFE_DATA_PATH 			EMAIL_FAIL_SAFE_RW_PATH "/data"
-#define EMAIL_FAIL_SAFE_SHARED_RES_PATH 	EMAIL_FAIL_SAFE_R_PATH "/shared/res"
-#define EMAIL_FAIL_SAFE_SHARED_DATA_PATH 	EMAIL_FAIL_SAFE_RW_PATH "/shared/data"
-
-#define EMAIL_FAIL_SAFE_PHONE_STORAGE_PATH 	"/opt/usr/media"
-#define EMAIL_FAIL_SAFE_MMC_STORAGE_PATH	"/opt/storage/sdcard"
-
-#define EMAIL_ETC_LOCALTIME_PATH 			"/opt/etc/localtime"
-
-#else
-
-#include <tzplatform_config.h>
-
-#define EMAIL_RES_PATH 			PKGNAME"/res"
-#define EMAIL_DATA_PATH 		PKGNAME"/data"
-#define EMAIL_SHARED_RES_PATH 	PKGNAME"/shared/res"
-
-#define EMAIL_SHARED_DATA_PATH 	PKGNAME"/shared/data"
-
-#define EMAIL_FAIL_SAFE_RES_PATH 			tzplatform_mkpath(TZ_SYS_RO_APP, EMAIL_RES_PATH)
-#define EMAIL_FAIL_SAFE_DATA_PATH 			tzplatform_mkpath(TZ_USER_APP, EMAIL_DATA_PATH)
-#define EMAIL_FAIL_SAFE_SHARED_RES_PATH 	tzplatform_mkpath(TZ_SYS_RO_APP, EMAIL_SHARED_RES_PATH)
-#define EMAIL_FAIL_SAFE_SHARED_DATA_PATH 	tzplatform_mkpath(TZ_USER_APP, EMAIL_SHARED_DATA_PATH)
-
-#define EMAIL_FAIL_SAFE_PHONE_STORAGE_PATH 	tzplatform_getenv(TZ_USER_CONTENT)
-#define EMAIL_FAIL_SAFE_MMC_STORAGE_PATH	tzplatform_mkpath(TZ_SYS_STORAGE, "sdcard")
-
-#define EMAIL_ETC_LOCALTIME_PATH 			tzplatform_mkpath(TZ_SYS_ETC, "localtime")
-
-#ifdef _SAVE_IN_USER_SHARE_DIR_
-#define EMAIL_FAIL_USER_SHARE_PATH			tzplatform_getenv(TZ_USER_SHARE)
-#endif
-
-#endif
-
 #define EMAIL_FAIL_SAFE_DOWNLOADS_DIR 		"Downloads"
 #define EMAIL_FAIL_SAFE_SOUNDS_DIR 			"Sounds"
 
@@ -349,9 +303,6 @@ static struct info {
 	char data_dir[EMAIL_SMALL_PATH_MAX];
 	char shared_res_dir[EMAIL_SMALL_PATH_MAX];
 	char shared_data_dir[EMAIL_SMALL_PATH_MAX];
-#ifdef _SAVE_IN_USER_SHARE_DIR_
-	char user_share_dir[EMAIL_SMALL_PATH_MAX];
-#endif
 
 	char phone_storage_dir[EMAIL_SMALL_PATH_MAX];
 	char mmc_storage_dir[EMAIL_SMALL_PATH_MAX];
@@ -368,9 +319,6 @@ static struct info {
 	.data_dir = {'\0'},
 	.shared_res_dir = {'\0'},
 	.shared_data_dir = {'\0'},
-#ifdef _SAVE_IN_USER_SHARE_DIR_
-	.user_share_dir = {'\0'},
-#endif
 
 	.phone_storage_dir = {'\0'},
 	.mmc_storage_dir = {'\0'},
@@ -393,42 +341,23 @@ static void _generate_best_pattern(const char *locale, i18n_uchar *customSkeleto
 static int _open_pattern_n_formatter(const char *locale, char *skeleton, i18n_udate_format_h *formatter);
 static int _close_pattern_n_formatter(i18n_udate_format_h formatter);
 
-#ifdef _EMAIL_GBS_BUILD_
-#define EMAIL_DEFINE_GET_APP_ROOT_PATH(func_name, root_func_name, var_name, fail_safe_path) \
+#define EMAIL_DEFINE_GET_APP_ROOT_PATH(func_name, root_func_name, var_name) \
 	const char *func_name() \
 	{ \
 		if (!var_name[0]) { \
-			snprintf(var_name, sizeof(var_name), "%s", fail_safe_path); \
-			debug_log("Directory is: %s", var_name); \
-		} \
-		return var_name; \
-	}
-#else
-#define EMAIL_DEFINE_GET_APP_ROOT_PATH(func_name, root_func_name, var_name, fail_safe_path) \
-	const char *func_name() \
-	{ \
-		if (!var_name[0]) { \
-			bool free_str = true; \
 			char *str = root_func_name(); \
 			if (!str || !str[0]) { \
-				debug_error(#root_func_name "(): failed! Using fail safe path..."); \
-				str = fail_safe_path; \
-				free_str = false; \
+				debug_error(#root_func_name "(): failed!"); \
+			} else { \
+				_copy_path_skip_last_bs(var_name, sizeof(var_name), str); \
+				debug_log("Directory is: %s", var_name); \
 			} \
-			\
-			_copy_path_skip_last_bs(var_name, sizeof(var_name), str); \
-			\
-			if (free_str) { \
-				free(str); \
-			} \
-			\
-			debug_log("Directory is: %s", var_name); \
+			free(str); \
 		} \
 		return var_name; \
 	}
-#endif
 
-#define EMAIL_DEFINE_GET_MEDIA_PATH(func_name, dir_type, fail_safe_path) \
+#define EMAIL_DEFINE_GET_MEDIA_PATH(func_name, dir_type) \
 	const char *func_name() \
 	{ \
 		static char result[EMAIL_SMALL_PATH_MAX] = {'\0'}; \
@@ -445,10 +374,7 @@ static int _close_pattern_n_formatter(i18n_udate_format_h formatter);
 				} \
 			} \
 			\
-			if (!path) { \
-				debug_log("Using fail safe path..."); \
-				snprintf(result, sizeof(result), "%s/" fail_safe_path, email_get_phone_storage_dir()); \
-			} else { \
+			if (path) { \
 				_copy_path_skip_last_bs(result, sizeof(result), path); \
 				free(path); \
 			} \
@@ -477,12 +403,6 @@ void _validate_storage_info()
 		int r = storage_foreach_device_supported(_storage_device_supported_cb, NULL);
 		if (r != STORAGE_ERROR_NONE) {
 			debug_error("storage_foreach_device_supported(): failed (%d)", r);
-		}
-
-		if (!s_info.phone_storage_dir[0]) {
-			debug_log("Using fail safe phone storage path...");
-			snprintf(s_info.phone_storage_dir, sizeof(s_info.phone_storage_dir),
-					"%s", EMAIL_FAIL_SAFE_PHONE_STORAGE_PATH);
 		}
 
 		s_info.storages_info_valid = true;
@@ -529,28 +449,11 @@ const char *email_get_mmc_storage_dir()
 	return s_info.mmc_storage_dir[0] ? s_info.mmc_storage_dir : NULL;
 }
 
-EMAIL_DEFINE_GET_MEDIA_PATH(email_get_phone_downloads_dir,
-		STORAGE_DIRECTORY_DOWNLOADS, EMAIL_FAIL_SAFE_DOWNLOADS_DIR)
-EMAIL_DEFINE_GET_MEDIA_PATH(email_get_phone_sounds_dir,
-		STORAGE_DIRECTORY_SOUNDS, EMAIL_FAIL_SAFE_SOUNDS_DIR)
-EMAIL_DEFINE_GET_PHONE_PATH(email_get_phone_tmp_dir, "/tmp")
+EMAIL_DEFINE_GET_MEDIA_PATH(email_get_phone_downloads_dir, STORAGE_DIRECTORY_DOWNLOADS)
 
-EMAIL_DEFINE_GET_APP_ROOT_PATH(email_get_res_dir, app_get_resource_path,
-		s_info.res_dir, EMAIL_FAIL_SAFE_RES_PATH)
-
-EMAIL_DEFINE_GET_APP_ROOT_PATH(email_get_data_dir, app_get_data_path,
-		s_info.data_dir, EMAIL_FAIL_SAFE_DATA_PATH)
-
-EMAIL_DEFINE_GET_APP_ROOT_PATH(email_get_shared_res_dir, app_get_shared_resource_path,
-		s_info.shared_res_dir, EMAIL_FAIL_SAFE_SHARED_RES_PATH)
-
-EMAIL_DEFINE_GET_APP_ROOT_PATH(email_get_shared_data_dir, app_get_shared_data_path,
-		s_info.shared_data_dir, EMAIL_FAIL_SAFE_SHARED_DATA_PATH)
-
-#ifdef _SAVE_IN_USER_SHARE_DIR_
-EMAIL_DEFINE_GET_APP_ROOT_PATH(email_get_user_share_dir, NULL,
-		s_info.user_share_dir, EMAIL_FAIL_USER_SHARE_PATH)
-#endif
+EMAIL_DEFINE_GET_APP_ROOT_PATH(email_get_res_dir, app_get_resource_path, s_info.res_dir)
+EMAIL_DEFINE_GET_APP_ROOT_PATH(email_get_data_dir, app_get_data_path, s_info.data_dir)
+EMAIL_DEFINE_GET_APP_ROOT_PATH(email_get_shared_res_dir, app_get_shared_resource_path, s_info.shared_res_dir)
 
 EMAIL_DEFINE_GET_IMG_PATH(email_get_img_dir, "")
 EMAIL_DEFINE_GET_MISC_PATH(email_get_misc_dir, "")
@@ -1451,23 +1354,6 @@ static void _generate_best_pattern(const char *locale, i18n_uchar *customSkeleto
 
 	i18n_ustring_copy_au_n(formattedString, formatted, EMAIL_BUFF_SIZE_BIG);
 	i18n_udate_destroy(formatter);
-}
-
-EMAIL_API char *email_get_timezone_str(void)
-{
-	debug_enter();
-
-	char buf[MAX_STR_LEN];
-	ssize_t len = readlink(EMAIL_ETC_LOCALTIME_PATH, buf, sizeof(buf) - 1);
-
-	if (len != -1) {
-		buf[len] = '\0';
-	} else {
-		/* handle error condition */
-		debug_critical("readlink() failed");
-		return NULL;
-	}
-	return g_strdup(buf + 20); /* Asia/Seoul */
 }
 
 EMAIL_API int email_create_folder(const char *path)

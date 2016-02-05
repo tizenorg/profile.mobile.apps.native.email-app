@@ -93,7 +93,8 @@ Description: Native email application
 %else
 %define _pkg_dir %{TZ_SYS_RO_APP}/%{name}
 %define _pkg_lib_dir %{_pkg_dir}/lib
-%define _sys_icons_dir %{TZ_SYS_RO_ICONS}/default/small
+%define _pkg_shared_dir %{_pkg_dir}/shared
+%define _sys_icons_dir %{_pkg_shared_dir}/res
 %define _sys_packages_dir %{TZ_SYS_RO_PACKAGES}
 %define _sys_license_dir %{TZ_SYS_SHARE}/license
 %endif

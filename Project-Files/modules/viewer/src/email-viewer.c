@@ -1232,23 +1232,6 @@ static void _timezone_changed_cb(system_settings_key_e key, void *data)
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
 
-	char *timezone_id = NULL;
-	i18n_uchar utimezone_id[512] = { 0, };
-	i18n_error_code_e status = I18N_ERROR_NONE;
-
-	timezone_id = email_get_timezone_str();
-	retm_if(timezone_id == NULL, "timezone_id is NULL.");
-
-	i18n_ustring_copy_ua(utimezone_id, timezone_id);
-
-	status = i18n_ucalendar_set_default_timezone(utimezone_id);
-
-	if (status != I18N_ERROR_NONE) {
-		debug_critical("i18n_ucalendar_set_default_timezone() failed: %d", status);
-	}
-
-	FREE(timezone_id);
-
 	header_update_date(ug_data);
 	debug_leave();
 }
