@@ -149,7 +149,7 @@ static void __composer_ps_gl_sel(void *data, Evas_Object *obj, void *event_info)
 	retm_if(!mbe, "Invalid entry is selected!");
 
 	EmailRecpInfo *ri = NULL;
-	if(contact_info->contact_origin == EMAIL_SEARCH_CONTACT_ORIGIN_CONTACTS && contact_info->display_name) {
+	if(contact_info->contact_origin == EMAIL_SEARCH_CONTACT_ORIGIN_CONTACTS) {
 		ri = composer_util_recp_make_recipient_info_with_display_name(contact_info->email_address, contact_info->display_name);
 		ri->email_id = contact_info->email_id;
 	} else {

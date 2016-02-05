@@ -366,9 +366,7 @@ static void _recipient_from_ctxpopup_item_select_cb(void *data, Evas_Object *obj
 		}
 		composer_util_modify_send_button(ugd);
 
-#ifdef ATTACH_PANEL_FEATURE
 		composer_util_update_attach_panel_bundles(ugd);
-#endif
 
 		debug_log("changed account_id:[%d]", ugd->account_info->selected_account->account_id);
 

@@ -1286,7 +1286,7 @@ void viewer_set_webview_content(EmailViewerUGD *ug_data)
 static char *_viewer_convert_plain_text_body(EmailViewerWebview *wvd)
 {
 	debug_enter();
-	retvm_if(wvd == NULL, EINA_FALSE, "Invalid parameter: wvd[NULL]");
+	retvm_if(wvd == NULL, NULL, "Invalid parameter: wvd[NULL]");
 
 	char *html = NULL;
 

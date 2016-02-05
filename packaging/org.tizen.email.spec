@@ -16,8 +16,6 @@ ExcludeArch: %{arm} %ix86 x86_64
 # set value 1 for Tizen 2.4 build
 %define _tizen_2_4 0
 
-%define _enable_attach_panel 1
-
 %define _build_shared_libs 0
 
 Requires: email-service
@@ -55,16 +53,13 @@ BuildRequires: pkgconfig(storage)
 BuildRequires: pkgconfig(capi-content-mime-type)
 BuildRequires: pkgconfig(vconf)
 BuildRequires: pkgconfig(feedback)
+BuildRequires: pkgconfig(attach-panel)
 
 %if 0%{?_tizen_2_4}
 BuildRequires: pkgconfig(ewebkit2)
 %else
 BuildRequires: pkgconfig(chromium-efl)
 BuildRequires: pkgconfig(libtzplatform-config)
-%endif
-
-%if 0%{?_enable_attach_panel}
-BuildRequires: pkgconfig(attach-panel)
 %endif
 
 %description
@@ -115,7 +110,6 @@ mkdir -p %{_tmp_buld_dir}
 cd %{_tmp_buld_dir}
 
 cmake ../../CMake -DCMAKE_INSTALL_PREFIX=%{_pkg_dir} \
-	-DENABLE_ATTACH_PANEL=%{_enable_attach_panel} \
 	-DBUILD_SHARED_LIBS=%{_build_shared_libs} \
 	-DSYS_ICONS_DIR=%{_sys_icons_dir} \
 	-DSYS_PACKAGES_DIR=%{_sys_packages_dir} \

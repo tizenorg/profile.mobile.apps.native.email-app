@@ -43,10 +43,8 @@ static void _subject_entry_activated_cb(void *data, Evas_Object *obj, void *even
 static void _subject_attach_files_clicked(void *data, Evas_Object *obj, void *event_info);
 static void _entry_filter_accept_set(void *data, Evas_Object *entry, char **text);
 
-#ifdef ATTACH_PANEL_FEATURE
 static void _show_attach_panel(EmailComposerUGD *ugd);
 static void _attach_panel_reply_cb(void *data, const char **path_array, int array_len);
-#endif
 
 static email_string_t EMAIL_COMPOSER_STRING_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED = { PACKAGE, "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED" };
 
@@ -194,7 +192,6 @@ static void _subject_entry_activated_cb(void *data, Evas_Object *obj, void *even
 	debug_leave();
 }
 
-#ifdef ATTACH_PANEL_FEATURE
 static void _show_attach_panel(EmailComposerUGD *ugd)
 {
 	debug_enter();
@@ -230,7 +227,6 @@ static void _attach_panel_reply_cb(void *data, const char **path_array, int arra
 
 	debug_leave();
 }
-#endif
 
 static void _subject_attach_files_clicked(void *data, Evas_Object *obj, void *event_info)
 {
@@ -252,9 +248,7 @@ static void _subject_attach_files_clicked(void *data, Evas_Object *obj, void *ev
 	if (total_attachment_count >= MAX_ATTACHMENT_ITEM) {
 		composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_NUMBER_EXCEEDED, composer_util_popup_response_cb, ugd);
 	} else {
-#ifdef ATTACH_PANEL_FEATURE
 		_show_attach_panel(ugd);
-#endif
 	}
 
 	debug_leave();

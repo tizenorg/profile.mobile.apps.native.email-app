@@ -1065,10 +1065,12 @@ static void _make_mail_make_attachment_list(EmailComposerUGD *ugd)
 		debug_secure("[%d] name:%s, path:%s, is_inline:[%d], save:[%d]",
 			inline_att->attachment_id, inline_att->attachment_name, inline_att->attachment_path, inline_att->inline_content_status, inline_att->save_status);
 	}
+#ifdef _DEBUG
 	EINA_LIST_FOREACH(ugd->attachment_item_list, list, attachment_item_data) {
 		email_attachment_data_t *att = attachment_item_data->attachment_data;
 		debug_secure("[%d] name:%s, path:%s, is_inline:[%d], save:[%d]", att->attachment_id, att->attachment_name, att->attachment_path, att->inline_content_status, att->save_status);
 	}
+#endif
 
 	if (attach_count + inline_count > 0) {
 		ugd->new_mail_info->total_attachment_count = attach_count + inline_count;
@@ -1112,6 +1114,7 @@ static void _make_mail_make_attachment_list(EmailComposerUGD *ugd)
 		}
 	}
 
+#ifdef _DEBUG
 	/* For logging */
 	int i;
 	debug_log("----------------------------------------------------------------------------------------------");
@@ -1119,6 +1122,7 @@ static void _make_mail_make_attachment_list(EmailComposerUGD *ugd)
 		email_attachment_data_t *att = ugd->new_mail_info->attachment_list + i;
 		debug_secure("[%d] name:%s, path:%s, is_inline:[%d], save:[%d]", att->attachment_id, att->attachment_name, att->attachment_path, att->inline_content_status, att->save_status);
 	}
+#endif
 
 	debug_leave();
 }

@@ -514,10 +514,12 @@ static void _create_processing_popup(EmailSettingVD *vd)
 	retm_if(!vd, "view data is null");
 
 	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
-	email_account_t *account = ugd->new_account;
 
+#ifdef _DEBUG
+	email_account_t *account = ugd->new_account;
 	debug_secure("account name:%s", account->account_name);
 	debug_secure("email address:%s", account->user_email_address);
+#endif
 
 	DELETE_EVAS_OBJECT(ugd->popup);
 

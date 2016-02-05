@@ -16,24 +16,28 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
-		<buildCommand>
-			<name>org.tizen.nativecore.apichecker.core.builder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.cdt.core.cnature</nature>
 		<nature>org.eclipse.cdt.core.ccnature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
-		<nature>org.tizen.nativecore.apichecker.core.tizenCppNature</nature>
 	</natures>
 	<linkedResources>
 		<link>
-			<name>Project-Files</name>
+			<name>.resources</name>
 			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/Project-Files</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/Project-Files/resources</locationURI>
+		</link>
+		<link>
+			<name>common</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Project-Files/common</locationURI>
+		</link>
+		<link>
+			<name>edc</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Project-Files/resources/edc</locationURI>
 		</link>
 		<link>
 			<name>edc_images</name>
@@ -41,9 +45,19 @@
 			<locationURI>PARENT-2-PROJECT_LOC/Project-Files/resources/edc_images</locationURI>
 		</link>
 		<link>
-			<name>src/email-main.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/Project-Files/main/email-main.c</locationURI>
+			<name>main</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Project-Files/main</locationURI>
+		</link>
+		<link>
+			<name>modules</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Project-Files/modules</locationURI>
+		</link>
+		<link>
+			<name>res/edje</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
 			<name>res/edje/email-account.edc</name>
@@ -83,12 +97,21 @@
 	</linkedResources>
 	<filteredResources>
 		<filter>
-			<id>1425991974400</id>
+			<id>1454678275029</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
 				<id>org.eclipse.ui.ide.multiFilter</id>
 				<arguments>1.0-projectRelativePath-matches-false-false-*/.tpk</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1454678275033</id>
+			<name></name>
+			<type>6</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-project_def.prop</arguments>
 			</matcher>
 		</filter>
 	</filteredResources>

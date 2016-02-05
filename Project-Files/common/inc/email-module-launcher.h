@@ -64,7 +64,6 @@ typedef struct _email_launch_app_listener
 
 } email_launched_app_listener_t;
 
-#ifdef ATTACH_PANEL_FEATURE
 /**
  * Enumeration of the attach panel category type
  */
@@ -112,7 +111,6 @@ typedef struct _email_attach_panel_listener
 	void (*close_cb) (void *data);
 
 } email_attach_panel_listener_t;
-#endif
 
 /**
  * Forward declaration of the email module structure
@@ -133,7 +131,6 @@ typedef struct _email_module email_module_t;
 EMAIL_API int email_module_launch_app(email_module_t *module, email_launch_app_type_e app_type,
 		app_control_h params, email_launched_app_listener_t *listener);
 
-#ifdef ATTACH_PANEL_FEATURE
 /**
  * @brief Launches the attach panel
  *
@@ -161,7 +158,6 @@ EMAIL_API int email_module_launch_attach_panel(email_module_t *module,
  */
 EMAIL_API int email_module_set_attach_panel_category_bundle(email_module_t *module,
 		email_attach_panel_category_type_e category_type, bundle *b);
-#endif
 
 /**
  * @brief Terminates launched application and attach panel if any

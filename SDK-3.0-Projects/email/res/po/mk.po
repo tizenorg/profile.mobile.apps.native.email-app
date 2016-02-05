@@ -1,0 +1,1062 @@
+msgid "IDS_EMAIL_POP_FAILED_TO_MOVE"
+msgstr "Неуспешно преместување."
+
+msgid "IDS_ST_OPT_DEFAULT_RINGTONE"
+msgstr "Основно ѕвонење"
+
+msgid "IDS_EMAIL_BODY_MAXIMUM_NUMBER_OF_EMAIL_ACCOUNTS_REACHED"
+msgstr "Достигнат е максималниот број сметки за email."
+
+msgid "IDS_ST_OPT_EVERY_PD_HOURS_ABB2"
+msgstr "Секои %d часа"
+
+msgid "IDS_ST_OPT_EVERY_1_HOUR"
+msgstr "На 1 час"
+
+msgid "IDS_TPLATFORM_ACBUTTON_DONE_ABB"
+msgstr "ГОТОВО"
+
+msgid "IDS_TPLATFORM_ACBUTTON_CANCEL_ABB"
+msgstr "ОТКАЖИ"
+
+msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
+msgstr "ИЗБРИШИ"
+
+msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
+msgstr "Потребна е врска Wi-Fi. Поврзете со мрежа Wi-Fi и обидете се повторно"
+
+msgid "IDS_EMAIL_POP_MOBILE_DATA_IS_DISABLED_CONNECT_TO_WI_FI_NETWORK_INSTEAD_OR_ENABLE_MOBILE_DATA_AND_TRY_AGAIN"
+msgstr "Мобилните податоци се исклучени. Поврзете се со мрежа Wi-Fi или вклучете мобилни податоци и обидете се повторно"
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_CANCELLED"
+msgstr "Преземањето е откажано."
+
+msgid "IDS_EMAIL_BODY_TODAY"
+msgstr "Денес"
+
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Нема ставки за прикажување."
+
+msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
+msgstr "Може да се преземаат само URL-а http или https."
+
+msgid "IDS_BR_OPT_WEB_SEARCH"
+msgstr "Пребарување на Интернет"
+
+msgid "IDS_ASEML_POP_THE_SECURITY_POLICY_PREVENTS_THE_USE_OF_POP_AND_IMAP_EMAIL_PROTOCOLS"
+msgstr "Политиката за безбедност спречува користење протоколи POP и IMAP за е-пошта."
+
+msgid "IDS_ASEML_HEADER_UNABLE_TO_USE_FUNCTION_ABB"
+msgstr "Не може да се кор. функцијата"
+
+msgid "IDS_EMAIL_TPOP_SYNC_EMAIL_DISABLED_FOR_PS"
+msgstr "Синхронизирањето е-пошта е исклучено за %s."
+
+msgid "IDS_EMAIL_TPOP_SIGNATURE_SAVED"
+msgstr "Потписот е сочуван."
+
+msgid "IDS_EMAIL_TPOP_SERVER_ERROR_OCCURRED_ABB"
+msgstr "Дојде до грешка на серверот."
+
+msgid "IDS_EMAIL_TPOP_SENDING_FAILED"
+msgstr "Неуспешно праќање."
+
+msgid "IDS_EMAIL_TPOP_SENDING_EMAIL_ING"
+msgstr "Се праќа е-пошта..."
+
+msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
+msgstr "Се праќа е-пошта..."
+
+msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
+msgstr "Се менува големината на фајловите..."
+
+msgid "IDS_EMAIL_TPOP_RECIPIENT_ALREADY_EXISTS"
+msgstr "Примателот веќе постои."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAIL_ADDRESSES_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "%d адреси за е-пошта се отстранети од Приоритетни испраќачи."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MOVED_TO_SELECTED_FOLDER"
+msgstr "%d е-пошти се преместени во избраната папка."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MARKED_AS_UNREAD"
+msgstr "%d е-пошти се означени како непрочитани."
+
+msgid "IDS_EMAIL_TPOP_PD_EMAILS_MARKED_AS_READ"
+msgstr "%d е-пошти се означени како прочитани."
+
+msgid "IDS_EMAIL_TPOP_P1SD_EMAILS_MOVED_TO_P2SS"
+msgstr "%1$d е-пошти се преместени во %2$s."
+
+msgid "IDS_EMAIL_TPOP_NEW_EMAIL_RECEIVED_ABB"
+msgstr "Примена на нова е-пошта."
+
+msgid "IDS_EMAIL_TPOP_NETWORK_NOT_AVAILABLE_EMAIL_WILL_BE_SENT_WHEN_CONNECTED_TO_NETWORK"
+msgstr "Мрежата е недостапна. Поракава ќе се испрати кога ќе се поврзете со мрежа."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_REGISTERED_DEVICES_REACHED_FOR_THIS_ACCOUNT_DEREGISTER_SOME_DEVICES_AND_TRY_AGAIN"
+msgstr "Достигнат е максималниот број регистрирани уреди за оваа сметка. Одрегистрирајте некој уред и обидете се повторно."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_RECIPIENTS_HPD_REACHED"
+msgstr "Достигнат е максималниот број приматели (%d)."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
+msgstr "Достигнат е максималниот број знаци."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Достигнат е максималниот број знаци (%d)."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
+msgstr "Достигната е максималната големина за пораки (%d KB)."
+
+msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
+msgstr "Надмината е максималната големина за пораки. Ќе се споделат само првите %d KB."
+
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Се вчитува..."
+
+msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
+msgstr "Внесена е неважечка адреса за е-пошта."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_NAME_ALREADY_IN_USE_ABB"
+msgstr "Името на папката се користи."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_DELETED_ABB"
+msgstr "Папката е избришана."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_CREATED"
+msgstr "Папката е направена."
+
+msgid "IDS_EMAIL_TPOP_FILE_SAVED_TO_DOWNLOADS"
+msgstr "Фајлот е сочуван во Преземања."
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_SIGN_IN_TO_PS"
+msgstr "Неуспешна најава на %s."
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_SAVE_EMAIL"
+msgstr "Не можеше да се сочува е-поштата."
+
+msgid "IDS_EMAIL_TPOP_FAILED_TO_CONNECT_TO_NETWORK"
+msgstr "Неуспешно поврзување со мрежа."
+
+msgid "IDS_EMAIL_TPOP_ENTER_AT_LEAST_ONE_VALID_RECIPIENT"
+msgstr "Внесете барем еден важечки примател."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_SENT"
+msgstr "Е-поштата е пратена."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_SAVED_IN_DRAFTS"
+msgstr "Е-поштата е сочувана во Незавршени."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_MARKED_AS_UNREAD"
+msgstr "Е-поштата е означена како непрочитана."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "Адресата за е-пошта е отстранета од Приоритетни испраќачи."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ALREADY_ADDED_TO_PRIORITY_SENDERS"
+msgstr "Адресата за е-пошта е веќе додадена на приоритетни испраќачи."
+
+msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ADDED_TO_PRIORITY_SENDERS"
+msgstr "Адресата за е-пошта е додадена на Приоритетни испраќачи."
+
+msgid "IDS_EMAIL_TPOP_DELETING_FOLDER_ING"
+msgstr "Се брише папка..."
+
+msgid "IDS_EMAIL_TPOP_CREATING_FOLDER_ING"
+msgstr "Се прави папка..."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_SELECTED_FOLDER"
+msgstr "1 е-пошта е преместена во избраната папка."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_PS"
+msgstr "1 е-пошта е преместена во %s."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MARKED_AS_UNREAD"
+msgstr "1 е-пошта е означена како непрочитана."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_MARKED_AS_READ"
+msgstr "1 е-пошта е означена како прочитана."
+
+msgid "IDS_EMAIL_TPOP_1_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"
+msgstr "1 адреса за е-пошта е отстранета од Приоритетни испраќачи."
+
+msgid "IDS_EMAIL_TMBODY_SYNC_SETTINGS"
+msgstr "Опции за синхронизирање"
+
+msgid "IDS_EMAIL_TMBODY_DEFAULT_SENDING_ACCOUNT"
+msgstr "Основна сметка за праќање"
+
+msgid "IDS_EMAIL_SBODY_SENT_FROM_MY_SAMSUNG_DEVICE"
+msgstr "Пратено од мојот уред Samsung."
+
+msgid "IDS_EMAIL_SBODY_RECEIVE_STATUS_BAR_NOTIFICATIONS_WHEN_EMAILS_ARRIVE"
+msgstr "Примај известувања на лентата за состојбата кога ќе дојдат пораки од е-пошта."
+
+msgid "IDS_EMAIL_SBODY_NO_SUBJECT_M_NOUN"
+msgstr "Нема наслов"
+
+msgid "IDS_EMAIL_SBODY_NO_RECIPIENTS_M_NOUN"
+msgstr "Нема приматели"
+
+msgid "IDS_EMAIL_POP_YOU_MUST_DOWNLOAD_THE_MESSAGE_BEFORE_YOU_CAN_DOWNLOAD_THE_ATTACHMENT"
+msgstr "Треба да ја преземете пораката пред да го преземете прилогот."
+
+msgid "IDS_EMAIL_POP_YOU_HAVE_NOT_YET_CREATED_AN_EMAIL_ACCOUNT_CREATE_AN_EMAIL_ACCOUNT_AND_TRY_AGAIN"
+msgstr "Сè уште не сте направиле сметка за е-пошта. Направете сметка за е-пошта и обидете се повторно."
+
+msgid "IDS_EMAIL_POP_YOU_CAN_ONLY_LOG_IN_ONCE_EVERY_15_MINUTES"
+msgstr "Може да се најавите само еднаш на 15 минути."
+
+msgid "IDS_EMAIL_POP_YOUR_PASSWORD_CONTAINS_SPACES_MANY_SERVERS_DO_NOT_SUPPORT_PASSWORDS_WITH_SPACES"
+msgstr "Вашата лозинка содржи празни места. Многу сервери не поддржуваат лозинки со празни места."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
+msgstr "Не може да се преместат email-и од повеќе сметки одеднаш."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Не може да се поврзе со серверот."
+
+msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
+msgstr "За да составите е-пошта, отворете сметка за е-пошта."
+
+msgid "IDS_EMAIL_POP_THIS_FILE_TYPE_IS_NOT_SUPPORTED_BY_ANY_APPLICATION_ON_YOUR_DEVICE"
+msgstr "Овој тип фајл не е поддржан од ниедна апликација на уредот."
+
+msgid "IDS_EMAIL_POP_THIS_EMAIL_WILL_BE_DELETED"
+msgstr "Овој email ќе се избрише."
+
+msgid "IDS_EMAIL_POP_THIS_EMAIL_HAS_BEEN_DELETED_FROM_THE_SERVER"
+msgstr "Оваа е-пошта е избришана од серверот."
+
+msgid "IDS_EMAIL_POP_THE_VCARD_HAS_NOT_BEEN_CREATED_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Не е направена vCard. Дојде до непозната грешка."
+
+msgid "IDS_EMAIL_POP_THE_SELECTED_DATA_COULD_NOT_BE_FOUND"
+msgstr "Не можеа да се најдат избраните податоци."
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_TOTAL_SIZE_OF_ATTACHMENTS_HPS_MB_HAS_BEEN_EXCEEDED_REMOVE_SOME_FILES_AND_TRY_AGAIN"
+msgstr "Надмината е максималната вкупна големина на прилозите (%s MB). Отстранете некој фајл и обидете се повторно."
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_NUMBER_OF_ATTACHMENTS_HPD_HAS_BEEN_REACHED"
+msgstr "Достигнат е максималниот број прилози (%d)."
+
+msgid "IDS_EMAIL_POP_THE_MAXIMUM_ATTACHMENT_SIZE_ALLOWED_BY_THE_CURRENT_EXCHANGE_SERVER_POLICY_HAS_BEEN_EXCEEDED"
+msgstr "Максималната големина за прилози дозволена со моменталната политика на серверот Exchange е надмината."
+
+msgid "IDS_EMAIL_POP_THE_CURRENT_EXCHANGE_SERVER_POLICY_PREVENTS_ATTACHMENTS_FROM_BEING_DOWNLOADED_TO_MOBILE_DEVICES"
+msgstr "Моменталната политика на серверот Exchange спречува преземање прилози на мобилни уреди."
+
+msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE_GO_TO_SETTINGS_POWER_AND_STORAGE_STORAGE_THEN_DELETE_SOME_FILES_AND_TRY_AGAIN"
+msgstr "Нема доволно место во меморијата на уредот. Одете во Поставки > Енергија и меморија > Меморија, избришете некој фајл и обидете се повторно."
+
+msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE"
+msgstr "Нема доволно место во меморијата на уредот."
+
+msgid "IDS_EMAIL_POP_SERVER_NOT_AVAILABLE"
+msgstr "Серверот е недостапен."
+
+msgid "IDS_EMAIL_POP_SERVER_INFORMATION_QUERY_FAILED_ENTER_SERVER_INFORMATION_MANUALLY"
+msgstr "Барањето информации за серверот не успеа. Внесете ги рачно."
+
+msgid "IDS_EMAIL_POP_SECURITY_POLICY_RESTRICTS_USE_OF_THIS_ACCOUNT"
+msgstr "Политиката на безбедност го ограничува користењето на оваа сметка."
+
+msgid "IDS_EMAIL_POP_SAVING_EMAIL_ING"
+msgstr "Се зачувува е-пошта..."
+
+msgid "IDS_EMAIL_POP_SAVE_YOUR_CHANGES_OR_DISCARD_THEM_Q"
+msgstr "Да се сочуваат промените или да се отфрлат?"
+
+msgid "IDS_EMAIL_POP_REMOVING_ACCOUNT_ING"
+msgstr "Се брише сметката..."
+
+msgid "IDS_EMAIL_POP_PLEASE_FILL_ALL_THE_MANDATORY_FIELDS"
+msgstr "Пополнете ги сите задолжителни полиња."
+
+msgid "IDS_EMAIL_POP_ONLY_PART_OF_THE_MESSAGE_HAS_BEEN_DOWNLOADED_IF_YOU_CONTINUE_THE_REST_OF_THE_MESSAGE_MAY_BE_LOST"
+msgstr "Само дел од пораката е преземен. Ако продолжите, остатокот од оригиналната порака може да се изгуби."
+
+msgid "IDS_EMAIL_POP_NO_RESPONSE_HAS_BEEN_RECEIVED_FROM_THE_SERVER_TRY_AGAIN_LATER"
+msgstr "Не е примен одговор од серверот. Обидете се повторно подоцна."
+
+msgid "IDS_EMAIL_POP_NETWORK_BUSY"
+msgstr "Мрежата е зафатена."
+
+msgid "IDS_EMAIL_POP_INVALID_OR_INACCESSIBLE_CERTIFICATE"
+msgstr "Неважечки или недостапен сертификат."
+
+msgid "IDS_EMAIL_POP_INITIALISING_APPLICATION_ING"
+msgstr "Активирање на апликацијата..."
+
+msgid "IDS_EMAIL_POP_HOST_NOT_FOUND"
+msgstr "Давателот на услугата не е пронајден."
+
+msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_OR_NETWORK_NOT_AVAILABLE"
+msgstr "Вклучен е режимот за летање или мрежата е недостапна."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_START_EMAIL_APPLICATION"
+msgstr "Не можеше да се активира апликацијата Email."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DOWNLOAD_ATTACHMENT_CHECK_YOUR_NETWORK_CONNECTION_AND_TRY_AGAIN"
+msgstr "Неуспешно преземање прилог. Проверете го мрежното поврзување и обидете се повторно."
+
+msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
+msgstr "Email-от е избришан од серверот."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Неуспешно преземање."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Се презема..."
+
+msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
+msgstr "Со бришење на сметката ќе се избришат и сите пораки, контакти и други податоци од уредот. Допрете Избриши за да продолжите."
+
+msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
+msgstr "Се прави vCard..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Неуспешно поврзување."
+
+msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
+msgstr "Веќе е приложен фајл со ова име."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Неуспешна потврда."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Дојде до непозната грешка."
+
+msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
+msgstr "Сите прилози во оваа е-пошта ќе се преземат пред да се препрати."
+
+msgid "IDS_EMAIL_OPT_VIEW_CONTACT_DETAILS_ABB"
+msgstr "Види детали за контакт"
+
+msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
+msgstr "Ажурирај контакт"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Сподели"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Опции"
+
+msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
+msgstr "Прати на себе"
+
+msgid "IDS_EMAIL_OPT_SEND"
+msgstr "Прати"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Избери ги сите"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Избери"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Пребарување"
+
+msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
+msgstr "Соч. во недовршени"
+
+msgid "IDS_EMAIL_OPT_REPLY_ALL"
+msgstr "Одговори на сите"
+
+msgid "IDS_EMAIL_OPT_REPLY"
+msgstr "Одговори"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_SPAM_ABB"
+msgstr "Отстрани од Спам"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
+msgstr "Отстрани од Приоритетни испраќачи"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Отстрани"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Обнови"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Пресликај"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Оригинална"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
+msgstr "Прем. во главен примател (До)"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_CC"
+msgstr "Премести во Cc"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_BCC_ABB"
+msgstr "Премести во Bcc"
+
+msgid "IDS_EMAIL_OPT_MOVE"
+msgstr "Премести"
+
+msgid "IDS_EMAIL_OPT_MEDIUM_M_IMAGE_SIZE"
+msgstr "Среден"
+
+msgid "IDS_EMAIL_OPT_MARK_AS_UNREAD_ABB"
+msgstr "Означи како непрочитано"
+
+msgid "IDS_EMAIL_OPT_MARK_AS_READ_ABB"
+msgstr "Означи како прочитано"
+
+msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
+msgstr "Мал"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Препрати"
+
+msgid "IDS_EMAIL_OPT_EDIT"
+msgstr "Измени"
+
+msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
+msgstr "Избриши папка"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Избриши"
+
+msgid "IDS_EMAIL_OPT_CUT"
+msgstr "Исечи"
+
+msgid "IDS_EMAIL_OPT_CREATE_FOLDER_ABB2"
+msgstr "Нова папка"
+
+msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
+msgstr "Нов запис"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Копирај"
+
+msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
+msgstr "Состави е-пошта"
+
+msgid "IDS_EMAIL_OPT_CLIPBOARD"
+msgstr "Посредна меморија"
+
+msgid "IDS_EMAIL_OPT_CANCEL_SENDING_ABB"
+msgstr "Откажи испраќање"
+
+msgid "IDS_EMAIL_OPT_ADD_TO_PRIORITY_SENDERS_ABB"
+msgstr "Додај на приоритетни испраќачи"
+
+msgid "IDS_EMAIL_OPT_ADD_TO_CONTACTS_ABB2"
+msgstr "Додај во Контакти"
+
+msgid "IDS_EMAIL_OPT_ADD_CC_BCC"
+msgstr "Додај Копија/Н.к."
+
+msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
+msgstr "Додај прилог"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Додај сметка"
+
+msgid "IDS_EMAIL_OPT_ADD"
+msgstr "Додај"
+
+msgid "IDS_EMAIL_NPBODY_NO_RESULTS_FOUND"
+msgstr "Нема резултати"
+
+msgid "IDS_EMAIL_NPBODY_NO_PRIORITY_SENDERS"
+msgstr "Нема приоритетни испраќачи"
+
+msgid "IDS_EMAIL_NPBODY_NO_EMAILS"
+msgstr "Нема е-пошта"
+
+msgid "IDS_EMAIL_MBODY_VIBRATION"
+msgstr "Вибрации"
+
+msgid "IDS_EMAIL_MBODY_SIGNATURE"
+msgstr "Потпис"
+
+msgid "IDS_EMAIL_MBODY_PRIORITY_SENDERS"
+msgstr "Приоритетни испраќачи"
+
+msgid "IDS_EMAIL_MBODY_NO_EMAIL_ADDRESS_OR_NAME"
+msgstr "Нема е-пошта или име"
+
+msgid "IDS_EMAIL_MBODY_NOTIFICATION_SOUND"
+msgstr "Звук за известување"
+
+msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
+msgstr "Нова е-пошта"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Известување за email"
+
+msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
+msgstr "Измени потпис"
+
+msgid "IDS_EMAIL_MBODY_DISPLAY_SIGNATURE"
+msgstr "Прикажи потпис"
+
+msgid "IDS_EMAIL_MBODY_DISPLAY_IMAGES"
+msgstr "Прикажи слики"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_SEND_EMAIL_ABB"
+msgstr "Не може да се прати е-пошта"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"
+msgstr "Не може да се изврши дејството"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_OPEN_FILE_ABB"
+msgstr "Фајлот не може да се отвори"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_MOVE_EMAILS_ABB"
+msgstr "Не може да се прем. е-поштата"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_DOWNLOAD_ATTACHMENT_ABB"
+msgstr "Не може да се преземе прилогот"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_COMPOSE_EMAIL_ABB"
+msgstr "Не може да се состави е-пошта"
+
+msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
+msgstr "Не може да се додаде прилог"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Наслов"
+
+msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
+msgstr "Сопри составување е-пошта"
+
+msgid "IDS_EMAIL_HEADER_STARRED_EMAILS_ABB"
+msgstr "Е-пошта со ѕвезда"
+
+msgid "IDS_EMAIL_HEADER_SPAMBOX"
+msgstr "Несакана пошта"
+
+msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
+msgstr "Прикажи ги сите папки"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Опции"
+
+msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
+msgstr "Пратени"
+
+msgid "IDS_EMAIL_HEADER_SEND_TO_MYSELF_ABB"
+msgstr "Прати на себе"
+
+msgid "IDS_EMAIL_HEADER_SELECT_FOLDER_ABB2"
+msgstr "Одберете папка"
+
+msgid "IDS_EMAIL_HEADER_SELECT_ALL_ABB"
+msgstr "Избери ги сите"
+
+msgid "IDS_EMAIL_HEADER_SELECT_ACTION_ABB"
+msgstr "Изберете дејство"
+
+msgid "IDS_EMAIL_HEADER_RE_C_M_READ_REPORT"
+msgstr "Одг:"
+
+msgid "IDS_EMAIL_HEADER_REMOVE_ACCOUNT_ABB"
+msgstr "Избриши сметка"
+
+msgid "IDS_EMAIL_HEADER_RECYCLE_BIN_ABB"
+msgstr "Корпа за отпадоци"
+
+msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
+msgstr "Приоритетни испраќачи"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d избрани"
+
+msgid "IDS_EMAIL_HEADER_OUTBOX"
+msgstr "Излезно сандаче"
+
+msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
+msgstr "Отворање е-пошта"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Известувања"
+
+msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
+msgstr "Сандаче"
+
+msgid "IDS_EMAIL_HEADER_INBOX"
+msgstr "Влезно сандаче"
+
+msgid "IDS_EMAIL_HEADER_IMAGE_QUALITY_ABB"
+msgstr "Квалитет на сликата"
+
+msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
+msgstr "(основно)"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Општо"
+
+msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
+msgstr "Папки за сметката"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_SAVE_ATTACHMENT_ABB"
+msgstr "Неуспешно сочув. на прилогот"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_DELETE_ACCOUNT_ABB"
+msgstr "Неуспешно бришење сметка"
+
+msgid "IDS_EMAIL_HEADER_FAILED_TO_CONNECT_TO_SERVER_ABB"
+msgstr "Неуспешно поврзување со сервер"
+
+msgid "IDS_EMAIL_HEADER_ENTER_NEW_PASSWORD_ABB"
+msgstr "Внесете ја новата лозинка"
+
+msgid "IDS_EMAIL_HEADER_DRAFTS"
+msgstr "Недовршени"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ENTIRE_EMAIL_ABB"
+msgstr "Преземи ја цела е-пошта"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENT_HEADER"
+msgstr "Преземи прилог"
+
+msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
+msgstr "Преземи прилози"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Избриши"
+
+msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
+msgstr "Направи vCard"
+
+msgid "IDS_EMAIL_HEADER_COMPOSE_ABB"
+msgstr "Состави"
+
+msgid "IDS_EMAIL_HEADER_COMBINED_INBOX_ABB"
+msgstr "Комб. влезно сандаче"
+
+msgid "IDS_EMAIL_HEADER_COMBINED_ACCOUNTS_ABB"
+msgstr "Комбинирани сметки"
+
+msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
+msgstr "Прилози"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Сметки"
+
+msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
+msgstr "Видеа"
+
+msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
+msgstr "Фотографирај"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Опции"
+
+msgid "IDS_EMAIL_BUTTON_SEND_ALL"
+msgstr "Прати ги сите"
+
+msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
+msgstr "Сочув."
+
+msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
+msgstr "Сними видео"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_MEMO"
+msgstr "Белешка"
+
+msgid "IDS_EMAIL_BUTTON_IMAGES_ABB"
+msgstr "Слики"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
+msgstr "Преземи целосна е-пошта"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Преземи ги сите"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Готово"
+
+msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
+msgstr "Отфрли"
+
+msgid "IDS_EMAIL_BUTTON_DELETE_ABB4"
+msgstr "Избриши"
+
+msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
+msgstr "Направи"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Продолжи"
+
+msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
+msgstr "Контакти"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Откажи"
+
+msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
+msgstr "Сними звучен фајл"
+
+msgid "IDS_EMAIL_BUTTON2_CALENDAR"
+msgstr "Календар"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Вчера"
+
+msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
+msgstr "Не може да се отвори врската со серверот. Дојде до безбедносна грешка."
+
+msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
+msgstr "До"
+
+msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
+msgstr "Оваа папка и сите нејзини содржини ќе се избришат."
+
+msgid "IDS_EMAIL_BODY_SERVER_DOES_NOT_SUPPORT_TLS"
+msgstr "Серверот не поддржува TLS."
+
+msgid "IDS_EMAIL_BODY_SENT_C_M_DATE"
+msgstr "Пратено на:"
+
+msgid "IDS_EMAIL_BODY_PS_MB"
+msgstr "%s MB"
+
+msgid "IDS_EMAIL_BODY_PS_KB"
+msgstr "%s KB"
+
+msgid "IDS_EMAIL_BODY_PS_GB"
+msgstr "%s GB"
+
+msgid "IDS_EMAIL_BODY_PS_B"
+msgstr "%s B"
+
+msgid "IDS_EMAIL_BODY_PD_FILES_ABB"
+msgstr "%d фајл."
+
+msgid "IDS_EMAIL_BODY_ORIGINAL_MESSAGE"
+msgstr "Оригинална порака"
+
+msgid "IDS_EMAIL_BODY_NO_MORE_EMAILS_M_STATUS"
+msgstr "Нема веќе е-пошти"
+
+msgid "IDS_EMAIL_BODY_MY_FILES_M_APPLICATION"
+msgstr "Мои фајлови"
+
+msgid "IDS_EMAIL_BODY_MAPS_ABB"
+msgstr "Карти"
+
+msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
+msgstr "Се вчитуваат уште..."
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Последен пат ажурирано"
+
+msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
+msgstr "Вклучи оригинална порака"
+
+msgid "IDS_EMAIL_BODY_IMAP4"
+msgstr "IMAP4"
+
+msgid "IDS_EMAIL_BODY_FWD_C"
+msgstr "Пре:"
+
+msgid "IDS_EMAIL_BODY_FROM_MSENDER"
+msgstr "Од"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Име на папката"
+
+msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
+msgstr "Поминете нагоре за повеќе"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "Адреса на Е-пошта"
+
+msgid "IDS_EMAIL_BODY_CC_BCC"
+msgstr "Коп/Н.к."
+
+msgid "IDS_EMAIL_BODY_CC"
+msgstr "Cc"
+
+msgid "IDS_EMAIL_BODY_BCC"
+msgstr "Bcc"
+
+msgid "IDS_EMAIL_BODY_AUDIO_FILES_ABB"
+msgstr "Звуч.фајлови"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_SEND_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Откако ќе пратите е-пошти, ќе се прикажат тука."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_RECEIVE_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Откако ќе примите е-пошти, ќе се прикажат тука."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_MOVE_EMAILS_TO_THIS_FOLDER_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Откако ќе ја преместите е-поштата во папкава, ќе се прикаже тука."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_HAVE_TRIED_TO_SEND_EMAILS_BUT_THEY_FAILED_TO_BE_SENT_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Откако сте се обиделе да пратите е-пошта, но неуспешно, пораките ќе се прикажат тука."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_DELETE_EMAILS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Откако ќе избришете е-пошти, ќе се прикажат тука."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_PRIORITY_SENDERS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Откако ќе додадете приоритетни испраќачи, ќе се прикажат тука."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_PRIORITY_SENDERS_EMAILS_FROM_THEM_WILL_BE_SHOWN_HERE"
+msgstr "Откако ќе додадете приоритетни испраќачи, пораките од е-пошта од нив ќе се прикажуваат тука."
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_FAVOURITE_EMAILS_BY_TAPPING_THE_STAR_ICON_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Откако ќе додадете омилени е-пошти допирајќи ја иконата на ѕвезда, ќе се прикажат тука."
+
+msgid "IDS_EMAIL_BODY_1_FILE_ABB"
+msgstr "1 фајл"
+
+msgid "IDS_EMAIL_ACBUTTON_MAILBOX_ABB"
+msgstr "САНДАЧЕ"
+
+msgid "IDS_MF_HEADER_UNABLE_TO_SAVE_DATA_ABB"
+msgstr "Не може да се соч.подат."
+
+msgid "IDS_ST_TPOP_VALIDATING_ACCOUNT_ING_ABB"
+msgstr "Сметката се потврдува..."
+
+msgid "IDS_ST_TMBODY_USERNAME"
+msgstr "Корисничко име"
+
+msgid "IDS_ST_TMBODY_SYNC_WHILE_ROAMING"
+msgstr "Синхронизирање при роаминг"
+
+msgid "IDS_ST_TMBODY_SYNC"
+msgstr "Синхронизирај"
+
+msgid "IDS_ST_TMBODY_SERVER_ADDRESS"
+msgstr "Адреса на серверот"
+
+msgid "IDS_ST_TMBODY_SENDER_NAME"
+msgstr "Име на испраќач"
+
+msgid "IDS_ST_TMBODY_PASSWORD"
+msgstr "Лозинка"
+
+msgid "IDS_ST_TMBODY_ACCOUNT_NAME"
+msgstr "Име на сметката"
+
+msgid "IDS_ST_SBODY_TLS"
+msgstr "TLS"
+
+msgid "IDS_ST_SBODY_SSL"
+msgstr "SSL"
+
+msgid "IDS_ST_SBODY_SHOW_PASSWORD_ABB"
+msgstr "Прикажи лозинка"
+
+msgid "IDS_ST_SBODY_SET_AS_DEFAULT_ACCOUNT_ABB"
+msgstr "Одреди како основна сметка"
+
+msgid "IDS_ST_SBODY_PROCESSING_PLEASE_WAIT_ING_ABB"
+msgstr "Се обработува. Почекајте..."
+
+msgid "IDS_ST_SBODY_POP3"
+msgstr "POP3"
+
+msgid "IDS_ST_SBODY_NOT_SYNCED_YET_M_STATUS"
+msgstr "Уште не е синхронизирано"
+
+msgid "IDS_ST_SBODY_IMAP"
+msgstr "IMAP"
+
+msgid "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"
+msgstr "Сметката е веќе додадена."
+
+msgid "IDS_ST_POP_THE_MAXIMUM_NUMBER_OF_EMAIL_ACCOUNTS_HPD_HAS_BEEN_REACHED"
+msgstr "Достигнат е максималниот број сметки за е-пошта (%d)."
+
+msgid "IDS_ST_POP_CHECK_THE_EMAIL_ADDRESS_AND_PASSWORD_YOU_HAVE_ENTERED"
+msgstr "Проверете ги адресата за е-пошта и лозинката што ги внесовте."
+
+msgid "IDS_ST_POP_ALL_DATA_RELATED_TO_THIS_ACCOUNT_WILL_BE_DELETED_FROM_THE_DEVICE"
+msgstr "Сите податоци поврзани со оваа сметка ќе се избришат од уредот."
+
+msgid "IDS_ST_OPT_REMOVE"
+msgstr "Отстрани"
+
+msgid "IDS_ST_OPT_PUSH"
+msgstr "Автоматско праќање"
+
+msgid "IDS_ST_OPT_NO_LIMIT"
+msgstr "Без ограничување"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Ништо"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Рачно"
+
+msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
+msgstr "Задр. поставки без роаминг"
+
+msgid "IDS_ST_OPT_HEADER_ONLY"
+msgstr "Само заглавје"
+
+msgid "IDS_ST_OPT_EVERY_PD_MINUTES_ABB"
+msgstr "На %d минути"
+
+msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
+msgstr "Секој час"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Секој ден"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Основно"
+
+msgid "IDS_ST_MBODY_SYNC_EMAILS"
+msgstr "Синхронизирај е-пошта"
+
+msgid "IDS_ST_MBODY_SMTP_AUTHENTICATION"
+msgstr "Потврдување SMTP"
+
+msgid "IDS_ST_MBODY_SERVER_SETTINGS"
+msgstr "Поставки на серверот"
+
+msgid "IDS_ST_MBODY_SAME_AS_POP3_IMAP4"
+msgstr "Исто како POP3/IMAP4"
+
+msgid "IDS_ST_MBODY_POP3_BEFORE_SMTP"
+msgstr "POP3 пред SMTP"
+
+msgid "IDS_ST_MBODY_OTHER"
+msgstr "Друго"
+
+msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
+msgstr "Расп.за синхрон. е-пошта"
+
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Предупредување"
+
+msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
+msgstr "Не може да се потврди сметката"
+
+msgid "IDS_ST_HEADER_UNABLE_TO_ADD_ACCOUNT_ABB"
+msgstr "Не може да се додаде сметка"
+
+msgid "IDS_ST_HEADER_SERVER_TYPE_ABB"
+msgstr "Вид сервер"
+
+msgid "IDS_ST_HEADER_SELECT_ACCOUNT_TYPE_ABB"
+msgstr "Изберете тип сметка"
+
+msgid "IDS_ST_HEADER_SECURITY_TYPE_ABB"
+msgstr "Тип безбедност"
+
+msgid "IDS_ST_HEADER_OUTGOING_SERVER_SETTINGS_ABB"
+msgstr "Поставки за појдовен сервер"
+
+msgid "IDS_ST_HEADER_LIMIT_RETRIEVAL_SIZE"
+msgstr "Ограничи големина за преземање"
+
+msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
+msgstr "Поставки за дојдовен сервер"
+
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "Е-пошта"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Следно"
+
+msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
+msgstr "Рачно постав."
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Нечујно"
+
+msgid "IDS_ST_BODY_PORT"
+msgstr "Порт"
+
+msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
+msgstr "ПРАТИ"
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Големина на букви"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Боја на знаци"
+
+msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
+msgstr "Преименувај папка"
+
+msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
+msgstr "Премести во Несакана пошта"
+
+msgid "IDS_EMAIL_OPT_REMOVE_FROM_SPAMBOX_ABB"
+msgstr "Отстрани од Несакана пошта"
+
+msgid "IDS_EMAIL_OPT_SHOW_TEXT_TOOLS"
+msgstr "Покажи алатки за текст"
+
+msgid "IDS_EMAIL_OPT_HIDE_TEXT_TOOLS"
+msgstr "Сокриј алатки за текст"
+
+msgid "IDS_EMAIL_HEADER_EMAIL_SETTINGS"
+msgstr "Опции за email"
+
+msgid "IDS_EMAIL_BODY_SYNCING_ING"
+msgstr "Се синхронизирa..."
+
+msgid "IDS_EMAIL_BODY_SYNC_FAILED_TRY_LATER"
+msgstr "Неуспешна синхронизација. Обидете се подоцна."
+
+msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
+msgstr "Боја за заднина на текстот"
+
+msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
+msgstr "Преземено"
+
+msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
+msgstr "Автоматско преземање прилози кога е поврзано со мрежа Wi-Fi"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Меморирано."
+
+msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
+msgstr "Вклучи богат текст"
+
+msgid "IDS_EMAIL_OPT_DISABLE_RICH_TEXT_ABB2"
+msgstr "Исклучи Богат текст"
+
+msgid "IDS_EMAIL_BUTTON_SHOW_ABB"
+msgstr "Прикажи"
+
+msgid "IDS_EMAIL_BUTTON_HIDE_ABB3"
+msgstr "Сокриј"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_SAVE_EMAILS_IN_DRAFTS_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Откако ќе ја зачувате е-поштата во Недовршени, ќе се прикажат тука."
+
+msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
+msgstr "Сочувај сè"
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Неуспешно бришење."
+
+msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
+msgstr "Папката е преименувана."
+
+msgid "IDS_EMAIL_HEADER_SELECT_EMAILS"
+msgstr "Избери email-и"
+
+msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_EMAILS_TO_SPAM_THEY_WILL_BE_SHOWN_HERE"
+msgstr "Откако ќе додадете е-пошти во несакани, ќе се прикажат тука."
+
+msgid "IDS_EMAIL_BUTTON_RENAME_ABB"
+msgstr "Преименувај"
+
+msgid "IDS_EMAIL_POP_RENAMING_FOLDER_ING"
+msgstr "Се преименува папка..."
+
+msgid "IDS_EMAIL_POP_NETWORK_NOT_AVAILABLE_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
+msgstr "Мрежата е недостапна. Поракава ќе се испрати кога ќе се поврзете со мрежа."
+
+msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
+msgstr "Вклучен е режимот за летало. Поракава ќе се испрати кога ќе се поврзете со мрежа."
+

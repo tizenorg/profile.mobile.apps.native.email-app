@@ -2280,12 +2280,12 @@ EMAIL_API char *email_get_datetime_format(void)
 	return strdup(dt_fmt);
 }
 
-EMAIL_API inline char *email_get_system_string(const char *string_id)
+EMAIL_API char *email_get_system_string(const char *string_id)
 {
 	return dgettext(SYSTEM_STRING, string_id);
 }
 
-EMAIL_API inline char *email_get_email_string(const char *string_id)
+EMAIL_API char *email_get_email_string(const char *string_id)
 {
 	return dgettext(PACKAGE, string_id);
 }

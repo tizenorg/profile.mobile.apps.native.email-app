@@ -388,7 +388,7 @@ char *setting_get_provider_name(EmailSettingUGD *ugd);
  * @param[in]	t		Email string setting data
  * @return The translated text string on success, otherwise NULL. It should be freed.
  */
-inline char *email_setting_gettext(email_string_t t);
+char *email_setting_gettext(email_string_t t);
 
 /**
  * @brief The function registers callbacks for: 1) "virtualkeypad,state,on" 2) "virtualkeypad,state,off"

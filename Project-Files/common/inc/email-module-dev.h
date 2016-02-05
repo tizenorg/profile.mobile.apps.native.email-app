@@ -26,12 +26,10 @@
 #include "email-module-core.h"
 #include "email-module-launcher.h"
 
-#ifdef ATTACH_PANEL_FEATURE
 /**
  * Forward declaration of the attach panel handle
  */
 typedef struct _attach_panel *attach_panel_h;
-#endif
 
 /**
  * Enumeration of the email module states
@@ -131,10 +129,8 @@ struct _email_module
 	 * EMAIL_LAUNCH_APP_NONE if no applications launched*/
 	email_launch_app_type_e launched_app_type;
 
-#ifdef ATTACH_PANEL_FEATURE
 	/* Status of the attach panel */
 	bool is_attach_panel_launched;
-#endif
 	/* Busy status of the launcher */
 	bool is_launcher_busy;
 
@@ -165,28 +161,22 @@ struct _email_module
 
 	/* Request that was used to launch an application or NULL */
 	app_control_h _launched_app;
-#ifdef ATTACH_PANEL_FEATURE
 	/* Handle of the attach panel if created, or NULL */
 	attach_panel_h _attach_panel;
-#endif
 	/* Timer used to reset transparent application state */
 	Ecore_Timer *_app_timer;
 	/* Application launch listener */
 	email_launched_app_listener_t _app_listener;
-#ifdef ATTACH_PANEL_FEATURE
 	/* Attach panel launch listener */
 	email_attach_panel_listener_t _attach_panel_listener;
-#endif
 	/* true if the application was actually started by the system */
 	bool _app_was_started;
-#ifdef ATTACH_PANEL_FEATURE
 	/* true if we need to recreate attach panel on next launch */
 	bool _attach_panel_bundles_changed;
 
 	/* Attach panel category extra data bundles
 	 * to use when creating attach panel categories */
 	bundle *_attach_panel_bundles[EMAIL_APCT_COUNT];
-#endif
 };
 
 /**

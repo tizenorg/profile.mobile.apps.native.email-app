@@ -15,7 +15,9 @@
  *
  */
 
+#ifndef DISABLE_PNG_RESIZE
 #include <png.h>
+#endif
 #include <string.h>
 #include <Elementary.h>
 #include <libexif/exif-data.h>
@@ -52,19 +54,25 @@ typedef struct _transform {
  * Declarations for static variables
  */
 
+#ifndef DISABLE_PNG_RESIZE
 static const int RGBA_BPP = 4;
+#endif
 static const int RGB_BPP = 3;
 
 /*
  * Declaration for static functions
  */
 
+#ifndef DISABLE_PNG_RESIZE
 static Eina_Bool __composer_util_image_read_png_image(const char *filename, png_bytep **row_pointers, png_uint_32 *width, png_uint_32 *height,
                                                       int *bit_depth, int *color_type, int *interlace_type, int quality, int *channels, image_util_colorspace_e *colorspace);
 static Eina_Bool __composer_util_image_write_png_image(const char *filename, png_bytep *row_pointers, png_uint_32 width, png_uint_32 height, int bit_depth, int color_type, int interlace_type);
+#endif
 
+#ifndef DISABLE_PNG_RESIZE
 static int __composer_image_util_resize(unsigned char *dest, const int *dest_width , const int *dest_height, const unsigned char *src,
 		const int src_w, const int src_h, const image_util_colorspace_e colorspace);
+#endif
 static int __composer_image_util_rotate(unsigned char *dest, int *dest_width, int *dest_height, const image_util_rotation_e dest_rotation,
 		const unsigned char *src, const int src_w, const int src_h, const image_util_colorspace_e colorspace);
 
@@ -78,7 +86,11 @@ Eina_Bool composer_util_image_is_resizable_image_type(const char *mime_type)
 
 	retvm_if(!mime_type, EINA_FALSE, "Invalid parameter: mime_type is NULL!");
 
+#ifndef DISABLE_PNG_RESIZE
 	if (!g_strcmp0(mime_type, "image/png") || !g_strcmp0(mime_type, "image/jpeg")) {
+#else
+	if (!g_strcmp0(mime_type, "image/jpeg")) {
+#endif
 		debug_leave();
 		return EINA_TRUE;
 	} else {
@@ -187,6 +199,7 @@ Eina_Bool composer_util_image_set_image_with_size(void *data, Evas_Object **src_
 	return EINA_TRUE;
 }
 
+#ifndef DISABLE_PNG_RESIZE
 static Eina_Bool __composer_util_image_read_png_image(const char *filename, png_bytep **row_pointers, png_uint_32 *width, png_uint_32 *height,
                                                       int *bit_depth, int *color_type, int *interlace_type, int quality, int *channels, image_util_colorspace_e *colorspace)
 {
@@ -387,6 +400,7 @@ static Eina_Bool __composer_util_image_write_png_image(const char *filename, png
 	debug_leave();
 	return EINA_TRUE;
 }
+#endif
 
 Eina_Bool composer_util_image_scale_down_with_quality(void *data, const char *src, const char *dst, int quality)
 {
@@ -435,7 +449,9 @@ Eina_Bool composer_util_image_scale_down_with_quality(void *data, const char *sr
 			goto exit_func;
 		}
 		FREE(jpeg_image_buffer);
-	} else if (!g_strcmp0(mime_type, "image/png")) {
+	}
+#ifndef DISABLE_PNG_RESIZE
+	else if (!g_strcmp0(mime_type, "image/png")) {
 		int i = 0;
 		int color_type = 0;
 		int bit_depth = 0;
@@ -518,6 +534,7 @@ Eina_Bool composer_util_image_scale_down_with_quality(void *data, const char *sr
 		}
 		FREE(dst_row_ptrs);
 	}
+#endif
 
 	if (!email_file_exists(dst)) {
 		debug_secure_error("email_file_exists(%s) failed!", dst);
@@ -743,6 +760,7 @@ err_return:
 	return EINA_FALSE;
 }
 
+#ifndef DISABLE_PNG_RESIZE
 static int __composer_image_util_resize(unsigned char *dest, const int *dest_width , const int *dest_height, const unsigned char *src,
 								const int src_w, const int src_h, const image_util_colorspace_e colorspace)
 {
@@ -884,6 +902,7 @@ static int __composer_image_util_resize(unsigned char *dest, const int *dest_wid
 
 	return IMAGE_UTIL_ERROR_NONE;
 }
+#endif
 
 static int __composer_image_util_rotate(unsigned char *dest, int *dest_width, int *dest_height, const image_util_rotation_e dest_rotation,
 										const unsigned char *src, const int src_w, const int src_h, const image_util_colorspace_e colorspace)
