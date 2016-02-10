@@ -223,7 +223,6 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.167757458" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_DEBUG"/>
-									<listOptionValue builtIn="false" value="DISABLE_PNG_RESIZE"/>
 									<listOptionValue builtIn="false" value="_EWK_LOAD_NONEMPTY_LAYOUT_FINISHED_CB_UNAVAILABLE_"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.262633697" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -430,7 +429,6 @@
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1590788948" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_EWK_LOAD_NONEMPTY_LAYOUT_FINISHED_CB_UNAVAILABLE_"/>
 									<listOptionValue builtIn="false" value="_DEBUG"/>
-									<listOptionValue builtIn="false" value="DISABLE_PNG_RESIZE"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.14685267" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
@@ -709,7 +707,6 @@
 									<listOptionValue builtIn="false" value="Native_API"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.381516142" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="DISABLE_PNG_RESIZE"/>
 									<listOptionValue builtIn="false" value="_EWK_LOAD_NONEMPTY_LAYOUT_FINISHED_CB_UNAVAILABLE_"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1194920890" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -915,7 +912,6 @@
 								</option>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1956529520" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_EWK_LOAD_NONEMPTY_LAYOUT_FINISHED_CB_UNAVAILABLE_"/>
-									<listOptionValue builtIn="false" value="DISABLE_PNG_RESIZE"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.872924693" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>

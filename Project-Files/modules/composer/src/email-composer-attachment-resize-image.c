@@ -47,11 +47,6 @@ static email_string_t EMAIL_COMPOSER_STRING_HEADER_IMAGE_QUALITY_ABB = { PACKAGE
 static email_string_t EMAIL_COMPOSER_STRING_OPT_ADD_ATTACHMENT_ABB = { PACKAGE, "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB" };
 static email_string_t EMAIL_COMPOSER_STRING_POP_RESIZNG_ING = { PACKAGE, "IDS_EMAIL_TPOP_RESIZING_FILES_ING" };
 
-enum {
-	RESIZE_IMAGE_SMALL_SIZE = 10,
-	RESIZE_IMAGE_MEDIUM_SIZE = 50,
-	RESIZE_IMAGE_ORIGINAL_SIZE = 100
-};
 static Elm_Genlist_Item_Class resize_image_itc;
 
 
@@ -129,7 +124,7 @@ static void _attachment_resize_image_thread_worker(void *data, Ecore_Thread *th)
 
 		char dst_filepath[EMAIL_FILEPATH_MAX + 1] = { 0, };
 		if (composer_util_file_get_temp_filename(recv, dst_filepath, EMAIL_FILEPATH_MAX, "_resized")) {
-			if (composer_util_image_scale_down_with_quality(ugd, recv, dst_filepath, ugd->resize_image_quality)) {
+			if (composer_util_image_scale_down_with_quality(recv, dst_filepath, ugd->resize_image_quality)) {
 				struct stat file_info;
 				if (stat(dst_filepath, &file_info) == -1) {
 					debug_error("stat() failed! (%d): %s", errno, strerror(errno));

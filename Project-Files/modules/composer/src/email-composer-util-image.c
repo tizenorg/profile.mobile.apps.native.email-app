@@ -15,9 +15,6 @@
  *
  */
 
-#ifndef DISABLE_PNG_RESIZE
-#include <png.h>
-#endif
 #include <string.h>
 #include <Elementary.h>
 #include <libexif/exif-data.h>
@@ -30,49 +27,45 @@
 #include "email-composer-types.h"
 #include "email-composer-util.h"
 
-#define Z_BEST_COMPRESSION 9
+#define RGB_BPP 3
 
-
-typedef unsigned char uchar;
-typedef struct _rgb888 {
-	uchar r;
-	uchar g;
-	uchar b;
-} rgb888;
 typedef struct _rgba8888 {
-	uchar r;
-	uchar g;
-	uchar b;
-	uchar a;
+	uint8_t r;
+	uint8_t g;
+	uint8_t b;
+	uint8_t a;
 } rgba8888;
+
+typedef struct _rgb888 {
+	uint8_t r;
+	uint8_t g;
+	uint8_t b;
+} rgb888;
+
 typedef struct _transform {
 	int index;
-	float coef;
+	int coef;
 } transform;
-
-/*
- * Declarations for static variables
- */
-
-#ifndef DISABLE_PNG_RESIZE
-static const int RGBA_BPP = 4;
-#endif
-static const int RGB_BPP = 3;
 
 /*
  * Declaration for static functions
  */
 
-#ifndef DISABLE_PNG_RESIZE
-static Eina_Bool __composer_util_image_read_png_image(const char *filename, png_bytep **row_pointers, png_uint_32 *width, png_uint_32 *height,
-                                                      int *bit_depth, int *color_type, int *interlace_type, int quality, int *channels, image_util_colorspace_e *colorspace);
-static Eina_Bool __composer_util_image_write_png_image(const char *filename, png_bytep *row_pointers, png_uint_32 width, png_uint_32 height, int bit_depth, int color_type, int interlace_type);
+#ifndef _TIZEN_2_4_BUILD_
+static inline void __composer_util_make_image_resize_transform(transform *trans,
+		int dst_length, int src_length);
+static bool __composer_util_prepare_image_resize(const int dst_length, const int src_length,
+		const int tmp_buff_mult, transform **trans, void **tmp_buff);
+static bool __composer_util_resize_image_width_rgba(rgba8888 *const dst, const int dst_width,
+		const rgba8888 *const src, const int src_width, const int height);
+static bool __composer_util_resize_image_height_rgba(rgba8888 *const dst, const int dst_height,
+		const rgba8888 *const src, const int src_height, const int width);
+
+static int _composer_util_resize_image_rgba(
+		unsigned char *const dst, const int dst_width , const int dst_height,
+		const unsigned char *const src, const int src_width, const int src_height);
 #endif
 
-#ifndef DISABLE_PNG_RESIZE
-static int __composer_image_util_resize(unsigned char *dest, const int *dest_width , const int *dest_height, const unsigned char *src,
-		const int src_w, const int src_h, const image_util_colorspace_e colorspace);
-#endif
 static int __composer_image_util_rotate(unsigned char *dest, int *dest_width, int *dest_height, const image_util_rotation_e dest_rotation,
 		const unsigned char *src, const int src_w, const int src_h, const image_util_colorspace_e colorspace);
 
@@ -86,11 +79,12 @@ Eina_Bool composer_util_image_is_resizable_image_type(const char *mime_type)
 
 	retvm_if(!mime_type, EINA_FALSE, "Invalid parameter: mime_type is NULL!");
 
-#ifndef DISABLE_PNG_RESIZE
-	if (!g_strcmp0(mime_type, "image/png") || !g_strcmp0(mime_type, "image/jpeg")) {
-#else
-	if (!g_strcmp0(mime_type, "image/jpeg")) {
+#ifdef _TIZEN_2_4_BUILD_
+	debug_leave();
+	return EINA_FALSE;
 #endif
+
+	if (!g_strcmp0(mime_type, "image/png") || !g_strcmp0(mime_type, "image/jpeg")) {
 		debug_leave();
 		return EINA_TRUE;
 	} else {
@@ -199,355 +193,147 @@ Eina_Bool composer_util_image_set_image_with_size(void *data, Evas_Object **src_
 	return EINA_TRUE;
 }
 
-#ifndef DISABLE_PNG_RESIZE
-static Eina_Bool __composer_util_image_read_png_image(const char *filename, png_bytep **row_pointers, png_uint_32 *width, png_uint_32 *height,
-                                                      int *bit_depth, int *color_type, int *interlace_type, int quality, int *channels, image_util_colorspace_e *colorspace)
+Eina_Bool composer_util_image_scale_down_with_quality(const char *src_path, const char *dst_path, int quality)
 {
 	debug_enter();
+	retvm_if(!src_path, EINA_FALSE, "src is NULL!");
+	retvm_if(!dst_path, EINA_FALSE, "dst is NULL!");
 
-	png_structp png_ptr = NULL;
-	png_infop info_ptr = NULL;
+#ifdef _TIZEN_2_4_BUILD_
+	debug_secure("Not supported on Tizen 2.4");
+	return EINA_FALSE;
+#else
 
-	png_uint_32 w = 0;
-	png_uint_32 h = 0;
-	int t = 0, b = 0;
-	image_util_colorspace_e img_colorspace = IMAGE_UTIL_COLORSPACE_RGB888;
-	unsigned char header[8] = { 0, }; /* 8 is the maximum size that can be checked */
-
-	FILE *fp = fopen(filename, "rb");
-	retvm_if(!fp, EINA_FALSE, "fopen() failed!");
-
-	size_t n = fread(header, 1, 8, fp);
-	if (n <= 0) {
-		debug_error("file size error ==> n:%d", n);
-		fclose(fp);
-		return EINA_FALSE;
-	}
-	if (png_sig_cmp(header, 0, 8) != 0) {
-		debug_error("file is not recognized as a PNG file!");
-		fclose(fp);
+	if (!email_file_exists(src_path)) {
+		debug_secure("email_file_exists(%s) failed!", src_path);
 		return EINA_FALSE;
 	}
 
-	/* initialize stuff */
-	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	if (!png_ptr) {
-		debug_error("png_create_info_struct() failed!");
-		fclose(fp);
-		return EINA_FALSE;
+	image_util_colorspace_e colorspace = IMAGE_UTIL_COLORSPACE_RGBA8888;
+	image_util_type_e image_type = IMAGE_UTIL_PNG;
+	bool image_type_ok = false;
+
+	char *mime_type = email_get_mime_type_from_file(src_path);
+	retvm_if(!mime_type, EINA_FALSE, "email_get_mime_type_from_file() failed!");
+
+	if (g_strcmp0(mime_type, "image/jpeg") == 0) {
+		colorspace = IMAGE_UTIL_COLORSPACE_RGB888;
+		image_type = IMAGE_UTIL_JPEG;
+		image_type_ok = true;
+	} else if (g_strcmp0(mime_type, "image/png") == 0) {
+		colorspace = IMAGE_UTIL_COLORSPACE_RGBA8888;
+		image_type = IMAGE_UTIL_PNG;
+		image_type_ok = true;
 	}
 
-	info_ptr = png_create_info_struct(png_ptr);
-	if (!info_ptr) {
-		debug_error("png_create_info_struct() failed!");
-		fclose(fp);
-		png_destroy_read_struct(&png_ptr, NULL, NULL);
-		return EINA_FALSE;
-	}
+	FREE(mime_type);
 
-	if (setjmp(png_jmpbuf(png_ptr))) {
-		debug_error("error occurred on libpng!");
-		fclose(fp);
-		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-		return EINA_FALSE;
-	}
+	retvm_if(!image_type_ok, EINA_FALSE, "File type not supported: %s", mime_type);
 
-	png_init_io(png_ptr, fp);
-	png_set_sig_bytes(png_ptr, 8);
-	png_read_info(png_ptr, info_ptr);
+	Eina_Bool result = EINA_FALSE;
+	int r = 0;
 
-	int intr_type = png_get_interlace_type(png_ptr, info_ptr);
+	image_util_decode_h decoder = NULL;
+	image_util_encode_h encoder = NULL;
+	unsigned long long int decode_size = 0;
+	unsigned long long int encode_size = 0;
+	unsigned char *src_buff = NULL;
+	unsigned char *dst_buff = NULL;
+	unsigned long src_w = 0;
+	unsigned long src_h = 0;
+	int dst_w = 0;
+	int dst_h = 0;
+	bool free_dst_buff = false;
 
-	/* Currently interlaced PNG images are not supported */
-	if (intr_type != PNG_INTERLACE_NONE) {
-		debug_warning("interlace not supported");
-		fclose(fp);
-		png_destroy_read_struct(&png_ptr, NULL, NULL);
-		return EINA_FALSE;
-	}
+	r = image_util_decode_create(&decoder);
+	gotom_if(r != 0, exit_func, "image_util_decode_create() failed!");
+	r = image_util_decode_set_input_path(decoder, src_path);
+	gotom_if(r != 0, exit_func, "image_util_decode_set_input_path() failed!");
+	r = image_util_decode_set_colorspace(decoder, colorspace);
+	gotom_if(r != 0, exit_func, "image_util_decode_set_colorspace() failed!");
+	r = image_util_decode_set_output_buffer(decoder, &src_buff);
+	gotom_if(r != 0, exit_func, "image_util_decode_set_output_buffer() failed!");
+	r = image_util_decode_run(decoder, &src_w, &src_h, &decode_size);
+	gotom_if(r != 0, exit_func, "image_util_decode_run() failed!");
 
-	int b_depth = png_get_bit_depth(png_ptr, info_ptr);
-	int c_type = png_get_color_type(png_ptr, info_ptr);
+	r = image_util_encode_create(image_type, &encoder);
+	gotom_if(r != 0, exit_func, "image_util_encode_create() failed!");
+	r = image_util_encode_set_colorspace(encoder, colorspace);
+	gotom_if(r != 0, exit_func, "image_util_encode_set_colorspace() failed!");
+	r =image_util_encode_set_output_path(encoder, dst_path);
+	gotom_if(r != 0, exit_func, "image_util_encode_set_output_path() failed!");
 
-	/* Convert palette color to RGB. */
-	if (c_type == PNG_COLOR_TYPE_PALETTE) {
-		png_set_palette_to_rgb(png_ptr);
-	}
+	dst_buff = src_buff;
+	dst_w = src_w;
+	dst_h = src_h;
 
-	/* Convert grayscale with less than 8 bpp to 8 bpp. */
-	if (c_type == PNG_COLOR_TYPE_GRAY && b_depth < 8) {
-		png_set_expand_gray_1_2_4_to_8(png_ptr);
-	}
-
-	/* Add full alpha channel if there's transparency. */
-	if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS)) {
-		png_set_tRNS_to_alpha(png_ptr);
-	}
-
-	/* PNGs support 16 bpp, but we don't. */
-	if (b_depth == 16) {
-		debug_warning("converting 16-bit channels to 8-bit");
-		png_set_strip_16(png_ptr);
-	}
-
-	/* If there's more than one pixel per byte, expand to 1 pixel / byte. */
-	if (b_depth < 8) {
-		png_set_packing(png_ptr);
-	}
-
-	/* Update info after updating attributes. */
-	png_read_update_info(png_ptr, info_ptr);
-
-	/* Get info again after updating info. */
-	png_get_IHDR(png_ptr, info_ptr, &w, &h, &b, &t, NULL, NULL, NULL);
-	debug_log("(w:%d, h:%d, b:%d, t:%d)", w, h, b, t);
-
-	/* read file */
-	if (setjmp(png_jmpbuf(png_ptr))) {
-		debug_error("error occurred on libpng!");
-		fclose(fp);
-		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-		return EINA_FALSE;
-	}
-
-	int i = 0;
-	int chnls = png_get_channels(png_ptr, info_ptr);
-	if (chnls == 4) {
-		img_colorspace = IMAGE_UTIL_COLORSPACE_RGBA8888;
-	} else {
-		img_colorspace = IMAGE_UTIL_COLORSPACE_RGB888;
-	}
-
-	debug_log("channels: [%d]", chnls);
-
-	png_bytep *row_ptrs = NULL;
-	row_ptrs = calloc(h, sizeof(png_bytep));
-	for (i = 0; i < h; ++i) {
-		row_ptrs[i] = malloc(w * chnls);
-	}
-	png_read_image(png_ptr, row_ptrs);
-	png_read_end(png_ptr, info_ptr);
-
-	*width = w;
-	*height = h;
-	*bit_depth = b;
-	*color_type = t;
-	*row_pointers = row_ptrs;
-	*channels = chnls;
-	*colorspace = img_colorspace;
-
-	png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-	fclose(fp);
-
-	debug_leave();
-	return EINA_TRUE;
-}
-
-static Eina_Bool __composer_util_image_write_png_image(const char *filename, png_bytep *row_pointers, png_uint_32 width, png_uint_32 height, int bit_depth, int color_type, int interlace_type)
-{
-	debug_enter();
-
-	png_structp png_ptr = NULL;
-	png_infop info_ptr = NULL;
-
-	FILE *fp = fopen(filename, "wb");
-	retvm_if(!fp, EINA_FALSE, "fopen() failed!");
-
-	/* initialize stuff */
-	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	if (!png_ptr) {
-		debug_error("png_create_write_struct() failed!");
-		fclose(fp);
-		return EINA_FALSE;
-	}
-
-	info_ptr = png_create_info_struct(png_ptr);
-	if (!info_ptr) {
-		debug_error("png_create_info_struct() failed!");
-		fclose(fp);
-		png_destroy_write_struct(&png_ptr, NULL);
-		return EINA_FALSE;
-	}
-
-	if (setjmp(png_jmpbuf(png_ptr))) {
-		debug_error("error occurred on libpng!");
-		fclose(fp);
-		png_destroy_write_struct(&png_ptr, &info_ptr);
-		return EINA_FALSE;
-	}
-
-	debug_log("(w:%d, h:%d, bit_depth:%d, color_type:%d)", width, height, bit_depth, color_type);
-
-	png_init_io(png_ptr, fp);
-	png_set_compression_level(png_ptr, Z_BEST_COMPRESSION);
-	png_set_IHDR(png_ptr, info_ptr, width, height, bit_depth, color_type, interlace_type, PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
-	png_write_info(png_ptr, info_ptr);
-
-	/* write bytes */
-	if (setjmp(png_jmpbuf(png_ptr))) {
-		debug_error("error occurred on libpng!");
-		fclose(fp);
-		png_destroy_write_struct(&png_ptr, &info_ptr);
-		return EINA_FALSE;
-	}
-
-	png_write_image(png_ptr, row_pointers);
-	png_write_end(png_ptr, NULL);
-
-	png_destroy_write_struct(&png_ptr, &info_ptr);
-	fclose(fp);
-
-	debug_leave();
-	return EINA_TRUE;
-}
-#endif
-
-Eina_Bool composer_util_image_scale_down_with_quality(void *data, const char *src, const char *dst, int quality)
-{
-	debug_enter();
-
-	retvm_if(data == NULL, EINA_FALSE, "data is NULL!");
-	retvm_if(src == NULL, EINA_FALSE, "src is NULL!");
-	retvm_if(dst == NULL, EINA_FALSE, "dst is NULL!");
-
-	if (email_file_exists(src) == EINA_FALSE) {
-		debug_secure("email_file_exists(%s) failed!", src);
-		return EINA_FALSE;
-	}
-
-	Eina_Bool err = EINA_FALSE;
-	char *mime_type = email_get_mime_type_from_file(src);
-	if (!g_strcmp0(mime_type, "image/jpeg")) {
-		unsigned char *jpeg_image_buffer = NULL;
-		int width = 0, height = 0;
-		unsigned int size = 0;
-
-		int ret = image_util_decode_jpeg(src, IMAGE_UTIL_COLORSPACE_RGB888, &jpeg_image_buffer, &width, &height, &size);
-		if (ret != IMAGE_UTIL_ERROR_NONE) {
-			debug_error("image_util_decode_jpeg() failed! ret:[%d]", ret);
-			goto exit_func;
-		}
+	if (image_type == IMAGE_UTIL_JPEG) {
 
 		int orientation = 0;
-		if (composer_util_image_get_rotation_for_jpeg_image(src, &orientation)) {
+		if (composer_util_image_get_rotation_for_jpeg_image(src_path, &orientation)) {
 			debug_log("==> orientation: (%d)", orientation);
 
 			unsigned char *rotated_buffer = NULL;
-			int rotated_width = 0, rotated_height = 0;
-			if (composer_util_image_rotate_jpeg_image_from_memory(jpeg_image_buffer, width, height, size, orientation, &rotated_buffer, &rotated_width, &rotated_height)) {
-				FREE(jpeg_image_buffer);
-				jpeg_image_buffer = rotated_buffer;
-				width = rotated_width;
-				height = rotated_height;
+			int rotated_width = 0;
+			int rotated_height = 0;
+			if (composer_util_image_rotate_jpeg_image_from_memory(src_buff, src_w, src_h,
+					decode_size, orientation, &rotated_buffer, &rotated_width, &rotated_height)) {
+				dst_w = rotated_width;
+				dst_h = rotated_height;
+				dst_buff = rotated_buffer;
+				free_dst_buff = true;
 			}
 		}
 
-		ret = image_util_encode_jpeg(jpeg_image_buffer, width, height, IMAGE_UTIL_COLORSPACE_RGB888, quality, dst);
-		if (ret != IMAGE_UTIL_ERROR_NONE) {
-			debug_error("image_util_encode_jpeg() failed! ret:[%d]", ret);
-			FREE(jpeg_image_buffer);
-			goto exit_func;
+		r = image_util_encode_set_quality(encoder, quality);
+		gotom_if(r != 0, exit_func, "image_util_encode_set_quality() failed!");
+
+	} else if (quality < 100) {
+
+		float q = 1.0f;
+		if (quality <= RESIZE_IMAGE_SMALL_SIZE) {
+			q = 0.25;
+		} else if (quality <= RESIZE_IMAGE_MEDIUM_SIZE) {
+			q = 0.5;
 		}
-		FREE(jpeg_image_buffer);
+
+		dst_w = (int)(src_w * q + 0.5f);
+		dst_h = (int)(src_h * q + 0.5f);
+		dst_buff = malloc(dst_w * dst_h * sizeof(rgba8888));
+		free_dst_buff = true;
+
+		r = _composer_util_resize_image_rgba(dst_buff, dst_w, dst_h, src_buff, src_w, src_h);
+		gotom_if(r != 0, exit_func, "_composer_util_resize_image_rgba() failed!");
 	}
-#ifndef DISABLE_PNG_RESIZE
-	else if (!g_strcmp0(mime_type, "image/png")) {
-		int i = 0;
-		int color_type = 0;
-		int bit_depth = 0;
-		int interlace_type = 0;
-		int channels = 0;
-		image_util_colorspace_e colorspace = IMAGE_UTIL_COLORSPACE_RGB888;
-		png_uint_32 width = 0;
-		png_uint_32 height = 0;
-		png_bytep *src_row_ptrs = NULL;
 
-		Eina_Bool ret = __composer_util_image_read_png_image(src, &src_row_ptrs, &width, &height, &bit_depth, &color_type, &interlace_type, quality, &channels, &colorspace);
-		if (!ret) {
-			debug_error("__composer_util_image_read_png_image() failed!");
-			for (i = 0; i < height; i++) {
-				free(src_row_ptrs[i]);
-			}
-			FREE(src_row_ptrs);
-			goto exit_func;
-		}
+	r = image_util_encode_set_input_buffer(encoder, dst_buff);
+	gotom_if(r != 0, exit_func, "image_util_encode_set_input_buffer() failed!");
+	r = image_util_encode_set_resolution(encoder, dst_w, dst_h);
+	gotom_if(r != 0, exit_func, "image_util_encode_set_resolution() failed!");
+	r = image_util_encode_run(encoder, &encode_size);
+	gotom_if(r != 0, exit_func, "image_util_decode_run() failed!");
 
-		unsigned char *srcbuf = (unsigned char *)malloc(height * width * channels);
-		unsigned int ctr = 0;
-		for (i = 0; i < height; ++i) {
-			memcpy((srcbuf + ctr), src_row_ptrs[i], (width * channels));
-			ctr += width * channels;
-		}
-
-		for (i = 0; i < height; i++) {
-			free(src_row_ptrs[i]);
-		}
-		FREE(src_row_ptrs);
-
-		double q = 1;
-		if (quality < 100) {
-			if (quality == 70) {
-				q = 0.75;
-			} else if ((quality == 30) || (quality == 50)) {
-				q = 0.5;
-			} else if (quality == 10) {
-				q = 0.25;
-			}
-		}
-
-		int dst_w = (int)(width * q);
-		int dst_h = (int)(height * q);
-		unsigned char *dstbuf = (unsigned char *)malloc(height * (width * channels));
-
-		ret = __composer_image_util_resize(dstbuf, &dst_w, &dst_h, srcbuf, width, height, colorspace);
-		if (ret != IMAGE_UTIL_ERROR_NONE) {
-			debug_error("__composer_image_util_resize() failed! ret:[%d]", ret);
-			FREE(srcbuf);
-			FREE(dstbuf);
-			goto exit_func;
-		}
-		ctr = 0;
-		png_bytep *dst_row_ptrs = calloc(dst_h, sizeof(png_bytep));
-		for (i = 0; i < dst_h; ++i) {
-			dst_row_ptrs[i] = malloc(dst_w * channels);
-			memcpy(dst_row_ptrs[i], (dstbuf + ctr), (dst_w * channels));
-			ctr += (dst_w * channels);
-		}
-
-		FREE(srcbuf);
-		FREE(dstbuf);
-
-		ret = __composer_util_image_write_png_image(dst, dst_row_ptrs, dst_w, dst_h, bit_depth, color_type, interlace_type);
-		if (!ret) {
-			debug_error("__composer_util_image_write_png_image() failed!");
-
-			for (i = 0; i < dst_h; i++) {
-				free(dst_row_ptrs[i]);
-			}
-			FREE(dst_row_ptrs);
-
-			goto exit_func;
-		}
-
-		for (i = 0; i < dst_h; i++) {
-			free(dst_row_ptrs[i]);
-		}
-		FREE(dst_row_ptrs);
-	}
-#endif
-
-	if (!email_file_exists(dst)) {
-		debug_secure_error("email_file_exists(%s) failed!", dst);
+	if (!email_file_exists(dst_path)) {
+		debug_secure_error("email_file_exists(%s) failed!", dst_path);
 		goto exit_func;
 	}
 
-	err = EINA_TRUE;
+	result = EINA_TRUE;
 
 exit_func:
-	FREE(mime_type);
+	if (free_dst_buff) {
+		FREE(dst_buff);
+	}
+	if (encoder) {
+		image_util_encode_destroy(encoder);
+	}
+	if (decoder) {
+		image_util_decode_destroy(decoder);
+	}
 
 	debug_leave();
-	return err;
+	return result;
+#endif
 }
 
 Eina_Bool composer_util_image_get_rotation_for_jpeg_image(const char *src_file_path, int *rotation)
@@ -760,146 +546,261 @@ err_return:
 	return EINA_FALSE;
 }
 
-#ifndef DISABLE_PNG_RESIZE
-static int __composer_image_util_resize(unsigned char *dest, const int *dest_width , const int *dest_height, const unsigned char *src,
-								const int src_w, const int src_h, const image_util_colorspace_e colorspace)
+#ifndef _TIZEN_2_4_BUILD_
+static inline void __composer_util_make_image_resize_transform(transform *trans,
+		int dst_length, int src_length)
+{
+	const int src_index_max = src_length - 2;
+
+	const float scale = (float)(src_length) / (float)(dst_length);
+	const float bias = 0.5f * scale - 0.5f;
+
+	int dst_index = 0;
+	for (; dst_index < dst_length; ++dst_index) {
+		const float src_pos = (float)dst_index * scale + bias;
+		const float src_floor_pos = floorf(src_pos);
+		const int src_index = (int)src_floor_pos;
+		if (src_index < 0) {
+			trans[dst_index].index = 0;
+			trans[dst_index].coef = 0;
+		} else if (src_index > src_index_max) {
+			trans[dst_index].index = src_index_max;
+			trans[dst_index].coef = 0x10000;
+		} else {
+			trans[dst_index].index = src_index;
+			trans[dst_index].coef = (int)((src_pos - src_floor_pos) * 65536.0f + 0.5f);
+		}
+	}
+}
+
+static bool __composer_util_prepare_image_resize(const int dst_length, const int src_length,
+		const int tmp_buff_mult, transform **trans, void **tmp_buff)
+{
+	int half_length = src_length;
+	while ((half_length >> 1) >= dst_length) {
+		half_length >>= 1;
+	}
+
+	if (half_length != src_length) {
+		*tmp_buff = malloc((src_length >> 1) * tmp_buff_mult);
+		if (!*tmp_buff) {
+			debug_error("Memory allocation failed!");
+			return false;
+		}
+	}
+
+	if (half_length != dst_length) {
+		*trans = malloc(dst_length * sizeof(transform));
+		if (!*trans) {
+			debug_error("Memory allocation failed!");
+			FREE(*tmp_buff);
+			return false;
+		}
+		__composer_util_make_image_resize_transform(*trans, dst_length, half_length);
+	}
+
+	return true;
+}
+
+static bool __composer_util_resize_image_width_rgba(rgba8888 *const dst, const int dst_width,
+		const rgba8888 *const src, const int src_width, const int height)
+{
+	rgba8888 *tmp_row = NULL;
+	transform *trans = NULL;
+
+	if (!__composer_util_prepare_image_resize(dst_width, src_width,
+			sizeof(rgba8888), &trans, (void **)&tmp_row)) {
+		debug_error("Resize prepare failed!");
+		return false;
+	}
+
+	const int half_src_width = (src_width >> 1);
+
+	const rgba8888 *src_row = src;
+	rgba8888 *dst_row = dst;
+
+	int y = 0;
+	for (; y < height; ++y) {
+		const rgba8888 *src_row2 = src_row;
+
+		int half_width = half_src_width;
+		while (half_width >= dst_width) {
+			rgba8888 *const dst_row2 = ((half_width == dst_width) ? dst_row : tmp_row);
+
+			int x = 0;
+			for (; x < half_width; ++x) {
+				const rgba8888 src_pixel_l = src_row2[x * 2];
+				const rgba8888 src_pixel_r = src_row2[x * 2 + 1];
+				const rgba8888 p = {
+						(src_pixel_l.r + src_pixel_r.r + 1) >> 1,
+						(src_pixel_l.g + src_pixel_r.g + 1) >> 1,
+						(src_pixel_l.b + src_pixel_r.b + 1) >> 1,
+						(src_pixel_l.a + src_pixel_r.a + 1) >> 1};
+				dst_row2[x] = p;
+			}
+
+			src_row2 = tmp_row;
+			half_width >>= 1;
+		}
+
+		if (trans) {
+			int x = 0;
+			for (; x < dst_width; ++x) {
+				const transform t = trans[x];
+				const int inv_coef = (0x10000 - t.coef);
+				const rgba8888 src_pixel_l = src_row2[t.index];
+				const rgba8888 src_pixel_r = src_row2[t.index + 1];
+				const rgba8888 p = {
+						(src_pixel_l.r * inv_coef + src_pixel_r.r * t.coef + 0x8000) >> 16,
+						(src_pixel_l.g * inv_coef + src_pixel_r.g * t.coef + 0x8000) >> 16,
+						(src_pixel_l.b * inv_coef + src_pixel_r.b * t.coef + 0x8000) >> 16,
+						(src_pixel_l.a * inv_coef + src_pixel_r.a * t.coef + 0x8000) >> 16};
+				dst_row[x] = p;
+			}
+		}
+
+		src_row += src_width;
+		dst_row += dst_width;
+	}
+
+	free(tmp_row);
+	free(trans);
+
+	return true;
+}
+
+static bool __composer_util_resize_image_height_rgba(rgba8888 *const dst, const int dst_height,
+		const rgba8888 *const src, const int src_height, const int width)
+{
+	rgba8888 *tmp_buff = NULL;
+	transform *trans = NULL;
+
+	if (!__composer_util_prepare_image_resize(dst_height, src_height,
+			width * sizeof(rgba8888), &trans, (void **)&tmp_buff)) {
+		debug_error("Resize prepare failed!");
+		return false;
+	}
+
+	const rgba8888 *src2 = src;
+
+	int half_height = (src_height >> 1);
+	while (half_height >= dst_height) {
+		rgba8888 *dst_row = ((half_height == dst_height) ? dst : tmp_buff);
+
+		int y = 0;
+		for (; y < half_height; ++y) {
+			const rgba8888 *const src_row_t = src2 + y * 2 * width;
+			const rgba8888 *const src_row_b = src_row_t + width;
+			int x = 0;
+			for (; x < width; ++x) {
+				const rgba8888 src_pixel_t = src_row_t[x];
+				const rgba8888 src_pixel_b = src_row_b[x];
+				const rgba8888 p = {
+						(src_pixel_t.r + src_pixel_b.r + 1) >> 1,
+						(src_pixel_t.g + src_pixel_b.g + 1) >> 1,
+						(src_pixel_t.b + src_pixel_b.b + 1) >> 1,
+						(src_pixel_t.a + src_pixel_b.a + 1) >> 1};
+				dst_row[x] = p;
+			}
+			dst_row += width;
+		}
+
+		src2 = tmp_buff;
+		half_height >>= 1;
+	}
+
+	if (trans) {
+		rgba8888 *dst_row = dst;
+
+		int y = 0;
+		for (y = 0; y < dst_height; ++y) {
+			const transform t = trans[y];
+			const int inv_coef = (0x10000 - t.coef);
+			const rgba8888 *const src_row_t = src2 + t.index * width;
+			const rgba8888 *const src_row_b = src_row_t + width;
+			int x = 0;
+			for (; x < width; ++x) {
+				const rgba8888 src_pixel_t = src_row_t[x];
+				const rgba8888 src_pixel_b = src_row_b[x];
+				const rgba8888 p = {
+						(src_pixel_t.r * inv_coef + src_pixel_b.r * t.coef + 0x8000) >> 16,
+						(src_pixel_t.g * inv_coef + src_pixel_b.g * t.coef + 0x8000) >> 16,
+						(src_pixel_t.b * inv_coef + src_pixel_b.b * t.coef + 0x8000) >> 16,
+						(src_pixel_t.a * inv_coef + src_pixel_b.a * t.coef + 0x8000) >> 16};
+				dst_row[x] = p;
+			}
+			dst_row += width;
+		}
+	}
+
+	free(tmp_buff);
+	free(trans);
+
+	return true;
+}
+
+static int _composer_util_resize_image_rgba(
+		unsigned char *const dst, const int dst_width , const int dst_height,
+		const unsigned char *const src, const int src_width, const int src_height)
 {
 	debug_enter();
+	retvm_if(!dst, IMAGE_UTIL_ERROR_INVALID_PARAMETER, "dst is NULL");
+	retvm_if(!src, IMAGE_UTIL_ERROR_INVALID_PARAMETER, "src is NULL");
 
-	if (!dest || !dest_width || !dest_height || !src) {
-		debug_leave();
+	if (dst_width <= 0 || dst_height <= 0 || dst_width > UINT16_MAX || dst_height > UINT16_MAX ||
+		src_width <= 0 || src_height <= 0 || src_width > UINT16_MAX || src_height > UINT16_MAX) {
+		debug_error("Invalid image size: dst(%d, %d); src(%d, %d)",
+				dst_width, dst_height, src_width, src_height);
 		return IMAGE_UTIL_ERROR_INVALID_PARAMETER;
 	}
 
-	int dest_w = *dest_width;
-	int dest_h = *dest_height;
+	bool ok = false;
 
-	if ((IMAGE_UTIL_COLORSPACE_RGB888 != colorspace && IMAGE_UTIL_COLORSPACE_RGBA8888 != colorspace)
-			|| src_w <= 0 || src_h <= 0 || dest_w <= 0 || dest_h <= 0) {
-		debug_leave();
-		return IMAGE_UTIL_ERROR_INVALID_PARAMETER;
-	}
+	if ((dst_width == src_width) && (dst_height == src_height)) {
 
-	const unsigned int bpp = (IMAGE_UTIL_COLORSPACE_RGBA8888 == colorspace ? RGBA_BPP : RGB_BPP);
-	const unsigned int src_stride = bpp * src_w;
-	const unsigned int dest_stride = bpp * dest_w;
-	float coef = 0.0f;
-	float c1, c2, c3, c4;
-	c1 = c2 = c3 = c4 = 0.0f;
-	u_int32_t red, green, blue, alpha;
-	red = green = blue = alpha = 0;
-	int x = 0, y = 0;
-	const float coef_x = (float) (src_w) / (float) (dest_w);
-	const float coef_y = (float) (src_h) / (float) (dest_h);
-	const float add_x = 0.5f * coef_x - 0.5f;
-	const float add_y = 0.5f * coef_y - 0.5f;
-	transform *transform_x = NULL, *transform_y = NULL;
-	transform_x = calloc(dest_w, sizeof(transform));
-	if (!transform_x) {
-		debug_leave();
-		return IMAGE_UTIL_ERROR_OUT_OF_MEMORY;
-	}
-	transform_y = calloc(dest_h, sizeof(transform));
-	if (!transform_y) {
-		free(transform_x);
-		debug_leave();
-		return IMAGE_UTIL_ERROR_OUT_OF_MEMORY;
-	}
+		memcpy(dst, src, dst_width * dst_height * sizeof(rgba8888));
 
-	for (x = 0; x < dest_w; ++x) {
-		coef = x * coef_x + add_x;
-		transform_x[x].index = (int)coef;
-		transform_x[x].coef = 1 - coef + transform_x[x].index;
-	}
-	if (transform_x[0].index < 0) {
-		transform_x[0].index = 0;
-		transform_x[0].coef = 1.0f;
-	}
-	if (transform_x[dest_w - 1].index >= src_w - 2) {
-		transform_x[dest_w - 1].index = src_w - 2;
-		transform_x[dest_w - 1].coef = 0.0f;
-	}
+	} else if (dst_width == src_width) {
 
-	for (y = 0; y < dest_h; ++y) {
-		coef = y * coef_y + add_y;
-		transform_y[y].index = (int)coef;
-		transform_y[y].coef = 1 - coef + transform_y[y].index;
-	}
-	if (transform_y[0].index < 0) {
-		transform_y[0].index = 0;
-		transform_y[0].coef = 1.0f;
-	}
-	if (transform_y[dest_h - 1].index >= src_h - 2) {
-		transform_y[dest_h - 1].index = src_h - 2;
-		transform_y[dest_h - 1].coef = 0.0f;
-	}
+		ok = __composer_util_resize_image_height_rgba((rgba8888 *)dst, dst_height,
+				(rgba8888 *)dst, src_height, dst_width);
 
-	if (colorspace == IMAGE_UTIL_COLORSPACE_RGBA8888) {
-		for (y = 0; y < dest_h; ++y) {
-			const transform t_y = transform_y[y];
-			rgba8888 * const dest_row = (rgba8888 *)(dest + y * dest_stride);
-			const rgba8888 * const src_row_1 = (rgba8888 *)(src + t_y.index * src_stride);
-			const rgba8888 * const src_row_2 = (rgba8888 *)(src + (t_y.index + 1) * src_stride);
+	} else if (dst_height == src_height) {
 
-			for (x = 0; x < dest_w; ++x) {
-				const transform t_x = transform_x[x];
-				const rgba8888 pixel1 = src_row_1[t_x.index];
-				const rgba8888 pixel2 = src_row_1[t_x.index + 1];
-				const rgba8888 pixel3 = src_row_2[t_x.index];
-				const rgba8888 pixel4 = src_row_2[t_x.index + 1];
-				c1 = t_x.coef * t_y.coef;
-				c2 = (1 - t_x.coef) * t_y.coef;
-				c3 = t_x.coef * (1 - t_y.coef);
-				c4 = (1 - t_x.coef) * (1 - t_y.coef);
-				red = pixel1.r * c1 + pixel2.r * c2 + pixel3.r * c3
-						+ pixel4.r * c4;
-				green = pixel1.g * c1 + pixel2.g * c2 + pixel3.g * c3
-						+ pixel4.g * c4;
-				blue = pixel1.b * c1 + pixel2.b * c2 + pixel3.b * c3
-						+ pixel4.b * c4;
-				alpha = pixel1.a * c1 + pixel2.a * c2 + pixel3.a * c3
-						+ pixel4.a * c4;
-				dest_row[x].r = red;
-				dest_row[x].g = green;
-				dest_row[x].b = blue;
-				dest_row[x].a = alpha;
-			}
-		}
+		ok = __composer_util_resize_image_width_rgba((rgba8888 *)dst, dst_width,
+				(rgba8888 *)src, src_width, dst_height);
+
 	} else {
-		for (y = 0; y < dest_h; ++y) {
-			const transform t_y = transform_y[y];
-			rgb888 * const dest_row = (rgb888 *)(dest + y * dest_stride);
-			const rgb888 * const src_row_1 = (rgb888 *)(src + t_y.index * src_stride);
-			const rgb888 * const src_row_2 = (rgb888 *)(src + (t_y.index + 1) * src_stride);
+		const int buff1_size = dst_width * src_height;
+		const int buff2_size = dst_height * src_width;
 
-			for (x = 0; x < dest_w; ++x) {
-				const transform t_x = transform_x[x];
-				const rgb888 pixel1 = src_row_1[t_x.index];
-				const rgb888 pixel2 = src_row_1[t_x.index + 1];
-				const rgb888 pixel3 = src_row_2[t_x.index];
-				const rgb888 pixel4 = src_row_2[t_x.index + 1];
-				c1 = t_x.coef * t_y.coef;
-				c2 = (1 - t_x.coef) * t_y.coef;
-				c3 = t_x.coef * (1 - t_y.coef);
-				c4 = (1 - t_x.coef) * (1 - t_y.coef);
-				red = pixel1.r * c1 + pixel2.r * c2 + pixel3.r * c3
-						+ pixel4.r * c4;
-				green = pixel1.g * c1 + pixel2.g * c2 + pixel3.g * c3
-						+ pixel4.g * c4;
-				blue = pixel1.b * c1 + pixel2.b * c2 + pixel3.b * c3
-						+ pixel4.b * c4;
-
-				dest_row[x].r = red;
-				dest_row[x].g = green;
-				dest_row[x].b = blue;
-			}
+		rgba8888 *const tmp_buff = malloc(MIN(buff1_size, buff2_size) * sizeof(*tmp_buff));
+		if (!tmp_buff) {
+			debug_error("Memory allocation failed!");
+			return IMAGE_UTIL_ERROR_OUT_OF_MEMORY;
 		}
+
+		if (buff1_size < buff2_size) {
+			ok = (__composer_util_resize_image_width_rgba(tmp_buff, dst_width,
+						(rgba8888 *)src, src_width, src_height)) &&
+				 (__composer_util_resize_image_height_rgba((rgba8888 *)dst, dst_height,
+						tmp_buff, src_height, dst_width));
+		} else {
+			ok = (__composer_util_resize_image_height_rgba(tmp_buff, dst_height,
+						(rgba8888 *)src, src_height, src_width)) &&
+				 (__composer_util_resize_image_width_rgba((rgba8888 *)dst, dst_width,
+						tmp_buff, src_width, dst_height));
+		}
+
+		free(tmp_buff);
 	}
 
-	free(transform_x);
-	free(transform_y);
-	debug_leave();
+	if (!ok) {
+		debug_error("Image resize failed!");
+		return IMAGE_UTIL_ERROR_OUT_OF_MEMORY;
+	}
 
+	debug_leave();
 	return IMAGE_UTIL_ERROR_NONE;
 }
 #endif
@@ -933,7 +834,7 @@ static int __composer_image_util_rotate(unsigned char *dest, int *dest_width, in
 				rgb888 *const dest_row = (rgb888 *) (dest + y * dest_stride);
 				const rgb888 *const src_col = (src_col_0 + y);
 				for (x = 0; x < dest_w; x++) {
-					dest_row[x] = *(rgb888 *)((uchar *)src_col - x * src_stride);
+					dest_row[x] = *(rgb888 *)((uint8_t *)src_col - x * src_stride);
 				}
 			}
 			break;
@@ -944,7 +845,7 @@ static int __composer_image_util_rotate(unsigned char *dest, int *dest_width, in
 					+ (src_w - 1) * sizeof(rgb888));
 			for (y = 0; y < dest_h; y++) {
 				rgb888 *const dest_row = (rgb888 *) (dest + y * dest_stride);
-				const rgb888 *const src_row_rev = (rgb888 *) ((uchar *)src_row_rev_0 - y * src_stride);
+				const rgb888 *const src_row_rev = (rgb888 *) ((uint8_t *)src_row_rev_0 - y * src_stride);
 				for (x = 0; x < dest_w; x++) {
 					dest_row[x] = *(src_row_rev - x);
 				}
@@ -958,7 +859,7 @@ static int __composer_image_util_rotate(unsigned char *dest, int *dest_width, in
 				rgb888 *const dest_row = (rgb888 *) (dest + y * dest_stride);
 				const rgb888 *const src_col_rev = (src_col_rev_0 - y);
 				for (x = 0; x < dest_w; x++) {
-					dest_row[x] = *(rgb888 *)((uchar *)src_col_rev + x * src_stride);
+					dest_row[x] = *(rgb888 *)((uint8_t *)src_col_rev + x * src_stride);
 				}
 			}
 			break;

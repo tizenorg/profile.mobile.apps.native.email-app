@@ -39,6 +39,12 @@ enum EXIF_ORIENTATION {
 	EXIF_ROT_270 = 8	/* Portrait upsidedown(180) */
 };
 
+enum {
+	RESIZE_IMAGE_SMALL_SIZE = 30,
+	RESIZE_IMAGE_MEDIUM_SIZE = 70,
+	RESIZE_IMAGE_ORIGINAL_SIZE = 100
+};
+
 #define _USE_PROFILE_
 #ifdef _USE_PROFILE_
 #define email_profiling_begin(pfid) \
@@ -202,14 +208,13 @@ Eina_Bool composer_util_image_set_image_with_size(void *data, Evas_Object **src_
 /**
  * @brief Image scale down with quality
  *
- * @param[in]	data			User data (Email composer data)
  * @param[in]	src_file		Source file path
  * @param[in]	dst				Destination file path
  * @param[in]	quality			Integer parameter of quality 100, 70, 50, 30, 10
  *
  *@return EINA_TRUE on success, otherwise EINA_FALSE or an error occurred
  */
-Eina_Bool composer_util_image_scale_down_with_quality(void *data, const char *src, const char *dst, int quality);
+Eina_Bool composer_util_image_scale_down_with_quality(const char *src, const char *dst, int quality);
 
 /**
  * @brief Get rotation for jpeg image
