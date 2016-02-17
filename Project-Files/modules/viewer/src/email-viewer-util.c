@@ -632,34 +632,31 @@ static void _account_destroy_request_cb(void *data, email_module_h module)
 	debug_leave();
 }
 
-static void _account_result_cb(void *data, email_module_h module, app_control_h result)
+static void _account_result_cb(void *data, email_module_h module, email_params_h result)
 {
 	debug_enter();
 	retm_if(module == NULL, "Invalid parameter: module[NULL]");
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
 	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
-	char *temp = NULL;
+
 	int is_move_mail_ug = 0;
-	app_control_get_extra_data(result, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, &temp);
-	is_move_mail_ug = atoi(temp);
-	FREE(temp);
+	email_params_get_int_opt(result, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, &is_move_mail_ug);
 
 	if (is_move_mail_ug) {
-		app_control_get_extra_data(result, EMAIL_BUNDLE_KEY_MAILBOX_MOVE_STATUS, &temp);
-		int move_status = (int)atoi(temp);
-		FREE(temp);
+		int move_status = 0;
+		email_params_get_int_opt(result, EMAIL_BUNDLE_KEY_MAILBOX_MOVE_STATUS, &move_status);
+
 		if (move_status == EMAIL_ERROR_NONE) {
-			app_control_get_extra_data(result, EMAIL_BUNDLE_KEY_MAILBOX_MOVED_MAILBOX_NAME, &temp);
 			char str[BUF_LEN_L] = { 0, };
-			if (temp) {
-				snprintf(str, sizeof(str), email_get_email_string("IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_PS"), temp);
+			const char *mailbox_name = NULL;
+			if (email_params_get_str(result, EMAIL_BUNDLE_KEY_MAILBOX_MOVED_MAILBOX_NAME, &mailbox_name)) {
+				snprintf(str, sizeof(str), email_get_email_string("IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_PS"), mailbox_name);
 			} else {
 				snprintf(str, sizeof(str), "%s", email_get_email_string("IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_SELECTED_FOLDER"));
 			}
 			int ret = notification_status_message_post(str);
 			debug_warning_if(ret != NOTIFICATION_ERROR_NONE, "notification_status_message_post() failed! ret:(%d)", ret);
-			FREE(temp);
 			ug_data->move_status = move_status;
 		}
 	}
@@ -668,7 +665,7 @@ static void _account_result_cb(void *data, email_module_h module, app_control_h 
 	}
 }
 
-email_module_h viewer_create_module(void *data, email_module_type_e module_type, app_control_h bd, bool hide)
+email_module_h viewer_create_module(void *data, email_module_type_e module_type, email_params_h params, bool hide)
 {
 	debug_enter();
 	retvm_if(data == NULL, NULL, "Invalid parameter: data[NULL]");
@@ -690,14 +687,14 @@ email_module_h viewer_create_module(void *data, email_module_type_e module_type,
 
 	if (hide) viewer_hide_webview(ug_data);
 
-	email_module_h module = email_module_create_child(ug_data->base.module, module_type, bd, &listener);
+	email_module_h module = email_module_create_child(ug_data->base.module, module_type, params, &listener);
 	if (ug_data->base.content)
 		elm_object_tree_focus_allow_set(ug_data->base.content, EINA_FALSE);
 
 	return module;
 }
 
-email_module_h viewer_create_scheduled_composer_module(void *data, app_control_h bd)
+email_module_h viewer_create_scheduled_composer_module(void *data, email_params_h params)
 {
 	debug_enter();
 	retvm_if(data == NULL, NULL, "Invalid parameter: data[NULL]");
@@ -711,7 +708,7 @@ email_module_h viewer_create_scheduled_composer_module(void *data, app_control_h
 	viewer_hide_webview(ug_data);
 
 	email_module_h module = email_module_create_child(ug_data->base.module,
-			EMAIL_MODULE_COMPOSER, bd, &listener);
+			EMAIL_MODULE_COMPOSER, params, &listener);
 	if (ug_data->base.content)
 		elm_object_tree_focus_allow_set(ug_data->base.content, EINA_FALSE);
 
@@ -744,22 +741,22 @@ void viewer_launch_browser(EmailViewerUGD *ug_data, const char *link_url)
 	debug_secure("link_url (%s)", link_url);
 
 	int ret = APP_CONTROL_ERROR_NONE;
-	app_control_h service = NULL;
-	ret = app_control_create(&service);
-	retm_if(ret != APP_CONTROL_ERROR_NONE, "service create failed: service[NULL]");
+	app_control_h app_control = NULL;
+	ret = app_control_create(&app_control);
+	retm_if(ret != APP_CONTROL_ERROR_NONE, "app_control create failed: app_control[NULL]");
 
-	ret = app_control_set_launch_mode(service, APP_CONTROL_LAUNCH_MODE_GROUP);
+	ret = app_control_set_launch_mode(app_control, APP_CONTROL_LAUNCH_MODE_GROUP);
 	debug_log("app_control_set_launch_mode: %d", ret);
-	ret = app_control_set_operation(service, APP_CONTROL_OPERATION_VIEW);
+	ret = app_control_set_operation(app_control, APP_CONTROL_OPERATION_VIEW);
 	debug_log("app_control_set_operation: %d", ret);
-	ret = app_control_set_uri(service, link_url);
+	ret = app_control_set_uri(app_control, link_url);
 	debug_log("app_control_set_uri: %d", ret);
-	ret = app_control_send_launch_request(service, NULL, NULL);
+	ret = app_control_send_launch_request(app_control, NULL, NULL);
 	debug_log("app_control_send_launch_request: %d", ret);
 	if (ret != APP_CONTROL_ERROR_NONE) {
 		notification_status_message_post(_("IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"));
 	}
-	ret = app_control_destroy(service);
+	ret = app_control_destroy(app_control);
 	debug_log("app_control_destroy: %d", ret);
 
 	debug_leave();
@@ -772,35 +769,18 @@ void viewer_create_email(EmailViewerUGD *ug_data, const char *email_address)
 	retm_if(email_address == NULL, "Invalid parameter: email_address[NULL]");
 	debug_secure("email_address (%s)", email_address);
 	int scheme_length = strlen(URI_SCHEME_MAILTO);
-	int ret = APP_CONTROL_ERROR_NONE;
-	app_control_h service = NULL;
+	email_params_h params = NULL;
 
-	ret = app_control_create(&service);
-	retm_if(ret != APP_CONTROL_ERROR_NONE, "service create failed: service[NULL]");
+	if (email_params_create(&params) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_RUN_TYPE, RUN_COMPOSER_EXTERNAL),
+		email_params_add_str(params, EMAIL_BUNDLE_KEY_TO, &email_address[scheme_length])) {
 
-	char rtype[BUF_LEN_T] = { 0, };
-	snprintf(rtype, sizeof(rtype), "%d", RUN_COMPOSER_EXTERNAL);
-
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_RUN_TYPE, rtype);
-	if (ret != APP_CONTROL_ERROR_NONE) {
-		debug_error("app_control_add_extra_data failed: %d: ", ret);
-		app_control_destroy(service);
-		return;
+		ug_data->loaded_module = viewer_create_module(ug_data, EMAIL_MODULE_COMPOSER, params, ug_data);
 	}
 
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_TO, &email_address[scheme_length]);
-	if (ret != APP_CONTROL_ERROR_NONE) {
-		debug_error("app_control_add_extra_data failed: %d: ", ret);
-		app_control_destroy(service);
-		return;
-	}
-
-	ug_data->loaded_module = viewer_create_module(ug_data, EMAIL_MODULE_COMPOSER, service, ug_data);
-	ret = app_control_destroy(service);
-	debug_log("app_control_destroy: %d", ret);
+	email_params_free(&params);
 
 	debug_leave();
-
 }
 
 email_ext_save_err_type_e viewer_save_attachment_in_downloads(EV_attachment_data *aid, gboolean(*copy_file_cb) (void *data, float percentage))
@@ -970,27 +950,27 @@ static void _viewer_launch_storage_settings(EmailViewerUGD *ug_data)
 {
 	debug_enter();
 	int ret = APP_CONTROL_ERROR_NONE;
-	app_control_h svc_handle = NULL;
+	app_control_h app_control = NULL;
 
-	ret = app_control_create(&svc_handle);
-	debug_warning_if((ret != APP_CONTROL_ERROR_NONE || !svc_handle), "app_control_create() failed! ret:[%d]", ret);
+	ret = app_control_create(&app_control);
+	debug_warning_if((ret != APP_CONTROL_ERROR_NONE || !app_control), "app_control_create() failed! ret:[%d]", ret);
 
 	/* Do make prerequisites. */
-	ret = app_control_set_launch_mode(svc_handle, APP_CONTROL_LAUNCH_MODE_GROUP);
+	ret = app_control_set_launch_mode(app_control, APP_CONTROL_LAUNCH_MODE_GROUP);
 	debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_set_launch_mode() failed! ret:[%d]", ret);
 
-	/* Set some service data for launching application. */
-	ret = app_control_set_app_id(svc_handle, "setting-storage-efl");
+	/* Set some data for launching application. */
+	ret = app_control_set_app_id(app_control, "setting-storage-efl");
 	debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_set_app_id() failed! ret:[%d]", ret);
 
 	/* Launch application */
-	ret = app_control_send_launch_request(svc_handle, NULL, ug_data);
+	ret = app_control_send_launch_request(app_control, NULL, ug_data);
 	debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_send_launch_request() failed! ret:[%d]", ret);
 	if (ret != APP_CONTROL_ERROR_NONE) {
 		notification_status_message_post(_("IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"));
 	}
 
-	ret = app_control_destroy(svc_handle);
+	ret = app_control_destroy(app_control);
 	debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_destroy() failed! ret:[%d]", ret);
 
 	debug_leave();
@@ -1082,69 +1062,43 @@ void viewer_send_email(void *data, char *email_address)
 
 	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
 
-	int ret;
-	app_control_h service = NULL;
+	email_params_h params = NULL;
 
-	ret = app_control_create(&service);
-	debug_log("app_control_create: %d", ret);
-	retm_if(service == NULL, "service create failed: service[NULL]");
+	if (email_params_create(&params) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_RUN_TYPE, RUN_COMPOSER_EXTERNAL) &&
+		email_params_add_str(params, EMAIL_BUNDLE_KEY_TO, email_address)) {
 
-	char rtype[10] = { 0, };
-	snprintf(rtype, sizeof(rtype), "%d", RUN_COMPOSER_EXTERNAL);
+		ug_data->loaded_module = viewer_create_module(ug_data, EMAIL_MODULE_COMPOSER, params, true);
+	}
 
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_RUN_TYPE, rtype);
-	debug_log("app_control_add_extra_data: %d", ret);
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_TO, email_address);
-	debug_log("app_control_add_extra_data: %d", ret);
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_CC, NULL);
-	debug_log("app_control_add_extra_data: %d", ret);
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_BCC, NULL);
-	debug_log("app_control_add_extra_data: %d", ret);
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_SUBJECT, NULL);
-	debug_log("app_control_add_extra_data: %d", ret);
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_BODY, NULL);
-	debug_log("app_control_add_extra_data: %d", ret);
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ATTACHMENT, NULL);
-	debug_log("app_control_add_extra_data: %d", ret);
+	email_params_free(&params);
 
-	ug_data->loaded_module = viewer_create_module(ug_data, EMAIL_MODULE_COMPOSER, service, true);
-
-	ret = app_control_destroy(service);
-	debug_log("app_control_destroy: %d", ret);
 	debug_leave();
 }
 
-void viewer_view_contact_detail(void *data, char *index)
+void viewer_view_contact_detail(void *data, int index)
 {
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	retm_if(index == NULL, "Invalid parameter: index[NULL]");
 	debug_secure("index (%s)", index);
 
 	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
-	app_control_h service = NULL;
+	email_params_h params = NULL;
+	int ret = -1;
 
-	int ret = app_control_create(&service);
-	debug_log("app_control_create: %d", ret);
-	retm_if(service == NULL, "service create failed: service[NULL]");
+	if (email_params_create(&params) &&
+		email_params_set_operation(params, APP_CONTROL_OPERATION_VIEW) &&
+		email_params_set_mime(params, EMAIL_CONTACT_MIME_SCHEME) &&
+		email_params_add_int(params, EMAIL_CONTACT_EXT_DATA_ID, index)) {
 
-	ret = app_control_set_operation(service, APP_CONTROL_OPERATION_VIEW);
-	debug_log("app_control_set_mime: %d", ret);
+		ret = email_module_launch_app(ug_data->base.module, EMAIL_LAUNCH_APP_AUTO, params, NULL);
+	}
 
-	ret = app_control_set_mime(service, EMAIL_CONTACT_MIME_SCHEME);
-	debug_log("app_control_set_mime: %d", ret);
+	email_params_free(&params);
 
-	ret = app_control_add_extra_data(service, EMAIL_CONTACT_EXT_DATA_ID, index);
-	debug_log("app_control_add_extra_data: %d", ret);
-
-	ret = email_module_launch_app(ug_data->base.module, EMAIL_LAUNCH_APP_AUTO, service, NULL);
 	if (ret != 0) {
 		notification_status_message_post(_("IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"));
 	}
-
-	ret = app_control_destroy(service);
-	debug_log("app_control_destroy: %d", ret);
-	g_free(index);
 
 	debug_leave();
 }
@@ -1155,46 +1109,22 @@ void viewer_launch_composer(void *data, int type)
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
 	retm_if(ug_data->mail_info == NULL, "Invalid parameter: mail_info[NULL]");
-	char tmp[PATH_MAX] = {0, };
 
-	int ret;
-	app_control_h service = NULL;
+	email_params_h params = NULL;
 
-	ret = app_control_create(&service);
-	debug_log("app_control_create: %d", ret);
-	retm_if(service == NULL, "service create failed : service[NULL]");
+	if (email_params_create(&params) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_RUN_TYPE, type) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, ug_data->account_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, ug_data->mailbox_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAIL_ID, ug_data->mail_id) &&
+		((type != RUN_EML_REPLY && type != RUN_EML_REPLY_ALL && type != RUN_EML_FORWARD) ||
+		email_params_add_str(params, EMAIL_BUNDLE_KEY_MYFILE_PATH, ug_data->eml_file_path))) {
 
-	char rtype[10] = { 0, };
-	snprintf(rtype, sizeof(rtype), "%d", type);
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_RUN_TYPE, rtype);
-	debug_log("app_control_add_extra_data: %d", ret);
-
-	memset(tmp, 0x0, sizeof(tmp));
-	snprintf(tmp, sizeof(tmp), "%d", ug_data->account_id);
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_ID, tmp);
-	debug_log("app_control_add_extra_data: %d", ret);
-
-	memset(tmp, 0x0, sizeof(tmp));
-	snprintf(tmp, sizeof(tmp), "%d", ug_data->mailbox_id);
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAILBOX, tmp);
-	debug_log("app_control_add_extra_data: %d", ret);
-
-	memset(tmp, 0x0, sizeof(tmp));
-	snprintf(tmp, sizeof(tmp), "%d", ug_data->mail_id);
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAIL_ID, tmp);
-	debug_log("app_control_add_extra_data: %d", ret);
-
-	if (type == RUN_EML_REPLY || type == RUN_EML_REPLY_ALL || type == RUN_EML_FORWARD) {
-		memset(tmp, 0x0, sizeof(tmp));
-		snprintf(tmp, sizeof(tmp), "%s", ug_data->eml_file_path);
-		ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MYFILE_PATH, tmp);
-		debug_log("app_control_add_extra_data: %d", ret);
+		ug_data->loaded_module = viewer_create_module(ug_data, EMAIL_MODULE_COMPOSER, params, true);
 	}
 
-	ug_data->loaded_module = viewer_create_module(ug_data, EMAIL_MODULE_COMPOSER, service, true);
+	email_params_free(&params);
 
-	ret = app_control_destroy(service);
-	debug_log("app_control_destroy: %d", ret);
 	debug_leave();
 }
 

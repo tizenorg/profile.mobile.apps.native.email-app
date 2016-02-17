@@ -35,7 +35,7 @@ static void _return_key_cb(void *data, Evas_Object *obj, void *event_info);
 static void _entry_changed_cb(void *data, Evas_Object *obj, void *event_info);
 static void _contact_button_clicked_cb(void *data, Evas_Object *obj, void *event_info);
 static Evas_Object *_gl_content_get_cb(void *data, Evas_Object *obj, const char *part);
-static void _contact_app_reply_cb(void *data, app_control_result_e result, app_control_h reply);
+static void _contact_app_reply_cb(void *data, app_control_result_e result, email_params_h reply);
 static int _checking_is_dup_rule(EmailFilterVD *vd, email_rule_t *filter_rule);
 
 static Evas_Object *_create_list(EmailFilterVD *vd);
@@ -495,70 +495,42 @@ static void _launch_contact_app(EmailFilterVD *vd)
 {
 	debug_enter();
 
-	app_control_h service = NULL;
-	email_launched_app_listener_t listener = { 0 };
-	int ret = 0;
-	listener.cb_data = vd;
-	listener.reply_cb = _contact_app_reply_cb;
+	email_params_h params = NULL;
 
-	app_control_create(&service);
-	retm_if(!service, "app_control_create failed");
+	if (email_params_create(&params) &&
+		email_params_set_operation(params, APP_CONTROL_OPERATION_PICK) &&
+		email_params_set_mime(params, EMAIL_CONTACT_MIME_SCHEME) &&
+		email_params_add_str(params, EMAIL_CONTACT_EXT_DATA_TYPE, EMAIL_CONTACT_BUNDLE_EMAIL) &&
+		email_params_add_str(params, EMAIL_CONTACT_EXT_DATA_SELECTION_MODE, EMAIL_CONTACT_BUNDLE_SELECT_SINGLE)) {
 
-	ret = app_control_set_operation(service, APP_CONTROL_OPERATION_PICK);
-	if (ret != APP_CONTROL_ERROR_NONE) {
-		debug_log("app_control_set_operation() failed! ret:[%d]", ret);
-		goto FINISH;
+		email_launched_app_listener_t listener = { 0 };
+		listener.cb_data = vd;
+		listener.reply_cb = _contact_app_reply_cb;
+
+		email_module_launch_app(vd->base.module, EMAIL_LAUNCH_APP_AUTO, params, &listener);
 	}
 
-	ret = app_control_set_mime(service, EMAIL_CONTACT_MIME_SCHEME);
-	if (ret != APP_CONTROL_ERROR_NONE) {
-		debug_log("app_control_set_mime() failed! ret:[%d]", ret);
-		goto FINISH;
-	}
-
-	ret = app_control_add_extra_data(service, EMAIL_CONTACT_EXT_DATA_TYPE, EMAIL_CONTACT_BUNDLE_EMAIL);
-	if (ret != APP_CONTROL_ERROR_NONE) {
-		debug_log("app_control_add_extra_data() failed! ret:[%d]", ret);
-		goto FINISH;
-	}
-
-	ret = app_control_add_extra_data(service, EMAIL_CONTACT_EXT_DATA_SELECTION_MODE, EMAIL_CONTACT_BUNDLE_SELECT_SINGLE);
-	if (ret != APP_CONTROL_ERROR_NONE) {
-		debug_log("app_control_add_extra_data() failed! ret:[%d]", ret);
-		goto FINISH;
-	}
-
-	email_module_launch_app(vd->base.module, EMAIL_LAUNCH_APP_AUTO, service, &listener);
-
-FINISH:
-	app_control_destroy(service);
+	email_params_free(&params);
 }
 
-static void _contact_app_reply_cb(void *data, app_control_result_e result, app_control_h reply)
+static void _contact_app_reply_cb(void *data, app_control_result_e result, email_params_h reply)
 {
 	debug_enter();
 
 	EmailFilterVD *vd = data;
-	char **filter_addr_id_arr = NULL;
+	const char **filter_addr_id_arr = NULL;
 	int id = -1;
 	int len = 0;
 
-	int ret = app_control_get_extra_data_array(reply, EMAIL_CONTACT_EXT_DATA_SELECTED, &filter_addr_id_arr, &len);
-	retm_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data_array() failed! ret:[%d]", ret);
+	retm_if(!email_params_get_str_array(reply, EMAIL_CONTACT_EXT_DATA_SELECTED, &filter_addr_id_arr, &len),
+			"email_params_get_str_array() failed!");
 
 	if (len <= 0) {
-		free(filter_addr_id_arr);
 		return;
 	}
 
 	id = atoi(filter_addr_id_arr[0]);
 	debug_log("email id: %d", id);
-
-	int i = 0;
-	for (; i < len; i++) {
-		free(filter_addr_id_arr[i]);
-	}
-	free(filter_addr_id_arr);
 
 	email_contact_list_info_t *contact_info = email_contacts_get_contact_info_by_email_id(id);
 	if (!contact_info || !contact_info->email_address) {

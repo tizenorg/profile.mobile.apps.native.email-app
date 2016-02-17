@@ -60,9 +60,9 @@
  * Declaration for static functions
  */
 
-static int _mailbox_module_create(email_module_t *self, app_control_h params);
+static int _mailbox_module_create(email_module_t *self, email_params_h params);
 static void _mailbox_module_destroy(email_module_t *self);
-static void _mailbox_on_message(email_module_t *self, app_control_h msg);
+static void _mailbox_on_message(email_module_t *self, email_params_h msg);
 
 static void _mailbox_email_service_ping_thread_heavy_cb(void *data, Ecore_Thread *thread);
 static void _mailbox_email_service_ping_thread_notify_cb(void *data, Ecore_Thread *thread, void *msg_data);
@@ -80,12 +80,12 @@ static void _mailbox_on_back_key(email_view_t *self);
 static int _mailbox_initialize(EmailMailboxUGD *mailbox_ugd);
 static void _mailbox_finalize(EmailMailboxUGD *mailbox_ugd);
 
-static email_run_type_e _mailbox_params_get_run_type(app_control_h params);
-static int _mailbox_params_get_account_id(app_control_h params);
-static int _mailbox_params_get_mail_id(app_control_h params);
+static email_run_type_e _mailbox_params_get_run_type(email_params_h params);
+static int _mailbox_params_get_account_id(email_params_h params);
+static int _mailbox_params_get_mail_id(email_params_h params);
 
-static int _mailbox_handle_launch_mailbox_bundle_val(EmailMailboxUGD *mailbox_ugd, app_control_h msg);
-static int _mailbox_handle_launch_viewer_bundle_val(EmailMailboxUGD *mailbox_ugd, app_control_h msg);
+static int _mailbox_handle_launch_mailbox_bundle_val(EmailMailboxUGD *mailbox_ugd, email_params_h msg);
+static int _mailbox_handle_launch_viewer_bundle_val(EmailMailboxUGD *mailbox_ugd, email_params_h msg);
 
 static void _mailbox_create_view(EmailMailboxUGD *mailbox_ugd);
 static void _mailbox_delete_evas_object(EmailMailboxUGD *mailbox_ugd);
@@ -102,7 +102,7 @@ static int _mailbox_push_base_view_layout(EmailMailboxUGD *mailbox_ugd);
  * Definition for static functions
  */
 
-static int _mailbox_module_create(email_module_t *self, app_control_h params)
+static int _mailbox_module_create(email_module_t *self, email_params_h params)
 {
 	debug_enter();
 	retvm_if(!self, -1, "self is NULL");
@@ -240,20 +240,15 @@ static int _mailbox_create_account_setting_module(EmailMailboxUGD *mailbox_ugd)
 	debug_enter();
 	retvm_if(!mailbox_ugd, -1, "mailbox_ugd is NULL");
 
-	app_control_h service = NULL;
-	int ret = APP_CONTROL_ERROR_NONE;
+	email_params_h params = NULL;
 
-	ret = app_control_create(&service);
-	retvm_if(ret != APP_CONTROL_ERROR_NONE, -1, "app_control_create() failed! ret: [%d]", ret);
+	if (email_params_create(&params) &&
+		email_params_add_str(params, EMAIL_BUNDLE_KEY_VIEW_TYPE, EMAIL_BUNDLE_VAL_VIEW_ACCOUNT_SETUP)) {
 
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_VIEW_TYPE, EMAIL_BUNDLE_VAL_VIEW_ACCOUNT_SETUP);
-	if (ret != APP_CONTROL_ERROR_NONE) {
-		debug_error("app_control_add_extra_data() failed! ret: [%d]", ret);
-	} else {
-		mailbox_ugd->setting = mailbox_setting_module_create(mailbox_ugd, EMAIL_MODULE_SETTING, service);
+		mailbox_ugd->setting = mailbox_setting_module_create(mailbox_ugd, EMAIL_MODULE_SETTING, params);
 	}
 
-	app_control_destroy(service);
+	email_params_free(&params);
 
 	retvm_if(!mailbox_ugd->setting, -1, "mailbox_setting_module_create() failed!");
 
@@ -261,16 +256,16 @@ static int _mailbox_create_account_setting_module(EmailMailboxUGD *mailbox_ugd)
 	return 0;
 }
 
-static email_run_type_e _mailbox_params_get_run_type(app_control_h params)
+static email_run_type_e _mailbox_params_get_run_type(email_params_h params)
 {
 	debug_enter();
 
 	email_run_type_e result = RUN_TYPE_UNKNOWN;
 
-	char *operation = NULL;
+	const char *operation = NULL;
 	bool is_operation_default = false;
 
-	if ((app_control_get_operation(params, &operation) != APP_CONTROL_ERROR_NONE) || !operation) {
+	if (!email_params_get_operation(params, &operation)) {
 		return result;
 	}
 
@@ -279,8 +274,6 @@ static email_run_type_e _mailbox_params_get_run_type(app_control_h params)
 	} else {
 		debug_warning("Operation is not supported: %s", operation);
 	}
-
-	free(operation);
 
 	if (is_operation_default) {
 		if (email_params_get_int_opt(params, EMAIL_BUNDLE_KEY_RUN_TYPE, &result)) {
@@ -298,7 +291,7 @@ static email_run_type_e _mailbox_params_get_run_type(app_control_h params)
 	return result;
 }
 
-static int _mailbox_params_get_account_id(app_control_h params)
+static int _mailbox_params_get_account_id(email_params_h params)
 {
 	debug_enter();
 
@@ -314,7 +307,7 @@ static int _mailbox_params_get_account_id(app_control_h params)
 	return result;
 }
 
-static int _mailbox_params_get_mail_id(app_control_h params)
+static int _mailbox_params_get_mail_id(email_params_h params)
 {
 	debug_enter();
 
@@ -654,7 +647,7 @@ static void _mailbox_finalize(EmailMailboxUGD *mailbox_ugd)
 
 }
 
-static void _mailbox_on_message(email_module_t *self, app_control_h msg)
+static void _mailbox_on_message(email_module_t *self, email_params_h msg)
 {
 	debug_enter();
 	retm_if(!self, "self is NULL");
@@ -680,7 +673,7 @@ static void _mailbox_on_message(email_module_t *self, app_control_h msg)
 	return;
 }
 
-int mailbox_handle_next_msg_bundle(EmailMailboxUGD *mailbox_ugd, app_control_h msg)
+int mailbox_handle_next_msg_bundle(EmailMailboxUGD *mailbox_ugd, email_params_h msg)
 {
 	debug_enter();
 	retvm_if(!mailbox_ugd, -1, "Error: mailbox_ugd is NULL");
@@ -695,19 +688,13 @@ int mailbox_handle_next_msg_bundle(EmailMailboxUGD *mailbox_ugd, app_control_h m
 	MailItemData *ld = NULL;
 	GList *first = g_list_first(mailbox_ugd->mail_list);
 	GList *last = g_list_last(mailbox_ugd->mail_list);
-	int ret;
-	char *s_current_mail_index = NULL;
 	int current_mail_index = -1;
 
 	int cnt = g_list_length(mailbox_ugd->mail_list);
 	debug_log("first %p, last %p, cnt: %d", first, last, cnt);
 
-	ret = app_control_get_extra_data(msg, EMAIL_BUNDLE_KEY_MAIL_INDEX, &s_current_mail_index);
-	debug_log("app_control_get_extra_data: %d, %s", ret, s_current_mail_index);
-	if (s_current_mail_index) {
-		current_mail_index = atoi(s_current_mail_index);
-		g_free(s_current_mail_index);
-	}
+	email_params_get_int_opt(msg, EMAIL_BUNDLE_KEY_MAIL_INDEX, &current_mail_index);
+	debug_log("current_mail_index: %d", current_mail_index);
 
 	GList *opened_mail = g_list_find_custom(mailbox_ugd->mail_list, GINT_TO_POINTER(mailbox_ugd->opened_mail_id), mailbox_compare_mailid_in_list);
 	if (!opened_mail && current_mail_index > -1 && current_mail_index < cnt) {
@@ -740,7 +727,7 @@ int mailbox_handle_next_msg_bundle(EmailMailboxUGD *mailbox_ugd, app_control_h m
 
 }
 
-int mailbox_handle_prev_msg_bundle(EmailMailboxUGD *mailbox_ugd, app_control_h msg)
+int mailbox_handle_prev_msg_bundle(EmailMailboxUGD *mailbox_ugd, email_params_h msg)
 {
 	debug_enter();
 	retvm_if(!mailbox_ugd, -1, "Error: mailbox_ugd is NULL");
@@ -755,19 +742,13 @@ int mailbox_handle_prev_msg_bundle(EmailMailboxUGD *mailbox_ugd, app_control_h m
 	MailItemData *ld = NULL;
 	GList *first = g_list_first(mailbox_ugd->mail_list);
 	GList *last = g_list_last(mailbox_ugd->mail_list);
-	int ret;
-	char *s_current_mail_index = NULL;
 	int current_mail_index = -1;
 
 	int cnt = g_list_length(mailbox_ugd->mail_list);
 	debug_log("first %p, last %p, cnt: %d", first, last, cnt);
 
-	ret = app_control_get_extra_data(msg, EMAIL_BUNDLE_KEY_MAIL_INDEX, &s_current_mail_index);
-	debug_log("app_control_get_extra_data: %d, %s", ret, s_current_mail_index);
-	if (s_current_mail_index) {
-		current_mail_index = atoi(s_current_mail_index);
-		g_free(s_current_mail_index);
-	}
+	email_params_get_int_opt(msg, EMAIL_BUNDLE_KEY_MAIL_INDEX, &current_mail_index);
+	debug_log("current_mail_index: %d", current_mail_index);
 
 	GList *opened_mail = g_list_find_custom(mailbox_ugd->mail_list, GINT_TO_POINTER(mailbox_ugd->opened_mail_id), mailbox_compare_mailid_in_list);
 	if (!opened_mail && current_mail_index > -1 && current_mail_index < cnt) {
@@ -806,7 +787,7 @@ static int _mailbox_destroy_child_modules(EmailMailboxUGD *mailbox_ugd, bool kee
 	debug_enter();
 	retvm_if(!mailbox_ugd, -1,  "Error: mailbox_ugd is NULL");
 
-	app_control_h service = NULL;
+	email_params_h params = NULL;
 	int ret = -1;
 
 	if (mailbox_ugd->account) {
@@ -820,9 +801,9 @@ static int _mailbox_destroy_child_modules(EmailMailboxUGD *mailbox_ugd, bool kee
 	if (mailbox_ugd->viewer && !keep_viewer) {
 		debug_log("Viewer is running. Need to destroy all viewer child modules.");
 
-		if (email_params_create(&service) &&
-			email_params_add_str(service, EMAIL_BUNDLE_KEY_MSG, EMAIL_BUNDLE_VAL_VIEWER_DESTROY_VIEW)) {
-			ret = email_module_send_message(mailbox_ugd->viewer, service);
+		if (email_params_create(&params) &&
+			email_params_add_str(params, EMAIL_BUNDLE_KEY_MSG, EMAIL_BUNDLE_VAL_VIEWER_DESTROY_VIEW)) {
+			ret = email_module_send_message(mailbox_ugd->viewer, params);
 		}
 
 		if (ret != 0) {
@@ -834,9 +815,9 @@ static int _mailbox_destroy_child_modules(EmailMailboxUGD *mailbox_ugd, bool kee
 	if (mailbox_ugd->composer) {
 		debug_log("Asking composer to save in drafts.");
 
-		if (email_params_create(&service) &&
-			email_params_add_str(service, EMAIL_BUNDLE_KEY_MSG, EMAIL_BUNDLE_VAL_EMAIL_COMPOSER_SAVE_DRAFT)) {
-			ret = email_module_send_message(mailbox_ugd->viewer, service);
+		if (email_params_create(&params) &&
+			email_params_add_str(params, EMAIL_BUNDLE_KEY_MSG, EMAIL_BUNDLE_VAL_EMAIL_COMPOSER_SAVE_DRAFT)) {
+			ret = email_module_send_message(mailbox_ugd->viewer, params);
 		}
 
 		if (ret != 0) {
@@ -845,7 +826,7 @@ static int _mailbox_destroy_child_modules(EmailMailboxUGD *mailbox_ugd, bool kee
 		}
 	}
 
-	email_params_free(&service);
+	email_params_free(&params);
 
 	debug_leave();
 	return 0;
@@ -921,7 +902,7 @@ static int _mailbox_update_mailbox(EmailMailboxUGD *mailbox_ugd, int account_id,
 	return 0;
 }
 
-static int _mailbox_handle_launch_mailbox_bundle_val(EmailMailboxUGD *mailbox_ugd, app_control_h msg)
+static int _mailbox_handle_launch_mailbox_bundle_val(EmailMailboxUGD *mailbox_ugd, email_params_h msg)
 {
 	debug_enter();
 	retvm_if(!mailbox_ugd, -1,  "Error: mailbox_ugd is NULL");
@@ -942,7 +923,7 @@ static int _mailbox_handle_launch_mailbox_bundle_val(EmailMailboxUGD *mailbox_ug
 	return 0;
 }
 
-static int _mailbox_handle_launch_viewer_bundle_val(EmailMailboxUGD *mailbox_ugd, app_control_h msg)
+static int _mailbox_handle_launch_viewer_bundle_val(EmailMailboxUGD *mailbox_ugd, email_params_h msg)
 {
 	debug_enter();
 	retvm_if(!mailbox_ugd, -1, "Error: mailbox_ugd is NULL");
@@ -955,7 +936,7 @@ static int _mailbox_handle_launch_viewer_bundle_val(EmailMailboxUGD *mailbox_ugd
 	retvm_if(mail_id <= 0, -1,  "(mail_id <= 0) is not allowed");
 
 	if (mailbox_ugd->viewer && (mail_id == mailbox_ugd->opened_mail_id)) {
-		app_control_h params = NULL;
+		email_params_h params = NULL;
 
 		if (email_params_create(&params) &&
 			email_params_add_str(params, EMAIL_BUNDLE_KEY_MSG, EMAIL_BUNDLE_VAL_VIEWER_RESTORE_VIEW)) {
@@ -1166,40 +1147,30 @@ static void _mailbox_title_clicked_cb(void *data, Evas_Object *obj, void *event_
 	DELETE_EVAS_OBJECT(mailbox_ugd->more_ctxpopup);
 
 	if (!mailbox_ugd->b_editmode && !mailbox_ugd->b_searchmode) {
-		app_control_h service;
-		if (APP_CONTROL_ERROR_NONE != app_control_create(&service)) {
-			debug_log("creating service handle failed");
-			mailbox_ugd->is_module_launching = false;
-			return;
-		}
 
-		char acctid[30] = { 0, };
-		snprintf(acctid, sizeof(acctid), "%d", mailbox_ugd->account_id);
-		char is_account_ug[30] = { 0, };
-		snprintf(is_account_ug, sizeof(is_account_ug), "%d", 1);
-		char boxtype[30] = { 0, };
-		snprintf(boxtype, sizeof(boxtype), "%d", mailbox_ugd->mailbox_type);
-		char boxid[30] = { 0, };
-		snprintf(boxid, sizeof(boxid), "%d", mailbox_ugd->mailbox_id);
-		app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_ID, acctid);
-		app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, 0);
-		app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_IS_MAILBOX_ACCOUNT_UG, is_account_ug);
-		app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAILBOX_TYPE, boxtype);
-		app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAILBOX, boxid);
-
+		const char *account_type = EMAIL_BUNDLE_VAL_SINGLE_ACCOUNT;
 		if (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER) {
-			app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, EMAIL_BUNDLE_VAL_PRIORITY_SENDER);
+			account_type = EMAIL_BUNDLE_VAL_PRIORITY_SENDER;
 		} else if (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_ALL && mailbox_ugd->account_id == 0 && EMAIL_MAILBOX_TYPE_FLAGGED == mailbox_ugd->mailbox_type) {
-			app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, EMAIL_BUNDLE_VAL_FILTER_INBOX);
+			account_type = EMAIL_BUNDLE_VAL_FILTER_INBOX;
 		} else if (mailbox_ugd->account_id == 0) {
-			app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, EMAIL_BUNDLE_VAL_ALL_ACCOUNT);
-		} else {
-			app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, EMAIL_BUNDLE_VAL_SINGLE_ACCOUNT);
+			account_type = EMAIL_BUNDLE_VAL_ALL_ACCOUNT;
 		}
 
-		mailbox_ugd->account = mailbox_account_module_create(mailbox_ugd, EMAIL_MODULE_ACCOUNT, service);
+		email_params_h params = NULL;
 
-		app_control_destroy(service);
+		if (email_params_create(&params) &&
+			email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, mailbox_ugd->account_id) &&
+			email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, 0) &&
+			email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_ACCOUNT_UG, 1) &&
+			email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX_TYPE, mailbox_ugd->mailbox_type) &&
+			email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, mailbox_ugd->mailbox_id) &&
+			email_params_add_str(params, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, account_type)) {
+
+			mailbox_ugd->account = mailbox_account_module_create(mailbox_ugd, EMAIL_MODULE_ACCOUNT, params);
+		}
+
+		email_params_free(&params);
 	} else {
 		debug_log("account couldn't open. Edit/Search mode");
 	}
@@ -1487,18 +1458,18 @@ int mailbox_open_email_viewer(EmailMailboxUGD *mailbox_ugd, int account_id, int 
 	retvm_if(!mailbox_ugd, -1, "mailbox_ugd is NULL");
 	debug_log("account_id: %d, mailbox_id: %d, mail_id: %d", account_id, mailbox_id, mail_id);
 
-	app_control_h service = NULL;
+	email_params_h params = NULL;
 
-	if (email_params_create(&service) &&
-		email_params_add_int(service, EMAIL_BUNDLE_KEY_ACCOUNT_ID, account_id) &&
-		email_params_add_int(service, EMAIL_BUNDLE_KEY_MAILBOX, mailbox_id) &&
-		email_params_add_int(service, EMAIL_BUNDLE_KEY_MAIL_ID, mail_id)) {
+	if (email_params_create(&params) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, account_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, mailbox_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAIL_ID, mail_id)) {
 
 		mailbox_ugd->opened_mail_id = mail_id;
-		mailbox_ugd->viewer = mailbox_viewer_module_create(mailbox_ugd, EMAIL_MODULE_VIEWER, service);
+		mailbox_ugd->viewer = mailbox_viewer_module_create(mailbox_ugd, EMAIL_MODULE_VIEWER, params);
 	}
 
-	email_params_free(&service);
+	email_params_free(&params);
 
 	debug_leave();
 	return 0;

@@ -22,11 +22,11 @@
  * @brief Provides initial data pre parse arguments
  *
  * @param[in]	data			User data (Email viewer data)
- * @param[in]	svc_handle		App control handler to get operation and data to perform
+ * @param[in]	params			Email params handle to get operation and data to perform
  *
  * @return VIEWER_ERROR_NONE on success, otherwise VIEWER_ERROR_TYPE_E when an error occurred
  */
-int viewer_initial_data_pre_parse_arguments(void *data, app_control_h svc_handle);
+int viewer_initial_data_pre_parse_arguments(void *data, email_params_h params);
 
 /**
  * @brief Free viewer data

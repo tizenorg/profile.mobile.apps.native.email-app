@@ -21,12 +21,12 @@
 #include <errno.h>
 #include <system_settings.h>
 #include <efl_extension.h>
-#include <app_control.h>
 
 #include "email-common-types.h"
 #include "email-debug.h"
 #include "email-editfield-utils.h"
 #include "email-module-dev.h"
+#include "email-params.h"
 
 #define DEFAULT_CHARSET "UTF-8"
 #define EMAIL_DATETIME_FORMAT_12 "yMdhm"
@@ -443,19 +443,6 @@ EMAIL_API Eina_Bool email_util_get_rgb_string(char *buf, int size, unsigned char
 
 EMAIL_API void email_set_need_restart_flag(bool value);
 EMAIL_API bool email_get_need_restart_flag();
-
-EMAIL_API bool email_params_create(app_control_h *params);
-EMAIL_API void email_params_free(app_control_h *params);
-EMAIL_API bool email_params_operation_set(app_control_h params, const char *operation);
-EMAIL_API bool email_params_uri_set(app_control_h params, const char *uri);
-
-EMAIL_API bool email_params_add_int(app_control_h params, const char *key, int value);
-EMAIL_API bool email_params_add_str(app_control_h params, const char *key, const char *value);
-
-EMAIL_API bool email_params_get_int(app_control_h params, const char *key, int *result);
-EMAIL_API bool email_params_get_int_opt(app_control_h params, const char *key, int *result);
-EMAIL_API bool email_params_get_str(app_control_h params, const char *key, char *result, int result_size);
-EMAIL_API bool email_params_get_str_opt(app_control_h params, const char *key, char *result, int result_size);
 
 EMAIL_API int email_preview_attachment_file(email_module_t *module, const char *path, email_launched_app_listener_t *listener);
 EMAIL_API email_ext_save_err_type_e email_prepare_temp_file_path(const int index,const char *tmp_root_dir, const char *src_file_path, char **dst_file_path);

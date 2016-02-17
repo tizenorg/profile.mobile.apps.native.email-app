@@ -22,10 +22,10 @@
  * @brief Creates Composer module from Mailbox view
  * @param[in]	data		User data (Email mailbox data)
  * @param[in]	type		Email Module type (EMAIL_MODULE_COMPOSER)
- * @param[in]	service		App control handler
+ * @param[in]	params		Email params handle
  * @return email_module_h handler that used as text filter
  */
-email_module_h mailbox_composer_module_create(void *data, email_module_type_e type, app_control_h service);
+email_module_h mailbox_composer_module_create(void *data, email_module_type_e type, email_params_h params);
 
 /**
  * @brief Callback function to destroy Composer module
@@ -38,10 +38,10 @@ void mailbox_composer_module_destroy(void *priv, email_module_h module);
  * @brief Creates Viewer module from Mailbox view
  * @param[in]	data		User data (Email mailbox data)
  * @param[in]	type		Email Module type (EMAIL_MODULE_COMPOSER)
- * @param[in]	service		App control handler
+ * @param[in]	params		Email params handle
  * @return email_module_h handler that used as text filter
  */
-email_module_h mailbox_viewer_module_create(void *data, email_module_type_e type, app_control_h service);
+email_module_h mailbox_viewer_module_create(void *data, email_module_type_e type, email_params_h params);
 
 /**
  * @brief Callback function to destroy Viewer module
@@ -54,10 +54,10 @@ void mailbox_viewer_module_destroy(void *priv, email_module_h module);
  * @brief Creates Account module from Mailbox view
  * @param[in]	data		User data (Email mailbox data)
  * @param[in]	type		Email Module type (EMAIL_MODULE_COMPOSER)
- * @param[in]	service		App control handler
+ * @param[in]	params		Email params handle
  * @return email_module_h handler that used as text filter
  */
-email_module_h mailbox_account_module_create(void *data, email_module_type_e type, app_control_h service);
+email_module_h mailbox_account_module_create(void *data, email_module_type_e type, email_params_h params);
 
 /**
  * @brief Callback function to destroy Account module
@@ -70,10 +70,10 @@ void mailbox_account_module_destroy(void *priv, email_module_h module);
  * @brief Creates Setting module from Mailbox view
  * @param[in]	data		User data (Email mailbox data)
  * @param[in]	type		Email Module type (EMAIL_MODULE_COMPOSER)
- * @param[in]	service		App control hendler
+ * @param[in]	params		Email params handle
  * @return email_module_h handler that used as text filter
  */
-email_module_h mailbox_setting_module_create(void *data, email_module_type_e type, app_control_h service);
+email_module_h mailbox_setting_module_create(void *data, email_module_type_e type, email_params_h params);
 
 /**
  * @brief Callback function to destroy Setting module

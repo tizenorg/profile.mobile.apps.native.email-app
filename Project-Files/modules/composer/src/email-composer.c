@@ -83,8 +83,8 @@ static void _composer_set_environment_variables();
 static void _composer_add_main_callbacks(EmailComposerUGD *ugd);
 static void _composer_del_main_callbacks(EmailComposerUGD *ugd);
 
-static int _composer_module_create(email_module_t *self, app_control_h params);
-static void _composer_on_message(email_module_t *self, app_control_h msg);
+static int _composer_module_create(email_module_t *self, email_params_h params);
+static void _composer_on_message(email_module_t *self, email_params_h msg);
 static void _composer_on_event(email_module_t *self, email_module_event_e event);
 
 static int _composer_create(email_view_t *self);
@@ -162,7 +162,7 @@ static Eina_Bool _composer_delayed_drawing_timer_cb(void *data)
 	composer_initial_view_draw_remaining_components(ugd);
 
 	composer_initial_data_set_mail_info(ugd, true);
-	composer_initial_data_post_parse_arguments(ugd, ugd->ec_app);
+	composer_initial_data_post_parse_arguments(ugd, ugd->launch_params);
 	composer_initial_data_make_initial_contents(ugd);
 
 CATCH:
@@ -189,7 +189,7 @@ static Eina_Bool _composer_update_data_after_adding_account_timer_cb(void *data)
 	gotom_if(ugd->eComposerErrorType != COMPOSER_ERROR_NONE, CATCH, "_composer_construct_composer_data() failed");
 
 	composer_initial_data_set_mail_info(ugd, true);
-	composer_initial_data_post_parse_arguments(ugd, ugd->ec_app);
+	composer_initial_data_post_parse_arguments(ugd, ugd->launch_params);
 	composer_initial_data_make_initial_contents(ugd);
 
 CATCH:
@@ -227,7 +227,7 @@ static void _composer_launch_settings_popup_response_cb(void *data, Evas_Object 
 	debug_enter();
 
 	EmailComposerUGD *ugd = data;
-	app_control_h params = NULL;
+	email_params_h params = NULL;
 	email_module_h module = NULL;
 
 	if ((obj != ugd->composer_popup) &&
@@ -710,7 +710,7 @@ static COMPOSER_ERROR_TYPE_E _composer_construct_composer_data(void *data)
 	ret = _composer_initialize_services(ugd);
 	gotom_if(ret != COMPOSER_ERROR_NONE, CATCH, "_composer_initialize_services() failed");
 
-	ret = composer_initial_data_pre_parse_arguments(ugd, ugd->ec_app);
+	ret = composer_initial_data_pre_parse_arguments(ugd, ugd->launch_params);
 	gotom_if(ret != COMPOSER_ERROR_NONE, CATCH, "composer_initial_data_pre_parse_arguments() failed");
 
 	ret = _composer_prepare_vcard(ugd);
@@ -1057,14 +1057,14 @@ static void _composer_initial_view_draw_richtext_components_if_enabled(EmailComp
 	}
 }
 
-static int _composer_module_create(email_module_t *self, app_control_h params)
+static int _composer_module_create(email_module_t *self, email_params_h params)
 {
 	debug_enter();
 	retvm_if(!self, -1, "Invalid parameter: self is NULL!");
 
 	EmailComposerModule *md = (EmailComposerModule *)self;
 
-	app_control_clone(&md->view.ec_app, params);
+	email_params_clone(&md->view.launch_params, params);
 
 	md->view.eComposerErrorType = composer_initial_data_parse_composer_run_type(&md->view, params);
 	retvm_if(md->view.eComposerErrorType != COMPOSER_ERROR_NONE, -1, "composer_initial_data_parse_composer_run_type() failed");
@@ -1154,7 +1154,7 @@ static void _composer_start(EmailComposerUGD *ugd)
 		ugd->timer_lazy_loading = ecore_timer_add(0.2f, _composer_delayed_drawing_timer_cb, ugd);
 	} else {
 		composer_initial_data_set_mail_info(ugd, true);
-		composer_initial_data_post_parse_arguments(ugd, ugd->ec_app);
+		composer_initial_data_post_parse_arguments(ugd, ugd->launch_params);
 		composer_initial_data_make_initial_contents(ugd);
 	}
 
@@ -1226,20 +1226,18 @@ static void _composer_destroy(email_view_t *self)
 	retm_if(!self, "Invalid parameter: self is NULL!");
 
 	EmailComposerUGD *ugd = (EmailComposerUGD *)self;
-	app_control_h reply_service;
+	email_params_h reply = NULL;
 
-	int ret = app_control_create(&reply_service);
-	if (ret == APP_CONTROL_ERROR_NONE) {
-		ret = email_module_send_result(ugd->base.module, reply_service);
+	if (email_params_create(&reply)) {
+		int ret = email_module_send_result(ugd->base.module, reply);
 		debug_warning_if(ret != 0, "email_module_send_result() failed!");
-
-		ret = app_control_destroy(reply_service);
-		debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_destroy() failed!");
 	} else {
-		debug_warning("app_control_create() failed!");
+		debug_warning("email_params_create() failed!");
 	}
 
-	app_control_destroy(ugd->ec_app);
+	email_params_free(&reply);
+
+	email_params_free(&ugd->launch_params);
 
 	ugd->is_composer_getting_destroyed = EINA_TRUE;
 	_composer_del_main_callbacks(ugd);
@@ -1261,7 +1259,7 @@ static void _composer_on_back_key(email_view_t *self)
 	return;
 }
 
-static void _composer_on_message(email_module_t *self, app_control_h msg)
+static void _composer_on_message(email_module_t *self, email_params_h msg)
 {
 	debug_enter();
 
@@ -1269,10 +1267,10 @@ static void _composer_on_message(email_module_t *self, app_control_h msg)
 
 	EmailComposerModule *md = (EmailComposerModule *)self;
 	EmailComposerUGD *ugd = &md->view;
-	char *msg_type = NULL;
+	const char *msg_type = NULL;
 
-	int ret = app_control_get_extra_data(msg, EMAIL_BUNDLE_KEY_MSG, &msg_type);
-	debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data(%s) failed! (%d)", EMAIL_BUNDLE_KEY_MSG, ret);
+	debug_warning_if(!email_params_get_str(msg, EMAIL_BUNDLE_KEY_MSG,  &msg_type),
+			"email_params_get_str(%s) failed!", EMAIL_BUNDLE_KEY_MSG);
 
 	if (g_strcmp0(msg_type, EMAIL_BUNDLE_VAL_EMAIL_COMPOSER_SAVE_DRAFT) == 0) {
 
@@ -1286,7 +1284,6 @@ static void _composer_on_message(email_module_t *self, app_control_h msg)
 			ugd->need_to_destroy_after_initializing = EINA_TRUE;
 		}
 	}
-	FREE(msg_type);
 
 	debug_leave();
 }

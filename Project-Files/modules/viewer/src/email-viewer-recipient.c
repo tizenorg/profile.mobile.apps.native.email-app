@@ -228,9 +228,7 @@ static void _recipient_popup_genlist_sel(void *data, Evas_Object *obj, void *eve
 		if (index == 0) {
 			if (ug_data->recipient_contact_list_item) {
 				debug_log("Contact Item Exist: index[%d]", ug_data->recipient_contact_list_item->person_id);
-				char index_str[BUF_LEN_T] = { 0, };
-				snprintf(index_str, sizeof(index_str), "%d", ug_data->recipient_contact_list_item->person_id);
-				viewer_view_contact_detail(ug_data, g_strdup(index_str));
+				viewer_view_contact_detail(ug_data, ug_data->recipient_contact_list_item->person_id);
 				email_contacts_delete_contact_info(&ug_data->recipient_contact_list_item);
 			} else {
 				ug_data->create_contact_arg = CONTACTUI_REQ_ADD_EMAIL;

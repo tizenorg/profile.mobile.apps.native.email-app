@@ -18,10 +18,9 @@
 #ifndef _EMAIL_MODULE_H_
 #define _EMAIL_MODULE_H_
 
-#include <app_control.h>
 #include <Evas.h>
 
-#include "email-common-types.h"
+#include "email-params.h"
 
 /**
  * Opaque handle of the email module
@@ -91,7 +90,7 @@ typedef struct _email_module_listener
 	 * @param[in]	module		sender module
 	 * @param[in]	result		result message send back to the listener
 	 */
-	void (*result_cb) (void *data, email_module_h module, app_control_h result);
+	void (*result_cb) (void *data, email_module_h module, email_params_h result);
 
 	/**
 	 * @brief Callback which is used to send destroy request to the listener
@@ -189,7 +188,7 @@ EMAIL_API int email_module_mgr_send_event(email_module_event_e event);
  * 		NULL - on error
  */
 EMAIL_API email_module_h email_module_mgr_create_root_module(email_module_type_e module_type,
-		app_control_h params, email_module_listener_t *listener);
+		email_params_h params, email_module_listener_t *listener);
 
 /**
  * @brief Checks weather the module manager is in the middle of switching views
@@ -247,6 +246,6 @@ EMAIL_API int email_module_destroy_no_pop(email_module_h module);
  * @return 0 - on success,
  * 		negative value - on error
  */
-EMAIL_API int email_module_send_message(email_module_h module, app_control_h msg);
+EMAIL_API int email_module_send_message(email_module_h module, email_params_h msg);
 
 #endif /* _EMAIL_MODULE_H_ */

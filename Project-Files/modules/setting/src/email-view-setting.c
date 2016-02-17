@@ -776,17 +776,15 @@ static void _priority_senders_email_cb(void *data, Evas_Object *obj, void *event
 												&(EMAIL_SETTING_STRING_OK),
 												_popup_ok_cb, NULL, NULL);
 	} else {
-		app_control_h service = NULL;
-		app_control_create(&service);
-		if (service) {
-			app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_FILTER_OPERATION,
-					EMAIL_BUNDLE_VAL_FILTER_OPERATION_PS);
-			app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_FILTER_MODE, EMAIL_BUNDLE_VAL_FILTER_LIST);
+		email_params_h params = NULL;
+		if (email_params_create(&params) &&
+			email_params_add_str(params, EMAIL_BUNDLE_KEY_FILTER_OPERATION, EMAIL_BUNDLE_VAL_FILTER_OPERATION_PS) &&
+			email_params_add_str(params, EMAIL_BUNDLE_KEY_FILTER_MODE, EMAIL_BUNDLE_VAL_FILTER_LIST)) {
 
 			ugd->filter = email_module_create_child(&ugd->base, EMAIL_MODULE_FILTER,
-					service, &ugd->filter_listener);
-			app_control_destroy(service);
+					params, &ugd->filter_listener);
 		}
+		email_params_free(&params);
 	}
 
 	return;
@@ -956,31 +954,31 @@ static int _create_google_sync_view(EmailSettingVD *vd, int my_account_id)
 {
 	debug_enter();
 	char my_account_id_str[30] = { 0, };
-	app_control_h service = NULL;
+	app_control_h app_control = NULL;
 	int ret;
 
 	retvm_if(!vd, 0, "vd is NULL");
 
 	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
 
-	ret = app_control_create(&service);
-	retvm_if(!service, 0, "app_control_create failed: %d", ret);
+	ret = app_control_create(&app_control);
+	retvm_if(!app_control, 0, "app_control_create failed: %d", ret);
 
 	snprintf(my_account_id_str, 30, "%d", my_account_id);
-	app_control_add_extra_data(service, ACCOUNT_DATA_ID, my_account_id_str);
+	app_control_add_extra_data(app_control, ACCOUNT_DATA_ID, my_account_id_str);
 
-	app_control_set_launch_mode(service, APP_CONTROL_LAUNCH_MODE_GROUP);
+	app_control_set_launch_mode(app_control, APP_CONTROL_LAUNCH_MODE_GROUP);
 
-	app_control_set_app_id(service, "org.tizen.google-service-account-lite");
-	app_control_set_operation(service, ACCOUNT_OPERATION_VIEW);
+	app_control_set_app_id(app_control, "org.tizen.google-service-account-lite");
+	app_control_set_operation(app_control, ACCOUNT_OPERATION_VIEW);
 
-	ret = app_control_send_launch_request(service, _google_sync_view_result_cb, vd);
+	ret = app_control_send_launch_request(app_control, _google_sync_view_result_cb, vd);
 	if (ret != APP_CONTROL_ERROR_NONE) {
 		debug_error("app_control_send_launch_request failed: %d", ret);
 		return 0;
 	}
 
-	ugd->app_control_google_eas = service;
+	ugd->app_control_google_eas = app_control;
 
 	return 1;
 }

@@ -136,7 +136,7 @@ static void _email_module_attach_panel_event_cb(attach_panel_h attach_panel,
 		void *user_data);
 
 int email_module_launch_app(email_module_t *module, email_launch_app_type_e app_type,
-		app_control_h params, email_launched_app_listener_t *listener)
+		email_params_h params, email_launched_app_listener_t *listener)
 {
 	debug_enter();
 	/* Check state and input arguments */
@@ -155,12 +155,11 @@ int email_module_launch_app(email_module_t *module, email_launch_app_type_e app_
 
 	/* Dummy loop to handle exceptions and cleanup */
 	while (1) {
-		/* Compile-time warning is preferred over undefined behaviour in run-time. */
+		/* Compile-time warning is preferred over undefined behavior in run-time. */
 		int r;
 
-		r = app_control_clone(&module->_launched_app, params);
-		if (r != APP_CONTROL_ERROR_NONE) {
-			debug_error("Failed to clone launch parameters: %d", r);
+		if (!email_params_to_app_control(params, &module->_launched_app)) {
+			debug_error("Failed to convert parameters.");
 			break;
 		}
 
@@ -507,7 +506,13 @@ void _email_module_app_reply_cb(app_control_h request, app_control_h reply,
 	default:
 		/* In other cases - forward reply to listener */
 		if (module->_app_listener.reply_cb) {
-			module->_app_listener.reply_cb(module->_app_listener.cb_data, result, reply);
+			email_params_h params = NULL;
+			if (email_params_from_app_control(&params, reply)) {
+				module->_app_listener.reply_cb(module->_app_listener.cb_data, result, params);
+				email_params_free(&params);
+			} else {
+				debug_error("Reply convert error!");
+			}
 			module->_app_listener.reply_cb = NULL;
 		}
 	}

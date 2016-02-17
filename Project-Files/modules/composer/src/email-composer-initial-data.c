@@ -38,18 +38,18 @@ static char *_initial_data_body_make_recipient_string(const char *original_list,
 static char *_initial_data_body_get_original_message_bar_tags(EmailComposerUGD *ugd);
 static char *_initial_data_body_get_parent_content(EmailComposerUGD *ugd);
 
-static void _initial_data_parse_service_data_by_internal(app_control_h svc_handle, char **argv, int run_type);
-static void _initial_data_parse_service_data_by_ug(app_control_h svc_handle, char **argv);
-static void _initial_data_parse_service_data_by_appcontrol(EmailComposerUGD *ugd,
-		app_control_h svc_handle, char **argv, const char *operation);
+static void _initial_data_parse_params_by_internal(email_params_h params, const char **argv, int run_type);
+static void _initial_data_parse_params_by_ug(email_params_h params, const char **argv);
+static void _initial_data_parse_params_by_appcontrol(EmailComposerUGD *ugd,
+		email_params_h params, const char **argv, const char *operation);
 
 static char *_initial_data_parse_mailto_recipients(char *recipients_list);
-static void _initial_data_parse_mailto_uri(EmailComposerUGD *ugd, char *mailto_uri);
-static void _initial_data_parse_contacts_sharing(EmailComposerUGD *ugd, app_control_h svc_handle, const char *operation);
+static void _initial_data_parse_mailto_uri(EmailComposerUGD *ugd, const char *mailto_uri);
+static void _initial_data_parse_contacts_sharing(EmailComposerUGD *ugd, email_params_h params, const char *operation);
 static void _initial_data_parse_attachments(EmailComposerUGD *ugd, Eina_List *attachment_uri_list);
 
-static COMPOSER_ERROR_TYPE_E _initial_data_process_service_data_by_internal(EmailComposerUGD *ugd, char **argv);
-static COMPOSER_ERROR_TYPE_E _initial_data_process_service_data_by_external(EmailComposerUGD *ugd, char **argv);
+static COMPOSER_ERROR_TYPE_E _initial_data_process_params_by_internal(EmailComposerUGD *ugd, const char **argv);
+static COMPOSER_ERROR_TYPE_E _initial_data_process_params_by_external(EmailComposerUGD *ugd, const char **argv);
 
 static void _initial_data_set_mail_to_recipients(EmailComposerUGD *ugd);
 static void _initial_data_set_mail_cc_recipients(EmailComposerUGD *ugd);
@@ -64,7 +64,7 @@ static Eina_List *_initial_data_make_initial_recipients_list(Evas_Object *mbe);
 static void _recp_preppend_string(gchar **dst, gchar *src);
 static void _recp_append_string(gchar **dst, gchar *src);
 
-static void _recp_append_extra_data_array(gchar **dst, app_control_h app_control, const char *data_key);
+static void _recp_append_extra_data_array(gchar **dst, email_params_h params, const char *data_key);
 
 static email_string_t EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
 static email_string_t EMAIL_COMPOSER_STRING_BUTTON_CANCEL = { PACKAGE, "IDS_EMAIL_BUTTON_CANCEL" };
@@ -206,26 +206,26 @@ static char *_initial_data_body_get_parent_content(EmailComposerUGD *ugd)
 	return tmp_text;
 }
 
-static void _initial_data_parse_service_data_by_internal(app_control_h svc_handle, char **argv, int run_type)
+static void _initial_data_parse_params_by_internal(email_params_h params, const char **argv, int run_type)
 {
 	debug_enter();
 
-	retm_if(!svc_handle, "svc_handle is NULL!");
+	retm_if(!params, "params is NULL!");
 	retm_if(!argv, "argv is NULL!");
 
-	int ret = app_control_get_extra_data(svc_handle, EMAIL_BUNDLE_KEY_ACCOUNT_ID, (char **)&argv[0]);
-	debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data(%s) failed! ret:[%d]", EMAIL_BUNDLE_KEY_ACCOUNT_ID, ret);
+	debug_warning_if(!email_params_get_str(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, &argv[0]),
+			"email_params_get_str(%s) failed!", EMAIL_BUNDLE_KEY_ACCOUNT_ID);
 
 	debug_secure("account_id: (%s)", argv[0]);
 
-	ret = app_control_get_extra_data(svc_handle, EMAIL_BUNDLE_KEY_MAIL_ID, (char **)&argv[1]);
-	debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data(%s) failed! ret:[%d]", EMAIL_BUNDLE_KEY_MAIL_ID, ret);
+	debug_warning_if(!email_params_get_str(params, EMAIL_BUNDLE_KEY_MAIL_ID, &argv[1]),
+			"email_params_get_str(%s) failed!", EMAIL_BUNDLE_KEY_MAIL_ID);
 
 	debug_log("mail_id: (%s)", argv[1]);
 
 	if ((run_type == RUN_EML_FORWARD) || (run_type == RUN_EML_REPLY) || (run_type == RUN_EML_REPLY_ALL)) {
-		ret = app_control_get_extra_data(svc_handle, EMAIL_BUNDLE_KEY_MYFILE_PATH, (char **)&argv[3]);
-		debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data(%s) failed! ret:[%d]", EMAIL_BUNDLE_KEY_MYFILE_PATH, ret);
+		debug_warning_if(!email_params_get_str(params, EMAIL_BUNDLE_KEY_MYFILE_PATH, &argv[3]),
+				"email_params_get_str(%s) failed!", EMAIL_BUNDLE_KEY_MYFILE_PATH);
 
 		debug_secure("eml_file_path: (%s)", argv[3]);
 	}
@@ -233,32 +233,30 @@ static void _initial_data_parse_service_data_by_internal(app_control_h svc_handl
 	debug_leave();
 }
 
-static void _initial_data_parse_service_data_by_ug(app_control_h svc_handle, char **argv)
+static void _initial_data_parse_params_by_ug(email_params_h params, const char **argv)
 {
 	debug_enter();
 
-	retm_if(!svc_handle, "Invalid parameter: svc_handle is NULL!");
+	retm_if(!params, "Invalid parameter: params is NULL!");
 	retm_if(!argv, "Invalid parameter: argv is NULL!");
 
-	int ret = APP_CONTROL_ERROR_NONE;
+	debug_warning_if(!email_params_get_str(params, EMAIL_BUNDLE_KEY_TO, &argv[0]),
+			"email_params_get_str(%s) failed!", EMAIL_BUNDLE_KEY_TO);
 
-	ret = app_control_get_extra_data(svc_handle, EMAIL_BUNDLE_KEY_TO, (char **)&argv[0]);
-	debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data(%s) failed! ret:[%d]", EMAIL_BUNDLE_KEY_TO, ret);
+	debug_warning_if(!email_params_get_str(params, EMAIL_BUNDLE_KEY_CC, &argv[1]),
+			"email_params_get_str(%s) failed!", EMAIL_BUNDLE_KEY_CC);
 
-	ret = app_control_get_extra_data(svc_handle, EMAIL_BUNDLE_KEY_CC, (char **)&argv[1]);
-	debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data(%s) failed! ret:[%d]", EMAIL_BUNDLE_KEY_CC, ret);
+	debug_warning_if(!email_params_get_str(params, EMAIL_BUNDLE_KEY_BCC, &argv[2]),
+			"email_params_get_str(%s) failed!", EMAIL_BUNDLE_KEY_BCC);
 
-	ret = app_control_get_extra_data(svc_handle, EMAIL_BUNDLE_KEY_BCC, (char **)&argv[2]);
-	debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data(%s) failed! ret:[%d]", EMAIL_BUNDLE_KEY_BCC, ret);
+	debug_warning_if(!email_params_get_str(params, EMAIL_BUNDLE_KEY_SUBJECT, &argv[3]),
+			"email_params_get_str(%s) failed!", EMAIL_BUNDLE_KEY_SUBJECT);
 
-	ret = app_control_get_extra_data(svc_handle, EMAIL_BUNDLE_KEY_SUBJECT, (char **)&argv[3]);
-	debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data(%s) failed! ret:[%d]", EMAIL_BUNDLE_KEY_SUBJECT, ret);
+	debug_warning_if(!email_params_get_str(params, EMAIL_BUNDLE_KEY_BODY, &argv[4]),
+			"email_params_get_str(%s) failed!", EMAIL_BUNDLE_KEY_BODY);
 
-	ret = app_control_get_extra_data(svc_handle, EMAIL_BUNDLE_KEY_BODY, (char **)&argv[4]);
-	debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data(%s) failed! ret:[%d]", EMAIL_BUNDLE_KEY_BODY, ret);
-
-	ret = app_control_get_extra_data(svc_handle, EMAIL_BUNDLE_KEY_ATTACHMENT, (char **)&argv[5]);
-	debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data(%s) failed! ret:[%d]", EMAIL_BUNDLE_KEY_ATTACHMENT, ret);
+	debug_warning_if(!email_params_get_str(params, EMAIL_BUNDLE_KEY_ATTACHMENT, &argv[5]),
+			"email_params_get_str(%s) failed!", EMAIL_BUNDLE_KEY_ATTACHMENT);
 
 	debug_secure("to: (%s)", argv[0]);
 	debug_secure("cc: (%s)", argv[1]);
@@ -270,34 +268,32 @@ static void _initial_data_parse_service_data_by_ug(app_control_h svc_handle, cha
 	debug_leave();
 }
 
-static void _initial_data_parse_service_data_by_appcontrol(EmailComposerUGD *ugd,
-		app_control_h svc_handle, char **argv, const char *operation)
+static void _initial_data_parse_params_by_appcontrol(EmailComposerUGD *ugd,
+		email_params_h params, const char **argv, const char *operation)
 {
 	debug_enter();
 
-	retm_if(!svc_handle, "Invalid parameter: svc_handle is NULL!");
+	retm_if(!params, "Invalid parameter: params is NULL!");
 	retm_if(!argv, "Invalid parameter: argv is NULL!");
 	retm_if(!operation, "Invalid parameter: operation is NULL!");
 
-	int ret = APP_CONTROL_ERROR_NONE;
-
 	if (!g_strcmp0(operation, APP_CONTROL_OPERATION_COMPOSE)) {
 
-		_recp_append_extra_data_array(&ugd->new_mail_info->mail_data->full_address_to, svc_handle, APP_CONTROL_DATA_TO);
+		_recp_append_extra_data_array(&ugd->new_mail_info->mail_data->full_address_to, params, APP_CONTROL_DATA_TO);
 
-		_recp_append_extra_data_array(&ugd->new_mail_info->mail_data->full_address_cc, svc_handle, APP_CONTROL_DATA_CC);
+		_recp_append_extra_data_array(&ugd->new_mail_info->mail_data->full_address_cc, params, APP_CONTROL_DATA_CC);
 
-		_recp_append_extra_data_array(&ugd->new_mail_info->mail_data->full_address_bcc, svc_handle, APP_CONTROL_DATA_BCC);
+		_recp_append_extra_data_array(&ugd->new_mail_info->mail_data->full_address_bcc, params, APP_CONTROL_DATA_BCC);
 	}
 
 	if (!g_strcmp0(operation, APP_CONTROL_OPERATION_COMPOSE) ||
 		!g_strcmp0(operation, APP_CONTROL_OPERATION_SHARE_TEXT)) {
 
-		ret = app_control_get_extra_data(svc_handle, APP_CONTROL_DATA_SUBJECT, (char **)&argv[3]);
-		debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data(%s) failed! ret:[%d]", APP_CONTROL_DATA_SUBJECT, ret);
+		debug_warning_if(!email_params_get_str(params, APP_CONTROL_DATA_SUBJECT, &argv[3]),
+				"email_params_get_str(%s) failed!", APP_CONTROL_DATA_SUBJECT);
 
-		ret = app_control_get_extra_data(svc_handle, APP_CONTROL_DATA_TEXT, (char **)&argv[4]);
-		debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data(%s) failed! ret:[%d]", APP_CONTROL_DATA_TEXT, ret);
+		debug_warning_if(!email_params_get_str(params, APP_CONTROL_DATA_TEXT, &argv[4]),
+				"email_params_get_str(%s) failed!", APP_CONTROL_DATA_TEXT);
 
 		debug_secure("subject: (%s)", argv[3]);
 		debug_secure("body: (%s)", argv[4]);
@@ -333,7 +329,7 @@ static char *_initial_data_parse_mailto_recipients(char *recipients_list)
 	return new_recipients_list;
 }
 
-static void _initial_data_parse_mailto_uri(EmailComposerUGD *ugd, char *mailto_uri)
+static void _initial_data_parse_mailto_uri(EmailComposerUGD *ugd, const char *mailto_uri)
 {
 	debug_enter();
 
@@ -383,15 +379,15 @@ static void _initial_data_parse_mailto_uri(EmailComposerUGD *ugd, char *mailto_u
 	debug_leave();
 }
 
-static void _initial_data_parse_contacts_sharing(EmailComposerUGD *ugd, app_control_h svc_handle, const char *operation)
+static void _initial_data_parse_contacts_sharing(EmailComposerUGD *ugd, email_params_h params, const char *operation)
 {
 	debug_enter();
 
 	if (!g_strcmp0(operation, APP_CONTROL_OPERATION_SHARE)) {
-		char data_type[BUF_LEN_T] = "person";
+		const char *data_type = "person";
 
-		if (email_params_get_str_opt(svc_handle, APP_CONTROL_DATA_TYPE, data_type, BUF_LEN_T) &&
-			email_params_get_int(svc_handle, APP_CONTROL_DATA_ID, &ugd->shared_contact_id)) {
+		if (email_params_get_str_opt(params, APP_CONTROL_DATA_TYPE, &data_type) &&
+			email_params_get_int(params, APP_CONTROL_DATA_ID, &ugd->shared_contact_id)) {
 
 			ugd->shared_contacts_count = 1;
 
@@ -408,27 +404,22 @@ static void _initial_data_parse_contacts_sharing(EmailComposerUGD *ugd, app_cont
 		}
 
 	} else {
+		const char **array = NULL;
 		int i = 0;
-		char **array = NULL;
 
-		int ret = app_control_get_extra_data_array(svc_handle, APP_CONTROL_DATA_ID, &array, &ugd->shared_contacts_count);
-		retm_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data_array(%s) failed! ret:[%d]", APP_CONTROL_DATA_ID, ret);
+		retm_if(!email_params_get_str_array(params, APP_CONTROL_DATA_ID, &array, &ugd->shared_contacts_count),
+				"email_params_get_str_array(%s) failed!", APP_CONTROL_DATA_ID);
 
 		if (ugd->shared_contacts_count > 0) {
 			ugd->shared_contact_id_list = calloc(ugd->shared_contacts_count, sizeof(int));
-			debug_error_if(!ugd->shared_contact_id_list, "calloc() failed");
+			retm_if(!ugd->shared_contact_id_list, "calloc() failed");
 
 			for (i = 0; i < ugd->shared_contacts_count; ++i) {
-				if (ugd->shared_contact_id_list) {
-					ugd->shared_contact_id_list[i] = atoi(array[i]);
-				}
-				free(array[i]);
+				ugd->shared_contact_id_list[i] = atoi(array[i]);
 			}
 		} else {
 			debug_error("Array is empty");
 		}
-
-		free(array);
 	}
 
 	ugd->is_sharing_contacts = (ugd->shared_contacts_count > 0) ? EINA_TRUE : EINA_FALSE;
@@ -473,7 +464,7 @@ static void _initial_data_parse_attachments(EmailComposerUGD *ugd, Eina_List *at
 	debug_leave();
 }
 
-static COMPOSER_ERROR_TYPE_E _initial_data_process_service_data_by_internal(EmailComposerUGD *ugd, char **argv)
+static COMPOSER_ERROR_TYPE_E _initial_data_process_params_by_internal(EmailComposerUGD *ugd, const char **argv)
 {
 	debug_enter();
 
@@ -507,7 +498,7 @@ static COMPOSER_ERROR_TYPE_E _initial_data_process_service_data_by_internal(Emai
 	return COMPOSER_ERROR_NONE;
 }
 
-static COMPOSER_ERROR_TYPE_E _initial_data_process_service_data_by_external(EmailComposerUGD *ugd, char **argv)
+static COMPOSER_ERROR_TYPE_E _initial_data_process_params_by_external(EmailComposerUGD *ugd, const char **argv)
 {
 	debug_enter();
 
@@ -1141,79 +1132,65 @@ void composer_initial_data_set_mail_info(EmailComposerUGD *ugd, bool is_draft_sy
 	email_profiling_end(composer_initial_data_set_mail_info);
 }
 
-COMPOSER_ERROR_TYPE_E composer_initial_data_parse_composer_run_type(EmailComposerUGD *ugd, app_control_h svc_handle)
+COMPOSER_ERROR_TYPE_E composer_initial_data_parse_composer_run_type(EmailComposerUGD *ugd, email_params_h params)
 {
 	email_profiling_begin(composer_initial_data_parse_composer_run_type);
 	debug_enter();
 
-	int ret = 0;
-	char *operation = NULL;
-	char *run_type = NULL;
+	const char *operation = NULL;
 
 	ugd->composer_type = RUN_TYPE_UNKNOWN;
 
-	ret = app_control_get_operation(svc_handle, &operation);
-	debug_warning_if((ret != APP_CONTROL_ERROR_NONE) && (ret != APP_CONTROL_ERROR_KEY_NOT_FOUND), "app_control_get_operation() failed! ret:[%d]", ret);
+	debug_warning_if(!email_params_get_operation_opt(params, &operation),
+			"email_params_get_operation_opt() failed!");
 
 	if (operation && (g_strcmp0(operation, APP_CONTROL_OPERATION_DEFAULT) != 0)) {
 		debug_secure("operation type: (%s)", operation);
 		ugd->composer_type = RUN_COMPOSER_EXTERNAL;
 	} else {
-		ret = app_control_get_extra_data(svc_handle, EMAIL_BUNDLE_KEY_RUN_TYPE, &run_type);
-		debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data(%s) failed! ret:[%d]", EMAIL_BUNDLE_KEY_RUN_TYPE, ret);
-
-		if (run_type) {
-			ugd->composer_type = atoi(run_type);
-		} else {
-			ugd->composer_type = RUN_COMPOSER_NEW;
-		}
+		debug_warning_if(!email_params_get_int(params, EMAIL_BUNDLE_KEY_RUN_TYPE, &ugd->composer_type),
+				"email_params_get_int(%s) failed!", EMAIL_BUNDLE_KEY_RUN_TYPE);
 	}
-
-	g_free(operation);
-	g_free(run_type);
 
 	debug_leave();
 	email_profiling_end(composer_initial_data_parse_composer_run_type);
 	return COMPOSER_ERROR_NONE;
 }
 
-COMPOSER_ERROR_TYPE_E composer_initial_data_pre_parse_arguments(EmailComposerUGD *ugd, app_control_h svc_handle)
+COMPOSER_ERROR_TYPE_E composer_initial_data_pre_parse_arguments(EmailComposerUGD *ugd, email_params_h params)
 {
 	email_profiling_begin(composer_initial_data_pre_parse_arguments);
 	debug_enter();
 
 	retvm_if(!ugd, COMPOSER_ERROR_INVALID_ARG, "Invalid parameter: ugd is NULL!");
-	retvm_if(!svc_handle, COMPOSER_ERROR_INVALID_ARG, "Invalid parameter: svc_handle is NULL!");
+	retvm_if(!params, COMPOSER_ERROR_INVALID_ARG, "Invalid parameter: params is NULL!");
 
 	COMPOSER_ERROR_TYPE_E return_val = COMPOSER_ERROR_NONE;
-	int ret = 0;
-	char *operation = NULL;
-	char *uri = NULL;
-	char *mime = NULL;
-	char *argv[6] = { 0, };
-	int i;
+	const char *operation = NULL;
+	const char *uri = NULL;
+	const char *mime = NULL;
+	const char *argv[6] = { 0, };
 
-	ret = app_control_get_operation(svc_handle, &operation);
-	debug_warning_if((ret != APP_CONTROL_ERROR_NONE) && (ret != APP_CONTROL_ERROR_KEY_NOT_FOUND), "app_control_get_operation() failed! ret:[%d]", ret);
+	debug_warning_if(!email_params_get_operation_opt(params, &operation),
+			"email_params_get_operation_opt() failed!");
 
 	if (ugd->composer_type != RUN_COMPOSER_EXTERNAL) {
 		debug_log("Composer launched internally! type:[%d]", ugd->composer_type);
 
-		_initial_data_parse_service_data_by_internal(svc_handle, argv, ugd->composer_type);
+		_initial_data_parse_params_by_internal(params, argv, ugd->composer_type);
 
-		return_val = _initial_data_process_service_data_by_internal(ugd, argv);
-		gotom_if(return_val != COMPOSER_ERROR_NONE, EXIT_FUNC, "_initial_data_process_service_data_by_internal() failed!");
+		return_val = _initial_data_process_params_by_internal(ugd, argv);
+		gotom_if(return_val != COMPOSER_ERROR_NONE, EXIT_FUNC, "_initial_data_process_params_by_internal() failed!");
 	} else {
 		debug_log("Composer launched externally!");
 
 		if (operation == NULL) { /* ug called by ug_create */
-			_initial_data_parse_service_data_by_ug(svc_handle, argv);
+			_initial_data_parse_params_by_ug(params, argv);
 		} else { /* ug called by appcontrol request */
 
 			if (!g_strcmp0(operation, APP_CONTROL_OPERATION_COMPOSE)) {
 
-				ret = app_control_get_uri(svc_handle, &uri);
-				if ((ret == APP_CONTROL_ERROR_NONE) && STR_VALID(uri) &&
+				if (email_params_get_uri(params, &uri) &&
 						g_str_has_prefix(uri, COMPOSER_SCHEME_MAILTO)) {
 					_initial_data_parse_mailto_uri(ugd, uri);
 				}
@@ -1221,57 +1198,44 @@ COMPOSER_ERROR_TYPE_E composer_initial_data_pre_parse_arguments(EmailComposerUGD
 			} else if (!g_strcmp0(operation, APP_CONTROL_OPERATION_SHARE) ||
 						!g_strcmp0(operation, APP_CONTROL_OPERATION_MULTI_SHARE)) {
 
-				ret = app_control_get_mime(svc_handle, &mime);
-				if ((ret == APP_CONTROL_ERROR_NONE) &&
+				if (email_params_get_mime(params, &mime) &&
 						!g_strcmp0(mime, COMPOSER_MIME_CONTACT_SHARE)) {
-					_initial_data_parse_contacts_sharing(ugd, svc_handle, operation);
+					_initial_data_parse_contacts_sharing(ugd, params, operation);
 				}
 			}
 
-			_initial_data_parse_service_data_by_appcontrol(ugd, svc_handle, argv, operation);
+			_initial_data_parse_params_by_appcontrol(ugd, params, argv, operation);
 		}
 
-		return_val = _initial_data_process_service_data_by_external(ugd, argv);
-		gotom_if(return_val != COMPOSER_ERROR_NONE, EXIT_FUNC, "_initial_data_process_service_data_by_external() failed!");
+		return_val = _initial_data_process_params_by_external(ugd, argv);
+		gotom_if(return_val != COMPOSER_ERROR_NONE, EXIT_FUNC, "_initial_data_process_params_by_external() failed!");
 	}
 
 EXIT_FUNC:
-	free(uri);
-	free(mime);
-	free(operation);
-	for (i = 0; i < 6; i++) {
-		free(argv[i]);
-	}
-
 	debug_leave();
 	email_profiling_end(composer_initial_data_pre_parse_arguments);
 	return return_val;
 }
 
-COMPOSER_ERROR_TYPE_E composer_initial_data_post_parse_arguments(EmailComposerUGD *ugd, app_control_h svc_handle)
+COMPOSER_ERROR_TYPE_E composer_initial_data_post_parse_arguments(EmailComposerUGD *ugd, email_params_h params)
 {
 	email_profiling_begin(composer_initial_data_post_parse_arguments);
 	debug_enter();
 
 	retvm_if(!ugd, COMPOSER_ERROR_INVALID_ARG, "Invalid parameter: ugd is NULL!");
-	retvm_if(!svc_handle, COMPOSER_ERROR_INVALID_ARG, "Invalid parameter: svc_handle is NULL!");
+	retvm_if(!params, COMPOSER_ERROR_INVALID_ARG, "Invalid parameter: params is NULL!");
 
 	if (ugd->composer_type == RUN_COMPOSER_EXTERNAL) {
-		int ret = APP_CONTROL_ERROR_NONE;
-		char *operation = NULL;
+		const char *operation = NULL;
 		Eina_List *attachment_uri_list = NULL;
 
-		ret = app_control_get_operation(svc_handle, &operation);
-		debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_operation() failed! ret:[%d]", ret);
+		debug_warning_if(!email_params_get_operation_opt(params, &operation),
+				"email_params_get_operation_opt() failed!");
 
 		/* TODO: the first case is needed? it seems like dead case. */
 		if (operation == NULL) { /* ug called by ug_create */
-			char *attachment_uri = NULL;
-
-			ret = app_control_get_extra_data(svc_handle, EMAIL_BUNDLE_KEY_ATTACHMENT, &attachment_uri);
-			debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data() failed! ret:[%d]", ret);
-
-			if (attachment_uri) {
+			const char *attachment_uri = NULL;
+			if (email_params_get_str(params, EMAIL_BUNDLE_KEY_ATTACHMENT, &attachment_uri)) {
 				gchar **split_att = g_strsplit_set(attachment_uri, ";\n", -1);
 				int i;
 				for (i = 0; i < g_strv_length(split_att); i++) {
@@ -1280,7 +1244,6 @@ COMPOSER_ERROR_TYPE_E composer_initial_data_post_parse_arguments(EmailComposerUG
 					}
 				}
 				g_strfreev(split_att);
-				free(attachment_uri);
 			}
 
 		/* sharing contacts */
@@ -1311,40 +1274,37 @@ COMPOSER_ERROR_TYPE_E composer_initial_data_post_parse_arguments(EmailComposerUG
 
 			/* 1. parse uri */
 			if (!g_strcmp0(operation, APP_CONTROL_OPERATION_SHARE)) {
-				char *uri = NULL;
-				ret = app_control_get_uri(svc_handle, &uri);
-				if (ret == APP_CONTROL_ERROR_NONE) {
+				const char *uri = NULL;
+				if (email_params_get_uri(params, &uri)) {
 					if (STR_VALID(uri) && !g_str_has_prefix(uri, COMPOSER_SCHEME_MAILTO)) {
 						attachment_uri_list = eina_list_append(attachment_uri_list, g_strdup(uri));
 						parse_data_path = false;
 					}
-					free(uri);
 				}
 			}
 
 			/* 2. parse value as "http://tizen.org/appcontrol/data/path" */
 			if (parse_data_path) {
-				char *path = NULL;
-				char **path_array = NULL;
+				const char *path = NULL;
+				const char **path_array = NULL;
 				int path_array_len = 0;
-				bool is_array = false;
+				bool is_array = true;
+				bool ok = false;
 
-				ret = app_control_is_extra_data_array(svc_handle, APP_CONTROL_DATA_PATH, &is_array);
-				if (ret != APP_CONTROL_ERROR_NONE) {
-					debug_error("app_control_is_extra_data_array() failed! ret:[%d]", ret);
-					is_array = true;
+				if (!email_params_get_is_array(params, APP_CONTROL_DATA_PATH, &is_array)) {
+					debug_error("email_params_get_is_array() failed!");
 				}
 
 				debug_log("is_array = %d", is_array);
 				if (is_array) {
-					ret = app_control_get_extra_data_array(svc_handle, APP_CONTROL_DATA_PATH, &path_array, &path_array_len);
+					ok = email_params_get_str_array(params, APP_CONTROL_DATA_PATH, &path_array, &path_array_len);
 				} else {
-					ret = app_control_get_extra_data(svc_handle, APP_CONTROL_DATA_PATH, &path);
+					ok = email_params_get_str(params, APP_CONTROL_DATA_PATH, &path);
 				}
 
-				if (ret != APP_CONTROL_ERROR_NONE) {
+				if (!ok) {
 					if (g_strcmp0(operation, APP_CONTROL_OPERATION_SHARE_TEXT)) {
-						debug_warning("app_control_get_extra_data_***(%s) failed! ret:[%d]", APP_CONTROL_DATA_PATH, ret);
+						debug_warning("email_params_get_str***(%s) failed!", APP_CONTROL_DATA_PATH);
 					}
 				} else if (path_array) {
 					int i = 0;
@@ -1352,14 +1312,11 @@ COMPOSER_ERROR_TYPE_E composer_initial_data_post_parse_arguments(EmailComposerUG
 						if (STR_VALID(path_array[i])) {
 							attachment_uri_list = eina_list_append(attachment_uri_list, g_strdup(path_array[i]));
 						}
-						free(path_array[i]);
 					}
-					free(path_array);
 				} else {
 					if (STR_VALID(path)) {
 						attachment_uri_list = eina_list_append(attachment_uri_list, g_strdup(path));
 					}
-					free(path);
 				}
 			}
 		}
@@ -1375,7 +1332,6 @@ COMPOSER_ERROR_TYPE_E composer_initial_data_post_parse_arguments(EmailComposerUG
 
 			_initial_data_parse_attachments(ugd, attachment_uri_list);
 		}
-		g_free(operation);
 	}
 
 	debug_leave();
@@ -1491,25 +1447,21 @@ static void _recp_append_string(gchar **dst, gchar *src)
 	}
 }
 
-static void _recp_append_extra_data_array(gchar **dst, app_control_h app_control, const char *data_key)
+static void _recp_append_extra_data_array(gchar **dst, email_params_h params, const char *data_key)
 {
 	retm_if(!dst, "dst is NULL");
-	retm_if(!app_control, "app_control is NULL");
+	retm_if(!params, "params is NULL");
 	retm_if(!data_key, "data_key is NULL");
 
-	char **array = NULL;
+	const char **array = NULL;
 	int array_length = 0;
-	int ret = 0;
 	int i = 0;
 
-	ret = app_control_get_extra_data_array(app_control, data_key, &array, &array_length);
-	retm_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data_array(%s) failed! ret:[%d]", data_key, ret);
+	retm_if(!email_params_get_str_array(params, data_key, &array, &array_length),
+			"email_params_get_str_array(%s) failed!", data_key);
 
 	while (i < array_length) {
 		_recp_append_string(dst, g_strdup(array[i]));
-		free(array[i]);
 		++i;
 	}
-
-	free(array);
 }

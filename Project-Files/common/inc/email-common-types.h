@@ -26,8 +26,13 @@
 #include "email-colors.h"
 
 #ifndef EMAIL_API
+#ifdef SHARED_MODULES_FEATURE
 #define EMAIL_API __attribute__ ((visibility("default")))
+#else
+#define EMAIL_API
 #endif
+#endif
+
 
 #define EMAIL_FILEPATH_MAX		4096 	// PATH_MAX in limits.h
 #define EMAIL_FILENAME_MAX		255 	// NAME_MAX in limits.h
@@ -38,6 +43,13 @@
 #define MAX_RECPT_LEN			(MAX_STR_LEN * 8 + 1)
 #define MIN_FREE_SPACE			(5) /* MB */
 #define MAX_ACCOUNT_COUNT		10
+
+#define EMAIL_BUFF_SIZE_TIN 16
+#define EMAIL_BUFF_SIZE_SML 32
+#define EMAIL_BUFF_SIZE_MID 64
+#define EMAIL_BUFF_SIZE_BIG 128
+#define EMAIL_BUFF_SIZE_HUG 256
+#define EMAIL_BUFF_SIZE_4K 4096
 
 /* define bundle key */
 #define EMAIL_BUNDLE_KEY_ACCOUNT_TYPE				"ACCOUNT_TYPE"

@@ -49,7 +49,7 @@ typedef struct _app_data {
 	Evas_Object *win;
 	Evas_Object *conform;
 
-	app_control_h launch_params;
+	app_control_h launch_request;
 	email_module_h module;
 
 	bool module_mgr_init_ok;
@@ -69,7 +69,7 @@ static void _app_region_fmt_changed_cb(app_event_info_h event_info, void *user_d
 
 static void _app_timezone_change_cb(system_settings_key_e key, void *data);
 static void _app_win_rotation_changed_cb(void *data, Evas_Object *obj, void *event_info);
-static void _app_module_result_cb(void *data, email_module_h module, app_control_h result);
+static void _app_module_result_cb(void *data, email_module_h module, email_params_h result);
 static void _app_module_destroy_request_cb(void *data, email_module_h module);
 
 #ifdef APP_USE_SIG
@@ -83,8 +83,8 @@ static bool _app_register_callbacks(app_data_t *ad);
 
 static void _app_finalize(app_data_t *ad);
 
-static email_module_type_e _app_get_module_type(app_control_h params);
-static bool _app_create_module(app_data_t *ad, app_control_h params);
+static email_module_type_e _app_get_module_type(app_data_t *ad);
+static bool _app_create_module(app_data_t *ad, email_params_h params);
 static bool _app_recreate_module(app_data_t *ad);
 
 bool _app_create_cb(void *user_data)
@@ -117,27 +117,41 @@ void _app_control_cb(app_control_h app_control, void *user_data)
 	debug_enter();
 	app_data_t *ad = user_data;
 
-	bool first_launch = (ad->launch_params == NULL);
+	bool first_launch = (ad->launch_request == NULL);
+	email_params_h params = NULL;
+
+	if (!email_params_from_app_control(&params, app_control)) {
+		debug_error("App control convert error!");
+		if (first_launch) {
+			debug_log("Shutting down...");
+			ui_app_exit();
+		}
+		return;
+	}
 
 	if (first_launch) {
-		int r = app_control_clone(&ad->launch_params, app_control);
+		int r = app_control_clone(&ad->launch_request, app_control);
 		if (r != APP_CONTROL_ERROR_NONE) {
 			debug_error("app_control_clone(): failed (%d). Shutting down...", r);
+			email_params_free(&params);
 			ui_app_exit();
 			return;
 		}
 
-		if (!_app_create_module(ad, app_control)) {
+		if (!_app_create_module(ad, params)) {
 			debug_error("_app_create_module(): failed (%d). Shutting down...", r);
+			email_params_free(&params);
 			ui_app_exit();
 			return;
 		}
 	} else if (!email_module_mgr_is_in_transiton()) {
 		debug_log("Sending message to the module...");
-		email_module_send_message(ad->module, app_control);
+		email_module_send_message(ad->module, params);
 	} else {
 		debug_warning("Module manager in transition state. Ignoring message...");
 	}
+
+	email_params_free(&params);
 
 	debug_leave();
 }
@@ -266,15 +280,22 @@ void _app_win_rotation_changed_cb(void *data, Evas_Object *obj, void *event_info
 	debug_leave();
 }
 
-void _app_module_result_cb(void *data, email_module_h module, app_control_h result)
+void _app_module_result_cb(void *data, email_module_h module, email_params_h result)
 {
 	debug_enter();
 	app_data_t *ad = data;
 
-	int r = app_control_reply_to_launch_request(result, ad->launch_params, APP_CONTROL_RESULT_SUCCEEDED);
-	if (r != APP_CONTROL_ERROR_NONE) {
-		debug_error("app_control_reply_to_launch_request(): failed (%d).", r);
-		return;
+	app_control_h app_control = NULL;
+
+	if (email_params_to_app_control(result, &app_control)) {
+		int r = app_control_reply_to_launch_request(app_control, ad->launch_request, APP_CONTROL_RESULT_SUCCEEDED);
+		app_control_destroy(app_control);
+		if (r != APP_CONTROL_ERROR_NONE) {
+			debug_error("app_control_reply_to_launch_request(): failed (%d).", r);
+			return;
+		}
+	} else {
+		debug_error("Failed to convert result.");
 	}
 
 	debug_leave();
@@ -459,7 +480,7 @@ void _app_finalize(app_data_t *ad)
 	email_engine_finalize_force();
 }
 
-static email_module_type_e _app_get_module_type(app_control_h params)
+static email_module_type_e _app_get_module_type(app_data_t *ad)
 {
 #ifdef SHARED_MODULES_FEATURE
 	return APP_MODULE_TYPE;
@@ -468,7 +489,7 @@ static email_module_type_e _app_get_module_type(app_control_h params)
 	email_module_type_e module_type = EMAIL_MODULE_MAILBOX;
 
 	app_control_launch_mode_e launch_mode = APP_CONTROL_LAUNCH_MODE_SINGLE;
-	int r = app_control_get_launch_mode(params, &launch_mode);
+	int r = app_control_get_launch_mode(ad->launch_request, &launch_mode);
 	if (r != APP_CONTROL_ERROR_NONE) {
 		debug_log("app_control_get_launch_mode(): failed (%d)", r);
 		return module_type;
@@ -476,7 +497,7 @@ static email_module_type_e _app_get_module_type(app_control_h params)
 
 	if (launch_mode != APP_CONTROL_LAUNCH_MODE_SINGLE) {
 		char *operation = NULL;
-		r = app_control_get_operation(params, &operation);
+		r = app_control_get_operation(ad->launch_request, &operation);
 		if (r != APP_CONTROL_ERROR_NONE) {
 			debug_error("app_control_get_operation(): failed (%d)", r);
 			return module_type;
@@ -500,7 +521,7 @@ static email_module_type_e _app_get_module_type(app_control_h params)
 	return module_type;
 }
 
-static bool _app_create_module(app_data_t *ad, app_control_h params)
+static bool _app_create_module(app_data_t *ad, email_params_h params)
 {
 	debug_enter();
 	retvm_if(ad->module, false, "Root module already created!");
@@ -511,7 +532,7 @@ static bool _app_create_module(app_data_t *ad, app_control_h params)
 	listener.destroy_request_cb = _app_module_destroy_request_cb;
 
 	email_module_h module = email_module_mgr_create_root_module(
-			_app_get_module_type(params), params, &listener);
+			_app_get_module_type(ad), params, &listener);
 	if (!module) {
 		debug_error("Module creation failed.");
 		return false;
@@ -528,7 +549,7 @@ static bool _app_recreate_module(app_data_t *ad)
 	retvm_if(!ad->module, false, "Root module is not created!");
 
 	bool result = true;
-	app_control_h params = NULL;
+	email_params_h params = NULL;
 
 	if (email_params_create(&params)) {
 

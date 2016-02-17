@@ -372,14 +372,14 @@ void mailbox_naviframe_mailbox_button_add(EmailMailboxUGD *mailbox_ugd);
  * @param[in]	mailbox_ugd		Email mailbox data
  * @return 0 on success, otherwise a negative error value
  */
-int mailbox_handle_next_msg_bundle(EmailMailboxUGD *mailbox_ugd, app_control_h msg);
+int mailbox_handle_next_msg_bundle(EmailMailboxUGD *mailbox_ugd, email_params_h msg);
 
 /**
  * @brief Handles message from Viewer to open the previous mail
  * @param[in]	mailbox_ugd		Email mailbox data
  * @return 0 on success, otherwise a negative error value
  */
-int mailbox_handle_prev_msg_bundle(EmailMailboxUGD *mailbox_ugd, app_control_h msg);
+int mailbox_handle_prev_msg_bundle(EmailMailboxUGD *mailbox_ugd, email_params_h msg);
 
 /**
  * @brief Provides functionality to open the Email viewer

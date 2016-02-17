@@ -46,25 +46,17 @@ void __email_viewer_got_next_prev_message(void *data, gboolean next)
 
 	_hide_view(ug_data);
 
-	app_control_h service = NULL;
-	app_control_create(&service);
-	if (!service) {
-		debug_log("service create failed");
-		return;
+	email_params_h params = NULL;
+
+	if (email_params_create(&params) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAIL_INDEX, ug_data->mail_id) &&
+		email_params_add_str(params, EMAIL_BUNDLE_KEY_MSG,
+				(next ? EMAIL_BUNDLE_VAL_PREV_MSG : EMAIL_BUNDLE_VAL_NEXT_MSG))) {
+
+		email_module_send_result(ug_data->base.module, params);
 	}
 
-	if (next == true) {
-		app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MSG, EMAIL_BUNDLE_VAL_PREV_MSG);
-	} else {
-		app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MSG, EMAIL_BUNDLE_VAL_NEXT_MSG);
-	}
-	char idx[BUFSIZ] = { '\0' };
-	snprintf(idx, sizeof(idx), "%d", ug_data->mail_id);
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAIL_INDEX, idx);
-
-	email_module_send_result(ug_data->base.module, service);
-
-	app_control_destroy(service);
+	email_params_free(&params);
 
 	debug_leave();
 }

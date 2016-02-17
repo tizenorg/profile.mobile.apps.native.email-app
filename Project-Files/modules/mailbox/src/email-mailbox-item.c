@@ -30,24 +30,20 @@ void mailbox_process_move_mail(EmailMailboxUGD *mailbox_ugd)
 
 	int checked_count = eina_list_count(mailbox_ugd->selected_mail_list);
 	int account_id = 0;
-	int mail_list_length = 0;
-	app_control_h service;
+	int i = 0;
 
 	debug_log("checked_count: [%d]", checked_count);
 	if (checked_count <= 0) return;
 
-	if (APP_CONTROL_ERROR_NONE != app_control_create(&service)) {
-		debug_log("creating service handle failed");
+	char **selected_mail_list = malloc(checked_count * (sizeof(char *) + MAIL_ID_SIZE));
+	if (!selected_mail_list) {
+		debug_error("allocation memory failed");
 		return;
 	}
 
-	int i = 0;
-	int temp_count = 0;
-	temp_count = checked_count;
-	debug_log("temp_count %d", temp_count);
-	char **temp = MEM_ALLOC(temp, temp_count);
-	for (i = 0; i < temp_count; i++) {
-		temp[i] = MEM_ALLOC(temp[i], MAIL_ID_SIZE);
+	selected_mail_list[0] = (char *)&selected_mail_list[checked_count];
+	for (i = 1; i < checked_count; i++) {
+		selected_mail_list[i] = (selected_mail_list[i - 1] + MAIL_ID_SIZE);
 	}
 
 	for (i = 0; i < checked_count; i++) {
@@ -59,80 +55,31 @@ void mailbox_process_move_mail(EmailMailboxUGD *mailbox_ugd)
 			mailbox_ugd->move_src_mailbox_id = ld->mailbox_id;
 		}
 
-		/* save the mail-id to be moved */
-		debug_log("not Thread...");
-		int mail_id = ld->mail_id;
-		snprintf(temp[mail_list_length++], MAIL_ID_SIZE, "%d", mail_id);
+		snprintf(selected_mail_list[i], MAIL_ID_SIZE, "%d", (int)ld->mail_id);
 	}
-
-	debug_log("mail list length %d", mail_list_length);
-	char **selected_mail_list = (char **)malloc(mail_list_length * sizeof(char *));
-	if (!selected_mail_list) {
-		app_control_destroy(service);
-		for (i = 0; i < temp_count; i++) {
-			FREE(temp[i]);
-		}
-		FREE(temp);
-		debug_error("allocation memory failed");
-		return;
-	}
-	for (i = 0; i < mail_list_length; i++) {
-		selected_mail_list[i] = (char *)malloc(MAIL_ID_SIZE * sizeof(char));
-		/* In case of failure free all previous elements service & temp & selected_mail_list[j] */
-		if (!selected_mail_list[i]) {
-			int j = i;
-			app_control_destroy(service);
-			for (i = 0; i < temp_count; i++) {
-				FREE(temp[i]);
-			}
-			FREE(temp);
-			for (--j; j >= 0; --j) {
-				free(selected_mail_list[j]);
-			}
-			free(selected_mail_list);
-			debug_error("allocation memory failed");
-			return;
-		}
-		snprintf(selected_mail_list[i], MAIL_ID_SIZE, "%s", temp[i]);
-	}
-
-	for (i = 0; i < temp_count; i++) {
-		FREE(temp[i]);
-	}
-	FREE(temp);
 
 	mailbox_sync_cancel_all(mailbox_ugd);
 
-	char acctid[30] = { 0, };
-	snprintf(acctid, sizeof(acctid), "%d", account_id);
-	char mailboxid[30] = { 0, };
-	snprintf(mailboxid, sizeof(mailboxid), "%d", mailbox_ugd->move_src_mailbox_id);
-	char move_ug[30] = { 0, };
-	snprintf(move_ug, sizeof(move_ug), "%d", 1);
-	char move_mode[30] = { 0, };
-	snprintf(move_mode, sizeof(move_mode), "%d", EMAIL_MOVE_VIEW_NORMAL);
-	debug_log("setting move mode %s", move_mode);
-	char mailbox_edit_mode[30] = { 0, };
-	snprintf(mailbox_edit_mode, sizeof(mailbox_edit_mode), "%d", mailbox_ugd->b_editmode);
-	char move_src_mailbox_id[30] = { 0, };
-	snprintf(move_src_mailbox_id, sizeof(move_src_mailbox_id), "%d", mailbox_ugd->move_src_mailbox_id);
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_ID, acctid);
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAILBOX, mailboxid);
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, move_ug);
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAILBOX_MOVE_MODE, move_mode);
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_IS_MAILBOX_EDIT_MODE, mailbox_edit_mode);
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MOVE_SRC_MAILBOX_ID, move_src_mailbox_id);
-	app_control_add_extra_data_array(service, EMAIL_BUNDLE_KEY_ARRAY_SELECTED_MAIL_IDS, (const char **)selected_mail_list, mail_list_length);
-	debug_log("account_id: %s, mailbox_id: %s", acctid, mailboxid);
+	debug_log("account_id: %d, mailbox_id: %d", account_id, mailbox_ugd->move_src_mailbox_id);
 
-	mailbox_ugd->account = mailbox_account_module_create(mailbox_ugd, EMAIL_MODULE_ACCOUNT, service);
-	app_control_destroy(service);
+	email_params_h params = NULL;
 
-	for (i = 0; i < mail_list_length; i++) {
-		free(selected_mail_list[i]);
+	if (email_params_create(&params) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, account_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, mailbox_ugd->move_src_mailbox_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, 1) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX_MOVE_MODE, EMAIL_MOVE_VIEW_NORMAL) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_EDIT_MODE, mailbox_ugd->b_editmode) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MOVE_SRC_MAILBOX_ID, mailbox_ugd->move_src_mailbox_id) &&
+		email_params_add_str_array(params, EMAIL_BUNDLE_KEY_ARRAY_SELECTED_MAIL_IDS,
+				(const char **)selected_mail_list, checked_count)) {
+
+		mailbox_ugd->account = mailbox_account_module_create(mailbox_ugd, EMAIL_MODULE_ACCOUNT, params);
 	}
-	free(selected_mail_list);
 
+	email_params_free(&params);
+
+	free(selected_mail_list);
 }
 
 void mailbox_process_delete_mail(void *data, Ecore_Thread *thd)

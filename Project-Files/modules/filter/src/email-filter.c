@@ -35,9 +35,9 @@ static void _keypad_up_cb(void *data, Evas_Object *obj, void *event_info);
 static void _entry_maxlength_reached_cb(void *data, Evas_Object *obj, void *event_info);
 static void _title_show(EmailFilterUGD *ugd);
 static void _title_hide(EmailFilterUGD *ugd);
-static EmailFilterViewType _parse_option(EmailFilterUGD *ugd, app_control_h data);
+static EmailFilterViewType _parse_option(EmailFilterUGD *ugd, email_params_h params);
 
-static int _filter_create(email_module_t *self, app_control_h params)
+static int _filter_create(email_module_t *self, email_params_h params)
 {
 	debug_enter();
 	EmailFilterUGD *ugd = NULL;
@@ -100,43 +100,38 @@ static void _filter_on_event(email_module_t *self, email_module_event_e event)
 	}
 }
 
-static EmailFilterViewType _parse_option(EmailFilterUGD *ugd, app_control_h data)
+static EmailFilterViewType _parse_option(EmailFilterUGD *ugd, email_params_h params)
 {
 	debug_enter();
-	char *operation_mode = NULL;
-	char *filter_op = NULL;
+	const char *operation_mode = NULL;
+	const char *filter_op = NULL;
 
-	retvm_if(!data, EMAIL_FILTER_VIEW_INVALID, "invalid parameter!");
+	retvm_if(!params, EMAIL_FILTER_VIEW_INVALID, "invalid parameter!");
 
-	app_control_get_extra_data(data, EMAIL_BUNDLE_KEY_FILTER_OPERATION, &filter_op);
-	if (filter_op) {
+	if (email_params_get_str(params, EMAIL_BUNDLE_KEY_FILTER_OPERATION, &filter_op)) {
 		if (!strcmp(filter_op, EMAIL_BUNDLE_VAL_FILTER_OPERATION_PS))
 			ugd->op_type = EMAIL_FILTER_OPERATION_PRIORITY_SERNDER;
 		else if (!strcmp(filter_op, EMAIL_BUNDLE_VAL_FILTER_OPERATION_BLOCK))
 			ugd->op_type = EMAIL_FILTER_OPERATION_BLOCK;
 		else
 			ugd->op_type = EMAIL_FILTER_OPERATION_FILTER;
-		free(filter_op);
 	} else {
 		ugd->op_type = EMAIL_FILTER_OPERATION_FILTER;
 	}
 
-	app_control_get_extra_data(data, EMAIL_BUNDLE_KEY_FILTER_MODE, &operation_mode);
-	retvm_if(!operation_mode, EMAIL_FILTER_VIEW_INVALID, "invalid parameter!");
+	retvm_if(!email_params_get_str(params, EMAIL_BUNDLE_KEY_FILTER_MODE, &operation_mode),
+			EMAIL_FILTER_VIEW_INVALID, "invalid parameter!");
 
 	if (!strcmp(operation_mode, EMAIL_BUNDLE_VAL_FILTER_LIST)) {
-		free(operation_mode);
 		debug_log("filter list view start");
 		return EMAIL_FILTER_VIEW_FILTER_LIST;
 	} else if (!strcmp(operation_mode, EMAIL_BUNDLE_VAL_FILTER_ADD)) {
-		app_control_get_extra_data(data, EMAIL_BUNDLE_KEY_FILTER_ADDR, &ugd->param_filter_addr);
-		free(operation_mode);
+		email_params_get_str_opt(params, EMAIL_BUNDLE_KEY_FILTER_ADDR, &ugd->param_filter_addr);
 		debug_secure("filter add view start: address[%s]", ugd->param_filter_addr);
 		return EMAIL_FILTER_VIEW_ADD_FILTER;
 	}
 
 	debug_error("invalid parameter!");
-	free(operation_mode);
 	return EMAIL_FILTER_VIEW_INVALID;
 }
 

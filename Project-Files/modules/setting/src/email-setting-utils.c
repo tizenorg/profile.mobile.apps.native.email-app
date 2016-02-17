@@ -1249,17 +1249,17 @@ static void _wifi_launch_cb(void *data, Evas_Object *obj, void *event_info)
 	debug_enter();
 	email_view_t *vd = data;
 	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
-	app_control_h b;
+	app_control_h app_control;
 	int ret;
 
-	ret = app_control_create(&b);
+	ret = app_control_create(&app_control);
 	retm_if(ret != APP_CONTROL_ERROR_NONE, "app_control_create failed: %d", ret);
 
-	app_control_set_operation(b, APP_CONTROL_OPERATION_SETTING_WIFI);
-	ret = app_control_send_launch_request(b, NULL, NULL);
+	app_control_set_operation(app_control, APP_CONTROL_OPERATION_SETTING_WIFI);
+	ret = app_control_send_launch_request(app_control, NULL, NULL);
 	retm_if(ret != APP_CONTROL_ERROR_NONE, "app_control_send_launch_request failed: %d", ret);
 
-	app_control_destroy(b);
+	app_control_destroy(app_control);
 
 	DELETE_EVAS_OBJECT(ugd->popup);
 }
@@ -1270,26 +1270,26 @@ static void _data_setting_launch_cb(void *data, Evas_Object *obj, void *event_in
 	email_view_t *vd = data;
 	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
 	email_network_status_e status = (int)(ptrdiff_t)evas_object_data_get(ugd->popup, EMAIL_SETTING_POPUP_NET_ERROR_CODE_KEY);
-	app_control_h b;
+	app_control_h app_control;
 	int ret;
 
-	ret = app_control_create(&b);
+	ret = app_control_create(&app_control);
 	retm_if(ret != APP_CONTROL_ERROR_NONE, "app_control_create failed: %d", ret);
 
 	debug_log("network status in btn callback: %d", status);
 	if (status == EMAIL_NETWORK_STATUS_FLIGHT_MODE) {
-		app_control_set_app_id(b, "setting-flightmode-efl");
+		app_control_set_app_id(app_control, "setting-flightmode-efl");
 	} else if (status == EMAIL_NETWORK_STATUS_MOBILE_DATA_DISABLED ||
 			status == EMAIL_NETWORK_STATUS_ROAMING_OFF) {
-		app_control_set_app_id(b, "setting-network-efl");
-		app_control_set_operation(b, "http://tizen.org/appcontrol/operation/setting/mobile_network");
+		app_control_set_app_id(app_control, "setting-network-efl");
+		app_control_set_operation(app_control, "http://tizen.org/appcontrol/operation/setting/mobile_network");
 	} else if (status == EMAIL_NETWORK_STATUS_MOBILE_DATA_LIMIT_EXCEED) {
-		app_control_set_app_id(b, "setting-datausage-efl");
+		app_control_set_app_id(app_control, "setting-datausage-efl");
 	}
 
-	app_control_send_launch_request(b, NULL, NULL);
+	app_control_send_launch_request(app_control, NULL, NULL);
 
-	app_control_destroy(b);
+	app_control_destroy(app_control);
 
 	DELETE_EVAS_OBJECT(ugd->popup);
 }

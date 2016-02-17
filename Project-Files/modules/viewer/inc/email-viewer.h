@@ -108,7 +108,6 @@ struct ug_data {
 
 	/* module */
 	email_module_h loaded_module;
-	app_control_h service_handle;
 	int create_contact_arg;
 	bool is_composer_module_launched;
 

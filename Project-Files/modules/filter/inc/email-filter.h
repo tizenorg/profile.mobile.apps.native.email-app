@@ -67,7 +67,7 @@ typedef struct ug_data
 	/*Filter operation type*/
 	FilterOperationType op_type;
 
-	char *param_filter_addr;
+	const char *param_filter_addr;
 
 	/* base layout variable */
 	Evas_Object *more_btn;

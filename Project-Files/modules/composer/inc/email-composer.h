@@ -277,9 +277,9 @@ struct ug_data {
 
 	/*
 	 * Related to composer data
-	 * App control handle for composer
+	 * Launch params handle for composer
 	 */
-	app_control_h ec_app;
+	email_params_h launch_params;
 
 	/* Previous setting values. These should be restored when exiting out of composer. */
 	double scroll_friction; // friction value(scrolling speed) for scroller.

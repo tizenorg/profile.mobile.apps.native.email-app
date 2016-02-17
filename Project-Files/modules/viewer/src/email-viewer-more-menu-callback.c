@@ -112,7 +112,7 @@ void viewer_ctxpopup_detail_contact_cb(void *data, Evas_Object *obj, void *event
 
 	DELETE_EVAS_OBJECT(ug_data->con_popup);
 	debug_secure("data(%s)", data);
-	viewer_view_contact_detail(ug_data, (char *)data);
+	viewer_view_contact_detail(ug_data, (intptr_t)data);
 	debug_leave();
 }
 
@@ -353,35 +353,20 @@ void viewer_edit_email_cb(void *data, Evas_Object *obj, void *event_info)
 	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
 
 	DELETE_EVAS_OBJECT(ug_data->con_popup);
-	int ret;
-	app_control_h service = NULL;
 
-	ret = app_control_create(&service);
-	debug_log("app_control_create: %d", ret);
-	retm_if(service == NULL, "service create failed: service[NULL]");
+	email_params_h params = NULL;
 
-	char rtype[10] = { 0, };
-	snprintf(rtype, sizeof(rtype), "%d", RUN_COMPOSER_EDIT);
-	char acctid[10] = { 0, };
-	snprintf(acctid, sizeof(acctid), "%d", ug_data->account_id);
-	char mailboxid[10] = { 0, };
-	snprintf(mailboxid, sizeof(mailboxid), "%d", ug_data->mailbox_id);
-	char mailid[10] = { 0, };
-	snprintf(mailid, sizeof(mailid), "%d", ug_data->mail_id);
+	if (email_params_create(&params) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_RUN_TYPE, RUN_COMPOSER_EDIT) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, ug_data->account_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, ug_data->mailbox_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAIL_ID, ug_data->mail_id)) {
 
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_RUN_TYPE, rtype);
-	debug_log("app_control_add_extra_data: %d", ret);
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_ID, acctid);
-	debug_log("app_control_add_extra_data: %d", ret);
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAILBOX, mailboxid);
-	debug_log("app_control_add_extra_data: %d", ret);
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAIL_ID, mailid);
-	debug_log("app_control_add_extra_data: %d", ret);
+		ug_data->loaded_module = viewer_create_module(ug_data, EMAIL_MODULE_COMPOSER, params, true);
+	}
 
-	ug_data->loaded_module = viewer_create_module(ug_data, EMAIL_MODULE_COMPOSER, service, true);
+	email_params_free(&params);
 
-	ret = app_control_destroy(service);
-	debug_log("app_control_destroy: %d", ret);
 	debug_leave();
 }
 
@@ -399,35 +384,20 @@ void viewer_edit_scheduled_email_cb(void *data, Evas_Object *obj, void *event_in
 		debug_warning("email_cancel_sending_mail failed - err(%d)", err);
 
 	DELETE_EVAS_OBJECT(ug_data->con_popup);
-	int ret;
-	app_control_h service = NULL;
 
-	ret = app_control_create(&service);
-	debug_log("app_control_create: %d", ret);
-	retm_if(service == NULL, "service create failed: service[NULL]");
+	email_params_h params = NULL;
 
-	char rtype[10] = { 0, };
-	snprintf(rtype, sizeof(rtype), "%d", RUN_COMPOSER_EDIT);
-	char acctid[10] = { 0, };
-	snprintf(acctid, sizeof(acctid), "%d", ug_data->account_id);
-	char mailboxid[10] = { 0, };
-	snprintf(mailboxid, sizeof(mailboxid), "%d", ug_data->mailbox_id);
-	char mailid[10] = { 0, };
-	snprintf(mailid, sizeof(mailid), "%d", ug_data->mail_id);
+	if (email_params_create(&params) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_RUN_TYPE, RUN_COMPOSER_EDIT) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, ug_data->account_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, ug_data->mailbox_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAIL_ID, ug_data->mail_id)) {
 
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_RUN_TYPE, rtype);
-	debug_log("app_control_add_extra_data: %d", ret);
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_ID, acctid);
-	debug_log("app_control_add_extra_data: %d", ret);
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAILBOX, mailboxid);
-	debug_log("app_control_add_extra_data: %d", ret);
-	ret = app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAIL_ID, mailid);
-	debug_log("app_control_add_extra_data: %d", ret);
+		ug_data->loaded_module = viewer_create_scheduled_composer_module(ug_data, params);
+	}
 
-	ug_data->loaded_module = viewer_create_scheduled_composer_module(ug_data, service);
+	email_params_free(&params);
 
-	ret = app_control_destroy(service);
-	debug_log("app_control_destroy: %d", ret);
 	debug_leave();
 }
 

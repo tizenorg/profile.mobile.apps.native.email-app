@@ -29,7 +29,7 @@
 
 #define EMAIL_GENLIST_MAX_BLOCK_ITEMS_COUNT 36
 
-static int _account_module_create(email_module_t *self, app_control_h params);
+static int _account_module_create(email_module_t *self, email_params_h params);
 
 static int _account_create(email_view_t *self);
 static void _account_destroy(email_view_t *self);
@@ -55,18 +55,17 @@ static void _account_delete_more_ctxpopup_cb(void *data, Evas *e, Evas_Object *o
 static void _account_more_ctxpopup_dismissed_cb(void *data, Evas_Object *obj, void *event_info);
 static void _account_resize_more_ctxpopup_cb(void *data, Evas *e, Evas_Object *obj, void *event_info);
 static void _account_settings_cb(void *data, Evas_Object *obj, void *event_info);
-static email_module_h account_setting_module_create(void *data, email_module_type_e module_type, app_control_h service);
+static email_module_h account_setting_module_create(void *data, email_module_type_e module_type, email_params_h params);
 static void _account_setting_module_destroy(void *priv, email_module_h module);
 static void _folder_delete_cb(void *data, Evas_Object *obj, void *event_info);
 static void _folder_rename_cb(void *data, Evas_Object *obj, void *event_info);
 static int _get_accounts_data(int *account_count, email_account_t **account_list);
 
-static int _account_module_create(email_module_t *self, app_control_h params)
+static int _account_module_create(email_module_t *self, email_params_h params)
 {
 	debug_enter();
 	EmailAccountModule *md = (EmailAccountModule *)self;
 	EmailAccountUGD *ug_data = &md->view;
-	char *argv[5] = { 0 };
 	email_account_t *account_list = NULL;
 	int ret = APP_CONTROL_ERROR_NONE;
 
@@ -96,133 +95,87 @@ static int _account_module_create(email_module_t *self, app_control_h params)
 		ug_data->isRotate = false;
 	}
 
-	/* parsing bundle data */
-	app_control_get_extra_data(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, &(argv[0]));
-	app_control_get_extra_data(params, EMAIL_BUNDLE_KEY_MAILBOX, &(argv[1]));
-	app_control_get_extra_data(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, &(argv[2]));
-	app_control_get_extra_data(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_ACCOUNT_UG, &(argv[3]));
-	app_control_get_extra_data(params, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, &(argv[4]));
+	/* parsing params data */
+	email_params_get_int_opt(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, &ug_data->account_id);
+	email_params_get_int_opt(params, EMAIL_BUNDLE_KEY_MAILBOX, &ug_data->folder_id);
+	email_params_get_int_opt(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, &is_move_mail_ug);
 
-	if (argv[0]) {
-		ug_data->account_id = atoi(argv[0]);
-		g_free(argv[0]);
+	if (is_move_mail_ug) {
+		ug_data->folder_view_mode = ACC_FOLDER_MOVE_MAIL_VIEW_MODE;
 	}
 
-	if (argv[1]) {
-		ug_data->folder_id = atoi(argv[1]);
-		g_free(argv[1]);
-	}
-
-	if (argv[2]) {
-		is_move_mail_ug = atoi(argv[2]);
-		g_free(argv[2]);
-
-		if (is_move_mail_ug) {
-			ug_data->folder_view_mode = ACC_FOLDER_MOVE_MAIL_VIEW_MODE;
-		}
-	}
-
-	if(_get_accounts_data(&ug_data->account_count, &ug_data->account_list)) {
+	if (_get_accounts_data(&ug_data->account_count, &ug_data->account_list)) {
 		debug_critical("get accounts data failed");
 		return -1;
 	}
 
-	if (argv[3]) {
-		is_account_list_ug = atoi(argv[3]);
-		g_free(argv[3]);
+	email_params_get_int_opt(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_ACCOUNT_UG, &is_account_list_ug);
+	if (is_account_list_ug) {
 
-		if (is_account_list_ug) {
+		const char *account_type = NULL;
+		email_params_get_str_opt(params, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, &account_type);
+		if (account_type) {
 
-			if (argv[4]) {
-
-				debug_log("mailbox_mode:%s", argv[4]);
-				if (g_strcmp0(argv[4], EMAIL_BUNDLE_VAL_PRIORITY_SENDER) == 0) {
-					ug_data->mailbox_mode = ACC_MAILBOX_TYPE_PRIORITY_INBOX;
-					ug_data->mailbox_type = EMAIL_MAILBOX_TYPE_PRIORITY_SENDERS;
-					if (ug_data->account_count == 1) {
-						ug_data->folder_view_mode = ACC_FOLDER_SINGLE_VIEW_MODE;
-					} else {
-						ug_data->folder_view_mode = ACC_FOLDER_ACCOUNT_LIST_VIEW_MODE;
-					}
-				} else if (g_strcmp0(argv[4], EMAIL_BUNDLE_VAL_FILTER_INBOX) == 0) {
-					ug_data->mailbox_mode = ACC_MAILBOX_TYPE_FLAGGED;
-					ug_data->mailbox_type = EMAIL_MAILBOX_TYPE_FLAGGED;
-					if (ug_data->account_count == 1) {
-						ug_data->folder_view_mode = ACC_FOLDER_SINGLE_VIEW_MODE;
-					} else {
-						ug_data->folder_view_mode = ACC_FOLDER_ACCOUNT_LIST_VIEW_MODE;
-					}
-				} else if (g_strcmp0(argv[4], EMAIL_BUNDLE_VAL_ALL_ACCOUNT) == 0 || ug_data->account_count > 1) {
-					ug_data->mailbox_mode = ACC_MAILBOX_TYPE_ALL_ACCOUNT;
-					ug_data->folder_view_mode = ACC_FOLDER_ACCOUNT_LIST_VIEW_MODE;
-				} else {
-					ug_data->mailbox_mode = ACC_MAILBOX_TYPE_SINGLE_ACCOUNT;
+			debug_log("mailbox_mode:%s", account_type);
+			if (g_strcmp0(account_type, EMAIL_BUNDLE_VAL_PRIORITY_SENDER) == 0) {
+				ug_data->mailbox_mode = ACC_MAILBOX_TYPE_PRIORITY_INBOX;
+				ug_data->mailbox_type = EMAIL_MAILBOX_TYPE_PRIORITY_SENDERS;
+				if (ug_data->account_count == 1) {
 					ug_data->folder_view_mode = ACC_FOLDER_SINGLE_VIEW_MODE;
+				} else {
+					ug_data->folder_view_mode = ACC_FOLDER_ACCOUNT_LIST_VIEW_MODE;
 				}
-				g_free(argv[4]);
-			} else {
+			} else if (g_strcmp0(account_type, EMAIL_BUNDLE_VAL_FILTER_INBOX) == 0) {
+				ug_data->mailbox_mode = ACC_MAILBOX_TYPE_FLAGGED;
+				ug_data->mailbox_type = EMAIL_MAILBOX_TYPE_FLAGGED;
+				if (ug_data->account_count == 1) {
+					ug_data->folder_view_mode = ACC_FOLDER_SINGLE_VIEW_MODE;
+				} else {
+					ug_data->folder_view_mode = ACC_FOLDER_ACCOUNT_LIST_VIEW_MODE;
+				}
+			} else if (g_strcmp0(account_type, EMAIL_BUNDLE_VAL_ALL_ACCOUNT) == 0 || ug_data->account_count > 1) {
 				ug_data->mailbox_mode = ACC_MAILBOX_TYPE_ALL_ACCOUNT;
 				ug_data->folder_view_mode = ACC_FOLDER_ACCOUNT_LIST_VIEW_MODE;
+			} else {
+				ug_data->mailbox_mode = ACC_MAILBOX_TYPE_SINGLE_ACCOUNT;
+				ug_data->folder_view_mode = ACC_FOLDER_SINGLE_VIEW_MODE;
 			}
+		} else {
+			ug_data->mailbox_mode = ACC_MAILBOX_TYPE_ALL_ACCOUNT;
+			ug_data->folder_view_mode = ACC_FOLDER_ACCOUNT_LIST_VIEW_MODE;
 		}
 	}
+
 	debug_log("account_id [%d], folder_id [%d], is_move_mail_ug [%d], is_account_list_ug [%d]", ug_data->account_id, ug_data->folder_id, is_move_mail_ug, is_account_list_ug);
 	debug_log("folder_view_mode [%d]", ug_data->folder_view_mode);
 
 	/* contents */
 	if (ug_data->folder_view_mode == ACC_FOLDER_MOVE_MAIL_VIEW_MODE) {
-		char *move_argv[5] = { 0 };
-		int selected_mail_list_legth = 0;
-		char **selected_mail_list = NULL;
+		const char **selected_mail_list = NULL;
+		int selected_mail_list_len = 0;
 
-		app_control_get_extra_data(params, EMAIL_BUNDLE_KEY_MAILBOX_MOVE_MODE, &(move_argv[0]));
-		if (move_argv[0]) {
-			ug_data->move_mode = atoi(move_argv[0]);
-			g_free(move_argv[0]);
-		}
-		app_control_get_extra_data(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_EDIT_MODE, &(move_argv[2]));
-		if (move_argv[2]) {
-			ug_data->b_editmode = atoi(move_argv[2]);
-			g_free(move_argv[2]);
-		}
-		app_control_get_extra_data(params, EMAIL_BUNDLE_KEY_MOVE_SRC_MAILBOX_ID, &(move_argv[1]));
-		if (move_argv[1]) {
-			ug_data->move_src_mailbox_id = atoi(move_argv[1]);
-			g_free(move_argv[1]);
-		}
-		ret = app_control_get_extra_data_array(params, EMAIL_BUNDLE_KEY_ARRAY_SELECTED_MAIL_IDS, &selected_mail_list, &(selected_mail_list_legth));
-		debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data_array(item_id) failed! ret:[%d]", ret);
+		email_params_get_int_opt(params, EMAIL_BUNDLE_KEY_MAILBOX_MOVE_MODE, &ug_data->move_mode);
+		email_params_get_int_opt(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_EDIT_MODE, &ug_data->b_editmode);
+		email_params_get_int_opt(params, EMAIL_BUNDLE_KEY_MOVE_SRC_MAILBOX_ID, &ug_data->move_src_mailbox_id);
+
+		email_params_get_str_array(params, EMAIL_BUNDLE_KEY_ARRAY_SELECTED_MAIL_IDS, &selected_mail_list, &selected_mail_list_len);
+
 		int i;
-		for (i = 0; i < selected_mail_list_legth; i++) {
+		for (i = 0; i < selected_mail_list_len; i++) {
 			debug_log("mail list to move %d", atoi(selected_mail_list[i]));
 			ug_data->selected_mail_list_to_move = g_list_prepend(ug_data->selected_mail_list_to_move,
 											GINT_TO_POINTER(atoi(selected_mail_list[i])));
 		}
 
-		for (i = 0; i < selected_mail_list_legth; i++) {
-			g_free(selected_mail_list[i]);
-		}
-		g_free(selected_mail_list);
-
 	} else if (ug_data->folder_view_mode == ACC_FOLDER_ACCOUNT_LIST_VIEW_MODE ||
 			ug_data->folder_view_mode == ACC_FOLDER_SINGLE_VIEW_MODE) {
 
-		char *mailbox_argv[3] = { 0 };
-
 		if (ug_data->mailbox_type == 0) {
-			app_control_get_extra_data(params, EMAIL_BUNDLE_KEY_MAILBOX_TYPE, &(mailbox_argv[0]));
-			if (mailbox_argv[0]) {
-				ug_data->mailbox_type = atoi(mailbox_argv[0]);
-				g_free(mailbox_argv[0]);
-			}
+			email_params_get_int_opt(params, EMAIL_BUNDLE_KEY_MAILBOX_TYPE, &ug_data->mailbox_type);
 		}
 
 		if (ug_data->mailbox_id == 0) {
-			app_control_get_extra_data(params, EMAIL_BUNDLE_KEY_MAILBOX, &(mailbox_argv[1]));
-			if (mailbox_argv[1]) {
-				ug_data->mailbox_id = atoi(mailbox_argv[1]);
-				g_free(mailbox_argv[1]);
-			}
+			email_params_get_int_opt(params, EMAIL_BUNDLE_KEY_MAILBOX, &ug_data->mailbox_id);
 		}
 
 		if (ug_data->folder_view_mode == ACC_FOLDER_SINGLE_VIEW_MODE) {
@@ -774,7 +727,7 @@ static void _account_setting_module_destroy(void *priv, email_module_h module)
 	}
 }
 
-email_module_h account_setting_module_create(void *data, email_module_type_e module_type, app_control_h service)
+email_module_h account_setting_module_create(void *data, email_module_type_e module_type, email_params_h params)
 {
 	debug_enter();
 
@@ -784,7 +737,7 @@ email_module_h account_setting_module_create(void *data, email_module_type_e mod
 	listener.cb_data = ug_data;
 	listener.destroy_request_cb = _account_setting_module_destroy;
 
-	return email_module_create_child(ug_data->base.module, module_type, service, &listener);
+	return email_module_create_child(ug_data->base.module, module_type, params, &listener);
 }
 
 static void _account_settings_cb(void *data, Evas_Object *obj, void *event_info)
@@ -793,18 +746,17 @@ static void _account_settings_cb(void *data, Evas_Object *obj, void *event_info)
 	retm_if(!data, "data is NULL");
 
 	EmailAccountUGD *ug_data = (EmailAccountUGD *) data;
-	app_control_h service;
+	email_params_h params = NULL;
 
 	DELETE_EVAS_OBJECT(ug_data->more_ctxpopup);
 
-	if (APP_CONTROL_ERROR_NONE != app_control_create(&service)) {
-		debug_log("creating service handle failed");
-		return;
+	if (email_params_create(&params) &&
+		email_params_add_str(params, EMAIL_BUNDLE_KEY_VIEW_TYPE, EMAIL_BUNDLE_VAL_VIEW_SETTING)) {
+
+		ug_data->setting = account_setting_module_create(ug_data, EMAIL_MODULE_SETTING, params);
 	}
 
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_VIEW_TYPE, EMAIL_BUNDLE_VAL_VIEW_SETTING);
-	ug_data->setting = account_setting_module_create(ug_data, EMAIL_MODULE_SETTING, service);
-	app_control_destroy(service);
+	email_params_free(&params);
 }
 
 static Elm_Object_Item *_add_ctx_menu_item(EmailAccountUGD *ug_data, const char *str, Evas_Object *icon, Evas_Smart_Cb cb)

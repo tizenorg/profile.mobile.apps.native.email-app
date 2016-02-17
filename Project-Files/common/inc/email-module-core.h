@@ -37,7 +37,7 @@ typedef struct _email_view email_view_t;
  * @return 0 - on success,
  * 		negative value - on error
  */
-EMAIL_API int email_module_send_result(email_module_t *module, app_control_h result);
+EMAIL_API int email_module_send_result(email_module_t *module, email_params_h result);
 
 /**
  * @brief Makes destroy request to listener
@@ -64,7 +64,7 @@ EMAIL_API int email_module_make_destroy_request(email_module_t *module);
  * 		NULL - on error
  */
 EMAIL_API email_module_h email_module_create_child(email_module_t *module, email_module_type_e module_type,
-		app_control_h params, email_module_listener_t *listener);
+		email_params_h params, email_module_listener_t *listener);
 
 /**
  * @brief Creates view for specified module

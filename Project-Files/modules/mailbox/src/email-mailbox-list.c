@@ -457,29 +457,19 @@ static void _mail_item_gl_selected_cb(void *data, Evas_Object *obj, void *event_
 			debug_log("Composer UG is already launched");
 			return;
 		}
-		app_control_h service;
-		if (APP_CONTROL_ERROR_NONE != app_control_create(&service)) {
-			debug_warning("creating service handle failed");
-			return;
+
+		email_params_h params = NULL;
+
+		if (email_params_create(&params) &&
+			email_params_add_int(params, EMAIL_BUNDLE_KEY_RUN_TYPE, RUN_COMPOSER_EDIT) &&
+			email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, ld->account_id) &&
+			email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, ld->mailbox_id) &&
+			email_params_add_int(params, EMAIL_BUNDLE_KEY_MAIL_ID, id)) {
+
+			ld->mailbox_ugd->composer = mailbox_composer_module_create(ld->mailbox_ugd, EMAIL_MODULE_COMPOSER, params);
 		}
 
-		char cmd[30] = { 0, };
-		snprintf(cmd, sizeof(cmd), "%d", RUN_COMPOSER_EDIT);
-
-		char mailid[30] = { 0, };
-		snprintf(mailid, sizeof(mailid), "%d", id);
-		char acctid[30] = { 0, };
-		snprintf(acctid, sizeof(acctid), "%d", ld->account_id);
-		char mailboxid[30] = { 0, };
-		snprintf(mailboxid, sizeof(mailboxid), "%d", ld->mailbox_id);
-		app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_RUN_TYPE, cmd);
-		app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_ID, acctid);
-		app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAILBOX, mailboxid);
-		app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAIL_ID, mailid);
-
-		ld->mailbox_ugd->composer = mailbox_composer_module_create(ld->mailbox_ugd, EMAIL_MODULE_COMPOSER, service);
-
-		app_control_destroy(service);
+		email_params_free(&params);
 	} else {
 		mailbox_list_open_email_viewer(ld);
 	}

@@ -153,18 +153,17 @@ static void _settings_cb(void *data, Evas_Object *obj, void *event_info)
 	retm_if(!data, "data is NULL");
 
 	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
-	app_control_h service;
+	email_params_h params = NULL;
 
 	DELETE_EVAS_OBJECT(mailbox_ugd->more_ctxpopup);
 
-	if (APP_CONTROL_ERROR_NONE != app_control_create(&service)) {
-		debug_log("creating service handle failed");
-		return;
+	if (email_params_create(&params) &&
+		email_params_add_str(params, EMAIL_BUNDLE_KEY_VIEW_TYPE, EMAIL_BUNDLE_VAL_VIEW_SETTING)) {
+
+		mailbox_ugd->setting = mailbox_setting_module_create(mailbox_ugd, EMAIL_MODULE_SETTING, params);
 	}
 
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_VIEW_TYPE, EMAIL_BUNDLE_VAL_VIEW_SETTING);
-	mailbox_ugd->setting = mailbox_setting_module_create(mailbox_ugd, EMAIL_MODULE_SETTING, service);
-	app_control_destroy(service);
+	email_params_free(&params);
 }
 
 static void _more_ctxpopup_back_cb(void *data, Evas_Object *obj, void *event_info)
@@ -295,23 +294,18 @@ static void _compose_toolbar_clicked_cb(void *data, Evas_Object *obj, void *even
 	debug_log("composer type: %d", composer_type);
 	debug_log("account id: %d", account_id);
 
-	char s_composer_type[14] = { 0, };
-	char s_account_id[14] = { 0, };
-	snprintf(s_composer_type, sizeof(s_composer_type), "%d", composer_type);
-	snprintf(s_account_id, sizeof(s_account_id), "%d", account_id);
+	email_params_h params = NULL;
 
-	app_control_h service;
-	if (APP_CONTROL_ERROR_NONE != app_control_create(&service)) {
-		debug_log("creating service handle failed");
+	if (email_params_create(&params) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_RUN_TYPE, composer_type) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, account_id)) {
+
+		mailbox_ugd->composer = mailbox_composer_module_create(mailbox_ugd, EMAIL_MODULE_COMPOSER, params);
+	} else {
 		mailbox_ugd->is_module_launching = false;
-		return;
 	}
 
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_RUN_TYPE, s_composer_type);
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_ID, s_account_id);
-	mailbox_ugd->composer = mailbox_composer_module_create(mailbox_ugd, EMAIL_MODULE_COMPOSER, service);
-
-	app_control_destroy(service);
+	email_params_free(&params);
 	debug_leave();
 }
 

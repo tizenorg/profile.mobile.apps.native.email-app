@@ -341,29 +341,20 @@ static void _send_result_to_mailbox_ug_for_move(void *data)
 	RETURN_IF_FAIL(data != NULL);
 	EmailAccountUGD *ug_data = (EmailAccountUGD *)data;
 
-	app_control_h service;
-	if (APP_CONTROL_ERROR_NONE != app_control_create(&service)) {
-		debug_log("creating service handle failed");
-		return;
+	email_params_h params = NULL;
+
+	if (email_params_create(&params) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_EDIT_MODE, ug_data->b_editmode) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, ug_data->folder_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX_MOVE_STATUS, ug_data->move_status) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, 1) &&
+		(!ug_data->moved_mailbox_name ||
+		email_params_add_str(params, EMAIL_BUNDLE_KEY_MAILBOX_MOVED_MAILBOX_NAME, ug_data->moved_mailbox_name))) {
+
+		email_module_send_result(ug_data->base.module, params);
 	}
-	char mailbox_edit_mode[30] = { 0, };
-	snprintf(mailbox_edit_mode, sizeof(mailbox_edit_mode), "%d", ug_data->b_editmode);
-	char is_mail_move_ug[30] = {0,};
-	snprintf(is_mail_move_ug, sizeof(is_mail_move_ug), "%d", 1);
-	char move_status[30] = {0,};
-	snprintf(move_status, sizeof(move_status), "%d", ug_data->move_status);
-	char mailbox_id[30] = {0,};
-	snprintf(mailbox_id, sizeof(mailbox_id), "%d", ug_data->folder_id);
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_IS_MAILBOX_EDIT_MODE, mailbox_edit_mode);
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAILBOX, mailbox_id);
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAILBOX_MOVE_STATUS, move_status);
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, is_mail_move_ug);
-	if (ug_data->moved_mailbox_name)
-		app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAILBOX_MOVED_MAILBOX_NAME, ug_data->moved_mailbox_name);
 
-	email_module_send_result(ug_data->base.module, service);
-
-	app_control_destroy(service);
+	email_params_free(&params);
 }
 
 static void _gl_sel(void *data, Evas_Object *obj, void *event_info)

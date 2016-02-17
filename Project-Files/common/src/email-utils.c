@@ -64,13 +64,6 @@
 #define EMAIL_STR_SIZE 10
 #define EMAIL_DELIMETER_SIZE 2
 
-#define EMAIL_BUFF_SIZE_TIN 16
-#define EMAIL_BUFF_SIZE_SML 32
-#define EMAIL_BUFF_SIZE_MID 64
-#define EMAIL_BUFF_SIZE_BIG 128
-#define EMAIL_BUFF_SIZE_HUG 256
-#define EMAIL_BUFF_SIZE_4K 4096
-
 EMAIL_API const char *locale = NULL;
 static bool is_24_hr_format = false;
 
@@ -2923,181 +2916,17 @@ EMAIL_API bool email_get_need_restart_flag()
 	return s_info.need_restart_flag;
 }
 
-EMAIL_API bool email_params_create(app_control_h *params)
-{
-	retvm_if(!params, false, "params is NULL");
-	retvm_if(*params, false, "*params is not NULL");
-
-	int ret = APP_CONTROL_ERROR_NONE;
-
-	ret = app_control_create(params);
-	if (ret != APP_CONTROL_ERROR_NONE) {
-		debug_error("app_control_create() failed! ret = %d", ret);
-		*params = NULL;
-		return false;
-	}
-
-	return true;
-}
-
-EMAIL_API void email_params_free(app_control_h *params)
-{
-	retm_if(!params, "params is NULL");
-
-	if (*params) {
-		int ret = APP_CONTROL_ERROR_NONE;
-
-		ret = app_control_destroy(*params);
-		warn_if(ret != APP_CONTROL_ERROR_NONE, "app_control_destroy() failed! ret = %d", ret);
-
-		*params = NULL;
-	}
-}
-
-EMAIL_API bool email_params_operation_set(app_control_h params, const char *operation)
-{
-	retvm_if(!params, false, "params is NULL");
-	retvm_if(!operation, false, "operation is NULL");
-
-	int ret = APP_CONTROL_ERROR_NONE;
-
-	ret = app_control_set_operation(params, operation);
-	retvm_if(ret != APP_CONTROL_ERROR_NONE, false, "app_control_set_operation failed: %d", ret);
-
-	return true;
-}
-
-EMAIL_API bool email_params_uri_set(app_control_h params, const char *uri)
-{
-	retvm_if(!params, false, "params is NULL");
-	retvm_if(!uri, false, "operation is NULL");
-
-	int ret = APP_CONTROL_ERROR_NONE;
-
-	ret = app_control_set_uri(params, uri);
-	retvm_if(ret != APP_CONTROL_ERROR_NONE, false, "app_control_set_uri() failed: %d", ret);
-
-	return true;
-}
-
-EMAIL_API bool email_params_add_int(app_control_h params, const char *key, int value)
-{
-	retvm_if(!params, false, "params is NULL");
-	retvm_if(!key, false, "key is NULL");
-
-	char s_value[EMAIL_BUFF_SIZE_SML] = {'\0'};
-	int ret = APP_CONTROL_ERROR_NONE;
-
-	snprintf(s_value, sizeof(s_value), "%d", value);
-
-	ret = app_control_add_extra_data(params, key, s_value);
-	retvm_if(ret != APP_CONTROL_ERROR_NONE, false, "app_control_add_extra_data() failed! ret = %d", ret);
-
-	return true;
-}
-
-EMAIL_API bool email_params_add_str(app_control_h params, const char *key, const char *value)
-{
-	retvm_if(!params, false, "params is NULL");
-	retvm_if(!key, false, "key is NULL");
-	retvm_if(!value, false, "value is NULL");
-
-	int ret = APP_CONTROL_ERROR_NONE;
-
-	ret = app_control_add_extra_data(params, key, value);
-	retvm_if(ret != APP_CONTROL_ERROR_NONE, false, "app_control_add_extra_data() failed! ret = %d", ret);
-
-	return true;
-}
-
-static bool _email_params_get_value_impl(app_control_h params, const char *key, char **result, bool opt)
-{
-	retvm_if(!params, false, "params is NULL");
-	retvm_if(!key, false, "key is NULL");
-	retvm_if(!result, false, "result is NULL");
-	retvm_if(*result, false, "*result is not NULL");
-
-	int ret = APP_CONTROL_ERROR_NONE;
-
-	ret = app_control_get_extra_data(params, key, result);
-	if (ret != APP_CONTROL_ERROR_NONE) {
-		if (opt && (ret == APP_CONTROL_ERROR_KEY_NOT_FOUND)) {
-			*result = NULL;
-			return true;
-		}
-		debug_error("app_control_get_extra_data() failed! ret = %d", ret);
-		return false;
-	}
-	retvm_if(!result, false, "buff is NULL");
-
-	return true;
-}
-
-static bool _email_params_get_int_impl(app_control_h params, const char *key, int *result, bool opt)
-{
-	char *buff = NULL;
-
-	if (!_email_params_get_value_impl(params, key, &buff, opt)) {
-		return false;
-	}
-
-	if (buff) {
-		*result = atoi(buff);
-		free(buff);
-	}
-
-	return true;
-}
-
-EMAIL_API bool email_params_get_int(app_control_h params, const char *key, int *result)
-{
-	return _email_params_get_int_impl(params, key, result, false);
-}
-
-EMAIL_API bool email_params_get_int_opt(app_control_h params, const char *key, int *result)
-{
-	return _email_params_get_int_impl(params, key, result, true);
-}
-
-static bool _email_params_get_str_impl(app_control_h params, const char *key, char *result, int result_size, bool opt)
-{
-	char *buff = NULL;
-	int n = 0;
-
-	if (!_email_params_get_value_impl(params, key, &buff, opt)) {
-		return false;
-	}
-
-	if (buff) {
-		n = snprintf(result, result_size, "%s", buff);
-		free(buff);
-		retvm_if(n >= result_size, false, "Result_size is too small. needed: %d bytes", n + 1);
-	}
-
-	return true;
-}
-
-EMAIL_API bool email_params_get_str(app_control_h params, const char *key, char *result, int result_size)
-{
-	return _email_params_get_str_impl(params, key, result, result_size, false);
-}
-
-EMAIL_API bool email_params_get_str_opt(app_control_h params, const char *key, char *result, int result_size)
-{
-	return _email_params_get_str_impl(params, key, result, result_size, true);
-}
-
 EMAIL_API int email_preview_attachment_file(email_module_t *module, const char *path, email_launched_app_listener_t *listener)
 {
 	retvm_if(!path, -1, "path is NULL");
 	retvm_if(!module, -1, "module is NULL");
 
 	int ret = 0;
-	app_control_h params = NULL;
+	email_params_h params = NULL;
 
 	if (email_params_create(&params) &&
-		email_params_operation_set(params, APP_CONTROL_OPERATION_VIEW) &&
-		email_params_uri_set(params, path) &&
+		email_params_set_operation(params, APP_CONTROL_OPERATION_VIEW) &&
+		email_params_set_uri(params, path) &&
 		email_params_add_str(params,
 				EMAIL_PREVIEW_VIEW_MODE_PARAM_NAME,
 				EMAIL_PREVIEW_VIEW_MODE_PARAM_STR_VALUE) &&
@@ -3114,7 +2943,6 @@ EMAIL_API int email_preview_attachment_file(email_module_t *module, const char *
 
 	return ret;
 }
-
 
 EMAIL_API email_ext_save_err_type_e email_prepare_temp_file_path(const int index, const char *tmp_root_dir, const char *src_file_path, char **dst_file_path)
 {

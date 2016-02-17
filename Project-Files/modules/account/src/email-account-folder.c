@@ -263,59 +263,36 @@ static void _gl_sel_single(void *data, Evas_Object *obj, void *event_info)
 		_popup_renamefolder_cb(ug_data, obj, event_info);
 
 	} else if (ACC_FOLDER_NONE == ug_data->folder_mode) {
-		app_control_h service;
-		if (APP_CONTROL_ERROR_NONE != app_control_create(&service)) {
-			debug_log("creating service handle failed");
-			return;
-		}
-
-		char id[NUM_STR_LEN] = { 0 };
-		snprintf(id, sizeof(id), "%d", ug_data->account_id);
-
-		char is_mail_move_ug[NUM_STR_LEN] = { 0 };
-		snprintf(is_mail_move_ug, sizeof(is_mail_move_ug), "%d", 0);
-
-		app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, is_mail_move_ug);
+		const char *account_type = EMAIL_BUNDLE_VAL_SINGLE_ACCOUNT;
+		int mailbox_id = tree_item_data->mailbox_id;
+		int mailbox_type = tree_item_data->mailbox_type;
 
 		if (tree_item_data->b_scheduled_outbox > 0) {
-			app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_ID, id);
-			app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, EMAIL_BUNDLE_VAL_SCHEDULED_OUTBOX);
+			account_type = EMAIL_BUNDLE_VAL_SCHEDULED_OUTBOX;
 			debug_log("scheduled outbox is selected");
-		} else {
-
-			int i_mailbox_id = tree_item_data->mailbox_id;
-			int mb_type = tree_item_data->mailbox_type;
-			if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_PRIORITY_SENDERS) {
-				mb_type = EMAIL_MAILBOX_TYPE_INBOX;
-				i_mailbox_id = 0;
-			} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED) {
-				mb_type = tree_item_data->mailbox_type;
-				i_mailbox_id = 0;
-			}
-
-			char mailbox_id[NUM_STR_LEN] = { 0 };
-			snprintf(mailbox_id, sizeof(mailbox_id), "%d", i_mailbox_id);
-
-			char mailbox_type[NUM_STR_LEN] = { 0 };
-			snprintf(mailbox_type, sizeof(mailbox_type), "%d", mb_type);
-
-			if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED) {
-				app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, EMAIL_BUNDLE_VAL_ALL_ACCOUNT);
-			} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_PRIORITY_SENDERS) {
-				app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, EMAIL_BUNDLE_VAL_PRIORITY_SENDER);
-			} else {
-				app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, EMAIL_BUNDLE_VAL_SINGLE_ACCOUNT);
-			}
-
-			app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_ID, id);
-			app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAILBOX, mailbox_id);
-			app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAILBOX_TYPE, mailbox_type);
-			app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, is_mail_move_ug);
+		} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED) {
+			account_type = EMAIL_BUNDLE_VAL_ALL_ACCOUNT;
+			mailbox_id = 0;
+		} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_PRIORITY_SENDERS) {
+			account_type = EMAIL_BUNDLE_VAL_PRIORITY_SENDER;
+			mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
+			mailbox_id = 0;
 		}
 
-		email_module_send_result(ug_data->base.module, service);
+		email_params_h params = NULL;
 
-		app_control_destroy(service);
+		if (email_params_create(&params) &&
+			email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, 0) &&
+			email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, ug_data->account_id) &&
+			email_params_add_str(params, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, account_type) &&
+			((tree_item_data->b_scheduled_outbox > 0) || (
+			email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, mailbox_id) &&
+			email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX_TYPE, mailbox_type)))) {
+
+			email_module_send_result(ug_data->base.module, params);
+		}
+
+		email_params_free(&params);
 	}
 	debug_leave();
 }
@@ -1675,41 +1652,26 @@ static void _open_allacc_boxtype(void *data, Evas_Object *obj, void *event_info)
 	}
 	elm_genlist_item_update(item);
 
-	app_control_h service;
-	if (APP_CONTROL_ERROR_NONE != app_control_create(&service)) {
-		debug_log("creating service handle failed");
-		return;
-	}
-	debug_log("mailbox_type: [%d]", mailbox_type);
-
-	char id[NUM_STR_LEN] = {0,};
-	snprintf(id, sizeof(id), "%d", 0);
-
-	char ch_boxtype[NUM_STR_LEN] = { 0 };
-
-	if (mailbox_type != EMAIL_MAILBOX_TYPE_PRIORITY_SENDERS) {
-		snprintf(ch_boxtype, sizeof(ch_boxtype), "%d", mailbox_type);
-	} else {
-		snprintf(ch_boxtype, sizeof(ch_boxtype), "%d", EMAIL_MAILBOX_TYPE_INBOX);
-	}
-
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, EMAIL_BUNDLE_VAL_ALL_ACCOUNT);
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_ID, id);
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAILBOX_TYPE, ch_boxtype);
-
+	const char *account_type = EMAIL_BUNDLE_VAL_ALL_ACCOUNT;
 	if (mailbox_type == EMAIL_MAILBOX_TYPE_PRIORITY_SENDERS) {
-		app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, EMAIL_BUNDLE_VAL_PRIORITY_SENDER);
+		mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
+		account_type = EMAIL_BUNDLE_VAL_PRIORITY_SENDER;
 	}
 
-	char is_mail_move_ug[NUM_STR_LEN] = {0,};
-	snprintf(is_mail_move_ug, sizeof(is_mail_move_ug), "%d", 0);
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, is_mail_move_ug);
+	email_params_h params = NULL;
 
-	email_module_send_result(ug_data->base.module, service);
+	if (email_params_create(&params) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, 0) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, 0) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX_TYPE, mailbox_type) &&
+		email_params_add_str(params, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, account_type)) {
+
+		email_module_send_result(ug_data->base.module, params);
+	}
+
+	email_params_free(&params);
 
 	ug_data->block_item_click = 1;
-
-	app_control_destroy(service);
 }
 
 static void _delete_folder_ok_cb(void *data, Evas_Object *obj, void *event_info)

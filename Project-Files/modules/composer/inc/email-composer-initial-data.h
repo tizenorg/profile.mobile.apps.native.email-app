@@ -48,26 +48,26 @@ void composer_initial_data_set_mail_info(EmailComposerUGD *ugd, bool is_draft_sy
 /**
  * @brief Parse composer run type
  * @param[in]	ugd»			Email composer data
- * @param[in]	svc_handle		App control handler
+ * @param[in]	params			Email params handle
  * @return Composer error type
  */
-COMPOSER_ERROR_TYPE_E composer_initial_data_parse_composer_run_type(EmailComposerUGD *ugd, app_control_h svc_handle);
+COMPOSER_ERROR_TYPE_E composer_initial_data_parse_composer_run_type(EmailComposerUGD *ugd, email_params_h params);
 
 /**
  * @brief Pre parse arguments
  * @param[in]	ugd»			Email composer data
- * @param[in]	svc_handle		App control handler
+ * @param[in]	params			Email params handle
  * @return Composer error type
  */
-COMPOSER_ERROR_TYPE_E composer_initial_data_pre_parse_arguments(EmailComposerUGD *ugd, app_control_h data);
+COMPOSER_ERROR_TYPE_E composer_initial_data_pre_parse_arguments(EmailComposerUGD *ugd, email_params_h params);
 
 /**
  * @brief Post parse arguments
  * @param[in]	ugd»			Email composer data
- * @param[in]	svc_handle		App control handler
+ * @param[in]	params			Email params handle
  * @return Composer error type
  */
-COMPOSER_ERROR_TYPE_E composer_initial_data_post_parse_arguments(EmailComposerUGD *ugd, app_control_h data);
+COMPOSER_ERROR_TYPE_E composer_initial_data_post_parse_arguments(EmailComposerUGD *ugd, email_params_h params);
 
 /**
  * @brief Composer make initial content

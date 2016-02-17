@@ -121,22 +121,22 @@ int viewer_delete_email(EmailViewerUGD *ug_data);
  *
  * @param[in]	data			User data (Email viewer data)
  * @param[in]	module_type		Email Module type
- * @param[in]	bd				App control handler to create child module
+ * @param[in]	params			Emal params handle to create child module
  * @param[in]	hide			If set hide webview
  *
  * @return Handler with suitable Email module, otherwise NULL
  */
-email_module_h viewer_create_module(void *data, email_module_type_e module_type, app_control_h bd, bool hide);
+email_module_h viewer_create_module(void *data, email_module_type_e module_type, email_params_h params, bool hide);
 
 /**
  * @brief Create Composer module
  *
  * @param[in]	data			User data (Email viewer data)
- * @param[in]	bd				App control handler to create child module
+ * @param[in]	params			Emal params handle to create child module
  *
  * @return Handler with Composer Email module, otherwise NULL
  */
-email_module_h viewer_create_scheduled_composer_module(void *data, app_control_h bd);
+email_module_h viewer_create_scheduled_composer_module(void *data, email_params_h params);
 
 /**
  * @brief Create Composer module
@@ -260,7 +260,7 @@ void viewer_send_email(void *data, char *email_address);
  * @param[in]	index			Index of contact that should be displayed
  *
  */
-void viewer_view_contact_detail(void *data, char *index);
+void viewer_view_contact_detail(void *data, int index);
 
 /**
  * @brief Run Composer, called from mbe selection

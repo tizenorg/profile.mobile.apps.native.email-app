@@ -33,14 +33,14 @@
 #include "email-view-signature-setting.h"
 #include "email-view-notification.h"
 
-static int _setting_create(email_module_t *self, app_control_h params);
+static int _setting_create(email_module_t *self, email_params_h params);
 static void _setting_resume(email_module_t *self);
 static void _setting_destroy(email_module_t *self);
 static void _setting_on_event(email_module_t *self, email_module_event_e event);
 
 static int _account_init(EmailSettingUGD *ugd);
 static int _account_finalize(EmailSettingUGD *ugd);
-static ViewType _parse_option(EmailSettingUGD *ugd, app_control_h service);
+static ViewType _parse_option(EmailSettingUGD *ugd, email_params_h params);
 static void _account_deleted_cb(int account_id, email_setting_response_data *response, void *user_data);
 
 static void _filter_destroy_request_cb(void *data, email_module_h module);
@@ -80,7 +80,7 @@ UG_MODULE_API int setting_plugin_reset(app_control_h service, void *priv)
 	return 0;
 }
 
-static int _setting_create(email_module_t *self, app_control_h params)
+static int _setting_create(email_module_t *self, email_params_h params)
 {
 	debug_enter();
 	EmailSettingUGD *ugd;
@@ -264,17 +264,15 @@ static int _account_finalize(EmailSettingUGD *ugd)
 	return TRUE;
 }
 
-static ViewType _parse_option(EmailSettingUGD *ugd, app_control_h service)
+static ViewType _parse_option(EmailSettingUGD *ugd, email_params_h params)
 {
 	debug_enter();
-	int ret;
-	char *operation = NULL;
+	const char *operation = NULL;
 	ViewType ret_type = VIEW_INVALID;
 
-	retvm_if(!service, VIEW_INVALID, "invalid parameter!");
+	retvm_if(!params, VIEW_INVALID, "invalid parameter!");
 
-	ret = app_control_get_operation(service, &operation);
-	debug_log("app_control_get_operation: %d", ret);
+	email_params_get_operation_opt(params, &operation);
 	debug_log("operation = %s", operation);
 
 	if (operation) {
@@ -289,15 +287,11 @@ static ViewType _parse_option(EmailSettingUGD *ugd, app_control_h service)
 		} else if (!g_strcmp0(operation, ACCOUNT_OPERATION_VIEW)) {
 			debug_log("Operation ACCOUNT_OPERATION_VIEW");
 
-			char *account_id = NULL;
 			int my_account_id = 0;
 			int i = 0;
 
-			app_control_get_extra_data(service, ACCOUNT_DATA_ID, &account_id);
-			gotom_if(!account_id, FINISH, "%s is invalid", ACCOUNT_DATA_ID);
-
-			my_account_id = atoi(account_id);
-			free(account_id);
+			gotom_if(!email_params_get_int(params, ACCOUNT_DATA_ID, &my_account_id),
+					FINISH, "%s is invalid", ACCOUNT_DATA_ID);
 
 			debug_log("my-account id - %d", my_account_id);
 
@@ -320,14 +314,11 @@ static ViewType _parse_option(EmailSettingUGD *ugd, app_control_h service)
 			goto FINISH;
 		} else if (!g_strcmp0(operation, EMAIL_URI_NOTIFICATION_SETTING)) {
 			debug_log("Operation EMAIL_URI_NOTIFICATION_SETTING");
-			char *account_id_str = NULL;
 			int account_id = -1;
 
-			app_control_get_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_ID, &account_id_str);
-			gotom_if(!account_id_str, FINISH, "%s is invalid", ACCOUNT_DATA_ID);
+			gotom_if(!email_params_get_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, &account_id),
+					FINISH, "%s is invalid", EMAIL_BUNDLE_KEY_ACCOUNT_ID);
 
-			account_id = atoi(account_id_str);
-			FREE(account_id_str);
 			debug_log("EMAIL_URI_NOTIFICATION_SETTING account id: %d", account_id);
 
 			ugd->account_id = account_id;
@@ -340,14 +331,11 @@ static ViewType _parse_option(EmailSettingUGD *ugd, app_control_h service)
 			}
 		} else if (!g_strcmp0(operation, EMAIL_URI_SIGNATURE_SETTING)) {
 			debug_log("Operation EMAIL_URI_SIGNATURE_SETTING");
-			char *account_id_str = NULL;
 			int account_id = -1;
 
-			app_control_get_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_ID, &account_id_str);
-			gotom_if(!account_id_str, FINISH, "%s is invalid", ACCOUNT_DATA_ID);
+			gotom_if(!email_params_get_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, &account_id),
+					FINISH, "%s is invalid", EMAIL_BUNDLE_KEY_ACCOUNT_ID);
 
-			account_id = atoi(account_id_str);
-			FREE(account_id_str);
 			debug_log("EMAIL_URI_NOTIFICATION_SETTING account id: %d", account_id);
 
 			ugd->account_id = account_id;
@@ -361,9 +349,9 @@ static ViewType _parse_option(EmailSettingUGD *ugd, app_control_h service)
 		}
 	} else {
 		/* from ug_create */
-		char *start_view_type = NULL;
-		app_control_get_extra_data(service, EMAIL_BUNDLE_KEY_VIEW_TYPE, &start_view_type);
-		retvm_if(!start_view_type, VIEW_INVALID, "%s is invalid", EMAIL_BUNDLE_KEY_VIEW_TYPE);
+		const char *start_view_type = NULL;
+		retvm_if(!email_params_get_str(params, EMAIL_BUNDLE_KEY_VIEW_TYPE, &start_view_type),
+				VIEW_INVALID, "%s is invalid", EMAIL_BUNDLE_KEY_VIEW_TYPE);
 
 		debug_log("VIEW_TYPE - %s", start_view_type);
 		if (!g_strcmp0(start_view_type, EMAIL_BUNDLE_VAL_VIEW_SETTING)) {
@@ -373,12 +361,9 @@ static ViewType _parse_option(EmailSettingUGD *ugd, app_control_h service)
 		} else {
 			ret_type = VIEW_INVALID;
 		}
-
-		free(start_view_type);
 	}
 
 FINISH:
-	FREE(operation);
 	debug_log("start view is %d", ret_type);
 	return ret_type;
 }

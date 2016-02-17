@@ -706,24 +706,24 @@ static void _viewer_launch_smart_search(EmailViewerUGD *ug_data, char *link_url)
 	}
 	debug_secure("keyword [%s]", keyword);
 
-	app_control_h service = NULL;
-	ret = app_control_create(&service);
+	app_control_h app_control = NULL;
+	ret = app_control_create(&app_control);
 	debug_log("app_control_create: %d", ret);
-	retm_if(service == NULL, "service create failed: service[NULL]");
-	ret = app_control_set_launch_mode(service, APP_CONTROL_LAUNCH_MODE_GROUP);
+	retm_if(app_control == NULL, "app_control create failed: app_control[NULL]");
+	ret = app_control_set_launch_mode(app_control, APP_CONTROL_LAUNCH_MODE_GROUP);
 	debug_log("app_control_set_launch_mode: %d", ret);
-	ret = app_control_set_operation(service, APP_CONTROL_OPERATION_SEARCH);
+	ret = app_control_set_operation(app_control, APP_CONTROL_OPERATION_SEARCH);
 	debug_log("app_control_set_operation: %d", ret);
-	ret = app_control_add_extra_data(service, "http://tizen.org/appcontrol/data/keyword", keyword);
+	ret = app_control_add_extra_data(app_control, "http://tizen.org/appcontrol/data/keyword", keyword);
 	debug_log("app_control_add_extra_data: %d", ret);
 
-	ret = app_control_send_launch_request(service, NULL, NULL);
+	ret = app_control_send_launch_request(app_control, NULL, NULL);
 	debug_log("app_control_send_launch_request: %d", ret);
 	if (ret != APP_CONTROL_ERROR_NONE) {
 		notification_status_message_post(_("IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"));
 	}
 
-	ret = app_control_destroy(service);
+	ret = app_control_destroy(app_control);
 	debug_log("app_control_destroy: %d", ret);
 	g_free(keyword);
 }
@@ -733,15 +733,15 @@ static void _viewer_share_text(EmailViewerUGD *ug_data, char *share_text)
 	debug_enter();
 
 	int ret = 0;
-	app_control_h service_handle = NULL;
-	ret = app_control_create(&service_handle);
-	debug_log("app_control_create: %p, %d", service_handle, ret);
-	retm_if((service_handle == NULL || ret < 0), "service create failed: service[NULL] or ret[< 0]");
+	app_control_h app_control = NULL;
+	ret = app_control_create(&app_control);
+	debug_log("app_control_create: %p, %d", app_control, ret);
+	retm_if((app_control == NULL || ret < 0), "app_control create failed: app_control[NULL] or ret[< 0]");
 
-	ret = app_control_set_launch_mode(service_handle, APP_CONTROL_LAUNCH_MODE_GROUP);
+	ret = app_control_set_launch_mode(app_control, APP_CONTROL_LAUNCH_MODE_GROUP);
 	debug_log("app_control_set_launch_mode: %d", ret);
 
-	ret = app_control_set_operation(service_handle, APP_CONTROL_OPERATION_SHARE_TEXT);
+	ret = app_control_set_operation(app_control, APP_CONTROL_OPERATION_SHARE_TEXT);
 	debug_log("app_control_set_operation: %d", ret);
 
 	int text_len = STR_LEN(share_text);
@@ -755,16 +755,16 @@ static void _viewer_share_text(EmailViewerUGD *ug_data, char *share_text)
 	} else {
 		selected_text = g_strdup(share_text);
 	}
-	ret = app_control_add_extra_data(service_handle, APP_CONTROL_DATA_TEXT, selected_text);
+	ret = app_control_add_extra_data(app_control, APP_CONTROL_DATA_TEXT, selected_text);
 	debug_log("app_control_add_extra_data: %d", ret);
 
-	ret = app_control_send_launch_request(service_handle, NULL, NULL);
+	ret = app_control_send_launch_request(app_control, NULL, NULL);
 	debug_log("app_control_send_launch_request: %d", ret);
 	if (ret != APP_CONTROL_ERROR_NONE) {
 		notification_status_message_post(_("IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"));
 	}
 
-	ret = app_control_destroy(service_handle);
+	ret = app_control_destroy(app_control);
 	debug_log("app_control_destroy: %d", ret);
 	g_free(selected_text);
 }
@@ -776,43 +776,43 @@ void viewer_launch_download_manager(EmailViewerUGD *ug_data, const char *downloa
 	debug_secure("uri = [%s], cookie = [%s]", download_uri, cookie);
 
 	int ret = 0;
-	app_control_h service_handle = NULL;
+	app_control_h app_control = NULL;
 
-	ret = app_control_create(&service_handle);
-	debug_log("app_control_create: %p, %d", service_handle, ret);
-	retm_if((service_handle == NULL || ret < 0), "service create failed: service[NULL] or ret[< 0]");
+	ret = app_control_create(&app_control);
+	debug_log("app_control_create: %p, %d", app_control, ret);
+	retm_if((app_control == NULL || ret < 0), "app_control create failed: app_control[NULL] or ret[< 0]");
 
-	ret = app_control_set_launch_mode(service_handle, APP_CONTROL_LAUNCH_MODE_GROUP);
+	ret = app_control_set_launch_mode(app_control, APP_CONTROL_LAUNCH_MODE_GROUP);
 	debug_log("app_control_set_launch_mode: %d", ret);
 
-	ret = app_control_set_operation(service_handle, APP_CONTROL_OPERATION_DOWNLOAD);
+	ret = app_control_set_operation(app_control, APP_CONTROL_OPERATION_DOWNLOAD);
 	debug_log("app_control_set_operation: %d", ret);
 
-	ret = app_control_set_uri(service_handle, download_uri);
+	ret = app_control_set_uri(app_control, download_uri);
 	debug_log("app_control_set_uri: %d", ret);
 
 	if (cookie && strlen(cookie)) {
-		ret = app_control_add_extra_data(service_handle, "req_http_header_field", "cookie");
+		ret = app_control_add_extra_data(app_control, "req_http_header_field", "cookie");
 		debug_log("app_control_add_extra_data: %d", ret);
 
-		ret = app_control_add_extra_data(service_handle, "req_http_header_value", cookie);
+		ret = app_control_add_extra_data(app_control, "req_http_header_value", cookie);
 		debug_log("app_control_add_extra_data: %d", ret);
 	}
 
-	ret = app_control_add_extra_data(service_handle, "mode", "silent");
+	ret = app_control_add_extra_data(app_control, "mode", "silent");
 	debug_log("app_control_add_extra_data: %d", ret);
 
 	const char *storage_type = "0"; /* "0": phone memory / "1": memory card */
-	ret = app_control_add_extra_data(service_handle, "default_storage", storage_type);
+	ret = app_control_add_extra_data(app_control, "default_storage", storage_type);
 	debug_log("app_control_add_extra_data: %d", ret);
 
-	ret = app_control_add_extra_data(service_handle, "network_bonding", "true");
+	ret = app_control_add_extra_data(app_control, "network_bonding", "true");
 	debug_log("app_control_add_extra_data: %d", ret);
 
-	ret = app_control_send_launch_request(service_handle, NULL, NULL);
+	ret = app_control_send_launch_request(app_control, NULL, NULL);
 	debug_log("app_control_send_launch_request: %d", ret);
 
-	app_control_destroy(service_handle);
+	app_control_destroy(app_control);
 	debug_log("app_control_destroy: %d", ret);
 
 	int noti_ret = notification_status_message_post(email_get_email_string("IDS_EMAIL_POP_DOWNLOADING_ING"));

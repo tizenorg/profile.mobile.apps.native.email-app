@@ -30,8 +30,8 @@
  * Declaration for static functions
  */
 
-static void _viewer_result_cb(void *data, email_module_h module, app_control_h result);
-static void _account_result_cb(void *data, email_module_h module, app_control_h result);
+static void _viewer_result_cb(void *data, email_module_h module, email_params_h result);
+static void _account_result_cb(void *data, email_module_h module, email_params_h result);
 
 /*
  * Definitions
@@ -50,17 +50,16 @@ static void _account_result_cb(void *data, email_module_h module, app_control_h 
  * Definition for static functions
  */
 
-static void _viewer_result_cb(void *data, email_module_h module, app_control_h result)
+static void _viewer_result_cb(void *data, email_module_h module, email_params_h result)
 {
 	debug_enter();
 	retm_if(!data, "data is NULL");
 
 	EmailMailboxUGD *mailbox_ugd = data;
-	char *msg_type = NULL;
-	int ret = 0;
+	const char *msg_type = NULL;
 
-	ret = app_control_get_extra_data(result, EMAIL_BUNDLE_KEY_MSG, &msg_type);
-	retm_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data() failed! ret: [%d]", ret);
+	retm_if(!email_params_get_str(result, EMAIL_BUNDLE_KEY_MSG, &msg_type),
+			"email_params_get_str() failed!");
 
 	if (g_strcmp0(msg_type, EMAIL_BUNDLE_VAL_NEXT_MSG) == 0) {
 		mailbox_handle_next_msg_bundle(mailbox_ugd, result);
@@ -69,49 +68,36 @@ static void _viewer_result_cb(void *data, email_module_h module, app_control_h r
 	}
 
 	debug_log("mailbox_ugd->opened_mail_id : %d", mailbox_ugd->opened_mail_id);
-
-	G_FREE(msg_type);
 }
 
-static void _account_result_cb(void *data, email_module_h module, app_control_h result)
+static void _account_result_cb(void *data, email_module_h module, email_params_h result)
 {
 	debug_enter();
 	retm_if(!module, "module is NULL");
 	retm_if(!data, "data is NULL");
 
-	char *mode = NULL;
-	char *account_id = NULL;
-	char *mailbox_id = NULL;
-	char *mailbox_type = NULL;
-	int ret;
+	const char *mode = NULL;
 	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
 
 	if (mailbox_ugd->account)
 		mailbox_account_module_destroy(mailbox_ugd, mailbox_ugd->account);
 
 	/* handle result from move to folder ug */
-	char *temp = NULL;
-	int is_move_mail_ug = 0;
 
-	app_control_get_extra_data(result, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, &temp);
-	is_move_mail_ug = atoi(temp);
-	G_FREE(temp);
+	int is_move_mail_ug = 0;
+	email_params_get_int_opt(result, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, &is_move_mail_ug);
 
 	if (is_move_mail_ug) {
 		int b_edit_mod = 0;
-		app_control_get_extra_data(result, EMAIL_BUNDLE_KEY_IS_MAILBOX_EDIT_MODE, &temp);
-		b_edit_mod = atoi(temp);
-		G_FREE(temp);
-		app_control_get_extra_data(result, EMAIL_BUNDLE_KEY_MAILBOX, &temp);
-		mailbox_ugd->mailbox_id = (int)atoi(temp);
-		G_FREE(temp);
-		app_control_get_extra_data(result, EMAIL_BUNDLE_KEY_MAILBOX_MOVE_STATUS, &temp);
-		mailbox_ugd->move_status = (int)atoi(temp);
-		G_FREE(temp);
-		app_control_get_extra_data(result, EMAIL_BUNDLE_KEY_MAILBOX_MOVED_MAILBOX_NAME, &temp);
+		const char *moved_mailbox_name = NULL;
+
+		email_params_get_int_opt(result, EMAIL_BUNDLE_KEY_IS_MAILBOX_EDIT_MODE, &b_edit_mod);
+		email_params_get_int_opt(result, EMAIL_BUNDLE_KEY_MAILBOX, &mailbox_ugd->mailbox_id);
+		email_params_get_int_opt(result, EMAIL_BUNDLE_KEY_MAILBOX_MOVE_STATUS, &mailbox_ugd->move_status);
+		email_params_get_str_opt(result, EMAIL_BUNDLE_KEY_MAILBOX_MOVED_MAILBOX_NAME, &moved_mailbox_name);
+
 		G_FREE(mailbox_ugd->moved_mailbox_name);
-		mailbox_ugd->moved_mailbox_name = g_strdup(temp);
-		G_FREE(temp);
+		mailbox_ugd->moved_mailbox_name = g_strdup(moved_mailbox_name);
 
 		if (b_edit_mod) {
 			mailbox_exit_edit_mode(mailbox_ugd);
@@ -120,8 +106,7 @@ static void _account_result_cb(void *data, email_module_h module, app_control_h 
 	}
 
 
-	ret = app_control_get_extra_data(result, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, &mode);
-	debug_log("app_control_get_extra_data: %d", ret);
+	email_params_get_str_opt(result, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, &mode);
 
 	mailbox_clear_prev_mailbox_info(mailbox_ugd);
 
@@ -131,9 +116,9 @@ static void _account_result_cb(void *data, email_module_h module, app_control_h 
 		mailbox_ugd->mode = EMAIL_MAILBOX_MODE_ALL;
 		mailbox_ugd->account_id = 0;
 
-		ret = app_control_get_extra_data(result, EMAIL_BUNDLE_KEY_MAILBOX_TYPE, &(mailbox_type));
-		debug_log("app_control_get_extra_data: %d", ret);
-		mailbox_ugd->mailbox_type = (gint) atoi(mailbox_type);
+		int mailbox_type = 0;
+		email_params_get_int_opt(result, EMAIL_BUNDLE_KEY_MAILBOX_TYPE, &mailbox_type);
+		mailbox_ugd->mailbox_type = mailbox_type;
 
 		debug_log("account_id(%d), mailbox_type(%d)", mailbox_ugd->account_id, mailbox_ugd->mailbox_type);
 
@@ -142,19 +127,10 @@ static void _account_result_cb(void *data, email_module_h module, app_control_h 
 
 		mailbox_ugd->mode = EMAIL_MAILBOX_MODE_MAILBOX;
 
-		ret = app_control_get_extra_data(result, EMAIL_BUNDLE_KEY_ACCOUNT_ID, &account_id);
-		debug_log("app_control_get_extra_data: %d", ret);
-		mailbox_ugd->account_id = (gint) atoi(account_id);
+		email_params_get_int_opt(result, EMAIL_BUNDLE_KEY_ACCOUNT_ID, &mailbox_ugd->account_id);
 
-		ret = app_control_get_extra_data(result, EMAIL_BUNDLE_KEY_MAILBOX, &mailbox_id);
-		debug_log("app_control_get_extra_data: %d", ret);
-		if (mailbox_id) {
-			mailbox_ugd->mailbox_id = (int)atoi(mailbox_id);
-			G_FREE(mailbox_id);
-		} else {
+		if (!email_params_get_int(result, EMAIL_BUNDLE_KEY_MAILBOX, &mailbox_ugd->mailbox_id)) {
 			debug_error("failure on getting mailbox_id");
-			G_FREE(mode);
-			G_FREE(account_id);
 			return;
 		}
 
@@ -167,9 +143,6 @@ static void _account_result_cb(void *data, email_module_h module, app_control_h 
 		mailbox_ugd->mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
 		mailbox_ugd->mode = EMAIL_MAILBOX_MODE_PRIORITY_SENDER;
 	} else {
-		G_FREE(mode);
-		G_FREE(account_id);
-		G_FREE(mailbox_type);
 		return;
 	}
 
@@ -182,17 +155,13 @@ static void _account_result_cb(void *data, email_module_h module, app_control_h 
 		mailbox_refreshing_progress_add(mailbox_ugd);
 	else
 		mailbox_refreshing_progress_remove(mailbox_ugd);*/
-
-	G_FREE(mode);
-	G_FREE(account_id);
-	G_FREE(mailbox_type);
 }
 
 /*
  * Definition for exported functions
  */
 
-email_module_h mailbox_composer_module_create(void *data, email_module_type_e type, app_control_h service)
+email_module_h mailbox_composer_module_create(void *data, email_module_type_e type, email_params_h params)
 {
 	debug_enter();
 
@@ -202,7 +171,7 @@ email_module_h mailbox_composer_module_create(void *data, email_module_type_e ty
 	listener.cb_data = mailbox_ugd;
 	listener.destroy_request_cb = mailbox_composer_module_destroy;
 
-	email_module_h module = email_module_create_child(mailbox_ugd->base.module, type, service, &listener);
+	email_module_h module = email_module_create_child(mailbox_ugd->base.module, type, params, &listener);
 	if (mailbox_ugd->content_layout)
 		elm_object_tree_focus_allow_set(mailbox_ugd->content_layout, EINA_FALSE);
 
@@ -242,7 +211,7 @@ void mailbox_composer_module_destroy(void *priv, email_module_h module)
 	}
 }
 
-email_module_h mailbox_viewer_module_create(void *data, email_module_type_e type, app_control_h service)
+email_module_h mailbox_viewer_module_create(void *data, email_module_type_e type, email_params_h params)
 {
 	debug_enter();
 
@@ -254,12 +223,12 @@ email_module_h mailbox_viewer_module_create(void *data, email_module_type_e type
 	listener.destroy_request_cb = mailbox_viewer_module_destroy;
 
 	if (!mailbox_ugd->viewer) {
-		mailbox_ugd->viewer = email_module_create_child(mailbox_ugd->base.module, type, service, &listener);
+		mailbox_ugd->viewer = email_module_create_child(mailbox_ugd->base.module, type, params, &listener);
 		if (mailbox_ugd->content_layout) {
 			elm_object_tree_focus_allow_set(mailbox_ugd->content_layout, EINA_FALSE);
 		}
 	} else {
-		email_module_send_message(mailbox_ugd->viewer, service);
+		email_module_send_message(mailbox_ugd->viewer, params);
 	}
 
 	return mailbox_ugd->viewer;
@@ -283,7 +252,7 @@ void mailbox_viewer_module_destroy(void *priv, email_module_h module)
 	mailbox_ugd->opened_mail_id = 0;
 }
 
-email_module_h mailbox_account_module_create(void *data, email_module_type_e type, app_control_h service)
+email_module_h mailbox_account_module_create(void *data, email_module_type_e type, email_params_h params)
 {
 	debug_enter();
 
@@ -294,7 +263,7 @@ email_module_h mailbox_account_module_create(void *data, email_module_type_e typ
 	listener.result_cb = _account_result_cb;
 	listener.destroy_request_cb = mailbox_account_module_destroy;
 
-	email_module_h module = email_module_create_child(mailbox_ugd->base.module, type, service, &listener);
+	email_module_h module = email_module_create_child(mailbox_ugd->base.module, type, params, &listener);
 	if (mailbox_ugd->content_layout)
 		elm_object_tree_focus_allow_set(mailbox_ugd->content_layout, EINA_FALSE);
 
@@ -319,7 +288,7 @@ void mailbox_account_module_destroy(void *priv, email_module_h module)
 	mailbox_ugd->is_module_launching = false;
 }
 
-email_module_h mailbox_setting_module_create(void *data, email_module_type_e type, app_control_h service)
+email_module_h mailbox_setting_module_create(void *data, email_module_type_e type, email_params_h params)
 {
 	debug_enter();
 
@@ -329,7 +298,7 @@ email_module_h mailbox_setting_module_create(void *data, email_module_type_e typ
 	listener.cb_data = mailbox_ugd;
 	listener.destroy_request_cb = mailbox_setting_module_destroy;
 
-	email_module_h module = email_module_create_child(mailbox_ugd->base.module, type, service, &listener);
+	email_module_h module = email_module_create_child(mailbox_ugd->base.module, type, params, &listener);
 	if (mailbox_ugd->content_layout)
 		elm_object_tree_focus_allow_set(mailbox_ugd->content_layout, EINA_FALSE);
 

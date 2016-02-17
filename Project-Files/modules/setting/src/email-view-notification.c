@@ -39,10 +39,10 @@ static char *_gl_ringtone_text_get_cb(void *data, Evas_Object *obj, const char *
 static void _onoff_cb(void *data, Evas_Object *obj, void *event_info);
 static void _update_notification_options_status(EmailSettingVD *vd);
 static void _alert_ringtone_setup_cb(void *data, Evas_Object *obj, void *event_info);
-static void _ringtone_app_reply_cb(void *data, app_control_result_e result, app_control_h reply);
+static void _ringtone_app_reply_cb(void *data, app_control_result_e result, email_params_h reply);
 
 static void _gl_sel_cb(void *data, Evas_Object *obj, void *event_info);
-static char *_get_alert_title(char *path);
+static char *_get_alert_title(const char *path);
 
 static email_string_t EMAIL_SETTING_STRING_EMAIL_NOTI = {PACKAGE, "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"};
 static email_string_t EMAIL_SETTING_STRING_EMAIL_NOTI_HELP = {PACKAGE, "IDS_EMAIL_SBODY_RECEIVE_STATUS_BAR_NOTIFICATIONS_WHEN_EMAILS_ARRIVE"};
@@ -313,51 +313,38 @@ static void _alert_ringtone_setup_cb(void *data, Evas_Object *obj, void *event_i
 	Elm_Object_Item *it = event_info;
 	elm_genlist_item_selected_set(it, EINA_FALSE);
 
-	app_control_h service = NULL;
-	app_control_create(&service);
-	if (service) {
-		char *pa_cur_ringtone = NULL;
-		char *dir_path = NULL;
-		int value = -1;
-
-		if (li->index == ALERT_RINGTONE_LIST_ITEM) {
-			value = vd->account_data->options.default_ringtone_status;
-			pa_cur_ringtone = g_strdup(vd->account_data->options.alert_ringtone_path);
+	const char *marked_mode = MYFILE_DEFAULT_RINGTON_VALUE;
+	if (!vd->account_data->options.default_ringtone_status) {
+		marked_mode = vd->account_data->options.alert_ringtone_path;
+		if (!STR_VALID(marked_mode)) {
+			marked_mode = MYFILE_SILENT_RINGTON_VALUE;
 		}
+	}
 
-		if (value) {
-			FREE(pa_cur_ringtone);
-			pa_cur_ringtone = g_strdup("default");
-		} else if (!value && !STR_VALID(pa_cur_ringtone)) {
-			FREE(pa_cur_ringtone);
-			pa_cur_ringtone = g_strdup(MYFILE_SILENT_RINGTON_VALUE);
-		}
+	email_params_h params = NULL;
 
-		debug_secure("pa_cur_ringtone : %s", pa_cur_ringtone);
-		dir_path = g_strdup(SETTING_DEFAULT_ALERT_PATH);
-		app_control_add_extra_data(service, "marked_mode", pa_cur_ringtone);
-		app_control_add_extra_data(service, "path", dir_path);
-		app_control_add_extra_data(service, "select_type", "SINGLE_FILE");
-		app_control_add_extra_data(service, "file_type", "SOUND");
-		app_control_add_extra_data(service, "title", "IDS_EMAIL_BODY_ALERT_RINGTONE_ABB");
-		app_control_add_extra_data(service, "domain", PACKAGE);
-		app_control_add_extra_data(service, "default", "default show");
-		app_control_add_extra_data(service, "silent", "silent show");
-		app_control_add_extra_data(service, "landscape", "support landscape");
+	if (email_params_create(&params) &&
+		email_params_add_str(params, "marked_mode", marked_mode) &&
+		email_params_add_str(params, "path", SETTING_DEFAULT_ALERT_PATH) &&
+		email_params_add_str(params, "select_type", "SINGLE_FILE") &&
+		email_params_add_str(params, "file_type", "SOUND") &&
+		email_params_add_str(params, "title", "IDS_EMAIL_BODY_ALERT_RINGTONE_ABB") &&
+		email_params_add_str(params, "domain", PACKAGE) &&
+		email_params_add_str(params, "default", "default show") &&
+		email_params_add_str(params, "silent", "silent show") &&
+		email_params_add_str(params, "landscape", "support landscape")) {
 
 		email_launched_app_listener_t listener = { 0 };
 		listener.cb_data = li;
 		listener.reply_cb = _ringtone_app_reply_cb;
 
-		email_module_launch_app(&ugd->base, EMAIL_LAUNCH_APP_RINGTONE, service, &listener);
-
-		app_control_destroy(service);
-		FREE(pa_cur_ringtone);
-		FREE(dir_path);
+		email_module_launch_app(&ugd->base, EMAIL_LAUNCH_APP_RINGTONE, params, &listener);
 	}
+
+	email_params_free(&params);
 }
 
-static void _ringtone_app_reply_cb(void *data, app_control_result_e result, app_control_h reply)
+static void _ringtone_app_reply_cb(void *data, app_control_result_e result, email_params_h reply)
 {
 	debug_enter();
 
@@ -369,10 +356,9 @@ static void _ringtone_app_reply_cb(void *data, app_control_result_e result, app_
 	EmailSettingVD *vd = li->vd;
 
 	char *ringtone_file = NULL;
-	char *ringtone_path = NULL;
+	const char *ringtone_path = NULL;
 
-	app_control_get_extra_data(reply, "result", &ringtone_path);
-	if (!ringtone_path) {
+	if (!email_params_get_str(reply, "result", &ringtone_path)) {
 		debug_warning("ringtone path result is NULL");
 		return;
 	}
@@ -402,7 +388,6 @@ static void _ringtone_app_reply_cb(void *data, app_control_result_e result, app_
 	}
 
 	elm_genlist_item_update(li->it);
-	FREE(ringtone_path);
 	FREE(ringtone_file);
 
 	_update_account_info(vd);
@@ -498,7 +483,7 @@ static char *_gl_ringtone_text_get_cb(void *data, Evas_Object *obj, const char *
 	return NULL;
 }
 
-static char *_get_alert_title(char *path)
+static char *_get_alert_title(const char *path)
 {
 	debug_enter();
 	char *alert_title = NULL;

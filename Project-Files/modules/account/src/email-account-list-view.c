@@ -721,7 +721,7 @@ static void _gl_account_list_item_sel(void *data, Evas_Object *obj, void *event_
 
 	Account_Item_Data *item_data = (Account_Item_Data *)data;
 	EmailAccountUGD *ug_data = item_data->ug_data;
-	int i_mailbox_id = 0;
+	int mailbox_id = 0;
 	retm_if(!ug_data, "ug_data is NULL");
 
 	email_mailbox_type_e mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
@@ -783,28 +783,28 @@ static void _gl_account_list_item_sel(void *data, Evas_Object *obj, void *event_
 		mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
 		box_type = ACC_MAILBOX_TYPE_INBOX;
 		ug_data->account_id = item_data->account_id;
-		i_mailbox_id = item_data->mailbox_id;
+		mailbox_id = item_data->mailbox_id;
 		break;
 
 	case ACCOUNT_LIST_SINGLE_DRAFTS:
 		mailbox_type = EMAIL_MAILBOX_TYPE_DRAFT;
 		box_type = ACC_MAILBOX_TYPE_DRAFT;
 		ug_data->account_id = item_data->account_id;
-		i_mailbox_id = item_data->mailbox_id;
+		mailbox_id = item_data->mailbox_id;
 		break;
 
 	case ACCOUNT_LIST_SINGLE_OUTBOX:
 		mailbox_type = EMAIL_MAILBOX_TYPE_OUTBOX;
 		box_type = ACC_MAILBOX_TYPE_OUTBOX;
 		ug_data->account_id = item_data->account_id;
-		i_mailbox_id = item_data->mailbox_id;
+		mailbox_id = item_data->mailbox_id;
 		break;
 
 	case ACCOUNT_LIST_SINGLE_SENT:
 		mailbox_type = EMAIL_MAILBOX_TYPE_SENTBOX;
 		box_type = ACC_MAILBOX_TYPE_SENTBOX;
 		ug_data->account_id = item_data->account_id;
-		i_mailbox_id = item_data->mailbox_id;
+		mailbox_id = item_data->mailbox_id;
 		break;
 
 	case ACCOUNT_LIST_SINGLE_SHOW_ALL_FOLDERS:
@@ -819,44 +819,30 @@ static void _gl_account_list_item_sel(void *data, Evas_Object *obj, void *event_
 		break;
 	}
 
-	app_control_h service;
-	if (APP_CONTROL_ERROR_NONE != app_control_create(&service)) {
-		debug_log("creating service handle failed");
-		return;
-	}
 	debug_log("account_id: [%d], box_type: [%d], mailbox_type: [%d]", ug_data->account_id, box_type, mailbox_type);
 
-	char id[NUM_STR_LEN] = {0,};
-	snprintf(id, sizeof(id), "%d", ug_data->account_id);
-
-	char ch_boxtype[NUM_STR_LEN] = {0,};
-	snprintf(ch_boxtype, sizeof(ch_boxtype), "%d", mailbox_type);
-	if (ug_data->account_id == 0) {
-		app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, EMAIL_BUNDLE_VAL_ALL_ACCOUNT);
-	} else {
-		app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, EMAIL_BUNDLE_VAL_SINGLE_ACCOUNT);
-	}
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_ID, id);
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAILBOX_TYPE, ch_boxtype);
-
-	char mailbox_id[NUM_STR_LEN] = {0,};
-	snprintf(mailbox_id, sizeof(mailbox_id), "%d", i_mailbox_id);
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_MAILBOX, mailbox_id);
-
+	const char *account_type = EMAIL_BUNDLE_VAL_SINGLE_ACCOUNT;
 	if (box_type == ACC_MAILBOX_TYPE_PRIORITY_INBOX) {
-		app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, EMAIL_BUNDLE_VAL_PRIORITY_SENDER);
+		account_type = EMAIL_BUNDLE_VAL_PRIORITY_SENDER;
+	} else if (ug_data->account_id == 0) {
+		account_type = EMAIL_BUNDLE_VAL_ALL_ACCOUNT;
 	}
 
-	char is_mail_move_ug[NUM_STR_LEN] = {0,};
-	snprintf(is_mail_move_ug, sizeof(is_mail_move_ug), "%d", 0);
-	app_control_add_extra_data(service, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, is_mail_move_ug);
+	email_params_h params = NULL;
 
-	email_module_send_result(ug_data->base.module, service);
+	if (email_params_create(&params) &&
+		email_params_add_str(params, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, account_type) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, ug_data->account_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX_TYPE, mailbox_type) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, mailbox_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, 0)) {
+
+		email_module_send_result(ug_data->base.module, params);
+	}
+
+	email_params_free(&params);
 
 	ug_data->block_item_click = 1;
-
-	app_control_destroy(service);
-
 }
 
 static void _check_account_list_zoom_state(EmailAccountUGD *ug_data)

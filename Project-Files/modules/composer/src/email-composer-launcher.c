@@ -15,7 +15,6 @@
  *
  */
 
-#include <app_control.h>
 #include <account.h>
 
 #include "email-popup-utils.h"
@@ -33,16 +32,10 @@
  * Declaration for static functions
  */
 
-static void _launch_app_recipient_contacts_reply_cb(void *data, app_control_result_e result, app_control_h reply);
+static void _launch_app_recipient_contacts_reply_cb(void *data, app_control_result_e result, email_params_h reply);
 static void _preview_attachment_close_cb(void *data);
 
-static int _composer_pick_contacts_set_params(EmailComposerUGD *ugd, app_control_h svc_handle);
 static int _composer_add_update_contact_launch(EmailComposerUGD *ugd,
-		const char *operation,
-		const char *contact_email,
-		const char *contact_name);
-static int _composer_add_update_contact_set_params(EmailComposerUGD *ugd,
-		app_control_h service,
 		const char *operation,
 		const char *contact_email,
 		const char *contact_name);
@@ -66,81 +59,31 @@ static int _composer_add_update_contact_launch(EmailComposerUGD *ugd,
 {
 	debug_enter();
 
-	app_control_h svc_handle = NULL;
-	int ret = app_control_create(&svc_handle);
-	retvm_if((ret != APP_CONTROL_ERROR_NONE || !svc_handle),
-			COMPOSER_ERROR_FAILED_TO_LAUNCH_APPLICATION,
-			"app_control_create() failed![%d]", ret);
+	int ret = -1;
+	email_params_h params = NULL;
 
-	ret = app_control_set_mime(svc_handle, EMAIL_CONTACT_MIME_SCHEME);
-	if (ret != APP_CONTROL_ERROR_NONE) {
-		debug_error("app_control_set_mime failed![%d]", ret);
-		app_control_destroy(svc_handle);
-		return COMPOSER_ERROR_FAILED_TO_LAUNCH_APPLICATION;
+	if (email_params_create(&params) &&
+		email_params_set_mime(params, EMAIL_CONTACT_MIME_SCHEME) &&
+		email_params_set_operation(params, operation) &&
+		email_params_add_str(params, EMAIL_CONTACT_EXT_DATA_EMAIL, contact_email) &&
+		(!contact_name ||
+		email_params_add_str(params, EMAIL_CONTACT_EXT_DATA_NAME, contact_name))) {
+
+		ret = email_module_launch_app(ugd->base.module, EMAIL_LAUNCH_APP_AUTO, params, NULL);
 	}
 
-	if (_composer_add_update_contact_set_params(ugd, svc_handle,
-			operation, contact_email, contact_name) != APP_CONTROL_ERROR_NONE) {
-		debug_error("_composer_add_update_contact_set_params failed![%d]", ret);
-		app_control_destroy(svc_handle);
-		return COMPOSER_ERROR_FAILED_TO_LAUNCH_APPLICATION;
-	}
+	email_params_free(&params);
 
-	ret = email_module_launch_app(ugd->base.module, EMAIL_LAUNCH_APP_AUTO, svc_handle, NULL);
 	if (ret != 0) {
-		debug_error("email_module_launch_app() failed![%d]", ret);
-		app_control_destroy(svc_handle);
+		debug_error("Launch failed! [%d]", ret);
 		return COMPOSER_ERROR_FAILED_TO_LAUNCH_APPLICATION;
 	}
 
-	app_control_destroy(svc_handle);
 	debug_leave();
-
 	return COMPOSER_ERROR_NONE;
 }
 
-static int _composer_pick_contacts_set_params(EmailComposerUGD *ugd, app_control_h svc_handle)
-{
-	int ret = app_control_set_operation(svc_handle, APP_CONTROL_OPERATION_PICK);
-	retvm_if(ret != APP_CONTROL_ERROR_NONE, COMPOSER_ERROR_FAILED_TO_LAUNCH_APPLICATION, "app_control_set_operation() failed! ret:[%d]", ret);
-
-	ret = app_control_add_extra_data(svc_handle, EMAIL_CONTACT_EXT_DATA_SELECTION_MODE, EMAIL_CONTACT_BUNDLE_SELECT_MULTIPLE);
-	retvm_if(ret != APP_CONTROL_ERROR_NONE, COMPOSER_ERROR_FAILED_TO_LAUNCH_APPLICATION, "app_control_add_extra_data() failed! ret:[%d]", ret);
-
-	ret = app_control_add_extra_data(svc_handle, EMAIL_CONTACT_EXT_DATA_TYPE, EMAIL_CONTACT_BUNDLE_EMAIL);
-	retvm_if(ret != APP_CONTROL_ERROR_NONE, COMPOSER_ERROR_FAILED_TO_LAUNCH_APPLICATION, "app_control_add_extra_data() failed! ret:[%d]", ret);
-
-	char max_count[BUF_LEN_T] = { 0 };
-	snprintf(max_count, sizeof(max_count), "%d", MAX_RECIPIENT_COUNT);
-	ret = app_control_add_extra_data(svc_handle, EMAIL_CONTACT_EXT_DATA_TOTAL_COUNT, max_count);
-	retvm_if(ret != APP_CONTROL_ERROR_NONE, COMPOSER_ERROR_FAILED_TO_LAUNCH_APPLICATION, "app_control_add_extra_data() failed! ret:[%d]", ret);
-
-	return COMPOSER_ERROR_NONE;
-}
-
-static int _composer_add_update_contact_set_params(EmailComposerUGD *ugd,
-		app_control_h service,
-		const char *operation,
-		const char *contact_email,
-		const char *contact_name)
-{
-	int ret = app_control_set_operation(service, operation);
-	retvm_if(ret != APP_CONTROL_ERROR_NONE, COMPOSER_ERROR_FAILED_TO_LAUNCH_APPLICATION, "app_control_set_operation failed: %d", ret);
-
-	ret = app_control_add_extra_data(service, EMAIL_CONTACT_EXT_DATA_EMAIL, contact_email);
-	retvm_if(ret != APP_CONTROL_ERROR_NONE, COMPOSER_ERROR_FAILED_TO_LAUNCH_APPLICATION, "app_control_add_extra_data failed: %d", ret);
-
-	if (contact_name) {
-		ret = app_control_add_extra_data(service, EMAIL_CONTACT_EXT_DATA_NAME, contact_name);
-		retvm_if(ret != APP_CONTROL_ERROR_NONE, COMPOSER_ERROR_FAILED_TO_LAUNCH_APPLICATION, "app_control_add_extra_data failed: %d", ret);
-	}
-
-	return COMPOSER_ERROR_NONE;
-}
-
-
-
-static void _launch_app_recipient_contacts_reply_cb(void *data, app_control_result_e result, app_control_h reply)
+static void _launch_app_recipient_contacts_reply_cb(void *data, app_control_result_e result, email_params_h reply)
 {
 	debug_enter();
 
@@ -151,11 +94,11 @@ static void _launch_app_recipient_contacts_reply_cb(void *data, app_control_resu
 	ugd->recipient_added_from_contacts = EINA_TRUE;
 
 	int i = 0;
-	char **return_value = NULL;
+	const char **return_value = NULL;
 	int len = 0;
 
-	int ret = app_control_get_extra_data_array(reply, EMAIL_CONTACT_EXT_DATA_SELECTED, &return_value, &len);
-	retm_if(ret != APP_CONTROL_ERROR_NONE, "app_control_get_extra_data_array() failed! ret:[%d]", ret);
+	retm_if(!email_params_get_str_array(reply, EMAIL_CONTACT_EXT_DATA_SELECTED, &return_value, &len),
+			"email_params_get_str_array() failed!");
 
 	for (i = 0; i < len ; i++) {
 
@@ -263,7 +206,7 @@ void composer_launcher_preview_attachment(EmailComposerUGD *ugd, const char *uri
 	if (ret != 0) {
 		ugd->composer_popup = composer_util_popup_create(ugd, EMAIL_COMPOSER_STRING_UNABLE_TO_OPEN_FILE, EMAIL_COMPOSER_STRING_FILE_NOT_SUPPORTED,
 				composer_util_popup_response_cb, EMAIL_COMPOSER_STRING_BUTTON_OK, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
-		debug_secure("app_control_send_launch_request() failed!");
+		debug_secure("email_preview_attachment_file() failed!");
 		return;
 	}
 	evas_object_freeze_events_set(ugd->ewk_view, EINA_TRUE);
@@ -276,16 +219,19 @@ void composer_launcher_launch_storage_settings(EmailComposerUGD *ugd)
 	debug_enter();
 	retm_if(!ugd, "Invalid parameter: ugd is NULL!");
 
-	app_control_h svc_handle = NULL;
-	int ret = app_control_create(&svc_handle);
-	retm_if(ret != APP_CONTROL_ERROR_NONE, "app_control_create() failed![%d]", ret);
+	int ret = -1;
+	email_params_h params = NULL;
 
-	ret = email_module_launch_app(ugd->base.module, EMAIL_LAUNCH_APP_STORAGE_SETTINGS, svc_handle, NULL);
-	if (ret != 0) {
-		debug_error("email_module_launch_app failed!");
+	if (email_params_create(&params)) {
+
+		ret = email_module_launch_app(ugd->base.module, EMAIL_LAUNCH_APP_STORAGE_SETTINGS, params, NULL);
 	}
 
-	app_control_destroy(svc_handle);
+	email_params_free(&params);
+
+	if (ret != 0) {
+		debug_error("Launch failed! [%d]", ret);
+	}
 
 	debug_leave();
 }
@@ -296,52 +242,36 @@ void composer_launcher_pick_contacts(EmailComposerUGD *ugd)
 
 	retm_if(!ugd, "Invalid parameter: ugd is NULL!");
 
-	app_control_h svc_handle = NULL;
+	int ret = -1;
+	email_params_h params = NULL;
 
-	while (1) {
-
-		int ret = app_control_create(&svc_handle);
-		if (ret != APP_CONTROL_ERROR_NONE || !svc_handle) {
-			debug_error("app_control_create() failed![%d]", ret);
-			break;
-		}
-
-		ret = app_control_set_mime(svc_handle, EMAIL_CONTACT_MIME_SCHEME);
-		if (ret != APP_CONTROL_ERROR_NONE) {
-			debug_error("app_control_set_mime failed![%d]", ret);
-			break;
-		}
-
-		ret = _composer_pick_contacts_set_params(ugd, svc_handle);
-		if (ret != COMPOSER_ERROR_NONE) {
-			debug_error("_composer_pick_contacts_set_params failed![%d]", ret);
-			break;
-		}
+	if (email_params_create(&params) &&
+		email_params_set_mime(params, EMAIL_CONTACT_MIME_SCHEME) &&
+		email_params_set_operation(params, APP_CONTROL_OPERATION_PICK) &&
+		email_params_add_str(params, EMAIL_CONTACT_EXT_DATA_SELECTION_MODE, EMAIL_CONTACT_BUNDLE_SELECT_MULTIPLE) &&
+		email_params_add_str(params, EMAIL_CONTACT_EXT_DATA_TYPE, EMAIL_CONTACT_BUNDLE_EMAIL) &&
+		email_params_add_int(params, EMAIL_CONTACT_EXT_DATA_TOTAL_COUNT, MAX_RECIPIENT_COUNT)) {
 
 		email_launched_app_listener_t listener = { 0 };
 		listener.cb_data = ugd;
 		listener.reply_cb = _launch_app_recipient_contacts_reply_cb;
 
-		ret = email_module_launch_app(ugd->base.module, EMAIL_LAUNCH_APP_AUTO, svc_handle, &listener);
-		if (ret != 0) {
-			debug_error("email_module_launch_app() failed![%d]", ret);
-			break;
-		}
-
-		app_control_destroy(svc_handle);
-
-		debug_leave();
-		return;
+		ret = email_module_launch_app(ugd->base.module, EMAIL_LAUNCH_APP_AUTO, params, &listener);
 	}
 
-	app_control_destroy(svc_handle);
-	ugd->composer_popup = composer_util_popup_create(ugd,
-			EMAIL_COMPOSER_UNABLE_TO_LAUNCH_APPLICATION,
-			EMAIL_COMPOSER_STRING_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED,
-			composer_util_popup_response_cb,
-			EMAIL_COMPOSER_STRING_BUTTON_OK,
-			EMAIL_COMPOSER_STRING_NULL,
-			EMAIL_COMPOSER_STRING_NULL);
+	email_params_free(&params);
+
+	if (ret != 0) {
+		debug_error("Launch failed! [%d]", ret);
+
+		ugd->composer_popup = composer_util_popup_create(ugd,
+				EMAIL_COMPOSER_UNABLE_TO_LAUNCH_APPLICATION,
+				EMAIL_COMPOSER_STRING_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED,
+				composer_util_popup_response_cb,
+				EMAIL_COMPOSER_STRING_BUTTON_OK,
+				EMAIL_COMPOSER_STRING_NULL,
+				EMAIL_COMPOSER_STRING_NULL);
+	}
 
 	debug_leave();
 }

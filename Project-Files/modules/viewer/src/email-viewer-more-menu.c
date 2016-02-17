@@ -29,7 +29,7 @@
  */
 
 static void _viewer_more_menu_ctxpopup_back_cb(void *data, Evas_Object *obj, void *event_info);
-static int _viewer_launch_contacts_for_add_update(app_control_h *service,
+static int _viewer_launch_contacts_for_add_update(
 		EmailViewerUGD *ug_data,
 		const char *operation,
 		const char *contact_data,
@@ -39,40 +39,45 @@ static int _viewer_launch_contacts_for_add_update(app_control_h *service,
  * Definition for exported functions
  */
 
-static int _viewer_launch_contacts_for_add_update(app_control_h *service,
+static int _viewer_launch_contacts_for_add_update(
 		EmailViewerUGD *ug_data,
 		const char *operation,
 		const char *contact_data,
 		const char *contact_name)
 {
-	int ret = app_control_set_operation(*service, operation);
-	retvm_if(ret != APP_CONTROL_ERROR_NONE, -1, "app_control_set_operation failed: %d", ret);
-
-	ret = app_control_set_mime(*service, EMAIL_CONTACT_MIME_SCHEME);
-	retvm_if(ret != APP_CONTROL_ERROR_NONE, -1, "app_control_set_mime failed: %d", ret);
+	const char *ext_data_key = NULL;
 
 	switch (ug_data->create_contact_arg) {
 	case CONTACTUI_REQ_ADD_PHONE_NUMBER:
-		ret = app_control_add_extra_data(*service, EMAIL_CONTACT_EXT_DATA_PHONE, contact_data);
+		ext_data_key = EMAIL_CONTACT_EXT_DATA_PHONE;
 		break;
 	case CONTACTUI_REQ_ADD_EMAIL:
-		ret = app_control_add_extra_data(*service, EMAIL_CONTACT_EXT_DATA_EMAIL, contact_data);
+		ext_data_key = EMAIL_CONTACT_EXT_DATA_EMAIL;
 		break;
 	case CONTACTUI_REQ_ADD_URL:
-		ret = app_control_add_extra_data(*service, EMAIL_CONTACT_EXT_DATA_URL, contact_data);
+		ext_data_key = EMAIL_CONTACT_EXT_DATA_URL;
 		break;
 	default:
 		debug_error("not needed value %d", ug_data->create_contact_arg);
 		break;
 	}
-	retvm_if(ret != APP_CONTROL_ERROR_NONE, -1, "app_control_add_extra_data failed: %d", ret);
 
-	if (contact_name) {
-		ret = app_control_add_extra_data(*service, EMAIL_CONTACT_EXT_DATA_NAME, contact_name);
-		retvm_if(ret != APP_CONTROL_ERROR_NONE, -1, "app_control_add_extra_data failed: %d", ret);
+	int ret = -1;
+	email_params_h params = NULL;
+
+	if (email_params_create(&params) &&
+		email_params_set_operation(params, operation) &&
+		email_params_set_mime(params, EMAIL_CONTACT_MIME_SCHEME) &&
+		(!ext_data_key ||
+		email_params_add_str(params, ext_data_key, contact_data)) &&
+		(!contact_name ||
+		email_params_add_str(params, EMAIL_CONTACT_EXT_DATA_NAME, contact_name))) {
+
+		ret = email_module_launch_app(ug_data->base.module, EMAIL_LAUNCH_APP_AUTO, params, NULL);
 	}
 
-	ret = email_module_launch_app(ug_data->base.module, EMAIL_LAUNCH_APP_AUTO, *service, NULL);
+	email_params_free(&params);
+
 	if (ret != 0) {
 		debug_error("email_module_launch_app failed: %d", ret);
 		return -1;
@@ -88,24 +93,16 @@ void viewer_add_contact(void *data, char *contact_data, char *contact_name)
 	debug_secure("contact_address (%s)", contact_data);
 
 	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
-	app_control_h service = NULL;
 
-	int ret = app_control_create(&service);
-	debug_log("app_control_create: %d", ret);
-	retm_if(service == NULL, "service create failed: service[NULL]");
-
-	ret = _viewer_launch_contacts_for_add_update(&service,
+	int ret = _viewer_launch_contacts_for_add_update(
 			ug_data,
 			APP_CONTROL_OPERATION_ADD,
 			contact_data,
 			contact_name);
-
 	if (ret != 0) {
 		debug_error("_viewer_launch_contacts_for_add_update failed: %d", ret);
 	}
 
-	ret = app_control_destroy(service);
-	debug_log("app_control_destroy: %d", ret);
 	debug_leave();
 }
 
@@ -117,24 +114,16 @@ void viewer_update_contact(void *data, char *contact_data)
 	debug_secure("contact_data (%s)", contact_data);
 
 	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
-	app_control_h service = NULL;
 
-	int ret = app_control_create(&service);
-	debug_log("app_control_create: %d", ret);
-	retm_if(service == NULL, "service create failed: service[NULL]");
-
-	ret = _viewer_launch_contacts_for_add_update(&service,
+	int ret = _viewer_launch_contacts_for_add_update(
 			ug_data,
 			APP_CONTROL_OPERATION_EDIT,
 			contact_data,
 			NULL);
-
 	if (ret != 0) {
 		debug_error("_viewer_launch_contacts_for_add_update failed: %d", ret);
 	}
 
-	ret = app_control_destroy(service);
-	debug_log("app_control_destroy: %d", ret);
 	debug_leave();
 }
 
@@ -276,11 +265,8 @@ void viewer_create_more_ctxpopup(EmailViewerUGD *ug_data)
 		email_contact_list_info_t *contact_list_item = email_contacts_get_contact_info_by_email_address(ug_data->sender_address);
 			if (contact_list_item) {
 				debug_log("Sender address is listed in contacts DB, person ID:%d", contact_list_item->person_id);
-				int index = contact_list_item->person_id;;
-				char index_str[BUF_LEN_T] = { 0, };
-				index = contact_list_item->person_id;
-				snprintf(index_str, sizeof(index_str), "%d", index);
-				ctx_menu_item = elm_ctxpopup_item_append(ug_data->con_popup, "IDS_EMAIL_OPT_VIEW_CONTACT_DETAILS_ABB", icon, viewer_ctxpopup_detail_contact_cb, g_strdup(index_str));
+				ctx_menu_item = elm_ctxpopup_item_append(ug_data->con_popup, "IDS_EMAIL_OPT_VIEW_CONTACT_DETAILS_ABB",
+						icon, viewer_ctxpopup_detail_contact_cb, (void *)contact_list_item->person_id);
 			} else {
 				debug_log("Sender address is not listed in contacts DB");
 				ctx_menu_item = elm_ctxpopup_item_append(ug_data->con_popup, "IDS_EMAIL_OPT_ADD_TO_CONTACTS_ABB2", icon, viewer_ctxpopup_add_contact_cb, ug_data);

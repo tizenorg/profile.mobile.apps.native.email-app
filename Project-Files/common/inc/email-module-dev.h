@@ -83,7 +83,7 @@ struct _email_module
 	 * @return 0 - on success,
 	 * 		negative value - on error
 	 */
-	int (*create) (email_module_t *self, app_control_h params);
+	int (*create) (email_module_t *self, email_params_h params);
 
 	/**
 	 * @brief Virtual function which is called from base implementation to destroy the concrete module
@@ -111,7 +111,7 @@ struct _email_module
 	 *
 	 * @param[in]	self		pointer to this module
 	 */
-	void (*on_message) (email_module_t *self, app_control_h msg);
+	void (*on_message) (email_module_t *self, email_params_h msg);
 
 	/**
 	 * @brief Virtual function to handle events from module manager

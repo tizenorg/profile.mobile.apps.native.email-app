@@ -146,7 +146,7 @@ static email_module_t *_email_module_mgr_alloc_module(email_module_type_e module
  *
  * @return handle to the module or NULL on error
  */
-static email_module_h _email_module_mgr_create_module(email_module_type_e module_type, app_control_h params,
+static email_module_h _email_module_mgr_create_module(email_module_type_e module_type, email_params_h params,
 		email_module_listener_t *listener, email_module_t *parent);
 
 /**
@@ -225,7 +225,7 @@ static void _email_module_mgr_pop_job_cb(void *data);
  * @return 0 on success,
  * 		negative value on error
  */
-static int _email_module_init(email_module_t *module, app_control_h params,
+static int _email_module_init(email_module_t *module, email_params_h params,
 		email_module_listener_t *listener, email_module_t *parent, Elm_Object_Item *parent_navi_item);
 
 /**
@@ -696,7 +696,7 @@ int email_module_mgr_send_event(email_module_event_e event)
 }
 
 email_module_h email_module_mgr_create_root_module(email_module_type_e module_type,
-		app_control_h params, email_module_listener_t *listener)
+		email_params_h params, email_module_listener_t *listener)
 {
 	debug_enter();
 
@@ -802,7 +802,7 @@ email_module_t *_email_module_mgr_alloc_module(email_module_type_e module_type)
 }
 #endif
 
-email_module_h _email_module_mgr_create_module(email_module_type_e module_type, app_control_h params,
+email_module_h _email_module_mgr_create_module(email_module_type_e module_type, email_params_h params,
 		email_module_listener_t *listener, email_module_t *parent)
 {
 	debug_enter();
@@ -1184,7 +1184,7 @@ void _email_module_mgr_pop_job_cb(void *data)
  * email_module
  */
 
-int _email_module_init(email_module_t *module, app_control_h params,
+int _email_module_init(email_module_t *module, email_params_h params,
 		email_module_listener_t *listener, email_module_t *parent, Elm_Object_Item *parent_navi_item)
 {
 	debug_enter();
@@ -1481,7 +1481,7 @@ void _email_module_do_send_event(email_module_t *module, email_module_event_e ev
 	}
 }
 
-int email_module_send_message(email_module_h module_h, app_control_h msg)
+int email_module_send_message(email_module_h module_h, email_params_h msg)
 {
 	debug_enter();
 	/* Check input arguments */
@@ -1508,7 +1508,7 @@ int email_module_send_message(email_module_h module_h, app_control_h msg)
 	return 0;
 }
 
-int email_module_send_result(email_module_t *module, app_control_h result)
+int email_module_send_result(email_module_t *module, email_params_h result)
 {
 	debug_enter();
 	/* Check input arguments */
@@ -1563,7 +1563,7 @@ int _email_module_make_destroy_request(email_module_t *module)
 }
 
 email_module_h email_module_create_child(email_module_t *module, email_module_type_e module_type,
-		app_control_h params, email_module_listener_t *listener)
+		email_params_h params, email_module_listener_t *listener)
 {
 	debug_enter();
 	/* Check input arguments */
