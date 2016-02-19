@@ -402,7 +402,7 @@ EMAIL_API bool email_params_add_str_array(email_params_h params, const char *key
 	retvm_if(!params, false, "params is NULL");
 	retvm_if(!key, false, "key is NULL");
 	retvm_if(!value, false, "value is NULL");
-	retvm_if(array_length > 0, false, "array_length: %d", array_length);
+	retvm_if(array_length <= 0, false, "array_length: %d", array_length);
 
 	int ret = bundle_add_str_array(params, key, value, array_length);
 	retvm_if(ret != BUNDLE_ERROR_NONE, false, "bundle_add_str_array() failed! ret = %d", ret);
