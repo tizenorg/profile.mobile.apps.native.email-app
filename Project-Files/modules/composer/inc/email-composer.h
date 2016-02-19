@@ -71,6 +71,9 @@ typedef struct ug_data EmailComposerUGD;
 struct ug_data {
 	email_view_t base;
 
+	GDBusConnection *dbus_conn;
+	guint dbus_network_id;
+
 	/* Idlers */
 	Ecore_Idler *idler_set_focus;
 	Ecore_Idler *idler_show_ctx_popup;
@@ -350,6 +353,7 @@ struct ug_data {
 	Eina_Bool need_to_destroy_after_initializing;
 	Eina_Bool need_to_display_max_size_popup;
 	Eina_Bool is_force_destroy;
+	Eina_Bool is_mbe_edit_mode;
 
 	/* Related to popup translation */
 	int pt_element_type;

@@ -60,7 +60,6 @@ static Eina_Bool _recipient_mbe_dnd_dragdone_reset_cb(void *data);*/
 
 static email_string_t EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
 
-static bool edit_mode = false;
 static Elm_Genlist_Item_Class select_address_itc;
 static Elm_Genlist_Item_Class add_to_contact_popup_itc;
 
@@ -87,8 +86,8 @@ static void _request_predictive_search(EmailComposerUGD *ugd)
 	debug_enter();
 
 	/* To prevent displaying gal-search popup when email address is set on entry. (entry_changed_cb is called!) */
-	if (edit_mode == true) {
-		edit_mode = false;
+	if (ugd->is_mbe_edit_mode) {
+		ugd->is_mbe_edit_mode = false;
 		return;
 	}
 
@@ -190,7 +189,7 @@ static void _recipient_mbe_popup_edit(EmailComposerUGD *ugd)
 	EmailAddressInfo *ai = (EmailAddressInfo *)eina_list_nth(ri->email_list, ri->selected_email_idx);
 	retm_if(!ai, "ai is NULL!");
 
-	edit_mode = true; /* To prevent displaying gal-search popup when email address is set on entry. (entry_changed_cb is called!) */
+	ugd->is_mbe_edit_mode = true; /* To prevent displaying gal-search popup when email address is set on entry. (entry_changed_cb is called!) */
 
 	char *existing_text = g_strdup(elm_entry_entry_get(ugd->selected_entry));
 

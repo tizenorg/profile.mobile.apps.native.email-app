@@ -109,9 +109,6 @@ static void _composer_set_charset_info(void *data);
 static void _composer_contacts_update_recp_info_for_mbe(EmailComposerUGD *ugd, Evas_Object *mbe);
 static void _composer_contacts_update_recp_info_for_recipients(EmailComposerUGD *ugd);
 
-GDBusConnection *_g_composer_dbus_conn = NULL;
-guint _g_composer_network_id = 0;
-
 static email_string_t EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
 static email_string_t EMAIL_COMPOSER_STRING_BUTTON_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
 static email_string_t EMAIL_COMPOSER_STRING_TPOP_LOADING_ING = { PACKAGE, "IDS_EMAIL_TPOP_LOADING_ING" };
@@ -638,17 +635,17 @@ static COMPOSER_ERROR_TYPE_E _composer_initialize_dbus(EmailComposerUGD *ugd)
 	debug_enter();
 
 	GError *error = NULL;
-	if (_g_composer_dbus_conn == NULL) {
-		_g_composer_dbus_conn = g_bus_get_sync(G_BUS_TYPE_SYSTEM, NULL, &error);
+	if (ugd->dbus_conn == NULL) {
+		ugd->dbus_conn = g_bus_get_sync(G_BUS_TYPE_SYSTEM, NULL, &error);
 		if (error) {
 			debug_error("g_bus_get_sync() failed (%s)", error->message);
 			g_error_free(error);
 			return COMPOSER_ERROR_DBUS_FAIL;
 		}
 
-		_g_composer_network_id = g_dbus_connection_signal_subscribe(_g_composer_dbus_conn, NULL, "User.Email.NetworkStatus", "email", "/User/Email/NetworkStatus",
+		ugd->dbus_network_id = g_dbus_connection_signal_subscribe(ugd->dbus_conn, NULL, "User.Email.NetworkStatus", "email", "/User/Email/NetworkStatus",
 													   NULL, G_DBUS_SIGNAL_FLAGS_NONE, _composer_gdbus_signal_receiver_cb, (void *)ugd, NULL);
-		retvm_if(_g_composer_network_id == GDBUS_SIGNAL_SUBSCRIBE_FAILURE, COMPOSER_ERROR_DBUS_FAIL, "g_dbus_connection_signal_subscribe() failed!");
+		retvm_if(ugd->dbus_network_id == GDBUS_SIGNAL_SUBSCRIBE_FAILURE, COMPOSER_ERROR_DBUS_FAIL, "g_dbus_connection_signal_subscribe() failed!");
 	}
 
 	debug_leave();
@@ -744,10 +741,10 @@ static void _composer_finalize_dbus(EmailComposerUGD *ugd)
 {
 	debug_enter();
 
-	g_dbus_connection_signal_unsubscribe(_g_composer_dbus_conn, _g_composer_network_id);
-	g_object_unref(_g_composer_dbus_conn);
-	_g_composer_dbus_conn = NULL;
-	_g_composer_network_id = 0;
+	g_dbus_connection_signal_unsubscribe(ugd->dbus_conn, ugd->dbus_network_id);
+	g_object_unref(ugd->dbus_conn);
+	ugd->dbus_conn = NULL;
+	ugd->dbus_network_id = 0;
 
 	debug_leave();
 }
