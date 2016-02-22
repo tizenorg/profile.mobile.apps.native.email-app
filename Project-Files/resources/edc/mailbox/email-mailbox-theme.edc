@@ -324,13 +324,6 @@
 				)
 			)
 
-			PART(SPACER, "elm.padding.right",
-				DSC_FROM_R("default" 0.0,
-					min: MAILBOX_BUTTON_PADDING_RIGHT 0;
-					max: MAILBOX_BUTTON_PADDING_RIGHT -1;
-				)
-			)
-
 			PART(SPACER, "elm.padding.top",
 				DSC_FROM_T("default" 0.0,
 					min: 0 TITLE_1_LINE_PADDING_TOP;

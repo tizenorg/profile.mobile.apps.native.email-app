@@ -13,6 +13,7 @@ SET(SRCS-common
 	${PROJECT_COMMON_DIR}/src/email-module-core.c
 	${PROJECT_COMMON_DIR}/src/email-editfield-utils.c
 	${PROJECT_COMMON_DIR}/src/email-color-box.c
+	${PROJECT_COMMON_DIR}/src/email-params.c
 )
 
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fpic")

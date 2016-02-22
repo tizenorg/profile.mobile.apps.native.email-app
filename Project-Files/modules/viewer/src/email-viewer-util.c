@@ -772,7 +772,7 @@ void viewer_create_email(EmailViewerUGD *ug_data, const char *email_address)
 	email_params_h params = NULL;
 
 	if (email_params_create(&params) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_RUN_TYPE, RUN_COMPOSER_EXTERNAL),
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_RUN_TYPE, RUN_COMPOSER_EXTERNAL) &&
 		email_params_add_str(params, EMAIL_BUNDLE_KEY_TO, &email_address[scheme_length])) {
 
 		ug_data->loaded_module = viewer_create_module(ug_data, EMAIL_MODULE_COMPOSER, params, ug_data);
