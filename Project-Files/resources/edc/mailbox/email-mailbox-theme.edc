@@ -38,6 +38,8 @@
 #define SEARCH_BAR_BACK_BUTTON_PADDING_RIGHT_WIDTH	68 // 10 + 80 + 10 - 32
 #define SEARCH_BAR_BACK_BUTTON_SIZE	80 80
 
+#define MAILBOX_BUTTON_PADDING_RIGHT 32 
+
 	group
 	{
 		name: "layout.email.mailbox.hd";
