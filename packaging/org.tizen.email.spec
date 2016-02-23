@@ -149,8 +149,6 @@ rm -f debugfiles.list debuglinks.list debugsources.list
 chown -R 5000:5000 %{_opt_pkg_dir}/data
 chown -R 5000:5000 %{_opt_pkg_dir}/cache
 chown -R 5000:5000 %{_opt_pkg_dir}/shared/data
-%else
-pkgdir_maker --create --pkgid=%{name}
 %endif
 
 %files
