@@ -266,7 +266,7 @@ void viewer_create_more_ctxpopup(EmailViewerUGD *ug_data)
 			if (contact_list_item) {
 				debug_log("Sender address is listed in contacts DB, person ID:%d", contact_list_item->person_id);
 				ctx_menu_item = elm_ctxpopup_item_append(ug_data->con_popup, "IDS_EMAIL_OPT_VIEW_CONTACT_DETAILS_ABB",
-						icon, viewer_ctxpopup_detail_contact_cb, (void *)contact_list_item->person_id);
+						icon, viewer_ctxpopup_detail_contact_cb, (void *)(ptrdiff_t)contact_list_item->person_id);
 			} else {
 				debug_log("Sender address is not listed in contacts DB");
 				ctx_menu_item = elm_ctxpopup_item_append(ug_data->con_popup, "IDS_EMAIL_OPT_ADD_TO_CONTACTS_ABB2", icon, viewer_ctxpopup_add_contact_cb, ug_data);
