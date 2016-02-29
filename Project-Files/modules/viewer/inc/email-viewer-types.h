@@ -20,7 +20,7 @@
 
 #define CONCAT_FORMAT(x, y, z) ((x<<16) | (y<<8) | z)
 
-#define VIEWER_EVAS_DATA_NAME "ViewerUGD"
+#define VIEWER_EVAS_DATA_NAME "ViewerModule"
 
 #define _EDJ(o) elm_layout_edje_get(o)
 
@@ -167,7 +167,7 @@ struct _EmailViewerWebview {
 
 typedef struct _EmailViewerIdlerData EmailViewerIdlerData;
 struct _EmailViewerIdlerData {
-	void *ug_data;
+	void *view;
 	void *data;
 };
 

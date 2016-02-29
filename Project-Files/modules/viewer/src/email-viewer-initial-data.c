@@ -25,7 +25,7 @@ int viewer_initial_data_pre_parse_arguments(void *data, email_params_h params)
 	retvm_if(!data, VIEWER_ERROR_INVALID_ARG, "Invalid parameter: data is NULL!");
 	retvm_if(!params, VIEWER_ERROR_INVALID_ARG, "Invalid parameter: params is NULL!");
 
-	EmailViewerUGD *temp_data = (EmailViewerUGD *)data;
+	EmailViewerView *temp_data = (EmailViewerView *)data;
 
 	if (email_params_get_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, &temp_data->account_id)) {
 		viewer_create_account_data(temp_data);
@@ -44,12 +44,12 @@ int viewer_initial_data_pre_parse_arguments(void *data, email_params_h params)
 	const char *uri = NULL;
 
 	if (email_params_get_str(params, EMAIL_BUNDLE_KEY_MYFILE_PATH, &file_path)) {
-		debug_log("ug called by app-control request");
+		debug_log("module created by app-control request");
 		temp_data->eml_file_path = g_strdup(file_path);
 		temp_data->viewer_type = EML_VIEWER;
 		debug_secure("eml_file_path: %s", temp_data->eml_file_path);
 	} else if (email_params_get_uri(params, &uri)) {
-		debug_log("ug called by app-control request");
+		debug_log("module created by app-control request");
 		if (g_str_has_prefix(uri, URI_SCHEME_FILE)) {
 			temp_data->eml_file_path = g_strndup(uri + strlen(URI_SCHEME_FILE), strlen(uri) - strlen(URI_SCHEME_FILE));
 		} else {
@@ -68,35 +68,35 @@ int viewer_initial_data_pre_parse_arguments(void *data, email_params_h params)
 Eina_Bool viewer_free_viewer_data(void *data)
 {
 	retvm_if(!data, EINA_FALSE, "Invalid parameter: data is NULL!");
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 	Eina_Bool ret = EINA_TRUE;
 
 	/* stop engine */
-	if (ug_data->email_handle != 0) {
-		email_engine_stop_working(ug_data->account_id, ug_data->email_handle);
-		ug_data->email_handle = 0;
+	if (view->email_handle != 0) {
+		email_engine_stop_working(view->account_id, view->email_handle);
+		view->email_handle = 0;
 	}
 
 	debug_log("free mail_info");
-	if (ug_data->mail_info) {
-		email_free_mail_data(&(ug_data->mail_info), 1);
-		ug_data->mail_info = NULL;
+	if (view->mail_info) {
+		email_free_mail_data(&(view->mail_info), 1);
+		view->mail_info = NULL;
 	}
 
-	if (ug_data->attachment_info && ug_data->attachment_count > 0) {
-		email_free_attachment_data(&(ug_data->attachment_info), ug_data->attachment_count);
-		ug_data->attachment_info = NULL;
-		ug_data->attachment_count = 0;
+	if (view->attachment_info && view->attachment_count > 0) {
+		email_free_attachment_data(&(view->attachment_info), view->attachment_count);
+		view->attachment_info = NULL;
+		view->attachment_count = 0;
 	}
 
-	ug_data->eml_file_path = NULL;
-	FREE(ug_data->file_id);
+	view->eml_file_path = NULL;
+	FREE(view->file_id);
 
-	viewer_remove_internal_mail(ug_data);
+	viewer_remove_internal_mail(view);
 
-	FREE(ug_data->webview_data);
+	FREE(view->webview_data);
 
-	FREE(ug_data->account_email_address);
+	FREE(view->account_email_address);
 
 	return ret;
 }

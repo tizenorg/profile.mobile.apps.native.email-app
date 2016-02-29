@@ -40,10 +40,10 @@ void viewer_update_contact(void *data, char *contact_data);
 /**
  * @brief Create more ctxpopup
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  */
-void viewer_create_more_ctxpopup(EmailViewerUGD *ug_data);
+void viewer_create_more_ctxpopup(EmailViewerView *view);
 
 /**
  * @brief Upadte geometry position after rotation for ctxpopup

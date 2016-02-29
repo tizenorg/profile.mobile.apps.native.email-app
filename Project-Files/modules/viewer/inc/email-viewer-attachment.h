@@ -21,10 +21,10 @@
 /**
  * @brief Provides attachment view
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  */
-void viewer_create_attachment_view(EmailViewerUGD *ug_data);
+void viewer_create_attachment_view(EmailViewerView *view);
 
 /**
  * @brief Provides process for downloading and preview, depends from current state
@@ -47,21 +47,21 @@ void viewer_set_attachment_state(EV_attachment_data *aid, EV_attachment_state ne
 /**
  * @brief Get attachment data
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  * @param[in]	info_index		Attachment ID
  *
  * @return Viewer attachment data on success or NULL if none or an error occurred
  */
-EV_attachment_data *viewer_get_attachment_data(EmailViewerUGD *ug_data, int info_index);
+EV_attachment_data *viewer_get_attachment_data(EmailViewerView *view, int info_index);
 
 /**
  * @brief Get attachment state for all attachments
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  * @return  Email viewer mutually attachment state enum
  */
-EV_all_attachment_state viewer_get_all_attachments_state(EmailViewerUGD *ug_data);
+EV_all_attachment_state viewer_get_all_attachments_state(EmailViewerView *view);
 
 /**
  * @brief Update attachment item info

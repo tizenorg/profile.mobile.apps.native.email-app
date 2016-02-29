@@ -25,11 +25,11 @@
 /**
  * @brief Create address info list
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  * @return Email addres info list on success or NULL if an error occurred
  */
-email_address_info_list_t *viewer_create_address_info_list(EmailViewerUGD *ug_data);
+email_address_info_list_t *viewer_create_address_info_list(EmailViewerView *view);
 
 /**
  * @brief Free address info list from Email address info list data

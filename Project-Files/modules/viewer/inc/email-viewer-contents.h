@@ -39,19 +39,19 @@ void viewer_webkit_del_callbacks(void *data);
 /**
  * @brief Creats webview and set initial setings to it
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  * @return Evas_Object webview instance on success or NULL if an error occurred
  */
-Evas_Object *viewer_get_webview(EmailViewerUGD *ug_data);
+Evas_Object *viewer_get_webview(EmailViewerView *view);
 
 /**
  * @brief Set content to webview
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  */
-void viewer_set_webview_content(EmailViewerUGD *ug_data);
+void viewer_set_webview_content(EmailViewerView *view);
 
 /**
  * @brief Set initial webview height
@@ -80,10 +80,10 @@ void viewer_show_webview(void *data);
 /**
  * @brief Provides memory warning notification
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  */
-void viewer_webview_handle_mem_warning(EmailViewerUGD *ug_data, bool hard);
+void viewer_webview_handle_mem_warning(EmailViewerView *view, bool hard);
 
 #endif	/* __EMAIL_VIEWER_CONTENTS_H__ */
 

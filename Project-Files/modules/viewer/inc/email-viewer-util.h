@@ -51,7 +51,7 @@ Evas_Object *util_notify_genlist_add(Evas_Object *parent);
 /**
  * @brief Creates notification popup list and returns object itself
  *
- * @param[in]	ug_data				Email viewer data
+ * @param[in]	view				Email viewer data
  * @param[in]	t_header			Email viewer string data for header
  * @param[in]	t_content			Email viewer string data for content
  * @param[in]	btn_num				Count of buttons in list
@@ -63,14 +63,14 @@ Evas_Object *util_notify_genlist_add(Evas_Object *parent);
  *
  * @return Evas_Object with suitable popup, otherwise NULL
  */
-Evas_Object *util_create_notify_with_list(EmailViewerUGD *ug_data, email_string_t t_header, email_string_t t_content,
+Evas_Object *util_create_notify_with_list(EmailViewerView *view, email_string_t t_header, email_string_t t_content,
 						int btn_num, email_string_t t_btn1_lb, popup_cb resp_cb1,
 						email_string_t t_btn2_lb, popup_cb resp_cb2, popup_cb resp_block_cb);
 
 /**
  * @brief Creates and show notification popup list
  *
- * @param[in]	ug_data				Email viewer data
+ * @param[in]	view				Email viewer data
  * @param[in]	t_header			Email viewer string data for header
  * @param[in]	t_content			Email viewer string data for content
  * @param[in]	btn_num				Count of buttons in list
@@ -81,40 +81,40 @@ Evas_Object *util_create_notify_with_list(EmailViewerUGD *ug_data, email_string_
  * @param[in]	resp_block_cb		Response callback function for Blocked Event area
  *
  */
-void util_create_notify(EmailViewerUGD *ug_data, email_string_t t_header, email_string_t t_content,
+void util_create_notify(EmailViewerView *view, email_string_t t_header, email_string_t t_content,
 						int btn_num, email_string_t t_btn1_lb, popup_cb resp_cb1,
 						email_string_t t_btn2_lb, popup_cb resp_cb2, popup_cb resp_block_cb);
 
 /**
  * @brief Find folder ID using folder type
  *
- * @param[in]	ug_data				Email viewer data
+ * @param[in]	view				Email viewer data
  * @param[in]	mailbox_type		Email mailbox type enum
  *
  * @return 0 on success, otherwise a negative error value
  */
-int _find_folder_id_using_folder_type(EmailViewerUGD *ug_data, email_mailbox_type_e mailbox_type);
+int _find_folder_id_using_folder_type(EmailViewerView *view, email_mailbox_type_e mailbox_type);
 
 /**
  * @brief Move email to destination folder that represented by folder ID
  *
- * @param[in]	ug_data				Email viewer data
+ * @param[in]	view				Email viewer data
  * @param[in]	dest_folder_id		Folder ID
  * @param[in]	is_delete			To specify which popop to show in case of failure
  * @param[in]	is_block			To specify which popop to show in case of failure
  *
  * @return 0 on success, otherwise a negative error value
  */
-int viewer_move_email(EmailViewerUGD *ug_data, int dest_folder_id, gboolean is_delete, gboolean is_block);
+int viewer_move_email(EmailViewerView *view, int dest_folder_id, gboolean is_delete, gboolean is_block);
 
 /**
  * @brief Delete an email
  *
- * @param[in]	ug_data				Email viewer data
+ * @param[in]	view				Email viewer data
  *
  * @return 0 on success, otherwise a negative error value
  */
-int viewer_delete_email(EmailViewerUGD *ug_data);
+int viewer_delete_email(EmailViewerView *view);
 
 /**
  * @brief Create child module that defined by Email Module type
@@ -154,20 +154,20 @@ Evas_Object *viewer_load_edj(Evas_Object *parent, const char *file, const char *
 /**
  * @brief Launch browser by specifying URI operation
  *
- * @param[in]	ug_data				Email viewer data
+ * @param[in]	view				Email viewer data
  * @param[in]	link_uri			URI to set operation
  *
  */
-void viewer_launch_browser(EmailViewerUGD *ug_data, const char *link_uri);
+void viewer_launch_browser(EmailViewerView *view, const char *link_uri);
 
 /**
  * @brief Create email
  *
- * @param[in]	ug_data				Email viewer data
+ * @param[in]	view				Email viewer data
  * @param[in]	email_address		Email address name
  *
  */
-void viewer_create_email(EmailViewerUGD *ug_data, const char *email_address);
+void viewer_create_email(EmailViewerView *view, const char *email_address);
 
 /**
  * @brief Save attached file to Downloads folder with progress notification
@@ -192,7 +192,7 @@ email_ext_save_err_type_e viewer_save_attachment_for_preview(EV_attachment_data 
 /**
  * @brief Preview attachment
  *
- * @param[in]	ug_data				Email viewer data
+ * @param[in]	view				Email viewer data
  *
  */
 void viewer_show_attachment_preview(EV_attachment_data *aid);
@@ -209,10 +209,10 @@ int viewer_check_storage_full(unsigned int mb_size);
 /**
  * @brief Provides notification popup storage is full
  *
- * @param[in]	ug_data				Email viewer data
+ * @param[in]	view				Email viewer data
  *
  */
-void viewer_show_storage_full_popup(EmailViewerUGD *ug_data);
+void viewer_show_storage_full_popup(EmailViewerView *view);
 
 /**
  * @brief Callback performed after full storage detected
@@ -320,45 +320,45 @@ Eina_Bool viewer_check_body_download_status(int body_download_status, int status
 /**
  * @brief Create body button
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  * @param[in]	button_title	Button lable
  * @param[in]	cb				Callback function for button response
  *
  */
-void viewer_create_body_button(EmailViewerUGD *ug_data, const char *button_title, Evas_Smart_Cb cb);
+void viewer_create_body_button(EmailViewerView *view, const char *button_title, Evas_Smart_Cb cb);
 
 /**
  * @brief Delete body button
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  */
-void viewer_delete_body_button(EmailViewerUGD *ug_data);
+void viewer_delete_body_button(EmailViewerView *view);
 
 /**
  * @brief Temporary folder /tmp/email is created when viewer is launched
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  * @return 0 on success, otherwise a negative error value
  */
-int viewer_create_temp_folder(EmailViewerUGD *ug_data);
+int viewer_create_temp_folder(EmailViewerView *view);
 
 /**
  * @brief Temporary folder '/tmp/email' and its contents are deleted when composer is destroyed
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  */
-void viewer_remove_temp_folders(EmailViewerUGD *ug_data);
+void viewer_remove_temp_folders(EmailViewerView *view);
 
 /**
  * @brief Delete files from temp viewer html file path
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  */
-void viewer_remove_temp_files(EmailViewerUGD *ug_data);
+void viewer_remove_temp_files(EmailViewerView *view);
 
 #endif	/* __EMAIL_VIEWER_UTIL_H__ */
 /* EOF */

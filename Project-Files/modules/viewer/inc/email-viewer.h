@@ -92,12 +92,12 @@ void ewk_context_notify_low_memory(Ewk_Context *);
 
 typedef struct _ev_attachment_data_tag EV_attachment_data;
 
-typedef struct ug_data EmailViewerUGD;
+typedef struct _view_data EmailViewerView;
 
 /**
  * @brief Email viewer data
  */
-struct ug_data {
+struct _view_data {
 	email_view_t base;
 
 	/* base */
@@ -309,7 +309,7 @@ struct ug_data {
  */
 typedef struct {
 	email_module_t base;
-	EmailViewerUGD view;
+	EmailViewerView view;
 } EmailViewerModule;
 
 /**
@@ -319,7 +319,7 @@ typedef struct {
 	int index;
 	char *font_text;
 	Evas_Object *radio;
-	EmailViewerUGD *ug_data;
+	EmailViewerView *view;
 } FontsizeItem;
 
 /**
@@ -347,7 +347,7 @@ typedef enum {
 struct _ev_attachment_data_tag {
 
 	/* Main fields */
-	EmailViewerUGD *ug_data;
+	EmailViewerView *view;
 	Elm_Object_Item *it;
 	EmailAttachmentType *attachment_info;
 
@@ -403,19 +403,19 @@ enum {
 /**
  * @brief Reset viewer view
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  * @param[in]	update_body		Flag specifies that need to update header body
  *
  */
-void _reset_view(EmailViewerUGD *ug_data, Eina_Bool update_body);
+void _reset_view(EmailViewerView *view, Eina_Bool update_body);
 
 /**
  * @brief Hide viewer view
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  */
-void _hide_view(EmailViewerUGD *ug_data);
+void _hide_view(EmailViewerView *view);
 
 /**
  * @brief Callback to reply
@@ -470,10 +470,10 @@ void _move_cb(void *data, Evas_Object *obj, void *event_info);
 /**
  * @brief Provides webviewe body creation
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  */
-void _create_body(EmailViewerUGD *ug_data);
+void _create_body(EmailViewerView *view);
 
 /**
  * @brief Provides download webviewe body
@@ -495,86 +495,86 @@ Eina_Bool viewer_check_body_download(void *data);
 /**
  * @brief Creates body progress and list process animation when body downloading
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  */
-void create_body_progress(EmailViewerUGD *ug_data);
+void create_body_progress(EmailViewerView *view);
 
 /**
  * @brief Provides resizing for webview
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  * @param[in]	height			Heigh value to be setted
  *
  */
-void viewer_resize_webview(EmailViewerUGD *ug_data, int height);
+void viewer_resize_webview(EmailViewerView *view, int height);
 
 /**
  * @brief Initialize viewer's private data
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  * @return TRUE on success or FALSE if none or an error occurred
  *
  */
-Eina_Bool viewer_initialize_data(EmailViewerUGD *ug_data);
+Eina_Bool viewer_initialize_data(EmailViewerView *view);
 
 /**
  * @brief Delete all viewer internal timers and idlers
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  */
-void viewer_stop_ecore_running_apis(EmailViewerUGD *ug_data);
+void viewer_stop_ecore_running_apis(EmailViewerView *view);
 
 /**
  * @brief Reset all data belongs to mail
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  * @return Code from VIEWER_ERROR_TYPE_E enum about occurred error
  */
-int viewer_reset_mail_data(EmailViewerUGD *ug_data);
+int viewer_reset_mail_data(EmailViewerView *view);
 
 /**
  * @brief Deletes viewer's private data
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  * @param[in]	isHide			Evas_Bool value
  *
  */
-void viewer_delete_evas_objects(EmailViewerUGD *ug_data, Eina_Bool isHide);
+void viewer_delete_evas_objects(EmailViewerView *view, Eina_Bool isHide);
 
 /**
  * @brief Unregister viewer from callbacks
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  */
-void viewer_remove_callback(EmailViewerUGD *ug_data);
+void viewer_remove_callback(EmailViewerView *view);
 
 /**
  * @brief Creates account data
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  */
-void viewer_create_account_data(EmailViewerUGD *ug_data);
+void viewer_create_account_data(EmailViewerView *view);
 
 /**
  * @brief Deletes account data
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  */
-void viewer_delete_account_data(EmailViewerUGD *ug_data);
+void viewer_delete_account_data(EmailViewerView *view);
 
 /**
  * @brief Back key press handler
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  */
-void viewer_back_key_press_handler(EmailViewerUGD *ug_data);
+void viewer_back_key_press_handler(EmailViewerView *view);
 
 #endif	/* __EMAIL_VIEWER_H__ */

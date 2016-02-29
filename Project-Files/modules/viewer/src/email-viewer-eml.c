@@ -19,33 +19,33 @@
 #include "email-viewer-eml.h"
 #include "email-viewer-util.h"
 
-static GList *_viewer_get_recipient_list(EmailViewerUGD *ug_data, email_address_type_t address_type)
+static GList *_viewer_get_recipient_list(EmailViewerView *view, email_address_type_t address_type)
 {
 	debug_enter();
-	retvm_if(!ug_data, NULL, "Invalid parameter: ug_data[NULL]");
+	retvm_if(!view, NULL, "Invalid parameter: view[NULL]");
 
 	debug_secure("addr type[%d]", address_type);
 	const gchar *addr_list = NULL;
 
 	switch (address_type) {
 	case EMAIL_ADDRESS_TYPE_FROM:
-		if (ug_data->mail_info) {
-			addr_list = ug_data->mail_info->full_address_from;
+		if (view->mail_info) {
+			addr_list = view->mail_info->full_address_from;
 		}
 		break;
 	case EMAIL_ADDRESS_TYPE_TO:
-		if (ug_data->mail_info) {
-			addr_list = ug_data->mail_info->full_address_to;
+		if (view->mail_info) {
+			addr_list = view->mail_info->full_address_to;
 		}
 		break;
 	case EMAIL_ADDRESS_TYPE_CC:
-		if (ug_data->mail_info) {
-			addr_list = ug_data->mail_info->full_address_cc;
+		if (view->mail_info) {
+			addr_list = view->mail_info->full_address_cc;
 		}
 		break;
 	case EMAIL_ADDRESS_TYPE_BCC:
-		if (ug_data->mail_info) {
-			addr_list = ug_data->mail_info->full_address_bcc;
+		if (view->mail_info) {
+			addr_list = view->mail_info->full_address_bcc;
 		}
 		break;
 	default:
@@ -107,22 +107,22 @@ static GList *_viewer_get_recipient_list(EmailViewerUGD *ug_data, email_address_
 	return list;
 }
 
-email_address_info_list_t *viewer_create_address_info_list(EmailViewerUGD *ug_data)
+email_address_info_list_t *viewer_create_address_info_list(EmailViewerView *view)
 {
 	debug_enter();
-	retvm_if(!ug_data, NULL, "Invalid parameter: ug_data[NULL]");
+	retvm_if(!view, NULL, "Invalid parameter: view[NULL]");
 
-	email_mail_data_t *mail_info = ug_data->mail_info;
+	email_mail_data_t *mail_info = view->mail_info;
 	retvm_if(mail_info == NULL, 0, "mail_info is NULL");
 	email_address_info_list_t *address_info_list = NULL;
 
 	address_info_list = (email_address_info_list_t *)calloc(1, sizeof(email_address_info_list_t));
 	retvm_if(address_info_list == NULL, NULL, "calloc failed");
 
-	address_info_list->from = _viewer_get_recipient_list(ug_data, EMAIL_ADDRESS_TYPE_FROM);
-	address_info_list->to = _viewer_get_recipient_list(ug_data, EMAIL_ADDRESS_TYPE_TO);
-	address_info_list->cc = _viewer_get_recipient_list(ug_data, EMAIL_ADDRESS_TYPE_CC);
-	address_info_list->bcc = _viewer_get_recipient_list(ug_data, EMAIL_ADDRESS_TYPE_BCC);
+	address_info_list->from = _viewer_get_recipient_list(view, EMAIL_ADDRESS_TYPE_FROM);
+	address_info_list->to = _viewer_get_recipient_list(view, EMAIL_ADDRESS_TYPE_TO);
+	address_info_list->cc = _viewer_get_recipient_list(view, EMAIL_ADDRESS_TYPE_CC);
+	address_info_list->bcc = _viewer_get_recipient_list(view, EMAIL_ADDRESS_TYPE_BCC);
 
 	debug_leave();
 	return address_info_list;

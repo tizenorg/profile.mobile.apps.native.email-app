@@ -23,26 +23,26 @@
 /**
  * @brief Set vertical scroller position
  *
- * @param[in]	ug_data				Email viewer data
+ * @param[in]	view				Email viewer data
  *
  */
-void viewer_set_vertical_scroller_position(EmailViewerUGD *ug_data);
+void viewer_set_vertical_scroller_position(EmailViewerView *view);
 
 /**
  * @brief Set horizontal scroller size
  *
- * @param[in]	ug_data				Email viewer data
+ * @param[in]	view				Email viewer data
  *
  */
-void viewer_set_horizontal_scroller_size(EmailViewerUGD *ug_data);
+void viewer_set_horizontal_scroller_size(EmailViewerView *view);
 
 /**
  * @brief Set vertical scroller size
  *
- * @param[in]	ug_data				Email viewer data
+ * @param[in]	view				Email viewer data
  *
  */
-void viewer_set_vertical_scroller_size(EmailViewerUGD *ug_data);
+void viewer_set_vertical_scroller_size(EmailViewerView *view);
 
 /**
  * @brief Stop main scroller and start webkit scroller

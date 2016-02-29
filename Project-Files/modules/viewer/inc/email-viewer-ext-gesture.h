@@ -21,7 +21,7 @@
 /**
  * @brief Set flick layer to viewer
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  *
  */
 void viewer_set_flick_layer(void *data);

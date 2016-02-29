@@ -30,9 +30,9 @@ Eina_Bool noti_mgr_dbus_receiver_setup(void *data);
 /**
  * @brief Remove module notification system
  *
- * @param[in]	ug_data		Email viewer data
+ * @param[in]	view		Email viewer data
  *
  */
-void noti_mgr_dbus_receiver_remove(EmailViewerUGD *ug_data);
+void noti_mgr_dbus_receiver_remove(EmailViewerView *view);
 
 #endif /* __EMAIL_VIEWER_NOTI_MGR_H__ */

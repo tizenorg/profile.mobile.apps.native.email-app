@@ -30,7 +30,7 @@
 
 static void _viewer_more_menu_ctxpopup_back_cb(void *data, Evas_Object *obj, void *event_info);
 static int _viewer_launch_contacts_for_add_update(
-		EmailViewerUGD *ug_data,
+		EmailViewerView *view,
 		const char *operation,
 		const char *contact_data,
 		const char *contact_name);
@@ -40,14 +40,14 @@ static int _viewer_launch_contacts_for_add_update(
  */
 
 static int _viewer_launch_contacts_for_add_update(
-		EmailViewerUGD *ug_data,
+		EmailViewerView *view,
 		const char *operation,
 		const char *contact_data,
 		const char *contact_name)
 {
 	const char *ext_data_key = NULL;
 
-	switch (ug_data->create_contact_arg) {
+	switch (view->create_contact_arg) {
 	case CONTACTUI_REQ_ADD_PHONE_NUMBER:
 		ext_data_key = EMAIL_CONTACT_EXT_DATA_PHONE;
 		break;
@@ -58,7 +58,7 @@ static int _viewer_launch_contacts_for_add_update(
 		ext_data_key = EMAIL_CONTACT_EXT_DATA_URL;
 		break;
 	default:
-		debug_error("not needed value %d", ug_data->create_contact_arg);
+		debug_error("not needed value %d", view->create_contact_arg);
 		break;
 	}
 
@@ -73,7 +73,7 @@ static int _viewer_launch_contacts_for_add_update(
 		(!contact_name ||
 		email_params_add_str(params, EMAIL_CONTACT_EXT_DATA_NAME, contact_name))) {
 
-		ret = email_module_launch_app(ug_data->base.module, EMAIL_LAUNCH_APP_AUTO, params, NULL);
+		ret = email_module_launch_app(view->base.module, EMAIL_LAUNCH_APP_AUTO, params, NULL);
 	}
 
 	email_params_free(&params);
@@ -92,10 +92,10 @@ void viewer_add_contact(void *data, char *contact_data, char *contact_name)
 	retm_if(contact_data == NULL, "Invalid parameter: contact_address[NULL]");
 	debug_secure("contact_address (%s)", contact_data);
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
 	int ret = _viewer_launch_contacts_for_add_update(
-			ug_data,
+			view,
 			APP_CONTROL_OPERATION_ADD,
 			contact_data,
 			contact_name);
@@ -113,10 +113,10 @@ void viewer_update_contact(void *data, char *contact_data)
 	retm_if(contact_data == NULL, "Invalid parameter: contact_data[NULL]");
 	debug_secure("contact_data (%s)", contact_data);
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
 	int ret = _viewer_launch_contacts_for_add_update(
-			ug_data,
+			view,
 			APP_CONTROL_OPERATION_EDIT,
 			contact_data,
 			NULL);
@@ -127,11 +127,11 @@ void viewer_update_contact(void *data, char *contact_data)
 	debug_leave();
 }
 
-static Elm_Object_Item *_add_ctxpopup_menu_item(EmailViewerUGD *ug_data, const char *str, Evas_Object *icon, Evas_Smart_Cb cb)
+static Elm_Object_Item *_add_ctxpopup_menu_item(EmailViewerView *view, const char *str, Evas_Object *icon, Evas_Smart_Cb cb)
 {
 	Elm_Object_Item *ctx_menu_item = NULL;
 
-	ctx_menu_item = elm_ctxpopup_item_append(ug_data->con_popup, str, icon, cb, ug_data);
+	ctx_menu_item = elm_ctxpopup_item_append(view->con_popup, str, icon, cb, view);
 	elm_object_item_domain_text_translatable_set(ctx_menu_item, PACKAGE, EINA_TRUE);
 	return ctx_menu_item;
 }
@@ -146,9 +146,9 @@ static Elm_Object_Item *_viewer_more_menu_add_item(Evas_Object *obj, const char 
 	return ctx_menu_item;
 }
 
-static void _viewer_add_to_spam_menu_add(EmailViewerUGD *ug_data)
+static void _viewer_add_to_spam_menu_add(EmailViewerView *view)
 {
-	bool add_spam = (ug_data->mailbox_type != EMAIL_MAILBOX_TYPE_SPAMBOX);
+	bool add_spam = (view->mailbox_type != EMAIL_MAILBOX_TYPE_SPAMBOX);
 
 	const char *str = NULL;
 	Evas_Smart_Cb cb = NULL;
@@ -161,7 +161,7 @@ static void _viewer_add_to_spam_menu_add(EmailViewerUGD *ug_data)
 	}
 
 	Elm_Object_Item *ctx_menu_item = NULL;
-	ctx_menu_item = elm_ctxpopup_item_append(ug_data->con_popup, str, NULL, cb, ug_data);
+	ctx_menu_item = elm_ctxpopup_item_append(view->con_popup, str, NULL, cb, view);
 	elm_object_item_domain_text_translatable_set(ctx_menu_item, PACKAGE, EINA_TRUE);
 }
 
@@ -193,98 +193,98 @@ void viewer_more_menu_move_ctxpopup(Evas_Object *ctxpopup, Evas_Object *win)
 	debug_leave();
 }
 
-void viewer_create_more_ctxpopup(EmailViewerUGD *ug_data)
+void viewer_create_more_ctxpopup(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
+	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
 	Evas_Object *icon = NULL;
 	Elm_Object_Item *ctx_menu_item = NULL;
 
-	DELETE_EVAS_OBJECT(ug_data->con_popup);
-	ug_data->con_popup = elm_ctxpopup_add(ug_data->base.module->win);
-	retm_if(ug_data->con_popup == NULL, "cannot create context popup: ug_data->con_popup[NULL]");
+	DELETE_EVAS_OBJECT(view->con_popup);
+	view->con_popup = elm_ctxpopup_add(view->base.module->win);
+	retm_if(view->con_popup == NULL, "cannot create context popup: view->con_popup[NULL]");
 
-	elm_ctxpopup_auto_hide_disabled_set(ug_data->con_popup, EINA_TRUE);
-	elm_object_style_set(ug_data->con_popup, "more/default");
-	elm_ctxpopup_direction_priority_set(ug_data->con_popup,
+	elm_ctxpopup_auto_hide_disabled_set(view->con_popup, EINA_TRUE);
+	elm_object_style_set(view->con_popup, "more/default");
+	elm_ctxpopup_direction_priority_set(view->con_popup,
 							ELM_CTXPOPUP_DIRECTION_UP,
 							ELM_CTXPOPUP_DIRECTION_UNKNOWN,
 							ELM_CTXPOPUP_DIRECTION_UNKNOWN,
 							ELM_CTXPOPUP_DIRECTION_UNKNOWN);
 
-	evas_object_smart_callback_add(ug_data->con_popup, "dismissed", viewer_more_ctxpopup_dismissed_cb, ug_data);
-	evas_object_event_callback_add(ug_data->con_popup, EVAS_CALLBACK_DEL, viewer_more_menu_ctxpopup_del_cb, ug_data);
-	evas_object_event_callback_add(ug_data->base.module->navi, EVAS_CALLBACK_RESIZE, viewer_more_menu_window_resized_cb, ug_data);
-	eext_object_event_callback_add(ug_data->con_popup, EEXT_CALLBACK_BACK, _viewer_more_menu_ctxpopup_back_cb, NULL);
-	eext_object_event_callback_add(ug_data->con_popup, EEXT_CALLBACK_MORE, _viewer_more_menu_ctxpopup_back_cb, NULL);
-	debug_log("mailbox_type:%d", ug_data->mailbox_type);
+	evas_object_smart_callback_add(view->con_popup, "dismissed", viewer_more_ctxpopup_dismissed_cb, view);
+	evas_object_event_callback_add(view->con_popup, EVAS_CALLBACK_DEL, viewer_more_menu_ctxpopup_del_cb, view);
+	evas_object_event_callback_add(view->base.module->navi, EVAS_CALLBACK_RESIZE, viewer_more_menu_window_resized_cb, view);
+	eext_object_event_callback_add(view->con_popup, EEXT_CALLBACK_BACK, _viewer_more_menu_ctxpopup_back_cb, NULL);
+	eext_object_event_callback_add(view->con_popup, EEXT_CALLBACK_MORE, _viewer_more_menu_ctxpopup_back_cb, NULL);
+	debug_log("mailbox_type:%d", view->mailbox_type);
 
 	/* get save_status of mail_data */
 	int err = EMAIL_ERROR_NONE;
 	email_mail_data_t *mail_info = NULL;
-	err = email_get_mail_data(ug_data->mail_id, &mail_info);
+	err = email_get_mail_data(view->mail_id, &mail_info);
 
-	if (ug_data->viewer_type == EMAIL_VIEWER) {
+	if (view->viewer_type == EMAIL_VIEWER) {
 		if (err == EMAIL_ERROR_NONE && mail_info != NULL) {
-			if (ug_data->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
+			if (view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
 				if (mail_info->save_status == EMAIL_MAIL_STATUS_SEND_CANCELED || mail_info->save_status == EMAIL_MAIL_STATUS_SEND_FAILURE) {
-					_add_ctxpopup_menu_item(ug_data, "IDS_EMAIL_OPT_SEND", icon, viewer_resend_cb);
+					_add_ctxpopup_menu_item(view, "IDS_EMAIL_OPT_SEND", icon, viewer_resend_cb);
 
-					_add_ctxpopup_menu_item(ug_data, "IDS_EMAIL_OPT_EDIT", icon, viewer_edit_email_cb);
+					_add_ctxpopup_menu_item(view, "IDS_EMAIL_OPT_EDIT", icon, viewer_edit_email_cb);
 				} else if (mail_info->save_status == EMAIL_MAIL_STATUS_SEND_SCHEDULED) {
-					_add_ctxpopup_menu_item(ug_data, "IDS_EMAIL_OPT_EDIT", icon, viewer_edit_scheduled_email_cb);
+					_add_ctxpopup_menu_item(view, "IDS_EMAIL_OPT_EDIT", icon, viewer_edit_scheduled_email_cb);
 				} else if (mail_info->save_status == EMAIL_MAIL_STATUS_SENDING || mail_info->save_status == EMAIL_MAIL_STATUS_SEND_WAIT) {
-					ug_data->cancel_sending_ctx_item = _add_ctxpopup_menu_item(ug_data, "IDS_EMAIL_OPT_CANCEL_SENDING_ABB", icon, viewer_cancel_send_cb);
-					if (ug_data->is_cancel_sending_btn_clicked == EINA_TRUE) {
-						elm_object_item_disabled_set(ug_data->cancel_sending_ctx_item, EINA_TRUE);
+					view->cancel_sending_ctx_item = _add_ctxpopup_menu_item(view, "IDS_EMAIL_OPT_CANCEL_SENDING_ABB", icon, viewer_cancel_send_cb);
+					if (view->is_cancel_sending_btn_clicked == EINA_TRUE) {
+						elm_object_item_disabled_set(view->cancel_sending_ctx_item, EINA_TRUE);
 					}
 				}
 			}
 
-			debug_log("ug_data->save_status:%d, mail_info->save_status:%d", ug_data->save_status, mail_info->save_status);
+			debug_log("view->save_status:%d, mail_info->save_status:%d", view->save_status, mail_info->save_status);
 			if ((mail_info->save_status != EMAIL_MAIL_STATUS_SENDING && mail_info->save_status != EMAIL_MAIL_STATUS_SEND_WAIT
 				&& mail_info->save_status != EMAIL_MAIL_STATUS_SEND_SCHEDULED && mail_info->save_status != EMAIL_MAIL_STATUS_SEND_DELAYED)) {
-				_viewer_more_menu_add_item(ug_data->con_popup, NULL, "IDS_EMAIL_OPT_DELETE", _delete_cb, (void *)ug_data);
+				_viewer_more_menu_add_item(view->con_popup, NULL, "IDS_EMAIL_OPT_DELETE", _delete_cb, (void *)view);
 			}
 		} else {
 			debug_log("fail to get mail data - err (%d), mail_info is NULL? (%d)", err, (mail_info == NULL));
 		}
 
-		if (ug_data->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX) {
-			_add_ctxpopup_menu_item(ug_data, "IDS_EMAIL_OPT_MARK_AS_UNREAD_ABB", icon, viewer_mark_as_unread_cb);
+		if (view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX) {
+			_add_ctxpopup_menu_item(view, "IDS_EMAIL_OPT_MARK_AS_UNREAD_ABB", icon, viewer_mark_as_unread_cb);
 		}
 
-		debug_log("mailbox_type:%d, save_status:%d", ug_data->mailbox_type, ug_data->save_status);
-		if ((ug_data->mailbox_type != EMAIL_MAILBOX_TYPE_SENTBOX) && !(ug_data->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX)) {
-			_viewer_more_menu_add_item(ug_data->con_popup, NULL, "IDS_EMAIL_OPT_MOVE", _move_cb, (void *)ug_data);
+		debug_log("mailbox_type:%d, save_status:%d", view->mailbox_type, view->save_status);
+		if ((view->mailbox_type != EMAIL_MAILBOX_TYPE_SENTBOX) && !(view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX)) {
+			_viewer_more_menu_add_item(view->con_popup, NULL, "IDS_EMAIL_OPT_MOVE", _move_cb, (void *)view);
 		}
 	}
 
 	if (mail_info != NULL && mail_info->save_status != EMAIL_MAIL_STATUS_SENDING && mail_info->save_status != EMAIL_MAIL_STATUS_SEND_WAIT) {
-		email_contact_list_info_t *contact_list_item = email_contacts_get_contact_info_by_email_address(ug_data->sender_address);
+		email_contact_list_info_t *contact_list_item = email_contacts_get_contact_info_by_email_address(view->sender_address);
 			if (contact_list_item) {
 				debug_log("Sender address is listed in contacts DB, person ID:%d", contact_list_item->person_id);
-				ctx_menu_item = elm_ctxpopup_item_append(ug_data->con_popup, "IDS_EMAIL_OPT_VIEW_CONTACT_DETAILS_ABB",
+				ctx_menu_item = elm_ctxpopup_item_append(view->con_popup, "IDS_EMAIL_OPT_VIEW_CONTACT_DETAILS_ABB",
 						icon, viewer_ctxpopup_detail_contact_cb, (void *)(ptrdiff_t)contact_list_item->person_id);
 			} else {
 				debug_log("Sender address is not listed in contacts DB");
-				ctx_menu_item = elm_ctxpopup_item_append(ug_data->con_popup, "IDS_EMAIL_OPT_ADD_TO_CONTACTS_ABB2", icon, viewer_ctxpopup_add_contact_cb, ug_data);
+				ctx_menu_item = elm_ctxpopup_item_append(view->con_popup, "IDS_EMAIL_OPT_ADD_TO_CONTACTS_ABB2", icon, viewer_ctxpopup_add_contact_cb, view);
 			}
 			email_contacts_delete_contact_info(&contact_list_item);
 	}
 
 	elm_object_item_domain_text_translatable_set(ctx_menu_item, PACKAGE, EINA_TRUE);
 
-	if (ug_data->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX) {
-		_viewer_add_to_spam_menu_add(ug_data);
+	if (view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX) {
+		_viewer_add_to_spam_menu_add(view);
 	}
 
-	if (ug_data->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX) {
-		if (!recipient_is_priority_email_address(ug_data->sender_address)) {
-			ctx_menu_item = elm_ctxpopup_item_append(ug_data->con_popup, "IDS_EMAIL_OPT_ADD_TO_PRIORITY_SENDERS_ABB", icon, viewer_ctxpopup_add_vip_rule_cb, ug_data->sender_address);
+	if (view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX) {
+		if (!recipient_is_priority_email_address(view->sender_address)) {
+			ctx_menu_item = elm_ctxpopup_item_append(view->con_popup, "IDS_EMAIL_OPT_ADD_TO_PRIORITY_SENDERS_ABB", icon, viewer_ctxpopup_add_vip_rule_cb, view->sender_address);
 		} else {
-			ctx_menu_item = elm_ctxpopup_item_append(ug_data->con_popup, "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS", icon, viewer_ctxpopup_remove_vip_rule_cb, ug_data->sender_address);
+			ctx_menu_item = elm_ctxpopup_item_append(view->con_popup, "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS", icon, viewer_ctxpopup_remove_vip_rule_cb, view->sender_address);
 		}
 		elm_object_item_domain_text_translatable_set(ctx_menu_item, PACKAGE, EINA_TRUE);
 	}
@@ -294,9 +294,9 @@ void viewer_create_more_ctxpopup(EmailViewerUGD *ug_data)
 		mail_info = NULL;
 	}
 
-	viewer_more_menu_move_ctxpopup(ug_data->con_popup, ug_data->base.module->win);
+	viewer_more_menu_move_ctxpopup(view->con_popup, view->base.module->win);
 
-	evas_object_show(ug_data->con_popup);
+	evas_object_show(view->con_popup);
 	debug_leave();
 }
 

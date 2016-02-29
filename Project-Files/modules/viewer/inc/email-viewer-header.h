@@ -21,10 +21,10 @@
 /**
  * @brief Update attachment summary info
  *
- * @param[in]	ug_data		Email viewer data
+ * @param[in]	view		Email viewer data
  *
  */
-void header_update_attachment_summary_info(EmailViewerUGD *ug_data);
+void header_update_attachment_summary_info(EmailViewerView *view);
 
 /**
  * @brief Delete viewer header attachment preview
@@ -56,40 +56,40 @@ void header_update_view(void *data);
  * @param[in]	data		User data (Email viewer data)
  *
  */
-void header_update_date(EmailViewerUGD *ug_data);
+void header_update_date(EmailViewerView *view);
 
 /**
  * @brief Update viewer header response icon REPLY/FORWARD
  *
- * @param[in]	ug_data			Email viewer data
+ * @param[in]	view			Email viewer data
  * @param[in]	mail_info		Email mail data
  *
  */
-void header_update_response_icon(EmailViewerUGD *ug_data, email_mail_data_t *mail_info);
+void header_update_response_icon(EmailViewerView *view, email_mail_data_t *mail_info);
 
 /**
  * @brief Update viewer header favorite icon
  *
- * @param[in]	ug_data		Email viewer data
+ * @param[in]	view		Email viewer data
  *
  */
-void header_update_favorite_icon(EmailViewerUGD *ug_data);
+void header_update_favorite_icon(EmailViewerView *view);
 
 /**
  * @brief Set viewer header favorite icon
  *
- * @param[in]	ug_data		Email viewer data
+ * @param[in]	view		Email viewer data
  *
  */
-void header_set_favorite_icon(EmailViewerUGD *ug_data);
+void header_set_favorite_icon(EmailViewerView *view);
 
 /**
  * @brief Set viewer header sender name
  *
- * @param[in]	ug_data		Email viewer data
+ * @param[in]	view		Email viewer data
  *
  */
-void header_set_sender_name(EmailViewerUGD *ug_data);
+void header_set_sender_name(EmailViewerView *view);
 
 /**
  * @brief Unpack header layout from box

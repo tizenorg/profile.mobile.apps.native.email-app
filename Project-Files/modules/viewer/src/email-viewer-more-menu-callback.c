@@ -55,7 +55,7 @@ typedef enum {
  * Declaration for static functions
  */
 
-extern EmailViewerUGD *_g_md;
+extern EmailViewerView *_g_md;
 
 
 /*
@@ -70,8 +70,8 @@ void viewer_more_menu_window_resized_cb(void *data, Evas *e, Evas_Object *obj, v
 {
 	debug_enter();
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
-	viewer_more_menu_move_ctxpopup(ug_data->con_popup, ug_data->base.module->win);
+	EmailViewerView *view = (EmailViewerView *)data;
+	viewer_more_menu_move_ctxpopup(view->con_popup, view->base.module->win);
 
 	debug_leave();
 }
@@ -80,10 +80,10 @@ void viewer_more_menu_ctxpopup_del_cb(void *data, Evas *e, Evas_Object *obj, voi
 {
 	debug_enter();
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	evas_object_smart_callback_del(ug_data->con_popup, "dismissed", viewer_more_ctxpopup_dismissed_cb);
-	evas_object_event_callback_del_full(ug_data->base.module->navi, EVAS_CALLBACK_RESIZE, viewer_more_menu_window_resized_cb, ug_data);
+	evas_object_smart_callback_del(view->con_popup, "dismissed", viewer_more_ctxpopup_dismissed_cb);
+	evas_object_event_callback_del_full(view->base.module->navi, EVAS_CALLBACK_RESIZE, viewer_more_menu_window_resized_cb, view);
 
 	debug_leave();
 }
@@ -93,12 +93,12 @@ void viewer_ctxpopup_add_contact_cb(void *data, Evas_Object *obj, void *event_in
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	DELETE_EVAS_OBJECT(ug_data->con_popup);
+	DELETE_EVAS_OBJECT(view->con_popup);
 
-	ug_data->create_contact_arg = CONTACTUI_REQ_ADD_EMAIL;
-	recipient_add_to_contact_selection_popup(ug_data, ug_data->sender_address, EMAIL_SENDER_NAME);
+	view->create_contact_arg = CONTACTUI_REQ_ADD_EMAIL;
+	recipient_add_to_contact_selection_popup(view, view->sender_address, EMAIL_SENDER_NAME);
 	debug_leave();
 }
 
@@ -108,11 +108,11 @@ void viewer_ctxpopup_detail_contact_cb(void *data, Evas_Object *obj, void *event
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 	retm_if(_g_md == NULL, "Invalid parameter: _g_md[NULL]");
 
-	EmailViewerUGD *ug_data = _g_md;
+	EmailViewerView *view = _g_md;
 
-	DELETE_EVAS_OBJECT(ug_data->con_popup);
+	DELETE_EVAS_OBJECT(view->con_popup);
 	debug_secure("data(%s)", data);
-	viewer_view_contact_detail(ug_data, (intptr_t)data);
+	viewer_view_contact_detail(view, (intptr_t)data);
 	debug_leave();
 }
 
@@ -122,11 +122,11 @@ void viewer_ctxpopup_add_vip_rule_cb(void *data, Evas_Object *obj, void *event_i
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 	retm_if(_g_md == NULL, "Invalid parameter: _g_md[NULL]");
 
-	EmailViewerUGD *ug_data = _g_md;
+	EmailViewerView *view = _g_md;
 	char *addr = (char *)data;
 
 	debug_secure("VIP address: %s", addr);
-	DELETE_EVAS_OBJECT(ug_data->con_popup);
+	DELETE_EVAS_OBJECT(view->con_popup);
 
 	int ret_add = 0;
 	int ret_apply = 0;
@@ -166,17 +166,17 @@ void viewer_ctxpopup_add_vip_rule_cb(void *data, Evas_Object *obj, void *event_i
 		} else {
 			notification_status_message_post(_("IDS_EMAIL_TPOP_EMAIL_ADDRESS_ADDED_TO_PRIORITY_SENDERS"));
 
-			if (g_strcmp0(ug_data->sender_address, addr) == 0) {
-				if (ug_data->priority_sender_image) {
-					elm_object_part_content_unset(ug_data->sender_ly, "sender.priority.icon");
-					DELETE_EVAS_OBJECT(ug_data->priority_sender_image);
+			if (g_strcmp0(view->sender_address, addr) == 0) {
+				if (view->priority_sender_image) {
+					elm_object_part_content_unset(view->sender_ly, "sender.priority.icon");
+					DELETE_EVAS_OBJECT(view->priority_sender_image);
 				}
-				Evas_Object *priority_image = elm_layout_add(ug_data->sender_ly);
+				Evas_Object *priority_image = elm_layout_add(view->sender_ly);
 				elm_layout_file_set(priority_image, email_get_common_theme_path(), EMAIL_IMAGE_ICON_PRIO_SENDER);
-				elm_object_part_content_set(ug_data->sender_ly, "sender.priority.icon", priority_image);
-				elm_layout_signal_emit(ug_data->sender_ly, "set.priority.sender", "elm");
+				elm_object_part_content_set(view->sender_ly, "sender.priority.icon", priority_image);
+				elm_layout_signal_emit(view->sender_ly, "set.priority.sender", "elm");
 				evas_object_show(priority_image);
-				ug_data->priority_sender_image = priority_image;
+				view->priority_sender_image = priority_image;
 			}
 		}
 	}
@@ -189,11 +189,11 @@ void viewer_ctxpopup_remove_vip_rule_cb(void *data, Evas_Object *obj, void *even
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 	retm_if(_g_md == NULL, "Invalid parameter: _g_md[NULL]");
 
-	EmailViewerUGD *ug_data = _g_md;
+	EmailViewerView *view = _g_md;
 	char *addr = (char *)data;
 
 	debug_secure("VIP address: %s", addr);
-	DELETE_EVAS_OBJECT(ug_data->con_popup);
+	DELETE_EVAS_OBJECT(view->con_popup);
 
 	int count, i;
 	int ret = EMAIL_ERROR_NONE;
@@ -230,10 +230,10 @@ void viewer_ctxpopup_remove_vip_rule_cb(void *data, Evas_Object *obj, void *even
 		} else {
 			notification_status_message_post(_("IDS_EMAIL_TPOP_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"));
 
-			if (g_strcmp0(ug_data->sender_address, addr) == 0) {
-				elm_layout_signal_emit(ug_data->sender_ly, "remove.priority.sender", "elm");
-				elm_object_part_content_unset(ug_data->sender_ly, "sender.priority.icon");
-				DELETE_EVAS_OBJECT(ug_data->priority_sender_image);
+			if (g_strcmp0(view->sender_address, addr) == 0) {
+				elm_layout_signal_emit(view->sender_ly, "remove.priority.sender", "elm");
+				elm_object_part_content_unset(view->sender_ly, "sender.priority.icon");
+				DELETE_EVAS_OBJECT(view->priority_sender_image);
 			}
 		}
 	}
@@ -245,28 +245,28 @@ void viewer_ctxpopup_add_to_spambox_cb(void *data, Evas_Object *obj, void *event
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	DELETE_EVAS_OBJECT(ug_data->con_popup);
+	DELETE_EVAS_OBJECT(view->con_popup);
 
-	if (ug_data->viewer_type == EML_VIEWER) {
+	if (view->viewer_type == EML_VIEWER) {
 		debug_log("eml viewer. return here");
 		return;
 	}
 
-	debug_log("mailbox_id(%d), mailbox_type(%d)", ug_data->mailbox_id, ug_data->mailbox_type);
-	if (ug_data->mailbox_type == EMAIL_MAILBOX_TYPE_SPAMBOX) {
+	debug_log("mailbox_id(%d), mailbox_type(%d)", view->mailbox_id, view->mailbox_type);
+	if (view->mailbox_type == EMAIL_MAILBOX_TYPE_SPAMBOX) {
 		debug_log("original folder is already spambox.");
 	} else {
 		int ret = EMAIL_ERROR_NONE;
-		ret = viewer_move_email(ug_data, _find_folder_id_using_folder_type(ug_data, EMAIL_MAILBOX_TYPE_SPAMBOX), FALSE, TRUE);
+		ret = viewer_move_email(view, _find_folder_id_using_folder_type(view, EMAIL_MAILBOX_TYPE_SPAMBOX), FALSE, TRUE);
 
 		if (ret == 1) {
 			char str[EMAIL_VIEWER_STRING_LENGTH] = {0, };
 			snprintf(str, sizeof(str), email_get_email_string("IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_PS"), email_get_email_string("IDS_EMAIL_HEADER_SPAMBOX"));
 			notification_status_message_post(str);
 			debug_log("email_module_make_destroy_request");
-			email_module_make_destroy_request(ug_data->base.module);
+			email_module_make_destroy_request(view->base.module);
 		} else {
 			notification_status_message_post(_("IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"));
 			debug_log("move failed. ret[%d]", ret);
@@ -280,27 +280,27 @@ void viewer_ctxpopup_remove_from_spambox_cb(void *data, Evas_Object *obj, void *
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	DELETE_EVAS_OBJECT(ug_data->con_popup);
+	DELETE_EVAS_OBJECT(view->con_popup);
 
-	if (ug_data->viewer_type == EML_VIEWER) {
+	if (view->viewer_type == EML_VIEWER) {
 		debug_log("eml viewer. return here");
 		return;
 	}
 
-	if (ug_data->mailbox_type != EMAIL_MAILBOX_TYPE_SPAMBOX) {
+	if (view->mailbox_type != EMAIL_MAILBOX_TYPE_SPAMBOX) {
 		debug_log("original folder is already spambox.");
 	} else {
 		int ret = EMAIL_ERROR_NONE;
-		ret = viewer_move_email(ug_data, _find_folder_id_using_folder_type(ug_data, EMAIL_MAILBOX_TYPE_INBOX), FALSE, TRUE);
+		ret = viewer_move_email(view, _find_folder_id_using_folder_type(view, EMAIL_MAILBOX_TYPE_INBOX), FALSE, TRUE);
 
 		if (ret == 1) {
 			char str[EMAIL_VIEWER_STRING_LENGTH] = {0, };
 			snprintf(str, sizeof(str), email_get_email_string("IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_PS"), email_get_email_string("IDS_EMAIL_HEADER_INBOX"));
 			notification_status_message_post(str);
 			debug_log("email_module_make_destroy_request");
-			email_module_make_destroy_request(ug_data->base.module);
+			email_module_make_destroy_request(view->base.module);
 		} else {
 			notification_status_message_post(_("IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"));
 			debug_log("move failed. ret[%d]", ret);
@@ -314,8 +314,8 @@ void viewer_more_ctxpopup_dismissed_cb(void *data, Evas_Object *obj, void *event
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
-	DELETE_EVAS_OBJECT(ug_data->con_popup);
+	EmailViewerView *view = (EmailViewerView *)data;
+	DELETE_EVAS_OBJECT(view->con_popup);
 
 	debug_leave();
 }
@@ -325,14 +325,14 @@ void viewer_mark_as_unread_cb(void *data, Evas_Object *obj, void *event_info)
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	DELETE_EVAS_OBJECT(ug_data->con_popup);
+	DELETE_EVAS_OBJECT(view->con_popup);
 
 	int err = 0;
-	debug_log("ug_data->mail_id(%d), mail_info->mail_id(%d)", ug_data->mail_id, ug_data->mail_info->mail_id);
+	debug_log("view->mail_id(%d), mail_info->mail_id(%d)", view->mail_id, view->mail_info->mail_id);
 
-	err = email_set_flags_field(ug_data->account_id, &ug_data->mail_id, 1, EMAIL_FLAGS_SEEN_FIELD, 0, 1);
+	err = email_set_flags_field(view->account_id, &view->mail_id, 1, EMAIL_FLAGS_SEEN_FIELD, 0, 1);
 	debug_log("email_set_flags_field - err(%d)", err);
 
 	if (err != EMAIL_ERROR_NONE) {
@@ -340,7 +340,7 @@ void viewer_mark_as_unread_cb(void *data, Evas_Object *obj, void *event_info)
 	} else {
 		notification_status_message_post(_("IDS_EMAIL_TPOP_EMAIL_MARKED_AS_UNREAD"));
 		debug_log("email_module_make_destroy_request");
-		email_module_make_destroy_request(ug_data->base.module);
+		email_module_make_destroy_request(view->base.module);
 	}
 	debug_leave();
 }
@@ -350,19 +350,19 @@ void viewer_edit_email_cb(void *data, Evas_Object *obj, void *event_info)
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	DELETE_EVAS_OBJECT(ug_data->con_popup);
+	DELETE_EVAS_OBJECT(view->con_popup);
 
 	email_params_h params = NULL;
 
 	if (email_params_create(&params) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_RUN_TYPE, RUN_COMPOSER_EDIT) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, ug_data->account_id) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, ug_data->mailbox_id) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAIL_ID, ug_data->mail_id)) {
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, view->account_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, view->mailbox_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAIL_ID, view->mail_id)) {
 
-		ug_data->loaded_module = viewer_create_module(ug_data, EMAIL_MODULE_COMPOSER, params, true);
+		view->loaded_module = viewer_create_module(view, EMAIL_MODULE_COMPOSER, params, true);
 	}
 
 	email_params_free(&params);
@@ -375,25 +375,25 @@ void viewer_edit_scheduled_email_cb(void *data, Evas_Object *obj, void *event_in
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	debug_log("ug_data->mail_id:%d", ug_data->mail_id);
+	debug_log("view->mail_id:%d", view->mail_id);
 
-	int err = email_cancel_sending_mail(ug_data->mail_id);
+	int err = email_cancel_sending_mail(view->mail_id);
 	if (err != EMAIL_ERROR_NONE)
 		debug_warning("email_cancel_sending_mail failed - err(%d)", err);
 
-	DELETE_EVAS_OBJECT(ug_data->con_popup);
+	DELETE_EVAS_OBJECT(view->con_popup);
 
 	email_params_h params = NULL;
 
 	if (email_params_create(&params) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_RUN_TYPE, RUN_COMPOSER_EDIT) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, ug_data->account_id) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, ug_data->mailbox_id) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAIL_ID, ug_data->mail_id)) {
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, view->account_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, view->mailbox_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAIL_ID, view->mail_id)) {
 
-		ug_data->loaded_module = viewer_create_scheduled_composer_module(ug_data, params);
+		view->loaded_module = viewer_create_scheduled_composer_module(view, params);
 	}
 
 	email_params_free(&params);
@@ -406,17 +406,17 @@ void viewer_cancel_send_cb(void *data, Evas_Object *obj, void *event_info)
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
-	DELETE_EVAS_OBJECT(ug_data->con_popup);
+	EmailViewerView *view = (EmailViewerView *)data;
+	DELETE_EVAS_OBJECT(view->con_popup);
 
-	debug_log("ug_data->account_id(%d), mail_info->account_id(%d)", ug_data->account_id, ug_data->mail_info->account_id);
-	debug_log("ug_data->mail_id(%d), mail_info->mail_id(%d)", ug_data->mail_id, ug_data->mail_info->mail_id);
+	debug_log("view->account_id(%d), mail_info->account_id(%d)", view->account_id, view->mail_info->account_id);
+	debug_log("view->mail_id(%d), mail_info->mail_id(%d)", view->mail_id, view->mail_info->mail_id);
 
-	int err = email_cancel_sending_mail(ug_data->mail_id);
+	int err = email_cancel_sending_mail(view->mail_id);
 	if (err != EMAIL_ERROR_NONE) {
 		debug_warning("email_cancel_sending_mail failed - err(%d)", err);
 	}
-	ug_data->is_cancel_sending_btn_clicked = EINA_TRUE;
+	view->is_cancel_sending_btn_clicked = EINA_TRUE;
 
 	debug_leave();
 }
@@ -426,27 +426,27 @@ void viewer_resend_cb(void *data, Evas_Object *obj, void *event_info)
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
-	DELETE_EVAS_OBJECT(ug_data->con_popup);
+	EmailViewerView *view = (EmailViewerView *)data;
+	DELETE_EVAS_OBJECT(view->con_popup);
 	int err = 0;
 
 	/* Send email again */
-	debug_log("ug_data->account_id(%d), mail_info->account_id(%d)", ug_data->account_id, ug_data->mail_info->account_id);
-	debug_log("ug_data->mail_id(%d), mail_info->mail_id(%d)", ug_data->mail_id, ug_data->mail_info->mail_id);
+	debug_log("view->account_id(%d), mail_info->account_id(%d)", view->account_id, view->mail_info->account_id);
+	debug_log("view->mail_id(%d), mail_info->mail_id(%d)", view->mail_id, view->mail_info->mail_id);
 
 	email_account_t *account = NULL;
-	err = email_get_account(ug_data->account_id, EMAIL_ACC_GET_OPT_DEFAULT, &account);
+	err = email_get_account(view->account_id, EMAIL_ACC_GET_OPT_DEFAULT, &account);
 	if (err == EMAIL_ERROR_NONE && account) {
 		email_mail_attribute_value_t mail_attr;
 
 		mail_attr.integer_type_value = (account->auto_resend_times == EMAIL_NO_LIMITED_RETRY_COUNT) ? 10 : account->auto_resend_times;
-		err = email_update_mail_attribute(ug_data->account_id, &ug_data->mail_id, 1, EMAIL_MAIL_ATTRIBUTE_REMAINING_RESEND_TIMES, mail_attr);
-		debug_log("mail_id(%d) resend tme(%d)", ug_data->mail_id, mail_attr.integer_type_value);
+		err = email_update_mail_attribute(view->account_id, &view->mail_id, 1, EMAIL_MAIL_ATTRIBUTE_REMAINING_RESEND_TIMES, mail_attr);
+		debug_log("mail_id(%d) resend tme(%d)", view->mail_id, mail_attr.integer_type_value);
 		if (err != EMAIL_ERROR_NONE) {
-			debug_warning("email_update_mail_attribute failed! - err(%d) mail_id(%d) resend tme(%d)", err, ug_data->mail_id, mail_attr.integer_type_value);
+			debug_warning("email_update_mail_attribute failed! - err(%d) mail_id(%d) resend tme(%d)", err, view->mail_id, mail_attr.integer_type_value);
 		}
 	} else {
-		debug_warning("email_get_account failed! account_id(%d) - err(%d) or account NULL", ug_data->account_id, err);
+		debug_warning("email_get_account failed! account_id(%d) - err(%d) or account NULL", view->account_id, err);
 	}
 
 	if (account) {
@@ -455,7 +455,7 @@ void viewer_resend_cb(void *data, Evas_Object *obj, void *event_info)
 	}
 
 	int handle = 0;
-	err = email_send_mail(ug_data->mail_id, &handle);
+	err = email_send_mail(view->mail_id, &handle);
 	debug_log("sending handle(%d)", handle);
 	if (err != EMAIL_ERROR_NONE) {
 		debug_warning("email_send_mail failed - err(%d)", err);

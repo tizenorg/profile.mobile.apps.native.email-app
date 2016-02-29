@@ -15,10 +15,6 @@
  *
  */
 
-#ifndef UG_MODULE_API
-#define UG_MODULE_API __attribute__ ((visibility("default")))
-#endif
-
 /* Header Include */
 #include <utils_i18n.h>
 #include <malloc.h>
@@ -49,7 +45,7 @@
 
 
 /* Global Val */
-EmailViewerUGD *_g_md = NULL; /* TODO Need more investigation why we need this global variable. */
+EmailViewerView *_g_md = NULL; /* TODO Need more investigation why we need this global variable. */
 
 static email_string_t EMAIL_VIEWER_POPUP_DOWNLOADING = { PACKAGE, "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB" };
 static email_string_t EMAIL_VIEWER_STRING_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
@@ -81,26 +77,26 @@ static void _viewer_update(email_view_t *self, int flags);
 static void _viewer_on_back_key(email_view_t *self);
 
 /* viewer theme */
-static void _viewer_initialize_theme(EmailViewerUGD *ug_data);
-static void _viewer_deinitialize_theme(EmailViewerUGD *ug_data);
+static void _viewer_initialize_theme(EmailViewerView *view);
+static void _viewer_deinitialize_theme(EmailViewerView *view);
 
 /*event update functions*/
-static void _viewer_update_on_orientation_change(EmailViewerUGD *ug_data, bool isLandscape);
-static void _viewer_update_on_region_change(EmailViewerUGD *ug_data);
-static void _viewer_update_on_language_change(EmailViewerUGD *ug_data);
+static void _viewer_update_on_orientation_change(EmailViewerView *view, bool isLandscape);
+static void _viewer_update_on_region_change(EmailViewerView *view);
+static void _viewer_update_on_language_change(EmailViewerView *view);
 
-static void __viewer_add_main_callbacks(EmailViewerUGD *ug_data, void *data);
-static void _viewer_add_main_callbacks(EmailViewerUGD *ug_data);
+static void __viewer_add_main_callbacks(EmailViewerView *view, void *data);
+static void _viewer_add_main_callbacks(EmailViewerView *view);
 static void _viewer_update_data_on_start(void *data);
 
 /* View related */
-static VIEWER_ERROR_TYPE_E _viewer_create_base_view(EmailViewerUGD *ug_data);
-static void _viewer_get_window_sizes(EmailViewerUGD *ug_data);
+static VIEWER_ERROR_TYPE_E _viewer_create_base_view(EmailViewerView *view);
+static void _viewer_get_window_sizes(EmailViewerView *view);
 static void _create_webview_layout(void *data);
 
 static void _timezone_changed_cb(system_settings_key_e key, void *data);
 
-static void _viewer_set_webview_size(EmailViewerUGD *ug_data, int height);
+static void _viewer_set_webview_size(EmailViewerView *view, int height);
 
 /* callback functions */
 static void _more_cb(void *data, Evas_Object *obj, void *event_info);
@@ -118,8 +114,8 @@ static void _outter_scroller_top_hit_cb(void *data, Evas_Object *obj, void *even
 
 static Eina_Bool _viewer_launch_email_application_cb(void *data);
 
-static int _construct_viewer_data(EmailViewerUGD *ug_data);
-static void _destroy_viewer(EmailViewerUGD *ug_data);
+static int _construct_viewer_data(EmailViewerView *view);
+static void _destroy_viewer(EmailViewerView *view);
 
 #ifdef SHARED_MODULES_FEATURE
 EMAIL_API email_module_t *email_module_alloc()
@@ -129,115 +125,115 @@ email_module_t *viewer_module_alloc()
 {
 	debug_enter();
 
-	EmailViewerModule *md = MEM_ALLOC(md, 1);
-	if (!md) {
-		debug_error("md is NULL");
+	EmailViewerModule *module = MEM_ALLOC(module, 1);
+	if (!module) {
+		debug_error("module is NULL");
 		return NULL;
 	}
 
-	_g_md = &md->view;
+	_g_md = &module->view;
 
-	md->base.create = _viewer_module_create;
-	md->base.on_message = _viewer_module_on_message;
-	md->base.on_event = _viewer_module_on_event;
+	module->base.create = _viewer_module_create;
+	module->base.on_message = _viewer_module_on_message;
+	module->base.on_event = _viewer_module_on_event;
 
-	return &md->base;
+	return &module->base;
 }
 
-static void _viewer_set_webview_size(EmailViewerUGD *ug_data, int height)
+static void _viewer_set_webview_size(EmailViewerView *view, int height)
 {
 	debug_enter();
 
-	retm_if(ug_data->loaded_module, "Viewer module in background");
+	retm_if(view->loaded_module, "Viewer module in background");
 	int min_height = 0, max_height = 0;
 
 	int win_h = 0, win_w = 0;
-	elm_win_screen_size_get(ug_data->base.module->win, NULL, NULL, &win_w, &win_h);
+	elm_win_screen_size_get(view->base.module->win, NULL, NULL, &win_w, &win_h);
 	debug_log("==> main layout [w, h] = [%d, %d]", win_w, win_h);
-	debug_log("ug_data->header_height : %d", ug_data->header_height);
+	debug_log("view->header_height : %d", view->header_height);
 
-	if (ug_data->isLandscape) {
-		min_height = win_w - ug_data->header_height;
+	if (view->isLandscape) {
+		min_height = win_w - view->header_height;
 		max_height = win_w;
-		ug_data->webview_width = win_h;
+		view->webview_width = win_h;
 	} else {
-		min_height = win_h - ug_data->header_height;
+		min_height = win_h - view->header_height;
 		max_height = win_h;
-		ug_data->webview_width = win_w;
+		view->webview_width = win_w;
 	}
 
 	if (height <= min_height) {
 		debug_log("min");
-		ug_data->webview_height = min_height;
+		view->webview_height = min_height;
 	} else {
 		debug_log("max");
-		ug_data->webview_height = max_height;
+		view->webview_height = max_height;
 	}
 
 	debug_log("min_height: %d height :%d max_height :%d ", min_height, height, max_height);
-	debug_log("ug_data->webview_height: %d", ug_data->webview_height);
+	debug_log("view->webview_height: %d", view->webview_height);
 
 	debug_leave();
 }
 
-void viewer_resize_webview(EmailViewerUGD *ug_data, int height)
+void viewer_resize_webview(EmailViewerView *view, int height)
 {
 	debug_enter();
-	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
-	_viewer_set_webview_size(ug_data, height);
+	retm_if(view == NULL, "Invalid parameter: view[NULL]");
+	_viewer_set_webview_size(view, height);
 
-	evas_object_size_hint_min_set(ug_data->webview, ug_data->webview_width, ug_data->webview_height);
-	evas_object_size_hint_max_set(ug_data->webview, ug_data->webview_width, ug_data->webview_height);
+	evas_object_size_hint_min_set(view->webview, view->webview_width, view->webview_height);
+	evas_object_size_hint_max_set(view->webview, view->webview_width, view->webview_height);
 }
 
-void viewer_back_key_press_handler(EmailViewerUGD *ug_data)
+void viewer_back_key_press_handler(EmailViewerView *view)
 {
 	debug_enter();
 
-	if (ug_data->b_load_finished == EINA_FALSE) {
+	if (view->b_load_finished == EINA_FALSE) {
 		debug_log("b_load_finished is not yet done");
 		return;
 	}
 
-	if (ug_data->webview) {
-		if (ewk_view_text_selection_clear(ug_data->webview)) {
+	if (view->webview) {
+		if (ewk_view_text_selection_clear(view->webview)) {
 			debug_log("ewk_view_text_selection_clear() failed");
 			return;
 		}
 	}
-	debug_log("ug_destroy_me");
-	ug_data->need_pending_destroy = EINA_TRUE;
-	evas_object_smart_callback_del(ug_data->more_btn, "clicked", _more_cb);
-	email_module_make_destroy_request(ug_data->base.module);
+	debug_log("email_module_make_destroy_request");
+	view->need_pending_destroy = EINA_TRUE;
+	evas_object_smart_callback_del(view->more_btn, "clicked", _more_cb);
+	email_module_make_destroy_request(view->base.module);
 	debug_leave();
 }
 
-static void __viewer_add_main_callbacks(EmailViewerUGD *ug_data, void *data)
+static void __viewer_add_main_callbacks(EmailViewerView *view, void *data)
 {
 	debug_enter();
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
-	retm_if(!ug_data, "Invalid parameter: ug_data is NULL!");
+	retm_if(!view, "Invalid parameter: view is NULL!");
 
 	/* indicator */
-	elm_win_indicator_mode_set(ug_data->base.module->win, ELM_WIN_INDICATOR_SHOW);
-	elm_win_indicator_opacity_set(ug_data->base.module->win, ELM_WIN_INDICATOR_OPAQUE);
+	elm_win_indicator_mode_set(view->base.module->win, ELM_WIN_INDICATOR_SHOW);
+	elm_win_indicator_opacity_set(view->base.module->win, ELM_WIN_INDICATOR_OPAQUE);
 
 	viewer_open_pattern_generator();
 	if (email_register_timezone_changed_callback(_timezone_changed_cb, data) == -1) {
 		debug_log("Failed to register system settings callback for time changed");
-		ug_data->eViewerErrorType = VIEWER_ERROR_FAIL;
+		view->eViewerErrorType = VIEWER_ERROR_FAIL;
 	}
 
 	debug_leave();
 }
 
-static void _viewer_add_main_callbacks(EmailViewerUGD *ug_data)
+static void _viewer_add_main_callbacks(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
+	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
-	__viewer_add_main_callbacks(ug_data, (void *)ug_data);
+	__viewer_add_main_callbacks(view, (void *)view);
 
 	debug_leave();
 }
@@ -273,31 +269,31 @@ int _viewer_module_create(email_module_t *self, email_params_h params)
 	debug_enter();
 	retvm_if(!self, -1, "Invalid parameter: self is NULL!");
 
-	EmailViewerModule *md = (EmailViewerModule *)self;
-	EmailViewerUGD *ug_data = &md->view;
+	EmailViewerModule *module = (EmailViewerModule *)self;
+	EmailViewerView *view = &module->view;
 
-	viewer_initialize_data(ug_data);
+	viewer_initialize_data(view);
 
 	if (!params) {
 		debug_log("params handle is NULL");
-		ug_data->eViewerErrorType = VIEWER_ERROR_INVALID_ARG;
+		view->eViewerErrorType = VIEWER_ERROR_INVALID_ARG;
 	}
 
-	int ret = viewer_initial_data_pre_parse_arguments(ug_data, params);
+	int ret = viewer_initial_data_pre_parse_arguments(view, params);
 	if (ret != VIEWER_ERROR_NONE) {
 		debug_log("viewer_initial_data_pre_parse_arguments() failed! (error type: %d)", ret);
-		ug_data->eViewerErrorType = ret;
+		view->eViewerErrorType = ret;
 	}
 
-	ug_data->base.create = _viewer_create;
-	ug_data->base.destroy = _viewer_destroy;
-	ug_data->base.activate = _viewer_activate;
-	ug_data->base.show = _viewer_show;
-	ug_data->base.hide = _viewer_hide;
-	ug_data->base.update = _viewer_update;
-	ug_data->base.on_back_key = _viewer_on_back_key;
+	view->base.create = _viewer_create;
+	view->base.destroy = _viewer_destroy;
+	view->base.activate = _viewer_activate;
+	view->base.show = _viewer_show;
+	view->base.hide = _viewer_hide;
+	view->base.update = _viewer_update;
+	view->base.on_back_key = _viewer_on_back_key;
 
-	ret = email_module_create_view(&md->base, &ug_data->base);
+	ret = email_module_create_view(&module->base, &view->base);
 	if (ret != 0) {
 		debug_error("email_module_create_view(): failed (%d)", ret);
 		return -1;
@@ -312,45 +308,45 @@ int _viewer_create(email_view_t *self)
 	debug_enter();
 	retvm_if(!self, -1, "Invalid parameter: self is NULL!");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)self;
+	EmailViewerView *view = (EmailViewerView *)self;
 
-	int ret = _construct_viewer_data(ug_data);
+	int ret = _construct_viewer_data(view);
 	if (ret != VIEWER_ERROR_NONE) {
 		debug_log("_construct_viewer_data() failed! (error type: %d)", ret);
-		ug_data->eViewerErrorType = ret;
+		view->eViewerErrorType = ret;
 	}
 
-	ret = _initialize_services(ug_data);
+	ret = _initialize_services(view);
 	if (ret != VIEWER_ERROR_NONE) {
-		ug_data->eViewerErrorType = ret;
+		view->eViewerErrorType = ret;
 	}
 
-	ug_data->create_contact_arg = CONTACTUI_REQ_ADD_EMAIL;
-	_viewer_initialize_theme(ug_data);
-	_viewer_create_base_view(ug_data);
-	_create_webview_layout(ug_data);
-	viewer_get_webview(ug_data);
-	header_create_view(ug_data);
-	header_update_view(ug_data);
+	view->create_contact_arg = CONTACTUI_REQ_ADD_EMAIL;
+	_viewer_initialize_theme(view);
+	_viewer_create_base_view(view);
+	_create_webview_layout(view);
+	viewer_get_webview(view);
+	header_create_view(view);
+	header_update_view(view);
 
-	create_body_progress(ug_data);
-	ug_data->b_viewer_hided = FALSE;
-	_viewer_add_main_callbacks(ug_data);
+	create_body_progress(view);
+	view->b_viewer_hided = FALSE;
+	_viewer_add_main_callbacks(view);
 
 	debug_leave();
 	return 0;
 }
 
-static VIEWER_ERROR_TYPE_E _viewer_process_error_popup(EmailViewerUGD *ug_data)
+static VIEWER_ERROR_TYPE_E _viewer_process_error_popup(EmailViewerView *view)
 {
 	debug_enter();
 
-	debug_log("eViewerErrorType:%d", ug_data->eViewerErrorType);
-	if (ug_data->eViewerErrorType != VIEWER_ERROR_NONE) {
-		switch (ug_data->eViewerErrorType) {
+	debug_log("eViewerErrorType:%d", view->eViewerErrorType);
+	if (view->eViewerErrorType != VIEWER_ERROR_NONE) {
+		switch (view->eViewerErrorType) {
 		case VIEWER_ERROR_NOT_ALLOWED:
 			debug_warning("Lauching viewer failed! VIEWER_ERROR_NOT_ALLOWED");
-			util_create_notify(ug_data, EMAIL_VIEWER_HEADER_UNAVAILABLE,
+			util_create_notify(view, EMAIL_VIEWER_HEADER_UNAVAILABLE,
 					EMAIL_VIEWER_POP_SECURITY_POLICY_RESTRICTS_USE_OF_POP_IMAP_EMAIL, 1,
 					EMAIL_VIEWER_STRING_OK, _popup_response_to_destroy_cb, EMAIL_VIEWER_STRING_NULL, NULL, NULL);
 			break;
@@ -358,17 +354,17 @@ static VIEWER_ERROR_TYPE_E _viewer_process_error_popup(EmailViewerUGD *ug_data)
 		case VIEWER_ERROR_NO_DEFAULT_ACCOUNT:
 		case VIEWER_ERROR_NO_ACCOUNT_LIST:
 		case VIEWER_ERROR_NO_ACCOUNT:
-			debug_warning("Lauching viewer failed! Failed to get account! [%d]", ug_data->eViewerErrorType);
-			util_create_notify(ug_data, EMAIL_VIEWER_HEADER_UNABLE_TO_PERFORM_ACTION,
+			debug_warning("Lauching viewer failed! Failed to get account! [%d]", view->eViewerErrorType);
+			util_create_notify(view, EMAIL_VIEWER_HEADER_UNABLE_TO_PERFORM_ACTION,
 					EMAIL_VIEWER_POP_THERE_IS_NO_ACCOUNT_CREATE_A_NEW_ACCOUNT_FIRST, 0,
 					EMAIL_VIEWER_STRING_NULL, NULL, EMAIL_VIEWER_STRING_NULL, NULL, NULL);
-			DELETE_TIMER_OBJECT(ug_data->launch_timer);
-			ug_data->launch_timer = ecore_timer_add(2.0f, _viewer_launch_email_application_cb, ug_data);
+			DELETE_TIMER_OBJECT(view->launch_timer);
+			view->launch_timer = ecore_timer_add(2.0f, _viewer_launch_email_application_cb, view);
 			break;
 
 		case VIEWER_ERROR_GET_DATA_FAIL:
 			debug_warning("Lauching viewer failed! VIEWER_ERROR_GET_DATA_FAIL");
-			util_create_notify(ug_data, EMAIL_VIEWER_HEADER_UNABLE_TO_PERFORM_ACTION,
+			util_create_notify(view, EMAIL_VIEWER_HEADER_UNABLE_TO_PERFORM_ACTION,
 						EMAIL_VIEWER_BODY_SELECTED_DATA_NOT_FOUND, 1,
 						EMAIL_VIEWER_STRING_OK, _popup_response_to_destroy_cb, EMAIL_VIEWER_STRING_NULL, NULL, NULL);
 			break;
@@ -376,8 +372,8 @@ static VIEWER_ERROR_TYPE_E _viewer_process_error_popup(EmailViewerUGD *ug_data)
 		case VIEWER_ERROR_FAIL:
 		case VIEWER_ERROR_UNKOWN_TYPE:
 		case VIEWER_ERROR_INVALID_ARG:
-			debug_warning("Lauching viewer failed! Due to [%d]", ug_data->eViewerErrorType);
-			util_create_notify(ug_data, EMAIL_VIEWER_HEADER_UNABLE_TO_PERFORM_ACTION,
+			debug_warning("Lauching viewer failed! Due to [%d]", view->eViewerErrorType);
+			util_create_notify(view, EMAIL_VIEWER_HEADER_UNABLE_TO_PERFORM_ACTION,
 						EMAIL_VIEWER_UNKNOWN_ERROR_HAS_OCCURED, 1,
 						EMAIL_VIEWER_STRING_OK, _popup_response_to_destroy_cb, EMAIL_VIEWER_STRING_NULL, NULL, NULL);
 
@@ -387,8 +383,8 @@ static VIEWER_ERROR_TYPE_E _viewer_process_error_popup(EmailViewerUGD *ug_data)
 		case VIEWER_ERROR_DBUS_FAIL:
 		case VIEWER_ERROR_SERVICE_INIT_FAIL:
 		case VIEWER_ERROR_OUT_OF_MEMORY:
-			debug_warning("Lauching viewer failed! Due to [%d]", ug_data->eViewerErrorType);
-			util_create_notify(ug_data, EMAIL_VIEWER_HEADER_UNABLE_TO_PERFORM_ACTION,
+			debug_warning("Lauching viewer failed! Due to [%d]", view->eViewerErrorType);
+			util_create_notify(view, EMAIL_VIEWER_HEADER_UNABLE_TO_PERFORM_ACTION,
 						EMAIL_VIEWER_POP_FAILED_TO_START_EMAIL_APPLICATION, 1,
 						EMAIL_VIEWER_STRING_OK, _popup_response_to_destroy_cb, EMAIL_VIEWER_STRING_NULL, NULL, NULL);
 			break;
@@ -397,7 +393,7 @@ static VIEWER_ERROR_TYPE_E _viewer_process_error_popup(EmailViewerUGD *ug_data)
 			debug_warning("Lauching viewer failed! VIEWER_ERROR_STORAGE_FULL");
 			email_string_t content = { PACKAGE, "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE_GO_TO_SETTINGS_POWER_AND_STORAGE_STORAGE_THEN_DELETE_SOME_FILES_AND_TRY_AGAIN" };
 			email_string_t btn2 = { PACKAGE, "IDS_EMAIL_BUTTON_SETTINGS" };
-			util_create_notify(ug_data, EMAIL_VIEWER_HEADER_UNABLE_TO_PERFORM_ACTION, content, 2,
+			util_create_notify(view, EMAIL_VIEWER_HEADER_UNABLE_TO_PERFORM_ACTION, content, 2,
 						EMAIL_VIEWER_STRING_OK, _popup_response_to_destroy_cb,
 						btn2, viewer_storage_full_popup_response_cb, NULL);
 			break;
@@ -407,7 +403,7 @@ static VIEWER_ERROR_TYPE_E _viewer_process_error_popup(EmailViewerUGD *ug_data)
 		}
 
 		debug_leave();
-		return ug_data->eViewerErrorType;
+		return view->eViewerErrorType;
 	}
 
 	debug_leave();
@@ -419,17 +415,17 @@ void _viewer_activate(email_view_t *self, email_view_state prev_state)
 	debug_enter();
 	retm_if(!self, "Invalid parameter: self is NULL!");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)self;
+	EmailViewerView *view = (EmailViewerView *)self;
 
 	if (prev_state != EV_STATE_CREATED) {
 		return;
 	}
 
-	VIEWER_ERROR_TYPE_E error = _viewer_process_error_popup(ug_data);
+	VIEWER_ERROR_TYPE_E error = _viewer_process_error_popup(view);
 	if (error != VIEWER_ERROR_NONE) {
 		return;
 	}
-	_viewer_update_data_on_start(ug_data);
+	_viewer_update_data_on_start(view);
 
 	debug_leave();
 }
@@ -439,9 +435,9 @@ static void _viewer_update_data_on_start(void *data)
 	debug_enter();
 
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	viewer_check_body_download(ug_data);
+	viewer_check_body_download(view);
 
 	debug_leave();
 }
@@ -451,10 +447,10 @@ void _viewer_hide(email_view_t *self)
 	debug_enter();
 	retm_if(self == NULL, "Invalid parameter: self is NULL!");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)self;
+	EmailViewerView *view = (EmailViewerView *)self;
 
-	viewer_hide_webview(ug_data);
-	elm_object_focus_allow_set(ug_data->en_subject, EINA_FALSE);
+	viewer_hide_webview(view);
+	elm_object_focus_allow_set(view->en_subject, EINA_FALSE);
 
 	debug_leave();
 }
@@ -464,10 +460,10 @@ void _viewer_show(email_view_t *self)
 	debug_enter();
 	retm_if(!self, "Invalid parameter: self is NULL!");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)self;
+	EmailViewerView *view = (EmailViewerView *)self;
 
-	viewer_show_webview(ug_data);
-	elm_object_focus_allow_set(ug_data->en_subject, EINA_TRUE);
+	viewer_show_webview(view);
+	elm_object_focus_allow_set(view->en_subject, EINA_TRUE);
 
 	debug_leave();
 }
@@ -477,9 +473,9 @@ void _viewer_destroy(email_view_t *self)
 	debug_enter();
 	retm_if(!self, "Invalid parameter: self is NULL!");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)self;
+	EmailViewerView *view = (EmailViewerView *)self;
 
-	_destroy_viewer(ug_data);
+	_destroy_viewer(view);
 
 	debug_leave();
 }
@@ -489,21 +485,21 @@ void _viewer_module_on_message(email_module_t *self, email_params_h msg)
 	debug_enter();
 	retm_if(!self, "Invalid parameter: self is NULL!");
 
-	EmailViewerModule *md = (EmailViewerModule *)self;
-	EmailViewerUGD *ug_data = &md->view;
+	EmailViewerModule *module = (EmailViewerModule *)self;
+	EmailViewerView *view = &module->view;
 
 	bool wait_for_composer = false;
 
 	const char *msg_type = NULL;
 	email_params_get_str_opt(msg, EMAIL_BUNDLE_KEY_MSG, &msg_type);
 
-	if (ug_data->loaded_module && ug_data->is_composer_module_launched) {
+	if (view->loaded_module && view->is_composer_module_launched) {
 		email_params_h params = NULL;
 
 		if (email_params_create(&params) &&
 			email_params_add_str(params, EMAIL_BUNDLE_KEY_MSG, EMAIL_BUNDLE_VAL_EMAIL_COMPOSER_SAVE_DRAFT)) {
 
-			email_module_send_message(ug_data->loaded_module, params);
+			email_module_send_message(view->loaded_module, params);
 		}
 
 		email_params_free(&params);
@@ -513,68 +509,68 @@ void _viewer_module_on_message(email_module_t *self, email_params_h msg)
 	if (g_strcmp0(msg_type, EMAIL_BUNDLE_VAL_VIEWER_DESTROY_VIEW) == 0) {
 		debug_log("Email viewer need to be closed");
 		if (wait_for_composer) {
-			ug_data->need_pending_destroy = EINA_TRUE;
+			view->need_pending_destroy = EINA_TRUE;
 		} else {
-			email_module_make_destroy_request(ug_data->base.module);
+			email_module_make_destroy_request(view->base.module);
 		}
 		return;
 	}
 
-	if (ug_data->loaded_module && !ug_data->is_composer_module_launched) {
-		email_module_destroy(ug_data->loaded_module);
-		ug_data->loaded_module = NULL;
+	if (view->loaded_module && !view->is_composer_module_launched) {
+		email_module_destroy(view->loaded_module);
+		view->loaded_module = NULL;
 	}
 
 	if (g_strcmp0(msg_type, EMAIL_BUNDLE_VAL_VIEWER_RESTORE_VIEW) == 0) {
 		debug_log("Restore Email viewer");
-		_reset_view(ug_data, EINA_TRUE);
+		_reset_view(view, EINA_TRUE);
 		return;
 	}
 
 	debug_log("Hide previous mail data");
-	_hide_view(ug_data);
+	_hide_view(view);
 
-	_g_md = ug_data;
+	_g_md = view;
 
-	int ret = viewer_initial_data_pre_parse_arguments(ug_data, msg);
+	int ret = viewer_initial_data_pre_parse_arguments(view, msg);
 	if (ret != VIEWER_ERROR_NONE) {
 		debug_log("viewer_initial_data_pre_parse_arguments() failed! (error type: %d)", ret);
-		ug_data->eViewerErrorType = ret;
+		view->eViewerErrorType = ret;
 	}
 
 	/* The viewer layout is not destroyed. Therefore, it runs with EINA_TRUE. */
-	ret = _construct_viewer_data(ug_data);
+	ret = _construct_viewer_data(view);
 	if (ret != VIEWER_ERROR_NONE) {
 		debug_log("_construct_viewer_data() failed! (error type: %d)", ret);
-		ug_data->eViewerErrorType = ret;
+		view->eViewerErrorType = ret;
 	}
 
-	if (noti_mgr_dbus_receiver_setup(ug_data) == EINA_FALSE) {
+	if (noti_mgr_dbus_receiver_setup(view) == EINA_FALSE) {
 		debug_log("Failed to initialize dbus");
-		ug_data->eViewerErrorType = VIEWER_ERROR_DBUS_FAIL;
+		view->eViewerErrorType = VIEWER_ERROR_DBUS_FAIL;
 	}
 
-	if (ug_data->webview != NULL) {
-		Ewk_Settings *ewk_settings = ewk_view_settings_get(ug_data->webview);
-		debug_log("b_show_remote_images is %d", ug_data->b_show_remote_images);
-		if (ewk_settings_loads_images_automatically_set(ewk_settings, ug_data->b_show_remote_images) == EINA_FALSE) { /* ewk_settings_load_remote_images_set for remote image */
+	if (view->webview != NULL) {
+		Ewk_Settings *ewk_settings = ewk_view_settings_get(view->webview);
+		debug_log("b_show_remote_images is %d", view->b_show_remote_images);
+		if (ewk_settings_loads_images_automatically_set(ewk_settings, view->b_show_remote_images) == EINA_FALSE) { /* ewk_settings_load_remote_images_set for remote image */
 			debug_log("SET show images is FAILED!");
 		}
 	}
 
-	edje_object_signal_emit(_EDJ(ug_data->base.content), "hide_button", "elm.event.btn");
+	edje_object_signal_emit(_EDJ(view->base.content), "hide_button", "elm.event.btn");
 
-	int angle = elm_win_rotation_get(ug_data->base.module->win);
-	ug_data->isLandscape = ((angle == APP_DEVICE_ORIENTATION_90) || (angle == APP_DEVICE_ORIENTATION_270)) ? true : false;
-	debug_log("isLandscapte : %d", ug_data->isLandscape);
+	int angle = elm_win_rotation_get(view->base.module->win);
+	view->isLandscape = ((angle == APP_DEVICE_ORIENTATION_90) || (angle == APP_DEVICE_ORIENTATION_270)) ? true : false;
+	debug_log("isLandscapte : %d", view->isLandscape);
 
-	_reset_view(ug_data, EINA_FALSE);
+	_reset_view(view, EINA_FALSE);
 
-	create_body_progress(ug_data);
+	create_body_progress(view);
 
-	ug_data->b_viewer_hided = FALSE;
+	view->b_viewer_hided = FALSE;
 
-	VIEWER_ERROR_TYPE_E error = _viewer_process_error_popup(ug_data);
+	VIEWER_ERROR_TYPE_E error = _viewer_process_error_popup(view);
 	if (error != VIEWER_ERROR_NONE) {
 		return;
 	}
@@ -587,18 +583,18 @@ static void _viewer_module_on_event(email_module_t *self, email_module_event_e e
 	debug_enter();
 	retm_if(!self, "Invalid parameter: self is NULL!");
 
-	EmailViewerModule *md = (EmailViewerModule *)self;
-	EmailViewerUGD *ug_data = &md->view;
+	EmailViewerModule *module = (EmailViewerModule *)self;
+	EmailViewerView *view = &module->view;
 	debug_log("event = %d", event);
 
 	switch (event) {
 	case EM_EVENT_LOW_MEMORY_SOFT:
 		debug_log("Low memory: %d", event);
-		viewer_webview_handle_mem_warning(ug_data, false);
+		viewer_webview_handle_mem_warning(view, false);
 		break;
 	case EM_EVENT_LOW_MEMORY_HARD:
 		debug_log("Low memory: %d", event);
-		viewer_webview_handle_mem_warning(ug_data, true);
+		viewer_webview_handle_mem_warning(view, true);
 		break;
 
 	default:
@@ -614,59 +610,59 @@ static void _viewer_update(email_view_t *self, int flags)
 	debug_enter();
 	retm_if(!self, "Invalid parameter: self is NULL!");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)self;
+	EmailViewerView *view = (EmailViewerView *)self;
 	debug_log("flags = %d", flags);
 
 	if (flags & EVUF_LANGUAGE_CHANGED) {
-		_viewer_update_on_language_change(ug_data);
+		_viewer_update_on_language_change(view);
 	}
 
 	if (flags & EVUF_ORIENTATION_CHANGED) {
-		switch (ug_data->base.orientation) {
+		switch (view->base.orientation) {
 		case APP_DEVICE_ORIENTATION_0:
 		case APP_DEVICE_ORIENTATION_180:
-			if (ug_data->webview) {
-				ewk_view_orientation_send(ug_data->webview,
-						ug_data->base.orientation == APP_DEVICE_ORIENTATION_0 ? 0 : 180);
+			if (view->webview) {
+				ewk_view_orientation_send(view->webview,
+						view->base.orientation == APP_DEVICE_ORIENTATION_0 ? 0 : 180);
 			}
-			if (ug_data->isLandscape == true) {
-				_viewer_update_on_orientation_change(ug_data, false);
+			if (view->isLandscape == true) {
+				_viewer_update_on_orientation_change(view, false);
 			}
 			break;
 
 		case APP_DEVICE_ORIENTATION_270:
 		case APP_DEVICE_ORIENTATION_90:
-			if (ug_data->webview) {
-				ewk_view_orientation_send(ug_data->webview,
-						ug_data->base.orientation == APP_DEVICE_ORIENTATION_270 ? 90 : -90);
+			if (view->webview) {
+				ewk_view_orientation_send(view->webview,
+						view->base.orientation == APP_DEVICE_ORIENTATION_270 ? 90 : -90);
 			}
-			if (ug_data->isLandscape == false) {
-				_viewer_update_on_orientation_change(ug_data, true);
+			if (view->isLandscape == false) {
+				_viewer_update_on_orientation_change(view, true);
 			}
 			break;
 		}
 	}
 
 	if (flags & EVUF_REGION_FMT_CHANGED) {
-		_viewer_update_on_region_change(ug_data);
+		_viewer_update_on_region_change(view);
 	}
 
 	debug_leave();
 }
 
-static void _viewer_update_on_orientation_change(EmailViewerUGD *ug_data, bool isLandscape)
+static void _viewer_update_on_orientation_change(EmailViewerView *view, bool isLandscape)
 {
 	debug_enter();
-	retm_if(!ug_data, "Invalid parameter: ug_data is NULL!");
+	retm_if(!view, "Invalid parameter: view is NULL!");
 
-	ug_data->isLandscape = isLandscape;
-	viewer_set_vertical_scroller_position(ug_data);
+	view->isLandscape = isLandscape;
+	viewer_set_vertical_scroller_position(view);
 	/* resize webview */
-	double scale = ewk_view_scale_get(ug_data->webview);
+	double scale = ewk_view_scale_get(view->webview);
 	int content_height = 0;
-	ewk_view_contents_size_get(ug_data->webview, NULL, &content_height);
+	ewk_view_contents_size_get(view->webview, NULL, &content_height);
 	if (content_height) {
-		viewer_resize_webview(ug_data, content_height * scale);
+		viewer_resize_webview(view, content_height * scale);
 	}
 
 	debug_log("content_height :%d scale :%f", content_height, scale);
@@ -674,98 +670,98 @@ static void _viewer_update_on_orientation_change(EmailViewerUGD *ug_data, bool i
 	debug_leave();
 }
 
-static void _viewer_update_on_region_change(EmailViewerUGD *ug_data)
+static void _viewer_update_on_region_change(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(!ug_data, "Invalid parameter: ug_data is NULL!");
+	retm_if(!view, "Invalid parameter: view is NULL!");
 
-	header_update_date(ug_data);
+	header_update_date(view);
 
 	debug_leave();
 }
 
-static void _viewer_update_on_language_change(EmailViewerUGD *ug_data)
+static void _viewer_update_on_language_change(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(!ug_data, "Invalid parameter: ug_data is NULL!");
+	retm_if(!view, "Invalid parameter: view is NULL!");
 
-	char *_subject = elm_entry_utf8_to_markup(ug_data->subject);
+	char *_subject = elm_entry_utf8_to_markup(view->subject);
 	if (!g_strcmp0(_subject, "")) {
 		g_free(_subject);
 		_subject = g_strdup(email_get_email_string("IDS_EMAIL_SBODY_NO_SUBJECT_M_NOUN"));
-		elm_entry_entry_set(ug_data->en_subject, _subject);
+		elm_entry_entry_set(view->en_subject, _subject);
 	}
 	g_free(_subject);
 
-	if (ug_data->to_mbe) {
-		elm_object_text_set(ug_data->to_mbe, email_get_email_string("IDS_EMAIL_BODY_TO_M_RECIPIENT"));
+	if (view->to_mbe) {
+		elm_object_text_set(view->to_mbe, email_get_email_string("IDS_EMAIL_BODY_TO_M_RECIPIENT"));
 	}
-	if (ug_data->cc_mbe) {
-		elm_object_text_set(ug_data->cc_mbe, email_get_email_string("IDS_EMAIL_BODY_CC"));
+	if (view->cc_mbe) {
+		elm_object_text_set(view->cc_mbe, email_get_email_string("IDS_EMAIL_BODY_CC"));
 	}
-	if (ug_data->bcc_mbe) {
-		elm_object_text_set(ug_data->bcc_mbe, email_get_email_string("IDS_EMAIL_BODY_BCC"));
+	if (view->bcc_mbe) {
+		elm_object_text_set(view->bcc_mbe, email_get_email_string("IDS_EMAIL_BODY_BCC"));
 	}
 
-	header_update_attachment_summary_info(ug_data);
+	header_update_attachment_summary_info(view);
 
 	/* This code is specific for popups where string translation is not handled by EFL */
-	if (ug_data->notify && ug_data->popup_element_type) {
+	if (view->notify && view->popup_element_type) {
 		char str[MAX_STR_LEN] = { 0, };
 		char first_str[MAX_STR_LEN] = { 0, };
-		switch (ug_data->popup_element_type) {
+		switch (view->popup_element_type) {
 		case POPUP_ELEMENT_TYPE_TITLE:
 			break;
 		case POPUP_ELEMENT_TYPE_CONTENT:
-			if (ug_data->extra_variable_type == VARIABLE_TYPE_INT) {
-				if (ug_data->str_format2) {
-					if (ug_data->package_type2 == PACKAGE_TYPE_SYS_STRING) {
-						snprintf(str, sizeof(str), ug_data->str_format2, email_get_system_string(ug_data->translation_string_id2), ug_data->extra_variable_integer);
-					} else if (ug_data->package_type2 == PACKAGE_TYPE_PACKAGE) {
-						snprintf(str, sizeof(str), ug_data->str_format2, email_get_email_string(ug_data->translation_string_id2), ug_data->extra_variable_integer);
+			if (view->extra_variable_type == VARIABLE_TYPE_INT) {
+				if (view->str_format2) {
+					if (view->package_type2 == PACKAGE_TYPE_SYS_STRING) {
+						snprintf(str, sizeof(str), view->str_format2, email_get_system_string(view->translation_string_id2), view->extra_variable_integer);
+					} else if (view->package_type2 == PACKAGE_TYPE_PACKAGE) {
+						snprintf(str, sizeof(str), view->str_format2, email_get_email_string(view->translation_string_id2), view->extra_variable_integer);
 					}
 				} else {
-					if (ug_data->package_type2 == PACKAGE_TYPE_SYS_STRING) {
-						snprintf(str, sizeof(str), email_get_system_string(ug_data->translation_string_id2), ug_data->extra_variable_integer);
-					} else if (ug_data->package_type2 == PACKAGE_TYPE_PACKAGE) {
-						snprintf(str, sizeof(str), email_get_email_string(ug_data->translation_string_id2), ug_data->extra_variable_integer);
-					}
-				}
-			} else if (ug_data->extra_variable_type == VARIABLE_TYPE_STRING) {
-				if (ug_data->str_format2) {
-					if (ug_data->package_type2 == PACKAGE_TYPE_SYS_STRING) {
-						snprintf(str, sizeof(str), ug_data->str_format2, email_get_system_string(ug_data->translation_string_id2), ug_data->extra_variable_string);
-					} else if (ug_data->package_type2 == PACKAGE_TYPE_PACKAGE) {
-						snprintf(str, sizeof(str), ug_data->str_format2, email_get_email_string(ug_data->translation_string_id2), ug_data->extra_variable_string);
-					}
-				} else {
-					if (ug_data->package_type2 == PACKAGE_TYPE_SYS_STRING) {
-						snprintf(str, sizeof(str), email_get_system_string(ug_data->translation_string_id2), ug_data->extra_variable_string);
-					} else if (ug_data->package_type2 == PACKAGE_TYPE_PACKAGE) {
-						snprintf(str, sizeof(str), email_get_email_string(ug_data->translation_string_id2), ug_data->extra_variable_string);
+					if (view->package_type2 == PACKAGE_TYPE_SYS_STRING) {
+						snprintf(str, sizeof(str), email_get_system_string(view->translation_string_id2), view->extra_variable_integer);
+					} else if (view->package_type2 == PACKAGE_TYPE_PACKAGE) {
+						snprintf(str, sizeof(str), email_get_email_string(view->translation_string_id2), view->extra_variable_integer);
 					}
 				}
-			} else {
-				if (ug_data->package_type2 == PACKAGE_TYPE_SYS_STRING) {
-					snprintf(str, sizeof(str), "%s", email_get_system_string(ug_data->translation_string_id2));
-				} else if (ug_data->package_type2 == PACKAGE_TYPE_PACKAGE) {
-					snprintf(str, sizeof(str), "%s", email_get_email_string(ug_data->translation_string_id2));
+			} else if (view->extra_variable_type == VARIABLE_TYPE_STRING) {
+				if (view->str_format2) {
+					if (view->package_type2 == PACKAGE_TYPE_SYS_STRING) {
+						snprintf(str, sizeof(str), view->str_format2, email_get_system_string(view->translation_string_id2), view->extra_variable_string);
+					} else if (view->package_type2 == PACKAGE_TYPE_PACKAGE) {
+						snprintf(str, sizeof(str), view->str_format2, email_get_email_string(view->translation_string_id2), view->extra_variable_string);
+					}
 				} else {
-					snprintf(str, sizeof(str), "%s", ug_data->translation_string_id2);
-				}
-			}
-			if (ug_data->str_format1) {
-				if (ug_data->package_type1 == PACKAGE_TYPE_SYS_STRING) {
-					snprintf(first_str, sizeof(first_str), ug_data->str_format1, email_get_system_string(ug_data->translation_string_id1), str);
-				} else if (ug_data->package_type1 == PACKAGE_TYPE_PACKAGE) {
-					snprintf(first_str, sizeof(first_str), ug_data->str_format1, email_get_email_string(ug_data->translation_string_id1), str);
-				} else {
-					snprintf(first_str, sizeof(first_str), ug_data->str_format1, ug_data->translation_string_id1, str);
+					if (view->package_type2 == PACKAGE_TYPE_SYS_STRING) {
+						snprintf(str, sizeof(str), email_get_system_string(view->translation_string_id2), view->extra_variable_string);
+					} else if (view->package_type2 == PACKAGE_TYPE_PACKAGE) {
+						snprintf(str, sizeof(str), email_get_email_string(view->translation_string_id2), view->extra_variable_string);
+					}
 				}
 			} else {
-				snprintf(first_str, sizeof(first_str), "%s", ug_data->translation_string_id1);
+				if (view->package_type2 == PACKAGE_TYPE_SYS_STRING) {
+					snprintf(str, sizeof(str), "%s", email_get_system_string(view->translation_string_id2));
+				} else if (view->package_type2 == PACKAGE_TYPE_PACKAGE) {
+					snprintf(str, sizeof(str), "%s", email_get_email_string(view->translation_string_id2));
+				} else {
+					snprintf(str, sizeof(str), "%s", view->translation_string_id2);
+				}
 			}
-			elm_object_text_set(ug_data->notify, first_str);
+			if (view->str_format1) {
+				if (view->package_type1 == PACKAGE_TYPE_SYS_STRING) {
+					snprintf(first_str, sizeof(first_str), view->str_format1, email_get_system_string(view->translation_string_id1), str);
+				} else if (view->package_type1 == PACKAGE_TYPE_PACKAGE) {
+					snprintf(first_str, sizeof(first_str), view->str_format1, email_get_email_string(view->translation_string_id1), str);
+				} else {
+					snprintf(first_str, sizeof(first_str), view->str_format1, view->translation_string_id1, str);
+				}
+			} else {
+				snprintf(first_str, sizeof(first_str), "%s", view->translation_string_id1);
+			}
+			elm_object_text_set(view->notify, first_str);
 			break;
 		case POPUP_ELEMENT_TYPE_BTN1:
 			break;
@@ -783,7 +779,7 @@ static Eina_Bool _viewer_launch_email_application_cb(void *data)
 {
 	debug_enter();
 	retvm_if(data == NULL, ECORE_CALLBACK_CANCEL, "Invalid parameter: data[NULL]");
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
 	app_control_h app_control = NULL;
 	int ret = APP_CONTROL_ERROR_NONE;
@@ -804,46 +800,46 @@ static Eina_Bool _viewer_launch_email_application_cb(void *data)
 	ret = app_control_destroy(app_control);
 	debug_warning_if(ret != APP_CONTROL_ERROR_NONE, "app_control_destroy() failed! ret:[%d]", ret);
 
-	ug_data->launch_timer = NULL;
-	_popup_response_to_destroy_cb(ug_data, ug_data->notify, NULL);
+	view->launch_timer = NULL;
+	_popup_response_to_destroy_cb(view, view->notify, NULL);
 
 	debug_leave();
 	return ECORE_CALLBACK_CANCEL;
 }
 
-static int _construct_viewer_data(EmailViewerUGD *ug_data)
+static int _construct_viewer_data(EmailViewerView *view)
 {
 	debug_enter();
-	retvm_if(ug_data == NULL, VIEWER_ERROR_FAIL, "Invalid parameter: ug_data[NULL]");
+	retvm_if(view == NULL, VIEWER_ERROR_FAIL, "Invalid parameter: view[NULL]");
 
-	debug_log("pointer %p account_id [%d], mail_id [%d], mailbox_id [%d]", ug_data, ug_data->account_id, ug_data->mail_id, ug_data->mailbox_id);
-	if (((ug_data->account_id <= 0 || (ug_data->mail_id <= 0) || (ug_data->mailbox_id <= 0)) && (ug_data->viewer_type != EML_VIEWER))) {
+	debug_log("pointer %p account_id [%d], mail_id [%d], mailbox_id [%d]", view, view->account_id, view->mail_id, view->mailbox_id);
+	if (((view->account_id <= 0 || (view->mail_id <= 0) || (view->mailbox_id <= 0)) && (view->viewer_type != EML_VIEWER))) {
 		debug_log("Required parameters are missing!");
 		return VIEWER_ERROR_INVALID_ARG;
 	}
 
-	if (viewer_create_temp_folder(ug_data) < 0) {
+	if (viewer_create_temp_folder(view) < 0) {
 		debug_log("creating email viewer temp folder is failed");
 		return VIEWER_ERROR_FAIL;
 	}
 
-	G_FREE(ug_data->temp_viewer_html_file_path);
-	ug_data->temp_viewer_html_file_path = g_strdup_printf("%s/%s", ug_data->temp_folder_path, EMAIL_VIEWER_TMP_HTML_FILE);
+	G_FREE(view->temp_viewer_html_file_path);
+	view->temp_viewer_html_file_path = g_strdup_printf("%s/%s", view->temp_folder_path, EMAIL_VIEWER_TMP_HTML_FILE);
 
-	int ret = viewer_reset_mail_data(ug_data);
+	int ret = viewer_reset_mail_data(view);
 	if (ret != VIEWER_ERROR_NONE) {
 		debug_log("viewer_reset_mail_data() failed! (error type: %d)", ret);
 		return ret;
 	}
 
-	viewer_create_account_data(ug_data);
+	viewer_create_account_data(view);
 
-	if (ug_data->viewer_type == EMAIL_VIEWER) {
-		retvm_if(ug_data->mail_info == NULL, VIEWER_ERROR_GET_DATA_FAIL, "ug_data->mail_info is NULL.");
+	if (view->viewer_type == EMAIL_VIEWER) {
+		retvm_if(view->mail_info == NULL, VIEWER_ERROR_GET_DATA_FAIL, "view->mail_info is NULL.");
 
-		email_mail_data_t *mail_data = ug_data->mail_info;
-		ug_data->mailbox_type = mail_data->mailbox_type;
-		debug_log("mailbox_type:%d", ug_data->mailbox_type);
+		email_mail_data_t *mail_data = view->mail_info;
+		view->mailbox_type = mail_data->mailbox_type;
+		debug_log("mailbox_type:%d", view->mailbox_type);
 		debug_secure("server_mailbox_name:%s", mail_data->server_mailbox_name);
 	}
 	return VIEWER_ERROR_NONE;
@@ -888,129 +884,129 @@ static Evas_Object *_create_box(Evas_Object *parent)
 	return box;
 }
 
-static void _viewer_get_window_sizes(EmailViewerUGD *ug_data)
+static void _viewer_get_window_sizes(EmailViewerView *view)
 {
 	debug_enter();
 
 	Evas_Coord width, height;
-	evas_object_geometry_get(ug_data->base.module->win, NULL, NULL, &width, &height);
-	ug_data->main_w = width;
-	ug_data->main_h = height;
-	ug_data->scale_factor = elm_app_base_scale_get() / elm_config_scale_get();
+	evas_object_geometry_get(view->base.module->win, NULL, NULL, &width, &height);
+	view->main_w = width;
+	view->main_h = height;
+	view->scale_factor = elm_app_base_scale_get() / elm_config_scale_get();
 
 	debug_log("WINDOW W[%d] H[%d]", width, height);
-	debug_log("ELM Scale[%f]", ug_data->scale_factor);
+	debug_log("ELM Scale[%f]", view->scale_factor);
 
 }
 
-static VIEWER_ERROR_TYPE_E _viewer_create_base_view(EmailViewerUGD *ug_data)
+static VIEWER_ERROR_TYPE_E _viewer_create_base_view(EmailViewerView *view)
 {
 	debug_enter();
-	retvm_if(ug_data == NULL, VIEWER_ERROR_FAIL, "Invalid parameter: ug_data[NULL]");
+	retvm_if(view == NULL, VIEWER_ERROR_FAIL, "Invalid parameter: view[NULL]");
 
-	_viewer_get_window_sizes(ug_data);
+	_viewer_get_window_sizes(view);
 
 	/* add container layout */
-	ug_data->base.content = viewer_load_edj(ug_data->base.module->navi, email_get_viewer_theme_path(), "ev/viewer/base", EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	view->base.content = viewer_load_edj(view->base.module->navi, email_get_viewer_theme_path(), "ev/viewer/base", EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 
-	if (ug_data->theme) {
-		elm_object_theme_set(ug_data->base.content, ug_data->theme);
+	if (view->theme) {
+		elm_object_theme_set(view->base.content, view->theme);
 	}
-	retvm_if(ug_data->base.content == NULL, VIEWER_ERROR_FAIL, "Cannot load edj!");
-	evas_object_show(ug_data->base.content);
+	retvm_if(view->base.content == NULL, VIEWER_ERROR_FAIL, "Cannot load edj!");
+	evas_object_show(view->base.content);
 
 	/* create scroller */
-	ug_data->scroller = _create_scroller(ug_data->base.content);
-	retvm_if(ug_data->scroller == NULL, VIEWER_ERROR_FAIL, "scroller is NULL!");
-	elm_object_part_content_set(ug_data->base.content, "ev.swallow.content", ug_data->scroller);
-	evas_object_smart_callback_add(ug_data->scroller, "edge,bottom", _outter_scroller_bottom_hit_cb, ug_data);
-	evas_object_smart_callback_add(ug_data->scroller, "edge,top", _outter_scroller_top_hit_cb, ug_data);
-	evas_object_show(ug_data->scroller);
+	view->scroller = _create_scroller(view->base.content);
+	retvm_if(view->scroller == NULL, VIEWER_ERROR_FAIL, "scroller is NULL!");
+	elm_object_part_content_set(view->base.content, "ev.swallow.content", view->scroller);
+	evas_object_smart_callback_add(view->scroller, "edge,bottom", _outter_scroller_bottom_hit_cb, view);
+	evas_object_smart_callback_add(view->scroller, "edge,top", _outter_scroller_top_hit_cb, view);
+	evas_object_show(view->scroller);
 
 	/* create flick detection layer */
-	viewer_set_flick_layer(ug_data);
+	viewer_set_flick_layer(view);
 
 	/* create base layout */
-	ug_data->base_ly = viewer_load_edj(ug_data->scroller, email_get_viewer_theme_path(), "ev/layout/base", EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	retvm_if(ug_data->base_ly == NULL, VIEWER_ERROR_FAIL, "Cannot load edj!");
-	elm_object_content_set(ug_data->scroller, ug_data->base_ly);
-	evas_object_show(ug_data->base_ly);
+	view->base_ly = viewer_load_edj(view->scroller, email_get_viewer_theme_path(), "ev/layout/base", EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	retvm_if(view->base_ly == NULL, VIEWER_ERROR_FAIL, "Cannot load edj!");
+	elm_object_content_set(view->scroller, view->base_ly);
+	evas_object_show(view->base_ly);
 
 	/* create main box */
-	ug_data->main_bx = _create_box(ug_data->scroller);
-	retvm_if(ug_data->main_bx == NULL, VIEWER_ERROR_FAIL, "main_bx is NULL!");
-	elm_object_part_content_set(ug_data->base_ly, "ev.swallow.box", ug_data->main_bx);
-	evas_object_show(ug_data->main_bx);
+	view->main_bx = _create_box(view->scroller);
+	retvm_if(view->main_bx == NULL, VIEWER_ERROR_FAIL, "main_bx is NULL!");
+	elm_object_part_content_set(view->base_ly, "ev.swallow.box", view->main_bx);
+	evas_object_show(view->main_bx);
 
 	/* push navigation bar */
-	email_module_view_push(&ug_data->base, NULL, EVPF_NO_BACK_BUTTON | EVPF_NO_TITLE);
+	email_module_view_push(&view->base, NULL, EVPF_NO_BACK_BUTTON | EVPF_NO_TITLE);
 
 	/* This button is set for devices which doesn't have H/W more key. */
-	ug_data->more_btn = elm_button_add(ug_data->base.module->navi);
-	elm_object_style_set(ug_data->more_btn, "naviframe/more/default");
-	evas_object_smart_callback_add(ug_data->more_btn, "clicked", _more_cb, ug_data);
-	elm_object_item_part_content_set(ug_data->base.navi_item, "toolbar_more_btn", ug_data->more_btn);
+	view->more_btn = elm_button_add(view->base.module->navi);
+	elm_object_style_set(view->more_btn, "naviframe/more/default");
+	evas_object_smart_callback_add(view->more_btn, "clicked", _more_cb, view);
+	elm_object_item_part_content_set(view->base.navi_item, "toolbar_more_btn", view->more_btn);
 
 	debug_leave();
 	return VIEWER_ERROR_NONE;
 }
 
-void _reset_view(EmailViewerUGD *ug_data, Eina_Bool update_body)
+void _reset_view(EmailViewerView *view, Eina_Bool update_body)
 {
 	debug_enter();
-	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
+	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
-	if (ug_data->base.module->views_count > 1) {
-		email_module_exit_view(&ug_data->attachment_view);
+	if (view->base.module->views_count > 1) {
+		email_module_exit_view(&view->attachment_view);
 	}
 
-	debug_log("@@@@@@@@@@ isLandscape = %d", ug_data->isLandscape);
-	if (ug_data->isLandscape == true) {
+	debug_log("@@@@@@@@@@ isLandscape = %d", view->isLandscape);
+	if (view->isLandscape == true) {
 		debug_log("In Split view - Hiding navi bar");
 		/* Set scroller to start - height made 480 to consider viewer in split view */
-		elm_scroller_region_show(ug_data->scroller, 0, 0, (int)((double)ug_data->main_h * 0.6), ug_data->main_w);
+		elm_scroller_region_show(view->scroller, 0, 0, (int)((double)view->main_h * 0.6), view->main_w);
 	} else {
 		debug_log("In Full view - Showing navi bar");
 		/* Set scroller to start */
-		elm_scroller_region_show(ug_data->scroller, 0, 0, ug_data->main_w, ug_data->main_h);
+		elm_scroller_region_show(view->scroller, 0, 0, view->main_w, view->main_h);
 	}
 
-	if (elm_object_scroll_freeze_get(ug_data->scroller) > 0)
-		elm_object_scroll_freeze_pop(ug_data->scroller);
+	if (elm_object_scroll_freeze_get(view->scroller) > 0)
+		elm_object_scroll_freeze_pop(view->scroller);
 
-	viewer_check_body_download(ug_data);
+	viewer_check_body_download(view);
 
 	if (update_body) {
-		header_update_view(ug_data);
+		header_update_view(view);
 	} else {
-		ug_data->is_recipient_ly_shown = EINA_FALSE;
-		header_layout_unpack(ug_data);
-		header_create_view(ug_data);
-		header_update_view(ug_data);
+		view->is_recipient_ly_shown = EINA_FALSE;
+		header_layout_unpack(view);
+		header_create_view(view);
+		header_update_view(view);
 	}
 
 	debug_leave();
 }
 
-void _hide_view(EmailViewerUGD *ug_data)
+void _hide_view(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
+	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
-	ug_data->b_viewer_hided = TRUE;
+	view->b_viewer_hided = TRUE;
 
-	viewer_webkit_del_callbacks(ug_data);
-	viewer_delete_account_data(ug_data);
-	viewer_stop_ecore_running_apis(ug_data);
-	viewer_delete_evas_objects(ug_data, EINA_TRUE);
-	viewer_remove_hard_link_for_inline_images(ug_data);
+	viewer_webkit_del_callbacks(view);
+	viewer_delete_account_data(view);
+	viewer_stop_ecore_running_apis(view);
+	viewer_delete_evas_objects(view, EINA_TRUE);
+	viewer_remove_hard_link_for_inline_images(view);
 
-	viewer_remove_temp_files(ug_data);
-	viewer_remove_temp_folders(ug_data);
-	viewer_free_viewer_data(ug_data);
-	noti_mgr_dbus_receiver_remove(ug_data);
+	viewer_remove_temp_files(view);
+	viewer_remove_temp_folders(view);
+	viewer_free_viewer_data(view);
+	noti_mgr_dbus_receiver_remove(view);
 
-	viewer_initialize_data(ug_data);
+	viewer_initialize_data(view);
 	_g_md = NULL;
 	debug_leave();
 }
@@ -1018,189 +1014,189 @@ void _hide_view(EmailViewerUGD *ug_data)
 /**
  * initialize viewer's private data
  */
-Eina_Bool viewer_initialize_data(EmailViewerUGD *ug_data)
+Eina_Bool viewer_initialize_data(EmailViewerView *view)
 {
 	debug_enter();
-	retvm_if(ug_data == NULL, EINA_FALSE, "Invalid parameter: ug_data[NULL]");
+	retvm_if(view == NULL, EINA_FALSE, "Invalid parameter: view[NULL]");
 
-	ug_data->loaded_module = NULL;
+	view->loaded_module = NULL;
 
-	ug_data->main_w = 0;
-	ug_data->main_h = 0;
-	ug_data->eViewerErrorType = VIEWER_ERROR_NONE;
+	view->main_w = 0;
+	view->main_h = 0;
+	view->eViewerErrorType = VIEWER_ERROR_NONE;
 
 	/*dbus*/
-	ug_data->viewer_dbus_conn = NULL;
-	ug_data->viewer_network_id = 0;
-	ug_data->viewer_storage_id = 0;
+	view->viewer_dbus_conn = NULL;
+	view->viewer_network_id = 0;
+	view->viewer_storage_id = 0;
 
 	/*combined scroller*/
-	ug_data->combined_scroller = NULL;
-	ug_data->webkit_scroll_y = 0;
-	ug_data->webkit_scroll_x = 0;
-	ug_data->header_height = 0;
-	ug_data->trailer_height = 0;
-	ug_data->total_height = 0;
-	ug_data->total_width = 0;
-	ug_data->main_scroll_y = 0;
-	ug_data->main_scroll_h = 0;
-	ug_data->main_scroll_w = 0;
+	view->combined_scroller = NULL;
+	view->webkit_scroll_y = 0;
+	view->webkit_scroll_x = 0;
+	view->header_height = 0;
+	view->trailer_height = 0;
+	view->total_height = 0;
+	view->total_width = 0;
+	view->main_scroll_y = 0;
+	view->main_scroll_h = 0;
+	view->main_scroll_w = 0;
 
 	/* arguments */
-	ug_data->account_id = 0;
-	ug_data->account_type = 0;
-	ug_data->mail_id = 0;
-	ug_data->mailbox_id = 0;
-	ug_data->account_email_address = NULL;
-	ug_data->temp_folder_path = NULL;
-	ug_data->temp_viewer_html_file_path = NULL;
+	view->account_id = 0;
+	view->account_type = 0;
+	view->mail_id = 0;
+	view->mailbox_id = 0;
+	view->account_email_address = NULL;
+	view->temp_folder_path = NULL;
+	view->temp_viewer_html_file_path = NULL;
 	/* for preview */
-	ug_data->temp_preview_folder_path = NULL;
+	view->temp_preview_folder_path = NULL;
 
 	/* flags */
-	ug_data->b_viewer_hided = 0;
-	ug_data->b_partial_body = 0;
-	ug_data->scroller_locked = 0;
-	ug_data->is_composer_module_launched = FALSE;
+	view->b_viewer_hided = 0;
+	view->b_partial_body = 0;
+	view->scroller_locked = 0;
+	view->is_composer_module_launched = FALSE;
 
-	ug_data->can_destroy_on_msg_delete = false;
-	ug_data->b_load_finished = EINA_FALSE;
-	ug_data->b_show_remote_images = EINA_FALSE;
-	ug_data->is_long_pressed = EINA_FALSE;
-	ug_data->is_webview_scrolling = EINA_FALSE;
-	ug_data->is_main_scroller_scrolling = EINA_TRUE;
-	ug_data->is_outer_scroll_bot_hit = EINA_FALSE;
-	ug_data->is_magnifier_opened = EINA_FALSE;
-	ug_data->is_recipient_ly_shown = EINA_FALSE;
-	ug_data->is_download_message_btn_clicked = EINA_FALSE;
-	ug_data->is_cancel_sending_btn_clicked = EINA_FALSE;
-	ug_data->is_storage_full_popup_shown = EINA_FALSE;
-	ug_data->need_pending_destroy = EINA_FALSE;
-	ug_data->is_top_webview_reached = EINA_FALSE;
-	ug_data->is_bottom_webview_reached = EINA_FALSE;
-	ug_data->is_scrolling_down = EINA_FALSE;
-	ug_data->is_scrolling_up = EINA_FALSE;
-	ug_data->is_webview_text_selected = EINA_FALSE;
+	view->can_destroy_on_msg_delete = false;
+	view->b_load_finished = EINA_FALSE;
+	view->b_show_remote_images = EINA_FALSE;
+	view->is_long_pressed = EINA_FALSE;
+	view->is_webview_scrolling = EINA_FALSE;
+	view->is_main_scroller_scrolling = EINA_TRUE;
+	view->is_outer_scroll_bot_hit = EINA_FALSE;
+	view->is_magnifier_opened = EINA_FALSE;
+	view->is_recipient_ly_shown = EINA_FALSE;
+	view->is_download_message_btn_clicked = EINA_FALSE;
+	view->is_cancel_sending_btn_clicked = EINA_FALSE;
+	view->is_storage_full_popup_shown = EINA_FALSE;
+	view->need_pending_destroy = EINA_FALSE;
+	view->is_top_webview_reached = EINA_FALSE;
+	view->is_bottom_webview_reached = EINA_FALSE;
+	view->is_scrolling_down = EINA_FALSE;
+	view->is_scrolling_up = EINA_FALSE;
+	view->is_webview_text_selected = EINA_FALSE;
 
 	/*eml viewer*/
-	ug_data->viewer_type = EMAIL_VIEWER;
-	ug_data->eml_file_path = NULL;
+	view->viewer_type = EMAIL_VIEWER;
+	view->eml_file_path = NULL;
 
 	/*popup translation*/
-	ug_data->popup_element_type = 0;
-	ug_data->package_type1 = 0;
-	ug_data->package_type2 = 0;
-	ug_data->translation_string_id1 = NULL;
-	ug_data->translation_string_id2 = NULL;
-	ug_data->extra_variable_type = 0;
-	ug_data->extra_variable_string = NULL;
-	ug_data->extra_variable_integer = 0;
-	ug_data->str_format1 = NULL;
-	ug_data->str_format2 = NULL;
+	view->popup_element_type = 0;
+	view->package_type1 = 0;
+	view->package_type2 = 0;
+	view->translation_string_id1 = NULL;
+	view->translation_string_id2 = NULL;
+	view->extra_variable_type = 0;
+	view->extra_variable_string = NULL;
+	view->extra_variable_integer = 0;
+	view->str_format1 = NULL;
+	view->str_format2 = NULL;
 
-	/* for ug create */
-	ug_data->create_contact_arg = 0;
+	/* for module create */
+	view->create_contact_arg = 0;
 
 	/* Scalable UI */
-	ug_data->scale_factor = 0.0;
-	ug_data->webview_width = 0;
-	ug_data->webview_height = 0;
+	view->scale_factor = 0.0;
+	view->webview_width = 0;
+	view->webview_height = 0;
 
 	/* rotation */
-	ug_data->isLandscape = 0;
+	view->isLandscape = 0;
 
 	/* mailbox list */
-	ug_data->mailbox_type = EMAIL_MAILBOX_TYPE_NONE;
-	ug_data->folder_list = NULL;
-	ug_data->move_mailbox_list = NULL;
-	ug_data->move_mailbox_count = 0;
-	ug_data->move_status = 0;
+	view->mailbox_type = EMAIL_MAILBOX_TYPE_NONE;
+	view->folder_list = NULL;
+	view->move_mailbox_list = NULL;
+	view->move_mailbox_count = 0;
+	view->move_status = 0;
 
 	/* Evas Object */
-	ug_data->en_subject = NULL;
-	ug_data->subject_ly = NULL;
-	ug_data->sender_ly = NULL;
-	ug_data->attachment_ly = NULL;
-	ug_data->webview_ly = NULL;
-	ug_data->webview_button = NULL;
-	ug_data->webview = NULL;
-	ug_data->list_progressbar = NULL;
-	ug_data->con_popup = NULL;
-	ug_data->notify = NULL;
-	ug_data->pb_notify = NULL;
-	ug_data->pb_notify_lb = NULL;
-	ug_data->dn_btn = NULL;
-	ug_data->to_mbe = NULL;
-	ug_data->to_ly = NULL;
-	ug_data->cc_mbe = NULL;
-	ug_data->cc_ly = NULL;
-	ug_data->bcc_mbe = NULL;
-	ug_data->bcc_ly = NULL;
-	ug_data->to_recipients_cnt = 0;
-	ug_data->cc_recipients_cnt = 0;
-	ug_data->bcc_recipients_cnt = 0;
-	ug_data->to_recipient_idler = NULL;
-	ug_data->cc_recipient_idler = NULL;
-	ug_data->bcc_recipient_idler = NULL;
-	ug_data->idler_regionbringin = NULL;
+	view->en_subject = NULL;
+	view->subject_ly = NULL;
+	view->sender_ly = NULL;
+	view->attachment_ly = NULL;
+	view->webview_ly = NULL;
+	view->webview_button = NULL;
+	view->webview = NULL;
+	view->list_progressbar = NULL;
+	view->con_popup = NULL;
+	view->notify = NULL;
+	view->pb_notify = NULL;
+	view->pb_notify_lb = NULL;
+	view->dn_btn = NULL;
+	view->to_mbe = NULL;
+	view->to_ly = NULL;
+	view->cc_mbe = NULL;
+	view->cc_ly = NULL;
+	view->bcc_mbe = NULL;
+	view->bcc_ly = NULL;
+	view->to_recipients_cnt = 0;
+	view->cc_recipients_cnt = 0;
+	view->bcc_recipients_cnt = 0;
+	view->to_recipient_idler = NULL;
+	view->cc_recipient_idler = NULL;
+	view->bcc_recipient_idler = NULL;
+	view->idler_regionbringin = NULL;
 
-	ug_data->attachment_save_thread = 0;
-	ug_data->attachment_update_job = NULL;
-	ug_data->attachment_update_timer = NULL;
-	ug_data->attachment_data_list = NULL;
-	ug_data->attachment_data_list_to_save = NULL;
-	ug_data->preview_aid = NULL;
-	ug_data->show_cancel_all_btn = false;
-	ug_data->attachment_genlist = NULL;
-	ug_data->save_all_btn = NULL;
-	ug_data->attachment_group_item = NULL;
-	ug_data->attachment_itc = NULL;
-	ug_data->attachment_group_itc = NULL;
+	view->attachment_save_thread = 0;
+	view->attachment_update_job = NULL;
+	view->attachment_update_timer = NULL;
+	view->attachment_data_list = NULL;
+	view->attachment_data_list_to_save = NULL;
+	view->preview_aid = NULL;
+	view->show_cancel_all_btn = false;
+	view->attachment_genlist = NULL;
+	view->save_all_btn = NULL;
+	view->attachment_group_item = NULL;
+	view->attachment_itc = NULL;
+	view->attachment_group_itc = NULL;
 
-	ug_data->cancel_sending_ctx_item = NULL;
+	view->cancel_sending_ctx_item = NULL;
 
-	ug_data->webview_data = NULL;
+	view->webview_data = NULL;
 
 	/* Email Viewer Private variables */
-	ug_data->file_id = NULL;
-	ug_data->file_size = 0;
-	ug_data->email_handle = 0;
-	ug_data->mail_info = NULL;
-	ug_data->attachment_info = NULL;
-	ug_data->attachment_count = 0;
+	view->file_id = NULL;
+	view->file_size = 0;
+	view->email_handle = 0;
+	view->mail_info = NULL;
+	view->attachment_info = NULL;
+	view->attachment_count = 0;
 
 	/*Email Viewer Property Variables*/
-	ug_data->mail_type = 0;
-	ug_data->mktime = 0;
-	ug_data->sender_address = NULL;
-	ug_data->sender_display_name = NULL;
-	ug_data->subject = NULL;
-	ug_data->charset = NULL;
-	ug_data->body = NULL;
-	ug_data->body_uri = NULL;
-	ug_data->attachment_info_list = NULL;
-	ug_data->total_att_count = 0;
-	ug_data->normal_att_count = 0;
-	ug_data->total_att_size = 0;
-	ug_data->has_html = FALSE;
-	ug_data->has_attachment = FALSE;
-	ug_data->has_inline_image = FALSE;
-	ug_data->is_smil_mail = FALSE;
-	ug_data->favorite = FALSE;
-	ug_data->request_report = FALSE;
+	view->mail_type = 0;
+	view->mktime = 0;
+	view->sender_address = NULL;
+	view->sender_display_name = NULL;
+	view->subject = NULL;
+	view->charset = NULL;
+	view->body = NULL;
+	view->body_uri = NULL;
+	view->attachment_info_list = NULL;
+	view->total_att_count = 0;
+	view->normal_att_count = 0;
+	view->total_att_size = 0;
+	view->has_html = FALSE;
+	view->has_attachment = FALSE;
+	view->has_inline_image = FALSE;
+	view->is_smil_mail = FALSE;
+	view->favorite = FALSE;
+	view->request_report = FALSE;
 
-	ug_data->account = NULL;
+	view->account = NULL;
 
-	ug_data->launch_timer = NULL;
-	ug_data->rcpt_scroll_corr = NULL;
+	view->launch_timer = NULL;
+	view->rcpt_scroll_corr = NULL;
 
-	ug_data->recipient_address = NULL;
-	ug_data->recipient_name = NULL;
-	ug_data->selected_address = NULL;
-	ug_data->selected_name = NULL;
-	ug_data->recipient_contact_list_item = NULL;
+	view->recipient_address = NULL;
+	view->recipient_name = NULL;
+	view->selected_address = NULL;
+	view->selected_name = NULL;
+	view->recipient_contact_list_item = NULL;
 
-	ug_data->passwd_popup = NULL;
+	view->passwd_popup = NULL;
 	return EINA_TRUE;
 }
 
@@ -1208,123 +1204,123 @@ static void _timezone_changed_cb(system_settings_key_e key, void *data)
 {
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	header_update_date(ug_data);
+	header_update_date(view);
 	debug_leave();
 }
 
-void create_body_progress(EmailViewerUGD *ug_data)
+void create_body_progress(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
-	retm_if(ug_data->list_progressbar != NULL, "progressbar already present");
+	retm_if(view == NULL, "Invalid parameter: view[NULL]");
+	retm_if(view->list_progressbar != NULL, "progressbar already present");
 	/*unset webview to show progressbar*/
 	/*webview will be set on "load,finished" callback or after setting search highlight*/
-	if (ug_data->webview_ly && ug_data->webview) {
-		elm_object_part_content_unset(ug_data->webview_ly, "elm.swallow.content");
-		evas_object_hide(ug_data->webview);
+	if (view->webview_ly && view->webview) {
+		elm_object_part_content_unset(view->webview_ly, "elm.swallow.content");
+		evas_object_hide(view->webview);
 	}
 
 	/*create list process animation*/
 	debug_log("Creating list progress");
-	ug_data->list_progressbar = elm_progressbar_add(ug_data->base.content);
-	elm_object_style_set(ug_data->list_progressbar, "process_large");
-	evas_object_size_hint_align_set(ug_data->list_progressbar, EVAS_HINT_FILL, 0.5);
-	evas_object_size_hint_weight_set(ug_data->list_progressbar, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	evas_object_show(ug_data->list_progressbar);
-	elm_progressbar_pulse(ug_data->list_progressbar, EINA_TRUE);
-	elm_object_part_content_set(ug_data->base.content, "ev.swallow.progress", ug_data->list_progressbar);
+	view->list_progressbar = elm_progressbar_add(view->base.content);
+	elm_object_style_set(view->list_progressbar, "process_large");
+	evas_object_size_hint_align_set(view->list_progressbar, EVAS_HINT_FILL, 0.5);
+	evas_object_size_hint_weight_set(view->list_progressbar, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	evas_object_show(view->list_progressbar);
+	elm_progressbar_pulse(view->list_progressbar, EINA_TRUE);
+	elm_object_part_content_set(view->base.content, "ev.swallow.progress", view->list_progressbar);
 	debug_leave();
 }
 
-void _create_body(EmailViewerUGD *ug_data)
+void _create_body(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
+	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
 	/* create webview */
-	if (ug_data->webview == NULL) {
-		viewer_get_webview(ug_data);
+	if (view->webview == NULL) {
+		viewer_get_webview(view);
 	}
 
-	viewer_set_webview_content(ug_data);
-	viewer_set_mail_seen(ug_data);
+	viewer_set_webview_content(view);
+	viewer_set_mail_seen(view);
 
 	debug_leave();
 }
 
-void viewer_stop_ecore_running_apis(EmailViewerUGD *ug_data)
+void viewer_stop_ecore_running_apis(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
+	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
-	DELETE_TIMER_OBJECT(ug_data->launch_timer);
-	DELETE_TIMER_OBJECT(ug_data->rcpt_scroll_corr);
-	DELETE_IDLER_OBJECT(ug_data->idler_regionbringin);
-	DELETE_IDLER_OBJECT(ug_data->to_recipient_idler);
-	DELETE_IDLER_OBJECT(ug_data->cc_recipient_idler);
-	DELETE_IDLER_OBJECT(ug_data->bcc_recipient_idler);
+	DELETE_TIMER_OBJECT(view->launch_timer);
+	DELETE_TIMER_OBJECT(view->rcpt_scroll_corr);
+	DELETE_IDLER_OBJECT(view->idler_regionbringin);
+	DELETE_IDLER_OBJECT(view->to_recipient_idler);
+	DELETE_IDLER_OBJECT(view->cc_recipient_idler);
+	DELETE_IDLER_OBJECT(view->bcc_recipient_idler);
 }
 
-void viewer_delete_evas_objects(EmailViewerUGD *ug_data, Eina_Bool isHide)
+void viewer_delete_evas_objects(EmailViewerView *view, Eina_Bool isHide)
 {
 	debug_enter();
-	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
+	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
-	if (ug_data->base.module->views_count > 1) {
-		email_module_exit_view(&ug_data->attachment_view);
+	if (view->base.module->views_count > 1) {
+		email_module_exit_view(&view->attachment_view);
 	}
 
-	FREE(ug_data->eml_file_path);
+	FREE(view->eml_file_path);
 
 	/* folder list */
-	if (NULL != ug_data->folder_list) {
+	if (NULL != view->folder_list) {
 		int i = 0;
-		LIST_ITER_START(i, ug_data->folder_list) {
-			email_mailbox_name_and_alias_t *nameandalias = (email_mailbox_name_and_alias_t *)LIST_ITER_GET_DATA(i, ug_data->folder_list);
+		LIST_ITER_START(i, view->folder_list) {
+			email_mailbox_name_and_alias_t *nameandalias = (email_mailbox_name_and_alias_t *)LIST_ITER_GET_DATA(i, view->folder_list);
 			FREE(nameandalias->name);
 			FREE(nameandalias->alias);
 			FREE(nameandalias);
 		}
-		g_list_free(ug_data->folder_list);
-		ug_data->folder_list = NULL;
+		g_list_free(view->folder_list);
+		view->folder_list = NULL;
 	}
 
 	/* mailbox list */
-	if (ug_data->move_mailbox_list) {
-		email_free_mailbox(&ug_data->move_mailbox_list, ug_data->move_mailbox_count);
-		ug_data->move_mailbox_list = NULL;
-		ug_data->move_mailbox_count = 0;
+	if (view->move_mailbox_list) {
+		email_free_mailbox(&view->move_mailbox_list, view->move_mailbox_count);
+		view->move_mailbox_list = NULL;
+		view->move_mailbox_count = 0;
 	}
 
 	/* Evas Object */
-	DELETE_EVAS_OBJECT(ug_data->passwd_popup);
-	DELETE_EVAS_OBJECT(ug_data->con_popup);
-	DELETE_EVAS_OBJECT(ug_data->pb_notify);
-	DELETE_EVAS_OBJECT(ug_data->notify);
+	DELETE_EVAS_OBJECT(view->passwd_popup);
+	DELETE_EVAS_OBJECT(view->con_popup);
+	DELETE_EVAS_OBJECT(view->pb_notify);
+	DELETE_EVAS_OBJECT(view->notify);
 
 	if (isHide) {
-		DELETE_EVAS_OBJECT(ug_data->combined_scroller);
-		DELETE_EVAS_OBJECT(ug_data->subject_ly);
-		DELETE_EVAS_OBJECT(ug_data->en_subject);
-		DELETE_EVAS_OBJECT(ug_data->sender_ly);
-		DELETE_EVAS_OBJECT(ug_data->to_ly);
-		DELETE_EVAS_OBJECT(ug_data->cc_ly);
-		DELETE_EVAS_OBJECT(ug_data->bcc_ly);
-		DELETE_EVAS_OBJECT(ug_data->header_divider);
-		DELETE_EVAS_OBJECT(ug_data->priority_sender_image);
-		DELETE_EVAS_OBJECT(ug_data->details_button);
-		DELETE_EVAS_OBJECT(ug_data->attachment_ly);
-		DELETE_EVAS_OBJECT(ug_data->dn_btn);
-		DELETE_EVAS_OBJECT(ug_data->webview_ly);
-		DELETE_EVAS_OBJECT(ug_data->webview_button);
-		DELETE_EVAS_OBJECT(ug_data->list_progressbar);
+		DELETE_EVAS_OBJECT(view->combined_scroller);
+		DELETE_EVAS_OBJECT(view->subject_ly);
+		DELETE_EVAS_OBJECT(view->en_subject);
+		DELETE_EVAS_OBJECT(view->sender_ly);
+		DELETE_EVAS_OBJECT(view->to_ly);
+		DELETE_EVAS_OBJECT(view->cc_ly);
+		DELETE_EVAS_OBJECT(view->bcc_ly);
+		DELETE_EVAS_OBJECT(view->header_divider);
+		DELETE_EVAS_OBJECT(view->priority_sender_image);
+		DELETE_EVAS_OBJECT(view->details_button);
+		DELETE_EVAS_OBJECT(view->attachment_ly);
+		DELETE_EVAS_OBJECT(view->dn_btn);
+		DELETE_EVAS_OBJECT(view->webview_ly);
+		DELETE_EVAS_OBJECT(view->webview_button);
+		DELETE_EVAS_OBJECT(view->list_progressbar);
 	}
 
-	FREE(ug_data->selected_address);
-	FREE(ug_data->selected_name);
-	email_contacts_delete_contact_info(&ug_data->recipient_contact_list_item);
+	FREE(view->selected_address);
+	FREE(view->selected_name);
+	email_contacts_delete_contact_info(&view->recipient_contact_list_item);
 
 	debug_leave();
 }
@@ -1334,8 +1330,8 @@ static void _viewer_on_back_key(email_view_t *self)
 	debug_enter();
 	retm_if(self == NULL, "Invalid parameter: self is NULL");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)self;
-	viewer_back_key_press_handler(ug_data);
+	EmailViewerView *view = (EmailViewerView *)self;
+	viewer_back_key_press_handler(view);
 
 	debug_leave();
 }
@@ -1345,18 +1341,18 @@ void _reply_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_U
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	DELETE_EVAS_OBJECT(ug_data->con_popup);
-	DELETE_EVAS_OBJECT(ug_data->notify);
+	DELETE_EVAS_OBJECT(view->con_popup);
+	DELETE_EVAS_OBJECT(view->notify);
 
-	if (ug_data->viewer_type == EML_VIEWER) {
-		viewer_launch_composer(ug_data, RUN_EML_REPLY);
+	if (view->viewer_type == EML_VIEWER) {
+		viewer_launch_composer(view, RUN_EML_REPLY);
 	} else {
-		bool is_body_fully_downloaded = viewer_check_body_download_status(ug_data->body_download_status, EMAIL_BODY_DOWNLOAD_STATUS_FULLY_DOWNLOADED);
+		bool is_body_fully_downloaded = viewer_check_body_download_status(view->body_download_status, EMAIL_BODY_DOWNLOAD_STATUS_FULLY_DOWNLOADED);
 
-		email_attachment_data_t *attach_data = ug_data->attachment_info;
-		int attach_count = ug_data->attachment_count;
+		email_attachment_data_t *attach_data = view->attachment_info;
+		int attach_count = view->attachment_count;
 
 		int i = 0;
 		bool is_inline_fully_downloaded = false;
@@ -1366,13 +1362,13 @@ void _reply_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_U
 			}
 		}
 
-		debug_log("is_body_fully_downloaded [%d], account_type [%d], has_inline_image [%d], is_inline_fully_downloaded [%d]", is_body_fully_downloaded, ug_data->account_type, ug_data->has_inline_image, is_inline_fully_downloaded);
-		if (!is_body_fully_downloaded && !(ug_data->has_inline_image && is_inline_fully_downloaded)) {
-			util_create_notify(ug_data, EMAIL_VIEWER_HEADER_DOWNLOAD_ENTIRE_EMAIL, EMAIL_VIEWER_POP_PARTIAL_BODY_DOWNLOADED_REST_LOST, 2,
+		debug_log("is_body_fully_downloaded [%d], account_type [%d], has_inline_image [%d], is_inline_fully_downloaded [%d]", is_body_fully_downloaded, view->account_type, view->has_inline_image, is_inline_fully_downloaded);
+		if (!is_body_fully_downloaded && !(view->has_inline_image && is_inline_fully_downloaded)) {
+			util_create_notify(view, EMAIL_VIEWER_HEADER_DOWNLOAD_ENTIRE_EMAIL, EMAIL_VIEWER_POP_PARTIAL_BODY_DOWNLOADED_REST_LOST, 2,
 					EMAIL_VIEWER_STRING_CANCEL, _popup_response_cb,
 					EMAIL_VIEWER_BUTTON_CONTINUE, _popup_response_continue_reply_cb, NULL);
 		} else {
-			viewer_launch_composer(ug_data, RUN_COMPOSER_REPLY);
+			viewer_launch_composer(view, RUN_COMPOSER_REPLY);
 		}
 	}
 	debug_leave();
@@ -1383,18 +1379,18 @@ void _reply_all_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EI
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	DELETE_EVAS_OBJECT(ug_data->con_popup);
-	DELETE_EVAS_OBJECT(ug_data->notify);
+	DELETE_EVAS_OBJECT(view->con_popup);
+	DELETE_EVAS_OBJECT(view->notify);
 
-	if (ug_data->viewer_type == EML_VIEWER) {
-		viewer_launch_composer(ug_data, RUN_EML_REPLY_ALL);
+	if (view->viewer_type == EML_VIEWER) {
+		viewer_launch_composer(view, RUN_EML_REPLY_ALL);
 	} else {
-		bool is_body_fully_downloaded = viewer_check_body_download_status(ug_data->body_download_status, EMAIL_BODY_DOWNLOAD_STATUS_FULLY_DOWNLOADED);
+		bool is_body_fully_downloaded = viewer_check_body_download_status(view->body_download_status, EMAIL_BODY_DOWNLOAD_STATUS_FULLY_DOWNLOADED);
 
-		email_attachment_data_t *attach_data = ug_data->attachment_info;
-		int attach_count = ug_data->attachment_count;
+		email_attachment_data_t *attach_data = view->attachment_info;
+		int attach_count = view->attachment_count;
 
 		int i = 0;
 		bool is_inline_fully_downloaded = false;
@@ -1404,13 +1400,13 @@ void _reply_all_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EI
 			}
 		}
 
-		debug_log("is_body_fully_downloaded [%d], account_type [%d], has_inline_image [%d], is_inline_fully_downloaded [%d]", is_body_fully_downloaded, ug_data->account_type, ug_data->has_inline_image, is_inline_fully_downloaded);
-		if (!is_body_fully_downloaded && !(ug_data->has_inline_image && is_inline_fully_downloaded)) {
-			util_create_notify(ug_data, EMAIL_VIEWER_HEADER_DOWNLOAD_ENTIRE_EMAIL, EMAIL_VIEWER_POP_PARTIAL_BODY_DOWNLOADED_REST_LOST, 2,
+		debug_log("is_body_fully_downloaded [%d], account_type [%d], has_inline_image [%d], is_inline_fully_downloaded [%d]", is_body_fully_downloaded, view->account_type, view->has_inline_image, is_inline_fully_downloaded);
+		if (!is_body_fully_downloaded && !(view->has_inline_image && is_inline_fully_downloaded)) {
+			util_create_notify(view, EMAIL_VIEWER_HEADER_DOWNLOAD_ENTIRE_EMAIL, EMAIL_VIEWER_POP_PARTIAL_BODY_DOWNLOADED_REST_LOST, 2,
 					EMAIL_VIEWER_STRING_CANCEL, _popup_response_cb,
 					EMAIL_VIEWER_BUTTON_CONTINUE, _popup_response_continue_reply_all_cb, NULL);
 		} else {
-			viewer_launch_composer(ug_data, RUN_COMPOSER_REPLY_ALL);
+			viewer_launch_composer(view, RUN_COMPOSER_REPLY_ALL);
 		}
 	}
 	debug_leave();
@@ -1421,18 +1417,18 @@ void _forward_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	DELETE_EVAS_OBJECT(ug_data->con_popup);
-	DELETE_EVAS_OBJECT(ug_data->notify);
+	DELETE_EVAS_OBJECT(view->con_popup);
+	DELETE_EVAS_OBJECT(view->notify);
 
-	if (ug_data->viewer_type == EML_VIEWER) {
-		viewer_launch_composer(ug_data, RUN_EML_FORWARD);
+	if (view->viewer_type == EML_VIEWER) {
+		viewer_launch_composer(view, RUN_EML_FORWARD);
 	} else {
-		bool is_body_fully_downloaded = viewer_check_body_download_status(ug_data->body_download_status, EMAIL_BODY_DOWNLOAD_STATUS_FULLY_DOWNLOADED);
+		bool is_body_fully_downloaded = viewer_check_body_download_status(view->body_download_status, EMAIL_BODY_DOWNLOAD_STATUS_FULLY_DOWNLOADED);
 
-		email_attachment_data_t *attach_data = ug_data->attachment_info;
-		int attach_count = ug_data->attachment_count;
+		email_attachment_data_t *attach_data = view->attachment_info;
+		int attach_count = view->attachment_count;
 
 		int i = 0;
 		bool is_inline_fully_downloaded = false;
@@ -1442,13 +1438,13 @@ void _forward_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA
 			}
 		}
 
-		debug_log("is_body_fully_downloaded [%d], account_type [%d], has_inline_image [%d], is_inline_fully_downloaded [%d]", is_body_fully_downloaded, ug_data->account_type, ug_data->has_inline_image, is_inline_fully_downloaded);
-		if (!is_body_fully_downloaded && !(ug_data->has_inline_image && is_inline_fully_downloaded)) {
-			util_create_notify(ug_data, EMAIL_VIEWER_HEADER_DOWNLOAD_ENTIRE_EMAIL, EMAIL_VIEWER_POP_PARTIAL_BODY_DOWNLOADED_REST_LOST, 2,
+		debug_log("is_body_fully_downloaded [%d], account_type [%d], has_inline_image [%d], is_inline_fully_downloaded [%d]", is_body_fully_downloaded, view->account_type, view->has_inline_image, is_inline_fully_downloaded);
+		if (!is_body_fully_downloaded && !(view->has_inline_image && is_inline_fully_downloaded)) {
+			util_create_notify(view, EMAIL_VIEWER_HEADER_DOWNLOAD_ENTIRE_EMAIL, EMAIL_VIEWER_POP_PARTIAL_BODY_DOWNLOADED_REST_LOST, 2,
 					EMAIL_VIEWER_STRING_CANCEL, _popup_response_cb,
 					EMAIL_VIEWER_BUTTON_CONTINUE, _popup_response_continue_forward_cb, NULL);
 		} else {
-			viewer_launch_composer(ug_data, RUN_COMPOSER_FORWARD);
+			viewer_launch_composer(view, RUN_COMPOSER_FORWARD);
 		}
 	}
 	debug_leave();
@@ -1458,14 +1454,14 @@ void _delete_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_
 {
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	DELETE_EVAS_OBJECT(ug_data->con_popup);
+	DELETE_EVAS_OBJECT(view->con_popup);
 
 	email_string_t title = { PACKAGE, "IDS_EMAIL_HEADER_DELETE" };
 	email_string_t content = { PACKAGE, "IDS_EMAIL_POP_THIS_EMAIL_WILL_BE_DELETED" };
 	email_string_t btn2 = { PACKAGE, "IDS_EMAIL_BUTTON_DELETE_ABB4" };
-	util_create_notify(ug_data, title, content, 2,
+	util_create_notify(view, title, content, 2,
 			EMAIL_VIEWER_STRING_CANCEL, _popup_response_cb,
 			btn2, _popup_response_delete_ok_cb, NULL);
 
@@ -1477,26 +1473,26 @@ void _move_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_UN
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	DELETE_EVAS_OBJECT(ug_data->con_popup);
+	DELETE_EVAS_OBJECT(view->con_popup);
 
 	char s_mail_id[EMAIL_BUFF_SIZE_SML] = { 0 };
 	const char *sa_mail_id = s_mail_id;
-	snprintf(s_mail_id, EMAIL_BUFF_SIZE_SML, "%d", ug_data->mail_id);
+	snprintf(s_mail_id, EMAIL_BUFF_SIZE_SML, "%d", view->mail_id);
 
 	email_params_h params = NULL;
 
 	if (email_params_create(&params) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, ug_data->account_id) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, ug_data->mailbox_id) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_MOVE_SRC_MAILBOX_ID, ug_data->mailbox_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, view->account_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, view->mailbox_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MOVE_SRC_MAILBOX_ID, view->mailbox_id) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_MODE, 1) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX_MOVE_MODE, 0) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_EDIT_MODE, 0) &&
 		email_params_add_str_array(params, EMAIL_BUNDLE_KEY_ARRAY_SELECTED_MAIL_IDS, &sa_mail_id, 1)) {
 
-		ug_data->loaded_module = viewer_create_module(ug_data, EMAIL_MODULE_ACCOUNT, params, false);
+		view->loaded_module = viewer_create_module(view, EMAIL_MODULE_ACCOUNT, params, false);
 	}
 
 	email_params_free(&params);
@@ -1508,9 +1504,9 @@ static void _more_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info 
 {
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	viewer_create_more_ctxpopup(ug_data);
+	viewer_create_more_ctxpopup(view);
 	debug_leave();
 }
 
@@ -1520,19 +1516,19 @@ void _download_body(void *data)
 
 	int handle;
 	gboolean ret = 0;
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
 	if (viewer_check_storage_full(MIN_FREE_SPACE)) {
-		viewer_show_storage_full_popup(ug_data);
+		viewer_show_storage_full_popup(view);
 		return;
 	}
-	ret = email_engine_body_download(ug_data->account_id, ug_data->mail_id, FALSE, &handle);
+	ret = email_engine_body_download(view->account_id, view->mail_id, FALSE, &handle);
 
 	if (ret == TRUE) {
-		ug_data->email_handle = handle;
+		view->email_handle = handle;
 		debug_log("mail_id(%d) account_id(%d) handle(%d)",
-				ug_data->mail_id, ug_data->account_id, ug_data->email_handle);
-		viewer_create_down_progress(ug_data, EMAIL_VIEWER_POPUP_DOWNLOADING, viewer_destroy_down_progress_cb);
+				view->mail_id, view->account_id, view->email_handle);
+		viewer_create_down_progress(view, EMAIL_VIEWER_POPUP_DOWNLOADING, viewer_destroy_down_progress_cb);
 	} else {
 		debug_log("unable to download mail body");
 		notification_status_message_post(_("IDS_EMAIL_POP_DOWNLOAD_FAILED"));
@@ -1544,11 +1540,11 @@ static void _download_msg_btn_clicked_cb(void *data, Evas_Object *obj, void *eve
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
-	retm_if(ug_data->is_download_message_btn_clicked, "Already clicked!!");
+	EmailViewerView *view = (EmailViewerView *)data;
+	retm_if(view->is_download_message_btn_clicked, "Already clicked!!");
 
 	/* check already downloaded */
-	int body_download_status = ug_data->body_download_status;
+	int body_download_status = view->body_download_status;
 
 	if (viewer_check_body_download_status(body_download_status, EMAIL_BODY_DOWNLOAD_STATUS_NONE)) {
 		debug_log("only header downloaded -> need body download");
@@ -1556,7 +1552,7 @@ static void _download_msg_btn_clicked_cb(void *data, Evas_Object *obj, void *eve
 		debug_log("body downloaded partially -> need full body download");
 	}
 
-	_download_body(ug_data);
+	_download_body(view);
 
 	debug_leave();
 }
@@ -1565,9 +1561,9 @@ static void _popup_response_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	DELETE_EVAS_OBJECT(ug_data->notify);
+	DELETE_EVAS_OBJECT(view->notify);
 	debug_leave();
 }
 
@@ -1575,33 +1571,33 @@ static void _popup_response_delete_ok_cb(void *data, Evas_Object *obj, void *eve
 {
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 	int ret = 0;
 
-	DELETE_EVAS_OBJECT(ug_data->notify);
+	DELETE_EVAS_OBJECT(view->notify);
 
-	if (ug_data->mailbox_type == EMAIL_MAILBOX_TYPE_TRASH || ug_data->save_status == EMAIL_MAIL_STATUS_SEND_SCHEDULED) {
+	if (view->mailbox_type == EMAIL_MAILBOX_TYPE_TRASH || view->save_status == EMAIL_MAIL_STATUS_SEND_SCHEDULED) {
 		/*cancel scheduled email before deleting the mail*/
-		if (ug_data->save_status == EMAIL_MAIL_STATUS_SEND_SCHEDULED) {
-			int err = email_cancel_sending_mail(ug_data->mail_id);
+		if (view->save_status == EMAIL_MAIL_STATUS_SEND_SCHEDULED) {
+			int err = email_cancel_sending_mail(view->mail_id);
 			if (err != EMAIL_ERROR_NONE)
 				debug_log("email_cancel_sending_mail() failed: [%d]", err);
 		}
-		ret = viewer_delete_email(ug_data);
-	} else if (ug_data->viewer_type == EML_VIEWER) {
-		if (remove(ug_data->eml_file_path)) {
+		ret = viewer_delete_email(view);
+	} else if (view->viewer_type == EML_VIEWER) {
+		if (remove(view->eml_file_path)) {
 			debug_log("failed to delete eml file");
 		} else {
 			debug_log("succeed to delete eml file");
 			ret = 1;
 		}
 	} else {
-		ret = viewer_move_email(ug_data, _find_folder_id_using_folder_type(ug_data, EMAIL_MAILBOX_TYPE_TRASH), TRUE, FALSE);
+		ret = viewer_move_email(view, _find_folder_id_using_folder_type(view, EMAIL_MAILBOX_TYPE_TRASH), TRUE, FALSE);
 	}
 
 	if (ret == 1) {
-		debug_log("ug_destroy_me");
-		email_module_make_destroy_request(ug_data->base.module);
+		debug_log("email_module_make_destroy_request");
+		email_module_make_destroy_request(view->base.module);
 	}
 	debug_leave();
 }
@@ -1610,11 +1606,11 @@ static void _popup_response_continue_reply_cb(void *data, Evas_Object *obj, void
 {
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	DELETE_EVAS_OBJECT(ug_data->notify);
+	DELETE_EVAS_OBJECT(view->notify);
 
-	viewer_launch_composer(ug_data, RUN_COMPOSER_REPLY);
+	viewer_launch_composer(view, RUN_COMPOSER_REPLY);
 	debug_leave();
 }
 
@@ -1622,11 +1618,11 @@ static void _popup_response_continue_reply_all_cb(void *data, Evas_Object *obj, 
 {
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	DELETE_EVAS_OBJECT(ug_data->notify);
+	DELETE_EVAS_OBJECT(view->notify);
 
-	viewer_launch_composer(ug_data, RUN_COMPOSER_REPLY_ALL);
+	viewer_launch_composer(view, RUN_COMPOSER_REPLY_ALL);
 	debug_leave();
 }
 
@@ -1634,11 +1630,11 @@ static void _popup_response_continue_forward_cb(void *data, Evas_Object *obj, vo
 {
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	DELETE_EVAS_OBJECT(ug_data->notify);
+	DELETE_EVAS_OBJECT(view->notify);
 
-	viewer_launch_composer(ug_data, RUN_COMPOSER_FORWARD);
+	viewer_launch_composer(view, RUN_COMPOSER_FORWARD);
 	debug_leave();
 }
 
@@ -1646,11 +1642,11 @@ static void _popup_response_to_destroy_cb(void *data, Evas_Object *obj, void *ev
 {
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	DELETE_EVAS_OBJECT(ug_data->notify);
+	DELETE_EVAS_OBJECT(view->notify);
 	debug_log("email_module_make_destroy_request");
-	email_module_make_destroy_request(ug_data->base.module);
+	email_module_make_destroy_request(view->base.module);
 	debug_leave();
 }
 
@@ -1659,9 +1655,9 @@ static void _outter_scroller_bottom_hit_cb(void *data, Evas_Object *obj, void *e
 {
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	viewer_stop_elm_scroller_start_webkit_scroller(ug_data);
+	viewer_stop_elm_scroller_start_webkit_scroller(view);
 
 	debug_leave();
 }
@@ -1671,45 +1667,45 @@ static void _outter_scroller_top_hit_cb(void *data, Evas_Object *obj, void *even
 	debug_enter();
 
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
-	ug_data->is_outer_scroll_bot_hit = EINA_FALSE;
-	edje_object_part_drag_value_set(_EDJ(ug_data->combined_scroller), "elm.dragable.vbar", 0.0, 0.0);
+	EmailViewerView *view = (EmailViewerView *)data;
+	view->is_outer_scroll_bot_hit = EINA_FALSE;
+	edje_object_part_drag_value_set(_EDJ(view->combined_scroller), "elm.dragable.vbar", 0.0, 0.0);
 	debug_leave();
 }
 
-void viewer_remove_callback(EmailViewerUGD *ug_data)
+void viewer_remove_callback(EmailViewerView *view)
 {
 	email_unregister_timezone_changed_callback(_timezone_changed_cb);
 	viewer_close_pattern_generator();
 }
 
-int viewer_reset_mail_data(EmailViewerUGD *ug_data)
+int viewer_reset_mail_data(EmailViewerView *view)
 {
 	debug_enter();
-	retvm_if(ug_data == NULL, VIEWER_ERROR_INVALID_ARG, "Invalid parameter: ug_data[NULL]");
+	retvm_if(view == NULL, VIEWER_ERROR_INVALID_ARG, "Invalid parameter: view[NULL]");
 
 	/* Create Email Viewer Private variables */
-	if (ug_data->mail_info) {
+	if (view->mail_info) {
 		debug_log("mail_info freed");
-		email_free_mail_data(&(ug_data->mail_info), 1);
-		ug_data->mail_info = NULL;
+		email_free_mail_data(&(view->mail_info), 1);
+		view->mail_info = NULL;
 	}
 
-	if (ug_data->attachment_info && ug_data->attachment_count > 0) {
-		debug_log("attachment_info freed p[%p] n[%d]", ug_data->attachment_info, ug_data->attachment_count);
-		email_free_attachment_data(&(ug_data->attachment_info), ug_data->attachment_count);
-		ug_data->attachment_info = NULL;
-		ug_data->attachment_count = 0;
+	if (view->attachment_info && view->attachment_count > 0) {
+		debug_log("attachment_info freed p[%p] n[%d]", view->attachment_info, view->attachment_count);
+		email_free_attachment_data(&(view->attachment_info), view->attachment_count);
+		view->attachment_info = NULL;
+		view->attachment_count = 0;
 	}
 
 	/* Get mail_info from service, and fill property */
-	int ret = viewer_set_internal_data(ug_data, EINA_TRUE);
+	int ret = viewer_set_internal_data(view, EINA_TRUE);
 	if (ret != VIEWER_ERROR_NONE) {
 		debug_log("viewer_set_internal_data() failed! (error type: %d)", ret);
 		return ret;
 	}
 
-	viewer_get_address_info_count(ug_data->mail_info, &ug_data->to_recipients_cnt, &ug_data->cc_recipients_cnt, &ug_data->bcc_recipients_cnt);
+	viewer_get_address_info_count(view->mail_info, &view->to_recipients_cnt, &view->cc_recipients_cnt, &view->bcc_recipients_cnt);
 
 	debug_leave();
 	return VIEWER_ERROR_NONE;
@@ -1720,23 +1716,23 @@ static void _create_webview_layout(void *data)
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
-	if (ug_data->webview_ly == NULL) {
-		Evas_Object *ewk_view_ly = _create_fullview(ug_data->base.content);
-		ug_data->webview_ly = ewk_view_ly;
+	EmailViewerView *view = (EmailViewerView *)data;
+	if (view->webview_ly == NULL) {
+		Evas_Object *ewk_view_ly = _create_fullview(view->base.content);
+		view->webview_ly = ewk_view_ly;
 
-		Evas_Object *ewk_btn = elm_button_add(ug_data->base.content);
+		Evas_Object *ewk_btn = elm_button_add(view->base.content);
 		elm_object_style_set(ewk_btn, "transparent");
 		evas_object_size_hint_weight_set(ewk_btn, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 		evas_object_size_hint_align_set(ewk_btn, EVAS_HINT_FILL, EVAS_HINT_FILL);
-		elm_object_part_content_set(ug_data->base.content, "ev.swallow.webview_button", ewk_btn);
+		elm_object_part_content_set(view->base.content, "ev.swallow.webview_button", ewk_btn);
 		evas_object_show(ewk_btn);
-		ug_data->webview_button = ewk_btn;
+		view->webview_button = ewk_btn;
 	} else {
-		evas_object_show(ug_data->webview_ly);
-		evas_object_show(ug_data->webview_button);
+		evas_object_show(view->webview_ly);
+		evas_object_show(view->webview_button);
 	}
-	elm_object_part_content_set(ug_data->base_ly, "ev.swallow.webview", ug_data->webview_ly);
+	elm_object_part_content_set(view->base_ly, "ev.swallow.webview", view->webview_ly);
 
 	debug_leave();
 }
@@ -1746,108 +1742,108 @@ Eina_Bool viewer_check_body_download(void *data)
 	debug_enter();
 	retvm_if(data == NULL, EINA_FALSE, "Invalid parameter: data[NULL]");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
-	_create_webview_layout(ug_data);
-	_create_body(ug_data);
+	EmailViewerView *view = (EmailViewerView *)data;
+	_create_webview_layout(view);
+	_create_body(view);
 
-	if (viewer_check_body_download_status(ug_data->body_download_status, EMAIL_BODY_DOWNLOAD_STATUS_PARTIALLY_DOWNLOADED)) {
-		ug_data->b_partial_body = 1;
+	if (viewer_check_body_download_status(view->body_download_status, EMAIL_BODY_DOWNLOAD_STATUS_PARTIALLY_DOWNLOADED)) {
+		view->b_partial_body = 1;
 	} else {
-		ug_data->b_partial_body = 0;
+		view->b_partial_body = 0;
 	}
 
-	if (!viewer_check_body_download_status(ug_data->body_download_status, EMAIL_BODY_DOWNLOAD_STATUS_FULLY_DOWNLOADED)) {
-		viewer_create_body_button(ug_data, "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB", _download_msg_btn_clicked_cb);
+	if (!viewer_check_body_download_status(view->body_download_status, EMAIL_BODY_DOWNLOAD_STATUS_FULLY_DOWNLOADED)) {
+		viewer_create_body_button(view, "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB", _download_msg_btn_clicked_cb);
 	}
 	debug_leave();
 	return EINA_FALSE;
 }
 
-void viewer_create_account_data(EmailViewerUGD *ug_data)
+void viewer_create_account_data(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
+	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
 	email_account_t *account = NULL;
-	if (email_engine_get_account_full_data(ug_data->account_id, &account)) {
+	if (email_engine_get_account_full_data(view->account_id, &account)) {
 		if (account) {
-			ug_data->account_type = account->incoming_server_type;
-			FREE(ug_data->account_email_address);
-			ug_data->account_email_address = strdup(account->user_email_address);
+			view->account_type = account->incoming_server_type;
+			FREE(view->account_email_address);
+			view->account_email_address = strdup(account->user_email_address);
 			account_user_data_t *ud = (account_user_data_t *)account->user_data;
 			if (ud != NULL) {
 				debug_log("show_images is %d", ud->show_images);
-				ug_data->b_show_remote_images = ud->show_images;
+				view->b_show_remote_images = ud->show_images;
 			}
 		}
-		viewer_delete_account_data(ug_data);
-		ug_data->account = account;
+		viewer_delete_account_data(view);
+		view->account = account;
 	}
 
 	debug_leave();
 }
 
-void viewer_delete_account_data(EmailViewerUGD *ug_data)
+void viewer_delete_account_data(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
+	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
-	if (ug_data->account) {
-		email_free_account(&ug_data->account, 1);
-		ug_data->account = NULL;
+	if (view->account) {
+		email_free_account(&view->account, 1);
+		view->account = NULL;
 	}
 
 	debug_leave();
 }
 
-static void _viewer_initialize_theme(EmailViewerUGD *ug_data)
+static void _viewer_initialize_theme(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(!ug_data, "Invalid parameter, ug_data is NULL");
+	retm_if(!view, "Invalid parameter, view is NULL");
 
-	ug_data->theme = elm_theme_new();
-	elm_theme_ref_set(ug_data->theme, NULL);
-	elm_theme_extension_add(ug_data->theme, email_get_viewer_theme_path());
+	view->theme = elm_theme_new();
+	elm_theme_ref_set(view->theme, NULL);
+	elm_theme_extension_add(view->theme, email_get_viewer_theme_path());
 
 	debug_leave();
 
 }
 
-static void _viewer_deinitialize_theme(EmailViewerUGD *ug_data)
+static void _viewer_deinitialize_theme(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(!ug_data, "Invalid parameter, ug_data is NULL");
+	retm_if(!view, "Invalid parameter, view is NULL");
 
-	elm_theme_extension_del(ug_data->theme, email_get_viewer_theme_path());
-	elm_theme_free(ug_data->theme);
-	ug_data->theme = NULL;
+	elm_theme_extension_del(view->theme, email_get_viewer_theme_path());
+	elm_theme_free(view->theme);
+	view->theme = NULL;
 
 	debug_leave();
 
 }
 
-static void _destroy_viewer(EmailViewerUGD *ug_data)
+static void _destroy_viewer(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
+	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
-	ug_data->b_viewer_hided = TRUE;
-	viewer_webkit_del_callbacks(ug_data);
-	viewer_delete_account_data(ug_data);
-	viewer_stop_ecore_running_apis(ug_data);
-	recipient_delete_callbacks(ug_data);
-	viewer_delete_evas_objects(ug_data, EINA_FALSE);
-	viewer_remove_hard_link_for_inline_images(ug_data);
-	viewer_remove_temp_files(ug_data);
-	viewer_remove_temp_folders(ug_data);
-	viewer_free_viewer_data(ug_data);
-	viewer_remove_callback(ug_data);
-	noti_mgr_dbus_receiver_remove(ug_data);
+	view->b_viewer_hided = TRUE;
+	viewer_webkit_del_callbacks(view);
+	viewer_delete_account_data(view);
+	viewer_stop_ecore_running_apis(view);
+	recipient_delete_callbacks(view);
+	viewer_delete_evas_objects(view, EINA_FALSE);
+	viewer_remove_hard_link_for_inline_images(view);
+	viewer_remove_temp_files(view);
+	viewer_remove_temp_folders(view);
+	viewer_free_viewer_data(view);
+	viewer_remove_callback(view);
+	noti_mgr_dbus_receiver_remove(view);
 
 	email_engine_finalize();
 	int ct_ret = email_contacts_finalize_service();
 	debug_warning_if(ct_ret != CONTACTS_ERROR_NONE, "email_contacts_finalize_service() failed! ct_ret:[%d]", ct_ret);
-	_viewer_deinitialize_theme(ug_data);
+	_viewer_deinitialize_theme(view);
 	_g_md = NULL;
 
 	debug_leave();

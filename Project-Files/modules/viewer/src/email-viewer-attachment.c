@@ -44,30 +44,30 @@ static void _destroy_view(email_view_t *self);
 static void _on_back_key(email_view_t *self);
 
 static void _popup_response_cb(void *data, Evas_Object *obj, void *event_info);
-static int _create_temp_preview_folder(EmailViewerUGD *ug_data);
-static char *_get_ellipsised_attachment_filename(EmailViewerUGD *ug_data, const char *org_filename, const char *file_size);
+static int _create_temp_preview_folder(EmailViewerView *view);
+static char *_get_ellipsised_attachment_filename(EmailViewerView *view, const char *org_filename, const char *file_size);
 
 static VIEWER_ERROR_TYPE_E _download_attachment(EV_attachment_data *aid);
 static VIEWER_ERROR_TYPE_E _save_and_preview_attachment(EV_attachment_data *aid);
 
-static VIEWER_ERROR_TYPE_E _ensure_save_thread(EmailViewerUGD *ug_data);
-static void _stop_save_thread(EmailViewerUGD *ug_data);
+static VIEWER_ERROR_TYPE_E _ensure_save_thread(EmailViewerView *view);
+static void _stop_save_thread(EmailViewerView *view);
 static void *_attachment_save_thread_run(void *data);
 static email_ext_save_err_type_e _viewer_save_attachment_on_disk(EV_attachment_data *aid);
 
-static VIEWER_ERROR_TYPE_E _ensure_update_timer(EmailViewerUGD *ug_data);
-static void _stop_update_timer(EmailViewerUGD *ug_data);
+static VIEWER_ERROR_TYPE_E _ensure_update_timer(EmailViewerView *view);
+static void _stop_update_timer(EmailViewerView *view);
 static Eina_Bool _attachment_update_timer_cb(void *data);
 
 static void _invalidate_attachment_item(EV_attachment_data *aid);
-static void _stop_update_job(EmailViewerUGD *ug_data);
+static void _stop_update_job(EmailViewerView *view);
 static void _attachment_update_job_cb(void *data);
 
 static void _cancel_attachment_task(EV_attachment_data *aid);
-static void _cancel_preview_task(EmailViewerUGD *ug_data, bool keep_download);
-static void _cancel_all_attachment_tasks(EmailViewerUGD *ug_data);
+static void _cancel_preview_task(EmailViewerView *view, bool keep_download);
+static void _cancel_all_attachment_tasks(EmailViewerView *view);
 
-static void _save_all_attachments(EmailViewerUGD *ug_data);
+static void _save_all_attachments(EmailViewerView *view);
 static void _attachment_download_save_all_cb(void *data, Evas_Object *obj, void *event_info);
 
 static void _viewer_attachment_cancel_cb(EV_attachment_data *aid);
@@ -88,7 +88,7 @@ static Evas_Object *_viewer_create_gl_item_icon_file_type(Evas_Object *parent, c
 static Evas_Object *_viewer_create_gl_item_download_button(Evas_Object *parent,  EV_attachment_data *attachment_data);
 static Evas_Object *_viewer_create_gl_item_label_filename(Evas_Object *parent);
 
-static void _update_attachment_save_cancel_all_buttons(EmailViewerUGD *ug_data);
+static void _update_attachment_save_cancel_all_buttons(EmailViewerView *view);
 
 static void _unpack_object_from_box(Evas_Object *box, Evas_Object *object);
 static void _pack_object_to_box(Evas_Object *box, Evas_Object *object);
@@ -99,10 +99,10 @@ static void _viewer_gl_attachment_update_filename_label_text(EV_attachment_data 
 static void _viewer_update_gl_attachment_item(EV_attachment_data *attachment_data);
 
 static void _viewer_create_attachment_list(void *data);
-static void _destroy_attachment_list(EmailViewerUGD *ug_data);
+static void _destroy_attachment_list(EmailViewerView *view);
 static Evas_Object *_viewer_create_attachment_view_ly(void *data);
 static gboolean _viewer_notify_attachment_process_copy_cb(void *data, float percentage);
-Evas_Object *_viewer_attachment_create_save_cancel_toolbar_btn(Evas_Object *layout, EmailViewerUGD *ug_data);
+Evas_Object *_viewer_attachment_create_save_cancel_toolbar_btn(Evas_Object *layout, EmailViewerView *view);
 
 static email_string_t EMAIL_VIEWER_STRING_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
 static email_string_t EMAIL_VIEWER_UNABLE_TO_DOWNLOAD_ATTACH = { PACKAGE, "IDS_EMAIL_HEADER_UNABLE_TO_DOWNLOAD_ATTACHMENT_ABB" };
@@ -117,21 +117,21 @@ static void _popup_response_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	DELETE_EVAS_OBJECT(ug_data->notify);
+	DELETE_EVAS_OBJECT(view->notify);
 	debug_leave();
 }
 
-static void _create_unable_to_save_attachment_popup(EmailViewerUGD *ug_data)
+static void _create_unable_to_save_attachment_popup(EmailViewerView *view)
 {
 	email_string_t title = { PACKAGE, "IDS_EMAIL_HEADER_FAILED_TO_SAVE_ATTACHMENT_ABB" };
 	email_string_t content = { PACKAGE, "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED" };
-	util_create_notify(ug_data, title, content, 1, EMAIL_VIEWER_STRING_OK,
+	util_create_notify(view, title, content, 1, EMAIL_VIEWER_STRING_OK,
 			_popup_response_cb, EMAIL_VIEWER_STRING_NULL, NULL, NULL);
 }
 
-static char *_get_ellipsised_attachment_filename(EmailViewerUGD *ug_data, const char *org_filename, const char *file_size)
+static char *_get_ellipsised_attachment_filename(EmailViewerView *view, const char *org_filename, const char *file_size)
 {
 	debug_enter();
 
@@ -148,16 +148,16 @@ static char *_get_ellipsised_attachment_filename(EmailViewerUGD *ug_data, const 
 	return filename;
 }
 
-EV_attachment_data *viewer_get_attachment_data(EmailViewerUGD *ug_data, int info_index)
+EV_attachment_data *viewer_get_attachment_data(EmailViewerView *view, int info_index)
 {
 	debug_enter();
-	retvm_if(ug_data == NULL, NULL, "Invalid parameter: ug_data[NULL]");
+	retvm_if(view == NULL, NULL, "Invalid parameter: view[NULL]");
 
 	EV_attachment_data *result = NULL;
 	Eina_List *l = NULL;
 	EV_attachment_data *attachment_item_data = NULL;
 
-	EINA_LIST_FOREACH(ug_data->attachment_data_list, l, attachment_item_data) {
+	EINA_LIST_FOREACH(view->attachment_data_list, l, attachment_item_data) {
 		if (attachment_item_data) {
 			if (attachment_item_data->attachment_info->index == info_index) {
 				result = attachment_item_data;
@@ -170,10 +170,10 @@ EV_attachment_data *viewer_get_attachment_data(EmailViewerUGD *ug_data, int info
 	return result;
 }
 
-static int _create_temp_preview_folder(EmailViewerUGD *ug_data)
+static int _create_temp_preview_folder(EmailViewerView *view)
 {
 	debug_enter();
-	retvm_if(ug_data == NULL, -1, "Invalid parameter: ug_data[NULL]");
+	retvm_if(view == NULL, -1, "Invalid parameter: view[NULL]");
 
 	int nErr = email_create_folder(email_get_viewer_tmp_dir());
 	if (nErr == -1) {
@@ -182,9 +182,9 @@ static int _create_temp_preview_folder(EmailViewerUGD *ug_data)
 	}
 
 	pid_t pid = getpid();
-	ug_data->temp_preview_folder_path = g_strdup_printf("%s/preview_%d_%d_%d",
-			email_get_viewer_tmp_dir(), pid, ug_data->account_id, ug_data->mail_id);
-	nErr = email_create_folder(ug_data->temp_preview_folder_path);
+	view->temp_preview_folder_path = g_strdup_printf("%s/preview_%d_%d_%d",
+			email_get_viewer_tmp_dir(), pid, view->account_id, view->mail_id);
+	nErr = email_create_folder(view->temp_preview_folder_path);
 	if (nErr == -1) {
 		debug_error("email_create_folder(temp_preview_folder_path) failed!");
 		return -1;
@@ -193,15 +193,15 @@ static int _create_temp_preview_folder(EmailViewerUGD *ug_data)
 	return 0;
 }
 
-static void _update_attachment_save_cancel_all_buttons(EmailViewerUGD *ug_data)
+static void _update_attachment_save_cancel_all_buttons(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
+	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
-	if (!(ug_data->show_cancel_all_btn)) {
-		elm_object_domain_translatable_text_set(ug_data->save_all_btn, PACKAGE, "IDS_EMAIL_BUTTON_DOWNLOAD_ALL");
+	if (!(view->show_cancel_all_btn)) {
+		elm_object_domain_translatable_text_set(view->save_all_btn, PACKAGE, "IDS_EMAIL_BUTTON_DOWNLOAD_ALL");
 	} else {
-		elm_object_domain_translatable_text_set(ug_data->save_all_btn, PACKAGE, "IDS_EMAIL_BUTTON_CANCEL");
+		elm_object_domain_translatable_text_set(view->save_all_btn, PACKAGE, "IDS_EMAIL_BUTTON_CANCEL");
 	}
 }
 
@@ -217,17 +217,17 @@ static VIEWER_ERROR_TYPE_E _download_attachment(EV_attachment_data *aid)
 		return VIEWER_ERROR_DOWNLOAD_FAIL;
 	}
 
-	EmailViewerUGD *ug_data = aid->ug_data;
+	EmailViewerView *view = aid->view;
 
-	if ((ug_data->account_type == EMAIL_SERVER_TYPE_POP3) &&
-			!viewer_check_body_download_status(ug_data->body_download_status, EMAIL_BODY_DOWNLOAD_STATUS_FULLY_DOWNLOADED)) {
+	if ((view->account_type == EMAIL_SERVER_TYPE_POP3) &&
+			!viewer_check_body_download_status(view->body_download_status, EMAIL_BODY_DOWNLOAD_STATUS_FULLY_DOWNLOADED)) {
 		return VIEWER_ERROR_BODY_NOT_DOWNLOADED;
 	}
 
 	int handle = 0;
 
 	/* download attachment */
-	gboolean res = email_engine_attachment_download(ug_data->mail_id, info->index, &handle);
+	gboolean res = email_engine_attachment_download(view->mail_id, info->index, &handle);
 	if (!res) {
 		int ret = notification_status_message_post(_("IDS_EMAIL_POP_DOWNLOAD_FAILED"));
 		debug_warning_if(ret != NOTIFICATION_ERROR_NONE, "notification_status_message_post() failed! ret:(%d)", ret);
@@ -266,12 +266,12 @@ VIEWER_ERROR_TYPE_E viewer_download_and_preview_save_attachment(EV_attachment_da
 			result = VIEWER_ERROR_NONE;
 			break;
 		case VIEWER_ERROR_BODY_NOT_DOWNLOADED:
-			util_create_notify(aid->ug_data, EMAIL_VIEWER_UNABLE_TO_DOWNLOAD_ATTACH,
+			util_create_notify(aid->view, EMAIL_VIEWER_UNABLE_TO_DOWNLOAD_ATTACH,
 					EMAIL_VIEWER_BODY_FIRST_DOWNLOAD_MESSAGE, 1,
 					EMAIL_VIEWER_STRING_OK, _popup_response_cb, EMAIL_VIEWER_STRING_NULL, NULL, NULL);
 			break;
 		default:
-			_create_unable_to_save_attachment_popup(aid->ug_data);
+			_create_unable_to_save_attachment_popup(aid->view);
 			break;
 		}
 
@@ -287,7 +287,7 @@ void viewer_set_attachment_state(EV_attachment_data *aid, EV_attachment_state ne
 {
 	debug_enter();
 	retm_if(aid == NULL, "Invalid parameter: aid[NULL]");
-	EmailViewerUGD *ug_data = aid->ug_data;
+	EmailViewerView *view = aid->view;
 
 	if (new_state != aid->state) {
 
@@ -299,7 +299,7 @@ void viewer_set_attachment_state(EV_attachment_data *aid, EV_attachment_state ne
 			break;
 		case EV_ATT_STATE_IN_PROGRESS:
 			{
-				VIEWER_ERROR_TYPE_E r = _ensure_update_timer(aid->ug_data);
+				VIEWER_ERROR_TYPE_E r = _ensure_update_timer(aid->view);
 				if (r != VIEWER_ERROR_NONE) {
 					debug_warning("_ensure_update_timer() failed: %d", r);
 				}
@@ -314,35 +314,35 @@ void viewer_set_attachment_state(EV_attachment_data *aid, EV_attachment_state ne
 
 		_invalidate_attachment_item(aid);
 
-		switch (viewer_get_all_attachments_state(ug_data)) {
+		switch (viewer_get_all_attachments_state(view)) {
 		case EV_ALL_ATT_STATE_IDLE:
-			ug_data->show_cancel_all_btn = EINA_FALSE;
+			view->show_cancel_all_btn = EINA_FALSE;
 			break;
 		case EV_ALL_ATT_STATE_BUSY:
-			ug_data->show_cancel_all_btn = EINA_TRUE;
+			view->show_cancel_all_btn = EINA_TRUE;
 			break;
 		default:
 			break;
 		}
 
-		if (ug_data->save_all_btn) {
-			_update_attachment_save_cancel_all_buttons(ug_data);
+		if (view->save_all_btn) {
+			_update_attachment_save_cancel_all_buttons(view);
 		}
 	}
 
 	debug_leave();
 }
 
-EV_all_attachment_state viewer_get_all_attachments_state(EmailViewerUGD *ug_data)
+EV_all_attachment_state viewer_get_all_attachments_state(EmailViewerView *view)
 {
 	debug_enter();
-	retvm_if(ug_data == NULL, EV_ALL_ATT_STATE_INVALID, "Invalid parameter: ug_data[NULL]");
+	retvm_if(view == NULL, EV_ALL_ATT_STATE_INVALID, "Invalid parameter: view[NULL]");
 
 	EV_all_attachment_state result = EV_ALL_ATT_STATE_INVALID;
 	Eina_List *l = NULL;
 	EV_attachment_data *aid = NULL;
 
-	EINA_LIST_FOREACH(ug_data->attachment_data_list, l, aid) {
+	EINA_LIST_FOREACH(view->attachment_data_list, l, aid) {
 		if (aid) {
 			EV_all_attachment_state all_state = (aid->state == EV_ATT_STATE_IDLE) ?
 					EV_ALL_ATT_STATE_IDLE : EV_ALL_ATT_STATE_BUSY;
@@ -370,27 +370,27 @@ static VIEWER_ERROR_TYPE_E _save_and_preview_attachment(EV_attachment_data *aid)
 	}
 
 	EmailAttachmentType *info = aid->attachment_info;
-	EmailViewerUGD *ug_data = aid->ug_data;
+	EmailViewerView *view = aid->view;
 
 	if (!info || STR_INVALID(info->path)) {
 		debug_leave();
 		return VIEWER_ERROR_INVALID_ARG;
 	}
 
-	VIEWER_ERROR_TYPE_E r = _ensure_save_thread(ug_data);
+	VIEWER_ERROR_TYPE_E r = _ensure_save_thread(view);
 	if (r != VIEWER_ERROR_NONE) {
 		debug_error("_ensure_save_thread() failed: %d", r);
 		return r;
 	}
 
-	r = _ensure_update_timer(ug_data);
+	r = _ensure_update_timer(view);
 	if (r != VIEWER_ERROR_NONE) {
 		debug_error("_ensure_update_timer() failed: %d", r);
 		return r;
 	}
 
-	if (aid == ug_data->preview_aid) {
-		email_ext_save_err_type_e r =  email_prepare_temp_file_path(info->index, ug_data->temp_preview_folder_path, info->path, &aid->preview_path);
+	if (aid == view->preview_aid) {
+		email_ext_save_err_type_e r =  email_prepare_temp_file_path(info->index, view->temp_preview_folder_path, info->path, &aid->preview_path);
 		if (r == EMAIL_EXT_SAVE_ERR_ALREADY_EXIST) {
 			debug_log("Already saved. Showing the preview...");
 			viewer_show_attachment_preview(aid);
@@ -413,28 +413,28 @@ static VIEWER_ERROR_TYPE_E _save_and_preview_attachment(EV_attachment_data *aid)
 
 	aid->progress_val = 0;
 
-	pthread_mutex_lock(&ug_data->attachment_save_mutex);
+	pthread_mutex_lock(&view->attachment_save_mutex);
 
-	ug_data->attachment_data_list_to_save = eina_list_append(ug_data->attachment_data_list_to_save, aid);
+	view->attachment_data_list_to_save = eina_list_append(view->attachment_data_list_to_save, aid);
 
-	pthread_mutex_unlock(&ug_data->attachment_save_mutex);
-	pthread_cond_signal(&ug_data->attachment_save_cond);
+	pthread_mutex_unlock(&view->attachment_save_mutex);
+	pthread_cond_signal(&view->attachment_save_cond);
 
 	debug_leave();
 	return VIEWER_ERROR_NONE;
 }
 
-static VIEWER_ERROR_TYPE_E _ensure_save_thread(EmailViewerUGD *ug_data)
+static VIEWER_ERROR_TYPE_E _ensure_save_thread(EmailViewerView *view)
 {
 	debug_enter();
-	retvm_if(ug_data == NULL, VIEWER_ERROR_NULL_POINTER, "Invalid parameter: ug_data[NULL]");
+	retvm_if(view == NULL, VIEWER_ERROR_NULL_POINTER, "Invalid parameter: view[NULL]");
 
-	if (ug_data->attachment_save_thread == 0) {
-		int r = pthread_create(&ug_data->attachment_save_thread, NULL,
-				_attachment_save_thread_run, ug_data);
+	if (view->attachment_save_thread == 0) {
+		int r = pthread_create(&view->attachment_save_thread, NULL,
+				_attachment_save_thread_run, view);
 		if (r != 0) {
 			debug_error("Failed to create thread: %d", r);
-			ug_data->attachment_save_thread = 0;
+			view->attachment_save_thread = 0;
 			return VIEWER_ERROR_FAIL;
 		}
 	}
@@ -443,18 +443,18 @@ static VIEWER_ERROR_TYPE_E _ensure_save_thread(EmailViewerUGD *ug_data)
 	return VIEWER_ERROR_NONE;
 }
 
-static void _stop_save_thread(EmailViewerUGD *ug_data)
+static void _stop_save_thread(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
+	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
-	if (ug_data->attachment_save_thread != 0) {
-		pthread_t t = ug_data->attachment_save_thread;
+	if (view->attachment_save_thread != 0) {
+		pthread_t t = view->attachment_save_thread;
 
-		pthread_mutex_lock(&ug_data->attachment_save_mutex);
-		ug_data->attachment_save_thread = 0;
-		pthread_mutex_unlock(&ug_data->attachment_save_mutex);
-		pthread_cond_signal(&ug_data->attachment_save_cond);
+		pthread_mutex_lock(&view->attachment_save_mutex);
+		view->attachment_save_thread = 0;
+		pthread_mutex_unlock(&view->attachment_save_mutex);
+		pthread_cond_signal(&view->attachment_save_cond);
 		pthread_join(t, NULL);
 	}
 
@@ -465,29 +465,29 @@ static void *_attachment_save_thread_run(void *data)
 {
 	debug_enter();
 	retvm_if(data == NULL, NULL, "Invalid parameter: data[NULL]");
-	EmailViewerUGD *ug_data = data;
+	EmailViewerView *view = data;
 
 	bool need_exit = false;
 	while (!need_exit) {
 		EV_attachment_data *aid = NULL;
 
 		debug_log("before lock");
-		pthread_mutex_lock(&ug_data->attachment_save_mutex);
+		pthread_mutex_lock(&view->attachment_save_mutex);
 		debug_log("LOCKED");
 
-		if (ug_data->attachment_data_list_to_save) {
-			aid = eina_list_data_get(ug_data->attachment_data_list_to_save);
-			ug_data->attachment_data_list_to_save = eina_list_remove_list(
-					ug_data->attachment_data_list_to_save, ug_data->attachment_data_list_to_save);
-		} else if (ug_data->attachment_save_thread != 0) {
+		if (view->attachment_data_list_to_save) {
+			aid = eina_list_data_get(view->attachment_data_list_to_save);
+			view->attachment_data_list_to_save = eina_list_remove_list(
+					view->attachment_data_list_to_save, view->attachment_data_list_to_save);
+		} else if (view->attachment_save_thread != 0) {
 			debug_log("WAITING...");
-			pthread_cond_wait(&ug_data->attachment_save_cond,
-					&ug_data->attachment_save_mutex);
+			pthread_cond_wait(&view->attachment_save_cond,
+					&view->attachment_save_mutex);
 		} else {
 			need_exit = true;
 		}
 
-		pthread_mutex_unlock(&ug_data->attachment_save_mutex);
+		pthread_mutex_unlock(&view->attachment_save_mutex);
 		debug_log("UNLOCKED");
 
 		if (aid) {
@@ -522,15 +522,15 @@ static email_ext_save_err_type_e _viewer_save_attachment_on_disk(EV_attachment_d
 	return EMAIL_EXT_SAVE_ERR_NONE;
 }
 
-static VIEWER_ERROR_TYPE_E _ensure_update_timer(EmailViewerUGD *ug_data)
+static VIEWER_ERROR_TYPE_E _ensure_update_timer(EmailViewerView *view)
 {
 	debug_enter();
-	retvm_if(ug_data == NULL, VIEWER_ERROR_NULL_POINTER, "Invalid parameter: ug_data[NULL]");
+	retvm_if(view == NULL, VIEWER_ERROR_NULL_POINTER, "Invalid parameter: view[NULL]");
 
-	if (!ug_data->attachment_update_timer) {
-		ug_data->attachment_update_timer = ecore_timer_add(
-				ATTACHMENT_TIMER_UPDATE_INTERVAL, _attachment_update_timer_cb, ug_data);
-		if (!ug_data->attachment_update_timer) {
+	if (!view->attachment_update_timer) {
+		view->attachment_update_timer = ecore_timer_add(
+				ATTACHMENT_TIMER_UPDATE_INTERVAL, _attachment_update_timer_cb, view);
+		if (!view->attachment_update_timer) {
 			debug_error("Failed to create update timer");
 			return VIEWER_ERROR_FAIL;
 		}
@@ -540,14 +540,14 @@ static VIEWER_ERROR_TYPE_E _ensure_update_timer(EmailViewerUGD *ug_data)
 	return VIEWER_ERROR_NONE;
 }
 
-static void _stop_update_timer(EmailViewerUGD *ug_data)
+static void _stop_update_timer(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
+	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
-	if (ug_data->attachment_update_timer) {
-		ecore_timer_del(ug_data->attachment_update_timer);
-		ug_data->attachment_update_timer = NULL;
+	if (view->attachment_update_timer) {
+		ecore_timer_del(view->attachment_update_timer);
+		view->attachment_update_timer = NULL;
 	}
 
 	debug_leave();
@@ -557,13 +557,13 @@ static Eina_Bool _attachment_update_timer_cb(void *data)
 {
 	debug_enter();
 	retvm_if(data == NULL, ECORE_CALLBACK_CANCEL, "Invalid parameter: data[NULL]");
-	EmailViewerUGD *ug_data = data;
+	EmailViewerView *view = data;
 
 	Eina_Bool result = ECORE_CALLBACK_CANCEL;
 
 	Eina_List *l = NULL;
 	EV_attachment_data *aid = NULL;
-	EINA_LIST_FOREACH(ug_data->attachment_data_list, l, aid) {
+	EINA_LIST_FOREACH(view->attachment_data_list, l, aid) {
 		if (!aid) {
 			continue;
 		}
@@ -585,7 +585,7 @@ static Eina_Bool _attachment_update_timer_cb(void *data)
 
 				if (!aid->saving_was_canceled) {
 					if (aid->save_result == EMAIL_EXT_SAVE_ERR_NONE) {
-						if (aid == ug_data->preview_aid) {
+						if (aid == view->preview_aid) {
 							viewer_show_attachment_preview(aid);
 						} else {
 							aid->is_saved = true;
@@ -593,7 +593,7 @@ static Eina_Bool _attachment_update_timer_cb(void *data)
 							debug_warning_if(ret != NOTIFICATION_ERROR_NONE, "notification_status_message_post() failed! ret:(%d)", ret);
 						}
 					} else if (aid->save_result == EMAIL_EXT_SAVE_ERR_NO_FREE_SPACE) {
-						viewer_show_storage_full_popup(ug_data);
+						viewer_show_storage_full_popup(view);
 					}
 				}
 
@@ -617,7 +617,7 @@ static Eina_Bool _attachment_update_timer_cb(void *data)
 	}
 
 	if (result == ECORE_CALLBACK_CANCEL) {
-		ug_data->attachment_update_timer = NULL;
+		view->attachment_update_timer = NULL;
 	}
 
 	debug_leave();
@@ -628,25 +628,25 @@ static void _invalidate_attachment_item(EV_attachment_data *aid)
 {
 	debug_enter();
 	retm_if(aid == NULL, "Invalid parameter: aid[NULL]");
-	EmailViewerUGD *ug_data = aid->ug_data;
+	EmailViewerView *view = aid->view;
 
 	aid->need_update = true;
 
-	if (!ug_data->attachment_update_job) {
-		ug_data->attachment_update_job = ecore_job_add(_attachment_update_job_cb, ug_data);
+	if (!view->attachment_update_job) {
+		view->attachment_update_job = ecore_job_add(_attachment_update_job_cb, view);
 	}
 
 	debug_leave();
 }
 
-static void _stop_update_job(EmailViewerUGD *ug_data)
+static void _stop_update_job(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
+	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
-	if (ug_data->attachment_update_job) {
-		ecore_job_del(ug_data->attachment_update_job);
-		ug_data->attachment_update_job = NULL;
+	if (view->attachment_update_job) {
+		ecore_job_del(view->attachment_update_job);
+		view->attachment_update_job = NULL;
 	}
 
 	debug_leave();
@@ -656,13 +656,13 @@ static void _attachment_update_job_cb(void *data)
 {
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerUGD *ug_data = data;
+	EmailViewerView *view = data;
 
-	ug_data->attachment_update_job = NULL;
+	view->attachment_update_job = NULL;
 
 	Eina_List *l = NULL;
 	EV_attachment_data *aid = NULL;
-	EINA_LIST_FOREACH(ug_data->attachment_data_list, l, aid) {
+	EINA_LIST_FOREACH(view->attachment_data_list, l, aid) {
 		if (aid && aid->need_update) {
 			if (aid->content_box) {
 				_viewer_update_gl_attachment_item(aid);
@@ -678,7 +678,7 @@ static void _cancel_attachment_task(EV_attachment_data *aid)
 {
 	debug_enter();
 	retm_if(aid == NULL, "Invalid parameter: aid[NULL]");
-	EmailViewerUGD *ug_data = aid->ug_data;
+	EmailViewerView *view = aid->view;
 
 	if (aid->state == EV_ATT_STATE_IDLE) {
 		debug_log("Already in idle state.");
@@ -686,7 +686,7 @@ static void _cancel_attachment_task(EV_attachment_data *aid)
 	}
 
 	if (aid->download_handle != 0) {
-		email_engine_stop_working(ug_data->account_id, aid->download_handle);
+		email_engine_stop_working(view->account_id, aid->download_handle);
 		aid->download_handle = 0;
 	}
 
@@ -696,18 +696,18 @@ static void _cancel_attachment_task(EV_attachment_data *aid)
 		Eina_List *l = NULL;
 		EV_attachment_data *aid_iter = NULL;
 
-		pthread_mutex_lock(&ug_data->attachment_save_mutex);
+		pthread_mutex_lock(&view->attachment_save_mutex);
 
-		EINA_LIST_FOREACH(ug_data->attachment_data_list_to_save, l, aid_iter) {
+		EINA_LIST_FOREACH(view->attachment_data_list_to_save, l, aid_iter) {
 			if (aid_iter == aid) {
-				ug_data->attachment_data_list_to_save = eina_list_remove_list(
-						ug_data->attachment_data_list_to_save, l);
+				view->attachment_data_list_to_save = eina_list_remove_list(
+						view->attachment_data_list_to_save, l);
 				was_removed = true;
 				break;
 			}
 		}
 
-		pthread_mutex_unlock(&ug_data->attachment_save_mutex);
+		pthread_mutex_unlock(&view->attachment_save_mutex);
 
 		if (was_removed) {
 			aid->is_saving = false;
@@ -717,8 +717,8 @@ static void _cancel_attachment_task(EV_attachment_data *aid)
 		}
 	}
 
-	if (aid == ug_data->preview_aid) {
-		ug_data->preview_aid = NULL;
+	if (aid == view->preview_aid) {
+		view->preview_aid = NULL;
 	}
 
 	viewer_set_attachment_state(aid, EV_ATT_STATE_IDLE);
@@ -726,47 +726,47 @@ static void _cancel_attachment_task(EV_attachment_data *aid)
 	debug_leave();
 }
 
-static void _cancel_preview_task(EmailViewerUGD *ug_data, bool keep_download)
+static void _cancel_preview_task(EmailViewerView *view, bool keep_download)
 {
 	debug_enter();
-	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
+	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
-	if (ug_data->preview_aid) {
-		if (!keep_download || ug_data->preview_aid->is_saving) {
-			_cancel_attachment_task(ug_data->preview_aid);
+	if (view->preview_aid) {
+		if (!keep_download || view->preview_aid->is_saving) {
+			_cancel_attachment_task(view->preview_aid);
 		} else {
-			ug_data->preview_aid = NULL;
+			view->preview_aid = NULL;
 		}
 	}
 
 	debug_leave();
 }
 
-static void _cancel_all_attachment_tasks(EmailViewerUGD *ug_data)
+static void _cancel_all_attachment_tasks(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
+	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
 	Eina_List *l = NULL;
 	EV_attachment_data *aid = NULL;
-	EINA_LIST_FOREACH(ug_data->attachment_data_list, l, aid) {
+	EINA_LIST_FOREACH(view->attachment_data_list, l, aid) {
 		_cancel_attachment_task(aid);
 	}
 
 	debug_leave();
 }
 
-static void _save_all_attachments(EmailViewerUGD *ug_data)
+static void _save_all_attachments(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(ug_data == NULL, "Invalid parameter: ug_data[NULL]");
+	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
 	/* Cancel preview task only if already saving */
-	_cancel_preview_task(ug_data, true);
+	_cancel_preview_task(view, true);
 
 	Eina_List *l = NULL;
 	EV_attachment_data *aid = NULL;
-	EINA_LIST_FOREACH(ug_data->attachment_data_list, l, aid) {
+	EINA_LIST_FOREACH(view->attachment_data_list, l, aid) {
 		if (aid && (aid->state == EV_ATT_STATE_IDLE)) {
 			VIEWER_ERROR_TYPE_E r = viewer_download_and_preview_save_attachment(aid);
 			if (r != VIEWER_ERROR_NONE) {
@@ -783,12 +783,12 @@ static void _attachment_download_save_all_cb(void *data, Evas_Object *obj, void 
 {
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerUGD *ug_data = (EmailViewerUGD *) data;
+	EmailViewerView *view = (EmailViewerView *) data;
 
-	if (!(ug_data->show_cancel_all_btn)) {
-		_save_all_attachments(ug_data);
+	if (!(view->show_cancel_all_btn)) {
+		_save_all_attachments(view);
 	} else {
-		_cancel_all_attachment_tasks(ug_data);
+		_cancel_all_attachment_tasks(view);
 	}
 
 	debug_leave();
@@ -833,18 +833,18 @@ static void _viewer_attachment_button_clicked(void *data, Evas_Object *obj, cons
 
 static char *_gl_attachment_group_text_get(void *data, Evas_Object *obj, const char *part)
 {
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
 	if ((strcmp(part, "elm.text")) == 0) {
 		char item_count_info[BUF_LEN_S];
-		if (ug_data->normal_att_count == 1) {
+		if (view->normal_att_count == 1) {
 			snprintf(item_count_info, sizeof(item_count_info), "%s", email_get_email_string("IDS_EMAIL_BODY_1_FILE_ABB"));
 		} else {
-			snprintf(item_count_info, sizeof(item_count_info), email_get_email_string("IDS_EMAIL_BODY_PD_FILES_ABB"), ug_data->normal_att_count);
+			snprintf(item_count_info, sizeof(item_count_info), email_get_email_string("IDS_EMAIL_BODY_PD_FILES_ABB"), view->normal_att_count);
 		}
 
 		char *total_file_size = NULL;
-		total_file_size = email_get_file_size_string(ug_data->total_att_size);
+		total_file_size = email_get_file_size_string(view->total_att_size);
 
 		strcat(strcat(strcat(item_count_info, " ("), total_file_size), ")");
 		g_free(total_file_size);
@@ -957,7 +957,7 @@ static void _gl_attachment_sel(void *data, Evas_Object *obj, void *event_info)
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
 	EV_attachment_data *attachment_item_data = (EV_attachment_data *)data;
-	EmailViewerUGD *ug_data = attachment_item_data->ug_data;
+	EmailViewerView *view = attachment_item_data->view;
 	debug_log("Selected item info_index = %d", attachment_item_data->attachment_info->index);
 
 	email_feedback_play_tap_sound();
@@ -969,15 +969,15 @@ static void _gl_attachment_sel(void *data, Evas_Object *obj, void *event_info)
 	}
 
 	/* When a user clicks attachment layout multiple times quickly, app launch requested is called multiple times. */
-	ret_if(ug_data->base.module->is_launcher_busy);
+	ret_if(view->base.module->is_launcher_busy);
 
 	/* Cancel current (if any) preview task in any case */
-	_cancel_preview_task(ug_data, false);
+	_cancel_preview_task(view, false);
 
 	/* Start new preview task */
-	ug_data->preview_aid = attachment_item_data;
+	view->preview_aid = attachment_item_data;
 	if (viewer_download_and_preview_save_attachment(attachment_item_data) != VIEWER_ERROR_NONE) {
-		ug_data->preview_aid = NULL;
+		view->preview_aid = NULL;
 	}
 
 	debug_leave();
@@ -1125,7 +1125,7 @@ static void _viewer_gl_attachment_update_filename_label_text(EV_attachment_data 
 {
 	const gint64 size = attachment_data->attachment_info->size;
 	gchar *file_size = email_get_file_size_string(size);
-	char *filename = _get_ellipsised_attachment_filename(attachment_data->ug_data,
+	char *filename = _get_ellipsised_attachment_filename(attachment_data->view,
 			attachment_data->attachment_info->name, file_size);
 	elm_object_text_set(attachment_data->filename_label, filename);
 	free(filename);
@@ -1202,7 +1202,7 @@ void viewer_update_attachment_item_info(void *data)
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
 	EV_attachment_data *attachment_item_data = (EV_attachment_data *)data;
-	EmailViewerUGD *ug_data = attachment_item_data->ug_data;
+	EmailViewerView *view = attachment_item_data->view;
 	EmailAttachmentType *info = attachment_item_data->attachment_info;
 
 	info->path = email_engine_get_attachment_path(info->attach_id);
@@ -1210,13 +1210,13 @@ void viewer_update_attachment_item_info(void *data)
 	if (email_check_file_exist(info->path)) {
 		gint64 copy_size = info->size;
 		info->size = email_get_file_size(info->path);
-		ug_data->total_att_size += (guint64) info->size - copy_size;
+		view->total_att_size += (guint64) info->size - copy_size;
 		info->is_downloaded = TRUE;
 
 		_viewer_gl_attachment_update_filename_label_text(attachment_item_data);
 	}
 
-	elm_genlist_item_update(ug_data->attachment_group_item);
+	elm_genlist_item_update(view->attachment_group_item);
 
 	debug_leave();
 }
@@ -1225,17 +1225,17 @@ static void _viewer_create_attachment_list(void *data)
 {
 	debug_enter();
 	retm_if(!data, "Invalid parameter: data is NULL!");
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
 	int i = 0;
-	GList *attach_info_list = ug_data->attachment_info_list;
+	GList *attach_info_list = view->attachment_info_list;
 	LIST_ITER_START(i, attach_info_list) {
 		EmailAttachmentType *info = (EmailAttachmentType *)LIST_ITER_GET_DATA(i, attach_info_list);
-		if (viewer_is_normal_attachment(info) || (ug_data->is_smil_mail)) {
+		if (viewer_is_normal_attachment(info) || (view->is_smil_mail)) {
 			EV_attachment_data *attachment_item_data = NULL;
 			attachment_item_data = calloc(1, sizeof(EV_attachment_data));
 			retm_if(!attachment_item_data, "attachment_item_data is NULL!");
-			attachment_item_data->ug_data = ug_data;
+			attachment_item_data->view = view;
 			attachment_item_data->state = EV_ATT_STATE_IDLE;
 			attachment_item_data->download_handle = 0;
 			attachment_item_data->is_saving = false;
@@ -1247,37 +1247,37 @@ static void _viewer_create_attachment_list(void *data)
 			attachment_item_data->is_progress_info_packed = false;
 			debug_log("attachment_item_data->attachment_info :%p", attachment_item_data->attachment_info);
 
-			if (!ug_data->attachment_group_item) {
-				ug_data->attachment_group_itc = _viewer_attachment_create_group_item_class();
-				ug_data->attachment_group_item = elm_genlist_item_append(ug_data->attachment_genlist, ug_data->attachment_group_itc, ug_data, NULL,
-										ELM_GENLIST_ITEM_NONE, _gl_attachment_group_sel, ug_data);
+			if (!view->attachment_group_item) {
+				view->attachment_group_itc = _viewer_attachment_create_group_item_class();
+				view->attachment_group_item = elm_genlist_item_append(view->attachment_genlist, view->attachment_group_itc, view, NULL,
+										ELM_GENLIST_ITEM_NONE, _gl_attachment_group_sel, view);
 			}
-			attachment_item_data->it = elm_genlist_item_append(ug_data->attachment_genlist, ug_data->attachment_itc, attachment_item_data, ug_data->attachment_group_item,
+			attachment_item_data->it = elm_genlist_item_append(view->attachment_genlist, view->attachment_itc, attachment_item_data, view->attachment_group_item,
 										ELM_GENLIST_ITEM_NONE, _gl_attachment_sel, attachment_item_data);
 			elm_genlist_item_select_mode_set(attachment_item_data->it, ELM_OBJECT_SELECT_MODE_ALWAYS);
 
-			ug_data->attachment_data_list = eina_list_append(ug_data->attachment_data_list, attachment_item_data);
+			view->attachment_data_list = eina_list_append(view->attachment_data_list, attachment_item_data);
 		}
 	}
 
 	debug_leave();
 }
 
-static void _destroy_attachment_list(EmailViewerUGD *ug_data)
+static void _destroy_attachment_list(EmailViewerView *view)
 {
 	debug_enter();
-	retm_if(!ug_data, "Invalid parameter: ug_data[NULL]");
+	retm_if(!view, "Invalid parameter: view[NULL]");
 
 	Eina_List *l = NULL;
 	EV_attachment_data *aid = NULL;
-	EINA_LIST_FOREACH(ug_data->attachment_data_list, l, aid) {
+	EINA_LIST_FOREACH(view->attachment_data_list, l, aid) {
 		free(aid->preview_path);
 		free(aid);
 	}
 
-	DELETE_LIST_OBJECT(ug_data->attachment_data_list);
-	DELETE_EVAS_OBJECT(ug_data->save_all_btn);
-	ug_data->save_all_btn = NULL;
+	DELETE_LIST_OBJECT(view->attachment_data_list);
+	DELETE_EVAS_OBJECT(view->save_all_btn);
+	view->save_all_btn = NULL;
 	debug_leave();
 }
 
@@ -1285,9 +1285,9 @@ static Evas_Object *_viewer_create_attachment_view_ly(void *data)
 {
 	debug_enter();
 	retvm_if(!data, NULL, "Invalid parameter: data is NULL!");
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	Evas_Object *parent = ug_data->base.module->navi;
+	Evas_Object *parent = view->base.module->navi;
 
 	Evas_Object *ly = elm_layout_add(parent);
 	elm_layout_theme_set(ly, "layout", "application", "noindicator");
@@ -1302,9 +1302,9 @@ static Evas_Object *_viewer_create_attachment_view_ly(void *data)
 static void _on_back_key(email_view_t *self)
 {
 	debug_enter();
-	EmailViewerUGD *ug_data = &((EmailViewerModule *)self->module)->view;
+	EmailViewerView *view = &((EmailViewerModule *)self->module)->view;
 
-	email_module_exit_view(&ug_data->attachment_view);
+	email_module_exit_view(&view->attachment_view);
 
 	debug_leave();
 }
@@ -1312,28 +1312,28 @@ static void _on_back_key(email_view_t *self)
 static void _destroy_view(email_view_t *self)
 {
 	debug_enter();
-	EmailViewerUGD *ug_data = &((EmailViewerModule *)self->module)->view;
+	EmailViewerView *view = &((EmailViewerModule *)self->module)->view;
 
-	DELETE_EVAS_OBJECT(ug_data->attachment_genlist);
+	DELETE_EVAS_OBJECT(view->attachment_genlist);
 
-	EMAIL_GENLIST_ITC_FREE(ug_data->attachment_itc);
-	EMAIL_GENLIST_ITC_FREE(ug_data->attachment_group_itc);
+	EMAIL_GENLIST_ITC_FREE(view->attachment_itc);
+	EMAIL_GENLIST_ITC_FREE(view->attachment_group_itc);
 
-	_cancel_all_attachment_tasks(ug_data);
+	_cancel_all_attachment_tasks(view);
 
-	_stop_update_job(ug_data);
-	_stop_update_timer(ug_data);
-	_stop_save_thread(ug_data);
+	_stop_update_job(view);
+	_stop_update_timer(view);
+	_stop_save_thread(view);
 
-	_destroy_attachment_list(ug_data);
+	_destroy_attachment_list(view);
 
-	ug_data->attachment_group_item = NULL;
-	ug_data->preview_aid = NULL;
+	view->attachment_group_item = NULL;
+	view->preview_aid = NULL;
 
-	pthread_mutex_destroy(&ug_data->attachment_save_mutex);
-	pthread_cond_destroy(&ug_data->attachment_save_cond);
+	pthread_mutex_destroy(&view->attachment_save_mutex);
+	pthread_cond_destroy(&view->attachment_save_cond);
 
-	memset(&ug_data->attachment_view, 0, sizeof(ug_data->attachment_view));
+	memset(&view->attachment_view, 0, sizeof(view->attachment_view));
 
 	debug_leave();
 }
@@ -1355,15 +1355,15 @@ static gboolean _viewer_notify_attachment_process_copy_cb(void *data, float perc
 	return false;
 }
 
-void viewer_create_attachment_view(EmailViewerUGD *ug_data)
+void viewer_create_attachment_view(EmailViewerView *view)
 {
 	debug_enter();
 
-	ug_data->attachment_view.create = _create_view;
-	ug_data->attachment_view.destroy = _destroy_view;
-	ug_data->attachment_view.on_back_key = _on_back_key;
+	view->attachment_view.create = _create_view;
+	view->attachment_view.destroy = _destroy_view;
+	view->attachment_view.on_back_key = _on_back_key;
 
-	int ret = email_module_create_view(ug_data->base.module, &ug_data->attachment_view);
+	int ret = email_module_create_view(view->base.module, &view->attachment_view);
 	if (ret != 0) {
 		debug_error("email_module_create_view(): failed (%d)", ret);
 	}
@@ -1371,11 +1371,11 @@ void viewer_create_attachment_view(EmailViewerUGD *ug_data)
 	debug_leave();
 }
 
-Evas_Object *_viewer_attachment_create_save_cancel_toolbar_btn(Evas_Object *layout, EmailViewerUGD *ug_data)
+Evas_Object *_viewer_attachment_create_save_cancel_toolbar_btn(Evas_Object *layout, EmailViewerView *view)
 {
 	Evas_Object *btn = elm_button_add(layout);
 	elm_object_style_set(btn, "bottom");
-	evas_object_smart_callback_add(btn, "clicked", _attachment_download_save_all_cb, ug_data);
+	evas_object_smart_callback_add(btn, "clicked", _attachment_download_save_all_cb, view);
 
 	return btn;
 }
@@ -1383,39 +1383,39 @@ Evas_Object *_viewer_attachment_create_save_cancel_toolbar_btn(Evas_Object *layo
 static int _create_view(email_view_t *self)
 {
 	debug_enter();
-	EmailViewerUGD *ug_data = &((EmailViewerModule *)self->module)->view;
+	EmailViewerView *view = &((EmailViewerModule *)self->module)->view;
 
-	pthread_mutex_init(&ug_data->attachment_save_mutex, NULL);
-	pthread_cond_init(&ug_data->attachment_save_cond, NULL);
+	pthread_mutex_init(&view->attachment_save_mutex, NULL);
+	pthread_cond_init(&view->attachment_save_cond, NULL);
 
-	self->content = _viewer_create_attachment_view_ly(ug_data);
-	ug_data->attachment_genlist = _viewer_attachment_create_genlist(self->content);
-	ug_data->attachment_itc = _viewer_attachment_create_item_class();
-	_viewer_create_attachment_list(ug_data);
-	elm_object_part_content_set(self->content, "elm.swallow.content", ug_data->attachment_genlist);
+	self->content = _viewer_create_attachment_view_ly(view);
+	view->attachment_genlist = _viewer_attachment_create_genlist(self->content);
+	view->attachment_itc = _viewer_attachment_create_item_class();
+	_viewer_create_attachment_list(view);
+	elm_object_part_content_set(self->content, "elm.swallow.content", view->attachment_genlist);
 
 	Elm_Object_Item *attachment_navi_it = email_module_view_push(self, "IDS_EMAIL_HEADER_ATTACHMENTS_ABB", 0);
 	elm_object_item_domain_text_translatable_set(attachment_navi_it, PACKAGE, EINA_TRUE);
 
-	int ret = _create_temp_preview_folder(ug_data);
+	int ret = _create_temp_preview_folder(view);
 	retvm_if(ret == -1, -1, "_create_temp_preview_folder() is failed!");
 
-	if (ug_data->normal_att_count > 1) {
-		Evas_Object *ly = elm_layout_add(ug_data->base.content);
+	if (view->normal_att_count > 1) {
+		Evas_Object *ly = elm_layout_add(view->base.content);
 		retvm_if(!ly, -1, "ly is NULL");
 		elm_layout_file_set(ly, email_get_viewer_theme_path(), "ev/layout/toolbar_single_button");
 		evas_object_size_hint_weight_set(ly, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 		evas_object_size_hint_align_set(ly, EVAS_HINT_FILL, EVAS_HINT_FILL);
 
-		ug_data->save_all_btn = _viewer_attachment_create_save_cancel_toolbar_btn(ly, ug_data);
-		retvm_if(!ug_data->save_all_btn, -1, "ug_data->save_all_btn is NULL");
+		view->save_all_btn = _viewer_attachment_create_save_cancel_toolbar_btn(ly, view);
+		retvm_if(!view->save_all_btn, -1, "view->save_all_btn is NULL");
 
-		elm_layout_content_set(ly, "ev.swallow.toolbar_single_button", ug_data->save_all_btn);
+		elm_layout_content_set(ly, "ev.swallow.toolbar_single_button", view->save_all_btn);
 
-		evas_object_show(ug_data->save_all_btn);
+		evas_object_show(view->save_all_btn);
 		evas_object_show(ly);
 		elm_object_item_part_content_set(attachment_navi_it, "toolbar", ly);
-		_update_attachment_save_cancel_all_buttons(ug_data);
+		_update_attachment_save_cancel_all_buttons(view);
 	}
 
 	debug_leave();

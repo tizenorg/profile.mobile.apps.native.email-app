@@ -42,18 +42,18 @@ void __email_viewer_got_next_prev_message(void *data, gboolean next)
 		return;
 	}
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
+	EmailViewerView *view = (EmailViewerView *)data;
 
-	_hide_view(ug_data);
+	_hide_view(view);
 
 	email_params_h params = NULL;
 
 	if (email_params_create(&params) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAIL_INDEX, ug_data->mail_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAIL_INDEX, view->mail_id) &&
 		email_params_add_str(params, EMAIL_BUNDLE_KEY_MSG,
 				(next ? EMAIL_BUNDLE_VAL_PREV_MSG : EMAIL_BUNDLE_VAL_NEXT_MSG))) {
 
-		email_module_send_result(ug_data->base.module, params);
+		email_module_send_result(view->base.module, params);
 	}
 
 	email_params_free(&params);
@@ -64,13 +64,13 @@ void __email_viewer_got_next_prev_message(void *data, gboolean next)
 static Evas_Event_Flags _onGestureStart(void *data, void *eventInfo)
 {
 	debug_enter();
-	EmailViewerUGD *ug_data = (EmailViewerUGD *) data;
+	EmailViewerView *view = (EmailViewerView *) data;
 
 	int ewk_sc_x = 0;
 	int ewk_sc_y = 0;
 
-	ewk_view_scroll_pos_get(ug_data->webview, &ewk_sc_x, &ewk_sc_y);
-	ug_data->webkit_old_x = ewk_sc_x;
+	ewk_view_scroll_pos_get(view->webview, &ewk_sc_x, &ewk_sc_y);
+	view->webkit_old_x = ewk_sc_x;
 
 	return EVAS_EVENT_FLAG_NONE;
 }
@@ -78,7 +78,7 @@ static Evas_Event_Flags _onGestureStart(void *data, void *eventInfo)
 static Evas_Event_Flags _onGestureEnd(void *data, void *eventInfo)
 {
 	debug_enter();
-	EmailViewerUGD *ug_data = (EmailViewerUGD *) data;
+	EmailViewerView *view = (EmailViewerView *) data;
 	Elm_Gesture_Line_Info *event = (Elm_Gesture_Line_Info *) eventInfo;
 
 	Evas_Coord ewk_ct_w = 0;
@@ -90,14 +90,14 @@ static Evas_Event_Flags _onGestureEnd(void *data, void *eventInfo)
 		return EVAS_EVENT_FLAG_NONE;
 	}
 
-	ewk_view_scroll_size_get(ug_data->webview, &ewk_ct_w, &ewk_ct_h);
+	ewk_view_scroll_size_get(view->webview, &ewk_ct_w, &ewk_ct_h);
 
 	if (event->momentum.mx > 0) { /* right//next */
-		if (ug_data->webkit_old_x == 0) {
+		if (view->webkit_old_x == 0) {
 			__email_viewer_got_next_prev_message(data, true);
 		}
 	} else { /* left//prevous */
-		if (ug_data->webkit_old_x == ewk_ct_w) {
+		if (view->webkit_old_x == ewk_ct_w) {
 			__email_viewer_got_next_prev_message(data, false);
 		}
 	}
@@ -116,16 +116,16 @@ void viewer_set_flick_layer(void *data)
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
-	EmailViewerUGD *ug_data = (EmailViewerUGD *) data;
+	EmailViewerView *view = (EmailViewerView *) data;
 
-	Evas_Object *gesture_obj = elm_gesture_layer_add(ug_data->scroller);
+	Evas_Object *gesture_obj = elm_gesture_layer_add(view->scroller);
 	retm_if(gesture_obj == NULL, "elm_gesture_layer_add() failed!");
 
-	elm_gesture_layer_attach(gesture_obj, ug_data->scroller);
+	elm_gesture_layer_attach(gesture_obj, view->scroller);
 	elm_gesture_layer_continues_enable_set(gesture_obj, EINA_FALSE);
 
-	elm_gesture_layer_cb_set(gesture_obj, ELM_GESTURE_N_FLICKS, ELM_GESTURE_STATE_START, _onGestureStart, ug_data);
-	elm_gesture_layer_cb_set(gesture_obj, ELM_GESTURE_N_FLICKS, ELM_GESTURE_STATE_END, _onGestureEnd, ug_data);
+	elm_gesture_layer_cb_set(gesture_obj, ELM_GESTURE_N_FLICKS, ELM_GESTURE_STATE_START, _onGestureStart, view);
+	elm_gesture_layer_cb_set(gesture_obj, ELM_GESTURE_N_FLICKS, ELM_GESTURE_STATE_END, _onGestureEnd, view);
 
 	debug_leave();
 }
