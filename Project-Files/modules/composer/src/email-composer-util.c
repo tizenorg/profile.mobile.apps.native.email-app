@@ -44,7 +44,7 @@
 #define EMAIL_BUNDLE_KEY_NAME_TOTAL_SIZE "http://tizen.org/appcontrol/data/total_size"
 
 static char *_composer_util_convert_dayformat(const char *format_str);
-static Evas_Coord _composer_util_get_selected_widget_position(EmailComposerUGD *ugd);
+static Evas_Coord _composer_util_get_selected_widget_position(EmailComposerView *view);
 
 static const char *_composer_util_file_get_unique_dirname(const char *root_dir, char *ec_dirname);
 
@@ -218,9 +218,9 @@ char *composer_util_get_error_string(int type)
 	return ret;
 }
 
-int composer_util_get_total_attachments_size(EmailComposerUGD *ugd, Eina_Bool with_inline_contents)
+int composer_util_get_total_attachments_size(EmailComposerView *view, Eina_Bool with_inline_contents)
 {
-	retvm_if(!ugd, 0, "ugd is NULL!");
+	retvm_if(!view, 0, "view is NULL!");
 
 	int attach_size = 0;
 	int inline_size = 0;
@@ -230,7 +230,7 @@ int composer_util_get_total_attachments_size(EmailComposerUGD *ugd, Eina_Bool wi
 	email_attachment_data_t *att_data;
 
 	ComposerAttachmentItemData *attachment_item_data = NULL;
-	EINA_LIST_FOREACH(ugd->attachment_item_list, l, attachment_item_data) {
+	EINA_LIST_FOREACH(view->attachment_item_list, l, attachment_item_data) {
 		email_attachment_data_t *att = attachment_item_data->attachment_data;
 		if (att) {
 			if (att->attachment_path && (stat(att->attachment_path, &file_info) != -1)) {
@@ -244,7 +244,7 @@ int composer_util_get_total_attachments_size(EmailComposerUGD *ugd, Eina_Bool wi
 	}
 
 	if (with_inline_contents) {
-		EINA_LIST_FOREACH(ugd->attachment_inline_item_list, l, att_data) {
+		EINA_LIST_FOREACH(view->attachment_inline_item_list, l, att_data) {
 			if (att_data) {
 				if (att_data->attachment_path && (stat(att_data->attachment_path, &file_info) != -1)) {
 					/*debug_secure("size(%s): %d", att_data->attachment_path, file_info.st_size);*/
@@ -280,32 +280,32 @@ Eina_Bool composer_util_is_max_sending_size_exceeded(void *data)
 
 	retvm_if(!data, EINA_TRUE, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	Eina_Bool ret = EINA_FALSE;
 
-	int mail_size = composer_util_get_total_attachments_size(ugd, EINA_TRUE); /* + composer_util_get_body_size(ugd->new_mail_info); */
-	if (mail_size > ugd->account_info->max_sending_size) {
+	int mail_size = composer_util_get_total_attachments_size(view, EINA_TRUE); /* + composer_util_get_body_size(view->new_mail_info); */
+	if (mail_size > view->account_info->max_sending_size) {
 		ret = EINA_TRUE;
 	}
-	debug_log("Total size:(%d Byte), max:(%d Byte)", mail_size, ugd->account_info->max_sending_size);
+	debug_log("Total size:(%d Byte), max:(%d Byte)", mail_size, view->account_info->max_sending_size);
 
 	debug_leave();
 	return ret;
 }
 
-void composer_util_modify_send_button(EmailComposerUGD *ugd)
+void composer_util_modify_send_button(EmailComposerView *view)
 {
 	debug_enter();
 
-	retm_if(!ugd, "Invalid parameter: ugd is NULL!");
+	retm_if(!view, "Invalid parameter: view is NULL!");
 
-	if (ugd->to_recipients_cnt == 0 && ugd->cc_recipients_cnt == 0 && ugd->bcc_recipients_cnt == 0) {
-		elm_object_disabled_set(ugd->send_btn, EINA_TRUE);
+	if (view->to_recipients_cnt == 0 && view->cc_recipients_cnt == 0 && view->bcc_recipients_cnt == 0) {
+		elm_object_disabled_set(view->send_btn, EINA_TRUE);
 	} else {
-		if (composer_util_is_max_sending_size_exceeded(ugd)) {
-			elm_object_disabled_set(ugd->send_btn, EINA_TRUE);
+		if (composer_util_is_max_sending_size_exceeded(view)) {
+			elm_object_disabled_set(view->send_btn, EINA_TRUE);
 		} else {
-			elm_object_disabled_set(ugd->send_btn, EINA_FALSE);
+			elm_object_disabled_set(view->send_btn, EINA_FALSE);
 		}
 	}
 
@@ -316,21 +316,21 @@ void composer_util_get_image_list_cb(Evas_Object *o, const char *result, void *d
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
-	EmailComposerAccount *account_info = ugd->account_info;
+	EmailComposerView *view = (EmailComposerView *)data;
+	EmailComposerAccount *account_info = view->account_info;
 	retm_if(!account_info, "account_info is NULL!");
 
 	int i = 0;
 	Eina_List *l = NULL;
 	email_attachment_data_t *att_data = NULL;
 
-	EINA_LIST_FOREACH(ugd->attachment_inline_item_list, l, att_data) {
+	EINA_LIST_FOREACH(view->attachment_inline_item_list, l, att_data) {
 		if (att_data) {
 			email_free_attachment_data(&att_data, 1);
 		}
 	}
-	eina_list_free(ugd->attachment_inline_item_list);
-	ugd->attachment_inline_item_list = NULL;
+	eina_list_free(view->attachment_inline_item_list);
+	view->attachment_inline_item_list = NULL;
 
 	if (result) {
 		debug_secure("inline attachment list from webkit: [%s]", result);
@@ -363,15 +363,15 @@ void composer_util_get_image_list_cb(Evas_Object *o, const char *result, void *d
 						new_att->attachment_size = file_info.st_size;
 						new_att->save_status = 1;
 					}
-					ugd->attachment_inline_item_list = eina_list_append(ugd->attachment_inline_item_list, new_att);
+					view->attachment_inline_item_list = eina_list_append(view->attachment_inline_item_list, new_att);
 				}
 			}
 		}
 		g_strfreev(uris);
 
 		/* For logging */
-		/*debug_log("total inline count:[%d]", eina_list_count(ugd->attachment_inline_item_list));
-		EINA_LIST_FOREACH(ugd->attachment_inline_item_list, l, att_data) {
+		/*debug_log("total inline count:[%d]", eina_list_count(view->attachment_inline_item_list));
+		EINA_LIST_FOREACH(view->attachment_inline_item_list, l, att_data) {
 			debug_secure("Name:[%s], path:[%s], size:[%d], save[%d]", att_data->attachment_name, att_data->attachment_path, att_data->attachment_size, att_data->save_status);
 		}*/
 	}
@@ -652,52 +652,52 @@ void composer_util_focus_set_focus(void *data, Evas_Object *target)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
-	/*debug_log("Flag values are %d,%d,%d,%d,%d",ugd->is_launching_ug, ugd->is_hided, ugd->is_back_btn_clicked, ugd->is_save_in_drafts_clicked, ugd->is_send_btn_clicked);*/
-	if (ugd->is_hided) {
-		ugd->need_to_set_focus_on_resume = EINA_TRUE;
+	EmailComposerView *view = (EmailComposerView *)data;
+	/*debug_log("Flag values are %d,%d,%d,%d,%d",view->is_launching_ug, view->is_hided, view->is_back_btn_clicked, view->is_save_in_drafts_clicked, view->is_send_btn_clicked);*/
+	if (view->is_hided) {
+		view->need_to_set_focus_on_resume = EINA_TRUE;
 	}
 
 	/* If ewk_view in focus some elm object may be in invalid focus state.
 	 * So unfocus any elm object to validate focus state.*/
-	if (evas_object_focus_get(ugd->ewk_view)) {
-		evas_object_focus_set(ugd->ewk_view, EINA_FALSE);
-		Evas_Object *elm_object_in_focus = elm_object_focused_object_get(ugd->base.content);
+	if (evas_object_focus_get(view->ewk_view)) {
+		evas_object_focus_set(view->ewk_view, EINA_FALSE);
+		Evas_Object *elm_object_in_focus = elm_object_focused_object_get(view->base.content);
 		if (elm_object_in_focus) {
 			elm_object_focus_set(elm_object_in_focus, EINA_FALSE);
 		}
 	}
 
-	retm_if(ugd->base.module->is_launcher_busy || ugd->is_hided || ugd->composer_popup || ugd->context_popup, "should not set focus");
-	retm_if(ugd->is_back_btn_clicked || ugd->is_save_in_drafts_clicked || ugd->is_send_btn_clicked, "while exiting composer");
+	retm_if(view->base.module->is_launcher_busy || view->is_hided || view->composer_popup || view->context_popup, "should not set focus");
+	retm_if(view->is_back_btn_clicked || view->is_save_in_drafts_clicked || view->is_send_btn_clicked, "while exiting composer");
 
 	/* XXX; check this. when is this routine needed? */
-	if (ugd->recp_from_ctxpopup) {
-		evas_object_del(ugd->recp_from_ctxpopup);
-		ugd->recp_from_ctxpopup = NULL;
-		composer_recipient_from_ctxpopup_item_delete(ugd);
+	if (view->recp_from_ctxpopup) {
+		evas_object_del(view->recp_from_ctxpopup);
+		view->recp_from_ctxpopup = NULL;
+		composer_recipient_from_ctxpopup_item_delete(view);
 	}
 
 	if (!target) {
 		debug_log("Focus set [None]");
-	} else if (target == ugd->recp_to_entry.entry) {
+	} else if (target == view->recp_to_entry.entry) {
 		debug_log("Focus set [to entry]");
-		elm_object_focus_set(ugd->recp_to_entry.entry, EINA_TRUE);
-	} else if (target == ugd->recp_cc_entry.entry) {
+		elm_object_focus_set(view->recp_to_entry.entry, EINA_TRUE);
+	} else if (target == view->recp_cc_entry.entry) {
 		debug_log("Focus set [cc entry]");
-		elm_object_focus_set(ugd->recp_cc_entry.entry, EINA_TRUE);
-	} else if (target == ugd->recp_bcc_entry.entry) {
+		elm_object_focus_set(view->recp_cc_entry.entry, EINA_TRUE);
+	} else if (target == view->recp_bcc_entry.entry) {
 		debug_log("Focus set [bcc entry]");
-		elm_object_focus_set(ugd->recp_bcc_entry.entry, EINA_TRUE);
-	} else if (target == ugd->subject_entry.entry) {
+		elm_object_focus_set(view->recp_bcc_entry.entry, EINA_TRUE);
+	} else if (target == view->subject_entry.entry) {
 		debug_log("Focus set [subject_entry]");
-		elm_object_focus_set(ugd->subject_entry.entry, EINA_TRUE);
-	} else if (target == ugd->ewk_view) {
+		elm_object_focus_set(view->subject_entry.entry, EINA_TRUE);
+	} else if (target == view->ewk_view) {
 		debug_log("Focus set [ewk_view]");
-		elm_object_focus_set(ugd->ewk_btn, EINA_TRUE);
+		elm_object_focus_set(view->ewk_btn, EINA_TRUE);
 	} else {
 		debug_log("Focus set [NO! subject_entry]");
-		elm_object_focus_set(ugd->subject_entry.entry, EINA_TRUE);
+		elm_object_focus_set(view->subject_entry.entry, EINA_TRUE);
 	}
 	debug_leave();
 }
@@ -706,16 +706,16 @@ static Eina_Bool __composer_util_focus_set_focus_idler_cb(void *data)
 {
 	debug_enter();
 
-	COMPOSER_GET_TIMER_DATA(tdata, ugd, data);
+	COMPOSER_GET_TIMER_DATA(tdata, view, data);
 	Evas_Object *entry = (Evas_Object *)tdata->data;
 
-	ugd->idler_set_focus = NULL;
+	view->idler_set_focus = NULL;
 
-	if (!entry && !ugd->base.module->is_attach_panel_launched && (ugd->selected_entry != ugd->ewk_view)) {
-		entry = ugd->selected_entry;
+	if (!entry && !view->base.module->is_attach_panel_launched && (view->selected_entry != view->ewk_view)) {
+		entry = view->selected_entry;
 	}
 
-	composer_util_focus_set_focus(ugd, entry);
+	composer_util_focus_set_focus(view, entry);
 
 	FREE(tdata);
 
@@ -727,24 +727,24 @@ void composer_util_focus_set_focus_with_idler(void *data, Evas_Object *target)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
 	email_common_timer_data_t *tdata = (email_common_timer_data_t *)calloc(1, sizeof(email_common_timer_data_t));
 	retm_if(!tdata, "tdata is NULL");
-	tdata->ug_data = (void *)ugd;
-	tdata->data = (void *)target;
+	tdata->view_data = view;
+	tdata->data = target;
 
-	DELETE_IDLER_OBJECT(ugd->idler_set_focus);
-	ugd->idler_set_focus = ecore_idler_add(__composer_util_focus_set_focus_idler_cb, tdata);
+	DELETE_IDLER_OBJECT(view->idler_set_focus);
+	view->idler_set_focus = ecore_idler_add(__composer_util_focus_set_focus_idler_cb, tdata);
 
 	debug_leave();
 }
 
-static Evas_Coord _composer_util_get_selected_widget_position(EmailComposerUGD *ugd)
+static Evas_Coord _composer_util_get_selected_widget_position(EmailComposerView *view)
 {
 	debug_enter();
 
-	if (ugd->recp_from_ctxpopup) {
+	if (view->recp_from_ctxpopup) {
 		debug_log("selected_layout = from layout");
 		return 0;
 	}
@@ -754,16 +754,16 @@ static Evas_Coord _composer_util_get_selected_widget_position(EmailComposerUGD *
 	Evas_Coord composer_layout_y = 0;
 	Evas_Coord entry_layout_y = 0;
 
-	evas_object_geometry_get(ugd->composer_layout, NULL, &composer_layout_y, NULL, NULL);
+	evas_object_geometry_get(view->composer_layout, NULL, &composer_layout_y, NULL, NULL);
 
-	if (ugd->selected_entry == ugd->recp_to_entry.entry) {
-		evas_object_geometry_get(ugd->recp_to_layout, NULL, &entry_layout_y, NULL, NULL);
-	} else if (ugd->selected_entry == ugd->recp_cc_entry.entry) {
-		evas_object_geometry_get(ugd->recp_cc_layout, NULL, &entry_layout_y, NULL, NULL);
-	} else if (ugd->selected_entry == ugd->recp_bcc_entry.entry) {
-		evas_object_geometry_get(ugd->recp_bcc_layout, NULL, &entry_layout_y, NULL, NULL);
-	} else if (ugd->selected_entry == ugd->subject_entry.entry) {
-		evas_object_geometry_get(ugd->subject_layout, NULL, &entry_layout_y, NULL, NULL);
+	if (view->selected_entry == view->recp_to_entry.entry) {
+		evas_object_geometry_get(view->recp_to_layout, NULL, &entry_layout_y, NULL, NULL);
+	} else if (view->selected_entry == view->recp_cc_entry.entry) {
+		evas_object_geometry_get(view->recp_cc_layout, NULL, &entry_layout_y, NULL, NULL);
+	} else if (view->selected_entry == view->recp_bcc_entry.entry) {
+		evas_object_geometry_get(view->recp_bcc_layout, NULL, &entry_layout_y, NULL, NULL);
+	} else if (view->selected_entry == view->subject_entry.entry) {
+		evas_object_geometry_get(view->subject_layout, NULL, &entry_layout_y, NULL, NULL);
 	} else {
 		debug_log("No selected entry!");
 		return -1;
@@ -778,12 +778,12 @@ static Evas_Coord _composer_util_get_selected_widget_position(EmailComposerUGD *
 void composer_util_scroll_region_show(void *data)
 {
 	debug_enter();
-	EmailComposerUGD *ugd = data;
+	EmailComposerView *view = data;
 
-	Evas_Coord size_to_be_scrolled = _composer_util_get_selected_widget_position(ugd);
+	Evas_Coord size_to_be_scrolled = _composer_util_get_selected_widget_position(view);
 
 	if (size_to_be_scrolled >= 0) {
-		composer_initial_view_cs_show(ugd, size_to_be_scrolled);
+		composer_initial_view_cs_show(view, size_to_be_scrolled);
 	}
 
 	debug_leave();
@@ -793,10 +793,10 @@ Eina_Bool composer_util_scroll_region_show_idler(void *data)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	ugd->idler_regionshow = NULL;
-	composer_util_scroll_region_show(ugd);
+	view->idler_regionshow = NULL;
+	composer_util_scroll_region_show(view);
 
 	debug_leave();
 	return ECORE_CALLBACK_CANCEL;
@@ -806,10 +806,10 @@ Eina_Bool composer_util_scroll_region_show_timer(void *data)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	ugd->timer_regionshow = NULL;
-	composer_util_scroll_region_show(ugd);
+	view->timer_regionshow = NULL;
+	composer_util_scroll_region_show(view);
 
 	/* To resize predictive search layout after rotating device.
 	 * (P140630-03288) Steps.
@@ -819,8 +819,8 @@ Eina_Bool composer_util_scroll_region_show_timer(void *data)
 	 *  4. Rotate device portrait.
 	 *  5. There's an empty space below the box. (It's because we moves the scroller to the focused entry.)
 	 */
-	if (ugd->ps_box) {
-		composer_ps_change_layout_size(ugd);
+	if (view->ps_box) {
+		composer_ps_change_layout_size(view);
 	}
 
 	debug_leave();
@@ -830,12 +830,12 @@ Eina_Bool composer_util_scroll_region_show_timer(void *data)
 void composer_util_scroll_region_bringin(void *data)
 {
 	debug_enter();
-	EmailComposerUGD *ugd = data;
+	EmailComposerView *view = data;
 
-	Evas_Coord size_to_be_scrolled = _composer_util_get_selected_widget_position(ugd);
+	Evas_Coord size_to_be_scrolled = _composer_util_get_selected_widget_position(view);
 
 	if (size_to_be_scrolled >= 0) {
-		composer_initial_view_cs_bring_in(ugd, size_to_be_scrolled);
+		composer_initial_view_cs_bring_in(view, size_to_be_scrolled);
 	}
 
 	debug_leave();
@@ -845,10 +845,10 @@ Eina_Bool composer_util_scroll_region_bringin_idler(void *data)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	ugd->idler_regionbringin = NULL;
-	composer_util_scroll_region_bringin(ugd);
+	view->idler_regionbringin = NULL;
+	composer_util_scroll_region_bringin(view);
 
 	debug_leave();
 	return ECORE_CALLBACK_CANCEL;
@@ -858,10 +858,10 @@ Eina_Bool composer_util_scroll_region_bringin_timer(void *data)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	ugd->timer_regionbringin = NULL;
-	composer_util_scroll_region_bringin(ugd);
+	view->timer_regionbringin = NULL;
+	composer_util_scroll_region_bringin(view);
 
 	debug_leave();
 	return ECORE_CALLBACK_CANCEL;
@@ -871,13 +871,13 @@ void composer_util_ug_destroy_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
 	/* Restore the indicator mode. */
-	composer_util_indicator_restore(ugd);
+	composer_util_indicator_restore(view);
 
-	DELETE_EVAS_OBJECT(ugd->composer_popup);
-	email_module_make_destroy_request(ugd->base.module);
+	DELETE_EVAS_OBJECT(view->composer_popup);
+	email_module_make_destroy_request(view->base.module);
 
 	debug_leave();
 }
@@ -888,32 +888,32 @@ Eina_Bool composer_util_is_mail_modified(void *data)
 
 	retvm_if(!data, EINA_TRUE, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
 	Eina_Bool is_modified = EINA_TRUE;
 
-	if ((ugd->composer_type == RUN_COMPOSER_EXTERNAL) ||
-		(ugd->recp_to_mbe && __composer_util_is_mbe_modified(ugd->recp_to_mbe, &ugd->initial_contents_to_list)) ||
-		(ugd->recp_cc_mbe && __composer_util_is_mbe_modified(ugd->recp_cc_mbe, &ugd->initial_contents_cc_list)) ||
-		(ugd->recp_bcc_mbe && __composer_util_is_mbe_modified(ugd->recp_bcc_mbe, &ugd->initial_contents_bcc_list)) ||
-		(g_strcmp0(elm_entry_entry_get(ugd->subject_entry.entry), ugd->initial_contents_subject) != 0)) {
+	if ((view->composer_type == RUN_COMPOSER_EXTERNAL) ||
+		(view->recp_to_mbe && __composer_util_is_mbe_modified(view->recp_to_mbe, &view->initial_contents_to_list)) ||
+		(view->recp_cc_mbe && __composer_util_is_mbe_modified(view->recp_cc_mbe, &view->initial_contents_cc_list)) ||
+		(view->recp_bcc_mbe && __composer_util_is_mbe_modified(view->recp_bcc_mbe, &view->initial_contents_bcc_list)) ||
+		(g_strcmp0(elm_entry_entry_get(view->subject_entry.entry), view->initial_contents_subject) != 0)) {
 		goto FINISH_OFF;
 	}
 
-	if ((ugd->initial_contents_attachment_list && !ugd->attachment_item_list) || (!ugd->initial_contents_attachment_list && ugd->attachment_item_list)) {
+	if ((view->initial_contents_attachment_list && !view->attachment_item_list) || (!view->initial_contents_attachment_list && view->attachment_item_list)) {
 		goto FINISH_OFF;
-	} else if (ugd->initial_contents_attachment_list && ugd->attachment_item_list) {
-		int nInitialListCount = eina_list_count(ugd->initial_contents_attachment_list);
-		int nAttachmentCount = eina_list_count(ugd->attachment_item_list);
+	} else if (view->initial_contents_attachment_list && view->attachment_item_list) {
+		int nInitialListCount = eina_list_count(view->initial_contents_attachment_list);
+		int nAttachmentCount = eina_list_count(view->attachment_item_list);
 
 		if (nInitialListCount != nAttachmentCount) {
 			goto FINISH_OFF;
 		} else {
 			int i = 0;
-			int nInitialListCount = eina_list_count(ugd->initial_contents_attachment_list);
+			int nInitialListCount = eina_list_count(view->initial_contents_attachment_list);
 
 			for (i = 0; i < nInitialListCount; i++) {
-				if (eina_list_nth(ugd->initial_contents_attachment_list, i) != eina_list_nth(ugd->attachment_item_list, i)) {
+				if (eina_list_nth(view->initial_contents_attachment_list, i) != eina_list_nth(view->attachment_item_list, i)) {
 					goto FINISH_OFF;
 					break;
 				}
@@ -921,18 +921,18 @@ Eina_Bool composer_util_is_mail_modified(void *data)
 		}
 	}
 
-	if (ugd->with_original_message) {
-		if (g_strcmp0(ugd->initial_parent_content, ugd->final_parent_content) != 0) {
+	if (view->with_original_message) {
+		if (g_strcmp0(view->initial_parent_content, view->final_parent_content) != 0) {
 			debug_log("final_parent_content is differ from initial_parent_content!");
 			goto FINISH_OFF;
 		}
 
-		if (g_strcmp0(ugd->initial_new_message_content, ugd->final_new_message_content) != 0) {
+		if (g_strcmp0(view->initial_new_message_content, view->final_new_message_content) != 0) {
 			debug_log("final_new_message_content is differ from initial_new_message_content!");
 			goto FINISH_OFF;
 		}
 	} else {
-		if (g_strcmp0(ugd->initial_body_content, ugd->final_body_content) != 0) {
+		if (g_strcmp0(view->initial_body_content, view->final_body_content) != 0) {
 			debug_log("final_new_message_content is differ from initial_new_message_content!");
 			goto FINISH_OFF;
 		}
@@ -974,7 +974,7 @@ static Eina_Bool _util_generate_random_string32(char *inString, int inSize)
 	return EINA_TRUE;
 }
 
-void composer_util_resize_webview_height(EmailComposerUGD *ugd)
+void composer_util_resize_webview_height(EmailComposerView *view)
 {
 	debug_enter();
 
@@ -983,10 +983,10 @@ void composer_util_resize_webview_height(EmailComposerUGD *ugd)
 	int win_w = 0;
 	int win_h = 0;
 
-	elm_win_screen_size_get(ugd->base.module->win, NULL, NULL, &win_w, &win_h);
+	elm_win_screen_size_get(view->base.module->win, NULL, NULL, &win_w, &win_h);
 
-	if ((ugd->base.orientation == APP_DEVICE_ORIENTATION_0) ||
-		(ugd->base.orientation == APP_DEVICE_ORIENTATION_180)) {
+	if ((view->base.orientation == APP_DEVICE_ORIENTATION_0) ||
+		(view->base.orientation == APP_DEVICE_ORIENTATION_180)) {
 		ewk_width = win_w;
 		ewk_height = win_h;
 	} else {
@@ -995,24 +995,24 @@ void composer_util_resize_webview_height(EmailComposerUGD *ugd)
 	}
 	debug_log("ewk_height: %d", ewk_height);
 
-	evas_object_size_hint_max_set(ugd->ewk_view, ewk_width, ewk_height);
-	evas_object_size_hint_min_set(ugd->ewk_view, ewk_width, ewk_height);
+	evas_object_size_hint_max_set(view->ewk_view, ewk_width, ewk_height);
+	evas_object_size_hint_min_set(view->ewk_view, ewk_width, ewk_height);
 
 	debug_leave();
 }
 
-void composer_util_resize_min_height_for_new_message(EmailComposerUGD *ugd, int ime_height)
+void composer_util_resize_min_height_for_new_message(EmailComposerView *view, int ime_height)
 {
 	debug_enter();
 
-	if (ugd->with_original_message) {
+	if (view->with_original_message) {
 		int min_size = 0;
 		char buf[BUF_LEN_L] = {'\0'};
 
 		Evas_Coord nWidth = 0, nHeight = 0;
-		elm_win_screen_size_get(ugd->base.module->win, NULL, NULL, &nWidth, &nHeight);
-		int rot = elm_win_rotation_get(ugd->base.module->win);
-		double ewk_scale = ewk_view_scale_get(ugd->ewk_view);
+		elm_win_screen_size_get(view->base.module->win, NULL, NULL, &nWidth, &nHeight);
+		int rot = elm_win_rotation_get(view->base.module->win);
+		double ewk_scale = ewk_view_scale_get(view->ewk_view);
 
 		/*debug_log("==> window [w, h, rot] = [%d, %d, %d]", nWidth, nHeight, rot);*/
 		if ((rot == 0) || (rot == 180)) {
@@ -1021,10 +1021,10 @@ void composer_util_resize_min_height_for_new_message(EmailComposerUGD *ugd, int 
 			min_size = (double)(nWidth - COMPOSER_NAVI_LAND_HEIGHT - COMPOSER_MESSAGEBAR_HEIGHT - COMPOSER_DEFAULT_WEBVIEW_MARGIN - ime_height) / ewk_scale;
 		}
 
-		if (ugd->is_checkbox_clicked) {
+		if (view->is_checkbox_clicked) {
 			/* When original message area is visible, the area should have min height. */
 			snprintf(buf, sizeof(buf), EC_JS_UPDATE_MIN_HEIGHT_OF_ORG_MESSAGE, min_size);
-			if (!ewk_view_script_execute(ugd->ewk_view, buf, NULL, NULL)) {
+			if (!ewk_view_script_execute(view->ewk_view, buf, NULL, NULL)) {
 				debug_error("EC_JS_UPDATE_MIN_HEIGHT_OF_ORG_MESSAGE failed!");
 			}
 
@@ -1033,7 +1033,7 @@ void composer_util_resize_min_height_for_new_message(EmailComposerUGD *ugd, int 
 
 		/* Update min height for new message area */
 		snprintf(buf, sizeof(buf), EC_JS_UPDATE_MIN_HEIGHT_OF_NEW_MESSAGE, min_size);
-		if (!ewk_view_script_execute(ugd->ewk_view, buf, NULL, NULL)) {
+		if (!ewk_view_script_execute(view->ewk_view, buf, NULL, NULL)) {
 			debug_error("EC_JS_UPDATE_MIN_HEIGHT_OF_NEW_MESSAGE failed!");
 		}
 	}
@@ -1045,56 +1045,56 @@ void composer_util_display_position(void *data)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	Evas_Coord x = 0, y = 0, w = 0, h = 0;
 
-	evas_object_geometry_get(ugd->base.module->win, &x, &y, &w, &h);
+	evas_object_geometry_get(view->base.module->win, &x, &y, &w, &h);
 	debug_log("window     = [x:%d, y:%d, w:%d, h:%d]", x, y, w, h);
 	x = y = w = h = 0;
 
-	evas_object_geometry_get(ugd->base.module->conform, &x, &y, &w, &h);
+	evas_object_geometry_get(view->base.module->conform, &x, &y, &w, &h);
 	debug_log("conformant = [x:%d, y:%d, w:%d, h:%d]", x, y, w, h);
 	x = y = w = h = 0;
 
-	evas_object_geometry_get(ugd->composer_layout, &x, &y, &w, &h);
+	evas_object_geometry_get(view->composer_layout, &x, &y, &w, &h);
 	debug_log("composer_layout = [x:%d, y:%d, w:%d, h:%d]", x, y, w, h);
 	x = y = w = h = 0;
 
-	evas_object_geometry_get(ugd->base.module->navi, &x, &y, &w, &h);
+	evas_object_geometry_get(view->base.module->navi, &x, &y, &w, &h);
 	debug_log("naviframe = [x:%d, y:%d, w:%d, h:%d]", x, y, w, h);
 	x = y = w = h = 0;
 
-	elm_scroller_region_get(ugd->main_scroller, &x, &y, &w, &h);
+	elm_scroller_region_get(view->main_scroller, &x, &y, &w, &h);
 	debug_log("scroller   = [x:%d, y:%d, w:%d, h:%d]", x, y, w, h);
 	x = y = w = h = 0;
 
-	if (ugd->recp_from_layout) {
-		evas_object_geometry_get(ugd->recp_from_layout, &x, &y, &w, &h);
+	if (view->recp_from_layout) {
+		evas_object_geometry_get(view->recp_from_layout, &x, &y, &w, &h);
 		debug_log("from       = [x:%d, y:%d, w:%d, h:%d]", x, y, w, h);
 		x = y = w = h = 0;
 	}
 
-	evas_object_geometry_get(ugd->recp_to_layout, &x, &y, &w, &h);
+	evas_object_geometry_get(view->recp_to_layout, &x, &y, &w, &h);
 	debug_log("to         = [x:%d, y:%d, w:%d, h:%d]", x, y, w, h);
 	x = y = w = h = 0;
 
-	if (ugd->recp_cc_layout) {
-		evas_object_geometry_get(ugd->recp_cc_layout, &x, &y, &w, &h);
+	if (view->recp_cc_layout) {
+		evas_object_geometry_get(view->recp_cc_layout, &x, &y, &w, &h);
 		debug_log("cc         = [x:%d, y:%d, w:%d, h:%d]", x, y, w, h);
 		x = y = w = h = 0;
 	}
 
-	if (ugd->recp_bcc_layout) {
-		evas_object_geometry_get(ugd->recp_bcc_layout, &x, &y, &w, &h);
+	if (view->recp_bcc_layout) {
+		evas_object_geometry_get(view->recp_bcc_layout, &x, &y, &w, &h);
 		debug_log("bcc        = [x:%d, y:%d, w:%d, h:%d]", x, y, w, h);
 		x = y = w = h = 0;
 	}
 
-	evas_object_geometry_get(ugd->subject_layout, &x, &y, &w, &h);
+	evas_object_geometry_get(view->subject_layout, &x, &y, &w, &h);
 	debug_log("subject    = [x:%d, y:%d, w:%d, h:%d]", x, y, w, h);
 	x = y = w = h = 0;
 
-	evas_object_geometry_get(ugd->ewk_view, &x, &y, &w, &h);
+	evas_object_geometry_get(view->ewk_view, &x, &y, &w, &h);
 	debug_log("webview    = [x:%d, y:%d, w:%d, h:%d]", x, y, w, h);
 	x = y = w = h = 0;
 
@@ -1105,17 +1105,17 @@ void composer_util_return_composer_view(void *data)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
 	/* Reset exit flags. */
-	ugd->is_send_btn_clicked = EINA_FALSE;
-	ugd->is_back_btn_clicked = EINA_FALSE;
-	ugd->is_save_in_drafts_clicked = EINA_FALSE;
+	view->is_send_btn_clicked = EINA_FALSE;
+	view->is_back_btn_clicked = EINA_FALSE;
+	view->is_save_in_drafts_clicked = EINA_FALSE;
 
-	elm_object_tree_focus_allow_set(ugd->composer_layout, EINA_TRUE);
-	elm_object_focus_allow_set(ugd->ewk_btn, EINA_TRUE);
+	elm_object_tree_focus_allow_set(view->composer_layout, EINA_TRUE);
+	elm_object_focus_allow_set(view->ewk_btn, EINA_TRUE);
 
-	composer_util_focus_set_focus_with_idler(ugd, ugd->selected_entry);
+	composer_util_focus_set_focus_with_idler(view, view->selected_entry);
 
 	debug_leave();
 }
@@ -1126,15 +1126,15 @@ void composer_util_indicator_show(void *data)
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	ugd->indicator_mode = elm_win_indicator_mode_get(ugd->base.module->win);
-	ugd->opacity_mode = elm_win_indicator_opacity_get(ugd->base.module->win);
+	view->indicator_mode = elm_win_indicator_mode_get(view->base.module->win);
+	view->opacity_mode = elm_win_indicator_opacity_get(view->base.module->win);
 
-	debug_log("Indicator mode:[%d], Opacity mode:[%d]", ugd->indicator_mode, ugd->opacity_mode);
+	debug_log("Indicator mode:[%d], Opacity mode:[%d]", view->indicator_mode, view->opacity_mode);
 
-	elm_win_indicator_mode_set(ugd->base.module->win, ELM_WIN_INDICATOR_SHOW);
-	elm_win_indicator_opacity_set(ugd->base.module->win, ELM_WIN_INDICATOR_OPAQUE);
+	elm_win_indicator_mode_set(view->base.module->win, ELM_WIN_INDICATOR_SHOW);
+	elm_win_indicator_opacity_set(view->base.module->win, ELM_WIN_INDICATOR_OPAQUE);
 
 	debug_leave();
 }
@@ -1145,14 +1145,14 @@ void composer_util_indicator_restore(void *data)
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	elm_win_indicator_mode_set(ugd->base.module->win, ugd->indicator_mode);
+	elm_win_indicator_mode_set(view->base.module->win, view->indicator_mode);
 
-	if (ugd->opacity_mode == ELM_WIN_INDICATOR_OPACITY_UNKNOWN) {
-		ugd->opacity_mode = ELM_WIN_INDICATOR_OPAQUE;
+	if (view->opacity_mode == ELM_WIN_INDICATOR_OPACITY_UNKNOWN) {
+		view->opacity_mode = ELM_WIN_INDICATOR_OPAQUE;
 	}
-	elm_win_indicator_opacity_set(ugd->base.module->win, ugd->opacity_mode);
+	elm_win_indicator_opacity_set(view->base.module->win, view->opacity_mode);
 
 	debug_leave();
 }
@@ -1202,7 +1202,7 @@ email_ext_save_err_type_e _composer_util_save_attachment_for_preview(ComposerAtt
 {
 	debug_enter();
 	retvm_if(attachment_item_data == NULL, EMAIL_EXT_SAVE_ERR_UNKNOWN, "Invalid parameter: aid[NULL]");
-	EmailComposerUGD *ugd = (EmailComposerUGD *)attachment_item_data->ugd;
+	EmailComposerView *view = (EmailComposerView *)attachment_item_data->view;
 	email_attachment_data_t *attachment = attachment_item_data->attachment_data;
 
 	email_ext_save_err_type_e ret = email_prepare_temp_file_path(attachment->attachment_id, composer_util_file_get_temp_dirname(), attachment->attachment_path, &attachment_item_data->preview_path);
@@ -1210,7 +1210,7 @@ email_ext_save_err_type_e _composer_util_save_attachment_for_preview(ComposerAtt
 		return EMAIL_EXT_SAVE_ERR_NONE;
 	}
 	if (ret == EMAIL_EXT_SAVE_ERR_UNKNOWN || !(email_file_cp(attachment->attachment_path, attachment_item_data->preview_path))) {
-		ugd->composer_popup = composer_util_popup_create(ugd, EMAIL_COMPOSER_STRING_UNABLE_TO_OPEN_FILE, EMAIL_COMPOSER_STRING_UNABLE_TO_DISPLAY_ATTACHMENT,
+		view->composer_popup = composer_util_popup_create(view, EMAIL_COMPOSER_STRING_UNABLE_TO_OPEN_FILE, EMAIL_COMPOSER_STRING_UNABLE_TO_DISPLAY_ATTACHMENT,
 								composer_util_popup_response_cb, EMAIL_COMPOSER_STRING_BUTTON_OK, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
 		debug_error("save attachment failed error");
 		return EMAIL_EXT_SAVE_ERR_UNKNOWN;
@@ -1223,7 +1223,7 @@ email_ext_save_err_type_e _composer_util_save_attachment_for_preview(ComposerAtt
 void composer_util_show_preview(ComposerAttachmentItemData *attach_item_data)
 {
 	debug_enter();
-	EmailComposerUGD *ugd = (EmailComposerUGD *)attach_item_data->ugd;
+	EmailComposerView *view = (EmailComposerView *)attach_item_data->view;
 	email_attachment_data_t *attachment = attach_item_data->attachment_data;
 
 	const char *path = attachment->attachment_path;
@@ -1236,13 +1236,13 @@ void composer_util_show_preview(ComposerAttachmentItemData *attach_item_data)
 		path = attach_item_data->preview_path;
 	}
 
-	composer_launcher_preview_attachment(ugd, path);
+	composer_launcher_preview_attachment(view, path);
 
 	debug_leave();
 	return;
 }
 
-void composer_util_update_attach_panel_bundles(EmailComposerUGD *ugd)
+void composer_util_update_attach_panel_bundles(EmailComposerView *view)
 {
 	debug_enter();
 
@@ -1250,14 +1250,14 @@ void composer_util_update_attach_panel_bundles(EmailComposerUGD *ugd)
 	int r = 0;
 	char buff[BUF_LEN_T] = { 0 };
 
-	snprintf(buff, BUF_LEN_T, "%d", (int)ugd->account_info->max_sending_size);
+	snprintf(buff, BUF_LEN_T, "%d", (int)view->account_info->max_sending_size);
 
 	b = bundle_create();
 	retm_if(!b, "bundle_create() failed!");
 
 	r = bundle_add_str(b, EMAIL_BUNDLE_KEY_NAME_TOTAL_SIZE, buff);
 	if (r == BUNDLE_ERROR_NONE) {
-		r = email_module_set_attach_panel_category_bundle(ugd->base.module, EMAIL_APCT_VIDEO_RECORDER, b);
+		r = email_module_set_attach_panel_category_bundle(view->base.module, EMAIL_APCT_VIDEO_RECORDER, b);
 		if (r != 0) {
 			debug_error("email_module_set_attach_panel_category_bundle() failed");
 		}
@@ -1312,10 +1312,10 @@ void composer_util_network_state_noti_post()
 	debug_leave();
 }
 
-void composer_create_vcard_create_popup(EmailComposerUGD *ugd)
+void composer_create_vcard_create_popup(EmailComposerView *view)
 {
-	DELETE_EVAS_OBJECT(ugd->composer_popup);
-	ugd->composer_popup = composer_util_popup_create_with_progress_horizontal(ugd,
+	DELETE_EVAS_OBJECT(view->composer_popup);
+	view->composer_popup = composer_util_popup_create_with_progress_horizontal(view,
 			EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_CREATING_VCARD, _composer_vcard_save_popup_cancel_cb,
 			EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
 }
@@ -1324,7 +1324,7 @@ static void _composer_vcard_save_popup_cancel_cb(void *data, Evas_Object *obj, v
 {
 	debug_enter();
 	retm_if(!data, "Invalid parameter: data is NULL!");
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	email_module_make_destroy_request(ugd->base.module);
+	email_module_make_destroy_request(view->base.module);
 }

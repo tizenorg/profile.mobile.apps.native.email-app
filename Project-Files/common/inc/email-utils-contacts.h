@@ -34,7 +34,7 @@ typedef struct _email_contact_list_info {
 	char *email_address;
 	char *image_path;
 	char display_name[EMAIL_LIMIT_EMAIL_ADDRESS_LENGTH + 1];
-	void *ugd;
+	void *view;
 	int email_type; // Type of email address
 	email_contact_search_origin_type_e contact_origin;
 } email_contact_list_info_t;

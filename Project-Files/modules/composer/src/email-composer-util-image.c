@@ -102,10 +102,10 @@ Eina_Bool composer_util_image_get_size(void *data, const char *src_file, int *wi
 	retvm_if(width == NULL, EINA_FALSE, "width is NULL!");
 	retvm_if(height == NULL, EINA_FALSE, "height is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	int w, h;
 
-	Evas_Object *img = evas_object_image_add(evas_object_evas_get(ugd->base.module->navi));
+	Evas_Object *img = evas_object_image_add(evas_object_evas_get(view->base.module->navi));
 	if (!img) {
 		debug_error("evas_object_image_add() failed!");
 		return EINA_FALSE;
@@ -129,8 +129,8 @@ Eina_Bool composer_util_image_get_size(void *data, const char *src_file, int *wi
  * Example:
  *		Evas_Object *img;
  *		int w, h;
- *		composer_image_get_size(ugd, src_file_path, &w, &h);
- *		composer_image_set_image_with_size(ugd, &img, src_file_path, w / 2, h / 2);
+ *		composer_image_get_size(view, src_file_path, &w, &h);
+ *		composer_image_set_image_with_size(view, &img, src_file_path, w / 2, h / 2);
  *		evas_object_image_save(img, dst_file_path, NULL, "quality=100");
  *		evas_object_del(img);
  */
@@ -147,7 +147,7 @@ Eina_Bool composer_util_image_set_image_with_size(void *data, Evas_Object **src_
 		return EINA_FALSE;
 	}
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
 	Ecore_Evas *m_ee = ecore_evas_buffer_new(dest_width, dest_height);
 	if (!m_ee) {
@@ -173,7 +173,7 @@ Eina_Bool composer_util_image_set_image_with_size(void *data, Evas_Object **src_
 	evas_object_show(img);
 
 	const void *pixels = ecore_evas_buffer_pixels_get(m_ee);
-	Evas_Object *result = evas_object_image_add(evas_object_evas_get(ugd->base.module->navi));
+	Evas_Object *result = evas_object_image_add(evas_object_evas_get(view->base.module->navi));
 	if (!result) {
 		debug_error("evas_object_image_add() failed!");
 		ecore_evas_free(m_ee);

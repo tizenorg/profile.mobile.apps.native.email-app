@@ -20,9 +20,9 @@
 
 /**
  * @brief Draw base frame
- * @param[in]	ugd»			Email composer data
+ * @param[in]	view»			Email composer data
  */
-void composer_initial_view_draw_base_frame(EmailComposerUGD *ugd);
+void composer_initial_view_draw_base_frame(EmailComposerView *view);
 
 /**
  * @brief Draw header components
@@ -56,49 +56,49 @@ void composer_initial_view_set_combined_scroller_rotation_mode(void *data);
 
 /**
  * @brief Back button callback, provides operation when clicked
- * @param[in]	ugd»			Email composer data
+ * @param[in]	view»			Email composer data
  */
-void composer_initial_view_back_cb(EmailComposerUGD *ugd);
+void composer_initial_view_back_cb(EmailComposerView *view);
 
 /**
  * @brief Brings combined scroller with animation to appropriate position
- * @param[in]	ugd»			Email composer data
+ * @param[in]	view»			Email composer data
  * @param[in]	pos»			Position
  */
-void composer_initial_view_cs_bring_in(EmailComposerUGD *ugd, int pos);
+void composer_initial_view_cs_bring_in(EmailComposerView *view, int pos);
 
 /**
  * @brief Immediately brings combined scroller to appropriate position
- * @param[in]	ugd»			Email composer data
+ * @param[in]	view»			Email composer data
  * @param[in]	pos»			Position
  */
-void composer_initial_view_cs_show(EmailComposerUGD *ugd, int pos);
+void composer_initial_view_cs_show(EmailComposerView *view, int pos);
 
 /**
  * @brief Freeze combined scroller
- * @param[in]	ugd»			Email composer data
+ * @param[in]	view»			Email composer data
  */
-void composer_initial_view_cs_freeze_push(EmailComposerUGD *ugd);
+void composer_initial_view_cs_freeze_push(EmailComposerView *view);
 
 /**
  * @brief Decrease freeze count
- * @param[in]	ugd»			Email composer data
+ * @param[in]	view»			Email composer data
  */
-void composer_initial_view_cs_freeze_pop(EmailComposerUGD *ugd);
+void composer_initial_view_cs_freeze_pop(EmailComposerView *view);
 
 /**
  * @brief Activate selection mode
- * @param[in]	ugd»			Email composer data
+ * @param[in]	view»			Email composer data
  */
-void composer_initial_view_activate_selection_mode(EmailComposerUGD *ugd);
+void composer_initial_view_activate_selection_mode(EmailComposerView *view);
 
 /**
  * @brief Callback when coret position chenged
- * @param[in]	ugd»			Email composer data
+ * @param[in]	view»			Email composer data
  * @param[in]	top»			Top position value
  * @param[in]	bottom»			Bottom position value
  * @param[in]	isCollapsed»	Is colapsed (hiden)
  */
-void composer_initial_view_caret_pos_changed_cb(EmailComposerUGD *ugd, int top, int bottom, bool isCollapsed);
+void composer_initial_view_caret_pos_changed_cb(EmailComposerView *view, int top, int bottom, bool isCollapsed);
 
 #endif /* __EMAIL_COMPOSER_INITIAL_VIEW_H__ */

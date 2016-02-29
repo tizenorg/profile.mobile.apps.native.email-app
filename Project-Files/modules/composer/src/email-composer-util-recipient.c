@@ -41,7 +41,7 @@ static char *_util_recp_escaping_email_display_name(char *display_name, int len)
 /*
  * Definitions for static & exported functions
  */
-gchar *composer_util_get_ellipsised_entry_name(EmailComposerUGD *ugd, Evas_Object *display_entry, const char *entry_string)
+gchar *composer_util_get_ellipsised_entry_name(EmailComposerView *view, Evas_Object *display_entry, const char *entry_string)
 {
 	debug_enter();
 
@@ -52,24 +52,24 @@ gchar *composer_util_get_ellipsised_entry_name(EmailComposerUGD *ugd, Evas_Objec
 	int allowed_entry_width = 0;
 	int win_w = 0;
 
-	if ((ugd->base.orientation == APP_DEVICE_ORIENTATION_0) ||
-		(ugd->base.orientation == APP_DEVICE_ORIENTATION_180)) {
-		elm_win_screen_size_get(ugd->base.module->win, NULL, NULL, &win_w, NULL);
+	if ((view->base.orientation == APP_DEVICE_ORIENTATION_0) ||
+		(view->base.orientation == APP_DEVICE_ORIENTATION_180)) {
+		elm_win_screen_size_get(view->base.module->win, NULL, NULL, &win_w, NULL);
 	} else {
-		elm_win_screen_size_get(ugd->base.module->win, NULL, NULL, NULL, &win_w);
+		elm_win_screen_size_get(view->base.module->win, NULL, NULL, NULL, &win_w);
 	}
 
-	if (display_entry == ugd->recp_to_display_entry.entry && ugd->recp_to_label) {
-		evas_object_geometry_get(ugd->recp_to_label, NULL, NULL, &label_width, NULL);
-	} else if (display_entry == ugd->recp_cc_display_entry.entry && ugd->recp_cc_label_cc) {
-		evas_object_geometry_get(ugd->recp_cc_label_cc, NULL, NULL, &label_width, NULL);
-	} else if (display_entry == ugd->recp_bcc_display_entry.entry && ugd->recp_bcc_label) {
-		evas_object_geometry_get(ugd->recp_bcc_label, NULL, NULL, &label_width, NULL);
+	if (display_entry == view->recp_to_display_entry.entry && view->recp_to_label) {
+		evas_object_geometry_get(view->recp_to_label, NULL, NULL, &label_width, NULL);
+	} else if (display_entry == view->recp_cc_display_entry.entry && view->recp_cc_label_cc) {
+		evas_object_geometry_get(view->recp_cc_label_cc, NULL, NULL, &label_width, NULL);
+	} else if (display_entry == view->recp_bcc_display_entry.entry && view->recp_bcc_label) {
+		evas_object_geometry_get(view->recp_bcc_label, NULL, NULL, &label_width, NULL);
 	}
 
 	allowed_entry_width = win_w - label_width - ENTRY_SIZE_ADJUSTMENT;
 
-	Evas_Object *entry = elm_entry_add(ugd->composer_layout);
+	Evas_Object *entry = elm_entry_add(view->composer_layout);
 	composer_util_set_entry_text_style(entry);
 	elm_entry_entry_set(entry, entry_string);
 	text_block = elm_entry_textblock_get(entry);
@@ -140,7 +140,7 @@ gchar *composer_util_get_ellipsised_entry_name(EmailComposerUGD *ugd, Evas_Objec
 	return ellipsised_string;
 }
 
-Eina_Bool composer_util_recp_is_duplicated(EmailComposerUGD *ugd, Evas_Object *obj, const char *email_address)
+Eina_Bool composer_util_recp_is_duplicated(EmailComposerView *view, Evas_Object *obj, const char *email_address)
 {
 	debug_enter();
 
@@ -175,10 +175,10 @@ Eina_Bool composer_util_recp_is_mbe_empty(void *data)
 
 	retvm_if(!data, EINA_TRUE, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	Eina_Bool ret = EINA_TRUE;
 
-	if ((elm_multibuttonentry_items_get(ugd->recp_to_mbe) != NULL) || (elm_multibuttonentry_items_get(ugd->recp_cc_mbe)) || (elm_multibuttonentry_items_get(ugd->recp_bcc_mbe))) {
+	if ((elm_multibuttonentry_items_get(view->recp_to_mbe) != NULL) || (elm_multibuttonentry_items_get(view->recp_cc_mbe)) || (elm_multibuttonentry_items_get(view->recp_bcc_mbe))) {
 		ret = EINA_FALSE;
 	}
 
@@ -327,7 +327,7 @@ EmailRecpInfo *composer_util_recp_make_recipient_info_with_display_name(char *em
 	return ri;
 }
 
-COMPOSER_ERROR_TYPE_E composer_util_recp_retrieve_recp_string(EmailComposerUGD *ugd, Evas_Object *obj, char **dest)
+COMPOSER_ERROR_TYPE_E composer_util_recp_retrieve_recp_string(EmailComposerView *view, Evas_Object *obj, char **dest)
 {
 	debug_enter();
 

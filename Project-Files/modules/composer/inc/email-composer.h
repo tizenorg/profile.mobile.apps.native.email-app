@@ -63,12 +63,12 @@ unsigned ewk_console_message_line_get(Ewk_Console_Message *msg);
 
 #endif
 
-typedef struct ug_data EmailComposerUGD;
+typedef struct _view_data EmailComposerView;
 
 /**
  * @brief Email composer data
  */
-struct ug_data {
+struct _view_data {
 	email_view_t base;
 
 	GDBusConnection *dbus_conn;
@@ -395,7 +395,7 @@ struct ug_data {
  */
 typedef struct {
 	email_module_t base;
-	EmailComposerUGD view;
+	EmailComposerView view;
 } EmailComposerModule;
 
 #endif /* __EMAIL_COMPOSER_H__ */

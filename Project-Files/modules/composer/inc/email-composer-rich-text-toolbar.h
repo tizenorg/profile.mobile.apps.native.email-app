@@ -35,37 +35,37 @@ typedef struct {
 /**
  * @brief Creates rich text toolbar for composer
  *
- * @param[in]	ugd		Email composer data
+ * @param[in]	view		Email composer data
  *
  * @return Evas_Object instance with suitable richtext, otherwise NULL
  */
-EMAIL_API Evas_Object *composer_rich_text_create_toolbar(EmailComposerUGD *ugd);
+EMAIL_API Evas_Object *composer_rich_text_create_toolbar(EmailComposerView *view);
 
 /**
  * @brief Set parameters for rich text toolbar in composer
  *
- * @param[in]	ugd			Email composer data
+ * @param[in]	view			Email composer data
  * @param[in]	params		Font style params data
  *
  */
-EMAIL_API void composer_rich_text_font_style_params_set(EmailComposerUGD *ugd, FontStyleParams *params);
+EMAIL_API void composer_rich_text_font_style_params_set(EmailComposerView *view, FontStyleParams *params);
 
 /**
  * @brief Disable rich text toolbar in composer
  *
- * @param[in]	ugd				Email composer data
+ * @param[in]	view				Email composer data
  * @param[in]	is_disable		Flag if set disable richtext toolbar
  *
  */
-EMAIL_API void composer_rich_text_disable_set(EmailComposerUGD *ugd, Eina_Bool is_disable);
+EMAIL_API void composer_rich_text_disable_set(EmailComposerView *view, Eina_Bool is_disable);
 
 /**
  * @brief Get disable flag from rich text toolbar in composer
  *
- * @param[in]	ugd		Email composer data
+ * @param[in]	view		Email composer data
  *
  * @return EINA_TRUE when disabled, otherwise EINA_FALSE or an error occurred
  */
-EMAIL_API Eina_Bool composer_rich_text_disable_get(EmailComposerUGD *ugd);
+EMAIL_API Eina_Bool composer_rich_text_disable_get(EmailComposerView *view);
 
 #endif /* __EMAIL_COMMON_EXT_RICH_TEXT_TOOLBAR_H__ */

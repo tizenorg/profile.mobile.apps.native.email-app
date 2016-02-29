@@ -36,14 +36,14 @@
 static void _subject_set_entry_guide_text(Evas_Object *entry);
 static void _subject_create_entry(Evas_Object *parent, email_editfield_t *editfield);
 static Evas_Object *_subject_create_add_attachment(Evas_Object *parent);
-static void _subject_register_entry_callbacks(Evas_Object *obj, EmailComposerUGD *ugd);
+static void _subject_register_entry_callbacks(Evas_Object *obj, EmailComposerView *view);
 static void _subject_entry_maxlength_reached_cb(void *data, Evas_Object *obj, void *event_info);
 static void _subject_entry_focused_cb(void *data, Evas_Object *obj, void *event_info);
 static void _subject_entry_activated_cb(void *data, Evas_Object *obj, void *event_info);
 static void _subject_attach_files_clicked(void *data, Evas_Object *obj, void *event_info);
 static void _entry_filter_accept_set(void *data, Evas_Object *entry, char **text);
 
-static void _show_attach_panel(EmailComposerUGD *ugd);
+static void _show_attach_panel(EmailComposerView *view);
 static void _attach_panel_reply_cb(void *data, const char **path_array, int array_len);
 
 static email_string_t EMAIL_COMPOSER_STRING_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED = { PACKAGE, "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED" };
@@ -116,13 +116,13 @@ static Evas_Object *_subject_create_add_attachment(Evas_Object *parent)
 	return btn;
 }
 
-static void _subject_register_entry_callbacks(Evas_Object *obj, EmailComposerUGD *ugd)
+static void _subject_register_entry_callbacks(Evas_Object *obj, EmailComposerView *view)
 {
 	debug_enter();
 
-	evas_object_smart_callback_add(obj, "maxlength,reached", _subject_entry_maxlength_reached_cb, ugd);
-	evas_object_smart_callback_add(obj, "focused", _subject_entry_focused_cb, ugd);
-	evas_object_smart_callback_add(obj, "activated", _subject_entry_activated_cb, ugd);
+	evas_object_smart_callback_add(obj, "maxlength,reached", _subject_entry_maxlength_reached_cb, view);
+	evas_object_smart_callback_add(obj, "focused", _subject_entry_focused_cb, view);
+	evas_object_smart_callback_add(obj, "activated", _subject_entry_activated_cb, view);
 
 	debug_leave();
 }
@@ -144,14 +144,14 @@ static void _subject_entry_focused_cb(void *data, Evas_Object *obj, void *event_
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (composer_recipient_is_recipient_entry(ugd, ugd->selected_entry)) {
-		if (!composer_recipient_commit_recipient_on_entry(ugd, ugd->selected_entry)) {
+	if (composer_recipient_is_recipient_entry(view, view->selected_entry)) {
+		if (!composer_recipient_commit_recipient_on_entry(view, view->selected_entry)) {
 			return;
 		}
 	}
-	composer_recipient_unfocus_entry(ugd, ugd->selected_entry);
+	composer_recipient_unfocus_entry(view, view->selected_entry);
 	/* Force calculate the size on the evas.
 	 * Case - 1. There're many contacts in mbe and the focus is on the mbe.
 	 *        2. Click subject entry to set the focus on it.
@@ -159,23 +159,23 @@ static void _subject_entry_focused_cb(void *data, Evas_Object *obj, void *event_
 	 *        4. The subject entry gets the focus and should be displayed within the screen.
 	 *           But the entry is displayed out of the screen because the size wasn't changed.
 	 */
-	evas_smart_objects_calculate(evas_object_evas_get(ugd->composer_layout));
+	evas_smart_objects_calculate(evas_object_evas_get(view->composer_layout));
 
-	if (ugd->bcc_added && !ugd->cc_recipients_cnt && !ugd->bcc_recipients_cnt) {
-		composer_recipient_show_hide_bcc_field(ugd, EINA_FALSE);
+	if (view->bcc_added && !view->cc_recipients_cnt && !view->bcc_recipients_cnt) {
+		composer_recipient_show_hide_bcc_field(view, EINA_FALSE);
 	}
 
-	DELETE_EVAS_OBJECT(ugd->context_popup);
+	DELETE_EVAS_OBJECT(view->context_popup);
 
-	composer_webkit_blur_webkit_focus(ugd);
-	if (ugd->richtext_toolbar) {
-		composer_rich_text_disable_set(ugd, EINA_TRUE);
+	composer_webkit_blur_webkit_focus(view);
+	if (view->richtext_toolbar) {
+		composer_rich_text_disable_set(view, EINA_TRUE);
 	}
 
-	Evas_Object *current_entry = ugd->subject_entry.entry;
-	if (ugd->selected_entry != current_entry) {
-		composer_attachment_ui_contract_attachment_list(ugd);
-		ugd->selected_entry = current_entry;
+	Evas_Object *current_entry = view->subject_entry.entry;
+	if (view->selected_entry != current_entry) {
+		composer_attachment_ui_contract_attachment_list(view);
+		view->selected_entry = current_entry;
 	}
 
 	debug_leave();
@@ -185,32 +185,32 @@ static void _subject_entry_activated_cb(void *data, Evas_Object *obj, void *even
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	composer_util_focus_set_focus(ugd, ugd->ewk_view);
+	composer_util_focus_set_focus(view, view->ewk_view);
 
 	debug_leave();
 }
 
-static void _show_attach_panel(EmailComposerUGD *ugd)
+static void _show_attach_panel(EmailComposerView *view)
 {
 	debug_enter();
 
 	email_attach_panel_listener_t listener = { 0 };
 
-	listener.cb_data = ugd;
+	listener.cb_data = view;
 	listener.reply_cb = _attach_panel_reply_cb;
 
-	if (email_module_launch_attach_panel(ugd->base.module, &listener) == 0) {
+	if (email_module_launch_attach_panel(view->base.module, &listener) == 0) {
 		// To update inline image list to calculate total attachment size
-		if (ewk_view_script_execute(ugd->ewk_view, EC_JS_GET_IMAGE_LIST,
-				composer_util_get_image_list_cb, (void *)ugd) == EINA_FALSE) {
+		if (ewk_view_script_execute(view->ewk_view, EC_JS_GET_IMAGE_LIST,
+				composer_util_get_image_list_cb, (void *)view) == EINA_FALSE) {
 			debug_error("EC_JS_GET_IMAGE_LIST failed.");
 		}
-		evas_object_focus_set(ugd->ewk_view, EINA_FALSE);
-		composer_webkit_blur_webkit_focus(ugd);
-		if (ugd->richtext_toolbar) {
-			composer_rich_text_disable_set(ugd, EINA_TRUE);
+		evas_object_focus_set(view->ewk_view, EINA_FALSE);
+		composer_webkit_blur_webkit_focus(view);
+		if (view->richtext_toolbar) {
+			composer_rich_text_disable_set(view, EINA_TRUE);
 		}
 	}
 
@@ -220,9 +220,9 @@ static void _show_attach_panel(EmailComposerUGD *ugd)
 static void _attach_panel_reply_cb(void *data, const char **path_array, int array_len)
 {
 	debug_enter();
-	EmailComposerUGD *ugd = data;
+	EmailComposerView *view = data;
 
-	composer_attachment_process_attachments_with_array(ugd,
+	composer_attachment_process_attachments_with_array(view,
 			path_array, array_len, ATTACH_BY_USE_ORG_FILE, EINA_FALSE);
 
 	debug_leave();
@@ -233,10 +233,10 @@ static void _subject_attach_files_clicked(void *data, Evas_Object *obj, void *ev
 	debug_enter();
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
-	retm_if(!ugd->is_load_finished, "Composer hasn't been launched completely!");
+	EmailComposerView *view = (EmailComposerView *)data;
+	retm_if(!view->is_load_finished, "Composer hasn't been launched completely!");
 
-	if (!ugd->allow_click_events) {
+	if (!view->allow_click_events) {
 		debug_log("Click was blocked.");
 		return;
 	}
@@ -244,11 +244,11 @@ static void _subject_attach_files_clicked(void *data, Evas_Object *obj, void *ev
 	email_feedback_play_tap_sound();
 
 	ecore_imf_input_panel_hide();
-	int total_attachment_count = eina_list_count(ugd->attachment_item_list) + eina_list_count(ugd->attachment_inline_item_list);
+	int total_attachment_count = eina_list_count(view->attachment_item_list) + eina_list_count(view->attachment_inline_item_list);
 	if (total_attachment_count >= MAX_ATTACHMENT_ITEM) {
-		composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_NUMBER_EXCEEDED, composer_util_popup_response_cb, ugd);
+		composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_NUMBER_EXCEEDED, composer_util_popup_response_cb, view);
 	} else {
-		_show_attach_panel(ugd);
+		_show_attach_panel(view);
 	}
 
 	debug_leave();
@@ -279,28 +279,28 @@ void composer_subject_update_detail(void *data, Evas_Object *parent)
 	email_profiling_begin(composer_subject_update_detail);
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	email_editfield_t editfield;
 	editfield.layout = NULL;
 	editfield.entry = NULL;
 	_subject_create_entry(parent, &editfield);
 	Evas_Object *btn = _subject_create_add_attachment(parent);
 
-	_subject_register_entry_callbacks(editfield.entry, ugd);
-	evas_object_smart_callback_add(btn, "clicked", _subject_attach_files_clicked, ugd);
+	_subject_register_entry_callbacks(editfield.entry, view);
+	evas_object_smart_callback_add(btn, "clicked", _subject_attach_files_clicked, view);
 
 	elm_object_part_content_set(parent, "ec.swallow.content", editfield.layout);
 	elm_object_part_content_set(parent, "ec.swallow.add_attachment", btn);
-	ugd->subject_entry = editfield;
+	view->subject_entry = editfield;
 
 	debug_leave();
 	email_profiling_end(composer_subject_update_detail);
 }
 
-void composer_subject_update_guide_text(EmailComposerUGD *ugd)
+void composer_subject_update_guide_text(EmailComposerView *view)
 {
 	debug_enter();
-	retm_if(!ugd, "Invalid parameter: ugd is NULL!");
-	_subject_set_entry_guide_text(ugd->subject_entry.entry);
+	retm_if(!view, "Invalid parameter: view is NULL!");
+	_subject_set_entry_guide_text(view->subject_entry.entry);
 	debug_leave();
 }

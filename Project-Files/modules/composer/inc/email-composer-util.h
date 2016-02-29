@@ -75,7 +75,7 @@ enum {
 /**
  * @brief Create popup composers utility
  *
- * @param[in]	ugd				Email composer data
+ * @param[in]	view				Email composer data
  * @param[in]	t_title			Email common string type data
  * @param[in]	t_content		Email common string type data
  * @param[in]	response_cb		This callback function set as a response for all buttons
@@ -85,13 +85,13 @@ enum {
  *
  * @return Evas_Object instance with suitable popup, otherwise NULL
  */
-Evas_Object *composer_util_popup_create(EmailComposerUGD *ugd, email_string_t t_title, email_string_t t_content, Evas_Smart_Cb response_cb,
+Evas_Object *composer_util_popup_create(EmailComposerView *view, email_string_t t_title, email_string_t t_content, Evas_Smart_Cb response_cb,
                                         email_string_t t_btn1_lb, email_string_t t_btn2_lb, email_string_t t_btn3_lb);
 
 /**
  * @brief Create horizontal progress popup composers utility
  *
- * @param[in]	ugd				Email composer data
+ * @param[in]	view				Email composer data
  * @param[in]	t_title			Email common string type data
  * @param[in]	t_content		Email common string type data
  * @param[in]	response_cb		This callback function set as a response for all buttons
@@ -101,7 +101,7 @@ Evas_Object *composer_util_popup_create(EmailComposerUGD *ugd, email_string_t t_
  *
  * @return Evas_Object instance with suitable popup, otherwise NULL
  */
-Evas_Object *composer_util_popup_create_with_progress_horizontal(EmailComposerUGD *ugd, email_string_t t_title, email_string_t t_content, Evas_Smart_Cb response_cb,
+Evas_Object *composer_util_popup_create_with_progress_horizontal(EmailComposerView *view, email_string_t t_title, email_string_t t_content, Evas_Smart_Cb response_cb,
 																email_string_t t_btn1_lb, email_string_t t_btn2_lb, email_string_t t_btn3_lb);
 
 /**
@@ -260,24 +260,24 @@ Eina_Bool composer_util_image_rotate_jpeg_image_from_memory(const unsigned char 
 /**
  * @brief Get ellipsised entry name
  *
- * @param[in]	ugd					Email composer data
+ * @param[in]	view					Email composer data
  * @param[in]	display_entry		Entry object instance
  * @param[in]	entry_string		String to be ellipsised
  *
  * @return gchar string on success, otherwise NULL. It should be freed
  */
-gchar *composer_util_get_ellipsised_entry_name(EmailComposerUGD *ugd, Evas_Object *display_entry, const char *entry_string);
+gchar *composer_util_get_ellipsised_entry_name(EmailComposerView *view, Evas_Object *display_entry, const char *entry_string);
 
 /**
  * @brief Check if email address of recipient is already exist in multibuttonentry
  *
- * @param[in]	ugd					Email composer data
+ * @param[in]	view					Email composer data
  * @param[in]	obj					Evas_Object multibuttonentry
  * @param[in]	email_address		Email address name
  *
  * @return EINA_TRUE if already exist, otherwise EINA_FALSE or an error occurred
  */
-Eina_Bool composer_util_recp_is_duplicated(EmailComposerUGD *ugd, Evas_Object *obj, const char *email_address);
+Eina_Bool composer_util_recp_is_duplicated(EmailComposerView *view, Evas_Object *obj, const char *email_address);
 
 /**
  * @brief Check if multibuttonentry is empty
@@ -318,13 +318,13 @@ EmailRecpInfo *composer_util_recp_make_recipient_info_with_display_name(char *em
 /**
  * @brief Set recipient display address from multibuttonentry to destination string
  *
- * @param[in]	ugd		Email composer data
+ * @param[in]	view		Email composer data
  * @param[in]	obj		Evas _Object multibuttonentry
  * @param[out]	dest	Pointer to destination string
  *
  * @return Composer error type enum
  */
-COMPOSER_ERROR_TYPE_E composer_util_recp_retrieve_recp_string(EmailComposerUGD *ugd, Evas_Object *obj, char **dest);
+COMPOSER_ERROR_TYPE_E composer_util_recp_retrieve_recp_string(EmailComposerView *view, Evas_Object *obj, char **dest);
 
 /**
  * In email-composer-util.c
@@ -359,12 +359,12 @@ char *composer_util_get_error_string(int type);
 /**
  * @brief Get total attachment size
  *
- * @param[in]	ugd							Email composer data
+ * @param[in]	view							Email composer data
  * @param[in]	with_inline_contents		Flag that specify inline content is used
  *
  * @return Attachments files size
  */
-int composer_util_get_total_attachments_size(EmailComposerUGD *ugd, Eina_Bool with_inline_contents);
+int composer_util_get_total_attachments_size(EmailComposerView *view, Eina_Bool with_inline_contents);
 
 /**
  * @brief Get body size
@@ -387,10 +387,10 @@ Eina_Bool composer_util_is_max_sending_size_exceeded(void *data);
 /**
  * @brief Modify send button acordinaly to send state
  *
- * @param[in]	ugd		Email composer data
+ * @param[in]	view		Email composer data
  *
  */
-void composer_util_modify_send_button(EmailComposerUGD *ugd);
+void composer_util_modify_send_button(EmailComposerView *view);
 
 /**
  * @brief Callback to get image list
@@ -589,19 +589,19 @@ Eina_Bool composer_util_is_mail_modified(void *data);
 /**
  * @brief Resize composer webview height
  *
- * @param[in]	ugd			Email composer data
+ * @param[in]	view			Email composer data
  *
  */
-void composer_util_resize_webview_height(EmailComposerUGD *ugd);
+void composer_util_resize_webview_height(EmailComposerView *view);
 
 /**
  * @brief Calculate min height for composer webview accordingly to image
  *
- * @param[in]	ugd				Email composer data
+ * @param[in]	view				Email composer data
  * @param[in]	ime_height		Image height
  *
  */
-void composer_util_resize_min_height_for_new_message(EmailComposerUGD *ugd, int ime_height);
+void composer_util_resize_min_height_for_new_message(EmailComposerView *view, int ime_height);
 
 /**
  * @brief Display geometry for all elements in composer
@@ -671,17 +671,17 @@ void composer_util_network_state_noti_post();
 /**
  * @brief Update attach panel bundles
  *
- * @param[in]	ugd			Email composer data
+ * @param[in]	view			Email composer data
  *
  */
-void composer_util_update_attach_panel_bundles(EmailComposerUGD *ugd);
+void composer_util_update_attach_panel_bundles(EmailComposerView *view);
 
 /**
  * @brief Creates popup for creating vcard
  *
- * @param[in]	ugd			Email composer data
+ * @param[in]	view			Email composer data
  *
  */
-void composer_create_vcard_create_popup(EmailComposerUGD *ugd);
+void composer_create_vcard_create_popup(EmailComposerView *view);
 
 #endif /* __EMAIL_COMPOSER_UTIL_H__ */

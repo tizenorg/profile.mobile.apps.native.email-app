@@ -277,7 +277,7 @@ struct _EmailComposerMail {
  * @brief Composer attachment item data
  */
 struct _ComposerAttachmentItemData {
-	void *ugd;
+	void *view;
 	email_attachment_data_t *attachment_data;
 	char *preview_path;
 	Evas_Object *layout;
@@ -315,7 +315,7 @@ typedef enum {
 #define GET_VALUE_WITH_RATE(total, rate) ((int)((float)(total) * rate / 100))
 
 #define COMPOSER_GET_TIMER_DATA(tdata, name, data) \
-        COMMON_GET_TIMER_DATA(tdata, EmailComposerUGD, name, data) \
+        COMMON_GET_TIMER_DATA(tdata, EmailComposerView, name, data) \
 
 /**
  * @brief Rich button state data

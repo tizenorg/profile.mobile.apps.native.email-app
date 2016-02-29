@@ -65,7 +65,7 @@ static void _ewk_view_contextmenu_customize_cb(void *data, Evas_Object *webview,
 
 /*static void _ewk_view_console_message(void *data, Evas_Object *obj, void *event_info);*/
 
-static Evas_Object *_webkit_create_ewk_view(Evas_Object *parent, EmailComposerUGD *ugd);
+static Evas_Object *_webkit_create_ewk_view(Evas_Object *parent, EmailComposerView *view);
 static Eina_Bool _webkit_parse_text_style_changed_data(const char *res_string, FontStyleParams *params);
 
 /*
@@ -76,15 +76,15 @@ static void _webkit_button_focused_cb(void *data, Evas_Object *obj, void *event_
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (!evas_object_focus_get(ugd->ewk_view)) {
-		evas_object_focus_set(ugd->ewk_view, EINA_TRUE);
-		if (ugd->need_to_set_focus_with_js) {
-			composer_webkit_set_focus_to_webview_with_js(ugd);
+	if (!evas_object_focus_get(view->ewk_view)) {
+		evas_object_focus_set(view->ewk_view, EINA_TRUE);
+		if (view->need_to_set_focus_with_js) {
+			composer_webkit_set_focus_to_webview_with_js(view);
 		}
 	}
-	ugd->need_to_set_focus_with_js = EINA_TRUE;
+	view->need_to_set_focus_with_js = EINA_TRUE;
 
 	debug_leave();
 }
@@ -94,29 +94,29 @@ static void _webkit_js_execute_set_focus_cb(Evas_Object *obj, const char *result
 	debug_enter();
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (ugd->is_loading_popup) {
-		DELETE_EVAS_OBJECT(ugd->composer_popup);
-		ugd->is_loading_popup = EINA_FALSE;
+	if (view->is_loading_popup) {
+		DELETE_EVAS_OBJECT(view->composer_popup);
+		view->is_loading_popup = EINA_FALSE;
 	}
 
-	elm_object_tree_focus_allow_set(ugd->composer_layout, EINA_TRUE);
-	if (!elm_win_focus_highlight_enabled_get(ugd->base.module->win)) {
-		elm_object_focus_allow_set(ugd->send_btn, EINA_FALSE);
+	elm_object_tree_focus_allow_set(view->composer_layout, EINA_TRUE);
+	if (!elm_win_focus_highlight_enabled_get(view->base.module->win)) {
+		elm_object_focus_allow_set(view->send_btn, EINA_FALSE);
 	}
 
-	if (!ugd->composer_popup && (obj == ugd->ewk_view)) { /* Removing focus in case of scheduled email*/
-		composer_util_focus_set_focus(ugd, ugd->selected_entry);
+	if (!view->composer_popup && (obj == view->ewk_view)) { /* Removing focus in case of scheduled email*/
+		composer_util_focus_set_focus(view, view->selected_entry);
 	}
 
-	ugd->is_ewk_ready = EINA_TRUE;
+	view->is_ewk_ready = EINA_TRUE;
 
-	if (!ugd->vcard_save_thread) {
-		ugd->is_load_finished = EINA_TRUE;
-		if (ugd->need_to_destroy_after_initializing) {
-			ugd->is_save_in_drafts_clicked = EINA_TRUE; /* The action should be just like clicking save in drafts.*/
-			composer_exit_composer_get_contents(ugd); /* Exit out of composer without any pop-up.*/
+	if (!view->vcard_save_thread) {
+		view->is_load_finished = EINA_TRUE;
+		if (view->need_to_destroy_after_initializing) {
+			view->is_save_in_drafts_clicked = EINA_TRUE; /* The action should be just like clicking save in drafts.*/
+			composer_exit_composer_get_contents(view); /* Exit out of composer without any pop-up.*/
 		}
 	}
 
@@ -129,11 +129,11 @@ static void _webkit_js_execute_insert_signature_cb(Evas_Object *obj, const char 
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (((ugd->composer_type == RUN_COMPOSER_REPLY || ugd->composer_type == RUN_COMPOSER_REPLY_ALL) && ugd->account_info->original_account->options.reply_with_body) ||
-		(ugd->composer_type == RUN_COMPOSER_FORWARD)) {
-		char *original_mail_info = composer_initial_data_body_make_parent_mail_info(ugd);
+	if (((view->composer_type == RUN_COMPOSER_REPLY || view->composer_type == RUN_COMPOSER_REPLY_ALL) && view->account_info->original_account->options.reply_with_body) ||
+		(view->composer_type == RUN_COMPOSER_FORWARD)) {
+		char *original_mail_info = composer_initial_data_body_make_parent_mail_info(view);
 
 		char **sp_info = g_strsplit(original_mail_info, "\"", -1);
 		char *jo_info = g_strjoinv("\\\"", sp_info);
@@ -148,7 +148,7 @@ static void _webkit_js_execute_insert_signature_cb(Evas_Object *obj, const char 
 			debug_error("EC_JS_INSERT_TEXT_TO_ORIGINAL_MESSAGE_BAR failed.");
 		}
 
-		if (!ewk_view_script_execute(obj, to_be_inserted_mail_info, _webkit_js_execute_insert_original_mail_info_cb, (void *)ugd)) {
+		if (!ewk_view_script_execute(obj, to_be_inserted_mail_info, _webkit_js_execute_insert_original_mail_info_cb, (void *)view)) {
 			debug_error("EC_JS_INSERT_ORIGINAL_MAIL_INFO failed.");
 		}
 
@@ -157,7 +157,7 @@ static void _webkit_js_execute_insert_signature_cb(Evas_Object *obj, const char 
 		g_free(jo_info);
 		g_strfreev(sp_info);
 	} else {
-		if (!ewk_view_script_execute(obj, EC_JS_HAS_ORIGINAL_MESSAGE_BAR, _webkit_js_execute_check_body_layout_cb, (void *)ugd)) {
+		if (!ewk_view_script_execute(obj, EC_JS_HAS_ORIGINAL_MESSAGE_BAR, _webkit_js_execute_check_body_layout_cb, (void *)view)) {
 			debug_error("EC_JS_HAS_ORIGINAL_MESSAGE_BAR failed.");
 		}
 	}
@@ -184,32 +184,32 @@ static void _webkit_js_execute_init_composer_body_cb(Evas_Object *obj, const cha
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	Evas_Object *ewk_view = (Evas_Object *)obj;
 
 	/* Create combined scroller */
-	composer_initial_view_create_combined_scroller(ugd);
+	composer_initial_view_create_combined_scroller(view);
 
-	elm_object_part_content_set(ugd->ewk_view_layout, "elm.swallow.content", ugd->ewk_view);
+	elm_object_part_content_set(view->ewk_view_layout, "elm.swallow.content", view->ewk_view);
 
-	composer_util_resize_webview_height(ugd);
+	composer_util_resize_webview_height(view);
 
 	char set_image_src[BUF_LEN_L] = { 0, };
 	snprintf(set_image_src, sizeof(set_image_src), EC_JS_UPDATE_IMAGE_SOURCES, composer_util_file_get_temp_dirname());
 
 	/* TODO: is this needed? the symbolic links for inline image were made on tmp_folder. */
-	if (ugd->composer_type == RUN_COMPOSER_EDIT || ugd->composer_type == RUN_COMPOSER_REPLY ||
-		ugd->composer_type == RUN_COMPOSER_REPLY_ALL || ugd->composer_type == RUN_COMPOSER_FORWARD) {
+	if (view->composer_type == RUN_COMPOSER_EDIT || view->composer_type == RUN_COMPOSER_REPLY ||
+		view->composer_type == RUN_COMPOSER_REPLY_ALL || view->composer_type == RUN_COMPOSER_FORWARD) {
 		if (!ewk_view_script_execute(ewk_view, set_image_src, NULL, NULL))
 			debug_error("EC_JS_UPDATE_IMAGE_SOURCES failed.");
 	}
 
-	if (ugd->with_original_message) {
-		if (!ewk_view_script_execute(ewk_view, EC_JS_GET_CONTENTS_FROM_ORG_MESSAGE, _webkit_js_execute_get_initial_parent_content_cb, (void *)ugd)) {
+	if (view->with_original_message) {
+		if (!ewk_view_script_execute(ewk_view, EC_JS_GET_CONTENTS_FROM_ORG_MESSAGE, _webkit_js_execute_get_initial_parent_content_cb, (void *)view)) {
 			debug_error("EC_JS_GET_CONTENTS_FROM_ORG_MESSAGE failed.");
 		}
 	} else {
-		if (!ewk_view_script_execute(ewk_view, EC_JS_GET_CONTENTS_FROM_BODY, _webkit_js_execute_get_initial_body_content_cb, (void *)ugd)) {
+		if (!ewk_view_script_execute(ewk_view, EC_JS_GET_CONTENTS_FROM_BODY, _webkit_js_execute_get_initial_body_content_cb, (void *)view)) {
 			debug_error("EC_JS_GET_CONTENTS_FROM_BODY failed.");
 		}
 	}
@@ -223,12 +223,12 @@ static void _webkit_js_execute_is_checkbox_clicked_cb(Evas_Object *obj, const ch
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
 	if (!g_strcmp0(result, "true")) {
-		ugd->is_checkbox_clicked = EINA_TRUE;
+		view->is_checkbox_clicked = EINA_TRUE;
 	} else {
-		ugd->is_checkbox_clicked = EINA_FALSE;
+		view->is_checkbox_clicked = EINA_FALSE;
 	}
 
 	debug_leave();
@@ -240,35 +240,35 @@ static void _webkit_js_execute_check_body_layout_cb(Evas_Object *obj, const char
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
 	if (!g_strcmp0(result, "true")) {
-		ugd->with_original_message = EINA_TRUE;
+		view->with_original_message = EINA_TRUE;
 	}
 
-	if (ugd->with_original_message) {
-		if (!ewk_view_script_execute(obj, EC_JS_IS_CHECKBOX_CHECKED, _webkit_js_execute_is_checkbox_clicked_cb, (void *)ugd)) {
+	if (view->with_original_message) {
+		if (!ewk_view_script_execute(obj, EC_JS_IS_CHECKBOX_CHECKED, _webkit_js_execute_is_checkbox_clicked_cb, (void *)view)) {
 			debug_error("EC_JS_IS_CHECKBOX_CHECKED failed.");
 		}
 
 		char buf[BUF_LEN_L] = { 0, };
 		snprintf(buf, sizeof(buf), EC_JS_UPDATE_COLOR_OF_ORG_MESSAGE_BAR, COLOR_GRAY);
-		if (!ewk_view_script_execute(ugd->ewk_view, buf, NULL, (void *)ugd)) {
+		if (!ewk_view_script_execute(view->ewk_view, buf, NULL, (void *)view)) {
 			debug_error("EC_JS_UPDATE_COLOR_OF_ORG_MESSAGE_BAR failed.");
 		}
 
 		snprintf(buf, sizeof(buf), EC_JS_UPDATE_COLOR_OF_CHECKBOX, COLOR_BLUE);
-		if (!ewk_view_script_execute(ugd->ewk_view, buf, NULL, (void *)ugd)) {
+		if (!ewk_view_script_execute(view->ewk_view, buf, NULL, (void *)view)) {
 			debug_error("EC_JS_UPDATE_COLOR_OF_CHECKBOX failed.");
 		}
 
 		snprintf(buf, sizeof(buf), EC_JS_UPDATE_COLOR_OF_CHECKBOX_ICON, COLOR_WHITE);
-		if (!ewk_view_script_execute(ugd->ewk_view, buf, NULL, (void *)ugd)) {
+		if (!ewk_view_script_execute(view->ewk_view, buf, NULL, (void *)view)) {
 			debug_error("EC_JS_UPDATE_COLOR_OF_CHECKBOX_ICON failed.");
 		}
 	}
 
-	if (!ewk_view_script_execute(obj, EC_JS_INITIALIZE_COMPOSER, _webkit_js_execute_init_composer_body_cb, (void *)ugd)) {
+	if (!ewk_view_script_execute(obj, EC_JS_INITIALIZE_COMPOSER, _webkit_js_execute_init_composer_body_cb, (void *)view)) {
 		debug_error("EC_JS_INITIALIZE_COMPOSER failed.");
 	}
 
@@ -281,14 +281,14 @@ static void _webkit_js_execute_get_initial_parent_content_cb(Evas_Object *obj, c
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	Evas_Object *ewk_view = (Evas_Object *)obj;
 
 	if (result) {
-		ugd->initial_parent_content = g_strdup(result);
+		view->initial_parent_content = g_strdup(result);
 	}
 
-	if (!ewk_view_script_execute(ewk_view, EC_JS_GET_CONTENTS_FROM_NEW_MESSAGE, _webkit_js_execute_get_initial_new_message_content_cb, (void *)ugd)) {
+	if (!ewk_view_script_execute(ewk_view, EC_JS_GET_CONTENTS_FROM_NEW_MESSAGE, _webkit_js_execute_get_initial_new_message_content_cb, (void *)view)) {
 		debug_error("EC_JS_GET_CONTENTS_FROM_NEW_MESSAGE failed.");
 	}
 
@@ -301,14 +301,14 @@ static void _webkit_js_execute_get_initial_new_message_content_cb(Evas_Object *o
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	Evas_Object *ewk_view = (Evas_Object *)obj;
 
 	if (result) {
-		ugd->initial_new_message_content = g_strdup(result);
+		view->initial_new_message_content = g_strdup(result);
 	}
 
-	if (!ewk_view_script_execute(ewk_view, EC_JS_GET_CONTENTS_FROM_BODY, _webkit_js_execute_get_initial_body_content_cb, (void *)ugd)) {
+	if (!ewk_view_script_execute(ewk_view, EC_JS_GET_CONTENTS_FROM_BODY, _webkit_js_execute_get_initial_body_content_cb, (void *)view)) {
 		debug_error("EC_JS_GET_CONTENTS_FROM_BODY failed.");
 	}
 
@@ -321,20 +321,20 @@ static void _webkit_js_execute_get_initial_body_content_cb(Evas_Object *obj, con
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	Evas_Object *ewk_view = (Evas_Object *)obj;
 
 	if (result) {
-		ugd->initial_body_content = g_strdup(result);
+		view->initial_body_content = g_strdup(result);
 	}
 
 	/* Incase of forward/reply a mail, we don't make body contenteditable to keep original message bar non editable state. */
-	if (ugd->with_original_message) {
-		if (!ewk_view_script_execute(ewk_view, EC_JS_ENABLE_EDITABLE_DIVS, _webkit_js_execute_set_focus_cb, (void *)ugd)) {
+	if (view->with_original_message) {
+		if (!ewk_view_script_execute(ewk_view, EC_JS_ENABLE_EDITABLE_DIVS, _webkit_js_execute_set_focus_cb, (void *)view)) {
 			debug_error("EC_JS_ENABLE_EDITABLE_DIVS failed!");
 		}
 	} else {
-		if (!ewk_view_script_execute(ewk_view, EC_JS_ENABLE_EDITABLE_BODY, _webkit_js_execute_set_focus_cb, (void *)ugd)) {
+		if (!ewk_view_script_execute(ewk_view, EC_JS_ENABLE_EDITABLE_BODY, _webkit_js_execute_set_focus_cb, (void *)view)) {
 			debug_error("EC_JS_ENABLE_EDITABLE_BODY failed!");
 		}
 	}
@@ -346,10 +346,10 @@ static void _ewk_view_mosue_up_cb(void *data, Evas *e, Evas_Object *obj, void *e
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (ugd->allow_click_events && !elm_object_focus_get(ugd->ewk_btn)) {
-		ugd->ewk_accepts_focus = EINA_TRUE;
+	if (view->allow_click_events && !elm_object_focus_get(view->ewk_btn)) {
+		view->ewk_accepts_focus = EINA_TRUE;
 	}
 }
 
@@ -359,54 +359,54 @@ static void _ewk_view_focus_in_cb(void *data, Evas *e, Evas_Object *obj, void *e
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
 	/* Menu ctxpopup and keypad is shown at the same time.
 	 * Cause: Press menu hard key then press webview quickly.
 	 * Menu ctxpopup comes up and keypad is shown because webview gets the focus.
 	 */
-	DELETE_EVAS_OBJECT(ugd->context_popup);
+	DELETE_EVAS_OBJECT(view->context_popup);
 
 	/* If there's no focus on the webkit button, it'll set the focus to webkit again. */
-	if (!elm_object_focus_get(ugd->ewk_btn)) {
+	if (!elm_object_focus_get(view->ewk_btn)) {
 		/* Idler used because recursion may do a nasty sings! */
-		if (ugd->ewk_accepts_focus) {
-			ugd->need_to_set_focus_with_js = EINA_FALSE;
+		if (view->ewk_accepts_focus) {
+			view->need_to_set_focus_with_js = EINA_FALSE;
 			debug_log("reset focus");
-			composer_util_focus_set_focus_with_idler(ugd, ugd->ewk_view);
+			composer_util_focus_set_focus_with_idler(view, view->ewk_view);
 		} else {
 			debug_log("cancel focus");
-			composer_util_focus_set_focus_with_idler(ugd, NULL);
+			composer_util_focus_set_focus_with_idler(view, NULL);
 		}
 		debug_log("return");
 		return;
 	}
 
-	ugd->ewk_accepts_focus = EINA_FALSE;
+	view->ewk_accepts_focus = EINA_FALSE;
 
-	if (composer_recipient_is_recipient_entry(ugd, ugd->selected_entry)) {
-		if (!composer_recipient_commit_recipient_on_entry(ugd, ugd->selected_entry)) {
+	if (composer_recipient_is_recipient_entry(view, view->selected_entry)) {
+		if (!composer_recipient_commit_recipient_on_entry(view, view->selected_entry)) {
 
-			if (ugd->richtext_toolbar) {
-				composer_rich_text_disable_set(ugd, EINA_FALSE);
+			if (view->richtext_toolbar) {
+				composer_rich_text_disable_set(view, EINA_FALSE);
 			}
 
 			return;
 		}
 	}
-	composer_recipient_unfocus_entry(ugd, ugd->selected_entry);
-	if (ugd->bcc_added && !ugd->cc_recipients_cnt && !ugd->bcc_recipients_cnt) {
-		composer_recipient_show_hide_bcc_field(ugd, EINA_FALSE);
+	composer_recipient_unfocus_entry(view, view->selected_entry);
+	if (view->bcc_added && !view->cc_recipients_cnt && !view->bcc_recipients_cnt) {
+		composer_recipient_show_hide_bcc_field(view, EINA_FALSE);
 	}
 
 	/* This line(for selected_entry) should be here. (after composer_recipient_hide_contact_button()) */
-	if (ugd->selected_entry != ugd->ewk_view) {
-		composer_attachment_ui_contract_attachment_list(ugd);
-		ugd->selected_entry = ugd->ewk_view;
+	if (view->selected_entry != view->ewk_view) {
+		composer_attachment_ui_contract_attachment_list(view);
+		view->selected_entry = view->ewk_view;
 	}
 
-	if (ugd->richtext_toolbar) {
-		composer_rich_text_disable_set(ugd, EINA_FALSE);
+	if (view->richtext_toolbar) {
+		composer_rich_text_disable_set(view, EINA_FALSE);
 	}
 
 	debug_leave();
@@ -416,9 +416,9 @@ static void _ewk_view_focus_out_cb(void *data, Evas *e, Evas_Object *obj, void *
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	ugd->cs_in_selection_mode = false;
+	view->cs_in_selection_mode = false;
 
 	debug_leave();
 }
@@ -431,8 +431,8 @@ static void _ewk_view_load_progress_cb(void *data, Evas_Object *obj, void *event
 	if (progress) {
 		debug_log("=> load,progress: (%f)", *progress);
 
-		EmailComposerUGD *ugd = (EmailComposerUGD *)data;
-		ugd->webview_load_progress = *progress;
+		EmailComposerView *view = (EmailComposerView *)data;
+		view->webview_load_progress = *progress;
 	}
 }
 
@@ -465,27 +465,27 @@ static void _ewk_view_load_nonemptylayout_finished_cb(void *data, Evas_Object *o
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
 	/* In this case, ewk_view_script_execute() should not be called because it causes crash sometimes. script executed callback is called after composer is destroyed. */
-	retm_if(ugd->is_low_memory_handled, "Composer will be destroyed because of low memory!");
+	retm_if(view->is_low_memory_handled, "Composer will be destroyed because of low memory!");
 
-	if (ugd->composer_type == RUN_COMPOSER_EDIT) {
-		if (!ewk_view_script_execute(obj, EC_JS_HAS_ORIGINAL_MESSAGE_BAR, _webkit_js_execute_check_body_layout_cb, (void *)ugd)) {
+	if (view->composer_type == RUN_COMPOSER_EDIT) {
+		if (!ewk_view_script_execute(obj, EC_JS_HAS_ORIGINAL_MESSAGE_BAR, _webkit_js_execute_check_body_layout_cb, (void *)view)) {
 			debug_warning("EC_JS_HAS_ORIGINAL_MESSAGE_BAR failed.");
 		}
 	} else {
 		char *to_be_inserted_signature = NULL;
-		char *signature = composer_initial_data_body_make_signature_markup(ugd);
+		char *signature = composer_initial_data_body_make_signature_markup(view);
 
-		if (((ugd->composer_type == RUN_COMPOSER_REPLY || ugd->composer_type == RUN_COMPOSER_REPLY_ALL) && ugd->account_info->original_account->options.reply_with_body) ||
-			(ugd->composer_type == RUN_COMPOSER_FORWARD)) {
+		if (((view->composer_type == RUN_COMPOSER_REPLY || view->composer_type == RUN_COMPOSER_REPLY_ALL) && view->account_info->original_account->options.reply_with_body) ||
+			(view->composer_type == RUN_COMPOSER_FORWARD)) {
 			to_be_inserted_signature = g_strdup_printf(EC_JS_INSERT_SIGNATURE_TO_NEW_MESSAGE, signature);
 		} else {
 			to_be_inserted_signature = g_strdup_printf(EC_JS_INSERT_SIGNATURE, signature);
 		}
 
-		if (!ewk_view_script_execute(obj, to_be_inserted_signature, _webkit_js_execute_insert_signature_cb, (void *)ugd)) {
+		if (!ewk_view_script_execute(obj, to_be_inserted_signature, _webkit_js_execute_insert_signature_cb, (void *)view)) {
 			debug_warning("EC_JS_INSERT_SIGNATURE failed.");
 		}
 
@@ -528,10 +528,10 @@ static void _ewk_view_policy_navigation_decide_cb(void *data, Evas_Object *obj, 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 	retm_if(!event_info, "Invalid parameter: event_info is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	Evas_Object *ewk_view = (Evas_Object *)obj;
 
-	if (ugd->is_load_finished) {
+	if (view->is_load_finished) {
 		Ewk_Policy_Decision *policy_decision = (Ewk_Policy_Decision *)event_info;
 
 		debug_secure("url:%s", ewk_policy_decision_url_get(policy_decision));
@@ -556,9 +556,9 @@ static void _ewk_view_policy_navigation_decide_cb(void *data, Evas_Object *obj, 
 		while (url) {
 			debug_secure("===> processed url: (%s)", url);
 			if (g_str_has_prefix(url, COMPOSER_SCHEME_RESIZE_START)) {
-				composer_initial_view_cs_freeze_push(ugd);
+				composer_initial_view_cs_freeze_push(view);
 			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_RESIZE_END)) {
-				composer_initial_view_cs_freeze_pop(ugd);
+				composer_initial_view_cs_freeze_pop(view);
 			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_START_DRAG)) {
 				Ewk_Settings *ewkSetting = ewk_view_settings_get(ewk_view);
 				ewk_settings_uses_keypad_without_user_action_set(ewkSetting, EINA_FALSE); /* To not show IME without user action */
@@ -570,19 +570,19 @@ static void _ewk_view_policy_navigation_decide_cb(void *data, Evas_Object *obj, 
 				snprintf(buf, sizeof(buf), "%s", url + strlen(COMPOSER_SCHEME_CLICK_CHECKBOX));
 				debug_log("click status: (%s)", buf);
 
-				ugd->is_checkbox_clicked = atoi(buf);
-				if (ugd->is_checkbox_clicked) {
+				view->is_checkbox_clicked = atoi(buf);
+				if (view->is_checkbox_clicked) {
 					snprintf(buf, sizeof(buf), EC_JS_UPDATE_COLOR_OF_CHECKBOX, COLOR_BLUE);
 				} else {
 					snprintf(buf, sizeof(buf), EC_JS_UPDATE_COLOR_OF_CHECKBOX, COLOR_DARK_GRAY);
 				}
 
-				if (!ewk_view_script_execute(ugd->ewk_view, buf, NULL, (void *)ugd)) {
+				if (!ewk_view_script_execute(view->ewk_view, buf, NULL, (void *)view)) {
 					debug_error("EC_JS_UPDATE_COLOR_OF_CHECKBOX failed.");
 				}
 				/* Not to move the focus to new meesage div when focused ui is enabled. */
-				if (!elm_win_focus_highlight_enabled_get(ugd->base.module->win) && !ugd->is_focus_on_new_message_div) {
-					if (ewk_view_script_execute(ugd->ewk_view, EC_JS_SET_FOCUS_NEW_MESSAGE, NULL, ugd) == EINA_FALSE) {
+				if (!elm_win_focus_highlight_enabled_get(view->base.module->win) && !view->is_focus_on_new_message_div) {
+					if (ewk_view_script_execute(view->ewk_view, EC_JS_SET_FOCUS_NEW_MESSAGE, NULL, view) == EINA_FALSE) {
 						debug_error("EC_JS_SET_FOCUS_NEW_MESSAGE is failed!");
 					}
 				}
@@ -592,34 +592,34 @@ static void _ewk_view_policy_navigation_decide_cb(void *data, Evas_Object *obj, 
 				ecore_imf_context_del(ctx);
 
 				debug_log("imf size ==> (x:%d,y:%d,w:%d,h:%d)", x, y, w, h);
-				composer_util_resize_min_height_for_new_message(ugd, h);
-				edje_object_signal_emit(_EDJ(ugd->composer_layout), "ec,action,clicked,layout", "");
+				composer_util_resize_min_height_for_new_message(view, h);
+				edje_object_signal_emit(_EDJ(view->composer_layout), "ec,action,clicked,layout", "");
 			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_GET_FOCUS_NEW)) {
-				ugd->is_focus_on_new_message_div = EINA_TRUE;
+				view->is_focus_on_new_message_div = EINA_TRUE;
 			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_GET_FOCUS_ORG)) {
-				ugd->is_focus_on_new_message_div = EINA_FALSE;
+				view->is_focus_on_new_message_div = EINA_FALSE;
 			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_EXCEENDED_MAX)) {
 				char buf[BUF_LEN_L] = { 0, };
 				snprintf(buf, sizeof(buf), email_get_email_string("IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"), MAX_MESSAGE_SIZE);
 				int noti_ret = notification_status_message_post(buf);
 				debug_warning_if(noti_ret != NOTIFICATION_ERROR_NONE, "notification_status_message_post() failed! ret:(%d)", noti_ret);
 			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_TEXT_STYLE_CHANGE)) {
-				if (ugd->richtext_toolbar) {
+				if (view->richtext_toolbar) {
 					FontStyleParams params = { 0 };
 					if (_webkit_parse_text_style_changed_data(url, &params)) {
-						composer_rich_text_font_style_params_set(ugd, &params);
+						composer_rich_text_font_style_params_set(view, &params);
 					} else {
 						debug_error("_webkit_parse_text_style_changed_data failed!");
 					}
 				}
 			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_CARET_POS_CHANGE)) {
-				if (elm_object_focus_get(ugd->ewk_btn)) {
+				if (elm_object_focus_get(view->ewk_btn)) {
 					int x = 0;
 					int top = 0;
 					int bottom = 0;
 					int isCollapsed = 0;
 					if (sscanf(url + strlen(COMPOSER_SCHEME_CARET_POS_CHANGE), "%d%d%d%d", &x, &top, &bottom, &isCollapsed) == 4) {
-						composer_initial_view_caret_pos_changed_cb(ugd, top, bottom, (isCollapsed != 0));
+						composer_initial_view_caret_pos_changed_cb(view, top, bottom, (isCollapsed != 0));
 					}
 				} else {
 					debug_log("Not in focus");
@@ -641,11 +641,11 @@ static void _ewk_view_contextmenu_customize_cb(void *data, Evas_Object *obj, voi
 	retm_if(data == NULL, "Invalid parameter: data is NULL!");
 	retm_if(event_info == NULL, "Invalid parameter: event_info is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	Ewk_Context_Menu *contextmenu = (Ewk_Context_Menu *)event_info;
 
-	if (ugd->selected_entry != ugd->ewk_view) {
-		elm_object_focus_set(ugd->ewk_btn, EINA_TRUE);
+	if (view->selected_entry != view->ewk_view) {
+		elm_object_focus_set(view->ewk_btn, EINA_TRUE);
 	}
 
 	int i = 0, count = 0;
@@ -718,7 +718,7 @@ static void _ewk_view_contextmenu_customize_cb(void *data, Evas_Object *obj, voi
 		ewk_context_menu_item_append_as_action(contextmenu, EWK_CONTEXT_MENU_ITEM_TAG_CLIPBOARD, email_get_email_string("IDS_EMAIL_OPT_CLIPBOARD"), EINA_TRUE);
 	}
 
-	composer_initial_view_activate_selection_mode(ugd);
+	composer_initial_view_activate_selection_mode(view);
 
 	debug_leave();
 }
@@ -737,7 +737,7 @@ static void _ewk_view_console_message(void *data, Evas_Object *obj, void *event_
 }
 #endif
 
-static Evas_Object *_webkit_create_ewk_view(Evas_Object *parent, EmailComposerUGD *ugd)
+static Evas_Object *_webkit_create_ewk_view(Evas_Object *parent, EmailComposerView *view)
 {
 	debug_enter();
 
@@ -792,36 +792,36 @@ static Evas_Object *_webkit_create_ewk_view(Evas_Object *parent, EmailComposerUG
  * Definition for exported functions
  */
 
-void composer_webkit_create_body_field(Evas_Object *parent, EmailComposerUGD *ugd)
+void composer_webkit_create_body_field(Evas_Object *parent, EmailComposerView *view)
 {
 	email_profiling_begin(composer_webkit_create_body_field);
 	debug_enter();
 
 	retm_if(!parent, "parent is NULL!");
-	retm_if(!ugd, "ugd is NULL!");
+	retm_if(!view, "view is NULL!");
 
 	Evas_Object *ewk_view_layout = composer_util_create_layout_with_noindicator(parent);
-	Evas_Object *ewk_view = _webkit_create_ewk_view(ewk_view_layout, ugd);
+	Evas_Object *ewk_view = _webkit_create_ewk_view(ewk_view_layout, view);
 	retm_if(!ewk_view, "_webkit_create_ewk_view() failed!");
 
 	/* The webkit object will be set to its layout on the composer view in "load,nonemptylayout,finished" callback */
 	elm_object_part_content_set(parent, "ec.swallow.webview", ewk_view_layout);
-	ugd->ewk_view = ewk_view;
-	ugd->ewk_view_layout = ewk_view_layout;
+	view->ewk_view = ewk_view;
+	view->ewk_view_layout = ewk_view_layout;
 
-	composer_webkit_add_callbacks(ugd->ewk_view, ugd);
+	composer_webkit_add_callbacks(view->ewk_view, view);
 
-	Evas_Object *ewk_btn = elm_button_add(ugd->base.module->navi);
+	Evas_Object *ewk_btn = elm_button_add(view->base.module->navi);
 	elm_object_style_set(ewk_btn, "transparent");
 	evas_object_freeze_events_set(ewk_btn, EINA_TRUE);
 	evas_object_size_hint_weight_set(ewk_btn, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_size_hint_align_set(ewk_btn, EVAS_HINT_FILL, EVAS_HINT_FILL);
 	evas_object_show(ewk_btn);
-	elm_object_part_content_set(ugd->base.content, "ec.swallow.webview.button", ewk_btn);
+	elm_object_part_content_set(view->base.content, "ec.swallow.webview.button", ewk_btn);
 
-	ugd->ewk_btn = ewk_btn;
+	view->ewk_btn = ewk_btn;
 
-	evas_object_smart_callback_add(ugd->ewk_btn, "focused", _webkit_button_focused_cb, ugd);
+	evas_object_smart_callback_add(view->ewk_btn, "focused", _webkit_button_focused_cb, view);
 
 	debug_leave();
 	email_profiling_end(composer_webkit_create_body_field);
@@ -834,26 +834,26 @@ void composer_webkit_add_callbacks(Evas_Object *ewk_view, void *data)
 	retm_if(!ewk_view, "Invalid parameter: ewk_view is NULL!");
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	evas_object_event_callback_add(ewk_view, EVAS_CALLBACK_FOCUS_IN, _ewk_view_focus_in_cb, ugd);
-	evas_object_event_callback_add(ewk_view, EVAS_CALLBACK_FOCUS_OUT, _ewk_view_focus_out_cb, ugd);
-	evas_object_event_callback_add(ewk_view, EVAS_CALLBACK_MOUSE_UP, _ewk_view_mosue_up_cb, ugd);
+	evas_object_event_callback_add(ewk_view, EVAS_CALLBACK_FOCUS_IN, _ewk_view_focus_in_cb, view);
+	evas_object_event_callback_add(ewk_view, EVAS_CALLBACK_FOCUS_OUT, _ewk_view_focus_out_cb, view);
+	evas_object_event_callback_add(ewk_view, EVAS_CALLBACK_MOUSE_UP, _ewk_view_mosue_up_cb, view);
 
-	evas_object_smart_callback_add(ewk_view, "load,progress", _ewk_view_load_progress_cb, ugd);
-	evas_object_smart_callback_add(ewk_view, "load,error", _ewk_view_load_error_cb, ugd);
+	evas_object_smart_callback_add(ewk_view, "load,progress", _ewk_view_load_progress_cb, view);
+	evas_object_smart_callback_add(ewk_view, "load,error", _ewk_view_load_error_cb, view);
 
 #ifndef _EWK_LOAD_NONEMPTY_LAYOUT_FINISHED_CB_UNAVAILABLE_
-	evas_object_smart_callback_add(ewk_view, "load,nonemptylayout,finished", _ewk_view_load_nonemptylayout_finished_cb, ugd);
+	evas_object_smart_callback_add(ewk_view, "load,nonemptylayout,finished", _ewk_view_load_nonemptylayout_finished_cb, view);
 #else
-	evas_object_smart_callback_add(ewk_view, "load,finished", _ewk_view_load_nonemptylayout_finished_cb, ugd);
+	evas_object_smart_callback_add(ewk_view, "load,finished", _ewk_view_load_nonemptylayout_finished_cb, view);
 #endif
 
-	evas_object_smart_callback_add(ewk_view, "policy,navigation,decide", _ewk_view_policy_navigation_decide_cb, ugd);
-	evas_object_smart_callback_add(ewk_view, "contextmenu,customize", _ewk_view_contextmenu_customize_cb, ugd);
+	evas_object_smart_callback_add(ewk_view, "policy,navigation,decide", _ewk_view_policy_navigation_decide_cb, view);
+	evas_object_smart_callback_add(ewk_view, "contextmenu,customize", _ewk_view_contextmenu_customize_cb, view);
 
 #if (_WEBKIT_CONSOLE_MESSAGE_LOG)
-	evas_object_smart_callback_add(ewk_view, "console,message", _ewk_view_console_message, ugd);
+	evas_object_smart_callback_add(ewk_view, "console,message", _ewk_view_console_message, view);
 #endif
 
 	debug_leave();
@@ -866,26 +866,26 @@ void composer_webkit_del_callbacks(Evas_Object *ewk_view, void *data)
 	retm_if(!ewk_view, "Invalid parameter: ewk_view is NULL!");
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	evas_object_event_callback_del_full(ewk_view, EVAS_CALLBACK_FOCUS_IN, _ewk_view_focus_in_cb, ugd);
-	evas_object_event_callback_del_full(ewk_view, EVAS_CALLBACK_FOCUS_OUT, _ewk_view_focus_out_cb, ugd);
-	evas_object_event_callback_del_full(ewk_view, EVAS_CALLBACK_MOUSE_UP, _ewk_view_mosue_up_cb, ugd);
+	evas_object_event_callback_del_full(ewk_view, EVAS_CALLBACK_FOCUS_IN, _ewk_view_focus_in_cb, view);
+	evas_object_event_callback_del_full(ewk_view, EVAS_CALLBACK_FOCUS_OUT, _ewk_view_focus_out_cb, view);
+	evas_object_event_callback_del_full(ewk_view, EVAS_CALLBACK_MOUSE_UP, _ewk_view_mosue_up_cb, view);
 
-	evas_object_smart_callback_del_full(ewk_view, "load,progress", _ewk_view_load_progress_cb, ugd);
-	evas_object_smart_callback_del_full(ewk_view, "load,error", _ewk_view_load_error_cb, ugd);
+	evas_object_smart_callback_del_full(ewk_view, "load,progress", _ewk_view_load_progress_cb, view);
+	evas_object_smart_callback_del_full(ewk_view, "load,error", _ewk_view_load_error_cb, view);
 
 #ifndef _EWK_LOAD_NONEMPTY_LAYOUT_FINISHED_CB_UNAVAILABLE_
-	evas_object_smart_callback_del_full(ewk_view, "load,nonemptylayout,finished", _ewk_view_load_nonemptylayout_finished_cb, ugd);
+	evas_object_smart_callback_del_full(ewk_view, "load,nonemptylayout,finished", _ewk_view_load_nonemptylayout_finished_cb, view);
 #else
-	evas_object_smart_callback_del_full(ewk_view, "load,finished", _ewk_view_load_nonemptylayout_finished_cb, ugd);
+	evas_object_smart_callback_del_full(ewk_view, "load,finished", _ewk_view_load_nonemptylayout_finished_cb, view);
 #endif
 
-	evas_object_smart_callback_del_full(ewk_view, "policy,navigation,decide", _ewk_view_policy_navigation_decide_cb, ugd);
-	evas_object_smart_callback_del_full(ewk_view, "contextmenu,customize", _ewk_view_contextmenu_customize_cb, ugd);
+	evas_object_smart_callback_del_full(ewk_view, "policy,navigation,decide", _ewk_view_policy_navigation_decide_cb, view);
+	evas_object_smart_callback_del_full(ewk_view, "contextmenu,customize", _ewk_view_contextmenu_customize_cb, view);
 
 #if (_WEBKIT_CONSOLE_MESSAGE_LOG)
-	evas_object_smart_callback_del_full(ewk_view, "console,message", _ewk_view_console_message, ugd);
+	evas_object_smart_callback_del_full(ewk_view, "console,message", _ewk_view_console_message, view);
 #endif
 
 	debug_leave();
@@ -895,20 +895,20 @@ void composer_webkit_blur_webkit_focus(void *data)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (ugd->with_original_message) {
-		if (ugd->is_focus_on_new_message_div) {
-			if (ewk_view_script_execute(ugd->ewk_view, EC_JS_SET_UNFOCUS_NEW_MESSAGE, NULL, ugd) == EINA_FALSE) {
+	if (view->with_original_message) {
+		if (view->is_focus_on_new_message_div) {
+			if (ewk_view_script_execute(view->ewk_view, EC_JS_SET_UNFOCUS_NEW_MESSAGE, NULL, view) == EINA_FALSE) {
 				debug_error("EC_JS_SET_UNFOCUS_NEW_MESSAGE is failed!");
 			}
 		} else {
-			if (ewk_view_script_execute(ugd->ewk_view, EC_JS_SET_UNFOCUS_ORG_MESSAGE, NULL, ugd) == EINA_FALSE) {
+			if (ewk_view_script_execute(view->ewk_view, EC_JS_SET_UNFOCUS_ORG_MESSAGE, NULL, view) == EINA_FALSE) {
 				debug_error("EC_JS_SET_UNFOCUS_ORG_MESSAGE is failed!");
 			}
 		}
 	} else {
-		if (ewk_view_script_execute(ugd->ewk_view, EC_JS_SET_UNFOCUS, NULL, ugd) == EINA_FALSE) {
+		if (ewk_view_script_execute(view->ewk_view, EC_JS_SET_UNFOCUS, NULL, view) == EINA_FALSE) {
 			debug_error("EC_JS_SET_UNFOCUS is failed!");
 		}
 	}
@@ -922,32 +922,32 @@ void composer_webkit_handle_mem_warning(void *data, Eina_Bool is_hard)
 
 	retm_if(!data, "Invalid parameter: data is NULL!);");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
-	retm_if(!ugd->ewk_view, "No webview!");
+	EmailComposerView *view = (EmailComposerView *)data;
+	retm_if(!view->ewk_view, "No webview!");
 
 	if (is_hard) {
-		composer_webkit_handle_mem_warning(ugd, EINA_FALSE); /* To do action for soft warning. */
+		composer_webkit_handle_mem_warning(view, EINA_FALSE); /* To do action for soft warning. */
 
-		Eina_Bool ret = ewk_view_stop(ugd->ewk_view);
+		Eina_Bool ret = ewk_view_stop(view->ewk_view);
 		debug_warning_if(!ret, "ewk_view_stop() failed!");
 
-		if (ugd->webview_load_progress > 0.5) {
-			if (ugd->webview_load_progress < 1.0) {
-				_ewk_view_load_nonemptylayout_finished_cb(ugd, ugd->ewk_view, NULL);
+		if (view->webview_load_progress > 0.5) {
+			if (view->webview_load_progress < 1.0) {
+				_ewk_view_load_nonemptylayout_finished_cb(view, view->ewk_view, NULL);
 			}
 		} else {
-			ugd->is_low_memory_handled = EINA_TRUE;
+			view->is_low_memory_handled = EINA_TRUE;
 
 			int noti_ret = notification_status_message_post(email_get_email_string("IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"));
 			debug_warning_if(noti_ret != NOTIFICATION_ERROR_NONE, "notification_status_message_post() failed! ret:(%d)", noti_ret);
 
 			/* Restore the indicator mode. */
-			composer_util_indicator_restore(ugd);
+			composer_util_indicator_restore(view);
 
-			email_module_make_destroy_request(ugd->base.module);
+			email_module_make_destroy_request(view->base.module);
 		}
 	} else {
-		Ewk_Context *context = ewk_view_context_get(ugd->ewk_view);
+		Ewk_Context *context = ewk_view_context_get(view->ewk_view);
 		retm_if(!context, "ewk_view_context_get() failed!");
 
 		ewk_context_cache_clear(context);
@@ -963,20 +963,20 @@ void composer_webkit_set_focus_to_webview_with_js(void *data)
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (ugd->with_original_message) {
-		if (ugd->is_focus_on_new_message_div) {
-			if (ewk_view_script_execute(ugd->ewk_view, EC_JS_SET_FOCUS_NEW_MESSAGE, NULL, NULL) == EINA_FALSE) {
+	if (view->with_original_message) {
+		if (view->is_focus_on_new_message_div) {
+			if (ewk_view_script_execute(view->ewk_view, EC_JS_SET_FOCUS_NEW_MESSAGE, NULL, NULL) == EINA_FALSE) {
 				debug_error("EC_JS_SET_FOCUS_NEW_MESSAGE is failed!");
 			}
 		} else {
-			if (ewk_view_script_execute(ugd->ewk_view, EC_JS_SET_FOCUS_ORG_MESSAGE, NULL, NULL) == EINA_FALSE) {
+			if (ewk_view_script_execute(view->ewk_view, EC_JS_SET_FOCUS_ORG_MESSAGE, NULL, NULL) == EINA_FALSE) {
 				debug_error("EC_JS_SET_FOCUS_ORG_MESSAGE is failed!");
 			}
 		}
 	} else {
-		if (ewk_view_script_execute(ugd->ewk_view, EC_JS_SET_FOCUS, NULL, NULL) == EINA_FALSE) {
+		if (ewk_view_script_execute(view->ewk_view, EC_JS_SET_FOCUS, NULL, NULL) == EINA_FALSE) {
 			debug_error("EC_JS_SET_FOCUS is failed!");
 		}
 	}

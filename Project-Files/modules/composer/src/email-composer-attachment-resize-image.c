@@ -60,15 +60,15 @@ static void _attachment_resize_image_thread_cancel_cb(void *data, Evas_Object *o
 
 	retm_if(!data, "Invalid parameter: datais NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	ugd->resize_thread_cancel = EINA_TRUE;
+	view->resize_thread_cancel = EINA_TRUE;
 
-	if (ugd->thread_resize_image && !ecore_thread_check(ugd->thread_resize_image)) {
-		ecore_thread_cancel(ugd->thread_resize_image);
-		ugd->thread_resize_image = NULL;
+	if (view->thread_resize_image && !ecore_thread_check(view->thread_resize_image)) {
+		ecore_thread_cancel(view->thread_resize_image);
+		view->thread_resize_image = NULL;
 	}
-	composer_util_popup_response_cb(ugd, NULL, NULL);
+	composer_util_popup_response_cb(view, NULL, NULL);
 
 	debug_leave();
 }
@@ -77,15 +77,15 @@ static void _attachment_resize_image_close_response_cb(void *data, Evas_Object *
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (ugd->need_to_display_max_size_popup) {
-		composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_SIZE_EXCEEDED, composer_util_popup_response_cb, ugd);
-		ugd->need_to_display_max_size_popup = EINA_FALSE;
+	if (view->need_to_display_max_size_popup) {
+		composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_SIZE_EXCEEDED, composer_util_popup_response_cb, view);
+		view->need_to_display_max_size_popup = EINA_FALSE;
 	} else {
-		composer_util_popup_response_cb(ugd, NULL, NULL);
+		composer_util_popup_response_cb(view, NULL, NULL);
 	}
-	_attachment_resize_image_release_list(ugd);
+	_attachment_resize_image_release_list(view);
 
 	debug_leave();
 }
@@ -94,15 +94,15 @@ static void _attachment_resize_image_release_list(void *data)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	Eina_List *l;
 	char *recv;
 
-	EINA_LIST_FOREACH(ugd->resize_image_list, l, recv) {
+	EINA_LIST_FOREACH(view->resize_image_list, l, recv) {
 		g_free(recv);
 	}
-	DELETE_LIST_OBJECT(ugd->resize_image_list);
-	ugd->resize_image_quality = 0;
+	DELETE_LIST_OBJECT(view->resize_image_list);
+	view->resize_image_quality = 0;
 
 	debug_leave();
 }
@@ -111,20 +111,20 @@ static void _attachment_resize_image_thread_worker(void *data, Ecore_Thread *th)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
 	Eina_List *l = NULL;
 	char *recv = NULL;
 
-	EINA_LIST_FOREACH(ugd->resize_image_list, l, recv) {
-		if (ugd->resize_thread_cancel) {
+	EINA_LIST_FOREACH(view->resize_image_list, l, recv) {
+		if (view->resize_thread_cancel) {
 			debug_log("resizing image has been cancelled!");
 			break;
 		}
 
 		char dst_filepath[EMAIL_FILEPATH_MAX + 1] = { 0, };
 		if (composer_util_file_get_temp_filename(recv, dst_filepath, EMAIL_FILEPATH_MAX, "_resized")) {
-			if (composer_util_image_scale_down_with_quality(recv, dst_filepath, ugd->resize_image_quality)) {
+			if (composer_util_image_scale_down_with_quality(recv, dst_filepath, view->resize_image_quality)) {
 				struct stat file_info;
 				if (stat(dst_filepath, &file_info) == -1) {
 					debug_error("stat() failed! (%d): %s", errno, strerror(errno));
@@ -141,7 +141,7 @@ static void _attachment_resize_image_thread_worker(void *data, Ecore_Thread *th)
 		}
 	}
 
-	if (ugd->resize_thread_cancel) {
+	if (view->resize_thread_cancel) {
 		ecore_thread_feedback(th, (void *)(ptrdiff_t)EINA_FALSE);
 	} else {
 		ecore_thread_feedback(th, (void *)(ptrdiff_t)EINA_TRUE);
@@ -154,15 +154,15 @@ static void _attachment_resize_image_thread_notify(void *data, Ecore_Thread *th,
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	int err = (int)(ptrdiff_t)msg_data;
 	Eina_Bool ret = EINA_TRUE;
 
 	if (err) {
-		ret = composer_attachment_create_list(ugd, ugd->resize_image_list, EINA_FALSE, EINA_FALSE);
+		ret = composer_attachment_create_list(view, view->resize_image_list, EINA_FALSE, EINA_FALSE);
 	}
 	if (ret) {
-		composer_util_popup_response_cb(ugd, NULL, NULL);
+		composer_util_popup_response_cb(view, NULL, NULL);
 	}
 
 	debug_leave();
@@ -172,11 +172,11 @@ static void _attachment_resize_image_thread_finish(void *data, Ecore_Thread *th)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	ugd->thread_resize_image = NULL;
-	ugd->resize_thread_cancel = EINA_FALSE;
-	_attachment_resize_image_release_list(ugd);
+	view->thread_resize_image = NULL;
+	view->resize_thread_cancel = EINA_FALSE;
+	_attachment_resize_image_release_list(view);
 
 	debug_leave();
 }
@@ -185,23 +185,23 @@ static Eina_Bool _attachment_resize_image_do_resize_on_thread(void *data)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
 	/* Not to show IME before destroying is called. (The focus moves to entry..) */
-	elm_object_focus_allow_set(ugd->ewk_btn, EINA_FALSE);
-	elm_object_tree_focus_allow_set(ugd->composer_layout, EINA_FALSE);
+	elm_object_focus_allow_set(view->ewk_btn, EINA_FALSE);
+	elm_object_tree_focus_allow_set(view->composer_layout, EINA_FALSE);
 
-	ugd->composer_popup = composer_util_popup_create_with_progress_horizontal(ugd, EMAIL_COMPOSER_STRING_OPT_ADD_ATTACHMENT_ABB, EMAIL_COMPOSER_STRING_POP_RESIZNG_ING, _attachment_resize_image_thread_cancel_cb,
+	view->composer_popup = composer_util_popup_create_with_progress_horizontal(view, EMAIL_COMPOSER_STRING_OPT_ADD_ATTACHMENT_ABB, EMAIL_COMPOSER_STRING_POP_RESIZNG_ING, _attachment_resize_image_thread_cancel_cb,
 	                                                                         EMAIL_COMPOSER_STRING_BUTTON_CANCEL, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
 
 	/* Resizing images take long time and have big load. so we use another thread to resize images. */
-	ugd->thread_resize_image = ecore_thread_feedback_run(_attachment_resize_image_thread_worker, _attachment_resize_image_thread_notify,
-	                                                     _attachment_resize_image_thread_finish, _attachment_resize_image_thread_finish, ugd, EINA_TRUE);
-	if (ugd->thread_resize_image) {
+	view->thread_resize_image = ecore_thread_feedback_run(_attachment_resize_image_thread_worker, _attachment_resize_image_thread_notify,
+	                                                     _attachment_resize_image_thread_finish, _attachment_resize_image_thread_finish, view, EINA_TRUE);
+	if (view->thread_resize_image) {
 		return EINA_TRUE;
 	} else {
 		debug_error("ecore_thread_feedback_run() failed!");
-		ugd->resize_image_quality = RESIZE_IMAGE_ORIGINAL_SIZE;
+		view->resize_image_quality = RESIZE_IMAGE_ORIGINAL_SIZE;
 	}
 
 	debug_leave();
@@ -230,7 +230,7 @@ static void _attachment_resize_image_gl_sel(void *data, Evas_Object *obj, void *
 	debug_enter();
 
 	Elm_Object_Item *item = (Elm_Object_Item *)event_info;
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	Eina_Bool ret = EINA_TRUE;
 
 	if (item != NULL) {
@@ -238,25 +238,25 @@ static void _attachment_resize_image_gl_sel(void *data, Evas_Object *obj, void *
 		elm_genlist_item_selected_set(item, EINA_FALSE);
 
 		if (index == 1) {
-			ugd->resize_image_quality = RESIZE_IMAGE_MEDIUM_SIZE;
+			view->resize_image_quality = RESIZE_IMAGE_MEDIUM_SIZE;
 		} else if (index == 2) {
-			ugd->resize_image_quality = RESIZE_IMAGE_SMALL_SIZE;
+			view->resize_image_quality = RESIZE_IMAGE_SMALL_SIZE;
 		} else {
-			ugd->resize_image_quality = RESIZE_IMAGE_ORIGINAL_SIZE;
+			view->resize_image_quality = RESIZE_IMAGE_ORIGINAL_SIZE;
 		}
 
-		if (ugd->resize_image_quality != RESIZE_IMAGE_ORIGINAL_SIZE) {
-			ret = _attachment_resize_image_do_resize_on_thread(ugd);
+		if (view->resize_image_quality != RESIZE_IMAGE_ORIGINAL_SIZE) {
+			ret = _attachment_resize_image_do_resize_on_thread(view);
 			ret_if(ret);
 		}
 
-		ret = composer_attachment_create_list(ugd, ugd->resize_image_list, EINA_FALSE, EINA_FALSE);
+		ret = composer_attachment_create_list(view, view->resize_image_list, EINA_FALSE, EINA_FALSE);
 	}
 
 	if (ret) {
-		composer_util_popup_response_cb(ugd, NULL, NULL);
+		composer_util_popup_response_cb(view, NULL, NULL);
 	}
-	_attachment_resize_image_release_list(ugd);
+	_attachment_resize_image_release_list(view);
 
 	debug_leave();
 }
@@ -266,11 +266,11 @@ static void _attachment_resize_image_gl_sel(void *data, Evas_Object *obj, void *
  * Definition for exported functions
  */
 
-void composer_attachment_resize_image(EmailComposerUGD *ugd, Eina_List *attachment_list)
+void composer_attachment_resize_image(EmailComposerView *view, Eina_List *attachment_list)
 {
 	debug_enter();
 
-	retm_if(!ugd, "ugd is NULL!");
+	retm_if(!view, "view is NULL!");
 	retm_if(!attachment_list, "attachment_list is NULL!");
 	retm_if(eina_list_count(attachment_list) == 0, "attachment_list count is 0!");
 
@@ -297,19 +297,19 @@ void composer_attachment_resize_image(EmailComposerUGD *ugd, Eina_List *attachme
 		}
 		DELETE_LIST_OBJECT(new_list);
 
-		composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_NOT_EXIST, composer_util_popup_response_cb, ugd);
+		composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_NOT_EXIST, composer_util_popup_response_cb, view);
 
 		debug_leave();
 		return;
 	}
-	ugd->resize_image_list = new_list;
+	view->resize_image_list = new_list;
 
-	ugd->composer_popup = common_util_create_popup(ugd->base.module->win,
+	view->composer_popup = common_util_create_popup(view->base.module->win,
 			EMAIL_COMPOSER_STRING_HEADER_IMAGE_QUALITY_ABB,
 			NULL, EMAIL_COMPOSER_STRING_NULL,
 			NULL, EMAIL_COMPOSER_STRING_NULL,
 			NULL, EMAIL_COMPOSER_STRING_NULL,
-			_attachment_resize_image_close_response_cb, EINA_TRUE, ugd);
+			_attachment_resize_image_close_response_cb, EINA_TRUE, view);
 
 	resize_image_itc.item_style = "type1";
 	resize_image_itc.func.text_get = _attachment_resize_image_gl_text_get;
@@ -317,17 +317,17 @@ void composer_attachment_resize_image(EmailComposerUGD *ugd, Eina_List *attachme
 	resize_image_itc.func.state_get = NULL;
 	resize_image_itc.func.del = NULL;
 
-	Evas_Object *genlist = elm_genlist_add(ugd->composer_popup);
-	evas_object_data_set(genlist, COMPOSER_EVAS_DATA_NAME, ugd);
+	Evas_Object *genlist = elm_genlist_add(view->composer_popup);
+	evas_object_data_set(genlist, COMPOSER_EVAS_DATA_NAME, view);
 	elm_genlist_homogeneous_set(genlist, EINA_TRUE);
 	elm_scroller_policy_set(genlist, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_AUTO);
 	elm_scroller_content_min_limit(genlist, EINA_FALSE, EINA_TRUE);
 
 	for (index = 0; index < 3; index++) {
-		elm_genlist_item_append(genlist, &resize_image_itc, (void *)(ptrdiff_t)index, NULL, ELM_GENLIST_ITEM_NONE, _attachment_resize_image_gl_sel, (void *)ugd);
+		elm_genlist_item_append(genlist, &resize_image_itc, (void *)(ptrdiff_t)index, NULL, ELM_GENLIST_ITEM_NONE, _attachment_resize_image_gl_sel, (void *)view);
 	}
 
-	elm_object_content_set(ugd->composer_popup, genlist);
+	elm_object_content_set(view->composer_popup, genlist);
 	evas_object_show(genlist);
 
 	debug_leave();

@@ -45,14 +45,14 @@ static char *__composer_pslines_gl_text_get(void *data, Evas_Object *obj, const 
 
 
 static char *__composer_ps_insert_match_tag(char *input, char *matched_word);
-Evas_Object *__composer_ps_create_genlist(Evas_Object *parent, EmailComposerUGD *ugd);
-static void __composer_ps_create_view(EmailComposerUGD *ugd);
-static void __composer_ps_destroy_view(EmailComposerUGD *ugd);
+Evas_Object *__composer_ps_create_genlist(Evas_Object *parent, EmailComposerView *view);
+static void __composer_ps_create_view(EmailComposerView *view);
+static void __composer_ps_destroy_view(EmailComposerView *view);
 
 static Eina_Bool _composer_correct_ps_layout_size_timer_cb(void *data);
-static void composer_ps_selected_recipient_content_get(EmailComposerUGD *ugd, Evas_Object **recipient_layout, Evas_Object **editfield_layout);
+static void composer_ps_selected_recipient_content_get(EmailComposerView *view, Evas_Object **recipient_layout, Evas_Object **editfield_layout);
 
-static void __composer_ps_append_result(EmailComposerUGD *ugd, Eina_List *predict_list, Elm_Object_Item *parent);
+static void __composer_ps_append_result(EmailComposerView *view, Eina_List *predict_list, Elm_Object_Item *parent);
 static Eina_List *__composer_ps_search_through_list(Eina_List *src, const char *search_word);
 
 /*
@@ -66,7 +66,7 @@ static Eina_Bool __composer_ps_mouse_down_cb(void *data, int type, void *event)
 	retvm_if(!data, EINA_TRUE, "Invalid parameter: data is NULL!");
 	retvm_if(!event, EINA_TRUE, "Invalid parameter: event is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *) data;
+	EmailComposerView *view = (EmailComposerView *) data;
 	Ecore_Event_Mouse_Button *ev = (Ecore_Event_Mouse_Button *)event;
 
 	Evas_Coord x = 0, y = 0, w = 0, h = 0;
@@ -79,25 +79,25 @@ static Eina_Bool __composer_ps_mouse_down_cb(void *data, int type, void *event)
 	 */
 
 	Evas_Coord eWidth = 0, eHeight = 0;
-	evas_object_geometry_get(ugd->base.module->win, NULL, NULL, &eWidth, &eHeight);
+	evas_object_geometry_get(view->base.module->win, NULL, NULL, &eWidth, &eHeight);
 	debug_log("eWidth : %d, eHeight : %d", eWidth, eHeight);
 
-	if (ugd->base.orientation == APP_DEVICE_ORIENTATION_0 || ugd->base.orientation ==  APP_DEVICE_ORIENTATION_180) {
+	if (view->base.orientation == APP_DEVICE_ORIENTATION_0 || view->base.orientation ==  APP_DEVICE_ORIENTATION_180) {
 		mouse_x = ev->x;
 		mouse_y = ev->y;
-	} else if (ugd->base.orientation == APP_DEVICE_ORIENTATION_270) {
+	} else if (view->base.orientation == APP_DEVICE_ORIENTATION_270) {
 		mouse_x = ev->y;
 		mouse_y = eHeight - ev->x;
-	} else if (ugd->base.orientation ==  APP_DEVICE_ORIENTATION_90) {
+	} else if (view->base.orientation ==  APP_DEVICE_ORIENTATION_90) {
 		mouse_x = eWidth - ev->y;
 		mouse_y = ev->x;
 	}
 
-	debug_secure("Rotation: [%d] ", ugd->base.orientation);
+	debug_secure("Rotation: [%d] ", view->base.orientation);
 	debug_secure("Final mouse down point: [x:%d,y:%d]", mouse_x, mouse_y);
 
-	evas_object_geometry_get(ugd->ps_layout, &x, &y, &w, &h); /* it retrurns geometry position base on combination window and rotation */
-	edje_object_part_geometry_get(_EDJ(ugd->ps_layout), "ec.swallow.content", &part_x, &part_y, &part_w, &part_h); /* it retrurns relative geometry position base on layout */
+	evas_object_geometry_get(view->ps_layout, &x, &y, &w, &h); /* it retrurns geometry position base on combination window and rotation */
+	edje_object_part_geometry_get(_EDJ(view->ps_layout), "ec.swallow.content", &part_x, &part_y, &part_w, &part_h); /* it retrurns relative geometry position base on layout */
 
 	int start_x = x + part_x;
 	int end_x = start_x + part_w;
@@ -106,8 +106,8 @@ static Eina_Bool __composer_ps_mouse_down_cb(void *data, int type, void *event)
 
 	debug_secure("layout position: [%d,%d] ~ [%d,%d]", start_x, start_y, end_x, end_y);
 
-	if ((((mouse_x < start_x || mouse_x > end_x) || (mouse_y < start_y || mouse_y > end_y)) && ugd->ps_is_runnig)) {
-		composer_ps_stop_search(ugd);
+	if ((((mouse_x < start_x || mouse_x > end_x) || (mouse_y < start_y || mouse_y > end_y)) && view->ps_is_runnig)) {
+		composer_ps_stop_search(view);
 	}
 
 	debug_leave();
@@ -132,19 +132,19 @@ static void __composer_ps_gl_sel(void *data, Evas_Object *obj, void *event_info)
 	retm_if(!data, "Invalid parameter: data is NULL!");
 	retm_if(!event_info, "Invalid parameter: event_info is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	Elm_Object_Item *item = (Elm_Object_Item *)event_info;
 	email_contact_list_info_t *contact_info = (email_contact_list_info_t *)elm_object_item_data_get(item);
 	Evas_Object *mbe = NULL;
 
 	elm_genlist_item_selected_set(item, EINA_FALSE);
 
-	if (ugd->selected_entry == ugd->recp_to_entry.entry) {
-		mbe = ugd->recp_to_mbe;
-	} else if (ugd->selected_entry == ugd->recp_cc_entry.entry) {
-		mbe = ugd->recp_cc_mbe;
-	} else if (ugd->selected_entry == ugd->recp_bcc_entry.entry) {
-		mbe = ugd->recp_bcc_mbe;
+	if (view->selected_entry == view->recp_to_entry.entry) {
+		mbe = view->recp_to_mbe;
+	} else if (view->selected_entry == view->recp_cc_entry.entry) {
+		mbe = view->recp_cc_mbe;
+	} else if (view->selected_entry == view->recp_bcc_entry.entry) {
+		mbe = view->recp_bcc_mbe;
 	}
 	retm_if(!mbe, "Invalid entry is selected!");
 
@@ -158,7 +158,7 @@ static void __composer_ps_gl_sel(void *data, Evas_Object *obj, void *event_info)
 	}
 
 	if (ri) {
-		elm_entry_entry_set(ugd->selected_entry, "");
+		elm_entry_entry_set(view->selected_entry, "");
 		char *markup_name = elm_entry_utf8_to_markup(ri->display_name);
 		elm_multibuttonentry_item_append(mbe, markup_name, NULL, ri);
 		FREE(markup_name);
@@ -166,8 +166,8 @@ static void __composer_ps_gl_sel(void *data, Evas_Object *obj, void *event_info)
 		debug_error("ri is NULL!");
 	}
 
-	if (ugd->ps_is_runnig) {
-		composer_ps_stop_search(ugd);
+	if (view->ps_is_runnig) {
+		composer_ps_stop_search(view);
 	}
 
 	debug_leave();
@@ -176,25 +176,25 @@ static void __composer_ps_gl_sel(void *data, Evas_Object *obj, void *event_info)
 static char *__composer_pslines_gl_text_get(void *data, Evas_Object *obj, const char *part)
 {
 	email_contact_list_info_t *contact_info = (email_contact_list_info_t *)data;
-	EmailComposerUGD *ugd = (EmailComposerUGD *)contact_info->ugd;
-	retvm_if(!ugd, NULL, "Failed to get ugd");
+	EmailComposerView *view = (EmailComposerView *)contact_info->view;
+	retvm_if(!view, NULL, "Failed to get view");
 
 	char *ret = NULL;
 	if (contact_info->contact_origin == EMAIL_SEARCH_CONTACT_ORIGIN_CONTACTS) {
 		if (!g_strcmp0(part, "elm.text")) {
-				ret = __composer_ps_insert_match_tag(contact_info->display_name, ugd->ps_keyword);
+				ret = __composer_ps_insert_match_tag(contact_info->display_name, view->ps_keyword);
 				if (!ret) {
 					ret = elm_entry_utf8_to_markup(contact_info->display_name);
 				}
 			} else if (!g_strcmp0(part, "elm.text.sub")) {
-				ret = __composer_ps_insert_match_tag(contact_info->email_address, ugd->ps_keyword);
+				ret = __composer_ps_insert_match_tag(contact_info->email_address, view->ps_keyword);
 				if (!ret) {
 					ret = elm_entry_utf8_to_markup(contact_info->email_address);
 				}
 			}
 	} else if (contact_info->contact_origin == EMAIL_SEARCH_CONTACT_ORIGIN_RECENT) {
 		if (!g_strcmp0(part, "elm.text")) {
-				ret = __composer_ps_insert_match_tag(contact_info->email_address, ugd->ps_keyword);
+				ret = __composer_ps_insert_match_tag(contact_info->email_address, view->ps_keyword);
 				if (!ret) {
 					ret = elm_entry_utf8_to_markup(contact_info->email_address);
 				}
@@ -230,7 +230,7 @@ static char *__composer_ps_insert_match_tag(char *input, char *matched_word)
 	return string;
 }
 
-Evas_Object *__composer_ps_create_genlist(Evas_Object *parent, EmailComposerUGD *ugd)
+Evas_Object *__composer_ps_create_genlist(Evas_Object *parent, EmailComposerView *view)
 {
 	debug_enter();
 
@@ -261,73 +261,73 @@ Evas_Object *__composer_ps_create_genlist(Evas_Object *parent, EmailComposerUGD 
 
 	elm_box_pack_end(box, genlist);
 	elm_object_part_content_set(layout, "ec.swallow.content", box);
-	eext_object_event_callback_add(layout, EEXT_CALLBACK_BACK, __composer_ps_back_cb, ugd);
-	ugd->ps_genlist = genlist;
-	ugd->ps_box = box;
+	eext_object_event_callback_add(layout, EEXT_CALLBACK_BACK, __composer_ps_back_cb, view);
+	view->ps_genlist = genlist;
+	view->ps_box = box;
 
 	debug_leave();
 	return layout;
 }
 
-static void __composer_ps_create_view(EmailComposerUGD *ugd)
+static void __composer_ps_create_view(EmailComposerView *view)
 {
 	debug_enter();
 
-	retm_if(!ugd, "Invalid parameter: ugd is NULL!");
+	retm_if(!view, "Invalid parameter: view is NULL!");
 
 	/* Create Predictive search field */
-	ugd->ps_layout = __composer_ps_create_genlist(ugd->composer_layout, ugd);
+	view->ps_layout = __composer_ps_create_genlist(view->composer_layout, view);
 
-	if (!ugd->ps_mouse_down_handler) {
-		ugd->ps_mouse_down_handler = ecore_event_handler_add(ECORE_EVENT_MOUSE_BUTTON_DOWN, __composer_ps_mouse_down_cb, ugd);
+	if (!view->ps_mouse_down_handler) {
+		view->ps_mouse_down_handler = ecore_event_handler_add(ECORE_EVENT_MOUSE_BUTTON_DOWN, __composer_ps_mouse_down_cb, view);
 	}
 
-	composer_initial_view_cs_freeze_push(ugd);
+	composer_initial_view_cs_freeze_push(view);
 
-	ugd->ps_is_runnig = EINA_TRUE;
+	view->ps_is_runnig = EINA_TRUE;
 
 	debug_leave();
 }
 
-static void __composer_ps_destroy_view(EmailComposerUGD *ugd)
+static void __composer_ps_destroy_view(EmailComposerView *view)
 {
 	debug_enter();
 
-	retm_if(!ugd, "Invalid parameter: ugd is NULL!");
+	retm_if(!view, "Invalid parameter: view is NULL!");
 
-	if (ugd->ps_mouse_down_handler) {
-		ecore_event_handler_del(ugd->ps_mouse_down_handler);
-		ugd->ps_mouse_down_handler = NULL;
+	if (view->ps_mouse_down_handler) {
+		ecore_event_handler_del(view->ps_mouse_down_handler);
+		view->ps_mouse_down_handler = NULL;
 	}
 
-	eext_object_event_callback_del(ugd->ps_layout, EEXT_CALLBACK_BACK, __composer_ps_back_cb);
-	DELETE_EVAS_OBJECT(ugd->ps_layout);
-	ugd->ps_genlist = NULL;
-	ugd->ps_box = NULL;
+	eext_object_event_callback_del(view->ps_layout, EEXT_CALLBACK_BACK, __composer_ps_back_cb);
+	DELETE_EVAS_OBJECT(view->ps_layout);
+	view->ps_genlist = NULL;
+	view->ps_box = NULL;
 
-	composer_initial_view_cs_freeze_pop(ugd);
+	composer_initial_view_cs_freeze_pop(view);
 
-	ugd->ps_is_runnig = EINA_FALSE;
+	view->ps_is_runnig = EINA_FALSE;
 
 	debug_leave();
 }
 
-static void __composer_ps_append_result(EmailComposerUGD *ugd, Eina_List *predict_list, Elm_Object_Item *parent)
+static void __composer_ps_append_result(EmailComposerView *view, Eina_List *predict_list, Elm_Object_Item *parent)
 {
 	debug_enter();
 
-	retm_if(!ugd, "Invalid parameter: ugd is NULL!");
-	retm_if(!ugd->ps_genlist, "Invalid parameter: ugd is NULL!");
-	retm_if(!predict_list, "Invalid parameter: ugd is NULL!");
+	retm_if(!view, "Invalid parameter: view is NULL!");
+	retm_if(!view->ps_genlist, "Invalid parameter: view is NULL!");
+	retm_if(!predict_list, "Invalid parameter: view is NULL!");
 
 	Eina_List *l = NULL;
 	email_contact_list_info_t *item = NULL;
 	EINA_LIST_FOREACH(predict_list, l, item) {
-		item->ugd = ugd;
-		elm_genlist_item_append(ugd->ps_genlist, &__ps_itc, item, NULL, ELM_GENLIST_ITEM_NONE, __composer_ps_gl_sel, ugd);
+		item->view = view;
+		elm_genlist_item_append(view->ps_genlist, &__ps_itc, item, NULL, ELM_GENLIST_ITEM_NONE, __composer_ps_gl_sel, view);
 	}
 
-	composer_ps_change_layout_size(ugd);
+	composer_ps_change_layout_size(view);
 
 	debug_leave();
 }
@@ -353,15 +353,15 @@ static Eina_List *__composer_ps_search_through_list(Eina_List *src, const char *
 	return result;
 }
 
-static int _composer_ps_genlist_item_max_height_calculate(EmailComposerUGD  *ugd)
+static int _composer_ps_genlist_item_max_height_calculate(EmailComposerView  *view)
 {
 	debug_enter();
-	retvm_if(!ugd, 0, "Invalid parameter: ugd is NULL!");
+	retvm_if(!view, 0, "Invalid parameter: view is NULL!");
 
 	int item_height = 0;
 	Elm_Object_Item *gl_item = NULL;
 
-	Eina_List *relized_items = elm_genlist_realized_items_get(ugd->ps_genlist);
+	Eina_List *relized_items = elm_genlist_realized_items_get(view->ps_genlist);
 	retvm_if(!relized_items, item_height, "Error: relized_items is NULL!");
 
 	gl_item = eina_list_data_get(relized_items);
@@ -380,7 +380,7 @@ static Eina_Bool _composer_correct_ps_layout_size_timer_cb(void *data)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
 	Evas_Object *recipient_layout = NULL, *editfield_layout = NULL;
 	Evas_Coord recipient_layout_y = 0, recipient_layout_h = 0;
@@ -396,27 +396,27 @@ static Eina_Bool _composer_correct_ps_layout_size_timer_cb(void *data)
 	ecore_imf_context_del(ctx);
 
 	Evas_Coord nHeight = 0;
-	evas_object_geometry_get(ugd->base.module->win, NULL, NULL, NULL, &nHeight);
-	composer_ps_selected_recipient_content_get(ugd, &recipient_layout, &editfield_layout);
+	evas_object_geometry_get(view->base.module->win, NULL, NULL, NULL, &nHeight);
+	composer_ps_selected_recipient_content_get(view, &recipient_layout, &editfield_layout);
 	retvm_if((!recipient_layout || !editfield_layout), ECORE_CALLBACK_CANCEL, "Invalid mbe entry is selected!");
 
 	evas_object_geometry_get(recipient_layout, NULL, &recipient_layout_y, NULL, &recipient_layout_h);
 	evas_object_geometry_get(editfield_layout, &editfield_layout_x, NULL, &editfield_layout_width, NULL);
 
-	if (recipient_layout_y < ugd->cs_top) {
-		composer_initial_view_cs_show(ugd, ugd->cs_scroll_pos - (ugd->cs_top - recipient_layout_y));
-		recipient_layout_y = ugd->cs_top;
+	if (recipient_layout_y < view->cs_top) {
+		composer_initial_view_cs_show(view, view->cs_scroll_pos - (view->cs_top - recipient_layout_y));
+		recipient_layout_y = view->cs_top;
 	}
-	item_height = _composer_ps_genlist_item_max_height_calculate(ugd);
+	item_height = _composer_ps_genlist_item_max_height_calculate(view);
 	retvm_if(item_height == 0, ECORE_CALLBACK_CANCEL, "Failed to calculate item height!");
 
-	count = elm_genlist_items_count(ugd->ps_genlist);
+	count = elm_genlist_items_count(view->ps_genlist);
 	total_height = count * item_height;
 	available_height = nHeight - (recipient_layout_y + recipient_layout_h + COMPOSER_PREDICTIVE_LAYOUT_BOTTOM_MASKING_ADJ + ch);
 	int display_item_count = (int) (available_height / item_height);
 	debug_log("display_item_count: [%d]", display_item_count);
 
-	int rot = elm_win_rotation_get(ugd->base.module->win);
+	int rot = elm_win_rotation_get(view->base.module->win);
 	if ((rot == 0) || (rot == 180)) { /* Portrait */
 		if (count > display_item_count) {
 			minimum_height = item_height * display_item_count;
@@ -428,19 +428,19 @@ static Eina_Bool _composer_correct_ps_layout_size_timer_cb(void *data)
 	}
 
 	debug_log("item:[%f], avail:[%f], minimum:[%f], total:[%f]", item_height, available_height, minimum_height, total_height);
-	composer_util_display_position(ugd);
+	composer_util_display_position(view);
 
 	/* Move scroller to show the list. (Landscape: at least 1, Portrait: at least 3) */
 	if (available_height < minimum_height) {
 		int delta = minimum_height - available_height;
-		int new_scroll_pos = ugd->cs_scroll_pos + delta;
+		int new_scroll_pos = view->cs_scroll_pos + delta;
 
 		recipient_layout_y -= delta;
 
-		debug_log("ugd->cs_scroll_pos:[%d]", ugd->cs_scroll_pos);
+		debug_log("view->cs_scroll_pos:[%d]", view->cs_scroll_pos);
 		debug_log("new_scroll_pos:[%d]", new_scroll_pos);
 
-		composer_initial_view_cs_show(ugd, new_scroll_pos);
+		composer_initial_view_cs_show(view, new_scroll_pos);
 	}
 
 	/* Calculate box height. */
@@ -454,33 +454,33 @@ static Eina_Bool _composer_correct_ps_layout_size_timer_cb(void *data)
 
 	debug_log("==> box_height: (%f)", box_height);
 
-	evas_object_size_hint_min_set(ugd->ps_box, 0, box_height);
-	evas_object_size_hint_max_set(ugd->ps_box, -1, box_height);
+	evas_object_size_hint_min_set(view->ps_box, 0, box_height);
+	evas_object_size_hint_max_set(view->ps_box, -1, box_height);
 
-	evas_object_resize(ugd->ps_layout, editfield_layout_width, box_height + ELM_SCALE_SIZE(4)); /* 4 means top line and bottom line on the layout */
-	evas_object_move(ugd->ps_layout, editfield_layout_x, recipient_layout_y + recipient_layout_h);
+	evas_object_resize(view->ps_layout, editfield_layout_width, box_height + ELM_SCALE_SIZE(4)); /* 4 means top line and bottom line on the layout */
+	evas_object_move(view->ps_layout, editfield_layout_x, recipient_layout_y + recipient_layout_h);
 
 	debug_leave();
 	return ECORE_CALLBACK_CANCEL;
 
 }
 
-static void composer_ps_selected_recipient_content_get(EmailComposerUGD *ugd, Evas_Object **recipient_layout, Evas_Object **editfield_layout)
+static void composer_ps_selected_recipient_content_get(EmailComposerView *view, Evas_Object **recipient_layout, Evas_Object **editfield_layout)
 {
 	debug_enter();
 	*recipient_layout = NULL;
 	*editfield_layout = NULL;
-	retm_if(!ugd, "Invalid parameter: ugd is NULL!");
+	retm_if(!view, "Invalid parameter: view is NULL!");
 
-	if (ugd->selected_entry == ugd->recp_to_entry.entry) {
-		*recipient_layout = ugd->recp_to_layout;
-		*editfield_layout = ugd->recp_to_entry.layout;
-	} else if (ugd->selected_entry == ugd->recp_cc_entry.entry) {
-		*recipient_layout = ugd->recp_cc_layout;
-		*editfield_layout = ugd->recp_cc_entry.layout;
-	} else if (ugd->selected_entry == ugd->recp_bcc_entry.entry) {
-		*recipient_layout = ugd->recp_bcc_layout;
-		*editfield_layout = ugd->recp_bcc_entry.layout;
+	if (view->selected_entry == view->recp_to_entry.entry) {
+		*recipient_layout = view->recp_to_layout;
+		*editfield_layout = view->recp_to_entry.layout;
+	} else if (view->selected_entry == view->recp_cc_entry.entry) {
+		*recipient_layout = view->recp_cc_layout;
+		*editfield_layout = view->recp_cc_entry.layout;
+	} else if (view->selected_entry == view->recp_bcc_entry.entry) {
+		*recipient_layout = view->recp_bcc_layout;
+		*editfield_layout = view->recp_bcc_entry.layout;
 	}
 
 	debug_leave();
@@ -497,31 +497,31 @@ void composer_ps_start_search(void *data)
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	Eina_List *ps_list = NULL;
 
 	/* Retrieve contacts list from contacts db & phonelog db. If there's the list already searched, use it instead. */
-	if (!ugd->ps_contacts_list) {
+	if (!view->ps_contacts_list) {
 
-		ugd->ps_contacts_list = email_contacts_search_contacts_by_keyword(ugd->ps_keyword); /* contacts_list is cached for future use. */
-		ps_list = eina_list_clone(ugd->ps_contacts_list);
+		view->ps_contacts_list = email_contacts_search_contacts_by_keyword(view->ps_keyword); /* contacts_list is cached for future use. */
+		ps_list = eina_list_clone(view->ps_contacts_list);
 	} else {
-		ps_list = __composer_ps_search_through_list(ugd->ps_contacts_list, ugd->ps_keyword); /* cached contacts_list is used here. */
+		ps_list = __composer_ps_search_through_list(view->ps_contacts_list, view->ps_keyword); /* cached contacts_list is used here. */
 	}
 
 	/* If there're some contacts found, append it to the genlist. If not, destroy the layout. */
 	if (!ps_list) {
-		if (ugd->ps_is_runnig) {
-			composer_ps_stop_search(ugd);
+		if (view->ps_is_runnig) {
+			composer_ps_stop_search(view);
 		}
 	} else {
-		if (!ugd->ps_is_runnig) {
-			__composer_ps_create_view(ugd);
-		} else if (ugd->ps_genlist) { /* Clear existing items to append new list. */
-			elm_genlist_clear(ugd->ps_genlist);
+		if (!view->ps_is_runnig) {
+			__composer_ps_create_view(view);
+		} else if (view->ps_genlist) { /* Clear existing items to append new list. */
+			elm_genlist_clear(view->ps_genlist);
 		}
 
-		__composer_ps_append_result(ugd, ps_list, NULL);
+		__composer_ps_append_result(view, ps_list, NULL);
 		DELETE_LIST_OBJECT(ps_list); /* DO NOT remove the item on the list. they are removed on composer_ps_stop_search() */
 	}
 
@@ -534,25 +534,25 @@ void composer_ps_stop_search(void *data)
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (ugd->ps_is_runnig) {
-		__composer_ps_destroy_view(ugd);
+	if (view->ps_is_runnig) {
+		__composer_ps_destroy_view(view);
 	}
 
-	if (ugd->ps_contacts_list) {
-		email_contacts_delete_contact_info_list(&ugd->ps_contacts_list);
+	if (view->ps_contacts_list) {
+		email_contacts_delete_contact_info_list(&view->ps_contacts_list);
 	}
 
 	debug_leave();
 }
 
-void composer_ps_change_layout_size(EmailComposerUGD *ugd)
+void composer_ps_change_layout_size(EmailComposerView *view)
 {
 	debug_enter();
 
 	Evas_Object *recipient_layout = NULL, *editfield_layout = NULL;
-	composer_ps_selected_recipient_content_get(ugd, &recipient_layout, &editfield_layout);
+	composer_ps_selected_recipient_content_get(view, &recipient_layout, &editfield_layout);
 	retm_if(!recipient_layout || !editfield_layout, "Failed to get recipient content");
 
 	Evas_Coord recipient_layout_y = 0, recipient_layout_h = 0;
@@ -562,9 +562,9 @@ void composer_ps_change_layout_size(EmailComposerUGD *ugd)
 	evas_object_geometry_get(recipient_layout, NULL, &recipient_layout_y, NULL, &recipient_layout_h);
 	evas_object_geometry_get(editfield_layout, &editfield_layout_x, NULL, &editfield_layout_width, NULL);
 
-	evas_object_resize(ugd->ps_layout, editfield_layout_width, COMPOSER_PREDICTIVE_SEARCH_ITEM_DEFAULT_HEIGHT); /* Initial resize to calculate genlist item height */
-	evas_object_move(ugd->ps_layout, editfield_layout_x, recipient_layout_y + recipient_layout_h);
+	evas_object_resize(view->ps_layout, editfield_layout_width, COMPOSER_PREDICTIVE_SEARCH_ITEM_DEFAULT_HEIGHT); /* Initial resize to calculate genlist item height */
+	evas_object_move(view->ps_layout, editfield_layout_x, recipient_layout_y + recipient_layout_h);
 
-	ecore_timer_add(0.1f, _composer_correct_ps_layout_size_timer_cb, ugd);
+	ecore_timer_add(0.1f, _composer_correct_ps_layout_size_timer_cb, view);
 	debug_leave();
 }

@@ -20,17 +20,17 @@
 
 /**
  * @brief Creates body mail info
- * @param[in]	ugd»			Email composer data
+ * @param[in]	view»			Email composer data
  * @return The body main info string on success, otherwise NULL. It should be freed.
  */
-char *composer_initial_data_body_make_parent_mail_info(EmailComposerUGD *ugd);
+char *composer_initial_data_body_make_parent_mail_info(EmailComposerView *view);
 
 /**
  * @brief Creates signature
- * @param[in]	ugd»			Email composer data
+ * @param[in]	view»			Email composer data
  * @return The body signature string on success, otherwise NULL. It should be freed.
  */
-char *composer_initial_data_body_make_signature_markup(EmailComposerUGD *ugd);
+char *composer_initial_data_body_make_signature_markup(EmailComposerView *view);
 
 /**
  * @brief Delete progress popup
@@ -40,45 +40,45 @@ void composer_initial_data_destroy_download_contents_popup(void *data);
 
 /**
  * @brief Data set to ewk view
- * @param[in]	ugd»						Email composer data
+ * @param[in]	view»						Email composer data
  * @param[in]	is_draft_sync_requested»	Is draft sync reqested, bool value
  */
-void composer_initial_data_set_mail_info(EmailComposerUGD *ugd, bool is_draft_sync_requested);
+void composer_initial_data_set_mail_info(EmailComposerView *view, bool is_draft_sync_requested);
 
 /**
  * @brief Parse composer run type
- * @param[in]	ugd»			Email composer data
+ * @param[in]	view»			Email composer data
  * @param[in]	params			Email params handle
  * @return Composer error type
  */
-COMPOSER_ERROR_TYPE_E composer_initial_data_parse_composer_run_type(EmailComposerUGD *ugd, email_params_h params);
+COMPOSER_ERROR_TYPE_E composer_initial_data_parse_composer_run_type(EmailComposerView *view, email_params_h params);
 
 /**
  * @brief Pre parse arguments
- * @param[in]	ugd»			Email composer data
+ * @param[in]	view»			Email composer data
  * @param[in]	params			Email params handle
  * @return Composer error type
  */
-COMPOSER_ERROR_TYPE_E composer_initial_data_pre_parse_arguments(EmailComposerUGD *ugd, email_params_h params);
+COMPOSER_ERROR_TYPE_E composer_initial_data_pre_parse_arguments(EmailComposerView *view, email_params_h params);
 
 /**
  * @brief Post parse arguments
- * @param[in]	ugd»			Email composer data
+ * @param[in]	view»			Email composer data
  * @param[in]	params			Email params handle
  * @return Composer error type
  */
-COMPOSER_ERROR_TYPE_E composer_initial_data_post_parse_arguments(EmailComposerUGD *ugd, email_params_h params);
+COMPOSER_ERROR_TYPE_E composer_initial_data_post_parse_arguments(EmailComposerView *view, email_params_h params);
 
 /**
  * @brief Composer make initial content
- * @param[in]	ugd»			Email composer data
+ * @param[in]	view»			Email composer data
  */
-void composer_initial_data_make_initial_contents(EmailComposerUGD *ugd);
+void composer_initial_data_make_initial_contents(EmailComposerView *view);
 
 /**
  * @brief Composer free initial content
- * @param[in]	ugd»			Email composer data
+ * @param[in]	view»			Email composer data
  */
-void composer_initial_data_free_initial_contents(EmailComposerUGD *ugd);
+void composer_initial_data_free_initial_contents(EmailComposerView *view);
 
 #endif /* __EMAIL_COMPOSER_INITIAL_DATA_H__ */

@@ -35,7 +35,7 @@
 static void _launch_app_recipient_contacts_reply_cb(void *data, app_control_result_e result, email_params_h reply);
 static void _preview_attachment_close_cb(void *data);
 
-static int _composer_add_update_contact_launch(EmailComposerUGD *ugd,
+static int _composer_add_update_contact_launch(EmailComposerView *view,
 		const char *operation,
 		const char *contact_email,
 		const char *contact_name);
@@ -52,7 +52,7 @@ static email_string_t EMAIL_COMPOSER_UNABLE_TO_LAUNCH_APPLICATION = { NULL, N_("
  * Definition for static functions
  */
 
-static int _composer_add_update_contact_launch(EmailComposerUGD *ugd,
+static int _composer_add_update_contact_launch(EmailComposerView *view,
 		const char *operation,
 		const char *contact_email,
 		const char *contact_name)
@@ -69,7 +69,7 @@ static int _composer_add_update_contact_launch(EmailComposerUGD *ugd,
 		(!contact_name ||
 		email_params_add_str(params, EMAIL_CONTACT_EXT_DATA_NAME, contact_name))) {
 
-		ret = email_module_launch_app(ugd->base.module, EMAIL_LAUNCH_APP_AUTO, params, NULL);
+		ret = email_module_launch_app(view->base.module, EMAIL_LAUNCH_APP_AUTO, params, NULL);
 	}
 
 	email_params_free(&params);
@@ -90,8 +90,8 @@ static void _launch_app_recipient_contacts_reply_cb(void *data, app_control_resu
 	retm_if(!data, "data is NULL!");
 	retm_if(!reply, "reply is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
-	ugd->recipient_added_from_contacts = EINA_TRUE;
+	EmailComposerView *view = (EmailComposerView *)data;
+	view->recipient_added_from_contacts = EINA_TRUE;
 
 	int i = 0;
 	const char **return_value = NULL;
@@ -154,12 +154,12 @@ static void _launch_app_recipient_contacts_reply_cb(void *data, app_control_resu
 
 		char *markup_name = elm_entry_utf8_to_markup(ri->display_name);
 
-		if (ugd->selected_entry == ugd->recp_to_entry.entry) {
-			elm_multibuttonentry_item_append(ugd->recp_to_mbe, markup_name, NULL, ri);
-		} else if (ugd->selected_entry == ugd->recp_cc_entry.entry) {
-			elm_multibuttonentry_item_append(ugd->recp_cc_mbe, markup_name, NULL, ri);
-		} else if (ugd->selected_entry == ugd->recp_bcc_entry.entry) {
-			elm_multibuttonentry_item_append(ugd->recp_bcc_mbe, markup_name, NULL, ri);
+		if (view->selected_entry == view->recp_to_entry.entry) {
+			elm_multibuttonentry_item_append(view->recp_to_mbe, markup_name, NULL, ri);
+		} else if (view->selected_entry == view->recp_cc_entry.entry) {
+			elm_multibuttonentry_item_append(view->recp_cc_mbe, markup_name, NULL, ri);
+		} else if (view->selected_entry == view->recp_bcc_entry.entry) {
+			elm_multibuttonentry_item_append(view->recp_bcc_mbe, markup_name, NULL, ri);
 		} else {
 			debug_error("Not matched!!");
 			g_free(ri->display_name);
@@ -168,7 +168,7 @@ static void _launch_app_recipient_contacts_reply_cb(void *data, app_control_resu
 		FREE(markup_name);
 	}
 
-	ugd->recipient_added_from_contacts = EINA_FALSE;
+	view->recipient_added_from_contacts = EINA_FALSE;
 	debug_leave();
 }
 
@@ -178,9 +178,9 @@ static void _preview_attachment_close_cb(void *data)
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	evas_object_freeze_events_set(ugd->ewk_view, EINA_FALSE);
+	evas_object_freeze_events_set(view->ewk_view, EINA_FALSE);
 
 	debug_leave();
 }
@@ -189,42 +189,42 @@ static void _preview_attachment_close_cb(void *data)
  * Definition for exported functions
  */
 
-void composer_launcher_preview_attachment(EmailComposerUGD *ugd, const char *uri)
+void composer_launcher_preview_attachment(EmailComposerView *view, const char *uri)
 {
 	debug_enter();
 
-	retm_if(!ugd, "Invalid parameter: ugd is NULL!");
+	retm_if(!view, "Invalid parameter: view is NULL!");
 	retm_if(!uri, "Invalid parameter: uri is NULL!");
 
 	debug_log("uri:%s", uri);
 
 	email_launched_app_listener_t listener = { 0 };
-	listener.cb_data = ugd;
+	listener.cb_data = view;
 	listener.close_cb = _preview_attachment_close_cb;
 
-	int ret = email_preview_attachment_file(ugd->base.module, uri, &listener);
+	int ret = email_preview_attachment_file(view->base.module, uri, &listener);
 	if (ret != 0) {
-		ugd->composer_popup = composer_util_popup_create(ugd, EMAIL_COMPOSER_STRING_UNABLE_TO_OPEN_FILE, EMAIL_COMPOSER_STRING_FILE_NOT_SUPPORTED,
+		view->composer_popup = composer_util_popup_create(view, EMAIL_COMPOSER_STRING_UNABLE_TO_OPEN_FILE, EMAIL_COMPOSER_STRING_FILE_NOT_SUPPORTED,
 				composer_util_popup_response_cb, EMAIL_COMPOSER_STRING_BUTTON_OK, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
 		debug_secure("email_preview_attachment_file() failed!");
 		return;
 	}
-	evas_object_freeze_events_set(ugd->ewk_view, EINA_TRUE);
+	evas_object_freeze_events_set(view->ewk_view, EINA_TRUE);
 
 	debug_leave();
 }
 
-void composer_launcher_launch_storage_settings(EmailComposerUGD *ugd)
+void composer_launcher_launch_storage_settings(EmailComposerView *view)
 {
 	debug_enter();
-	retm_if(!ugd, "Invalid parameter: ugd is NULL!");
+	retm_if(!view, "Invalid parameter: view is NULL!");
 
 	int ret = -1;
 	email_params_h params = NULL;
 
 	if (email_params_create(&params)) {
 
-		ret = email_module_launch_app(ugd->base.module, EMAIL_LAUNCH_APP_STORAGE_SETTINGS, params, NULL);
+		ret = email_module_launch_app(view->base.module, EMAIL_LAUNCH_APP_STORAGE_SETTINGS, params, NULL);
 	}
 
 	email_params_free(&params);
@@ -236,11 +236,11 @@ void composer_launcher_launch_storage_settings(EmailComposerUGD *ugd)
 	debug_leave();
 }
 
-void composer_launcher_pick_contacts(EmailComposerUGD *ugd)
+void composer_launcher_pick_contacts(EmailComposerView *view)
 {
 	debug_enter();
 
-	retm_if(!ugd, "Invalid parameter: ugd is NULL!");
+	retm_if(!view, "Invalid parameter: view is NULL!");
 
 	int ret = -1;
 	email_params_h params = NULL;
@@ -253,10 +253,10 @@ void composer_launcher_pick_contacts(EmailComposerUGD *ugd)
 		email_params_add_int(params, EMAIL_CONTACT_EXT_DATA_TOTAL_COUNT, MAX_RECIPIENT_COUNT)) {
 
 		email_launched_app_listener_t listener = { 0 };
-		listener.cb_data = ugd;
+		listener.cb_data = view;
 		listener.reply_cb = _launch_app_recipient_contacts_reply_cb;
 
-		ret = email_module_launch_app(ugd->base.module, EMAIL_LAUNCH_APP_AUTO, params, &listener);
+		ret = email_module_launch_app(view->base.module, EMAIL_LAUNCH_APP_AUTO, params, &listener);
 	}
 
 	email_params_free(&params);
@@ -264,7 +264,7 @@ void composer_launcher_pick_contacts(EmailComposerUGD *ugd)
 	if (ret != 0) {
 		debug_error("Launch failed! [%d]", ret);
 
-		ugd->composer_popup = composer_util_popup_create(ugd,
+		view->composer_popup = composer_util_popup_create(view,
 				EMAIL_COMPOSER_UNABLE_TO_LAUNCH_APPLICATION,
 				EMAIL_COMPOSER_STRING_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED,
 				composer_util_popup_response_cb,
@@ -276,15 +276,15 @@ void composer_launcher_pick_contacts(EmailComposerUGD *ugd)
 	debug_leave();
 }
 
-void composer_launcher_update_contact(EmailComposerUGD *ugd)
+void composer_launcher_update_contact(EmailComposerView *view)
 {
 	debug_enter();
 
-	retm_if(!ugd, "Invalid parameter: ugd is NULL!");
+	retm_if(!view, "Invalid parameter: view is NULL!");
 
 	while (true) {
 
-		EmailRecpInfo *ri = (EmailRecpInfo *) elm_object_item_data_get(ugd->selected_mbe_item);
+		EmailRecpInfo *ri = (EmailRecpInfo *) elm_object_item_data_get(view->selected_mbe_item);
 		if (!ri) {
 			debug_error("email recipient info is NULL!");
 			break;
@@ -296,7 +296,7 @@ void composer_launcher_update_contact(EmailComposerUGD *ugd)
 			break;
 		}
 
-		int ret = _composer_add_update_contact_launch(ugd, APP_CONTROL_OPERATION_EDIT, ai->address, NULL);
+		int ret = _composer_add_update_contact_launch(view, APP_CONTROL_OPERATION_EDIT, ai->address, NULL);
 		if (ret != COMPOSER_ERROR_NONE) {
 			debug_error("_composer_add_update_contact_launch failed![%d]", ret);
 			break;
@@ -305,7 +305,7 @@ void composer_launcher_update_contact(EmailComposerUGD *ugd)
 		return;
 	}
 
-	ugd->composer_popup = composer_util_popup_create(ugd,
+	view->composer_popup = composer_util_popup_create(view,
 			EMAIL_COMPOSER_UNABLE_TO_LAUNCH_APPLICATION,
 			EMAIL_COMPOSER_STRING_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED,
 			composer_util_popup_response_cb,
@@ -316,15 +316,15 @@ void composer_launcher_update_contact(EmailComposerUGD *ugd)
 	debug_leave();
 }
 
-void composer_launcher_add_contact(EmailComposerUGD *ugd)
+void composer_launcher_add_contact(EmailComposerView *view)
 {
 	debug_enter();
 
-	retm_if(!ugd, "Invalid parameter: ugd is NULL!");
+	retm_if(!view, "Invalid parameter: view is NULL!");
 
 	while (true) {
 
-		EmailRecpInfo *ri = (EmailRecpInfo *) elm_object_item_data_get(ugd->selected_mbe_item);
+		EmailRecpInfo *ri = (EmailRecpInfo *) elm_object_item_data_get(view->selected_mbe_item);
 		if (!ri) {
 			debug_error("email recipient info is NULL!");
 			break;
@@ -336,7 +336,7 @@ void composer_launcher_add_contact(EmailComposerUGD *ugd)
 			break;
 		}
 
-		int ret = _composer_add_update_contact_launch(ugd, APP_CONTROL_OPERATION_ADD, ai->address, ri->display_name);
+		int ret = _composer_add_update_contact_launch(view, APP_CONTROL_OPERATION_ADD, ai->address, ri->display_name);
 		if (ret != COMPOSER_ERROR_NONE) {
 			debug_error("_composer_add_update_contact_launch failed![%d]", ret);
 			break;
@@ -345,7 +345,7 @@ void composer_launcher_add_contact(EmailComposerUGD *ugd)
 		return;
 	}
 
-	ugd->composer_popup = composer_util_popup_create(ugd,
+	view->composer_popup = composer_util_popup_create(view,
 			EMAIL_COMPOSER_UNABLE_TO_LAUNCH_APPLICATION,
 			EMAIL_COMPOSER_STRING_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED,
 			composer_util_popup_response_cb,

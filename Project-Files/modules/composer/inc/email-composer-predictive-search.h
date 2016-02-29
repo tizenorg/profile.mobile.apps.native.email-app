@@ -37,9 +37,9 @@ void composer_ps_stop_search(void *data);
 /**
  * @brief Provides layout resize calculation for predictive search
  *
- * @param[in]	ugd			Email composer data
+ * @param[in]	view			Email composer data
  *
  */
-void composer_ps_change_layout_size(EmailComposerUGD *ugd);
+void composer_ps_change_layout_size(EmailComposerView *view);
 
 #endif /* __EMAIL_COMPOSER_PREDICTIVE_SEARCH_H__ */

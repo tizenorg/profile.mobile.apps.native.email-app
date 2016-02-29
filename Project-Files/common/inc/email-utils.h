@@ -456,13 +456,13 @@ EMAIL_API email_ext_save_err_type_e email_prepare_temp_file_path(const int index
 #include <string.h>
 
 typedef struct {
-	void *ug_data;
+	void *view_data;
 	void *data;
 }email_common_timer_data_t;
 
 #define COMMON_GET_TIMER_DATA(tdata, type, name, data) \
 	email_common_timer_data_t *tdata = (email_common_timer_data_t *)data; \
-	type *name = tdata->ug_data
+	type *name = tdata->view_data
 
 G_END_DECLS
 #endif	/* _EMAIL_UTILS_H_ */
