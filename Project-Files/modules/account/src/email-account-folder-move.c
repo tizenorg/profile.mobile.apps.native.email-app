@@ -25,12 +25,12 @@ static void _gl_group_sel(void *data, Evas_Object *obj, void *event_info);
 static void _gl_group_del(void *data, Evas_Object *obj);
 
 static void _gl_sel(void *data, Evas_Object *obj, void *event_info);
-static void _send_result_to_mailbox_ug_for_move(void *data);
+static void _send_result_to_mailbox_module_for_move(EmailAccountView *view);
 static Evas_Object *_gl_icon_get(void *data, Evas_Object *obj, const char *part);
-static void _account_list_for_mail_move(EmailAccountUGD *ug_data, int account_index, bool hidden);
+static void _account_list_for_mail_move(EmailAccountView *view, int account_index, bool hidden);
 
 typedef struct _List_Item_Data {
-	EmailAccountUGD *ug_data;
+	EmailAccountView *view;
 	email_move_list *move_folder;
 
 	Elm_Object_Item *it; /* Genlist Item pointer */
@@ -54,14 +54,14 @@ static void _gl_group_sel(void *data, Evas_Object *obj, void *event_info)
 
 	List_Item_Data *group_item_data = (List_Item_Data *)elm_object_item_data_get(it);
 	List_Item_Data *sub_item_data = NULL;
-	EmailAccountUGD *ug_data = (EmailAccountUGD *)group_item_data->ug_data;
+	EmailAccountView *view = (EmailAccountView *)group_item_data->view;
 
 	if (group_item_data->expanded) {
 		elm_genlist_item_subitems_clear(group_item_data->it);
 	} else {
 		Eina_List *l = NULL;
 		EINA_LIST_FOREACH(group_item_data->sub_items, l, sub_item_data) {
-			sub_item_data->it = elm_genlist_item_append(ug_data->gl, ug_data->itc_move, sub_item_data, group_item_data->it, ELM_GENLIST_ITEM_NONE, _gl_sel, sub_item_data);
+			sub_item_data->it = elm_genlist_item_append(view->gl, view->itc_move, sub_item_data, group_item_data->it, ELM_GENLIST_ITEM_NONE, _gl_sel, sub_item_data);
 		}
 		elm_genlist_item_bring_in(group_item_data->it, ELM_GENLIST_ITEM_SCROLLTO_TOP);
 	}
@@ -72,12 +72,12 @@ static void _gl_group_sel(void *data, Evas_Object *obj, void *event_info)
 	debug_leave();
 }
 
-static void _account_list_for_mail_move(EmailAccountUGD *ug_data, int account_index, bool expanded)
+static void _account_list_for_mail_move(EmailAccountView *view, int account_index, bool expanded)
 {
 	debug_enter();
-	RETURN_IF_FAIL(ug_data != NULL);
+	RETURN_IF_FAIL(view != NULL);
 
-	Evas_Object *gl = ug_data->gl;
+	Evas_Object *gl = view->gl;
 	List_Item_Data *tree_item_data = NULL, *group_tree_item_data = NULL;
 	int mailbox_list_count = 0;
 	int err = 0;
@@ -85,15 +85,15 @@ static void _account_list_for_mail_move(EmailAccountUGD *ug_data, int account_in
 	email_mailbox_t *mailbox_list = NULL;
 	int i = account_index;
 
-	err = email_get_mailbox_list_ex(ug_data->account_list[i].account_id, -1, 1, &mailbox_list, &mailbox_list_count);
+	err = email_get_mailbox_list_ex(view->account_list[i].account_id, -1, 1, &mailbox_list, &mailbox_list_count);
 	if (err != EMAIL_ERROR_NONE) {
 		debug_critical("email_get_mailbox_list return error");
 	}
 
-	ug_data->move_list[i].account_info = &(ug_data->account_list[i]);
-	ug_data->move_list[i].mailbox_list = mailbox_list;
-	ug_data->move_list[i].mailbox_cnt = mailbox_list_count;
-	ug_data->move_list[i].move_view_mode = ug_data->move_mode;
+	view->move_list[i].account_info = &(view->account_list[i]);
+	view->move_list[i].mailbox_list = mailbox_list;
+	view->move_list[i].mailbox_cnt = mailbox_list_count;
+	view->move_list[i].move_view_mode = view->move_mode;
 
 	tree_item_data = calloc(1, sizeof(List_Item_Data));
 	if (!tree_item_data) {
@@ -102,10 +102,10 @@ static void _account_list_for_mail_move(EmailAccountUGD *ug_data, int account_in
 		return;
 	}
 	group_tree_item_data = tree_item_data;
-	group_tree_item_data->ug_data = ug_data;
-	group_tree_item_data->move_folder = &ug_data->move_list[i];
+	group_tree_item_data->view = view;
+	group_tree_item_data->move_folder = &view->move_list[i];
 	group_tree_item_data->expanded = expanded;
-	group_tree_item_data->it = elm_genlist_item_append(gl, ug_data->itc_group_move, group_tree_item_data, NULL, ELM_GENLIST_ITEM_NONE, _gl_group_sel, group_tree_item_data);
+	group_tree_item_data->it = elm_genlist_item_append(gl, view->itc_group_move, group_tree_item_data, NULL, ELM_GENLIST_ITEM_NONE, _gl_group_sel, group_tree_item_data);
 
 	for (j = 0; j < mailbox_list_count; j++) {
 		if (g_strcmp0(mailbox_list[j].mailbox_name, "[Gmail]") && (0 == mailbox_list[j].no_select)) {
@@ -114,22 +114,22 @@ static void _account_list_for_mail_move(EmailAccountUGD *ug_data, int account_in
 				&& mailbox_list[j].mailbox_type != EMAIL_MAILBOX_TYPE_DRAFT
 				&& mailbox_list[j].mailbox_type != EMAIL_MAILBOX_TYPE_ALL_EMAILS
 				&& mailbox_list[j].mailbox_type != EMAIL_MAILBOX_TYPE_SEARCH_RESULT
-				&& ug_data->folder_id != mailbox_list[j].mailbox_id) {
+				&& view->folder_id != mailbox_list[j].mailbox_id) {
 				tree_item_data = calloc(1, sizeof(List_Item_Data));
 				if (!tree_item_data) {
 					email_free_mailbox(&mailbox_list, mailbox_list_count);
 					debug_error("tree_item_data is NULL - allocation memory failed");
 					return;
 				}
-				tree_item_data->ug_data = ug_data;
+				tree_item_data->view = view;
 				tree_item_data->mailbox_name = g_strdup(mailbox_list[j].mailbox_name);
 				tree_item_data->mailbox_type = mailbox_list[j].mailbox_type;
 				tree_item_data->alias_name = g_strdup(mailbox_list[j].alias);
 				tree_item_data->mailbox_id = mailbox_list[j].mailbox_id;
 				tree_item_data->account_id = mailbox_list[j].account_id;
-				tree_item_data->move_folder = &ug_data->move_list[i];
+				tree_item_data->move_folder = &view->move_list[i];
 				if (expanded) {
-					tree_item_data->it = elm_genlist_item_append(gl, ug_data->itc_move, tree_item_data, group_tree_item_data->it, ELM_GENLIST_ITEM_NONE, _gl_sel, tree_item_data);
+					tree_item_data->it = elm_genlist_item_append(gl, view->itc_move, tree_item_data, group_tree_item_data->it, ELM_GENLIST_ITEM_NONE, _gl_sel, tree_item_data);
 				}
 				group_tree_item_data->sub_items = eina_list_append(group_tree_item_data->sub_items, tree_item_data);
 			}
@@ -139,47 +139,47 @@ static void _account_list_for_mail_move(EmailAccountUGD *ug_data, int account_in
 	debug_leave();
 }
 
-int account_create_folder_list_for_mail_move(EmailAccountUGD *ug_data)
+int account_create_folder_list_for_mail_move(EmailAccountView *view)
 {
 	debug_enter();
-	RETURN_VAL_IF_FAIL(ug_data != NULL, 0);
+	RETURN_VAL_IF_FAIL(view != NULL, 0);
 
 	int i = 0;
 
-	email_move_list *move_list = (email_move_list *)calloc(ug_data->account_count, sizeof(email_move_list));
+	email_move_list *move_list = (email_move_list *)calloc(view->account_count, sizeof(email_move_list));
 	retvm_if(move_list == NULL, 0, "Invalid parameter: move_list[NULL]");
 
-	ug_data->move_list = move_list;
+	view->move_list = move_list;
 
-	int inserted_account_id[ug_data->account_count];
+	int inserted_account_id[view->account_count];
 	memset(inserted_account_id, 0, sizeof(inserted_account_id));
 
-	if (EMAIL_SERVER_TYPE_IMAP4 == GET_ACCOUNT_SERVER_TYPE(ug_data->account_id)) {
-		for (i = 0; i < ug_data->account_count; i++) {
-			if (ug_data->account_list[i].account_id == ug_data->account_id) {
+	if (EMAIL_SERVER_TYPE_IMAP4 == GET_ACCOUNT_SERVER_TYPE(view->account_id)) {
+		for (i = 0; i < view->account_count; i++) {
+			if (view->account_list[i].account_id == view->account_id) {
 				inserted_account_id[i] = 1;
-				_account_list_for_mail_move(ug_data, i, EINA_TRUE);
-				ug_data->inserted_account_cnt++;
+				_account_list_for_mail_move(view, i, EINA_TRUE);
+				view->inserted_account_cnt++;
 			}
 		}
 
-		for (i = 0; i < ug_data->account_count; i++) {
-			if (inserted_account_id[i] != 1 && EMAIL_SERVER_TYPE_IMAP4 == ug_data->account_list[i].incoming_server_type) {
+		for (i = 0; i < view->account_count; i++) {
+			if (inserted_account_id[i] != 1 && EMAIL_SERVER_TYPE_IMAP4 == view->account_list[i].incoming_server_type) {
 				inserted_account_id[i] = 1;
-				_account_list_for_mail_move(ug_data, i, EINA_FALSE);
-				ug_data->inserted_account_cnt++;
+				_account_list_for_mail_move(view, i, EINA_FALSE);
+				view->inserted_account_cnt++;
 			}
 		}
 	} else {
-		for (i = 0; i < ug_data->account_count; i++) {
-			if (ug_data->account_list[i].account_id == ug_data->account_id) {
+		for (i = 0; i < view->account_count; i++) {
+			if (view->account_list[i].account_id == view->account_id) {
 				inserted_account_id[i] = 1;
-				_account_list_for_mail_move(ug_data, i, EINA_TRUE);
-				ug_data->inserted_account_cnt++;
+				_account_list_for_mail_move(view, i, EINA_TRUE);
+				view->inserted_account_cnt++;
 			}
 		}
 	}
-	debug_log("ug_data->inserted_account_cnt : %d", ug_data->inserted_account_cnt);
+	debug_log("view->inserted_account_cnt : %d", view->inserted_account_cnt);
 	return 0;
 }
 
@@ -192,7 +192,7 @@ static Evas_Object *_gl_icon_get(void *data, Evas_Object *obj, const char *part)
 	List_Item_Data *tree_item_data = (List_Item_Data *)data;
 
 	if (!g_strcmp0(part, "elm.swallow.end")) {
-		if (tree_item_data->ug_data && tree_item_data->ug_data->inserted_account_cnt > 1) {
+		if (tree_item_data->view && tree_item_data->view->inserted_account_cnt > 1) {
 
 			Evas_Object *expand_icon = elm_layout_add(obj);
 			if (tree_item_data->expanded) {
@@ -208,10 +208,10 @@ static Evas_Object *_gl_icon_get(void *data, Evas_Object *obj, const char *part)
 	return NULL;
 }
 
-void account_init_genlist_item_class_for_mail_move(EmailAccountUGD *ug_data)
+void account_init_genlist_item_class_for_mail_move(EmailAccountView *view)
 {
 	debug_enter();
-	RETURN_IF_FAIL(ug_data != NULL);
+	RETURN_IF_FAIL(view != NULL);
 
 	Elm_Genlist_Item_Class *itc_group_move = elm_genlist_item_class_new();
 	retm_if(itc_group_move == NULL, "itc_group_move is NULL!");
@@ -220,12 +220,12 @@ void account_init_genlist_item_class_for_mail_move(EmailAccountUGD *ug_data)
 	itc_group_move->func.content_get = _gl_icon_get;
 	itc_group_move->func.state_get = NULL;
 	itc_group_move->func.del = _gl_group_del;
-	ug_data->itc_group_move = itc_group_move;
+	view->itc_group_move = itc_group_move;
 
 	Elm_Genlist_Item_Class *itc_move = elm_genlist_item_class_new();
 	if (!itc_move){
 		debug_error("itc_move is NULL - allocation memory failed");
-		EMAIL_GENLIST_ITC_FREE(ug_data->itc_group_move);
+		EMAIL_GENLIST_ITC_FREE(view->itc_group_move);
 		return;
 	}
 	itc_move->item_style = "type1";
@@ -233,7 +233,7 @@ void account_init_genlist_item_class_for_mail_move(EmailAccountUGD *ug_data)
 	itc_move->func.content_get = NULL;
 	itc_move->func.state_get = NULL;
 	itc_move->func.del = NULL;
-	ug_data->itc_move = itc_move;
+	view->itc_move = itc_move;
 }
 
 static char *_gl_label_get(void *data, Evas_Object *obj, const char *part)
@@ -269,7 +269,7 @@ static char *_gl_label_get_for_subitem(void *data, Evas_Object *obj, const char 
 		return NULL;
 	}
 
-	EmailAccountUGD *ug_data = tree_item_data->ug_data;
+	EmailAccountView *view = tree_item_data->view;
 
 	if (!strcmp(part, "elm.text")) {
 		char *mailbox_alias = NULL;
@@ -299,7 +299,7 @@ static char *_gl_label_get_for_subitem(void *data, Evas_Object *obj, const char 
 			} else {
 				mailbox_alias = account_util_convert_mutf7_to_utf8(tree_item_data->mailbox_name);
 			}
-			char *filename = account_get_ellipsised_folder_name(ug_data, mailbox_alias);
+			char *filename = account_get_ellipsised_folder_name(view, mailbox_alias);
 			G_FREE(mailbox_alias);
 			return filename;
 			break;
@@ -334,24 +334,23 @@ static void _gl_group_del(void *data, Evas_Object *obj)
 	account_item_del((List_Item_Data *)data);
 }
 
-static void _send_result_to_mailbox_ug_for_move(void *data)
+static void _send_result_to_mailbox_module_for_move(EmailAccountView *view)
 {
 	debug_enter();
 
-	RETURN_IF_FAIL(data != NULL);
-	EmailAccountUGD *ug_data = (EmailAccountUGD *)data;
+	RETURN_IF_FAIL(view != NULL);
 
 	email_params_h params = NULL;
 
 	if (email_params_create(&params) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_EDIT_MODE, ug_data->b_editmode) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, ug_data->folder_id) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX_MOVE_STATUS, ug_data->move_status) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, 1) &&
-		(!ug_data->moved_mailbox_name ||
-		email_params_add_str(params, EMAIL_BUNDLE_KEY_MAILBOX_MOVED_MAILBOX_NAME, ug_data->moved_mailbox_name))) {
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_EDIT_MODE, view->b_editmode) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, view->folder_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX_MOVE_STATUS, view->move_status) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_MODE, 1) &&
+		(!view->moved_mailbox_name ||
+		email_params_add_str(params, EMAIL_BUNDLE_KEY_MAILBOX_MOVED_MAILBOX_NAME, view->moved_mailbox_name))) {
 
-		email_module_send_result(ug_data->base.module, params);
+		email_module_send_result(view->base.module, params);
 	}
 
 	email_params_free(&params);
@@ -374,11 +373,11 @@ static void _gl_sel(void *data, Evas_Object *obj, void *event_info)
 	email_move_list *move_list = item_data->move_folder;
 	Elm_Object_Item *it = event_info;
 
-	EmailAccountUGD *ug_data = item_data->ug_data;
+	EmailAccountView *view = item_data->view;
 	int i = 0, err = 0, task_id = 0;
 	email_mail_list_item_t *mail_info = NULL;
 
-	int count = g_list_length(ug_data->selected_mail_list_to_move);
+	int count = g_list_length(view->selected_mail_list_to_move);
 	int mail_ids[count];
 
 	elm_genlist_item_selected_set(it, EINA_FALSE);
@@ -394,7 +393,7 @@ static void _gl_sel(void *data, Evas_Object *obj, void *event_info)
 	if (move_list->move_view_mode == EMAIL_MOVE_VIEW_NORMAL) {
 		memset(mail_ids, 0, sizeof(mail_ids));
 
-		GList *cur = g_list_first(ug_data->selected_mail_list_to_move);
+		GList *cur = g_list_first(view->selected_mail_list_to_move);
 		for (; i < count ; i++, cur = g_list_next(cur)) {
 			mail_ids[i] = (int)(ptrdiff_t) g_list_nth_data(cur, 0);
 			debug_log("mail_id (%d)", mail_ids[i]);
@@ -429,22 +428,22 @@ static void _gl_sel(void *data, Evas_Object *obj, void *event_info)
 	}
 
 	debug_log("move status is %d, %d", err, EMAIL_ERROR_NONE);
-	ug_data->move_status = err;
+	view->move_status = err;
 
-	G_FREE(ug_data->moved_mailbox_name);
+	G_FREE(view->moved_mailbox_name);
 
 	if (item_data->alias_name) {
 		char *alias = account_convert_folder_alias_by_mailbox_type(item_data->mailbox_type);
 		if (alias) {
-			ug_data->moved_mailbox_name = g_strdup(alias);
+			view->moved_mailbox_name = g_strdup(alias);
 			FREE(alias);
 		} else {
-			ug_data->moved_mailbox_name = g_strdup(item_data->alias_name);
+			view->moved_mailbox_name = g_strdup(item_data->alias_name);
 		}
 	}
 
 	FINISH:
-	_send_result_to_mailbox_ug_for_move(ug_data);
+	_send_result_to_mailbox_module_for_move(view);
 
 }
 

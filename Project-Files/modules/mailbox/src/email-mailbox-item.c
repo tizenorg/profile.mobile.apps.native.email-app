@@ -67,7 +67,7 @@ void mailbox_process_move_mail(EmailMailboxUGD *mailbox_ugd)
 	if (email_params_create(&params) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, account_id) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, mailbox_ugd->move_src_mailbox_id) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, 1) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_MODE, 1) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX_MOVE_MODE, EMAIL_MOVE_VIEW_NORMAL) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_EDIT_MODE, mailbox_ugd->b_editmode) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_MOVE_SRC_MAILBOX_ID, mailbox_ugd->move_src_mailbox_id) &&

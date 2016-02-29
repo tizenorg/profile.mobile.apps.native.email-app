@@ -641,7 +641,7 @@ static void _account_result_cb(void *data, email_module_h module, email_params_h
 	EmailViewerUGD *ug_data = (EmailViewerUGD *)data;
 
 	int is_move_mail_ug = 0;
-	email_params_get_int_opt(result, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, &is_move_mail_ug);
+	email_params_get_int_opt(result, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_MODE, &is_move_mail_ug);
 
 	if (is_move_mail_ug) {
 		int move_status = 0;

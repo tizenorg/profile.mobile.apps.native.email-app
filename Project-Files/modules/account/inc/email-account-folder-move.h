@@ -18,8 +18,8 @@
 #ifndef __EMAIL_ACCOUNT_FOLDER_MOVE_H__
 #define __EMAIL_ACCOUNT_FOLDER_MOVE_H__
 
-int account_create_folder_list_for_mail_move(EmailAccountUGD *ug_data);
-void account_init_genlist_item_class_for_mail_move(EmailAccountUGD *ug_data);
+int account_create_folder_list_for_mail_move(EmailAccountView *view);
+void account_init_genlist_item_class_for_mail_move(EmailAccountView *view);
 
 #endif	/* __EMAIL_ACCOUNT_H__ */
 

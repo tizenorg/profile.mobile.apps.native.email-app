@@ -18,8 +18,8 @@
 #ifndef __EMAIL_ACCOUNT_LIST_VIEW_H__
 #define __EMAIL_ACCOUNT_LIST_VIEW_H__
 
-int account_create_account_list_view(EmailAccountUGD *ug_data);
-void account_init_genlist_item_class_for_account_view_list(EmailAccountUGD *ug_data);
+int account_create_account_list_view(EmailAccountView *view);
+void account_init_genlist_item_class_for_account_view_list(EmailAccountView *view);
 
 #endif	/* __EMAIL_ACCOUNT_H__ */
 

@@ -1491,7 +1491,7 @@ void _move_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_UN
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, ug_data->account_id) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, ug_data->mailbox_id) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_MOVE_SRC_MAILBOX_ID, ug_data->mailbox_id) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, 1) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_MODE, 1) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX_MOVE_MODE, 0) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_EDIT_MODE, 0) &&
 		email_params_add_str_array(params, EMAIL_BUNDLE_KEY_ARRAY_SELECTED_MAIL_IDS, &sa_mail_id, 1)) {

@@ -21,7 +21,7 @@
 #include "email-account-folder.h"
 
 typedef struct {
-	EmailAccountUGD *ug_data;
+	EmailAccountView *view;
 	int item_type;
 	int account_id;
 	int mailbox_id;
@@ -68,8 +68,8 @@ typedef enum {
 	ACCOUNT_LIST_ALL_GROUP_CONTRACTED,
 } account_list_group_state;
 
-static int _create_account_all_account_list(EmailAccountUGD *ug_data);
-static void _create_account_single_accout_list(EmailAccountUGD *ug_data, int account_id, int group_order);
+static int _create_account_all_account_list(EmailAccountView *view);
+static void _create_account_single_accout_list(EmailAccountView *view, int account_id, int group_order);
 
 static char *_gl_label_get_for_account_list_group_item(void *data, Evas_Object *obj, const char *part);
 static Evas_Object *_gl_icon_get_for_account_list_group_item(void *data, Evas_Object *obj, const char *part);
@@ -79,33 +79,33 @@ static void _gl_account_group_list_item_sel(void *data, Evas_Object *obj, void *
 static Evas_Object *_gl_account_content_get_for_single_subitem(void *data, Evas_Object *obj, const char *part);
 static char *_get_account_item_text_for_single_subitem(Account_Item_Data *item_data);
 
-static void _check_account_list_zoom_state(EmailAccountUGD *ug_data);
-static int _convert_account_list_item_type(EmailAccountUGD *ug_data, int account_id, int mailbox_type);
+static void _check_account_list_zoom_state(EmailAccountView *view);
+static int _convert_account_list_item_type(EmailAccountView *view, int account_id, int mailbox_type);
 static char *_create_account_list_item_text(Account_Item_Data *item_data, const char *text);
 static Evas_Object *_create_account_subitem_color_bar(Evas_Object *parent, unsigned int color);
 
-int account_create_account_list_view(EmailAccountUGD *ug_data)
+int account_create_account_list_view(EmailAccountView *view)
 {
 	debug_enter();
-	RETURN_VAL_IF_FAIL(ug_data != NULL, 0);
+	RETURN_VAL_IF_FAIL(view != NULL, 0);
 	int inserted_cnt = 0;
 
-	G_LIST_FREE(ug_data->account_group_list);
+	G_LIST_FREE(view->account_group_list);
 
-	if (!email_engine_get_default_account(&(ug_data->default_account_id))) {
+	if (!email_engine_get_default_account(&(view->default_account_id))) {
 		debug_log("email_engine_get_default_account failed");
 	}
 
-	inserted_cnt = _create_account_all_account_list(ug_data);
+	inserted_cnt = _create_account_all_account_list(view);
 
 	debug_log("account_create_account_list_view %d", inserted_cnt);
 	return inserted_cnt;
 }
 
-static int _create_account_all_account_list(EmailAccountUGD *ug_data)
+static int _create_account_all_account_list(EmailAccountView *view)
 {
 	debug_enter();
-	retvm_if(!ug_data, 0, "EmailAccountUGD is NULL");
+	retvm_if(!view, 0, "EmailAccountView is NULL");
 
 	int i = 0;
 	int total_count = 0, unread_count = 0;
@@ -119,10 +119,10 @@ static int _create_account_all_account_list(EmailAccountUGD *ug_data)
 	memset(all_acc_total_count, 0, sizeof(all_acc_total_count));
 	memset(all_acc_is_inserted, 0, sizeof(all_acc_is_inserted));
 
-	Evas_Object *gl = ug_data->gl;
+	Evas_Object *gl = view->gl;
 	Account_Item_Data *item_data = NULL, *group_item_data = NULL;
 
-	if (!ug_data->account_list) {
+	if (!view->account_list) {
 			debug_warning("Email account list is NULL");
 	} else {
 
@@ -208,15 +208,15 @@ static int _create_account_all_account_list(EmailAccountUGD *ug_data)
 		return 0;
 	}
 	group_item_data = item_data;
-	group_item_data->ug_data = ug_data;
+	group_item_data->view = view;
 	group_item_data->item_type = ACCOUNT_LIST_COMBINED_GROUP;
 	group_item_data->unread_cnt = all_acc_unread_count[ACCOUNT_LIST_COMBINED_INBOX];
 	group_item_data->total_cnt = all_acc_total_count[ACCOUNT_LIST_COMBINED_INBOX];
 	group_item_data->expanded = EINA_TRUE;
 	group_item_data->group_order = 0;
 
-	group_item_data->it = elm_genlist_item_append(gl, ug_data->itc_account_group, group_item_data, NULL, ELM_GENLIST_ITEM_NONE, _gl_account_group_list_item_sel, group_item_data);
-	ug_data->account_group_list = g_list_append(ug_data->account_group_list, group_item_data);
+	group_item_data->it = elm_genlist_item_append(gl, view->itc_account_group, group_item_data, NULL, ELM_GENLIST_ITEM_NONE, _gl_account_group_list_item_sel, group_item_data);
+	view->account_group_list = g_list_append(view->account_group_list, group_item_data);
 
 	for (i = ACCOUNT_LIST_COMBINED_INBOX; i < ACCOUNT_LIST_COMBINED_MAX; i++) {
 		if (!all_acc_is_inserted[i])
@@ -227,12 +227,12 @@ static int _create_account_all_account_list(EmailAccountUGD *ug_data)
 			debug_error("item_data is NULL - allocation memory failed");
 			return inserted_cnt;
 		}
-		item_data->ug_data = ug_data;
+		item_data->view = view;
 		item_data->item_type = i;
 		item_data->unread_cnt = all_acc_unread_count[i];
 		item_data->total_cnt = all_acc_total_count[i];
 
-		item_data->it = elm_genlist_item_append(gl, ug_data->itc_account_item, item_data, group_item_data->it, ELM_GENLIST_ITEM_NONE, _gl_account_list_item_sel, item_data);
+		item_data->it = elm_genlist_item_append(gl, view->itc_account_item, item_data, group_item_data->it, ELM_GENLIST_ITEM_NONE, _gl_account_list_item_sel, item_data);
 		debug_log("it : %p", item_data->it);
 
 		group_item_data->sub_items = eina_list_append(group_item_data->sub_items, item_data);
@@ -240,9 +240,9 @@ static int _create_account_all_account_list(EmailAccountUGD *ug_data)
 	}
 
 	/* Add sing account list */
-	if (ug_data->account_list) {
-		for (i = 0; i < ug_data->account_count; i++) {
-			_create_account_single_accout_list(ug_data, ug_data->account_list[i].account_id, i+1);
+	if (view->account_list) {
+		for (i = 0; i < view->account_count; i++) {
+			_create_account_single_accout_list(view, view->account_list[i].account_id, i+1);
 		}
 	}
 
@@ -250,10 +250,10 @@ static int _create_account_all_account_list(EmailAccountUGD *ug_data)
 	return inserted_cnt;
 }
 
-static void _create_account_single_accout_list(EmailAccountUGD *ug_data, int account_id, int group_order)
+static void _create_account_single_accout_list(EmailAccountView *view, int account_id, int group_order)
 {
 	debug_enter();
-	retm_if(!ug_data, "ug_data is NULL");
+	retm_if(!view, "view is NULL");
 
 	int err = 0;
 	int i = 0;
@@ -263,7 +263,7 @@ static void _create_account_single_accout_list(EmailAccountUGD *ug_data, int acc
 	email_mailbox_t *mailbox = NULL;
 	int scheduled_mail_cnt = 0;
 
-	Evas_Object *gl = ug_data->gl;
+	Evas_Object *gl = view->gl;
 
 	err = email_get_account(account_id, EMAIL_ACC_GET_OPT_DEFAULT, &email_account);
 	if (err != EMAIL_ERROR_NONE || !email_account) {
@@ -278,32 +278,32 @@ static void _create_account_single_accout_list(EmailAccountUGD *ug_data, int acc
 
 		item_data = calloc(1, sizeof(Account_Item_Data));
 		group_item_data = item_data;
-		group_item_data->ug_data = ug_data;
+		group_item_data->view = view;
 		group_item_data->item_type = ACCOUNT_LIST_SINGLE_GROUP;
 		group_item_data->account_id = account_id;
 		group_item_data->account_name = email_account->user_email_address ? g_strdup(email_account->user_email_address) : NULL;
 		group_item_data->expanded = EINA_TRUE;
 		group_item_data->group_order = group_order;
 
-		group_item_data->it = elm_genlist_item_append(gl, ug_data->itc_account_group, group_item_data, NULL, ELM_GENLIST_ITEM_NONE, _gl_account_list_item_sel, group_item_data);
-		ug_data->account_group_list = g_list_append(ug_data->account_group_list, item_data);
+		group_item_data->it = elm_genlist_item_append(gl, view->itc_account_group, group_item_data, NULL, ELM_GENLIST_ITEM_NONE, _gl_account_list_item_sel, group_item_data);
+		view->account_group_list = g_list_append(view->account_group_list, item_data);
 
 		/* Insert Inbox item first. */
 		item_data = calloc(1, sizeof(Account_Item_Data));
-		item_data->ug_data = ug_data;
+		item_data->view = view;
 		item_data->account_id = account_id;
 		item_data->item_type = ACCOUNT_LIST_SINGLE_INBOX;
-		item_data->it = elm_genlist_item_append(gl, ug_data->itc_account_item, item_data, group_item_data->it,
+		item_data->it = elm_genlist_item_append(gl, view->itc_account_item, item_data, group_item_data->it,
 				ELM_GENLIST_ITEM_NONE, _gl_account_list_item_sel, item_data);
 		group_item_data->sub_items = eina_list_append(group_item_data->sub_items, item_data);
 		debug_log("it : %p", item_data->it);
 
 		/* Insert Show all folders item */
 		item_data = calloc(1, sizeof(Account_Item_Data));
-		item_data->ug_data = ug_data;
+		item_data->view = view;
 		item_data->account_id = account_id;
 		item_data->item_type = ACCOUNT_LIST_SINGLE_SHOW_ALL_FOLDERS;
-		item_data->it = elm_genlist_item_append(gl, ug_data->itc_account_item, item_data, group_item_data->it,
+		item_data->it = elm_genlist_item_append(gl, view->itc_account_item, item_data, group_item_data->it,
 				ELM_GENLIST_ITEM_NONE, _gl_account_list_item_sel, item_data);
 		group_item_data->sub_items = eina_list_append(group_item_data->sub_items, item_data);
 
@@ -317,7 +317,7 @@ static void _create_account_single_accout_list(EmailAccountUGD *ug_data, int acc
 
 	item_data = calloc(1, sizeof(Account_Item_Data));
 	group_item_data = item_data;
-	group_item_data->ug_data = ug_data;
+	group_item_data->view = view;
 	group_item_data->item_type = ACCOUNT_LIST_SINGLE_GROUP;
 	group_item_data->unread_cnt = mailbox->unread_count;
 	group_item_data->total_cnt = mailbox->total_mail_count_on_local;
@@ -326,18 +326,18 @@ static void _create_account_single_accout_list(EmailAccountUGD *ug_data, int acc
 	group_item_data->expanded = EINA_TRUE;
 	group_item_data->group_order = group_order;
 
-	group_item_data->it = elm_genlist_item_append(gl, ug_data->itc_account_group, item_data, group_item_data->it, ELM_GENLIST_ITEM_NONE, _gl_account_group_list_item_sel, item_data);
-	ug_data->account_group_list = g_list_append(ug_data->account_group_list, item_data);
+	group_item_data->it = elm_genlist_item_append(gl, view->itc_account_group, item_data, group_item_data->it, ELM_GENLIST_ITEM_NONE, _gl_account_group_list_item_sel, item_data);
+	view->account_group_list = g_list_append(view->account_group_list, item_data);
 
 	/* Insert Inbox item first. */
 	item_data = calloc(1, sizeof(Account_Item_Data));
-	item_data->ug_data = ug_data;
+	item_data->view = view;
 	item_data->account_id = account_id;
 	item_data->mailbox_id = mailbox->mailbox_id;
 	item_data->item_type = ACCOUNT_LIST_SINGLE_INBOX;
 	item_data->unread_cnt = mailbox->unread_count;
 	item_data->total_cnt = mailbox->total_mail_count_on_local;
-	item_data->it = elm_genlist_item_append(gl, ug_data->itc_account_item, item_data, group_item_data->it,
+	item_data->it = elm_genlist_item_append(gl, view->itc_account_item, item_data, group_item_data->it,
 			ELM_GENLIST_ITEM_NONE, _gl_account_list_item_sel, item_data);
 	group_item_data->sub_items = eina_list_append(group_item_data->sub_items, item_data);
 	debug_log("it : %p", item_data->it);
@@ -384,7 +384,7 @@ static void _create_account_single_accout_list(EmailAccountUGD *ug_data, int acc
 		}
 		if (!bCountCheck) {
 			item_data = calloc(1, sizeof(Account_Item_Data));
-			item_data->ug_data = ug_data;
+			item_data->view = view;
 			item_data->account_id = account_id;
 			item_data->mailbox_id = mailbox->mailbox_id;
 			item_data->item_type = i;
@@ -396,7 +396,7 @@ static void _create_account_single_accout_list(EmailAccountUGD *ug_data, int acc
 				item_data->total_cnt = mailbox->total_mail_count_on_local;
 			}
 
-			item_data->it = elm_genlist_item_append(gl, ug_data->itc_account_item, item_data, group_item_data->it,
+			item_data->it = elm_genlist_item_append(gl, view->itc_account_item, item_data, group_item_data->it,
 					ELM_GENLIST_ITEM_NONE, _gl_account_list_item_sel, item_data);
 			group_item_data->sub_items = eina_list_append(group_item_data->sub_items, item_data);
 			debug_log("it : %p", item_data->it);
@@ -406,10 +406,10 @@ static void _create_account_single_accout_list(EmailAccountUGD *ug_data, int acc
 
 	/* Insert Show all folders item */
 	item_data = calloc(1, sizeof(Account_Item_Data));
-	item_data->ug_data = ug_data;
+	item_data->view = view;
 	item_data->account_id = account_id;
 	item_data->item_type = ACCOUNT_LIST_SINGLE_SHOW_ALL_FOLDERS;
-	item_data->it = elm_genlist_item_append(gl, ug_data->itc_account_item, item_data, group_item_data->it,
+	item_data->it = elm_genlist_item_append(gl, view->itc_account_item, item_data, group_item_data->it,
 			ELM_GENLIST_ITEM_NONE, _gl_account_list_item_sel, item_data);
 	group_item_data->sub_items = eina_list_append(group_item_data->sub_items, item_data);
 
@@ -417,10 +417,10 @@ static void _create_account_single_accout_list(EmailAccountUGD *ug_data, int acc
 		email_free_account(&email_account, 1);
 }
 
-void account_init_genlist_item_class_for_account_view_list(EmailAccountUGD *ug_data)
+void account_init_genlist_item_class_for_account_view_list(EmailAccountView *view)
 {
 	debug_enter();
-	RETURN_IF_FAIL(ug_data != NULL);
+	RETURN_IF_FAIL(view != NULL);
 
 	Elm_Genlist_Item_Class *itc_account_group = elm_genlist_item_class_new();
 	retm_if(!itc_account_group, "itc_account_group is NULL!");
@@ -429,12 +429,12 @@ void account_init_genlist_item_class_for_account_view_list(EmailAccountUGD *ug_d
 	itc_account_group->func.content_get = _gl_icon_get_for_account_list_group_item;
 	itc_account_group->func.state_get = NULL;
 	itc_account_group->func.del = _gl_account_list_item_del;
-	ug_data->itc_account_group = itc_account_group;
+	view->itc_account_group = itc_account_group;
 
 	Elm_Genlist_Item_Class *itc_account_item = elm_genlist_item_class_new();
 	if (!itc_account_item){
 		debug_error("itc_account_item is NULL - allocation memory failed");
-		EMAIL_GENLIST_ITC_FREE(ug_data->itc_account_group);
+		EMAIL_GENLIST_ITC_FREE(view->itc_account_group);
 		return;
 	}
 	itc_account_item->item_style = "full";
@@ -442,7 +442,7 @@ void account_init_genlist_item_class_for_account_view_list(EmailAccountUGD *ug_d
 	itc_account_item->func.content_get = _gl_account_content_get_for_single_subitem;
 	itc_account_item->func.state_get = NULL;
 	itc_account_item->func.del = NULL;
-	ug_data->itc_account_item = itc_account_item;
+	view->itc_account_item = itc_account_item;
 }
 
 static char *_gl_label_get_for_account_list_group_item(void *data, Evas_Object *obj, const char *part)
@@ -466,7 +466,7 @@ static char *_gl_label_get_for_account_list_group_item(void *data, Evas_Object *
 				return NULL;
 			} else {
 				char *account_name = elm_entry_utf8_to_markup(item_data->account_name);
-				if (item_data->ug_data->default_account_id == item_data->account_id) {
+				if (item_data->view->default_account_id == item_data->account_id) {
 					snprintf(tmp, sizeof(tmp), "%s %s", account_name,  _("IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"));
 				} else {
 					snprintf(tmp, sizeof(tmp), "%s", account_name);
@@ -492,8 +492,8 @@ static Evas_Object *_gl_account_content_get_for_single_subitem(void *data, Evas_
 	}
 
 	Account_Item_Data *item_data = (Account_Item_Data *)data;
-	if (!item_data->ug_data) {
-		debug_log("item_data->mailbox_ugd is NULL");
+	if (!item_data->view) {
+		debug_log("item_data->view is NULL");
 		return NULL;
 	}
 
@@ -503,7 +503,7 @@ static Evas_Object *_gl_account_content_get_for_single_subitem(void *data, Evas_
 		evas_object_size_hint_weight_set(full_item_ly, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 		evas_object_size_hint_align_set(full_item_ly, EVAS_HINT_FILL, EVAS_HINT_FILL);
 
-		int account_color = account_color_list_get_account_color(item_data->ug_data, item_data->account_id);
+		int account_color = account_color_list_get_account_color(item_data->view, item_data->account_id);
 		Evas_Object *color_bar = _create_account_subitem_color_bar(full_item_ly, account_color);
 		elm_object_part_content_set(full_item_ly, "elm.swallow.icon", color_bar);
 
@@ -519,11 +519,11 @@ static Evas_Object *_gl_icon_get_for_account_list_group_item(void *data, Evas_Ob
 	retvm_if(!data,  NULL, "Invalid parameter: data[NULL]");
 
 	Account_Item_Data *item_data = (Account_Item_Data *)data;
-	retvm_if(!item_data->ug_data,  NULL, "Invalid parameter: item_data->mailbox_ugd is NULL");
+	retvm_if(!item_data->view,  NULL, "Invalid parameter: item_data->view is NULL");
 	retvm_if(!item_data->it,  NULL, "Invalid parameter: item_data->it is NULL");
 
 	if (!strcmp(part, "elm.swallow.end")) {
-		if (item_data->ug_data->account_count > 1) {
+		if (item_data->view->account_count > 1) {
 			Evas_Object *expand_icon = elm_layout_add(obj);
 			if (item_data->expanded) {
 				elm_layout_file_set(expand_icon, email_get_common_theme_path(), EMAIL_IMAGE_CORE_EXPAND_OPENED);
@@ -548,14 +548,14 @@ static void  _gl_account_group_list_item_sel(void *data, Evas_Object *obj, void 
 
 	Account_Item_Data *group_item_data = (Account_Item_Data *)elm_object_item_data_get(it);
 	Account_Item_Data *sub_item_data = NULL;
-	EmailAccountUGD *ug_data = (EmailAccountUGD *)group_item_data->ug_data;
+	EmailAccountView *view = (EmailAccountView *)group_item_data->view;
 	Eina_List *l = NULL;
 
 	if (group_item_data->expanded) {
 		elm_genlist_item_subitems_clear(group_item_data->it);
 	} else {
 		EINA_LIST_FOREACH(group_item_data->sub_items, l, sub_item_data) {
-			sub_item_data->it = elm_genlist_item_append(ug_data->gl, ug_data->itc_account_item, sub_item_data, group_item_data->it, ELM_GENLIST_ITEM_NONE, _gl_account_list_item_sel, sub_item_data);
+			sub_item_data->it = elm_genlist_item_append(view->gl, view->itc_account_item, sub_item_data, group_item_data->it, ELM_GENLIST_ITEM_NONE, _gl_account_list_item_sel, sub_item_data);
 			elm_genlist_item_fields_update(sub_item_data->it, "elm.icon.1", ELM_GENLIST_ITEM_FIELD_CONTENT);
 		}
 		elm_genlist_item_bring_in(group_item_data->it, ELM_GENLIST_ITEM_SCROLLTO_TOP);
@@ -563,7 +563,7 @@ static void  _gl_account_group_list_item_sel(void *data, Evas_Object *obj, void 
 
 	group_item_data->expanded = !group_item_data->expanded;
 
-	_check_account_list_zoom_state(ug_data);
+	_check_account_list_zoom_state(view);
 	elm_genlist_item_fields_update(group_item_data->it, "elm.swallow.end", ELM_GENLIST_ITEM_FIELD_CONTENT);
 
 	debug_leave();
@@ -584,17 +584,17 @@ static Evas_Object *_create_account_subitem_color_bar(Evas_Object *parent, unsig
 
 static char *_create_account_list_item_text(Account_Item_Data *item_data, const char *text)
 {
-	int account_item_type = _convert_account_list_item_type(item_data->ug_data,
-			item_data->ug_data->account_id,
-			item_data->ug_data->mailbox_type);
+	int account_item_type = _convert_account_list_item_type(item_data->view,
+			item_data->view->account_id,
+			item_data->view->mailbox_type);
 
 	char buff[MAX_STR_LEN] = { 0 };
 	if (item_data->item_type > ACCOUNT_LIST_COMBINED_GROUP &&
 			item_data->item_type <= ACCOUNT_LIST_COMBINED_SENT) {
 
 		if ((account_item_type == item_data->item_type) &&
-				(item_data->ug_data->account_count == 1
-				|| item_data->ug_data->account_id == item_data->account_id)) {
+				(item_data->view->account_count == 1
+				|| item_data->view->account_id == item_data->account_id)) {
 			snprintf(buff, sizeof(buff), "<font=System:style=Bold><color=#%02x%02x%02x%02x>%s</color></font>", ACCOUNT_CURRENT_FOLDER_COLOR, text);
 		} else {
 			snprintf(buff, sizeof(buff), "<font=System:style=Regular>%s</font>", text);
@@ -602,8 +602,8 @@ static char *_create_account_list_item_text(Account_Item_Data *item_data, const 
 	} else if (item_data->item_type > ACCOUNT_LIST_SINGLE_GROUP &&
 			item_data->item_type < ACCOUNT_LIST_SINGLE_SHOW_ALL_FOLDERS) {
 
-		if (item_data->ug_data->account_id == item_data->account_id &&
-			item_data->ug_data->mailbox_id == item_data->mailbox_id &&
+		if (item_data->view->account_id == item_data->account_id &&
+			item_data->view->mailbox_id == item_data->mailbox_id &&
 			account_item_type == item_data->item_type) {
 			snprintf(buff, sizeof(buff), "<font=System:style=Bold><color=#%02x%02x%02x%02x>%s</color></font>", ACCOUNT_CURRENT_FOLDER_COLOR, text);
 		} else {
@@ -688,9 +688,9 @@ static char *_get_account_item_text_for_single_subitem(Account_Item_Data *item_d
 static void account_item_del(Account_Item_Data *item_data)
 {
 	if (item_data) {
-		EmailAccountUGD *ug_data = item_data->ug_data;
-		if (ug_data)
-			ug_data->account_group_list = g_list_remove(ug_data->account_group_list, item_data);
+		EmailAccountView *view = item_data->view;
+		if (view)
+			view->account_group_list = g_list_remove(view->account_group_list, item_data);
 		FREE(item_data->account_name);
 
 		if (item_data->sub_items) {
@@ -720,9 +720,9 @@ static void _gl_account_list_item_sel(void *data, Evas_Object *obj, void *event_
 	}
 
 	Account_Item_Data *item_data = (Account_Item_Data *)data;
-	EmailAccountUGD *ug_data = item_data->ug_data;
+	EmailAccountView *view = item_data->view;
 	int mailbox_id = 0;
-	retm_if(!ug_data, "ug_data is NULL");
+	retm_if(!view, "view is NULL");
 
 	email_mailbox_type_e mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
 	int box_type = ACC_MAILBOX_TYPE_INBOX;
@@ -739,79 +739,79 @@ static void _gl_account_list_item_sel(void *data, Evas_Object *obj, void *event_
 	case ACCOUNT_LIST_COMBINED_INBOX:
 		mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
 		box_type = ACC_MAILBOX_TYPE_INBOX;
-		ug_data->account_id = 0;
+		view->account_id = 0;
 		break;
 #ifndef _FEATURE_PRIORITY_SENDER_DISABLE_
 	case ACCOUNT_LIST_PRIORITY_INBOX:
 		mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
 		box_type = ACC_MAILBOX_TYPE_PRIORITY_INBOX;
-		ug_data->account_id = 0;
+		view->account_id = 0;
 		break;
 #endif
 	case ACCOUNT_LIST_STARRED:
 		mailbox_type = EMAIL_MAILBOX_TYPE_FLAGGED;
 		box_type = ACC_MAILBOX_TYPE_FLAGGED;
-		ug_data->account_id = 0;
+		view->account_id = 0;
 		break;
 
 	case ACCOUNT_LIST_COMBINED_DRAFTS:
 		mailbox_type = EMAIL_MAILBOX_TYPE_DRAFT;
 		box_type = ACC_MAILBOX_TYPE_DRAFT;
-		ug_data->account_id = 0;
+		view->account_id = 0;
 		break;
 
 	case ACCOUNT_LIST_COMBINED_OUTBOX:
 		mailbox_type = EMAIL_MAILBOX_TYPE_OUTBOX;
 		box_type = ACC_MAILBOX_TYPE_OUTBOX;
-		ug_data->account_id = 0;
+		view->account_id = 0;
 		break;
 
 	case ACCOUNT_LIST_COMBINED_SENT:
 		mailbox_type = EMAIL_MAILBOX_TYPE_SENTBOX;
 		box_type = ACC_MAILBOX_TYPE_SENTBOX;
-		ug_data->account_id = 0;
+		view->account_id = 0;
 		break;
 
 	case ACCOUNT_LIST_COMBINED_SHOW_ALL_FOLDERS:
-		ug_data->account_id = 0;
-		ug_data->folder_view_mode = ACC_FOLDER_COMBINED_VIEW_MODE;
-		ug_data->folder_mode = ACC_FOLDER_NONE;
-		account_show_all_folder(ug_data);
+		view->account_id = 0;
+		view->folder_view_mode = ACC_FOLDER_COMBINED_VIEW_MODE;
+		view->folder_mode = ACC_FOLDER_NONE;
+		account_show_all_folder(view);
 		return;
 
 	case ACCOUNT_LIST_SINGLE_INBOX:
 		mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
 		box_type = ACC_MAILBOX_TYPE_INBOX;
-		ug_data->account_id = item_data->account_id;
+		view->account_id = item_data->account_id;
 		mailbox_id = item_data->mailbox_id;
 		break;
 
 	case ACCOUNT_LIST_SINGLE_DRAFTS:
 		mailbox_type = EMAIL_MAILBOX_TYPE_DRAFT;
 		box_type = ACC_MAILBOX_TYPE_DRAFT;
-		ug_data->account_id = item_data->account_id;
+		view->account_id = item_data->account_id;
 		mailbox_id = item_data->mailbox_id;
 		break;
 
 	case ACCOUNT_LIST_SINGLE_OUTBOX:
 		mailbox_type = EMAIL_MAILBOX_TYPE_OUTBOX;
 		box_type = ACC_MAILBOX_TYPE_OUTBOX;
-		ug_data->account_id = item_data->account_id;
+		view->account_id = item_data->account_id;
 		mailbox_id = item_data->mailbox_id;
 		break;
 
 	case ACCOUNT_LIST_SINGLE_SENT:
 		mailbox_type = EMAIL_MAILBOX_TYPE_SENTBOX;
 		box_type = ACC_MAILBOX_TYPE_SENTBOX;
-		ug_data->account_id = item_data->account_id;
+		view->account_id = item_data->account_id;
 		mailbox_id = item_data->mailbox_id;
 		break;
 
 	case ACCOUNT_LIST_SINGLE_SHOW_ALL_FOLDERS:
-		ug_data->account_id = item_data->account_id;
-		ug_data->folder_view_mode = ACC_FOLDER_COMBINED_SINGLE_VIEW_MODE;
-		ug_data->folder_mode = ACC_FOLDER_NONE;
-		account_show_all_folder(ug_data);
+		view->account_id = item_data->account_id;
+		view->folder_view_mode = ACC_FOLDER_COMBINED_SINGLE_VIEW_MODE;
+		view->folder_mode = ACC_FOLDER_NONE;
+		account_show_all_folder(view);
 		return;
 
 	default:
@@ -819,12 +819,12 @@ static void _gl_account_list_item_sel(void *data, Evas_Object *obj, void *event_
 		break;
 	}
 
-	debug_log("account_id: [%d], box_type: [%d], mailbox_type: [%d]", ug_data->account_id, box_type, mailbox_type);
+	debug_log("account_id: [%d], box_type: [%d], mailbox_type: [%d]", view->account_id, box_type, mailbox_type);
 
 	const char *account_type = EMAIL_BUNDLE_VAL_SINGLE_ACCOUNT;
 	if (box_type == ACC_MAILBOX_TYPE_PRIORITY_INBOX) {
 		account_type = EMAIL_BUNDLE_VAL_PRIORITY_SENDER;
-	} else if (ug_data->account_id == 0) {
+	} else if (view->account_id == 0) {
 		account_type = EMAIL_BUNDLE_VAL_ALL_ACCOUNT;
 	}
 
@@ -832,25 +832,25 @@ static void _gl_account_list_item_sel(void *data, Evas_Object *obj, void *event_
 
 	if (email_params_create(&params) &&
 		email_params_add_str(params, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, account_type) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, ug_data->account_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, view->account_id) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX_TYPE, mailbox_type) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, mailbox_id) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, 0)) {
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_MODE, 0)) {
 
-		email_module_send_result(ug_data->base.module, params);
+		email_module_send_result(view->base.module, params);
 	}
 
 	email_params_free(&params);
 
-	ug_data->block_item_click = 1;
+	view->block_item_click = 1;
 }
 
-static void _check_account_list_zoom_state(EmailAccountUGD *ug_data)
+static void _check_account_list_zoom_state(EmailAccountView *view)
 {
 	debug_enter();
 
-	if (ug_data && ug_data->account_group_list) {
-		GList *first_element = g_list_first(ug_data->account_group_list);
+	if (view && view->account_group_list) {
+		GList *first_element = g_list_first(view->account_group_list);
 		Account_Item_Data *first_item_data = (Account_Item_Data *)g_list_nth_data(first_element, 0);
 		bool same_state = true;
 		GList *cur = g_list_next(first_element);
@@ -864,22 +864,22 @@ static void _check_account_list_zoom_state(EmailAccountUGD *ug_data)
 			cur = g_list_next(cur);
 		}
 		if (same_state) {
-			ug_data->account_group_state =
+			view->account_group_state =
 					first_item_data->expanded ? ACCOUNT_LIST_ALL_GROUP_EXPANDED : ACCOUNT_LIST_ALL_GROUP_CONTRACTED;
 		} else {
-			ug_data->account_group_state = ACCOUNT_LIST_SOME_GROUP_EXPANEDED;
+			view->account_group_state = ACCOUNT_LIST_SOME_GROUP_EXPANEDED;
 		}
-		debug_log("account_group_state : %d", ug_data->account_group_state);
+		debug_log("account_group_state : %d", view->account_group_state);
 	}
 }
 
-static int _convert_account_list_item_type(EmailAccountUGD *ug_data, int account_id, int mailbox_type)
+static int _convert_account_list_item_type(EmailAccountView *view, int account_id, int mailbox_type)
 {
 	int account_item_type = ACCOUNT_LIST_NONE;
 
-	if (ug_data) {
+	if (view) {
 
-		if (ug_data->mailbox_mode == ACC_MAILBOX_TYPE_PRIORITY_INBOX) {
+		if (view->mailbox_mode == ACC_MAILBOX_TYPE_PRIORITY_INBOX) {
 			account_item_type = ACCOUNT_LIST_PRIORITY_INBOX;
 		} else {
 			if (account_id == 0) {
