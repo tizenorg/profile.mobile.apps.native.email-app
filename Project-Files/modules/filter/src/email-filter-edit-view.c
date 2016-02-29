@@ -20,7 +20,7 @@
 #include "email-filter-edit-view.h"
 #include "email-common-contact-defines.h"
 
-typedef struct _EmailFilterEditVD EmailFilterVD;
+typedef struct _EmailFilterEditView EmailFilterView;
 
 /* Internal functions */
 static int _create(email_view_t *self);
@@ -36,12 +36,12 @@ static void _entry_changed_cb(void *data, Evas_Object *obj, void *event_info);
 static void _contact_button_clicked_cb(void *data, Evas_Object *obj, void *event_info);
 static Evas_Object *_gl_content_get_cb(void *data, Evas_Object *obj, const char *part);
 static void _contact_app_reply_cb(void *data, app_control_result_e result, email_params_h reply);
-static int _checking_is_dup_rule(EmailFilterVD *vd, email_rule_t *filter_rule);
+static int _checking_is_dup_rule(EmailFilterView *view, email_rule_t *filter_rule);
 
-static Evas_Object *_create_list(EmailFilterVD *vd);
-static void _launch_contact_app(EmailFilterVD *vd);
-static int _get_field_validation(EmailFilterVD *vd);
-static void _done_key_disabled_set(EmailFilterVD *vd, Eina_Bool disabled);
+static Evas_Object *_create_list(EmailFilterView *view);
+static void _launch_contact_app(EmailFilterView *view);
+static int _get_field_validation(EmailFilterView *view);
+static void _done_key_disabled_set(EmailFilterView *view, Eina_Bool disabled);
 
 static email_string_t EMAIL_FILTER_STRING_ALREADY_ADDED = {PACKAGE, "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ALREADY_ADDED_TO_PRIORITY_SENDERS"};
 static email_string_t EMAIL_FILTER_STRING_EMAIL_ADDRESS = {PACKAGE, "IDS_EMAIL_BODY_EMAIL_ADDRESS"};
@@ -51,7 +51,7 @@ static email_string_t EMAIL_FILTER_STRING_DONE_TITLE_BTN = {PACKAGE, "IDS_TPLATF
 static email_string_t EMAIL_FILTER_STRING_CANCEL_TITLE_BTN = {PACKAGE, "IDS_TPLATFORM_ACBUTTON_CANCEL_ABB"};
 
 /* Internal structure */
-struct _EmailFilterEditVD {
+struct _EmailFilterEditView {
 	email_view_t base;
 	filter_edit_view_mode mode;
 
@@ -76,33 +76,33 @@ typedef struct _ListItemData {
 	email_editfield_t editfield;
 	Elm_Entry_Filter_Limit_Size *entry_limit;
 	Elm_Object_Item *it;
-	EmailFilterVD *vd;
+	EmailFilterView *view;
 } ListItemData;
 
-void create_filter_edit_view(EmailFilterUGD *ugd, filter_edit_view_mode mode, int filter_id)
+void create_filter_edit_view(EmailFilterModule *module, filter_edit_view_mode mode, int filter_id)
 {
 	debug_enter();
-	retm_if(!ugd, "ug data is null");
+	retm_if(!module, "module is null");
 
-	EmailFilterVD *vd = calloc(1, sizeof(EmailFilterVD));
-	retm_if(!vd, "view data is null");
+	EmailFilterView *view = calloc(1, sizeof(EmailFilterView));
+	retm_if(!view, "view data is null");
 
 	if (mode == FILTER_EDIT_VIEW_MODE_EDIT_EXISTENT) {
 		email_rule_t *filter_rule = NULL;
 		email_get_rule(filter_id, &filter_rule);
-		retvm_if(!filter_rule, free(vd), "filter_rule to be edited is null");
-		vd->filter_rule = filter_rule;
+		retvm_if(!filter_rule, free(view), "filter_rule to be edited is null");
+		view->filter_rule = filter_rule;
 	}
 
-	vd->mode = mode;
+	view->mode = mode;
 
-	vd->base.create = _create;
-	vd->base.destroy = _destroy;
-	vd->base.activate = _activate;
-	vd->base.update = _update;
-	vd->base.on_back_key = _on_back_key;
+	view->base.create = _create;
+	view->base.destroy = _destroy;
+	view->base.activate = _activate;
+	view->base.update = _update;
+	view->base.on_back_key = _on_back_key;
 
-	debug_log("view create result: %d", email_module_create_view(&ugd->base, &vd->base));
+	debug_log("view create result: %d", email_module_create_view(&module->base, &view->base));
 }
 
 static int _create(email_view_t *self)
@@ -110,8 +110,8 @@ static int _create(email_view_t *self)
 	debug_enter();
 	retvm_if(!self, -1, "self is null");
 
-	EmailFilterVD *vd = (EmailFilterVD *)self;
-	EmailFilterUGD *ugd = (EmailFilterUGD *)vd->base.module;
+	EmailFilterView *view = (EmailFilterView *)self;
+	EmailFilterModule *module = (EmailFilterModule *)view->base.module;
 
 	Elm_Object_Item *navi_it = NULL;
 	Evas_Object *layout = NULL;
@@ -119,40 +119,40 @@ static int _create(email_view_t *self)
 	Evas_Object *done_btn = NULL;
 	Evas_Object *cancel_btn = NULL;
 
-	layout = elm_layout_add(ugd->base.navi);
+	layout = elm_layout_add(module->base.navi);
 	elm_layout_theme_set(layout, "layout", "application", "default");
 	evas_object_size_hint_weight_set(layout, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	vd->base.content = layout;
+	view->base.content = layout;
 
-	vd->genlist = genlist = _create_list(vd);
+	view->genlist = genlist = _create_list(view);
 	elm_object_part_content_set(layout, "elm.swallow.content", genlist);
 
 	email_string_t *title = NULL;
-	if (vd->mode == FILTER_EDIT_VIEW_MODE_ADD_NEW) {
+	if (view->mode == FILTER_EDIT_VIEW_MODE_ADD_NEW) {
 		title = &EMAIL_SETTING_STRING_ADD_PRIORITY_SENDER;
 	} else {
 		title = &EMAIL_SETTING_STRING_EDIT_PRIORITY_SENDER;
 	}
-	navi_it = email_module_view_push(&vd->base, title->id, 0);
+	navi_it = email_module_view_push(&view->base, title->id, 0);
 	elm_object_item_domain_text_translatable_set(navi_it, title->domain, EINA_TRUE);
 
-	cancel_btn = elm_button_add(ugd->base.navi);
+	cancel_btn = elm_button_add(module->base.navi);
 	elm_object_style_set(cancel_btn, "naviframe/title_left");
 	elm_object_domain_translatable_text_set(cancel_btn, EMAIL_FILTER_STRING_CANCEL_TITLE_BTN.domain, EMAIL_FILTER_STRING_CANCEL_TITLE_BTN.id);
-	evas_object_smart_callback_add(cancel_btn, "clicked", _cancel_cb, vd);
+	evas_object_smart_callback_add(cancel_btn, "clicked", _cancel_cb, view);
 	elm_object_item_part_content_set(navi_it, "title_left_btn", cancel_btn);
 
-	vd->done_btn = done_btn = elm_button_add(ugd->base.navi);
+	view->done_btn = done_btn = elm_button_add(module->base.navi);
 	elm_object_style_set(done_btn, "naviframe/title_right");
 	elm_object_domain_translatable_text_set(done_btn, EMAIL_FILTER_STRING_DONE_TITLE_BTN.domain, EMAIL_FILTER_STRING_DONE_TITLE_BTN.id);
-	evas_object_smart_callback_add(done_btn, "clicked", _done_cb, vd);
+	evas_object_smart_callback_add(done_btn, "clicked", _done_cb, view);
 	elm_object_item_part_content_set(navi_it, "title_right_btn", done_btn);
 
-	if (_get_field_validation(vd) == 0) {
+	if (_get_field_validation(view) == 0) {
 		elm_object_disabled_set(done_btn, EINA_TRUE);
 	}
 
-	email_filter_add_conformant_callback(ugd);
+	email_filter_add_conformant_callback(module);
 
 	return 0;
 }
@@ -162,17 +162,17 @@ static void _destroy(email_view_t *self)
 	debug_enter();
 	retm_if(!self, "self is NULL");
 
-	EmailFilterVD *vd = (EmailFilterVD *)self;
-	EmailFilterUGD *ugd = (EmailFilterUGD *)vd->base.module;
+	EmailFilterView *view = (EmailFilterView *)self;
+	EmailFilterModule *module = (EmailFilterModule *)view->base.module;
 
-	email_filter_del_conformant_callback(ugd);
+	email_filter_del_conformant_callback(module);
 
-	EMAIL_GENLIST_ITC_FREE(vd->itc2);
-	EMAIL_GENLIST_ITC_FREE(vd->itc3);
+	EMAIL_GENLIST_ITC_FREE(view->itc2);
+	EMAIL_GENLIST_ITC_FREE(view->itc3);
 
-	FREE(vd->original_priority_addr);
+	FREE(view->original_priority_addr);
 
-	GSList *l = vd->list_items;
+	GSList *l = view->list_items;
 	while (l) {
 		ListItemData *li = l->data;
 
@@ -188,9 +188,9 @@ static void _destroy(email_view_t *self)
 		free(l->data);
 		l = g_slist_next(l);
 	}
-	g_slist_free(vd->list_items);
+	g_slist_free(view->list_items);
 
-	free(vd);
+	free(view);
 }
 
 static void _update(email_view_t *self, int flags)
@@ -198,21 +198,21 @@ static void _update(email_view_t *self, int flags)
 	debug_enter();
 	retm_if(!self, "self is NULL");
 
-	EmailFilterVD *vd = (EmailFilterVD *)self;
+	EmailFilterView *view = (EmailFilterView *)self;
 
 	if (flags & EVUF_LANGUAGE_CHANGED) {
-		elm_genlist_realized_items_update(vd->genlist);
+		elm_genlist_realized_items_update(view->genlist);
 	}
 }
 
-static void _add_new_rule(EmailFilterVD *vd)
+static void _add_new_rule(EmailFilterView *view)
 {
 	debug_enter();
 
-	EmailFilterUGD *ugd = (EmailFilterUGD *)vd->base.module;
+	EmailFilterModule *module = (EmailFilterModule *)view->base.module;
 	email_rule_t *filter_rule = NULL;
 	int ret = EMAIL_ERROR_NONE;
-	Evas_Object *done_btn = vd->done_btn;
+	Evas_Object *done_btn = view->done_btn;
 
 	evas_object_smart_callback_del(done_btn, "clicked", _done_cb);
 
@@ -226,7 +226,7 @@ static void _add_new_rule(EmailFilterVD *vd)
 	filter_rule->flag2 = RULE_TYPE_EXACTLY;
 	filter_rule->type = EMAIL_PRIORITY_SENDER;
 
-	GSList *l = vd->list_items;
+	GSList *l = view->list_items;
 	while (l) {
 		ListItemData *li = l->data;
 		if (li->index == EMAIL_FILTER_ADD_SENDER) {
@@ -235,14 +235,14 @@ static void _add_new_rule(EmailFilterVD *vd)
 		l = g_slist_next(l);
 	}
 
-	if (_checking_is_dup_rule(vd, filter_rule)) {
+	if (_checking_is_dup_rule(view, filter_rule)) {
 		debug_warning("this rule already exist!");
 		ret = notification_status_message_post(email_get_email_string(EMAIL_FILTER_STRING_ALREADY_ADDED.id));
 		if (ret != NOTIFICATION_ERROR_NONE) {
 			debug_log("fail to notification_status_message_post() : %d\n", ret);
 		}
 		email_free_rule(&filter_rule, 1);
-		evas_object_smart_callback_add(done_btn, "clicked", _done_cb, vd);
+		evas_object_smart_callback_add(done_btn, "clicked", _done_cb, view);
 		return;
 	}
 
@@ -256,28 +256,28 @@ static void _add_new_rule(EmailFilterVD *vd)
 			debug_warning("email_apply_rule failed: %d", ret);
 		} else {
 			debug_log("email_apply_rule success");
-			email_filter_publish_changed_noti(ugd);
+			email_filter_publish_changed_noti(module);
 		}
 	}
 	email_free_rule(&filter_rule, 1);
 
-	email_module_exit_view(&vd->base);
+	email_module_exit_view(&view->base);
 
 	debug_leave();
 }
 
-static void _apply_rule_changes(EmailFilterVD *vd)
+static void _apply_rule_changes(EmailFilterView *view)
 {
 	debug_enter();
 
-	EmailFilterUGD *ugd = (EmailFilterUGD *)vd->base.module;
-	email_rule_t *filter_rule = vd->filter_rule;
+	EmailFilterModule *module = (EmailFilterModule *)view->base.module;
+	email_rule_t *filter_rule = view->filter_rule;
 	int ret = EMAIL_ERROR_NONE;
-	Evas_Object *done_btn = vd->done_btn;
+	Evas_Object *done_btn = view->done_btn;
 
 	evas_object_smart_callback_del(done_btn, "clicked", _done_cb);
 
-	GSList *l = vd->list_items;
+	GSList *l = view->list_items;
 	while (l) {
 		ListItemData *li = l->data;
 		if (li->index == EMAIL_FILTER_ADD_SENDER) {
@@ -287,13 +287,13 @@ static void _apply_rule_changes(EmailFilterVD *vd)
 		l = g_slist_next(l);
 	}
 
-	if (_checking_is_dup_rule(vd, filter_rule)) {
+	if (_checking_is_dup_rule(view, filter_rule)) {
 		debug_warning("this rule already exist!");
 		ret = notification_status_message_post(email_get_email_string(EMAIL_FILTER_STRING_ALREADY_ADDED.id));
 		if (ret != NOTIFICATION_ERROR_NONE) {
 			debug_log("fail to notification_status_message_post() : %d\n", ret);
 		}
-		evas_object_smart_callback_add(done_btn, "clicked", _done_cb, vd);
+		evas_object_smart_callback_add(done_btn, "clicked", _done_cb, view);
 		return;
 	}
 
@@ -307,11 +307,11 @@ static void _apply_rule_changes(EmailFilterVD *vd)
 			debug_warning("email_apply_rule failed: %d", ret);
 		} else {
 			debug_log("email_apply_rule success");
-			email_filter_publish_changed_noti(ugd);
+			email_filter_publish_changed_noti(module);
 		}
 	}
 
-	email_module_exit_view(&vd->base);
+	email_module_exit_view(&view->base);
 
 	debug_leave();
 }
@@ -321,21 +321,21 @@ static void _done_cb(void *data, Evas_Object *obj, void *event_info)
 	debug_enter();
 	retm_if(!data, "data is NULL");
 
-	EmailFilterVD *vd = data;
+	EmailFilterView *view = data;
 
-	if (vd->mode == FILTER_EDIT_VIEW_MODE_ADD_NEW) {
-		return _add_new_rule(vd);
+	if (view->mode == FILTER_EDIT_VIEW_MODE_ADD_NEW) {
+		return _add_new_rule(view);
 	} else {
-		return _apply_rule_changes(vd);
+		return _apply_rule_changes(view);
 	}
 }
 
 static void _cancel_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailFilterVD *vd = data;
+	EmailFilterView *view = data;
 
-	email_module_exit_view(&vd->base);
+	email_module_exit_view(&view->base);
 }
 
 static void _activate(email_view_t *self, email_view_state prev_state)
@@ -348,8 +348,8 @@ static void _activate(email_view_t *self, email_view_state prev_state)
 		return;
 	}
 
-	EmailFilterVD *vd = (EmailFilterVD *)self;
-	ListItemData *li = vd->list_items->data;
+	EmailFilterView *view = (EmailFilterView *)self;
+	ListItemData *li = view->list_items->data;
 	retm_if(!li, "li is NULL");
 
 	elm_object_focus_set(li->editfield.entry, EINA_TRUE);
@@ -365,7 +365,7 @@ static void _on_back_key(email_view_t *self)
 	email_module_exit_view(self);
 }
 
-static Evas_Object *_create_list(EmailFilterVD *vd)
+static Evas_Object *_create_list(EmailFilterView *view)
 {
 	debug_enter();
 
@@ -373,35 +373,35 @@ static Evas_Object *_create_list(EmailFilterVD *vd)
 	Evas_Object *genlist = NULL;
 	Elm_Object_Item *git = NULL;
 
-	genlist = elm_genlist_add(vd->base.content);
+	genlist = elm_genlist_add(view->base.content);
 	elm_genlist_mode_set(genlist, ELM_LIST_COMPRESS);
 	elm_genlist_homogeneous_set(genlist, EINA_TRUE);
 	elm_scroller_policy_set(genlist, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_OFF);
 	elm_genlist_select_mode_set(genlist, ELM_OBJECT_SELECT_MODE_NONE);
 	elm_genlist_highlight_mode_set(genlist, EINA_FALSE);
 
-	vd->itc3 = email_util_get_genlist_item_class("full", NULL, _gl_content_get_cb, NULL, NULL);
+	view->itc3 = email_util_get_genlist_item_class("full", NULL, _gl_content_get_cb, NULL, NULL);
 
 	/* Sender */
 	li = calloc(1, sizeof(ListItemData));
 	retvm_if(!li, NULL, "memory allocation failed");
 
 	li->index = EMAIL_FILTER_ADD_SENDER;
-	li->vd = vd;
+	li->view = view;
 
-	if (vd->mode == FILTER_EDIT_VIEW_MODE_ADD_NEW) {
-		EmailFilterUGD *ugd = (EmailFilterUGD *)vd->base.module;
-		li->entry_str = g_strdup(ugd->param_filter_addr);
+	if (view->mode == FILTER_EDIT_VIEW_MODE_ADD_NEW) {
+		EmailFilterModule *module = (EmailFilterModule *)view->base.module;
+		li->entry_str = g_strdup(module->param_filter_addr);
 	} else {
-		email_rule_t *filter_rule = vd->filter_rule;
+		email_rule_t *filter_rule = view->filter_rule;
 		li->entry_str = g_strdup(filter_rule->value2);
-		vd->original_priority_addr = g_strdup(filter_rule->value2);
+		view->original_priority_addr = g_strdup(filter_rule->value2);
 	}
 
-	li->it = git = elm_genlist_item_append(genlist, vd->itc3, li, NULL,
+	li->it = git = elm_genlist_item_append(genlist, view->itc3, li, NULL,
 			ELM_GENLIST_ITEM_NONE, NULL, NULL);
 	elm_genlist_item_select_mode_set(git, ELM_OBJECT_SELECT_MODE_ALWAYS);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	view->list_items = g_slist_append(view->list_items, li);
 
 	return genlist;
 }
@@ -415,13 +415,13 @@ static Evas_Object *_gl_content_get_cb(void *data, Evas_Object *obj, const char 
 			Evas_Object *layout = elm_layout_add(obj);
 			elm_layout_file_set(layout, email_get_filter_theme_path(), "email.filter.address_edit_view");
 
-			EmailFilterVD *vd = li->vd;
+			EmailFilterView *view = li->view;
 			email_common_util_editfield_create(layout, 0, &li->editfield);
 			elm_entry_input_panel_layout_set(li->editfield.entry, ELM_INPUT_PANEL_LAYOUT_EMAIL);
 
 			elm_object_domain_translatable_part_text_set(li->editfield.entry, "elm.guide",
 					EMAIL_FILTER_STRING_EMAIL_ADDRESS.domain, EMAIL_FILTER_STRING_EMAIL_ADDRESS.id);
-			li->entry_limit = email_filter_set_input_entry_limit(&vd->base, li->editfield.entry, 0, EMAIL_LIMIT_EMAIL_ADDRESS_LENGTH);
+			li->entry_limit = email_filter_set_input_entry_limit(&view->base, li->editfield.entry, 0, EMAIL_LIMIT_EMAIL_ADDRESS_LENGTH);
 
 			if (li->entry_str) {
 				char *str = elm_entry_utf8_to_markup(li->entry_str);
@@ -431,7 +431,7 @@ static Evas_Object *_gl_content_get_cb(void *data, Evas_Object *obj, const char 
 			}
 
 			elm_entry_input_panel_return_key_type_set(li->editfield.entry, ELM_INPUT_PANEL_RETURN_KEY_TYPE_DONE);
-			if (_get_field_validation(vd) == 0)
+			if (_get_field_validation(view) == 0)
 				elm_entry_input_panel_return_key_disabled_set(li->editfield.entry, EINA_TRUE);
 
 			evas_object_smart_callback_add(li->editfield.entry, "preedit,changed", _entry_changed_cb, li);
@@ -448,7 +448,7 @@ static Evas_Object *_gl_content_get_cb(void *data, Evas_Object *obj, const char 
 			elm_object_style_set(ct_btn, "transparent");
 			elm_object_part_content_set(ct_btn, "elm.swallow.content", ic);
 			evas_object_propagate_events_set(ct_btn, EINA_FALSE);
-			evas_object_smart_callback_add(ct_btn, "clicked", _contact_button_clicked_cb, li->vd);
+			evas_object_smart_callback_add(ct_btn, "clicked", _contact_button_clicked_cb, li->view);
 			elm_object_part_content_set(layout, "email.filter.contact_btn", ct_btn);
 			return layout;
 		}
@@ -464,7 +464,7 @@ static void _entry_changed_cb(void *data, Evas_Object *obj, void *event_info)
 	retm_if(!data, "data is NULL");
 
 	ListItemData *li = data;
-	EmailFilterVD *vd = li->vd;
+	EmailFilterView *view = li->view;
 
 	if (li->entry_str) {
 		free(li->entry_str);
@@ -473,10 +473,10 @@ static void _entry_changed_cb(void *data, Evas_Object *obj, void *event_info)
 
 	li->entry_str = elm_entry_markup_to_utf8(elm_entry_entry_get(obj));
 
-	if (_get_field_validation(vd) == 0) {
-		_done_key_disabled_set(vd, EINA_TRUE);
+	if (_get_field_validation(view) == 0) {
+		_done_key_disabled_set(view, EINA_TRUE);
 	} else {
-		_done_key_disabled_set(vd, EINA_FALSE);
+		_done_key_disabled_set(view, EINA_FALSE);
 	}
 
 	debug_leave();
@@ -486,12 +486,12 @@ static void _contact_button_clicked_cb(void *data, Evas_Object *obj, void *event
 {
 	debug_enter();
 
-	EmailFilterVD *vd = data;
+	EmailFilterView *view = data;
 
-	_launch_contact_app(vd);
+	_launch_contact_app(view);
 }
 
-static void _launch_contact_app(EmailFilterVD *vd)
+static void _launch_contact_app(EmailFilterView *view)
 {
 	debug_enter();
 
@@ -504,10 +504,10 @@ static void _launch_contact_app(EmailFilterVD *vd)
 		email_params_add_str(params, EMAIL_CONTACT_EXT_DATA_SELECTION_MODE, EMAIL_CONTACT_BUNDLE_SELECT_SINGLE)) {
 
 		email_launched_app_listener_t listener = { 0 };
-		listener.cb_data = vd;
+		listener.cb_data = view;
 		listener.reply_cb = _contact_app_reply_cb;
 
-		email_module_launch_app(vd->base.module, EMAIL_LAUNCH_APP_AUTO, params, &listener);
+		email_module_launch_app(view->base.module, EMAIL_LAUNCH_APP_AUTO, params, &listener);
 	}
 
 	email_params_free(&params);
@@ -517,7 +517,7 @@ static void _contact_app_reply_cb(void *data, app_control_result_e result, email
 {
 	debug_enter();
 
-	EmailFilterVD *vd = data;
+	EmailFilterView *view = data;
 	const char **filter_addr_id_arr = NULL;
 	int id = -1;
 	int len = 0;
@@ -540,7 +540,7 @@ static void _contact_app_reply_cb(void *data, app_control_result_e result, email
 	}
 
 	debug_secure("filter address: %s", contact_info->email_address);
-	GSList *l = vd->list_items;
+	GSList *l = view->list_items;
 	while (l) {
 		ListItemData *li = l->data;
 		if (li->index == EMAIL_FILTER_ADD_SENDER) {
@@ -558,14 +558,14 @@ static void _contact_app_reply_cb(void *data, app_control_result_e result, email
 	email_contacts_delete_contact_info(&contact_info);
 }
 
-static int _get_field_validation(EmailFilterVD *vd)
+static int _get_field_validation(EmailFilterView *view)
 {
 	debug_enter();
 
 	int is_valid_sender = 1;
 	int is_sender = 1;
 
-	GSList *l = vd->list_items;
+	GSList *l = view->list_items;
 	while (l) {
 		ListItemData *li = l->data;
 		if (li->index == EMAIL_FILTER_ADD_SENDER) {
@@ -589,20 +589,20 @@ static void _return_key_cb(void *data, Evas_Object *obj, void *event_info)
 	ListItemData *li = data;
 	retm_if(!li, "ListItemData is NULL");
 
-	EmailFilterVD *vd = li->vd;
+	EmailFilterView *view = li->view;
 
-	_done_cb(vd, NULL, NULL);
+	_done_cb(view, NULL, NULL);
 }
 
-static void _done_key_disabled_set(EmailFilterVD *vd, Eina_Bool disabled)
+static void _done_key_disabled_set(EmailFilterView *view, Eina_Bool disabled)
 {
-	EmailFilterUGD *ugd = (EmailFilterUGD *)vd->base.module;
-	GSList *l = vd->list_items;
+	EmailFilterModule *module = (EmailFilterModule *)view->base.module;
+	GSList *l = view->list_items;
 
-	elm_object_disabled_set(vd->done_btn, disabled);
+	elm_object_disabled_set(view->done_btn, disabled);
 	while (l) {
 		ListItemData *_li = l->data;
-		if (ugd->op_type == EMAIL_FILTER_OPERATION_PRIORITY_SERNDER &&
+		if (module->op_type == EMAIL_FILTER_OPERATION_PRIORITY_SERNDER &&
 				_li->index == EMAIL_FILTER_ADD_SENDER) {
 			elm_entry_input_panel_return_key_disabled_set(_li->editfield.entry, disabled);
 		}
@@ -610,7 +610,7 @@ static void _done_key_disabled_set(EmailFilterVD *vd, Eina_Bool disabled)
 	}
 }
 
-static int _checking_is_dup_rule(EmailFilterVD *vd, email_rule_t *filter_rule)
+static int _checking_is_dup_rule(EmailFilterView *view, email_rule_t *filter_rule)
 {
 	debug_enter();
 
@@ -621,7 +621,7 @@ static int _checking_is_dup_rule(EmailFilterVD *vd, email_rule_t *filter_rule)
 	char *compare_str = NULL;
 	int i = 0;
 
-	retvm_if(!vd, 0, "vd is NULL");
+	retvm_if(!view, 0, "view is NULL");
 	retvm_if(!filter_rule, 0, "filter_rule is NULL");
 
 	input_str = filter_rule->value2;
@@ -635,8 +635,8 @@ static int _checking_is_dup_rule(EmailFilterVD *vd, email_rule_t *filter_rule)
 			compare_str = rule_list[i].value2;
 		}
 		if (!g_strcmp0(input_str, compare_str) &&
-				((vd->mode == FILTER_EDIT_VIEW_MODE_EDIT_EXISTENT && g_strcmp0(vd->original_priority_addr, compare_str))
-				|| vd->mode == FILTER_EDIT_VIEW_MODE_ADD_NEW)) {
+				((view->mode == FILTER_EDIT_VIEW_MODE_EDIT_EXISTENT && g_strcmp0(view->original_priority_addr, compare_str))
+				|| view->mode == FILTER_EDIT_VIEW_MODE_ADD_NEW)) {
 			ret = 1;
 			break;
 		}

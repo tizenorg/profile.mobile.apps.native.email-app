@@ -60,7 +60,7 @@ typedef enum _EmailFilterViewType {
  * @brief Email Filter view data
  *
  */
-typedef struct ug_data
+typedef struct _module_data
 {
 	email_module_t base;
 
@@ -76,7 +76,7 @@ typedef struct ug_data
 	Eina_Bool is_keypad;
 	Eina_Bool is_conformant;
 
-} EmailFilterUGD;
+} EmailFilterModule;
 
 /**
  * @brief elm util function
@@ -88,28 +88,28 @@ EMAIL_API const char *email_get_filter_theme_path();
 
 /**
  * @brief Provide functionality to notify email service about filter rule changes
- * @param[in]	ugd		email filter module data
+ * @param[in]	module		email filter module data
  *
  */
-void email_filter_publish_changed_noti(EmailFilterUGD *ugd);
+void email_filter_publish_changed_noti(EmailFilterModule *module);
 
 /**
  * @brief util function which set callbacks on conformant object about keyboard and clipboard events
- * @param[in]	ugd		email filter module data
+ * @param[in]	module		email filter module data
  *
  */
-void email_filter_add_conformant_callback(EmailFilterUGD *ugd);
+void email_filter_add_conformant_callback(EmailFilterModule *module);
 
 /**
  * @brief util function which unset callbacks on conformant object about keyboard and clipboard events
- * @param[in]	ugd		email filter module data
+ * @param[in]	module		email filter module data
  *
  */
-void email_filter_del_conformant_callback(EmailFilterUGD *ugd);
+void email_filter_del_conformant_callback(EmailFilterModule *module);
 
 /**
  * @brief function which set limit on amount for inputted characters into entry
- * @param[in]	vd					email filter view data
+ * @param[in]	view					email filter view data
  * @param[in]	entry				Entry object
  * @param[in]	max_char_count		limits by character count (disabled if 0)
  * @param[in]	max_byte_count		limits by bytes count (disabled if 0)
@@ -117,6 +117,6 @@ void email_filter_del_conformant_callback(EmailFilterUGD *ugd);
  * @return	pointer to Elm_Entry_Filter_Limit_Size structure which was setted as entry filter limit
  *
  */
-Elm_Entry_Filter_Limit_Size *email_filter_set_input_entry_limit(email_view_t *vd, Evas_Object *entry, int max_char_count, int max_byte_count);
+Elm_Entry_Filter_Limit_Size *email_filter_set_input_entry_limit(email_view_t *view, Evas_Object *entry, int max_char_count, int max_byte_count);
 
 #endif				/* _EDF_email_filter_H__ */

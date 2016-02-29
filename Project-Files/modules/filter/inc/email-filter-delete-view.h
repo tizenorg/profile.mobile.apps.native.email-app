@@ -22,9 +22,9 @@
 
 /**
  * @brief Create filter delete view
- * @param[in]	ugd		Email Filter data
+ * @param[in]	module		Email Filter data
  *
  */
-void create_filter_delete_view(EmailFilterUGD *ugd);
+void create_filter_delete_view(EmailFilterModule *module);
 
 #endif

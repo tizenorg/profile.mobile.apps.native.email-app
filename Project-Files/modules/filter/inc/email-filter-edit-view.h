@@ -29,11 +29,11 @@ typedef enum _filter_edit_view_mode filter_edit_view_mode;
 /**
  * @brief Create filter edit view
  *
- * @param[in]	ugd			Email Filter data
+ * @param[in]	module		Email Filter data
  * @param[in]	mode		Edit view mode
  * @param[in]	filter_id	Id of filter rule which should be modified if mode is edit
  *
  */
-void create_filter_edit_view(EmailFilterUGD *ugd, filter_edit_view_mode mode, int filter_id);
+void create_filter_edit_view(EmailFilterModule *module, filter_edit_view_mode mode, int filter_id);
 
 #endif
