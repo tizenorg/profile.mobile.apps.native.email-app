@@ -23,9 +23,9 @@
 /**
  * @brief Create filter addresses list view
  *
- * @param[in]	ugd			Email Filter data
+ * @param[in]	module		Email Filter data
  *
  */
-void create_filter_list_view(EmailFilterUGD *ugd);
+void create_filter_list_view(EmailFilterModule *module);
 
 #endif
