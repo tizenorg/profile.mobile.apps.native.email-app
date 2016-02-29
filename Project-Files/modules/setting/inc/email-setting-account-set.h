@@ -24,9 +24,9 @@
 /**
  * @brief Set up an account setting
  * @remark Operation occurs with default provider.
- * @param[in]	vd	View data
+ * @param[in]	view	View data
  */
-void setting_set_others_account(email_view_t *vd);
+void setting_set_others_account(email_view_t *view);
 
 /**
  * @brief Set up an account provider server setting
@@ -41,19 +41,19 @@ void setting_set_others_account_server_default_type(email_account_t *account, in
 
 /**
  * @brief Check if email address domain is from default providers list
- * @param[in]	vd			View data
+ * @param[in]	view			View data
  * @param[in]	email_addr	The email address name
  * @return TRUE if email address domain is from default providers list, otherwise FALSE
  */
-int setting_is_in_default_provider_list(email_view_t *vd, const char *email_addr);
+int setting_is_in_default_provider_list(email_view_t *view, const char *email_addr);
 
 /**
  * @brief Set default provider info to account.
  * @remark Operation occurs by server configuration with default provider.
- * @param[in]	vd		View data
+ * @param[in]	view		View data
  * @param[in]	account	Account data
  */
-void setting_set_default_provider_info_to_account(email_view_t *vd, email_account_t *account);
+void setting_set_default_provider_info_to_account(email_view_t *view, email_account_t *account);
 
 #endif				/* __EMAIL_SETTING_ACCOUNT_SET_H__ */
 

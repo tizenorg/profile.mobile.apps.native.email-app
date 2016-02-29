@@ -142,7 +142,7 @@ const char *email_get_setting_theme_path();
 
 /**
  * @brief Provides popup notification
- * @param[in]	vd			View data
+ * @param[in]	view			View data
  * @param[in]	header		Email setting string data for popup header
  * @param[in]	content		Email setting string data for popup content
  * @param[in]	btn_num		Count of buttons
@@ -152,13 +152,13 @@ const char *email_get_setting_theme_path();
  * @param[in]	resp_cb2	Evas_Smart callback function data for button #2
  * @return Evas_Object with suitable popup notification, otherwise NULL
  */
-Evas_Object *setting_get_notify(email_view_t *vd, const email_string_t *header,
+Evas_Object *setting_get_notify(email_view_t *view, const email_string_t *header,
 		const email_string_t *content, int btn_num, const email_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
 		const email_string_t *btn2_lb, Evas_Smart_Cb resp_cb2);
 
 /**
  * @brief Provides process popup notification
- * @param[in]	vd			View data
+ * @param[in]	view			View data
  * @param[in]	header		Email setting string data for popup header
  * @param[in]	btn_num		Count of buttons
  * @param[in]	btn1_lb		Email setting string data for button #1
@@ -169,13 +169,13 @@ Evas_Object *setting_get_notify(email_view_t *vd, const email_string_t *header,
  * @param[in]	op_handle	The data pointer to be passed to cb func.
  * @return Evas_Object with suitable popup notification, otherwise NULL
  */
-Evas_Object *setting_get_pb_process_notify(email_view_t *vd, const email_string_t *header,
+Evas_Object *setting_get_pb_process_notify(email_view_t *view, const email_string_t *header,
 		int btn_num, const email_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
 		const email_string_t *btn2_lb, Evas_Smart_Cb resp_cb2, EMAIL_SETTING_POPUP_BACK_TYPE back_type, int *op_handle);
 
 /**
  * @brief Provides empty popup notification
- * @param[in]	vd			View data
+ * @param[in]	view			View data
  * @param[in]	header		Email setting string data for popup header
  * @param[in]	btn_num		Count of buttons
  * @param[in]	btn1_lb		Email setting string data for button #1
@@ -184,13 +184,13 @@ Evas_Object *setting_get_pb_process_notify(email_view_t *vd, const email_string_
  * @param[in]	resp_cb2	Evas_Smart callback function data for button #2
  * @return Evas_Object with suitable popup notification, otherwise NULL
  */
-Evas_Object *setting_get_empty_content_notify(email_view_t *vd, const email_string_t *header,
+Evas_Object *setting_get_empty_content_notify(email_view_t *view, const email_string_t *header,
 		int btn_num, const email_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
 		const email_string_t *btn2_lb, Evas_Smart_Cb resp_cb2);
 
 /**
  * @brief Provides entry popup notification
- * @param[in]	vd			View data
+ * @param[in]	view			View data
  * @param[in]	header		Email setting string data for popup header
  * @param[in]	btn_num		Count of buttons
  * @param[in]	btn1_lb		Email setting string data for button #1
@@ -200,25 +200,25 @@ Evas_Object *setting_get_empty_content_notify(email_view_t *vd, const email_stri
  * @param[in]	popup_type	Popup entry type
  * @return Evas_Object with suitable popup notification, otherwise NULL
  */
-Evas_Object *setting_get_entry_content_notify(email_view_t *vd, const email_string_t *header,const char *entry_text,
+Evas_Object *setting_get_entry_content_notify(email_view_t *view, const email_string_t *header,const char *entry_text,
 		int btn_num, const email_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
 		const email_string_t *btn2_lb, Evas_Smart_Cb resp_cb2, SETTINGS_POPUP_ENTRY_TYPE popup_type);
 
 /**
  * @brief Provides network failure popup notification
- * @param[in]	vd		View data
+ * @param[in]	view		View data
  * @return EINA_TRUE when network is unavailable, otherwise EINA_FALSE
  */
-Eina_Bool setting_get_network_failure_notify(email_view_t *vd);
+Eina_Bool setting_get_network_failure_notify(email_view_t *view);
 
 /**
  * @brief Provides layout creation from Naviframe as parent
  * @remark Layout loaded with function elm_layout_theme_set(layout, "layout", "application", "noindicator")
  * @remark Size hint weight is setted with EVAS_HINT_EXPAND
- * @param[in]	vd		View data
+ * @param[in]	view		View data
  * @return Evas_Object layout or NULL if none or an error occurred
  */
-Evas_Object *setting_add_inner_layout(email_view_t *vd);
+Evas_Object *setting_add_inner_layout(email_view_t *view);
 
 /**
  * @brief Markup filter function for text inserted in the entry
@@ -275,24 +275,24 @@ void setting_free_provider_list(GSList **list);
 
 /**
  * @brief Allocation of memory for new account.
- * @param[in]	vd	View data
+ * @param[in]	view	View data
  * @return TRUE on success or FALSE if none or an error occurred
  */
-gboolean setting_new_acct_init(email_view_t *vd);
+gboolean setting_new_acct_init(email_view_t *view);
 
 /**
  * @brief Freeing an account data.
- * @param[in]	vd	View data
+ * @param[in]	view	View data
  * @return TRUE on success or FALSE if none or an error occurred
  */
-gboolean setting_new_acct_final(email_view_t *vd);
+gboolean setting_new_acct_final(email_view_t *view);
 
 /**
  * @brief Update a list with account data.
- * @param[in]	vd	View data
+ * @param[in]	view	View data
  * @return TRUE on success or FALSE if none or an error occurred
  */
-gboolean setting_update_acct_list(email_view_t *vd);
+gboolean setting_update_acct_list(email_view_t *view);
 
 /**
  * @brief Get an account data
@@ -378,10 +378,10 @@ char *setting_get_datetime_format_text(const char *skeleton, void *time);
 
 /**
  * @brief Get provider name.
- * @param[in]	ugd		Email settings data
+ * @param[in]	module	Email settings data
  * @return The provider formated string on success, otherwise NULL. It should be freed.
  */
-char *setting_get_provider_name(EmailSettingUGD *ugd);
+char *setting_get_provider_name(EmailSettingModule *module);
 
 /**
  * @brief The function attempts to translate a text string into the user's native language, by looking up the translation in a message catalog.
@@ -393,23 +393,23 @@ char *email_setting_gettext(email_string_t t);
 /**
  * @brief The function registers callbacks for: 1) "virtualkeypad,state,on" 2) "virtualkeypad,state,off"
  * @brief 3) "wm,rotation,changed".
- * @param[in]	ugd		Email settings data
+ * @param[in]	module	Email settings data
  */
-void setting_register_keypad_rot_cb(EmailSettingUGD *ugd);
+void setting_register_keypad_rot_cb(EmailSettingModule *module);
 
 /**
  * @brief The function unregisters callbacks for: 1) "virtualkeypad,state,on" 2) "virtualkeypad,state,off"
  * @brief 3) "wm,rotation,changed".
- * @param[in]	ugd		Email settings data
+ * @param[in]	module	Email settings data
  */
-void setting_deregister_keypad_rot_cb(EmailSettingUGD *ugd);
+void setting_deregister_keypad_rot_cb(EmailSettingModule *module);
 
 /**
  * @brief The function creates account validation popup
- * @param[in]	vd			View data
+ * @param[in]	view			View data
  * @param[in]	handle		The data pointer to be passed to cb func.
  */
-void setting_create_account_validation_popup(email_view_t *vd, int *handle);
+void setting_create_account_validation_popup(email_view_t *view, int *handle);
 
 #endif				/* __EMAIL_SETTING_UTILS_H__ */
 

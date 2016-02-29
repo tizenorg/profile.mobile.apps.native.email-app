@@ -45,7 +45,7 @@ const int EMAIL_ACCOUNT_COLOR[] = {
 };
 
 typedef struct _email_setting_op_cancel_s {
-	EmailSettingUGD *ugd;
+	EmailSettingModule *module;
 	int *op_handle;
 } email_setting_op_cancel_s;
 
@@ -56,7 +56,7 @@ static const char *setting_locale = NULL;
 
 static void _entry_maxlength_reached_cb(void *data, Evas_Object *obj, void *event_info);
 static void _register_popup_back_callback(Evas_Object *popup, Eext_Event_Cb back_cb, void *data);
-static void _register_entry_popup_rot_callback(Evas_Object *popup, EmailSettingUGD *ugd, const email_string_t *header);
+static void _register_entry_popup_rot_callback(Evas_Object *popup, EmailSettingModule *module, const email_string_t *header);
 static void _entry_popup_keypad_down_cb(void *data, Evas_Object *obj, void *event_info);
 static void _entry_popup_keypad_up_cb(void *data, Evas_Object *obj, void *event_info);
 static void _entry_popup_rot_cb(void *data, Evas_Object *obj, void *event_info);
@@ -330,26 +330,26 @@ char *setting_get_datetime_format_text(const char *skeleton, void *time)
 	return g_strdup(formattedString);
 }
 
-Evas_Object *setting_get_notify(email_view_t *vd, const email_string_t *header,
+Evas_Object *setting_get_notify(email_view_t *view, const email_string_t *header,
 		const email_string_t *content, int btn_num, const email_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
 		const email_string_t *btn2_lb, Evas_Smart_Cb resp_cb2)
 {
 	debug_enter();
 
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
+	EmailSettingModule *module = (EmailSettingModule *)view->module;
 	Evas_Object *notify = NULL;
 
-	if (ugd->popup) {
-		_popup_content_remove(ugd->popup);
-		notify = ugd->popup;
+	if (module->popup) {
+		_popup_content_remove(module->popup);
+		notify = module->popup;
 	} else {
-		notify = elm_popup_add(ugd->base.navi);
+		notify = elm_popup_add(module->base.navi);
 		if (!notify) {
 			debug_error("elm_popup_add returns NULL");
 			return NULL;
 		}
 		elm_popup_align_set(notify, ELM_NOTIFY_ALIGN_FILL, 1.0);
-		evas_object_event_callback_add(notify, EVAS_CALLBACK_DEL, _popup_del_cb, ugd);
+		evas_object_event_callback_add(notify, EVAS_CALLBACK_DEL, _popup_del_cb, module);
 	}
 
 	if (header) {
@@ -366,7 +366,7 @@ Evas_Object *setting_get_notify(email_view_t *vd, const email_string_t *header,
 		if (btn1_lb)
 			elm_object_domain_translatable_text_set(btn1, btn1_lb->domain, btn1_lb->id);
 		elm_object_part_content_set(notify, "button1", btn1);
-		evas_object_smart_callback_add(btn1, "clicked", resp_cb1, vd);
+		evas_object_smart_callback_add(btn1, "clicked", resp_cb1, view);
 	}
 	if (btn_num == 2) {
 		Evas_Object *btn1 = elm_button_add(notify);
@@ -374,23 +374,23 @@ Evas_Object *setting_get_notify(email_view_t *vd, const email_string_t *header,
 		if (btn1_lb)
 			elm_object_domain_translatable_text_set(btn1, btn1_lb->domain, btn1_lb->id);
 		elm_object_part_content_set(notify, "button1", btn1);
-		evas_object_smart_callback_add(btn1, "clicked", resp_cb1, vd);
+		evas_object_smart_callback_add(btn1, "clicked", resp_cb1, view);
 
 		Evas_Object *btn2 = elm_button_add(notify);
 		if (btn2_lb)
 			elm_object_domain_translatable_text_set(btn2, btn2_lb->domain, btn2_lb->id);
 		elm_object_style_set(btn2, "popup");
 		elm_object_part_content_set(notify, "button2", btn2);
-		evas_object_smart_callback_add(btn2, "clicked", resp_cb2, vd);
+		evas_object_smart_callback_add(btn2, "clicked", resp_cb2, view);
 	}
 
 	evas_object_show(notify);
-	_register_popup_back_callback(notify, _popup_back_cb, ugd);
+	_register_popup_back_callback(notify, _popup_back_cb, module);
 
 	return notify;
 }
 
-Evas_Object *setting_get_pb_process_notify(email_view_t *vd, const email_string_t *header,
+Evas_Object *setting_get_pb_process_notify(email_view_t *view, const email_string_t *header,
 		int btn_num, const email_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
 		const email_string_t *btn2_lb, Evas_Smart_Cb resp_cb2, EMAIL_SETTING_POPUP_BACK_TYPE back_type, int *op_handle)
 {
@@ -399,18 +399,18 @@ Evas_Object *setting_get_pb_process_notify(email_view_t *vd, const email_string_
 	Evas_Object *notify = NULL;
 	Evas_Object *progressbar = NULL;
 	Evas_Object *layout = NULL;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
+	EmailSettingModule *module = (EmailSettingModule *)view->module;
 
-	if (ugd->popup) {
-		_popup_content_remove(ugd->popup);
-		notify = ugd->popup;
+	if (module->popup) {
+		_popup_content_remove(module->popup);
+		notify = module->popup;
 	} else {
-		notify = elm_popup_add(ugd->base.navi);
+		notify = elm_popup_add(module->base.navi);
 		if (!notify) {
 			debug_error("elm_popup_add returns NULL");
 			return NULL;
 		}
-		evas_object_event_callback_add(notify, EVAS_CALLBACK_DEL, _popup_del_cb, ugd);
+		evas_object_event_callback_add(notify, EVAS_CALLBACK_DEL, _popup_del_cb, module);
 		elm_popup_align_set(notify, ELM_NOTIFY_ALIGN_FILL, 1.0);
 	}
 
@@ -440,7 +440,7 @@ Evas_Object *setting_get_pb_process_notify(email_view_t *vd, const email_string_
 		if (btn1_lb)
 			elm_object_domain_translatable_text_set(btn1, btn1_lb->domain, btn1_lb->id);
 		elm_object_part_content_set(notify, "button1", btn1);
-		evas_object_smart_callback_add(btn1, "clicked", resp_cb1, vd);
+		evas_object_smart_callback_add(btn1, "clicked", resp_cb1, view);
 	}
 	if (btn_num == 2) {
 		Evas_Object *btn1 = elm_button_add(notify);
@@ -448,53 +448,53 @@ Evas_Object *setting_get_pb_process_notify(email_view_t *vd, const email_string_
 		if (btn1_lb)
 			elm_object_domain_translatable_text_set(btn1, btn1_lb->domain, btn1_lb->id);
 		elm_object_part_content_set(notify, "button1", btn1);
-		evas_object_smart_callback_add(btn1, "clicked", resp_cb1, vd);
+		evas_object_smart_callback_add(btn1, "clicked", resp_cb1, view);
 
 		Evas_Object *btn2 = elm_button_add(notify);
 		elm_object_style_set(btn2, "popup");
 		if (btn2_lb)
 			elm_object_domain_translatable_text_set(btn2, btn2_lb->domain, btn2_lb->id);
 		elm_object_part_content_set(notify, "button2", btn2);
-		evas_object_smart_callback_add(btn2, "clicked", resp_cb2, vd);
+		evas_object_smart_callback_add(btn2, "clicked", resp_cb2, view);
 	}
 
 	evas_object_show(notify);
 
 	if (back_type == POPUP_BACK_TYPE_DESTROY) {
-		_register_popup_back_callback(notify, _popup_back_cb, ugd);
+		_register_popup_back_callback(notify, _popup_back_cb, module);
 	} else if (back_type == POPUP_BACK_TYPE_DESTROY_WITH_CANCEL_OP) {
 		email_setting_op_cancel_s *cancel_op = NULL;
 		cancel_op = calloc(1, sizeof(email_setting_op_cancel_s));
 		if (cancel_op) {
-			cancel_op->ugd = ugd;
+			cancel_op->module = module;
 			cancel_op->op_handle = op_handle;
-			ugd->cancel_op_list = g_slist_append(ugd->cancel_op_list, cancel_op);
+			module->cancel_op_list = g_slist_append(module->cancel_op_list, cancel_op);
 			_register_popup_back_callback(notify, _popup_back_with_cancel_cb, cancel_op);
 		}
 	} else if (back_type == POPUP_BACK_TYPE_DESTROY_WITH_QUERY_CANCEL_OP) {
-		_register_popup_back_callback(notify, _popup_back_with_query_cancel_cb, ugd);
+		_register_popup_back_callback(notify, _popup_back_with_query_cancel_cb, module);
 	} else {
-		_register_popup_back_callback(notify, _popup_noop_cb, ugd);
+		_register_popup_back_callback(notify, _popup_noop_cb, module);
 	}
 
 	return notify;
 }
 
-Evas_Object *setting_get_empty_content_notify(email_view_t *vd, const email_string_t *header,
+Evas_Object *setting_get_empty_content_notify(email_view_t *view, const email_string_t *header,
 		int btn_num, const email_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
 		const email_string_t *btn2_lb, Evas_Smart_Cb resp_cb2)
 {
 	debug_enter();
 	Evas_Object *notify = NULL;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
+	EmailSettingModule *module = (EmailSettingModule *)view->module;
 
-	if (ugd->popup) {
-		_popup_content_remove(ugd->popup);
-		notify = ugd->popup;
+	if (module->popup) {
+		_popup_content_remove(module->popup);
+		notify = module->popup;
 	} else {
-		notify = elm_popup_add(ugd->base.navi);
+		notify = elm_popup_add(module->base.navi);
 		elm_popup_align_set(notify, ELM_NOTIFY_ALIGN_FILL, 1.0);
-		evas_object_event_callback_add(notify, EVAS_CALLBACK_DEL, _popup_del_cb, ugd);
+		evas_object_event_callback_add(notify, EVAS_CALLBACK_DEL, _popup_del_cb, module);
 	}
 
 	if (header) {
@@ -507,7 +507,7 @@ Evas_Object *setting_get_empty_content_notify(email_view_t *vd, const email_stri
 		if (btn1_lb)
 			elm_object_domain_translatable_text_set(btn1, btn1_lb->domain, btn1_lb->id);
 		elm_object_part_content_set(notify, "button1", btn1);
-		evas_object_smart_callback_add(btn1, "clicked", resp_cb1, vd);
+		evas_object_smart_callback_add(btn1, "clicked", resp_cb1, view);
 	}
 	if (btn_num == 2) {
 		Evas_Object *btn1 = elm_button_add(notify);
@@ -515,41 +515,41 @@ Evas_Object *setting_get_empty_content_notify(email_view_t *vd, const email_stri
 		if (btn1_lb)
 			elm_object_domain_translatable_text_set(btn1, btn1_lb->domain, btn1_lb->id);
 		elm_object_part_content_set(notify, "button1", btn1);
-		evas_object_smart_callback_add(btn1, "clicked", resp_cb1, vd);
+		evas_object_smart_callback_add(btn1, "clicked", resp_cb1, view);
 
 		Evas_Object *btn2 = elm_button_add(notify);
 		if (btn2_lb)
 			elm_object_domain_translatable_text_set(btn2, btn2_lb->domain, btn2_lb->id);
 		elm_object_style_set(btn2, "popup");
 		elm_object_part_content_set(notify, "button2", btn2);
-		evas_object_smart_callback_add(btn2, "clicked", resp_cb2, vd);
+		evas_object_smart_callback_add(btn2, "clicked", resp_cb2, view);
 	}
 
 	evas_object_show(notify);
 
-	_register_popup_back_callback(notify, _popup_back_cb, ugd);
+	_register_popup_back_callback(notify, _popup_back_cb, module);
 
 	return notify;
 }
 
-Evas_Object *setting_get_entry_content_notify(email_view_t *vd, const email_string_t *header, const char *entry_text,
+Evas_Object *setting_get_entry_content_notify(email_view_t *view, const email_string_t *header, const char *entry_text,
 		int btn_num, const email_string_t *btn1_lb, Evas_Smart_Cb resp_cb1,
 		const email_string_t *btn2_lb, Evas_Smart_Cb resp_cb2, SETTINGS_POPUP_ENTRY_TYPE popup_type)
 {
 	debug_enter();
 	Evas_Object *notify = NULL;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
+	EmailSettingModule *module = (EmailSettingModule *)view->module;
 	Evas_Object *btn2 = NULL;
 	Evas_Object *btn1 = NULL;
 	email_editfield_t entryfield;
 
-	if (ugd->popup) {
-		_popup_content_remove(ugd->popup);
-		notify = ugd->popup;
+	if (module->popup) {
+		_popup_content_remove(module->popup);
+		notify = module->popup;
 	} else {
-		notify = elm_popup_add(ugd->base.navi);
+		notify = elm_popup_add(module->base.navi);
 		elm_popup_align_set(notify, ELM_NOTIFY_ALIGN_FILL, 1.0);
-		evas_object_event_callback_add(notify, EVAS_CALLBACK_DEL, _popup_del_cb, ugd);
+		evas_object_event_callback_add(notify, EVAS_CALLBACK_DEL, _popup_del_cb, module);
 	}
 
 	if (header) {
@@ -562,7 +562,7 @@ Evas_Object *setting_get_entry_content_notify(email_view_t *vd, const email_stri
 		if (btn1_lb)
 			elm_object_domain_translatable_text_set(btn1, btn1_lb->domain, btn1_lb->id);
 		elm_object_part_content_set(notify, "button1", btn1);
-		evas_object_smart_callback_add(btn1, "clicked", resp_cb1, vd);
+		evas_object_smart_callback_add(btn1, "clicked", resp_cb1, view);
 	}
 	if (btn_num == 2) {
 		btn1 = elm_button_add(notify);
@@ -570,14 +570,14 @@ Evas_Object *setting_get_entry_content_notify(email_view_t *vd, const email_stri
 		if (btn1_lb)
 			elm_object_domain_translatable_text_set(btn1, btn1_lb->domain, btn1_lb->id);
 		elm_object_part_content_set(notify, "button1", btn1);
-		evas_object_smart_callback_add(btn1, "clicked", resp_cb1, vd);
+		evas_object_smart_callback_add(btn1, "clicked", resp_cb1, view);
 
 		btn2 = elm_button_add(notify);
 		if (btn2_lb)
 			elm_object_domain_translatable_text_set(btn2, btn2_lb->domain, btn2_lb->id);
 		elm_object_style_set(btn2, "popup");
 		elm_object_part_content_set(notify, "button2", btn2);
-		evas_object_smart_callback_add(btn2, "clicked", resp_cb2, vd);
+		evas_object_smart_callback_add(btn2, "clicked", resp_cb2, view);
 	}
 
 	if (popup_type == POPUP_ENRTY_PASSWORD) {
@@ -600,18 +600,18 @@ Evas_Object *setting_get_entry_content_notify(email_view_t *vd, const email_stri
 
 	evas_object_show(notify);
 
-	_register_popup_back_callback(notify, _popup_back_cb, ugd);
-	_register_entry_popup_rot_callback(notify, ugd, header);
+	_register_popup_back_callback(notify, _popup_back_cb, module);
+	_register_entry_popup_rot_callback(notify, module, header);
 
 	return notify;
 }
 
-Eina_Bool setting_get_network_failure_notify(email_view_t *vd)
+Eina_Bool setting_get_network_failure_notify(email_view_t *view)
 {
 	debug_enter();
-	retvm_if(!vd, EINA_FALSE, "vd is NULL");
+	retvm_if(!view, EINA_FALSE, "view is NULL");
 
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
+	EmailSettingModule *module = (EmailSettingModule *)view->module;
 	Eina_Bool ret = EINA_TRUE;
 	email_network_status_e status;
 
@@ -627,20 +627,20 @@ Eina_Bool setting_get_network_failure_notify(email_view_t *vd)
 			case EMAIL_NETWORK_STATUS_MOBILE_DATA_DISABLED:
 			case EMAIL_NETWORK_STATUS_ROAMING_OFF:
 			case EMAIL_NETWORK_STATUS_MOBILE_DATA_LIMIT_EXCEED:
-				ugd->popup = setting_get_notify(vd, &(EMAIL_SETTING_STRING_NO_NETWORK_CONNECTION),
+				module->popup = setting_get_notify(view, &(EMAIL_SETTING_STRING_NO_NETWORK_CONNECTION),
 						&(EMAIL_SETTING_STRING_MOBILE_DATA_DISABLED),
 						2,
 						&(EMAIL_SETTING_STRING_WIFI), _wifi_launch_cb,
 						&(EMAIL_SETTING_STRING_DATA_NETWORK), _data_setting_launch_cb);
-				evas_object_data_set(ugd->popup, EMAIL_SETTING_POPUP_NET_ERROR_CODE_KEY, (void *)status);
+				evas_object_data_set(module->popup, EMAIL_SETTING_POPUP_NET_ERROR_CODE_KEY, (void *)status);
 				break;
 			case EMAIL_NETWORK_STATUS_NO_SIM_OR_OUT_OF_SERVICE:
-				ugd->popup = setting_get_notify(vd, &(EMAIL_SETTING_STRING_NO_NETWORK_CONNECTION),
+				module->popup = setting_get_notify(view, &(EMAIL_SETTING_STRING_NO_NETWORK_CONNECTION),
 						&(EMAIL_SETTING_STRING_WIFI_REQUIRED),
 						2,
 						&(EMAIL_SETTING_STRING_CANCEL), _network_popup_cancel_cb,
 						&(EMAIL_SETTING_STRING_WIFI), _wifi_launch_cb);
-				evas_object_data_set(ugd->popup, EMAIL_SETTING_POPUP_NET_ERROR_CODE_KEY, (void *)status);
+				evas_object_data_set(module->popup, EMAIL_SETTING_POPUP_NET_ERROR_CODE_KEY, (void *)status);
 				break;
 			default:
 				break;
@@ -650,67 +650,67 @@ Eina_Bool setting_get_network_failure_notify(email_view_t *vd)
 	return ret;
 }
 
-Evas_Object *setting_add_inner_layout(email_view_t *vd)
+Evas_Object *setting_add_inner_layout(email_view_t *view)
 {
 	debug_enter();
 
-	if (vd == NULL) {
-		debug_error("vd == NULL");
+	if (view == NULL) {
+		debug_error("view == NULL");
 		return NULL;
 	}
 
 	Evas_Object *ly = NULL;
-	ly = elm_layout_add(vd->module->navi);
+	ly = elm_layout_add(view->module->navi);
 	elm_layout_theme_set(ly, "layout", "application", "noindicator");
 	evas_object_size_hint_weight_set(ly, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 
 	return ly;
 }
 
-gboolean setting_new_acct_init(email_view_t *vd)
+gboolean setting_new_acct_init(email_view_t *view)
 {
 	debug_enter();
-	retv_if(vd == NULL, FALSE);
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
+	retv_if(view == NULL, FALSE);
+	EmailSettingModule *module = (EmailSettingModule *)view->module;
 
-	ugd->new_account = NULL;
-	ugd->new_account = calloc(1, sizeof(email_account_t));
-	retvm_if(!ugd->new_account, FALSE, "calloc failed");
+	module->new_account = NULL;
+	module->new_account = calloc(1, sizeof(email_account_t));
+	retvm_if(!module->new_account, FALSE, "calloc failed");
 
 	return TRUE;
 }
 
-gboolean setting_new_acct_final(email_view_t *vd)
+gboolean setting_new_acct_final(email_view_t *view)
 {
 	debug_enter();
 	int r = 0;
 
-	retv_if(vd == NULL, FALSE);
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
+	retv_if(view == NULL, FALSE);
+	EmailSettingModule *module = (EmailSettingModule *)view->module;
 
-	if (ugd->new_account != NULL) {
-		r = email_engine_free_account_list(&(ugd->new_account), 1);
+	if (module->new_account != NULL) {
+		r = email_engine_free_account_list(&(module->new_account), 1);
 		retv_if(r == FALSE, FALSE);
 	}
-	ugd->new_account = NULL;
+	module->new_account = NULL;
 	return TRUE;
 }
 
-gboolean setting_update_acct_list(email_view_t *vd)
+gboolean setting_update_acct_list(email_view_t *view)
 {
 	debug_enter();
 	int r = 0;
 
-	retv_if(vd == NULL, FALSE);
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
+	retv_if(view == NULL, FALSE);
+	EmailSettingModule *module = (EmailSettingModule *)view->module;
 
-	if (ugd->account_list != NULL) {
-		r = email_engine_free_account_list(&(ugd->account_list), ugd->account_count);
+	if (module->account_list != NULL) {
+		r = email_engine_free_account_list(&(module->account_list), module->account_count);
 		retv_if(r == FALSE, FALSE);
 	}
 
-	ugd->account_list = NULL;
-	r = email_engine_get_account_list(&(ugd->account_count), &(ugd->account_list));
+	module->account_list = NULL;
+	r = email_engine_get_account_list(&(module->account_count), &(module->account_list));
 	retv_if(r == FALSE, FALSE);
 
 	return TRUE;
@@ -1007,76 +1007,76 @@ static void _register_popup_back_callback(Evas_Object *popup, Eext_Event_Cb back
 	}
 }
 
-static void _register_entry_popup_rot_callback(Evas_Object *popup, EmailSettingUGD *ugd, const email_string_t *header)
+static void _register_entry_popup_rot_callback(Evas_Object *popup, EmailSettingModule *module, const email_string_t *header)
 {
 	debug_enter();
 
 	evas_object_data_del(popup, "_header");
 	evas_object_data_set(popup, "_header", header);
 
-	evas_object_event_callback_add(popup, EVAS_CALLBACK_DEL, _entry_popup_del_cb, ugd);
-	evas_object_smart_callback_add(ugd->base.conform, "virtualkeypad,state,on", _entry_popup_keypad_up_cb, ugd);
-	evas_object_smart_callback_add(ugd->base.conform, "virtualkeypad,state,off", _entry_popup_keypad_down_cb, ugd);
-	evas_object_smart_callback_add(ugd->base.win, "wm,rotation,changed", _entry_popup_rot_cb, ugd);
+	evas_object_event_callback_add(popup, EVAS_CALLBACK_DEL, _entry_popup_del_cb, module);
+	evas_object_smart_callback_add(module->base.conform, "virtualkeypad,state,on", _entry_popup_keypad_up_cb, module);
+	evas_object_smart_callback_add(module->base.conform, "virtualkeypad,state,off", _entry_popup_keypad_down_cb, module);
+	evas_object_smart_callback_add(module->base.win, "wm,rotation,changed", _entry_popup_rot_cb, module);
 }
 
 static void _entry_popup_keypad_down_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailSettingUGD *ugd = data;
+	EmailSettingModule *module = data;
 	int rot = -1;
 
-	rot = elm_win_rotation_get(ugd->base.win);
+	rot = elm_win_rotation_get(module->base.win);
 	if (rot == 90 || rot == 270) {
-		const email_string_t *header = (const email_string_t *)evas_object_data_get(ugd->popup, "_header");
+		const email_string_t *header = (const email_string_t *)evas_object_data_get(module->popup, "_header");
 		retm_if(!header, "header is NULL!");
-		elm_object_domain_translatable_part_text_set(ugd->popup, "title,text", header->domain, header->id);
+		elm_object_domain_translatable_part_text_set(module->popup, "title,text", header->domain, header->id);
 	}
-	ugd->is_keypad = EINA_FALSE;
+	module->is_keypad = EINA_FALSE;
 }
 
 static void _entry_popup_keypad_up_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailSettingUGD *ugd = data;
+	EmailSettingModule *module = data;
 	int rot = -1;
 
-	rot = elm_win_rotation_get(ugd->base.win);
+	rot = elm_win_rotation_get(module->base.win);
 	if (rot == 90 || rot == 270)
-		elm_object_part_text_set(ugd->popup, "title,text", NULL);
-	ugd->is_keypad = EINA_TRUE;
+		elm_object_part_text_set(module->popup, "title,text", NULL);
+	module->is_keypad = EINA_TRUE;
 }
 
 static void _entry_popup_rot_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailSettingUGD *ugd = data;
+	EmailSettingModule *module = data;
 	int rot = -1;
-	const email_string_t *header = (const email_string_t *)evas_object_data_get(ugd->popup, "_header");
+	const email_string_t *header = (const email_string_t *)evas_object_data_get(module->popup, "_header");
 	retm_if(!header, "header is NULL!");
 
 	rot = elm_win_rotation_get(obj);
 	if (rot == 90 || rot == 270) {
-		if (ugd->is_keypad)
-			elm_object_domain_translatable_part_text_set(ugd->popup, "title,text", header->domain, header->id);
+		if (module->is_keypad)
+			elm_object_domain_translatable_part_text_set(module->popup, "title,text", header->domain, header->id);
 		else
-			elm_object_part_text_set(ugd->popup, "title,text", NULL);
+			elm_object_part_text_set(module->popup, "title,text", NULL);
 	} else {
-		if (ugd->is_keypad)
-			elm_object_domain_translatable_part_text_set(ugd->popup, "title,text", header->domain, header->id);
+		if (module->is_keypad)
+			elm_object_domain_translatable_part_text_set(module->popup, "title,text", header->domain, header->id);
 	}
 }
 
 static void _entry_popup_del_cb(void *data, Evas *evas, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailSettingUGD *ugd = data;
+	EmailSettingModule *module = data;
 
-	evas_object_smart_callback_del_full(ugd->base.conform, "virtualkeypad,state,on", _entry_popup_keypad_up_cb, ugd);
-	evas_object_smart_callback_del_full(ugd->base.conform, "virtualkeypad,state,off", _entry_popup_keypad_down_cb, ugd);
-	evas_object_smart_callback_del_full(ugd->base.win, "wm,rotation,changed", _entry_popup_rot_cb, ugd);
+	evas_object_smart_callback_del_full(module->base.conform, "virtualkeypad,state,on", _entry_popup_keypad_up_cb, module);
+	evas_object_smart_callback_del_full(module->base.conform, "virtualkeypad,state,off", _entry_popup_keypad_down_cb, module);
+	evas_object_smart_callback_del_full(module->base.win, "wm,rotation,changed", _entry_popup_rot_cb, module);
 
-	ugd->popup = NULL;
+	module->popup = NULL;
 }
 static void _entry_maxlength_reached_cb(void *data, Evas_Object *obj, void *event_info)
 {
@@ -1090,21 +1090,21 @@ static void _entry_maxlength_reached_cb(void *data, Evas_Object *obj, void *even
 static void _popup_del_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailSettingUGD *ugd = data;
+	EmailSettingModule *module = data;
 
-	retm_if(!ugd, "ugd is NULL");
+	retm_if(!module, "module is NULL");
 
-	ugd->popup = NULL;
+	module->popup = NULL;
 }
 
 static void _popup_back_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailSettingUGD *ugd = data;
+	EmailSettingModule *module = data;
 
-	retm_if(!ugd, "ugd is NULL");
+	retm_if(!module, "module is NULL");
 
-	DELETE_EVAS_OBJECT(ugd->popup);
+	DELETE_EVAS_OBJECT(module->popup);
 }
 
 static void _popup_back_with_cancel_cb(void *data, Evas_Object *obj, void *event_info)
@@ -1113,40 +1113,40 @@ static void _popup_back_with_cancel_cb(void *data, Evas_Object *obj, void *event
 	email_setting_op_cancel_s *cancel_op = data;
 	retm_if(!cancel_op, "cancel data is NULL");
 
-	EmailSettingUGD *ugd = cancel_op->ugd;
+	EmailSettingModule *module = cancel_op->module;
 	int *op_handle = cancel_op->op_handle;
 
-	retm_if(!ugd, "ugd is NULL");
+	retm_if(!module, "module is NULL");
 
-	DELETE_EVAS_OBJECT(ugd->popup);
+	DELETE_EVAS_OBJECT(module->popup);
 
 	if (op_handle) {
 		debug_log("handle is initialized by cancel");
 		*op_handle = EMAIL_OP_HANDLE_INITIALIZER;
 	}
 
-	ugd->cancel_op_list = g_slist_remove(ugd->cancel_op_list, cancel_op);
+	module->cancel_op_list = g_slist_remove(module->cancel_op_list, cancel_op);
 	free(cancel_op);
 
-	setting_cancel_job_by_account_id(ugd->account_id);
+	setting_cancel_job_by_account_id(module->account_id);
 }
 
 static void _popup_back_with_query_cancel_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailSettingUGD *ugd = data;
+	EmailSettingModule *module = data;
 
-	retm_if(!ugd, "ugd is NULL");
+	retm_if(!module, "module is NULL");
 
-	DELETE_EVAS_OBJECT(ugd->popup);
+	DELETE_EVAS_OBJECT(module->popup);
 }
 
 static void _popup_noop_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailSettingUGD *ugd = data;
+	EmailSettingModule *module = data;
 
-	retm_if(!ugd, "ugd is NULL");
+	retm_if(!module, "module is NULL");
 
 	debug_log("this popup cannot be destroyed by back key");
 }
@@ -1201,7 +1201,7 @@ char *email_setting_gettext(email_string_t t)
 		return dgettext(PACKAGE, t.id);
 }
 
-char *setting_get_provider_name(EmailSettingUGD *ugd)
+char *setting_get_provider_name(EmailSettingModule *module)
 {
 	debug_enter();
 
@@ -1247,8 +1247,8 @@ static void _popup_content_remove(Evas_Object *popup)
 static void _wifi_launch_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	email_view_t *vd = data;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
+	email_view_t *view = data;
+	EmailSettingModule *module = (EmailSettingModule *)view->module;
 	app_control_h app_control;
 	int ret;
 
@@ -1261,15 +1261,15 @@ static void _wifi_launch_cb(void *data, Evas_Object *obj, void *event_info)
 
 	app_control_destroy(app_control);
 
-	DELETE_EVAS_OBJECT(ugd->popup);
+	DELETE_EVAS_OBJECT(module->popup);
 }
 
 static void _data_setting_launch_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	email_view_t *vd = data;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
-	email_network_status_e status = (int)(ptrdiff_t)evas_object_data_get(ugd->popup, EMAIL_SETTING_POPUP_NET_ERROR_CODE_KEY);
+	email_view_t *view = data;
+	EmailSettingModule *module = (EmailSettingModule *)view->module;
+	email_network_status_e status = (int)(ptrdiff_t)evas_object_data_get(module->popup, EMAIL_SETTING_POPUP_NET_ERROR_CODE_KEY);
 	app_control_h app_control;
 	int ret;
 
@@ -1291,16 +1291,16 @@ static void _data_setting_launch_cb(void *data, Evas_Object *obj, void *event_in
 
 	app_control_destroy(app_control);
 
-	DELETE_EVAS_OBJECT(ugd->popup);
+	DELETE_EVAS_OBJECT(module->popup);
 }
 
 static void _network_popup_cancel_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	email_view_t *vd = data;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
+	email_view_t *view = data;
+	EmailSettingModule *module = (EmailSettingModule *)view->module;
 
-	DELETE_EVAS_OBJECT(ugd->popup);
+	DELETE_EVAS_OBJECT(module->popup);
 }
 
 Elm_Genlist_Item_Class *setting_get_genlist_class_item(const char *style,
@@ -1360,95 +1360,95 @@ char *setting_get_entry_str(Evas_Object *entry)
 	return entry_str;
 }
 
-void setting_register_keypad_rot_cb(EmailSettingUGD *ugd)
+void setting_register_keypad_rot_cb(EmailSettingModule *module)
 {
 	debug_enter();
-	evas_object_smart_callback_add(ugd->base.conform, "virtualkeypad,state,on", _keypad_up_cb, ugd);
-	evas_object_smart_callback_add(ugd->base.conform, "virtualkeypad,state,off", _keypad_down_cb, ugd);
-	evas_object_smart_callback_add(ugd->base.win, "wm,rotation,changed", _keypad_rot_cb, ugd);
+	evas_object_smart_callback_add(module->base.conform, "virtualkeypad,state,on", _keypad_up_cb, module);
+	evas_object_smart_callback_add(module->base.conform, "virtualkeypad,state,off", _keypad_down_cb, module);
+	evas_object_smart_callback_add(module->base.win, "wm,rotation,changed", _keypad_rot_cb, module);
 }
 
-void setting_deregister_keypad_rot_cb(EmailSettingUGD *ugd)
+void setting_deregister_keypad_rot_cb(EmailSettingModule *module)
 {
 	debug_enter();
-	evas_object_smart_callback_del_full(ugd->base.conform, "virtualkeypad,state,on", _keypad_up_cb, ugd);
-	evas_object_smart_callback_del_full(ugd->base.conform, "virtualkeypad,state,off", _keypad_down_cb, ugd);
-	evas_object_smart_callback_del_full(ugd->base.win, "wm,rotation,changed", _keypad_rot_cb, ugd);
+	evas_object_smart_callback_del_full(module->base.conform, "virtualkeypad,state,on", _keypad_up_cb, module);
+	evas_object_smart_callback_del_full(module->base.conform, "virtualkeypad,state,off", _keypad_down_cb, module);
+	evas_object_smart_callback_del_full(module->base.win, "wm,rotation,changed", _keypad_rot_cb, module);
 }
 
 static void _keypad_down_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailSettingUGD *ugd = data;
+	EmailSettingModule *module = data;
 	int rot = -1;
 
-	retm_if(ugd->popup, "popup is alive!");
+	retm_if(module->popup, "popup is alive!");
 
-	rot = elm_win_rotation_get(ugd->base.win);
+	rot = elm_win_rotation_get(module->base.win);
 	if (rot == 90 || rot == 270) {
-		Elm_Object_Item *navi_it = elm_naviframe_top_item_get(ugd->base.navi);
+		Elm_Object_Item *navi_it = elm_naviframe_top_item_get(module->base.navi);
 		elm_naviframe_item_title_enabled_set(navi_it, EINA_TRUE, EINA_TRUE);
 	}
-	ugd->is_keypad = EINA_FALSE;
+	module->is_keypad = EINA_FALSE;
 }
 
 static void _keypad_up_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailSettingUGD *ugd = data;
+	EmailSettingModule *module = data;
 	int rot = -1;
 
-	retm_if(ugd->popup, "popup is alive!");
+	retm_if(module->popup, "popup is alive!");
 
-	rot = elm_win_rotation_get(ugd->base.win);
+	rot = elm_win_rotation_get(module->base.win);
 	if (rot == 90 || rot == 270) {
-		Elm_Object_Item *navi_it = elm_naviframe_top_item_get(ugd->base.navi);
+		Elm_Object_Item *navi_it = elm_naviframe_top_item_get(module->base.navi);
 		elm_naviframe_item_title_enabled_set(navi_it, EINA_FALSE, EINA_TRUE);
 	}
-	ugd->is_keypad = EINA_TRUE;
+	module->is_keypad = EINA_TRUE;
 }
 
 static void _keypad_rot_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailSettingUGD *ugd = data;
+	EmailSettingModule *module = data;
 	int rot = -1;
 
-	retm_if(ugd->popup, "popup is alive!");
+	retm_if(module->popup, "popup is alive!");
 
 	rot = elm_win_rotation_get(obj);
 	if (rot == 90 || rot == 270) {
-		if (ugd->is_keypad) {
-			Elm_Object_Item *navi_it = elm_naviframe_top_item_get(ugd->base.navi);
+		if (module->is_keypad) {
+			Elm_Object_Item *navi_it = elm_naviframe_top_item_get(module->base.navi);
 			elm_naviframe_item_title_enabled_set(navi_it, EINA_FALSE, EINA_TRUE);
 		} else {
-			Elm_Object_Item *navi_it = elm_naviframe_top_item_get(ugd->base.navi);
+			Elm_Object_Item *navi_it = elm_naviframe_top_item_get(module->base.navi);
 			elm_naviframe_item_title_enabled_set(navi_it, EINA_TRUE, EINA_TRUE);
 		}
 	} else {
-		if (ugd->is_keypad) {
-			Elm_Object_Item *navi_it = elm_naviframe_top_item_get(ugd->base.navi);
+		if (module->is_keypad) {
+			Elm_Object_Item *navi_it = elm_naviframe_top_item_get(module->base.navi);
 			elm_naviframe_item_title_enabled_set(navi_it, EINA_TRUE, EINA_TRUE);
 		}
 	}
 }
 
-void setting_create_account_validation_popup(email_view_t *vd, int *handle)
+void setting_create_account_validation_popup(email_view_t *view, int *handle)
 {
 	debug_enter();
 
-	retm_if(!vd, "vd is null");
+	retm_if(!view, "view is null");
 
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
+	EmailSettingModule *module = (EmailSettingModule *)view->module;
 
 #ifdef _DEBUG
-	email_account_t *account = ugd->new_account;
+	email_account_t *account = module->new_account;
 	debug_secure("account name:%s", account->account_name);
 	debug_secure("email address:%s", account->user_email_address);
 #endif
 
 	debug_log("Start Account Validation");
-	ugd->popup = setting_get_pb_process_notify(vd,
+	module->popup = setting_get_pb_process_notify(view,
 			&(EMAIL_SETTING_STRING_VALIDATING_ACCOUNT_ING), 0, NULL, NULL, NULL, NULL,
 			POPUP_BACK_TYPE_DESTROY_WITH_CANCEL_OP, handle);
 }

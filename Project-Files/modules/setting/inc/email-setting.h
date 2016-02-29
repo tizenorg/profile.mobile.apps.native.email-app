@@ -59,7 +59,7 @@ enum _ViewType {
 };
 typedef enum _ViewType ViewType;
 
-struct ug_data
+struct _module_data
 {
 	email_module_t base;
 
@@ -94,7 +94,7 @@ struct ug_data
 	/* for conformant */
 	Eina_Bool is_keypad;
 };
-typedef struct ug_data EmailSettingUGD;
+typedef struct _module_data EmailSettingModule;
 
 #endif				/* __EMAIL_SETTING_H__ */
 

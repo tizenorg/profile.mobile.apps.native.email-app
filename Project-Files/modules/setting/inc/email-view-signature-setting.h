@@ -19,9 +19,9 @@
 
 /**
  * @brief Creates account signature settings view
- * @param[in]	ugd		Email settings data
+ * @param[in]	module	Email settings data
  */
-void create_signature_setting_view(EmailSettingUGD *ugd);
+void create_signature_setting_view(EmailSettingModule *module);
 
 
 /* EOF */

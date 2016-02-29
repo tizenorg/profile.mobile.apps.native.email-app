@@ -61,34 +61,34 @@ typedef struct _email_setting_ipc_data {
 
 /**
  * @brief Initialize settings module notification system
- * @param[in]	ugd		Email settings data
+ * @param[in]	module	Email settings data
  * @@return 0 on success, otherwise a negative error value
  */
-int setting_noti_init(EmailSettingUGD *ugd);
+int setting_noti_init(EmailSettingModule *module);
 
 /**
  * @brief Destroys the dbus connection and releases all its resources.
- * @param[in]	ugd		Email settings data
+ * @param[in]	module	Email settings data
  * @return 0 on success, otherwise a negative error value
  */
-int setting_noti_deinit(EmailSettingUGD *ugd);
+int setting_noti_deinit(EmailSettingModule *module);
 
 /**
  * @brief Subscribe to dbus signals
- * @param[in]	ugd			Email settings data
+ * @param[in]	module		Email settings data
  * @param[in]	op_type		Email settings operation type enum
  * @param[in]	cb			IPC callback function
  * @param[in]	user_data	user data pointer
  * @return 0 on success, otherwise a negative error value
  */
-int setting_noti_subscribe(EmailSettingUGD *ugd, email_setting_operation_type_e op_type, email_setting_ipc_cb cb, void *user_data);
+int setting_noti_subscribe(EmailSettingModule *module, email_setting_operation_type_e op_type, email_setting_ipc_cb cb, void *user_data);
 /**
  * @brief Unsubscribe from dbus signals
- * @param[in]	ugd			Email settings data
+ * @param[in]	module		Email settings data
  * @param[in]	op_type		Email settings operation type enum
  * @param[in]	cb			IPC callback function
  * @return 0 on success, otherwise a negative error value
  */
-int setting_noti_unsubscribe(EmailSettingUGD *ugd, email_setting_operation_type_e op_type, email_setting_ipc_cb cb);
+int setting_noti_unsubscribe(EmailSettingModule *module, email_setting_operation_type_e op_type, email_setting_ipc_cb cb);
 
 #endif				/* __EMAIL_SETTING_NOTI_MGR_H__ */

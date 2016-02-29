@@ -30,20 +30,20 @@
 
 #define EMAIL_SIZE_NO_LIMIT INT_MAX
 
-typedef struct view_data EmailSettingVD;
+typedef struct view_data EmailSettingView;
 
 static email_account_t *account_data = NULL;
-static EmailSettingVD *g_vd = NULL;
+static EmailSettingView *g_vd = NULL;
 
 static int _create(email_view_t *self);
 static void _update(email_view_t *self, int flags);
 static void _destroy(email_view_t *self);
 static void _on_back_cb(email_view_t *self);
 
-static void _update_view(EmailSettingVD *vd);
+static void _update_view(EmailSettingView *view);
 
-static void _push_naviframe(EmailSettingVD *vd);
-static void _create_list(EmailSettingVD *vd);
+static void _push_naviframe(EmailSettingView *view);
+static void _create_list(EmailSettingView *view);
 static Eina_Bool _update_account_info(void *data);
 static Eina_Bool _validate_account(void *data);
 static void _account_update_validate_cb(int account_id, email_setting_response_data *response, void *user_data);
@@ -67,7 +67,7 @@ static char *_gl_size_text_get_cb(void *data, Evas_Object *obj, const char *part
 static char *_gl_ex_size_text_get_cb(void *data, Evas_Object *obj, const char *part);
 static Evas_Object *_gl_ex_size_content_get_cb(void *data, Evas_Object *obj, const char *part);
 
-static void _create_toolbar_more_btn(EmailSettingVD *vd);
+static void _create_toolbar_more_btn(EmailSettingView *view);
 static void _gl_ex_size_sel_cb(void *data, Evas_Object *obj, void *event_info);
 static void _gl_ex_size_radio_cb(void *data, Evas_Object *obj, void *event_info);
 
@@ -97,9 +97,9 @@ static void _gl_ex_roaming_sel_cb(void *data, Evas_Object *obj, void *event_info
 static void _gl_ex_roaming_radio_cb(void *data, Evas_Object *obj, void *event_info);
 static void _gl_ex_sync_sel_cb(void *data, Evas_Object *obj, void *event_info);
 static void _gl_ex_sync_radio_cb(void *data, Evas_Object *obj, void *event_info);
-static void _perform_sync(EmailSettingVD *vd);
-static void _perform_cancel_sync(EmailSettingVD *vd);
-static void _update_toolbar_sync_button_state(EmailSettingVD *vd);
+static void _perform_sync(EmailSettingView *view);
+static void _perform_cancel_sync(EmailSettingView *view);
+static void _update_toolbar_sync_button_state(EmailSettingView *view);
 static void _sync_start_cb(int account_id, email_setting_response_data *response, void *user_data);
 static void _sync_end_cb(int account_id, email_setting_response_data *response, void *user_data);
 static Eina_Bool _after_save_cb(void *data);
@@ -218,25 +218,25 @@ typedef struct _ListItemData {
 	Evas_Object *check;
 	Eina_Bool is_checked;
 	Elm_Entry_Filter_Limit_Size *entry_limit;
-	EmailSettingVD *vd;
+	EmailSettingView *view;
 } ListItemData;
 
 static Evas_Object *_get_option_genlist(Evas_Object *parent, ListItemData *li);
 
-void create_account_details_view(EmailSettingUGD *ugd)
+void create_account_details_view(EmailSettingModule *module)
 {
 	debug_enter();
-	retm_if(!ugd, "ug data is null");
+	retm_if(!module, "module is null");
 
-	EmailSettingVD *vd = calloc(1, sizeof(EmailSettingVD));
-	retm_if(!vd, "view data is null");
+	EmailSettingView *view = calloc(1, sizeof(EmailSettingView));
+	retm_if(!view, "view data is null");
 
-	vd->base.create = _create;
-	vd->base.update = _update;
-	vd->base.destroy = _destroy;
-	vd->base.on_back_key = _on_back_cb;
+	view->base.create = _create;
+	view->base.update = _update;
+	view->base.destroy = _destroy;
+	view->base.on_back_key = _on_back_cb;
 
-	debug_log("view create result: %d", email_module_create_view(&ugd->base, &vd->base));
+	debug_log("view create result: %d", email_module_create_view(&module->base, &view->base));
 }
 
 static int _create(email_view_t *self)
@@ -244,32 +244,32 @@ static int _create(email_view_t *self)
 	debug_enter();
 	retvm_if(!self, -1, "self is null");
 
-	EmailSettingVD *vd = (EmailSettingVD *)self;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = (EmailSettingView *)self;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
-	if (!setting_get_acct_full_data(ugd->account_id, &account_data)) {
+	if (!setting_get_acct_full_data(module->account_id, &account_data)) {
 		debug_error("setting_get_acct_full_data failed");
 		return FALSE;
 	}
 
 	EMAIL_SETTING_PRINT_ACCOUNT_INFO(account_data);
-	vd->base.content = setting_add_inner_layout(&vd->base);
-	_push_naviframe(vd);
+	view->base.content = setting_add_inner_layout(&view->base);
+	_push_naviframe(view);
 
-	g_vd = vd;
+	g_vd = view;
 
-	_create_toolbar_more_btn(vd);
+	_create_toolbar_more_btn(view);
 
 	if (account_data->incoming_server_type == EMAIL_SERVER_TYPE_IMAP4)
-			vd->is_imap_push_supported = _is_imap_push_supported(account_data);
+			view->is_imap_push_supported = _is_imap_push_supported(account_data);
 
-	_create_list(vd);
+	_create_list(view);
 
-	setting_noti_subscribe(ugd, EMAIL_SETTING_SYNC_START_MAIL_NOTI, _sync_start_cb, vd);
-	setting_noti_subscribe(ugd, EMAIL_SETTING_SYNC_MAIL_NOTI, _sync_end_cb, vd);
-	setting_noti_subscribe(ugd, EMAIL_SETTING_ACCOUNT_VALIDATE_AND_UPDATE_NOTI, _account_update_validate_cb, vd);
+	setting_noti_subscribe(module, EMAIL_SETTING_SYNC_START_MAIL_NOTI, _sync_start_cb, view);
+	setting_noti_subscribe(module, EMAIL_SETTING_SYNC_MAIL_NOTI, _sync_end_cb, view);
+	setting_noti_subscribe(module, EMAIL_SETTING_ACCOUNT_VALIDATE_AND_UPDATE_NOTI, _account_update_validate_cb, view);
 
-	_update_view(vd);
+	_update_view(view);
 
 	return 0;
 }
@@ -279,24 +279,24 @@ static void _update(email_view_t *self, int flags)
 	debug_enter();
 	retm_if(!self, "self is null");
 
-	EmailSettingVD *vd = (EmailSettingVD *)self;
+	EmailSettingView *view = (EmailSettingView *)self;
 
 	if (flags & EVUF_LANGUAGE_CHANGED) {
 		/* refreshing genlist. */
-		elm_genlist_realized_items_update(vd->genlist);
+		elm_genlist_realized_items_update(view->genlist);
 	}
 
 	if (flags & (EVUF_WAS_PAUSED | EVUF_POPPING)) {
-		_update_view(vd);
+		_update_view(view);
 	}
 }
 
-static void _update_view(EmailSettingVD *vd)
+static void _update_view(EmailSettingView *view)
 {
 	debug_enter();
-	retm_if(!vd, "view data is null");
+	retm_if(!view, "view data is null");
 
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 	account_user_data_t *user_data = account_data->user_data;
 
 	/* read account info again. */
@@ -308,7 +308,7 @@ static void _update_view(EmailSettingVD *vd)
 		account_data = NULL;
 	}
 
-	if (!setting_get_acct_full_data(ugd->account_id, &account_data)) {
+	if (!setting_get_acct_full_data(module->account_id, &account_data)) {
 		debug_error("setting_get_acct_full_data failed");
 		return;
 	}
@@ -317,14 +317,14 @@ static void _update_view(EmailSettingVD *vd)
 
 	if (!account_data->sync_disabled &&
 			(account_data->sync_status & SYNC_STATUS_SYNCING)) {
-		vd->syncing = EINA_TRUE;
+		view->syncing = EINA_TRUE;
 	} else {
-		vd->syncing = EINA_FALSE;
+		view->syncing = EINA_FALSE;
 	}
-	vd->sync_status_failed = EINA_FALSE;
-	vd->sync_status_canceled = EINA_FALSE;
-	_update_toolbar_sync_button_state(vd);
-	GSList *l = vd->list_items;
+	view->sync_status_failed = EINA_FALSE;
+	view->sync_status_canceled = EINA_FALSE;
+	_update_toolbar_sync_button_state(view);
+	GSList *l = view->list_items;
 	while (l) {
 		ListItemData *_li = l->data;
 		if (_li->check && _li->is_checked == genlist_item_updated[_li->index-1]) {
@@ -340,18 +340,18 @@ static void _destroy(email_view_t *self)
 {
 	debug_enter();
 
-	EmailSettingVD *vd = (EmailSettingVD *)self;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = (EmailSettingView *)self;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
-	retm_if(!vd, "view data is null");
+	retm_if(!view, "view data is null");
 
-	setting_noti_unsubscribe(ugd, EMAIL_SETTING_SYNC_START_MAIL_NOTI, _sync_start_cb);
-	setting_noti_unsubscribe(ugd, EMAIL_SETTING_SYNC_MAIL_NOTI, _sync_end_cb);
-	setting_noti_unsubscribe(ugd, EMAIL_SETTING_ACCOUNT_VALIDATE_AND_UPDATE_NOTI, _account_update_validate_cb);
-	DELETE_TIMER_OBJECT(vd->del_timer);
-	DELETE_IDLER_OBJECT(vd->account_info_idler);
-	DELETE_TIMER_OBJECT(vd->edit_vc_timer);
-	DELETE_TIMER_OBJECT(vd->validate_timer);
+	setting_noti_unsubscribe(module, EMAIL_SETTING_SYNC_START_MAIL_NOTI, _sync_start_cb);
+	setting_noti_unsubscribe(module, EMAIL_SETTING_SYNC_MAIL_NOTI, _sync_end_cb);
+	setting_noti_unsubscribe(module, EMAIL_SETTING_ACCOUNT_VALIDATE_AND_UPDATE_NOTI, _account_update_validate_cb);
+	DELETE_TIMER_OBJECT(view->del_timer);
+	DELETE_IDLER_OBJECT(view->account_info_idler);
+	DELETE_TIMER_OBJECT(view->edit_vc_timer);
+	DELETE_TIMER_OBJECT(view->validate_timer);
 	system_settings_unset_changed_cb(SYSTEM_SETTINGS_KEY_FONT_SIZE);
 
 	if (account_data) {
@@ -359,7 +359,7 @@ static void _destroy(email_view_t *self)
 		account_data = NULL;
 	}
 
-	GSList *l = vd->list_items;
+	GSList *l = view->list_items;
 	while (l) {
 		ListItemData *li = l->data;
 		FREE(li->entry_str);
@@ -367,141 +367,141 @@ static void _destroy(email_view_t *self)
 		FREE(li);
 		l = g_slist_next(l);
 	}
-	g_slist_free(vd->list_items);
+	g_slist_free(view->list_items);
 
-	l = vd->itc_list;
+	l = view->itc_list;
 	while (l) {
 		Elm_Genlist_Item_Class *itc = l->data;
 		EMAIL_GENLIST_ITC_FREE(itc);
 		l = g_slist_next(l);
 	}
-	g_slist_free(vd->itc_list);
+	g_slist_free(view->itc_list);
 
-	free(vd);
+	free(view);
 }
 
-static void _push_naviframe(EmailSettingVD *vd)
+static void _push_naviframe(EmailSettingView *view)
 {
 	debug_enter();
 
-	email_module_view_push(&vd->base, EMAIL_SETTING_STRING_EMAIL.id, 0);
-	elm_object_item_domain_text_translatable_set(vd->base.navi_item, EMAIL_SETTING_STRING_EMAIL.domain, EINA_TRUE);
+	email_module_view_push(&view->base, EMAIL_SETTING_STRING_EMAIL.id, 0);
+	elm_object_item_domain_text_translatable_set(view->base.navi_item, EMAIL_SETTING_STRING_EMAIL.domain, EINA_TRUE);
 
 	if (account_data->sync_status & SYNC_STATUS_SYNCING) {
-		vd->syncing = EINA_TRUE;
+		view->syncing = EINA_TRUE;
 	}
-	evas_object_show(vd->base.module->navi);
+	evas_object_show(view->base.module->navi);
 }
 
-static void _create_list(EmailSettingVD *vd)
+static void _create_list(EmailSettingView *view)
 {
 	debug_enter();
 
-	retm_if(!vd, "view data is null");
+	retm_if(!view, "view data is null");
 
 	Elm_Object_Item *git = NULL;
 	ListItemData *li = NULL;
 	Elm_Object_Item *item = NULL;
 	account_user_data_t *user_data = account_data->user_data;
 
-	vd->genlist = elm_genlist_add(vd->base.content);
-	elm_scroller_policy_set(vd->genlist, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_AUTO);
-	elm_genlist_mode_set(vd->genlist, ELM_LIST_COMPRESS);
-	elm_genlist_homogeneous_set(vd->genlist, EINA_TRUE);
+	view->genlist = elm_genlist_add(view->base.content);
+	elm_scroller_policy_set(view->genlist, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_AUTO);
+	elm_genlist_mode_set(view->genlist, ELM_LIST_COMPRESS);
+	elm_genlist_homogeneous_set(view->genlist, EINA_TRUE);
 
-	vd->roaming_radio_grp = elm_radio_add(vd->base.content);
-	elm_radio_value_set(vd->roaming_radio_grp, -1);
-	evas_object_hide(vd->roaming_radio_grp);
+	view->roaming_radio_grp = elm_radio_add(view->base.content);
+	elm_radio_value_set(view->roaming_radio_grp, -1);
+	evas_object_hide(view->roaming_radio_grp);
 
-	vd->sync_radio_grp = elm_radio_add(vd->base.content);
-	elm_radio_value_set(vd->sync_radio_grp, -1);
-	evas_object_hide(vd->sync_radio_grp);
+	view->sync_radio_grp = elm_radio_add(view->base.content);
+	elm_radio_value_set(view->sync_radio_grp, -1);
+	evas_object_hide(view->sync_radio_grp);
 
-	vd->size_radio_grp = elm_radio_add(vd->base.content);
-	elm_radio_value_set(vd->size_radio_grp, -1);
-	evas_object_hide(vd->size_radio_grp);
+	view->size_radio_grp = elm_radio_add(view->base.content);
+	elm_radio_value_set(view->size_radio_grp, -1);
+	evas_object_hide(view->size_radio_grp);
 
-	vd->itc_account_details = setting_get_genlist_class_item("type1", _gl_ef_text_get_cb, NULL, NULL, NULL);
-	vd->itc_sig_noti_serversetting = setting_get_genlist_class_item("type1", _gl_sig_text_get_cb, NULL, NULL, NULL);
-	vd->itc_onoff = setting_get_genlist_class_item("type1", _gl_onoff_text_get_cb, _gl_onoff_content_get_cb, NULL, NULL);
-	vd->itc_sync_groupindex = setting_get_genlist_class_item("group_index", _gl_index_text_get_cb, NULL, NULL, NULL);
-	vd->itc_wifi_autodownload_onoff  = setting_get_genlist_class_item("multiline", _gl_wifi_autodownload_onoff_text_get_cb, _gl_onoff_content_get_cb, NULL, NULL);
-	vd->itc_sync_onoff = setting_get_genlist_class_item("type1", _gl_sync_onoff_text_get_cb, _gl_sync_onoff_content_get_cb, NULL, NULL);
-	vd->itc_sync = setting_get_genlist_class_item("type1", _gl_sync_text_get_cb, NULL, NULL, NULL);
-	vd->itc_roaming = setting_get_genlist_class_item("type1", _gl_roaming_text_get_cb, NULL, NULL, NULL);
-	vd->itc_ex_roaming = setting_get_genlist_class_item("type1", _gl_ex_roaming_text_get_cb, _gl_ex_roaming_content_get_cb, NULL, NULL);
-	vd->itc_ex_sync = setting_get_genlist_class_item("type1", _gl_ex_sync_text_get_cb, _gl_ex_sync_content_get_cb, NULL, NULL);
-	vd->itc_size = setting_get_genlist_class_item("type1", _gl_size_text_get_cb, NULL, NULL, NULL);
-	vd->itc_ex_size = setting_get_genlist_class_item("type1", _gl_ex_size_text_get_cb, _gl_ex_size_content_get_cb, NULL, NULL);
+	view->itc_account_details = setting_get_genlist_class_item("type1", _gl_ef_text_get_cb, NULL, NULL, NULL);
+	view->itc_sig_noti_serversetting = setting_get_genlist_class_item("type1", _gl_sig_text_get_cb, NULL, NULL, NULL);
+	view->itc_onoff = setting_get_genlist_class_item("type1", _gl_onoff_text_get_cb, _gl_onoff_content_get_cb, NULL, NULL);
+	view->itc_sync_groupindex = setting_get_genlist_class_item("group_index", _gl_index_text_get_cb, NULL, NULL, NULL);
+	view->itc_wifi_autodownload_onoff  = setting_get_genlist_class_item("multiline", _gl_wifi_autodownload_onoff_text_get_cb, _gl_onoff_content_get_cb, NULL, NULL);
+	view->itc_sync_onoff = setting_get_genlist_class_item("type1", _gl_sync_onoff_text_get_cb, _gl_sync_onoff_content_get_cb, NULL, NULL);
+	view->itc_sync = setting_get_genlist_class_item("type1", _gl_sync_text_get_cb, NULL, NULL, NULL);
+	view->itc_roaming = setting_get_genlist_class_item("type1", _gl_roaming_text_get_cb, NULL, NULL, NULL);
+	view->itc_ex_roaming = setting_get_genlist_class_item("type1", _gl_ex_roaming_text_get_cb, _gl_ex_roaming_content_get_cb, NULL, NULL);
+	view->itc_ex_sync = setting_get_genlist_class_item("type1", _gl_ex_sync_text_get_cb, _gl_ex_sync_content_get_cb, NULL, NULL);
+	view->itc_size = setting_get_genlist_class_item("type1", _gl_size_text_get_cb, NULL, NULL, NULL);
+	view->itc_ex_size = setting_get_genlist_class_item("type1", _gl_ex_size_text_get_cb, _gl_ex_size_content_get_cb, NULL, NULL);
 
-	vd->itc_list = g_slist_append(vd->itc_list, vd->itc_account_details);
-	vd->itc_list = g_slist_append(vd->itc_list, vd->itc_sig_noti_serversetting);
-	vd->itc_list = g_slist_append(vd->itc_list, vd->itc_onoff);
-	vd->itc_list = g_slist_append(vd->itc_list, vd->itc_wifi_autodownload_onoff);
-	vd->itc_list = g_slist_append(vd->itc_list, vd->itc_sync_groupindex);
-	vd->itc_list = g_slist_append(vd->itc_list, vd->itc_sync_onoff);
-	vd->itc_list = g_slist_append(vd->itc_list, vd->itc_sync);
-	vd->itc_list = g_slist_append(vd->itc_list, vd->itc_ex_roaming);
-	vd->itc_list = g_slist_append(vd->itc_list, vd->itc_ex_sync);
-	vd->itc_list = g_slist_append(vd->itc_list, vd->itc_size);
-	vd->itc_list = g_slist_append(vd->itc_list, vd->itc_ex_size);
+	view->itc_list = g_slist_append(view->itc_list, view->itc_account_details);
+	view->itc_list = g_slist_append(view->itc_list, view->itc_sig_noti_serversetting);
+	view->itc_list = g_slist_append(view->itc_list, view->itc_onoff);
+	view->itc_list = g_slist_append(view->itc_list, view->itc_wifi_autodownload_onoff);
+	view->itc_list = g_slist_append(view->itc_list, view->itc_sync_groupindex);
+	view->itc_list = g_slist_append(view->itc_list, view->itc_sync_onoff);
+	view->itc_list = g_slist_append(view->itc_list, view->itc_sync);
+	view->itc_list = g_slist_append(view->itc_list, view->itc_ex_roaming);
+	view->itc_list = g_slist_append(view->itc_list, view->itc_ex_sync);
+	view->itc_list = g_slist_append(view->itc_list, view->itc_size);
+	view->itc_list = g_slist_append(view->itc_list, view->itc_ex_size);
 
 	/* account name */
 	li = calloc(1, sizeof(ListItemData));
 	retm_if(!li, "memory allocation failed");
 
 	li->index = ACCOUNT_NAME_LIST_ITEM;
-	li->vd = vd;
+	li->view = view;
 	li->entry_str = elm_entry_utf8_to_markup(account_data->account_name);
-	li->gl_it = item = elm_genlist_item_append(vd->genlist, vd->itc_account_details, li, NULL,
+	li->gl_it = item = elm_genlist_item_append(view->genlist, view->itc_account_details, li, NULL,
 			ELM_GENLIST_ITEM_NONE, _gl_account_sel_cb, li);
 	elm_genlist_item_select_mode_set(item, ELM_OBJECT_SELECT_MODE_ALWAYS);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	view->list_items = g_slist_append(view->list_items, li);
 
 	/* password */
 	li = calloc(1, sizeof(ListItemData));
 	retm_if(!li, "memory allocation failed");
 
 	li->index = PASSWORD_LIST_ITEM;
-	li->vd = vd;
+	li->view = view;
 	li->entry_str = _population_password_str(EMAIL_GET_INCOMING_PASSWORD_LENGTH);
-	li->gl_it = item = elm_genlist_item_append(vd->genlist, vd->itc_sig_noti_serversetting, li, NULL,
+	li->gl_it = item = elm_genlist_item_append(view->genlist, view->itc_sig_noti_serversetting, li, NULL,
 			ELM_GENLIST_ITEM_NONE, _gl_account_sel_cb, li);
 	elm_genlist_item_select_mode_set(item, ELM_OBJECT_SELECT_MODE_ALWAYS);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	view->list_items = g_slist_append(view->list_items, li);
 
 	/* Email settings - group index */
 	li = calloc(1, sizeof(ListItemData));
 	retm_if(!li, "memory allocation failed");
 
 	li->index = EMAIL_SETTING_TITLE_LIST_ITEM;
-	li->vd = vd;
-	li->gl_it = git = elm_genlist_item_append(vd->genlist, vd->itc_sync_groupindex, li, NULL,
+	li->view = view;
+	li->gl_it = git = elm_genlist_item_append(view->genlist, view->itc_sync_groupindex, li, NULL,
 			ELM_GENLIST_ITEM_GROUP, NULL, NULL);
 	elm_genlist_item_select_mode_set(git, ELM_OBJECT_SELECT_MODE_DISPLAY_ONLY);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	view->list_items = g_slist_append(view->list_items, li);
 
 	/* display name */
 	li = calloc(1, sizeof(ListItemData));
 	retm_if(!li, "memory allocation failed");
 
 	li->index = DISPLAY_NAME_LIST_ITEM;
-	li->vd = vd;
+	li->view = view;
 	li->entry_str = elm_entry_utf8_to_markup(account_data->user_display_name);
-	li->gl_it = item = elm_genlist_item_append(vd->genlist, vd->itc_account_details, li, NULL,
+	li->gl_it = item = elm_genlist_item_append(view->genlist, view->itc_account_details, li, NULL,
 			ELM_GENLIST_ITEM_NONE, _gl_account_sel_cb, li);
 	elm_genlist_item_select_mode_set(item, ELM_OBJECT_SELECT_MODE_ALWAYS);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	view->list_items = g_slist_append(view->list_items, li);
 
 	/*--signature--*/
 	li = calloc(1, sizeof(ListItemData));
 	retm_if(!li, "memory allocation failed");
 
 	li->index = SIGNATURE_LIST_ITEM;
-	li->vd = vd;
-	li->gl_it = elm_genlist_item_append(vd->genlist, vd->itc_sig_noti_serversetting, li,
+	li->view = view;
+	li->gl_it = elm_genlist_item_append(view->genlist, view->itc_sig_noti_serversetting, li,
 			NULL, ELM_GENLIST_ITEM_NONE, _gl_sel_cb, li);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	view->list_items = g_slist_append(view->list_items, li);
 
 
 	/*--show images--*/
@@ -510,20 +510,20 @@ static void _create_list(EmailSettingVD *vd)
 
 	li->index = SHOW_IMAGE_LIST_ITEM;
 	li->is_checked = user_data->show_images ? EINA_TRUE : EINA_FALSE;
-	li->vd = vd;
-	li->gl_it = elm_genlist_item_append(vd->genlist, vd->itc_onoff, li,
+	li->view = view;
+	li->gl_it = elm_genlist_item_append(view->genlist, view->itc_onoff, li,
 			NULL, ELM_GENLIST_ITEM_NONE, _gl_sel_cb, li);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	view->list_items = g_slist_append(view->list_items, li);
 
 	/*--Email size--*/
 	li = calloc(1, sizeof(ListItemData));
 	retm_if(!li, "memory allocation failed");
 
 	li->index = EMAIL_SIZE_LIST_ITEM;
-	li->vd = vd;
-	li->gl_it = elm_genlist_item_append(vd->genlist, vd->itc_size, li,
+	li->view = view;
+	li->gl_it = elm_genlist_item_append(view->genlist, view->itc_size, li,
 			NULL, ELM_GENLIST_ITEM_NONE, _gl_ex_sel_cb, li);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	view->list_items = g_slist_append(view->list_items, li);
 
 	/*--Auto download attachment via WiFi--*/
 	li = calloc(1, sizeof(ListItemData));
@@ -531,85 +531,85 @@ static void _create_list(EmailSettingVD *vd)
 
 	li->index = WIFI_AUTODOWNLOAD_LIST_ITEM;
 	li->is_checked = user_data->wifi_auto_download ? EINA_TRUE : EINA_FALSE;
-	li->vd = vd;
-	li->gl_it = elm_genlist_item_append(vd->genlist, vd->itc_wifi_autodownload_onoff, li,
+	li->view = view;
+	li->gl_it = elm_genlist_item_append(view->genlist, view->itc_wifi_autodownload_onoff, li,
 			NULL, ELM_GENLIST_ITEM_NONE, _gl_sel_cb, li);
 	system_settings_set_changed_cb(SYSTEM_SETTINGS_KEY_FONT_SIZE, _gl_wifi_autodownload_text_size_change_cb, li->gl_it);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	view->list_items = g_slist_append(view->list_items, li);
 
 	/*--Server setting--*/
 	li = calloc(1, sizeof(ListItemData));
 	retm_if(!li, "memory allocation failed");
 
 	li->index = SERVER_SETTING_LIST_ITEM;
-	li->vd = vd;
-	li->gl_it = elm_genlist_item_append(vd->genlist, vd->itc_sig_noti_serversetting, li,
+	li->view = view;
+	li->gl_it = elm_genlist_item_append(view->genlist, view->itc_sig_noti_serversetting, li,
 			NULL, ELM_GENLIST_ITEM_NONE, _gl_sel_cb, li);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	view->list_items = g_slist_append(view->list_items, li);
 
 	/*--Notification--*/
 	li = calloc(1, sizeof(ListItemData));
 	retm_if(!li, "memory allocation failed");
 
 	li->index = NOTIFICATION_LIST_ITEM;
-	li->vd = vd;
-	li->gl_it = elm_genlist_item_append(vd->genlist, vd->itc_sig_noti_serversetting, li,
+	li->view = view;
+	li->gl_it = elm_genlist_item_append(view->genlist, view->itc_sig_noti_serversetting, li,
 			NULL, ELM_GENLIST_ITEM_NONE, _gl_sel_cb, li);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	view->list_items = g_slist_append(view->list_items, li);
 
 	/* Sync settings - group index */
 	li = calloc(1, sizeof(ListItemData));
 	retm_if(!li, "memory allocation failed");
 
 	li->index = SYNC_SETTING_TITLE_LIST_ITEM;
-	li->vd = vd;
-	li->gl_it = git = elm_genlist_item_append(vd->genlist, vd->itc_sync_groupindex, li, NULL,
+	li->view = view;
+	li->gl_it = git = elm_genlist_item_append(view->genlist, view->itc_sync_groupindex, li, NULL,
 			ELM_GENLIST_ITEM_GROUP, NULL, NULL);
 	elm_genlist_item_select_mode_set(git, ELM_OBJECT_SELECT_MODE_DISPLAY_ONLY);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	view->list_items = g_slist_append(view->list_items, li);
 
 	/*sync on/off*/
 	li = calloc(1, sizeof(ListItemData));
 	retm_if(!li, "memory allocation failed");
 
 	li->index = SYNC_ONOFF_LIST_ITEM;
-	li->vd = vd;
-	li->gl_it = elm_genlist_item_append(vd->genlist, vd->itc_sync_onoff, li,
+	li->view = view;
+	li->gl_it = elm_genlist_item_append(view->genlist, view->itc_sync_onoff, li,
 			NULL, ELM_GENLIST_ITEM_NONE, _gl_sel_cb, li);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	view->list_items = g_slist_append(view->list_items, li);
 
 	/*sync schedule*/
 	li = calloc(1, sizeof(ListItemData));
 	retm_if(!li, "memory allocation failed");
 
 	li->index = SYNC_SCHEDULE_LIST_ITEM;
-	li->vd = vd;
-	li->gl_it = elm_genlist_item_append(vd->genlist, vd->itc_sync, li,
+	li->view = view;
+	li->gl_it = elm_genlist_item_append(view->genlist, view->itc_sync, li,
 			NULL, ELM_GENLIST_ITEM_NONE, _gl_ex_sel_cb, li);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	view->list_items = g_slist_append(view->list_items, li);
 
 	/*while roaming*/
 	li = calloc(1, sizeof(ListItemData));
 	retm_if(!li, "memory allocation failed");
 
 	li->index = WHILE_ROAMING_LIST_ITEM;
-	li->vd = vd;
-	li->gl_it = elm_genlist_item_append(vd->genlist, vd->itc_roaming, li,
+	li->view = view;
+	li->gl_it = elm_genlist_item_append(view->genlist, view->itc_roaming, li,
 			NULL, ELM_GENLIST_ITEM_NONE, _gl_ex_sel_cb, li);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	view->list_items = g_slist_append(view->list_items, li);
 
-	elm_object_part_content_set(vd->base.content, "elm.swallow.content", vd->genlist);
+	elm_object_part_content_set(view->base.content, "elm.swallow.content", view->genlist);
 
 }
 
 static Eina_Bool _update_account_info(void *data)
 {
 	debug_enter();
-	EmailSettingVD *vd = data;
+	EmailSettingView *view = data;
 
-	retvm_if(!vd, ECORE_CALLBACK_CANCEL, "view data is null");
+	retvm_if(!view, ECORE_CALLBACK_CANCEL, "view data is null");
 
-	vd->account_info_idler = NULL;
+	view->account_info_idler = NULL;
 
 	retvm_if(!account_data, ECORE_CALLBACK_CANCEL, "account data is null");
 
@@ -622,33 +622,33 @@ static Eina_Bool _update_account_info(void *data)
 static Eina_Bool _validate_account(void *data)
 {
 	debug_enter();
-	EmailSettingVD *vd = data;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
-	int account_id = ugd->account_id;
+	EmailSettingView *view = data;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
+	int account_id = module->account_id;
 
-	retvm_if(!vd, ECORE_CALLBACK_CANCEL, "vd is NULL");
+	retvm_if(!view, ECORE_CALLBACK_CANCEL, "view is NULL");
 
 	gboolean ret;
-	DELETE_TIMER_OBJECT(vd->validate_timer);
+	DELETE_TIMER_OBJECT(view->validate_timer);
 
 	EMAIL_SETTING_PRINT_ACCOUNT_INFO(account_data);
 	ret = email_engine_update_account_with_validation(account_id, account_data);
 
-	DELETE_EVAS_OBJECT(ugd->popup);
+	DELETE_EVAS_OBJECT(module->popup);
 
 	if (ret) {
 		debug_log("Start Account Validation");
-		ugd->popup = setting_get_pb_process_notify(&vd->base,
+		module->popup = setting_get_pb_process_notify(&view->base,
 				&(EMAIL_SETTING_STRING_VALIDATING_ACCOUNT_ING), 0,
 				NULL, NULL,
 				NULL, NULL,
 				POPUP_BACK_TYPE_DESTROY_WITH_CANCEL_OP, NULL);
 	} else {
 		email_setting_response_data response;
-		response.account_id = ugd->account_id;
+		response.account_id = module->account_id;
 		response.type = NOTI_VALIDATE_AND_UPDATE_ACCOUNT_FAIL;
 		response.err = ret;
-		_account_update_validate_cb(ugd->account_id, &response, vd);
+		_account_update_validate_cb(module->account_id, &response, view);
 	}
 	return ECORE_CALLBACK_CANCEL;
 }
@@ -656,30 +656,30 @@ static Eina_Bool _validate_account(void *data)
 static void _account_update_validate_cb(int account_id, email_setting_response_data *response, void *user_data)
 {
 	debug_enter();
-	EmailSettingVD *vd = user_data;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = user_data;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
 	retm_if(!response, "response data is NULL");
-	retm_if(ugd->account_id != response->account_id, "account_id is different");
+	retm_if(module->account_id != response->account_id, "account_id is different");
 
 	debug_log("response err: %d", response->err);
 	debug_log("response type: %d", response->type);
 
 	if (response->err == EMAIL_ERROR_NONE ||
 			response->err == EMAIL_ERROR_VALIDATE_ACCOUNT_OF_SMTP) {
-		_update_account_info(vd);
-		DELETE_TIMER_OBJECT(vd->edit_vc_timer);
+		_update_account_info(view);
+		DELETE_TIMER_OBJECT(view->edit_vc_timer);
 		if (response->err == EMAIL_ERROR_VALIDATE_ACCOUNT_OF_SMTP)
 			debug_warning("smtp validation failed but it can be ignored");
 
-		vd->edit_vc_timer = ecore_timer_add(0.5, _after_save_cb, vd);
+		view->edit_vc_timer = ecore_timer_add(0.5, _after_save_cb, view);
 	} else {
-		DELETE_EVAS_OBJECT(ugd->popup);
+		DELETE_EVAS_OBJECT(module->popup);
 
 		if (response->type != NOTI_VALIDATE_AND_UPDATE_ACCOUNT_CANCEL) {
 			const email_string_t *err_msg = setting_get_service_fail_type(response->err);
 			const email_string_t *header = setting_get_service_fail_type_header(response->err);
-			ugd->popup = setting_get_notify(&vd->base, header, err_msg, 1,
+			module->popup = setting_get_notify(&view->base, header, err_msg, 1,
 					&(EMAIL_SETTING_STRING_OK),
 					_popup_ok_cb, NULL, NULL);
 		}
@@ -728,47 +728,47 @@ static void _gl_account_sel_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 	ListItemData *li = data;
-	EmailSettingVD *vd = li->vd;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = li->view;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 	Elm_Object_Item *item = event_info;
 	elm_genlist_item_selected_set(item, EINA_FALSE);
 	char *str = NULL;
 
 	if (li->index == ACCOUNT_NAME_LIST_ITEM) {
 		str = g_strdup(account_data->account_name);
-		ugd->popup = setting_get_entry_content_notify(&vd->base, &(EMAIL_SETTING_STRING_ACCOUNT_NAME), str,
+		module->popup = setting_get_entry_content_notify(&view->base, &(EMAIL_SETTING_STRING_ACCOUNT_NAME), str,
 				2, &(EMAIL_SETTING_STRING_CANCEL), _account_popup_cancel_cb, &(EMAIL_SETTING_STRING_DONE), _account_popup_name_done_cb, POPUP_ENTRY_EDITFIELD);
-		Evas_Object *entry_layout = elm_object_content_get(ugd->popup);
+		Evas_Object *entry_layout = elm_object_content_get(module->popup);
 		Evas_Object *entry = elm_layout_content_get(entry_layout, "elm.swallow.content");
 		li->entry_limit = setting_set_input_entry_limit(entry, EMAIL_LIMIT_ACCOUNT_NAME_LENGTH, 0);
 		li->entry = entry;
-		evas_object_smart_callback_add(li->entry, "activated", _account_popup_name_done_cb, vd);
-		evas_object_smart_callback_add(li->entry, "changed", _account_popup_entry_changed_cb, vd);
-		evas_object_smart_callback_add(li->entry, "preedit,changed", _account_popup_entry_changed_cb, vd);
+		evas_object_smart_callback_add(li->entry, "activated", _account_popup_name_done_cb, view);
+		evas_object_smart_callback_add(li->entry, "changed", _account_popup_entry_changed_cb, view);
+		evas_object_smart_callback_add(li->entry, "preedit,changed", _account_popup_entry_changed_cb, view);
 	} else if (li->index == DISPLAY_NAME_LIST_ITEM) {
 		str = g_strdup(account_data->user_display_name);
-		ugd->popup = setting_get_entry_content_notify(&vd->base, &(EMAIL_SETTING_STRING_SENDER_NAME), str,
+		module->popup = setting_get_entry_content_notify(&view->base, &(EMAIL_SETTING_STRING_SENDER_NAME), str,
 				2, &(EMAIL_SETTING_STRING_CANCEL), _account_popup_cancel_cb, &(EMAIL_SETTING_STRING_DONE), _account_popup_sender_name_done_cb, POPUP_ENTRY_EDITFIELD);
-		Evas_Object *entry_layout = elm_object_content_get(ugd->popup);
+		Evas_Object *entry_layout = elm_object_content_get(module->popup);
 		Evas_Object *entry = elm_layout_content_get(entry_layout, "elm.swallow.content");
 		li->entry_limit = setting_set_input_entry_limit(entry, EMAIL_LIMIT_DISPLAY_NAME_LENGTH, 0);
 		li->entry = entry;
-		evas_object_smart_callback_add(li->entry, "activated", _account_popup_sender_name_done_cb, vd);
-		evas_object_smart_callback_add(li->entry, "changed", _account_popup_entry_changed_cb, vd);
-		evas_object_smart_callback_add(li->entry, "preedit,changed", _account_popup_entry_changed_cb, vd);
+		evas_object_smart_callback_add(li->entry, "activated", _account_popup_sender_name_done_cb, view);
+		evas_object_smart_callback_add(li->entry, "changed", _account_popup_entry_changed_cb, view);
+		evas_object_smart_callback_add(li->entry, "preedit,changed", _account_popup_entry_changed_cb, view);
 	} else if (li->index == PASSWORD_LIST_ITEM) {
-		ugd->popup = setting_get_entry_content_notify(&vd->base, &(EMAIL_SETTING_STRING_PWD), NULL,
+		module->popup = setting_get_entry_content_notify(&view->base, &(EMAIL_SETTING_STRING_PWD), NULL,
 				2, &(EMAIL_SETTING_STRING_CANCEL), _account_popup_cancel_cb, &(EMAIL_SETTING_STRING_DONE), _account_popup_password_done_cb, POPUP_ENRTY_PASSWORD);
-		Evas_Object *entry_layout = elm_object_content_get(ugd->popup);
+		Evas_Object *entry_layout = elm_object_content_get(module->popup);
 		Evas_Object *entry = elm_layout_content_get(entry_layout, "elm.swallow.content");
 		li->entry_limit = setting_set_input_entry_limit(entry, EMAIL_LIMIT_PASSWORD_LENGTH, 0);
 		li->entry = entry;
-		evas_object_smart_callback_add(li->entry, "activated", _account_popup_password_done_cb, vd);
-		evas_object_smart_callback_add(li->entry, "changed", _account_popup_entry_changed_cb, vd);
-		evas_object_smart_callback_add(li->entry, "preedit,changed", _account_popup_entry_changed_cb, vd);
+		evas_object_smart_callback_add(li->entry, "activated", _account_popup_password_done_cb, view);
+		evas_object_smart_callback_add(li->entry, "changed", _account_popup_entry_changed_cb, view);
+		evas_object_smart_callback_add(li->entry, "preedit,changed", _account_popup_entry_changed_cb, view);
 	}
 	elm_object_focus_set(li->entry, EINA_TRUE);
-	evas_object_show(ugd->popup);
+	evas_object_show(module->popup);
 	FREE(str);
 }
 
@@ -776,29 +776,29 @@ static void _gl_sel_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 	ListItemData *li = data;
-	EmailSettingVD *vd = li->vd;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = li->view;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
 	Elm_Object_Item *item = event_info;
 	elm_genlist_item_selected_set(item, EINA_FALSE);
 
 	if (li->index == SIGNATURE_LIST_ITEM) {
-		create_signature_setting_view(ugd);
+		create_signature_setting_view(module);
 		return;
 	} else if (li->index == NOTIFICATION_LIST_ITEM) {
-		create_notification_setting_view(ugd);
+		create_notification_setting_view(module);
 	} else if (li->index == SERVER_SETTING_LIST_ITEM) {
-		create_account_edit_view(ugd);
+		create_account_edit_view(module);
 	} else if (li->index == SYNC_ONOFF_LIST_ITEM) {
 		Eina_Bool state = elm_check_state_get(li->check);
 		elm_check_state_set(li->check, !state);
-		_sync_onoff_cb(vd, li->check, NULL);
+		_sync_onoff_cb(view, li->check, NULL);
 	} else {
 		Eina_Bool state = elm_check_state_get(li->check);
 		elm_check_state_set(li->check, !state);
 		_onoff_cb(li, li->check, NULL);
 	}
-	_update_account_info(vd);
+	_update_account_info(view);
 }
 
 static void _gl_ex_sel_cb(void *data, Evas_Object *obj, void *event_info)
@@ -806,28 +806,28 @@ static void _gl_ex_sel_cb(void *data, Evas_Object *obj, void *event_info)
 	debug_enter();
 
 	ListItemData *li = data;
-	EmailSettingVD *vd = li->vd;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = li->view;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 	Elm_Object_Item *item = event_info;
 	elm_genlist_item_selected_set(item, EINA_FALSE);
 
 	Evas_Object *genlist = NULL;
 	if (li->index == WHILE_ROAMING_LIST_ITEM) {
-		ugd->popup = setting_get_empty_content_notify(&vd->base, &(EMAIL_SETTING_STRING_WHILE_ROAMING),
+		module->popup = setting_get_empty_content_notify(&view->base, &(EMAIL_SETTING_STRING_WHILE_ROAMING),
 				0, NULL, NULL, NULL, NULL);
-		genlist = _get_option_genlist(ugd->popup, li);
+		genlist = _get_option_genlist(module->popup, li);
 	} else if (li->index == SYNC_SCHEDULE_LIST_ITEM) {
-		ugd->popup = setting_get_empty_content_notify(&vd->base, &(EMAIL_SETTING_STRING_EMAIL_SYNC_SCHEDULE),
+		module->popup = setting_get_empty_content_notify(&view->base, &(EMAIL_SETTING_STRING_EMAIL_SYNC_SCHEDULE),
 				0, NULL, NULL, NULL, NULL);
-		genlist = _get_option_genlist(ugd->popup, li);
+		genlist = _get_option_genlist(module->popup, li);
 	} else if (li->index == EMAIL_SIZE_LIST_ITEM) {
-		ugd->popup = setting_get_empty_content_notify(&vd->base, &(EMAIL_SETTING_STRING_EMAIL_SIZE),
+		module->popup = setting_get_empty_content_notify(&view->base, &(EMAIL_SETTING_STRING_EMAIL_SIZE),
 				0, NULL, NULL, NULL, NULL);
-		genlist = _get_option_genlist(ugd->popup, li);
+		genlist = _get_option_genlist(module->popup, li);
 	}
-	elm_object_content_set(ugd->popup, genlist);
-	evas_object_show(ugd->popup);
-	evas_object_smart_callback_add(ugd->popup, "show,finished", _show_finished_cb, li);
+	elm_object_content_set(module->popup, genlist);
+	evas_object_show(module->popup);
+	evas_object_smart_callback_add(module->popup, "show,finished", _show_finished_cb, li);
 }
 
 static void _gl_ex_roaming_sel_cb(void *data, Evas_Object *obj, void *event_info)
@@ -837,11 +837,11 @@ static void _gl_ex_roaming_sel_cb(void *data, Evas_Object *obj, void *event_info
 	retm_if(!account_data, "account_data is null");
 
 	int index = (int)(ptrdiff_t)data;
-	EmailSettingVD *vd = g_vd;
+	EmailSettingView *view = g_vd;
 
 	Elm_Object_Item *item = event_info;
 	elm_genlist_item_selected_set(item, EINA_FALSE);
-	elm_radio_value_set(vd->roaming_radio_grp, index);
+	elm_radio_value_set(view->roaming_radio_grp, index);
 
 	_gl_ex_roaming_radio_cb((void *)(ptrdiff_t)index, NULL, NULL);
 }
@@ -853,11 +853,11 @@ static void _gl_ex_sync_sel_cb(void *data, Evas_Object *obj, void *event_info)
 	retm_if(!account_data, "account data is null");
 
 	int index = (int)(ptrdiff_t)data;
-	EmailSettingVD *vd = g_vd;
+	EmailSettingView *view = g_vd;
 
 	Elm_Object_Item *item = event_info;
 	elm_genlist_item_selected_set(item, EINA_FALSE);
-	elm_radio_value_set(vd->sync_radio_grp, sync_schedule[index]);
+	elm_radio_value_set(view->sync_radio_grp, sync_schedule[index]);
 
 	_gl_ex_sync_radio_cb((void *)(ptrdiff_t)index, NULL, NULL);
 }
@@ -867,7 +867,7 @@ static void _onoff_cb(void *data, Evas_Object *obj, void *event_info)
 	debug_enter();
 
 	ListItemData *li = data;
-	EmailSettingVD *vd = li->vd;
+	EmailSettingView *view = li->view;
 
 	Eina_Bool state = elm_check_state_get(obj);
 
@@ -880,20 +880,20 @@ static void _onoff_cb(void *data, Evas_Object *obj, void *event_info)
 		user_data->wifi_auto_download = state;
 		debug_secure("wifi_auto_download %d", user_data->wifi_auto_download);
 	}
-	_update_account_info(vd);
+	_update_account_info(view);
 }
 
 static void _sync_onoff_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 
-	EmailSettingVD *vd = data;
+	EmailSettingView *view = data;
 	Elm_Object_Item *sync_sche_it = NULL;
 	Elm_Object_Item *sync_roaming_it = NULL;
 
 	Eina_Bool state = elm_check_state_get(obj);
 
-	GSList *l = vd->list_items;
+	GSList *l = view->list_items;
 	while (l) {
 		ListItemData *li = l->data;
 		if (li->index == SYNC_SCHEDULE_LIST_ITEM) {
@@ -929,29 +929,29 @@ static void _sync_onoff_cb(void *data, Evas_Object *obj, void *event_info)
 			elm_object_item_disabled_set(sync_roaming_it, EINA_TRUE);
 		}
 
-		_perform_cancel_sync(vd);
+		_perform_cancel_sync(view);
 	}
-	_update_toolbar_sync_button_state(vd);
-	_update_account_info(vd);
-	DELETE_IDLER_OBJECT(vd->account_info_idler);
-	vd->account_info_idler = ecore_idler_add(_update_account_info, vd);
+	_update_toolbar_sync_button_state(view);
+	_update_account_info(view);
+	DELETE_IDLER_OBJECT(view->account_info_idler);
+	view->account_info_idler = ecore_idler_add(_update_account_info, view);
 }
 
 static void _gl_ex_roaming_radio_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 	int index = (int)(ptrdiff_t)data;
-	EmailSettingVD *vd = g_vd;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = g_vd;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
 	if (index == 0)
 		account_data->roaming_option = EMAIL_ROAMING_OPTION_RESTRICTED_BACKGROUND_TASK;
 	else if (index == 1)
 		account_data->roaming_option = EMAIL_ROAMING_OPTION_UNRESTRICTED;
 
-	_update_account_info(vd);
+	_update_account_info(view);
 
-	GSList *l = vd->list_items;
+	GSList *l = view->list_items;
 	while (l) {
 		ListItemData *li = l->data;
 		if (li->index == WHILE_ROAMING_LIST_ITEM) {
@@ -959,21 +959,21 @@ static void _gl_ex_roaming_radio_cb(void *data, Evas_Object *obj, void *event_in
 		}
 		l = g_slist_next(l);
 	}
-	DELETE_EVAS_OBJECT(ugd->popup);
+	DELETE_EVAS_OBJECT(module->popup);
 }
 
 static void _gl_ex_sync_radio_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 	int index = (int)(ptrdiff_t)data;
-	EmailSettingVD *vd = g_vd;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = g_vd;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
 	account_data->check_interval = sync_schedule[index];
 
-	_update_account_info(vd);
+	_update_account_info(view);
 
-	GSList *l = vd->list_items;
+	GSList *l = view->list_items;
 	while (l) {
 		ListItemData *li = l->data;
 		if (li->index == SYNC_SCHEDULE_LIST_ITEM) {
@@ -983,33 +983,33 @@ static void _gl_ex_sync_radio_cb(void *data, Evas_Object *obj, void *event_info)
 		l = g_slist_next(l);
 	}
 
-	DELETE_EVAS_OBJECT(ugd->popup);
+	DELETE_EVAS_OBJECT(module->popup);
 }
 static void _sync_toolbar_btn_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailSettingVD *vd = data;
-	retm_if(!vd, "view data is null");
-	if (vd->syncing) {
+	EmailSettingView *view = data;
+	retm_if(!view, "view data is null");
+	if (view->syncing) {
 		elm_object_disabled_set(obj, EINA_TRUE);
-		_perform_cancel_sync(vd);
+		_perform_cancel_sync(view);
 	} else {
-		_perform_sync(vd);
+		_perform_sync(view);
 	}
 
 	debug_leave();
 
 }
-static void _perform_sync(EmailSettingVD *vd)
+static void _perform_sync(EmailSettingView *view)
 {
 	debug_enter();
-	retm_if(!vd, "view data is null");
+	retm_if(!view, "view data is null");
 
 	int handle = 0;
 	int account_id = account_data->account_id;
-	vd->syncing = EINA_TRUE;
-	vd->sync_status_canceled = EINA_FALSE;
-	_update_toolbar_sync_button_state(vd);
+	view->syncing = EINA_TRUE;
+	view->sync_status_canceled = EINA_FALSE;
+	_update_toolbar_sync_button_state(view);
 	/* Inbox sync */
 	int ret = 0;
 	gboolean res = FALSE;
@@ -1017,17 +1017,17 @@ static void _perform_sync(EmailSettingVD *vd)
 	ret = email_get_mailbox_by_mailbox_type(account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox);
 	if (ret != EMAIL_ERROR_NONE || mailbox == NULL) {
 		debug_error("email_get_mailbox_by_mailbox_type failed: %d", ret);
-		vd->sync_status_failed = EINA_TRUE;
+		view->sync_status_failed = EINA_TRUE;
 		return;
 	}
 
 	res = email_engine_sync_folder(account_id, mailbox->mailbox_id, &handle);
 	debug_log("handle: %d, res: %d", handle, res);
 
-	vd->handle = handle;
+	view->handle = handle;
 	email_free_mailbox(&mailbox, 1);
 
-	GSList *l = vd->list_items;
+	GSList *l = view->list_items;
 	while (l) {
 		ListItemData *_li = l->data;
 		if (_li->index == SYNC_ONOFF_LIST_ITEM) {
@@ -1037,38 +1037,38 @@ static void _perform_sync(EmailSettingVD *vd)
 	}
 }
 
-static void _perform_cancel_sync(EmailSettingVD *vd)
+static void _perform_cancel_sync(EmailSettingView *view)
 {
 	debug_enter();
-	if (vd == NULL) {
-		debug_error("vd is NULL");
+	if (view == NULL) {
+		debug_error("view is NULL");
 		return;
 	}
 
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
-	setting_cancel_job_by_account_id(ugd->account_id);
+	setting_cancel_job_by_account_id(module->account_id);
 
-	vd->syncing = EINA_FALSE;
-	vd->sync_status_canceled = EINA_TRUE;
+	view->syncing = EINA_FALSE;
+	view->sync_status_canceled = EINA_TRUE;
 }
 
 static void _sync_start_cb(int account_id, email_setting_response_data *response, void *user_data)
 {
 	debug_enter();
 
-	EmailSettingVD *vd = user_data;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = user_data;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
 	retm_if(!response, "response data is NULL");
-	retm_if(ugd->account_id != response->account_id, "account_id is different");
+	retm_if(module->account_id != response->account_id, "account_id is different");
 
-	if (!setting_get_acct_full_data(ugd->account_id, &account_data)) {
+	if (!setting_get_acct_full_data(module->account_id, &account_data)) {
 		debug_warning("failed to get account data");
 	}
 
 	EMAIL_SETTING_PRINT_ACCOUNT_INFO(account_data);
-	vd->syncing = EINA_TRUE;
+	view->syncing = EINA_TRUE;
 
 }
 
@@ -1076,33 +1076,33 @@ static void _sync_end_cb(int account_id, email_setting_response_data *response, 
 {
 	debug_enter();
 
-	EmailSettingVD *vd = user_data;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = user_data;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
 	if (!response) {
 		debug_error("response data is NULL");
-		vd->sync_status_failed = EINA_TRUE;
+		view->sync_status_failed = EINA_TRUE;
 		return;
 	}
-	retm_if(ugd->account_id != response->account_id, "account_id is different");
+	retm_if(module->account_id != response->account_id, "account_id is different");
 
-	if (!setting_get_acct_full_data(ugd->account_id, &account_data)) {
+	if (!setting_get_acct_full_data(module->account_id, &account_data)) {
 		debug_warning("failed to get account data");
-		vd->sync_status_failed = EINA_TRUE;
+		view->sync_status_failed = EINA_TRUE;
 		return;
 	}
 
 	EMAIL_SETTING_PRINT_ACCOUNT_INFO(account_data);
 
 	if (response->err != 0) {
-		vd->sync_status_failed = EINA_TRUE;
+		view->sync_status_failed = EINA_TRUE;
 	} else {
-		vd->sync_status_failed = EINA_FALSE;
+		view->sync_status_failed = EINA_FALSE;
 	}
 
-	vd->syncing = EINA_FALSE;
-	_update_toolbar_sync_button_state(vd);
-	GSList *l = vd->list_items;
+	view->syncing = EINA_FALSE;
+	_update_toolbar_sync_button_state(view);
+	GSList *l = view->list_items;
 	while (l) {
 		ListItemData *_li = l->data;
 		if (_li->index == SYNC_ONOFF_LIST_ITEM) {
@@ -1117,11 +1117,11 @@ static Eina_Bool _after_save_cb(void *data)
 {
 	debug_enter();
 
-	EmailSettingVD *vd = data;
-	retv_if(vd == NULL, -1);
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = data;
+	retv_if(view == NULL, -1);
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
-	GSList *l = vd->list_items;
+	GSList *l = view->list_items;
 	while (l) {
 		ListItemData *li = l->data;
 		if (li->index == PASSWORD_LIST_ITEM) {
@@ -1132,10 +1132,10 @@ static Eina_Bool _after_save_cb(void *data)
 		l = g_slist_next(l);
 	}
 
-	DELETE_EVAS_OBJECT(ugd->popup);
-	DELETE_TIMER_OBJECT(vd->edit_vc_timer);
+	DELETE_EVAS_OBJECT(module->popup);
+	DELETE_TIMER_OBJECT(view->edit_vc_timer);
 
-	_update_account_info(vd);
+	_update_account_info(view);
 	return ECORE_CALLBACK_CANCEL;
 }
 
@@ -1203,16 +1203,16 @@ static Evas_Object *_gl_sync_onoff_content_get_cb(void *data, Evas_Object *obj, 
 	retvm_if(!account_data, NULL, "account_data is null");
 
 	ListItemData *li = data;
-	EmailSettingVD *vd = li->vd;
+	EmailSettingView *view = li->view;
 
 	if (!strcmp(part, "elm.swallow.end")) {
 		Evas_Object *check = elm_check_add(obj);
 		elm_object_style_set(check, "on&off");
-		evas_object_smart_callback_add(check, "changed", _sync_onoff_cb, vd);
+		evas_object_smart_callback_add(check, "changed", _sync_onoff_cb, view);
 		evas_object_propagate_events_set(check, EINA_FALSE);
 		elm_check_state_set(check, account_data->sync_disabled ? EINA_FALSE : EINA_TRUE);
 
-		GSList *l = vd->list_items;
+		GSList *l = view->list_items;
 		while (l) {
 			ListItemData *_li = l->data;
 			if (_li->index == SYNC_SCHEDULE_LIST_ITEM || _li->index == WHILE_ROAMING_LIST_ITEM) {
@@ -1233,17 +1233,17 @@ static Evas_Object *_gl_ex_roaming_content_get_cb(void *data, Evas_Object *obj, 
 	retvm_if(!account_data, NULL, "account_data is null");
 
 	int index = (int)(ptrdiff_t)data;
-	EmailSettingVD *vd = g_vd;
+	EmailSettingView *view = g_vd;
 
 	if (!strcmp(part, "elm.swallow.end")) {
 		Evas_Object *radio = elm_radio_add(obj);
-		elm_radio_group_add(radio, vd->roaming_radio_grp);
+		elm_radio_group_add(radio, view->roaming_radio_grp);
 		elm_radio_state_value_set(radio, index);
 
 		if (account_data->roaming_option == EMAIL_ROAMING_OPTION_RESTRICTED_BACKGROUND_TASK)
-			elm_radio_value_set(vd->roaming_radio_grp, 0);
+			elm_radio_value_set(view->roaming_radio_grp, 0);
 		else if (account_data->roaming_option == EMAIL_ROAMING_OPTION_UNRESTRICTED)
-			elm_radio_value_set(vd->roaming_radio_grp, 1);
+			elm_radio_value_set(view->roaming_radio_grp, 1);
 		evas_object_propagate_events_set(radio, EINA_FALSE);
 		evas_object_smart_callback_add(radio, "changed", _gl_ex_roaming_radio_cb, (void *)(ptrdiff_t)index);
 		return radio;
@@ -1257,16 +1257,16 @@ static Evas_Object *_gl_ex_sync_content_get_cb(void *data, Evas_Object *obj, con
 	retvm_if(!account_data, NULL, "account data is null");
 
 	int index = (int)(ptrdiff_t)data;
-	EmailSettingVD *vd = g_vd;
+	EmailSettingView *view = g_vd;
 
 	if (!strcmp(part, "elm.swallow.end")) {
 		Evas_Object *radio = elm_radio_add(obj);
 		if (index < SYNC_SCHEDULE_ITEM_COUNT) { /* sync schedule */
-			elm_radio_group_add(radio, vd->sync_radio_grp);
+			elm_radio_group_add(radio, view->sync_radio_grp);
 			elm_radio_state_value_set(radio, sync_schedule[index]);
 
 			if (sync_schedule[index] == account_data->check_interval) {
-				elm_radio_value_set(vd->sync_radio_grp, sync_schedule[index]);
+				elm_radio_value_set(view->sync_radio_grp, sync_schedule[index]);
 			}
 		}
 		evas_object_propagate_events_set(radio, EINA_FALSE);
@@ -1346,11 +1346,11 @@ static char *_gl_sync_onoff_text_get_cb(void *data, Evas_Object *obj, const char
 		return strdup(email_setting_gettext(EMAIL_SETTING_STRING_EMAIL_SYNC));
 	} else if (!strcmp(part, "elm.text.sub")) {
 		email_mailbox_t *mailbox = NULL;
-		EmailSettingVD *vd = g_vd;
-		retvm_if(!vd, NULL, "vd data is null");
-		if(vd->syncing) {
+		EmailSettingView *view = g_vd;
+		retvm_if(!view, NULL, "view data is null");
+		if(view->syncing) {
 			return strdup(email_setting_gettext(EMAIL_SETTING_STRING_SYNCING_ONGOING));
-		} else if(vd->sync_status_failed && !vd->sync_status_canceled) {
+		} else if(view->sync_status_failed && !view->sync_status_canceled) {
 			char sync_failed_text[MAX_STR_LEN] = {0,};
 			snprintf(sync_failed_text, sizeof(sync_failed_text), SYNC_FAILED_TEXT_STYLE, email_setting_gettext(EMAIL_SETTING_STRING_SYNCING_FAILED));
 			return strdup(sync_failed_text);
@@ -1487,7 +1487,7 @@ static Evas_Object *_get_option_genlist(Evas_Object *parent, ListItemData *li)
 	int i = 0;
 
 	if (li) {
-		EmailSettingVD *vd = li->vd;
+		EmailSettingView *view = li->view;
 		genlist = elm_genlist_add(parent);
 		elm_genlist_homogeneous_set(genlist, EINA_TRUE);
 		elm_scroller_policy_set(genlist, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_AUTO);
@@ -1495,21 +1495,21 @@ static Evas_Object *_get_option_genlist(Evas_Object *parent, ListItemData *li)
 
 		if (li->index == WHILE_ROAMING_LIST_ITEM) {
 			for (i = 0; i < 2; i++) {
-				elm_genlist_item_append(genlist, vd->itc_ex_roaming, (void *)(ptrdiff_t)i,
+				elm_genlist_item_append(genlist, view->itc_ex_roaming, (void *)(ptrdiff_t)i,
 						NULL, ELM_GENLIST_ITEM_NONE, _gl_ex_roaming_sel_cb, (void *)(ptrdiff_t)i);
 			}
 		} else if (li->index == SYNC_SCHEDULE_LIST_ITEM) {
 			for (i = 0; i < SYNC_SCHEDULE_ITEM_COUNT; i++) {
 				if (i == 0 && account_data->incoming_server_type == EMAIL_SERVER_TYPE_POP3)
 					continue;
-				if (i == 0 && !vd->is_imap_push_supported)
+				if (i == 0 && !view->is_imap_push_supported)
 					continue;
-				elm_genlist_item_append(genlist, vd->itc_ex_sync, (void *)(ptrdiff_t)i,
+				elm_genlist_item_append(genlist, view->itc_ex_sync, (void *)(ptrdiff_t)i,
 						NULL, ELM_GENLIST_ITEM_NONE, _gl_ex_sync_sel_cb, (void *)(ptrdiff_t)i);
 			}
 		} else if (li->index == EMAIL_SIZE_LIST_ITEM) {
 			for (i = 0; i < 10; i++) {
-				elm_genlist_item_append(genlist, vd->itc_ex_size, (void *)(ptrdiff_t)i,
+				elm_genlist_item_append(genlist, view->itc_ex_size, (void *)(ptrdiff_t)i,
 						NULL, ELM_GENLIST_ITEM_NONE, _gl_ex_size_sel_cb, (void *)(ptrdiff_t)i);
 			}
 		}
@@ -1520,46 +1520,46 @@ static Evas_Object *_get_option_genlist(Evas_Object *parent, ListItemData *li)
 	return NULL;
 }
 
-static void _create_toolbar_more_btn(EmailSettingVD *vd)
+static void _create_toolbar_more_btn(EmailSettingView *view)
 {
 	debug_enter();
 
 	Evas_Object *sync_btn = NULL;
 	Evas_Object *remove_btn = NULL;
 	Evas_Object *btn_ly = NULL;
-	btn_ly = elm_layout_add(vd->base.content);
+	btn_ly = elm_layout_add(view->base.content);
 	elm_layout_file_set(btn_ly, email_get_setting_theme_path(), "two_bottom_btn");
 
 	sync_btn = elm_button_add(btn_ly);
 	elm_object_style_set(sync_btn, "bottom");
 
-	evas_object_smart_callback_add(sync_btn, "clicked", _sync_toolbar_btn_cb, vd);
+	evas_object_smart_callback_add(sync_btn, "clicked", _sync_toolbar_btn_cb, view);
 	elm_layout_content_set(btn_ly, "btn1.swallow", sync_btn);
-	vd->sync_btn = sync_btn;
-	_update_toolbar_sync_button_state(vd);
+	view->sync_btn = sync_btn;
+	_update_toolbar_sync_button_state(view);
 
 	remove_btn = elm_button_add(btn_ly);
 	elm_object_style_set(remove_btn, "bottom");
 	elm_object_domain_translatable_text_set(remove_btn, EMAIL_SETTING_STRING_DELETE_ACCOUNT.domain, EMAIL_SETTING_STRING_DELETE_ACCOUNT.id);
-	evas_object_smart_callback_add(remove_btn, "clicked", _delete_account_cb, vd);
+	evas_object_smart_callback_add(remove_btn, "clicked", _delete_account_cb, view);
 	elm_layout_content_set(btn_ly, "btn2.swallow", remove_btn);
-	vd->remove_btn = remove_btn;
+	view->remove_btn = remove_btn;
 
-	elm_object_item_part_content_set(vd->base.navi_item, "toolbar", btn_ly);
-	evas_object_show(vd->base.content);
+	elm_object_item_part_content_set(view->base.navi_item, "toolbar", btn_ly);
+	evas_object_show(view->base.content);
 
 	debug_leave();
 }
 
-static void _update_toolbar_sync_button_state(EmailSettingVD *vd)
+static void _update_toolbar_sync_button_state(EmailSettingView *view)
 {
-	retm_if(!vd->sync_btn,  "Sync button is null");
+	retm_if(!view->sync_btn,  "Sync button is null");
 	debug_enter();
-	if (!vd->syncing) {
-		elm_object_domain_translatable_text_set(vd->sync_btn, EMAIL_SETTING_STRING_REFRESH.domain, EMAIL_SETTING_STRING_REFRESH.id);
-		elm_object_disabled_set(vd->sync_btn, account_data->sync_disabled ? EINA_TRUE : EINA_FALSE);
+	if (!view->syncing) {
+		elm_object_domain_translatable_text_set(view->sync_btn, EMAIL_SETTING_STRING_REFRESH.domain, EMAIL_SETTING_STRING_REFRESH.id);
+		elm_object_disabled_set(view->sync_btn, account_data->sync_disabled ? EINA_TRUE : EINA_FALSE);
 	} else {
-		elm_object_domain_translatable_text_set(vd->sync_btn, EMAIL_SETTING_STRING_CANCEL.domain, EMAIL_SETTING_STRING_CANCEL.id);
+		elm_object_domain_translatable_text_set(view->sync_btn, EMAIL_SETTING_STRING_CANCEL.domain, EMAIL_SETTING_STRING_CANCEL.id);
 	}
 
 	debug_leave();
@@ -1569,21 +1569,21 @@ static void _delete_account_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 
-	EmailSettingVD *vd = data;
-	retm_if(!vd, "view data is null");
+	EmailSettingView *view = data;
+	retm_if(!view, "view data is null");
 
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
-	ugd->account_id = account_data->account_id;
+	module->account_id = account_data->account_id;
 
-	DELETE_EVAS_OBJECT(ugd->popup);
+	DELETE_EVAS_OBJECT(module->popup);
 	email_string_t temp;
 	if (account_data->incoming_server_authentication_method == EMAIL_AUTHENTICATION_METHOD_XOAUTH2) {
 		temp = EMAIL_SETTING_STRING_GOOGLE_ACCOUNT_DELETED;
 	} else {
 		temp = EMAIL_SETTING_STRING_ACCOUNT_DELETED;
 	}
-	ugd->popup = setting_get_notify(&vd->base, &(EMAIL_SETTING_STRING_HEADER_DELETE),
+	module->popup = setting_get_notify(&view->base, &(EMAIL_SETTING_STRING_HEADER_DELETE),
 			&(temp), 2,
 			&(EMAIL_SETTING_STRING_CANCEL),
 			_popup_cancel_cb,
@@ -1597,10 +1597,10 @@ static void _popup_cancel_cb(void *data, Evas_Object *obj, void *event_info)
 
 	retm_if(!data, "data is null");
 
-	EmailSettingVD *vd = data;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = data;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
-	DELETE_EVAS_OBJECT(ugd->popup);
+	DELETE_EVAS_OBJECT(module->popup);
 }
 
 static void _popup_delete_ok_cb(void *data, Evas_Object *obj, void *event_info)
@@ -1609,32 +1609,32 @@ static void _popup_delete_ok_cb(void *data, Evas_Object *obj, void *event_info)
 
 	retm_if(!data, "data is null");
 
-	EmailSettingVD *vd = data;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = data;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
-	int account_id = ugd->account_id;
+	int account_id = module->account_id;
 	int account_svc_id = account_data->account_svc_id;
 
-	DELETE_EVAS_OBJECT(ugd->popup);
+	DELETE_EVAS_OBJECT(module->popup);
 
 	/* delete account from account_svc */
 	int ret = setting_delete_account_from_account_svc(account_svc_id);
 	if (ret == ACCOUNT_ERROR_NONE) {
 		/* delete account from email_svc */
-		ugd->is_account_deleted_on_this = EINA_TRUE;
+		module->is_account_deleted_on_this = EINA_TRUE;
 		ret = email_engine_delete_account(account_id);
 		if (ret) {
-			ugd->popup = setting_get_pb_process_notify(&vd->base,
+			module->popup = setting_get_pb_process_notify(&view->base,
 					&(EMAIL_SETTING_STRING_DELETING), 0,
 					NULL, NULL,
 					NULL, NULL,
 					POPUP_BACK_TYPE_NO_OP, NULL);
-			DELETE_TIMER_OBJECT(vd->del_timer);
-			vd->del_timer = ecore_timer_add(3.0, _after_delete_cb, vd);
+			DELETE_TIMER_OBJECT(view->del_timer);
+			view->del_timer = ecore_timer_add(3.0, _after_delete_cb, view);
 			debug_log("delete success");
 		} else {
-			ugd->is_account_deleted_on_this = EINA_FALSE;
-			ugd->popup = setting_get_notify(&vd->base, &(EMAIL_SETTING_STRING_HEADER_DELETE),
+			module->is_account_deleted_on_this = EINA_FALSE;
+			module->popup = setting_get_notify(&view->base, &(EMAIL_SETTING_STRING_HEADER_DELETE),
 					&(EMAIL_SETTING_STRING_UNABLE_DELETE), 1,
 					&(EMAIL_SETTING_STRING_OK),
 					_popup_cancel_cb, NULL, NULL);
@@ -1642,7 +1642,7 @@ static void _popup_delete_ok_cb(void *data, Evas_Object *obj, void *event_info)
 		}
 	} else {
 		debug_error("setting_delete_account_from_account_svc failed: %d", ret);
-		ugd->popup = setting_get_notify(&vd->base, &(EMAIL_SETTING_STRING_HEADER_DELETE),
+		module->popup = setting_get_notify(&view->base, &(EMAIL_SETTING_STRING_HEADER_DELETE),
 				&(EMAIL_SETTING_STRING_UNABLE_DELETE), 1,
 				&(EMAIL_SETTING_STRING_OK),
 				_popup_cancel_cb, NULL, NULL);
@@ -1654,20 +1654,20 @@ static Eina_Bool _after_delete_cb(void *data)
 {
 	debug_enter();
 
-	EmailSettingVD *vd = data;
+	EmailSettingView *view = data;
 
-	retvm_if(!vd, ECORE_CALLBACK_CANCEL, "view data is null");
+	retvm_if(!view, ECORE_CALLBACK_CANCEL, "view data is null");
 
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
-	DELETE_TIMER_OBJECT(vd->del_timer);
-	DELETE_EVAS_OBJECT(ugd->popup);
+	DELETE_TIMER_OBJECT(view->del_timer);
+	DELETE_EVAS_OBJECT(module->popup);
 
-	if (ugd->base.views_count > 1) {
-		setting_update_acct_list(&vd->base);
+	if (module->base.views_count > 1) {
+		setting_update_acct_list(&view->base);
 	}
 
-	email_module_exit_view(&vd->base);
+	email_module_exit_view(&view->base);
 
 	return ECORE_CALLBACK_CANCEL;
 }
@@ -1681,10 +1681,10 @@ static void _popup_ok_cb(void *data, Evas_Object *obj, void *event_info)
 		return;
 	}
 
-	EmailSettingVD *vd = data;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = data;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
-	DELETE_EVAS_OBJECT(ugd->popup);
+	DELETE_EVAS_OBJECT(module->popup);
 }
 
 static void _account_popup_name_done_cb(void *data, Evas_Object *obj, void *event_info)
@@ -1693,10 +1693,10 @@ static void _account_popup_name_done_cb(void *data, Evas_Object *obj, void *even
 
 	retm_if(!data, "data is null");
 
-	EmailSettingVD *vd = data;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = data;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
-	Evas_Object *entry_layout = elm_object_content_get(ugd->popup);
+	Evas_Object *entry_layout = elm_object_content_get(module->popup);
 	Evas_Object *entry = elm_layout_content_get(entry_layout, "elm.swallow.content");
 
 	char *val = setting_get_entry_str(entry);
@@ -1708,8 +1708,8 @@ static void _account_popup_name_done_cb(void *data, Evas_Object *obj, void *even
 			return;
 		}
 
-		_update_account_info(vd);
-		GSList *l = vd->list_items;
+		_update_account_info(view);
+		GSList *l = view->list_items;
 		while (l) {
 			ListItemData *li = l->data;
 			if (li->index == ACCOUNT_NAME_LIST_ITEM) {
@@ -1720,7 +1720,7 @@ static void _account_popup_name_done_cb(void *data, Evas_Object *obj, void *even
 			}
 			l = g_slist_next(l);
 		}
-		DELETE_EVAS_OBJECT(ugd->popup);
+		DELETE_EVAS_OBJECT(module->popup);
 	}
 	free(val);
 }
@@ -1731,10 +1731,10 @@ static void _account_popup_sender_name_done_cb(void *data, Evas_Object *obj, voi
 
 	retm_if(!data, "data is null");
 
-	EmailSettingVD *vd = data;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = data;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
-	Evas_Object *entry_layout = elm_object_content_get(ugd->popup);
+	Evas_Object *entry_layout = elm_object_content_get(module->popup);
 	Evas_Object *entry = elm_layout_content_get(entry_layout, "elm.swallow.content");
 
 	char *val = setting_get_entry_str(entry);
@@ -1746,8 +1746,8 @@ static void _account_popup_sender_name_done_cb(void *data, Evas_Object *obj, voi
 			return;
 		}
 
-		_update_account_info(vd);
-		GSList *l = vd->list_items;
+		_update_account_info(view);
+		GSList *l = view->list_items;
 		while (l) {
 			ListItemData *li = l->data;
 			if (li->index == DISPLAY_NAME_LIST_ITEM) {
@@ -1758,7 +1758,7 @@ static void _account_popup_sender_name_done_cb(void *data, Evas_Object *obj, voi
 			}
 			l = g_slist_next(l);
 		}
-		DELETE_EVAS_OBJECT(ugd->popup);
+		DELETE_EVAS_OBJECT(module->popup);
 	}
 	free(val);
 }
@@ -1769,10 +1769,10 @@ static void _account_popup_entry_changed_cb(void *data, Evas_Object *obj, void *
 
 	retm_if(!data, "data is null");
 
-	EmailSettingVD *vd = data;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = data;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
-	Evas_Object *entry_layout = elm_object_content_get(ugd->popup);
+	Evas_Object *entry_layout = elm_object_content_get(module->popup);
 	Evas_Object *entry = elm_layout_content_get(entry_layout, "elm.swallow.content");
 
 	char *val = setting_get_entry_str(entry);
@@ -1793,10 +1793,10 @@ static void _account_popup_password_done_cb(void *data, Evas_Object *obj, void *
 
 	retm_if(!data, "data is null");
 
-	EmailSettingVD *vd = data;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = data;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
-	Evas_Object *entry_layout = elm_object_content_get(ugd->popup);
+	Evas_Object *entry_layout = elm_object_content_get(module->popup);
 	Evas_Object *entry = elm_layout_content_get(entry_layout, "elm.swallow.content");
 
 	char *val = setting_get_entry_str(entry);
@@ -1808,7 +1808,7 @@ static void _account_popup_password_done_cb(void *data, Evas_Object *obj, void *
 			return;
 		}
 
-		GSList *l = vd->list_items;
+		GSList *l = view->list_items;
 		while (l) {
 			ListItemData *li = l->data;
 			if (li->index == PASSWORD_LIST_ITEM) {
@@ -1817,9 +1817,9 @@ static void _account_popup_password_done_cb(void *data, Evas_Object *obj, void *
 			}
 			l = g_slist_next(l);
 		}
-		DELETE_TIMER_OBJECT(vd->validate_timer);
-		vd->validate_timer = ecore_timer_add(0.5, _validate_account, vd);
-		DELETE_EVAS_OBJECT(ugd->popup);
+		DELETE_TIMER_OBJECT(view->validate_timer);
+		view->validate_timer = ecore_timer_add(0.5, _validate_account, view);
+		DELETE_EVAS_OBJECT(module->popup);
 	}
 	free(val);
 	debug_leave();
@@ -1831,10 +1831,10 @@ static void _account_popup_cancel_cb(void *data, Evas_Object *obj, void *event_i
 
 	retm_if(!data, "data is null");
 
-	EmailSettingVD *vd = data;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = data;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
-	GSList *l = vd->list_items;
+	GSList *l = view->list_items;
 	while (l) {
 		ListItemData *li = l->data;
 		if (li->entry) {
@@ -1844,7 +1844,7 @@ static void _account_popup_cancel_cb(void *data, Evas_Object *obj, void *event_i
 		l = g_slist_next(l);
 	}
 
-	DELETE_EVAS_OBJECT(ugd->popup);
+	DELETE_EVAS_OBJECT(module->popup);
 }
 
 static char *_gl_size_text_get_cb(void *data, Evas_Object *obj, const char *part)
@@ -1905,34 +1905,34 @@ static char *_gl_ex_size_text_get_cb(void *data, Evas_Object *obj, const char *p
 static Evas_Object *_gl_ex_size_content_get_cb(void *data, Evas_Object *obj, const char *part)
 {
 	int index = (int)(ptrdiff_t)data;
-	EmailSettingVD *vd = g_vd;
+	EmailSettingView *view = g_vd;
 
 	if (!strcmp(part, "elm.swallow.end")) {
 		Evas_Object *radio = elm_radio_add(obj);
-		elm_radio_group_add(radio, vd->size_radio_grp);
+		elm_radio_group_add(radio, view->size_radio_grp);
 		elm_radio_state_value_set(radio, index);
 
 		if (index == 0) {
 			if (account_data->auto_download_size == 0) {
-				elm_radio_value_set(vd->size_radio_grp, 0);
+				elm_radio_value_set(view->size_radio_grp, 0);
 			} else if (account_data->auto_download_size == 1024/2) {
-				elm_radio_value_set(vd->size_radio_grp, 1);
+				elm_radio_value_set(view->size_radio_grp, 1);
 			} else if (account_data->auto_download_size == 1024) {
-				elm_radio_value_set(vd->size_radio_grp, 2);
+				elm_radio_value_set(view->size_radio_grp, 2);
 			} else if (account_data->auto_download_size == 1024*2) {
-				elm_radio_value_set(vd->size_radio_grp, 3);
+				elm_radio_value_set(view->size_radio_grp, 3);
 			} else if (account_data->auto_download_size == 1024*5) {
-				elm_radio_value_set(vd->size_radio_grp, 4);
+				elm_radio_value_set(view->size_radio_grp, 4);
 			} else if (account_data->auto_download_size == 1024*10) {
-				elm_radio_value_set(vd->size_radio_grp, 5);
+				elm_radio_value_set(view->size_radio_grp, 5);
 			} else if (account_data->auto_download_size == 1024*20) {
-				elm_radio_value_set(vd->size_radio_grp, 6);
+				elm_radio_value_set(view->size_radio_grp, 6);
 			} else if (account_data->auto_download_size == 1024*50) {
-				elm_radio_value_set(vd->size_radio_grp, 7);
+				elm_radio_value_set(view->size_radio_grp, 7);
 			} else if (account_data->auto_download_size == 1024*100) {
-				elm_radio_value_set(vd->size_radio_grp, 8);
+				elm_radio_value_set(view->size_radio_grp, 8);
 			} else if (account_data->auto_download_size == EMAIL_SIZE_NO_LIMIT) {
-				elm_radio_value_set(vd->size_radio_grp, 9);
+				elm_radio_value_set(view->size_radio_grp, 9);
 			}
 		}
 		evas_object_propagate_events_set(radio, EINA_FALSE);
@@ -1947,8 +1947,8 @@ static void _gl_ex_size_radio_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 	int index = (int)(ptrdiff_t)data;
-	EmailSettingVD *vd = g_vd;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = g_vd;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
 
 	switch (index) {
@@ -1987,9 +1987,9 @@ static void _gl_ex_size_radio_cb(void *data, Evas_Object *obj, void *event_info)
 			break;
 	}
 
-	_update_account_info(vd);
+	_update_account_info(view);
 
-	GSList *l = vd->list_items;
+	GSList *l = view->list_items;
 	while (l) {
 		ListItemData *li = l->data;
 		if (li->index == EMAIL_SIZE_LIST_ITEM) {
@@ -1998,19 +1998,19 @@ static void _gl_ex_size_radio_cb(void *data, Evas_Object *obj, void *event_info)
 		}
 		l = g_slist_next(l);
 	}
-	DELETE_EVAS_OBJECT(ugd->popup);
+	DELETE_EVAS_OBJECT(module->popup);
 }
 
 static void _gl_ex_size_sel_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 	int index = (int)(ptrdiff_t)data;
-	EmailSettingVD *vd = g_vd;
+	EmailSettingView *view = g_vd;
 
 
 	Elm_Object_Item *item = event_info;
 	elm_genlist_item_selected_set(item, EINA_FALSE);
-	elm_radio_value_set(vd->size_radio_grp, index);
+	elm_radio_value_set(view->size_radio_grp, index);
 
 	_gl_ex_size_radio_cb((void *)(ptrdiff_t)index, NULL, NULL);
 }
@@ -2020,12 +2020,12 @@ static void _show_finished_cb(void *data, Evas_Object *obj, void *event_info)
 	debug_enter();
 	ListItemData *li = data;
 	int selected_index = 0;
-	EmailSettingVD *vd = li->vd;
+	EmailSettingView *view = li->view;
 
 	if (li->index == WHILE_ROAMING_LIST_ITEM) {
-		selected_index = elm_radio_value_get(vd->roaming_radio_grp);
+		selected_index = elm_radio_value_get(view->roaming_radio_grp);
 	} else if (li->index == SYNC_SCHEDULE_LIST_ITEM) {
-		selected_index = elm_radio_value_get(vd->sync_radio_grp);
+		selected_index = elm_radio_value_get(view->sync_radio_grp);
 		int i;
 		for (i = 0; i < SYNC_SCHEDULE_ITEM_COUNT; i++) {
 			if (selected_index == sync_schedule[i]) {
@@ -2034,7 +2034,7 @@ static void _show_finished_cb(void *data, Evas_Object *obj, void *event_info)
 			}
 		}
 	} else if (li->index == EMAIL_SIZE_LIST_ITEM) {
-		selected_index = elm_radio_value_get(vd->size_radio_grp);
+		selected_index = elm_radio_value_get(view->size_radio_grp);
 	}
 
 	Evas_Object *genlist = elm_object_content_get(obj);

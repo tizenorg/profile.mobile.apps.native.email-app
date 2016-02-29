@@ -15,10 +15,6 @@
  *
  */
 
-#ifndef UG_MODULE_API
-#define UG_MODULE_API __attribute__ ((visibility("default")))
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
@@ -38,16 +34,16 @@ static void _setting_resume(email_module_t *self);
 static void _setting_destroy(email_module_t *self);
 static void _setting_on_event(email_module_t *self, email_module_event_e event);
 
-static int _account_init(EmailSettingUGD *ugd);
-static int _account_finalize(EmailSettingUGD *ugd);
-static ViewType _parse_option(EmailSettingUGD *ugd, email_params_h params);
+static int _account_init(EmailSettingModule *module);
+static int _account_finalize(EmailSettingModule *module);
+static ViewType _parse_option(EmailSettingModule *module, email_params_h params);
 static void _account_deleted_cb(int account_id, email_setting_response_data *response, void *user_data);
 
 static void _filter_destroy_request_cb(void *data, email_module_h module);
 
 static void _popup_ok_cb(void *data, Evas_Object *obj, void *event_info);
 
-static void _create_launching_fail_popup(EmailSettingUGD *ugd, const email_string_t *content);
+static void _create_launching_fail_popup(EmailSettingModule *module, const email_string_t *content);
 
 static email_string_t EMAIL_SETTING_STRING_OK = {PACKAGE, "IDS_EMAIL_BUTTON_OK"};
 static email_string_t EMAIL_SETTING_STRING_FAILED_TO_START_EMAIL_APPLICATION = {PACKAGE, "IDS_EMAIL_POP_FAILED_TO_START_EMAIL_APPLICATION"};
@@ -61,84 +57,79 @@ email_module_t *setting_module_alloc()
 {
 	debug_enter();
 
-	EmailSettingUGD *ugd = MEM_ALLOC(ugd, 1);
-	if (!ugd) {
+	EmailSettingModule *module = MEM_ALLOC(module, 1);
+	if (!module) {
 		return NULL;
 	}
 
-	ugd->base.create = _setting_create;
-	ugd->base.destroy = _setting_destroy;
-	ugd->base.resume = _setting_resume;
-	ugd->base.on_event = _setting_on_event;
+	module->base.create = _setting_create;
+	module->base.destroy = _setting_destroy;
+	module->base.resume = _setting_resume;
+	module->base.on_event = _setting_on_event;
 
 	debug_leave();
-	return &ugd->base;
-}
-
-UG_MODULE_API int setting_plugin_reset(app_control_h service, void *priv)
-{
-	return 0;
+	return &module->base;
 }
 
 static int _setting_create(email_module_t *self, email_params_h params)
 {
 	debug_enter();
-	EmailSettingUGD *ugd;
+	EmailSettingModule *module;
 
 	if (!self)
 		return -1;
 
-	ugd = (EmailSettingUGD *)self;
+	module = (EmailSettingModule *)self;
 
 	bindtextdomain(PACKAGE, email_get_locale_dir());
 
-	ugd->filter_listener.cb_data = ugd;
-	ugd->filter_listener.destroy_request_cb = _filter_destroy_request_cb;
+	module->filter_listener.cb_data = module;
+	module->filter_listener.destroy_request_cb = _filter_destroy_request_cb;
 
 	/* DBUS */
-	setting_noti_init(ugd);
+	setting_noti_init(module);
 
 	/* subscribe for account delete notification */
-	setting_noti_subscribe(ugd, EMAIL_SETTING_ACCOUNT_DELETE_NOTI, _account_deleted_cb, ugd);
+	setting_noti_subscribe(module, EMAIL_SETTING_ACCOUNT_DELETE_NOTI, _account_deleted_cb, module);
 
 	/* ICU */
 	setting_open_icu_pattern_generator();
 
 	/* Init Email Service */
 	if (!email_engine_initialize()) {
-		_create_launching_fail_popup(ugd, &(EMAIL_SETTING_STRING_FAILED_TO_START_EMAIL_APPLICATION));
+		_create_launching_fail_popup(module, &(EMAIL_SETTING_STRING_FAILED_TO_START_EMAIL_APPLICATION));
 		return -1;
 	}
 
 	/* Init Emf Account */
-	if (!_account_init(ugd)) {
+	if (!_account_init(module)) {
 		debug_warning("Failed to get account list");
 	}
 
 	/* register keypad callback */
-	setting_register_keypad_rot_cb(ugd);
+	setting_register_keypad_rot_cb(module);
 
 	/* creating view */
 
-	switch (_parse_option(ugd, params)) {
+	switch (_parse_option(module, params)) {
 	case VIEW_SETTING:
-		create_setting_view(ugd);
+		create_setting_view(module);
 		break;
 	case VIEW_ACCOUNT_SETUP:
-		create_account_setup_view(ugd);
+		create_account_setup_view(module);
 		break;
 	case VIEW_ACCOUNT_DETAILS:
-		create_account_details_view(ugd);
+		create_account_details_view(module);
 		break;
 	case VIEW_NOTIFICATION_SETTING:
-		create_notification_setting_view(ugd);
+		create_notification_setting_view(module);
 		break;
 	case VIEW_SIGNATURE_SETTING:
-		create_signature_setting_view(ugd);
+		create_signature_setting_view(module);
 		break;
 	default:
 		/* invalid view type */
-		_create_launching_fail_popup(ugd, &(EMAIL_SETTING_STRING_FAILED_TO_START_EMAIL_APPLICATION));
+		_create_launching_fail_popup(module, &(EMAIL_SETTING_STRING_FAILED_TO_START_EMAIL_APPLICATION));
 		break;
 	}
 
@@ -152,7 +143,7 @@ static void _setting_on_event(email_module_t *self, email_module_event_e event)
 	if (!self)
 		return;
 
-	EmailSettingUGD *ugd = (EmailSettingUGD *)self;
+	EmailSettingModule *module = (EmailSettingModule *)self;
 
 	switch (event) {
 	case EM_EVENT_REGION_CHANGE:
@@ -164,7 +155,7 @@ static void _setting_on_event(email_module_t *self, email_module_event_e event)
 		break;
 	}
 
-	debug_log("is_keypad: %d", ugd->is_keypad);
+	debug_log("is_keypad: %d", module->is_keypad);
 	debug_log("event: %d", event);
 
 	return;
@@ -173,98 +164,98 @@ static void _setting_on_event(email_module_t *self, email_module_event_e event)
 static void _setting_destroy(email_module_t *self)
 {
 	debug_enter();
-	EmailSettingUGD *ugd;
+	EmailSettingModule *module;
 
 	if (!self)
 		return;
 
-	ugd = (EmailSettingUGD *)self;
+	module = (EmailSettingModule *)self;
 
-	setting_noti_unsubscribe(ugd, EMAIL_SETTING_ACCOUNT_DELETE_NOTI, _account_deleted_cb);
-	setting_noti_deinit(ugd);
-	setting_deregister_keypad_rot_cb(ugd);
+	setting_noti_unsubscribe(module, EMAIL_SETTING_ACCOUNT_DELETE_NOTI, _account_deleted_cb);
+	setting_noti_deinit(module);
+	setting_deregister_keypad_rot_cb(module);
 
-	DELETE_EVAS_OBJECT(ugd->popup);
+	DELETE_EVAS_OBJECT(module->popup);
 
 	/* destroying cancel op */
-	GSList *cancel_op_list = ugd->cancel_op_list;
-	if (g_slist_length(ugd->cancel_op_list) > 0) {
+	GSList *cancel_op_list = module->cancel_op_list;
+	if (g_slist_length(module->cancel_op_list) > 0) {
 		while (cancel_op_list) {
 			free(cancel_op_list->data);
 			cancel_op_list = g_slist_next(cancel_op_list);
 		}
-		g_slist_free(ugd->cancel_op_list);
-		ugd->cancel_op_list = NULL;
+		g_slist_free(module->cancel_op_list);
+		module->cancel_op_list = NULL;
 	}
 
-	if (ugd->app_control_google_eas) {
-		app_control_send_terminate_request(ugd->app_control_google_eas);
-		app_control_destroy(ugd->app_control_google_eas);
-		ugd->app_control_google_eas = NULL;
+	if (module->app_control_google_eas) {
+		app_control_send_terminate_request(module->app_control_google_eas);
+		app_control_destroy(module->app_control_google_eas);
+		module->app_control_google_eas = NULL;
 	}
 
 	/* ICU */
 	setting_close_icu_pattern_generator();
 
-	setting_free_provider_list(&(ugd->default_provider_list));
+	setting_free_provider_list(&(module->default_provider_list));
 	email_engine_finalize();
 
-	_account_finalize(ugd);
+	_account_finalize(module);
 }
 
 static void _setting_resume(email_module_t *self)
 {
 	debug_enter();
 
-	EmailSettingUGD *ugd;
+	EmailSettingModule *module;
 
 	if (!self)
 		return;
 
-	ugd = (EmailSettingUGD *)self;
+	module = (EmailSettingModule *)self;
 
-	if (ugd->app_control_google_eas) {
-		app_control_destroy(ugd->app_control_google_eas);
-		ugd->app_control_google_eas = NULL;
+	if (module->app_control_google_eas) {
+		app_control_destroy(module->app_control_google_eas);
+		module->app_control_google_eas = NULL;
 	}
 
 	return;
 }
 
-static int _account_init(EmailSettingUGD *ugd)
+static int _account_init(EmailSettingModule *module)
 {
 	debug_enter();
 	int i = 0;
 
 	/* Get Email Account List Info */
-	ugd->account_list = NULL;
-	if (!email_engine_get_account_list(&ugd->account_count, &ugd->account_list)) {
+	module->account_list = NULL;
+	if (!email_engine_get_account_list(&module->account_count, &module->account_list)) {
 		return FALSE;
 	}
 
-	for (i = 0; i < ugd->account_count; i++) {
-		EMAIL_SETTING_PRINT_ACCOUNT_INFO((&(ugd->account_list[i])));
+	for (i = 0; i < module->account_count; i++) {
+		EMAIL_SETTING_PRINT_ACCOUNT_INFO((&(module->account_list[i])));
 	}
 
 	return TRUE;
 }
 
-static int _account_finalize(EmailSettingUGD *ugd)
+static int _account_finalize(EmailSettingModule *module)
 {
 	debug_enter();
 	int r;
 
 	/* Free Account List Info */
-	if (ugd->account_list != NULL) {
-		r = email_engine_free_account_list(&(ugd->account_list), ugd->account_count);
+	if (module->account_list != NULL) {
+		r = email_engine_free_account_list(&(module->account_list), module->account_count);
 		retv_if(r == FALSE, -1);
 	}
-	ugd->account_list = NULL;
+	module->account_list = NULL;
 
 	return TRUE;
 }
 
-static ViewType _parse_option(EmailSettingUGD *ugd, email_params_h params)
+static ViewType _parse_option(EmailSettingModule *module, email_params_h params)
 {
 	debug_enter();
 	const char *operation = NULL;
@@ -295,15 +286,15 @@ static ViewType _parse_option(EmailSettingUGD *ugd, email_params_h params)
 
 			debug_log("my-account id - %d", my_account_id);
 
-			ugd->account_id = -1;
-			for (i = 0; i < ugd->account_count; i++) {
-				if (ugd->account_list[i].account_svc_id == my_account_id) {
-					ugd->account_id = ugd->account_list[i].account_id;
-					debug_log("email-service id - %d", ugd->account_id);
+			module->account_id = -1;
+			for (i = 0; i < module->account_count; i++) {
+				if (module->account_list[i].account_svc_id == my_account_id) {
+					module->account_id = module->account_list[i].account_id;
+					debug_log("email-service id - %d", module->account_id);
 				}
 			}
 
-			if (ugd->account_id != -1) {
+			if (module->account_id != -1) {
 				debug_log("VIEW_TYPE - VIEW_SYNC_OPTION");
 				ret_type = VIEW_ACCOUNT_DETAILS;
 			} else {
@@ -321,8 +312,8 @@ static ViewType _parse_option(EmailSettingUGD *ugd, email_params_h params)
 
 			debug_log("EMAIL_URI_NOTIFICATION_SETTING account id: %d", account_id);
 
-			ugd->account_id = account_id;
-			if (ugd->account_id != -1) {
+			module->account_id = account_id;
+			if (module->account_id != -1) {
 				debug_log("VIEW_TYPE - NOTIFICATION_SETTING");
 				ret_type = VIEW_NOTIFICATION_SETTING;
 			} else {
@@ -338,8 +329,8 @@ static ViewType _parse_option(EmailSettingUGD *ugd, email_params_h params)
 
 			debug_log("EMAIL_URI_NOTIFICATION_SETTING account id: %d", account_id);
 
-			ugd->account_id = account_id;
-			if (ugd->account_id != -1) {
+			module->account_id = account_id;
+			if (module->account_id != -1) {
 				debug_log("VIEW_TYPE - SIGNATURE_SETTING");
 				ret_type = VIEW_SIGNATURE_SETTING;
 			} else {
@@ -348,7 +339,7 @@ static ViewType _parse_option(EmailSettingUGD *ugd, email_params_h params)
 			}
 		}
 	} else {
-		/* from ug_create */
+		/* from parent module */
 		const char *start_view_type = NULL;
 		retvm_if(!email_params_get_str(params, EMAIL_BUNDLE_KEY_VIEW_TYPE, &start_view_type),
 				VIEW_INVALID, "%s is invalid", EMAIL_BUNDLE_KEY_VIEW_TYPE);
@@ -371,16 +362,14 @@ FINISH:
 static void _filter_destroy_request_cb(void *data, email_module_h module)
 {
 	debug_enter();
-	EmailSettingUGD *ugd;
-
 	if (!data)
 		return;
 
-	ugd = data;
+	EmailSettingModule *setting_module = data;
 
-	if (module == ugd->filter) {
-		email_module_destroy(ugd->filter);
-		ugd->filter = NULL;
+	if (module == setting_module->filter) {
+		email_module_destroy(setting_module->filter);
+		setting_module->filter = NULL;
 	}
 
 	return;
@@ -398,36 +387,36 @@ static void _popup_ok_cb(void *data, Evas_Object *obj, void *event_info)
 	if (obj)
 		evas_object_del(obj);
 
-	EmailSettingUGD *ugd = data;
-	email_module_make_destroy_request(&ugd->base);
+	EmailSettingModule *module = data;
+	email_module_make_destroy_request(&module->base);
 }
 
 static void _account_deleted_cb(int account_id, email_setting_response_data *response, void *user_data)
 {
 	debug_enter();
-	EmailSettingUGD *ugd = user_data;
+	EmailSettingModule *module = user_data;
 
 	retm_if(!response, "response data is NULL");
-	retm_if(ugd->account_id != response->account_id, "account_id is different");
-	retm_if(ugd->is_account_deleted_on_this, "account is deleted on this ug");
+	retm_if(module->account_id != response->account_id, "account_id is different");
+	retm_if(module->is_account_deleted_on_this, "account is deleted on this module");
 
 	debug_log("account is deleted. Let's destroyed");
-	email_module_make_destroy_request(&ugd->base);
+	email_module_make_destroy_request(&module->base);
 }
 
-static void _create_launching_fail_popup(EmailSettingUGD *ugd, const email_string_t *content)
+static void _create_launching_fail_popup(EmailSettingModule *module, const email_string_t *content)
 {
 	debug_enter();
-	Evas_Object *popup = elm_popup_add(ugd->base.win);
+	Evas_Object *popup = elm_popup_add(module->base.win);
 	elm_popup_align_set(popup, ELM_NOTIFY_ALIGN_FILL, 1.0);
 	elm_object_domain_translatable_part_text_set(popup, "title,text", EMAIL_SETTING_STRING_WARNING.domain, EMAIL_SETTING_STRING_WARNING.id);
 	elm_object_domain_translatable_text_set(popup, content->domain, content->id);
-	eext_object_event_callback_add(popup, EEXT_CALLBACK_BACK, _popup_ok_cb, ugd);
+	eext_object_event_callback_add(popup, EEXT_CALLBACK_BACK, _popup_ok_cb, module);
 	Evas_Object *btn1 = elm_button_add(popup);
 	elm_object_style_set(btn1, "popup");
 	elm_object_domain_translatable_text_set(btn1, EMAIL_SETTING_STRING_OK.domain, EMAIL_SETTING_STRING_OK.id);
 	elm_object_part_content_set(popup, "button1", btn1);
-	evas_object_smart_callback_add(btn1, "clicked", _popup_ok_cb, ugd);
+	evas_object_smart_callback_add(btn1, "clicked", _popup_ok_cb, module);
 	evas_object_show(popup);
 }
 

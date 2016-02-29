@@ -23,33 +23,33 @@
 
 void _event_receiver(GDBusConnection *connection, const gchar *sender_name, const gchar *object_path,
 		const gchar *interface_name, const gchar *signal_name, GVariant *parameters, gpointer data);
-static void _call_operation_callback(EmailSettingUGD *ugd, email_setting_operation_type_e op_type, email_setting_response_data *data);
+static void _call_operation_callback(EmailSettingModule *module, email_setting_operation_type_e op_type, email_setting_response_data *data);
 static email_setting_operation_type_e _get_email_setting_storage_noti_type(int type);
 static email_setting_operation_type_e _get_email_setting_network_noti_type(int type);
 
-int setting_noti_init(EmailSettingUGD *ugd)
+int setting_noti_init(EmailSettingModule *module)
 {
 	debug_enter();
 
 	GError *error = NULL;
-	if (ugd->dbus_conn == NULL) {
-		ugd->dbus_conn = g_bus_get_sync(G_BUS_TYPE_SYSTEM, NULL, &error);
+	if (module->dbus_conn == NULL) {
+		module->dbus_conn = g_bus_get_sync(G_BUS_TYPE_SYSTEM, NULL, &error);
 		if (error) {
 			debug_error("g_bus_get_sync() failed (%s)", error->message);
 			g_error_free(error);
 			return -1;
 		}
 
-		ugd->storage_id = g_dbus_connection_signal_subscribe(ugd->dbus_conn, NULL, "User.Email.StorageChange", "email", "/User/Email/StorageChange",
-													NULL, G_DBUS_SIGNAL_FLAGS_NONE, _event_receiver, ugd, NULL);
+		module->storage_id = g_dbus_connection_signal_subscribe(module->dbus_conn, NULL, "User.Email.StorageChange", "email", "/User/Email/StorageChange",
+													NULL, G_DBUS_SIGNAL_FLAGS_NONE, _event_receiver, module, NULL);
 
-		if (ugd->storage_id == GDBUS_SIGNAL_SUBSCRIBE_FAILURE) {
+		if (module->storage_id == GDBUS_SIGNAL_SUBSCRIBE_FAILURE) {
 			debug_log("Failed to g_dbus_connection_signal_subscribe()");
 			return -1;
 		}
-		ugd->network_id = g_dbus_connection_signal_subscribe(ugd->dbus_conn, NULL, "User.Email.NetworkStatus", "email", "/User/Email/NetworkStatus",
-													NULL, G_DBUS_SIGNAL_FLAGS_NONE, _event_receiver, ugd, NULL);
-		if (ugd->network_id == GDBUS_SIGNAL_SUBSCRIBE_FAILURE) {
+		module->network_id = g_dbus_connection_signal_subscribe(module->dbus_conn, NULL, "User.Email.NetworkStatus", "email", "/User/Email/NetworkStatus",
+													NULL, G_DBUS_SIGNAL_FLAGS_NONE, _event_receiver, module, NULL);
+		if (module->network_id == GDBUS_SIGNAL_SUBSCRIBE_FAILURE) {
 			debug_critical("Failed to g_dbus_connection_signal_subscribe()");
 			return -1;
 		}
@@ -58,33 +58,33 @@ int setting_noti_init(EmailSettingUGD *ugd)
 	return 0;
 }
 
-int setting_noti_deinit(EmailSettingUGD *ugd)
+int setting_noti_deinit(EmailSettingModule *module)
 {
 	debug_enter();
 
-	g_dbus_connection_signal_unsubscribe(ugd->dbus_conn, ugd->storage_id);
-	g_dbus_connection_signal_unsubscribe(ugd->dbus_conn, ugd->network_id);
-	g_object_unref(ugd->dbus_conn);
-	ugd->storage_id = 0;
-	ugd->network_id = 0;
-	ugd->dbus_conn = NULL;
+	g_dbus_connection_signal_unsubscribe(module->dbus_conn, module->storage_id);
+	g_dbus_connection_signal_unsubscribe(module->dbus_conn, module->network_id);
+	g_object_unref(module->dbus_conn);
+	module->storage_id = 0;
+	module->network_id = 0;
+	module->dbus_conn = NULL;
 
 	GSList *l = NULL;
 	email_setting_ipc_data *ipc_data = NULL;
-	l = ugd->noti_list;
+	l = module->noti_list;
 	while (l) {
 		ipc_data = l->data;
 		if (ipc_data)
 			free(ipc_data);
 		l = g_slist_next(l);
 	}
-	g_slist_free(ugd->noti_list);
-	ugd->noti_list = NULL;
+	g_slist_free(module->noti_list);
+	module->noti_list = NULL;
 
 	return 0;
 }
 
-int setting_noti_subscribe(EmailSettingUGD *ugd, email_setting_operation_type_e op_type, email_setting_ipc_cb cb, void *user_data)
+int setting_noti_subscribe(EmailSettingModule *module, email_setting_operation_type_e op_type, email_setting_ipc_cb cb, void *user_data)
 {
 	debug_enter();
 	email_setting_ipc_data *ipc_data = NULL;
@@ -97,24 +97,24 @@ int setting_noti_subscribe(EmailSettingUGD *ugd, email_setting_operation_type_e 
 	ipc_data->user_data = user_data;
 
 	debug_log("add operation: %d", op_type);
-	ugd->noti_list = g_slist_append(ugd->noti_list, ipc_data);
+	module->noti_list = g_slist_append(module->noti_list, ipc_data);
 
 	return 0;
 }
 
-int setting_noti_unsubscribe(EmailSettingUGD *ugd, email_setting_operation_type_e op_type, email_setting_ipc_cb cb)
+int setting_noti_unsubscribe(EmailSettingModule *module, email_setting_operation_type_e op_type, email_setting_ipc_cb cb)
 {
 	debug_enter();
 	GSList *l = NULL;
 	email_setting_ipc_data *ipc_data = NULL;
 
-	l = ugd->noti_list;
+	l = module->noti_list;
 	while (l) {
 		ipc_data = l->data;
 		if (ipc_data && ipc_data->op_type == op_type && ipc_data->cb == cb) {
 			debug_log("remove operation: %d", op_type);
-			ugd->noti_list = g_slist_remove(ugd->noti_list, ipc_data);
-			l = ugd->noti_list;
+			module->noti_list = g_slist_remove(module->noti_list, ipc_data);
+			l = module->noti_list;
 		} else {
 			l = g_slist_next(l);
 		}
@@ -131,10 +131,10 @@ void _event_receiver(GDBusConnection *connection,
 											gpointer data)
 {
 	debug_enter();
-	EmailSettingUGD *ugd = data;
+	EmailSettingModule *module = data;
 	debug_secure("Object path=%s, interface name=%s, signal name=%s", object_path, interface_name, signal_name);
 
-	retm_if(ugd->dbus_conn == NULL, "dbus_conn is NULL");
+	retm_if(module->dbus_conn == NULL, "dbus_conn is NULL");
 
 	if (!(g_strcmp0(object_path, "/User/Email/StorageChange")) && !(g_strcmp0(signal_name, "email"))) {
 		debug_log("receive storage event");
@@ -159,7 +159,7 @@ void _event_receiver(GDBusConnection *connection,
 		data->err = data4;
 		data->data = data3;
 
-		_call_operation_callback(ugd, _get_email_setting_storage_noti_type(subtype), data);
+		_call_operation_callback(module, _get_email_setting_storage_noti_type(subtype), data);
 	} else if (!(g_strcmp0(object_path, "/User/Email/NetworkStatus")) && !(g_strcmp0(signal_name, "email"))) {
 		debug_log("receive network event");
 		int subtype = 0;
@@ -183,7 +183,7 @@ void _event_receiver(GDBusConnection *connection,
 		data->err = data4;
 		data->data = data2;
 
-		_call_operation_callback(ugd, _get_email_setting_network_noti_type(subtype), data);
+		_call_operation_callback(module, _get_email_setting_network_noti_type(subtype), data);
 	} else {
 		debug_warning("uninterested dbus message");
 	}
@@ -265,7 +265,7 @@ static email_setting_operation_type_e _get_email_setting_network_noti_type(int t
 	return ret_op_type;
 }
 
-static void _call_operation_callback(EmailSettingUGD *ugd, email_setting_operation_type_e op_type, email_setting_response_data *data)
+static void _call_operation_callback(EmailSettingModule *module, email_setting_operation_type_e op_type, email_setting_response_data *data)
 {
 	debug_enter();
 	GSList *l = NULL;
@@ -273,7 +273,7 @@ static void _call_operation_callback(EmailSettingUGD *ugd, email_setting_operati
 
 	retm_if(!data, "response data is NULL");
 
-	l = ugd->noti_list;
+	l = module->noti_list;
 	while (l) {
 		ipc_data = l->data;
 		if (ipc_data && ipc_data->cb && ipc_data->op_type == op_type) {
