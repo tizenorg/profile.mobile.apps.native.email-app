@@ -22,9 +22,9 @@
 
 /**
  * @brief Creates account setting view
- * @param[in]	ugd		Email settings data
+ * @param[in]	module	Email settings data
  */
-void create_setting_view(EmailSettingUGD *ugd);
+void create_setting_view(EmailSettingModule *module);
 
 #endif				/* __EMAIL_VIEW_SETTING_H__ */
 

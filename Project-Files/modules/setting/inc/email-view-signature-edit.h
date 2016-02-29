@@ -22,9 +22,9 @@
 
 /**
  * @brief Creates account signature edit view
- * @param[in]	ugd		Email settings data
+ * @param[in]	module	Email settings data
  */
-void create_signature_edit_view(EmailSettingUGD *ugd);
+void create_signature_edit_view(EmailSettingModule *module);
 
 #endif				/* __EMAIL_VIEW_SIGNATURE_EDIT_H__ */
 

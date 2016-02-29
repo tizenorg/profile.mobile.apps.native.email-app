@@ -30,19 +30,19 @@ static email_string_t EMAIL_SETTING_STRING_SENT_FROM_SAMSUNG_MOBILE = {PACKAGE, 
 static void _account_info_print(email_account_t *account);
 static void _set_display_name_with_email_addr(char *email_addr, char **display_name);
 static char *_get_default_server_address(char *email_addr, int account_type, int server_type);
-static void _set_default_setting_to_account(email_view_t *vd, email_account_t *account);
+static void _set_default_setting_to_account(email_view_t *view, email_account_t *account);
 static void _set_setting_account_provider_info_to_email_account_t(email_account_t *account, setting_account_provider_info_t *info);
 static void _set_setting_account_server_info_to_email_account_t(email_account_t *account, setting_account_server_info_t *info);
 
-int setting_is_in_default_provider_list(email_view_t *vd, const char *email_addr)
+int setting_is_in_default_provider_list(email_view_t *view, const char *email_addr)
 {
 	debug_enter();
 
 	int ret = FALSE;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
+	EmailSettingModule *module = (EmailSettingModule *)view->module;
 	GSList *l = NULL;
 
-	l = ugd->default_provider_list;
+	l = module->default_provider_list;
 	while (l) {
 		setting_account_provider_info_t *info = l->data;
 		if (g_str_has_suffix(email_addr, info->provider_domain)) {
@@ -55,15 +55,15 @@ int setting_is_in_default_provider_list(email_view_t *vd, const char *email_addr
 	return ret;
 }
 
-void setting_set_default_provider_info_to_account(email_view_t *vd, email_account_t *account)
+void setting_set_default_provider_info_to_account(email_view_t *view, email_account_t *account)
 {
 	debug_enter();
 
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
+	EmailSettingModule *module = (EmailSettingModule *)view->module;
 	char *email_addr = g_strdup(account->user_email_address);
 	GSList *l = NULL;
 
-	l = ugd->default_provider_list;
+	l = module->default_provider_list;
 	while (l) {
 		setting_account_provider_info_t *info = l->data;
 		if (g_str_has_suffix(email_addr, info->provider_domain)) {
@@ -76,21 +76,21 @@ void setting_set_default_provider_info_to_account(email_view_t *vd, email_accoun
 	FREE(email_addr);
 
 	/* set default common setting */
-	_set_default_setting_to_account(vd, account);
+	_set_default_setting_to_account(view, account);
 
 	_account_info_print(account);
 }
 
-void setting_set_others_account(email_view_t *vd)
+void setting_set_others_account(email_view_t *view)
 {
 	debug_enter();
-	retm_if(!vd, "vd is NULL");
+	retm_if(!view, "view is NULL");
 
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
-	email_account_t *account = ugd->new_account;
+	EmailSettingModule *module = (EmailSettingModule *)view->module;
+	email_account_t *account = module->new_account;
 
 	/* set server configuration if default provider. */
-	setting_set_default_provider_info_to_account(vd, account);
+	setting_set_default_provider_info_to_account(view, account);
 }
 
 void setting_set_others_account_server_default_type(email_account_t *account, int account_type,
@@ -215,12 +215,12 @@ static void _account_info_print(email_account_t *account)
 	debug_secure("outgoing server user name: %s", account->outgoing_server_user_name);
 }
 
-static void _set_default_setting_to_account(email_view_t *vd, email_account_t *account)
+static void _set_default_setting_to_account(email_view_t *view, email_account_t *account)
 {
-	retm_if(!vd, "vd is NULL");
+	retm_if(!view, "view is NULL");
 	retm_if(!account, "account is NULL");
 
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->module;
+	EmailSettingModule *module = (EmailSettingModule *)view->module;
 
 	FREE(account->incoming_server_user_name);
 	account->incoming_server_user_name = g_strdup(account->user_email_address);
@@ -274,7 +274,7 @@ static void _set_default_setting_to_account(email_view_t *vd, email_account_t *a
 	data.show_images = 0;
 	data.send_read_report = 0;
 	data.pop3_deleting_option = 0;
-	snprintf(data.service_provider_name, 128, "%s", setting_get_provider_name(ugd));
+	snprintf(data.service_provider_name, 128, "%s", setting_get_provider_name(module));
 
 	int data_len = sizeof(account_user_data_t);
 	account->user_data = calloc(1, data_len);

@@ -22,9 +22,9 @@
 
 /**
  * @brief Creates account notification setting view
- * @param[in]	ugd		Email settings data
+ * @param[in]	module	Email settings data
  */
-void create_notification_setting_view(EmailSettingUGD *ugd);
+void create_notification_setting_view(EmailSettingModule *module);
 
 #endif
 

@@ -19,18 +19,18 @@
 #include "email-view-signature-setting.h"
 #include "email-view-signature-edit.h"
 
-typedef struct view_data EmailSettingVD;
+typedef struct view_data EmailSettingView;
 
 static int _create(email_view_t *self);
 static void _update(email_view_t *self, int flags);
 static void _destroy(email_view_t *self);
 static void _on_back_cb(email_view_t *self);
 
-static void _update_list(EmailSettingVD *vd);
+static void _update_list(EmailSettingView *view);
 
-static void _push_naviframe(EmailSettingVD *vd);
-static void _create_list(EmailSettingVD *vd);
-static void _update_account_info(EmailSettingVD *vd);
+static void _push_naviframe(EmailSettingView *view);
+static void _create_list(EmailSettingView *view);
+static void _update_account_info(EmailSettingView *view);
 
 static void _onoff_cb(void *data, Evas_Object *obj, void *event_info);
 static char *_gl_text_get_cb(void *data, Evas_Object *obj, const char *part);
@@ -62,23 +62,23 @@ typedef struct _ListItemData {
 	Elm_Object_Item *it;
 	Evas_Object *check;
 	Eina_Bool is_checked;
-	EmailSettingVD *vd;
+	EmailSettingView *view;
 } ListItemData;
 
-void create_signature_setting_view(EmailSettingUGD *ugd)
+void create_signature_setting_view(EmailSettingModule *module)
 {
 	debug_enter();
-	retm_if(!ugd, "ug data is null");
+	retm_if(!module, "module is null");
 
-	EmailSettingVD *vd = calloc(1, sizeof(EmailSettingVD));
-	retm_if(!vd, "view data is null");
+	EmailSettingView *view = calloc(1, sizeof(EmailSettingView));
+	retm_if(!view, "view data is null");
 
-	vd->base.create = _create;
-	vd->base.destroy = _destroy;
-	vd->base.update = _update;
-	vd->base.on_back_key = _on_back_cb;
+	view->base.create = _create;
+	view->base.destroy = _destroy;
+	view->base.update = _update;
+	view->base.on_back_key = _on_back_cb;
 
-	debug_log("view create result: %d", email_module_create_view(&ugd->base, &vd->base));
+	debug_log("view create result: %d", email_module_create_view(&module->base, &view->base));
 }
 
 static int _create(email_view_t *self)
@@ -86,19 +86,19 @@ static int _create(email_view_t *self)
 	debug_enter();
 	retvm_if(!self, -1, "self is null");
 
-	EmailSettingVD *vd = (EmailSettingVD *)self;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = (EmailSettingView *)self;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
-	if (!setting_get_acct_full_data(ugd->account_id, &(vd->account_data))) {
+	if (!setting_get_acct_full_data(module->account_id, &(view->account_data))) {
 		debug_error("setting_get_acct_full_data failed");
 		return -1;
 	}
 
-	EMAIL_SETTING_PRINT_ACCOUNT_INFO(vd->account_data);
-	vd->base.content = setting_add_inner_layout(&vd->base);
-	_push_naviframe(vd);
+	EMAIL_SETTING_PRINT_ACCOUNT_INFO(view->account_data);
+	view->base.content = setting_add_inner_layout(&view->base);
+	_push_naviframe(view);
 
-	_update_list(vd);
+	_update_list(view);
 
 	return 0;
 }
@@ -108,41 +108,41 @@ static void _update(email_view_t *self, int flags)
 	debug_enter();
 	retm_if(!self, "self is null");
 
-	EmailSettingVD *vd = (EmailSettingVD *)self;
+	EmailSettingView *view = (EmailSettingView *)self;
 
 	if (flags & EVUF_POPPING) {
-		_update_list(vd);
+		_update_list(view);
 	}
 }
 
-static void _update_list(EmailSettingVD *vd)
+static void _update_list(EmailSettingView *view)
 {
 	debug_enter();
-	retm_if(!vd, "view data is null");
+	retm_if(!view, "view data is null");
 
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
-	if (vd->genlist) {
-		elm_genlist_clear(vd->genlist);
-		evas_object_del(vd->genlist);
-		vd->genlist = NULL;
+	if (view->genlist) {
+		elm_genlist_clear(view->genlist);
+		evas_object_del(view->genlist);
+		view->genlist = NULL;
 	}
 
 	/* read account info again. */
 
-	if (vd->account_data) {
-		email_engine_free_account_list(&vd->account_data, 1);
-		vd->account_data = NULL;
+	if (view->account_data) {
+		email_engine_free_account_list(&view->account_data, 1);
+		view->account_data = NULL;
 	}
 
-	if (!setting_get_acct_full_data(ugd->account_id, &vd->account_data)) {
+	if (!setting_get_acct_full_data(module->account_id, &view->account_data)) {
 		debug_error("setting_get_acct_full_data failed");
 		return;
 	}
 
-	EMAIL_SETTING_PRINT_ACCOUNT_INFO(vd->account_data);
+	EMAIL_SETTING_PRINT_ACCOUNT_INFO(view->account_data);
 
-	_create_list(vd);
+	_create_list(view);
 }
 
 static void _destroy(email_view_t *self)
@@ -150,37 +150,37 @@ static void _destroy(email_view_t *self)
 	debug_enter();
 	retm_if(!self, "self is null");
 
-	EmailSettingVD *vd = (EmailSettingVD *)self;
+	EmailSettingView *view = (EmailSettingView *)self;
 
-	GSList *l = vd->list_items;
+	GSList *l = view->list_items;
 	while (l) {
 		free(l->data);
 		l = g_slist_next(l);
 	}
-	g_slist_free(vd->list_items);
+	g_slist_free(view->list_items);
 
-	EMAIL_GENLIST_ITC_FREE(vd->itc1);
-	EMAIL_GENLIST_ITC_FREE(vd->itc5);
+	EMAIL_GENLIST_ITC_FREE(view->itc1);
+	EMAIL_GENLIST_ITC_FREE(view->itc5);
 
-	free(vd);
+	free(view);
 }
 
-static void _push_naviframe(EmailSettingVD *vd)
+static void _push_naviframe(EmailSettingView *view)
 {
 	debug_enter();
 	Elm_Object_Item *navi_it = NULL;
 
-	navi_it = email_module_view_push(&vd->base, EMAIL_SETTING_STRING_SIGNATURE.id, 0);
+	navi_it = email_module_view_push(&view->base, EMAIL_SETTING_STRING_SIGNATURE.id, 0);
 	elm_object_item_domain_text_translatable_set(navi_it, EMAIL_SETTING_STRING_SIGNATURE.domain, EINA_TRUE);
 
-	evas_object_show(vd->base.content);
+	evas_object_show(view->base.content);
 }
 
 static void _gl_sel_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	ListItemData *li = data;
-	EmailSettingVD *vd = li->vd;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = li->view;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 	Elm_Object_Item *item = event_info;
 
 	elm_genlist_item_selected_set(item, EINA_FALSE);
@@ -189,7 +189,7 @@ static void _gl_sel_cb(void *data, Evas_Object *obj, void *event_info)
 		_onoff_cb(li, li->check, NULL);
 		elm_genlist_item_update(item);
 	} else {
-		create_signature_edit_view(ugd);
+		create_signature_edit_view(module);
 	}
 }
 
@@ -197,7 +197,7 @@ static Evas_Object *_gl_content_get_cb(void *data, Evas_Object *obj, const char 
 {
 	retvm_if(!data, NULL, "data is NULL");
 	ListItemData *li = data;
-	EmailSettingVD *vd = li->vd;
+	EmailSettingView *view = li->view;
 
 	if (!strcmp(part, "elm.swallow.end")) {
 		if (li->index == EMAIL_SETTING_SHOW_SIGNATURE) {
@@ -206,9 +206,9 @@ static Evas_Object *_gl_content_get_cb(void *data, Evas_Object *obj, const char 
 			elm_object_style_set(check, "on&off");
 			evas_object_smart_callback_add(check, "changed", _onoff_cb, li);
 			evas_object_propagate_events_set(check, EINA_FALSE);
-			li->is_checked = vd->account_data->options.add_signature;
+			li->is_checked = view->account_data->options.add_signature;
 			elm_check_state_set(check, li->is_checked);
-			vd->check = check;
+			view->check = check;
 			return check;
 		}
 	}
@@ -219,7 +219,7 @@ static char *_gl_text_get_cb(void *data, Evas_Object *obj, const char *part)
 {
 	retvm_if(!data, NULL, "data is NULL");
 	ListItemData *li = data;
-	EmailSettingVD *vd = li->vd;
+	EmailSettingView *view = li->view;
 
 	if (li->index == EMAIL_SETTING_SHOW_SIGNATURE) {
 		if (!strcmp(part, "elm.text")) {
@@ -229,13 +229,13 @@ static char *_gl_text_get_cb(void *data, Evas_Object *obj, const char *part)
 		if (!strcmp(part, "elm.text")) {
 			return strdup(email_setting_gettext(EMAIL_SETTING_STRING_EDIT_SIGNATURE));
 		} else if (!strcmp(part, "elm.text.sub")) {
-			return elm_entry_utf8_to_markup(dgettext(PACKAGE, vd->account_data->options.signature));
+			return elm_entry_utf8_to_markup(dgettext(PACKAGE, view->account_data->options.signature));
 		}
 	}
 	return NULL;
 }
 
-static void _create_list(EmailSettingVD *vd)
+static void _create_list(EmailSettingView *view)
 {
 	debug_enter();
 
@@ -243,38 +243,38 @@ static void _create_list(EmailSettingVD *vd)
 	Elm_Object_Item *git = NULL;
 	ListItemData *li = NULL;
 
-	genlist = elm_genlist_add(vd->base.content);
+	genlist = elm_genlist_add(view->base.content);
 	elm_genlist_mode_set(genlist, ELM_LIST_COMPRESS);
 	elm_scroller_policy_set(genlist, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_AUTO);
 	elm_genlist_homogeneous_set(genlist, EINA_TRUE);
-	vd->genlist = genlist;
+	view->genlist = genlist;
 
-	vd->itc1 = setting_get_genlist_class_item("type1", _gl_text_get_cb, _gl_content_get_cb, NULL, NULL);
-	vd->itc5 = setting_get_genlist_class_item("type1", _gl_text_get_cb, NULL, NULL, NULL);
+	view->itc1 = setting_get_genlist_class_item("type1", _gl_text_get_cb, _gl_content_get_cb, NULL, NULL);
+	view->itc5 = setting_get_genlist_class_item("type1", _gl_text_get_cb, NULL, NULL, NULL);
 
 	/* show signature */
 	li = calloc(1, sizeof(ListItemData));
 	retm_if(!li, "memory allocation failed");
 
 	li->index = EMAIL_SETTING_SHOW_SIGNATURE;
-	li->vd = vd;
-	li->it = git = elm_genlist_item_append(genlist, vd->itc1, li, NULL,
+	li->view = view;
+	li->it = git = elm_genlist_item_append(genlist, view->itc1, li, NULL,
 			ELM_GENLIST_ITEM_NONE, _gl_sel_cb, li);
 	elm_genlist_item_select_mode_set(git, ELM_OBJECT_SELECT_MODE_ALWAYS);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	view->list_items = g_slist_append(view->list_items, li);
 
 	/* edit signature */
 	li = calloc(1, sizeof(ListItemData));
 	retm_if(!li, "memory allocation failed");
 
 	li->index = EMAIL_SETTING_EDIT_SIGNATURE;
-	li->vd = vd;
-	li->it = git = elm_genlist_item_append(genlist, vd->itc5, li, NULL,
+	li->view = view;
+	li->it = git = elm_genlist_item_append(genlist, view->itc5, li, NULL,
 			ELM_GENLIST_ITEM_NONE, _gl_sel_cb, li);
 	elm_genlist_item_select_mode_set(git, ELM_OBJECT_SELECT_MODE_ALWAYS);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	view->list_items = g_slist_append(view->list_items, li);
 
-	elm_object_part_content_set(vd->base.content, "elm.swallow.content", genlist);
+	elm_object_part_content_set(view->base.content, "elm.swallow.content", genlist);
 	evas_object_show(genlist);
 }
 
@@ -283,12 +283,12 @@ static void _on_back_cb(email_view_t *self)
 	debug_enter();
 	retm_if(!self, "self is NULL");
 
-	EmailSettingVD *vd = (EmailSettingVD *)self;
+	EmailSettingView *view = (EmailSettingView *)self;
 
 	/* save on/off state */
-	debug_secure("set signature state as : %d", vd->account_data->options.add_signature);
-	_update_account_info(vd);
-	email_module_exit_view(&vd->base);
+	debug_secure("set signature state as : %d", view->account_data->options.add_signature);
+	_update_account_info(view);
+	email_module_exit_view(&view->base);
 }
 
 static void _onoff_cb(void *data, Evas_Object *obj, void *event_info)
@@ -296,23 +296,23 @@ static void _onoff_cb(void *data, Evas_Object *obj, void *event_info)
 	debug_enter();
 
 	ListItemData *li = data;
-	EmailSettingVD *vd = li->vd;
+	EmailSettingView *view = li->view;
 	li->is_checked = !li->is_checked;
 	elm_check_state_set(obj, li->is_checked);
 
-	vd->account_data->options.add_signature = li->is_checked;
-	_update_account_info(vd);
+	view->account_data->options.add_signature = li->is_checked;
+	_update_account_info(view);
 }
 
-static void _update_account_info(EmailSettingVD *vd)
+static void _update_account_info(EmailSettingView *view)
 {
 	debug_enter();
 
-	retm_if(!vd, "view data is null");
+	retm_if(!view, "view data is null");
 
-	retm_if(!(vd->account_data), "account_data is null");
+	retm_if(!(view->account_data), "account_data is null");
 
-	if (email_engine_update_account(vd->account_data->account_id, vd->account_data) == TRUE)
+	if (email_engine_update_account(view->account_data->account_id, view->account_data) == TRUE)
 		debug_log("Account updated successfully");
 }
 /* EOF */

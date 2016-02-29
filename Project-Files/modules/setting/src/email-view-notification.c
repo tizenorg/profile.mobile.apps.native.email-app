@@ -19,25 +19,25 @@
 #include "email-setting-utils.h"
 #include "email-view-notification.h"
 
-typedef struct view_data EmailSettingVD;
+typedef struct view_data EmailSettingView;
 
 static int _create(email_view_t *self);
 static void _update(email_view_t *self, int flags);
 static void _destroy(email_view_t *self);
 static void _on_back_cb(email_view_t *self);
 
-static void _update_list(EmailSettingVD *vd);
+static void _update_list(EmailSettingView *view);
 
-static void _push_naviframe(EmailSettingVD *vd);
-static void _create_list(EmailSettingVD *vd);
-static void _update_account_info(EmailSettingVD *vd);
+static void _push_naviframe(EmailSettingView *view);
+static void _create_list(EmailSettingView *view);
+static void _update_account_info(EmailSettingView *view);
 
 static char *_gl_vibro_onoff_text_get_cb(void *data, Evas_Object *obj, const char *part);
 static char *_gl_noti_onoff_text_get_cb(void *data, Evas_Object *obj, const char *part);
 static Evas_Object *_gl_onoff_content_get_cb(void *data, Evas_Object *obj, const char *part);
 static char *_gl_ringtone_text_get_cb(void *data, Evas_Object *obj, const char *part);
 static void _onoff_cb(void *data, Evas_Object *obj, void *event_info);
-static void _update_notification_options_status(EmailSettingVD *vd);
+static void _update_notification_options_status(EmailSettingView *view);
 static void _alert_ringtone_setup_cb(void *data, Evas_Object *obj, void *event_info);
 static void _ringtone_app_reply_cb(void *data, app_control_result_e result, email_params_h reply);
 
@@ -76,27 +76,27 @@ typedef struct _ListItemData {
 	Elm_Object_Item *it;
 	Evas_Object *check;
 	Eina_Bool is_checked;
-	EmailSettingVD *vd;
+	EmailSettingView *view;
 } ListItemData;
 
 #define SETTING_DEFAULT_ALERT_PATH		"/opt/usr/share/settings/Alerts"
 #define MYFILE_DEFAULT_RINGTON_VALUE	"default"
 #define MYFILE_SILENT_RINGTON_VALUE		"silent"
 
-void create_notification_setting_view(EmailSettingUGD *ugd)
+void create_notification_setting_view(EmailSettingModule *module)
 {
 	debug_enter();
-	retm_if(!ugd, "ug data is null");
+	retm_if(!module, "module is null");
 
-	EmailSettingVD *vd = calloc(1, sizeof(EmailSettingVD));
-	retm_if(!vd, "view data is null");
+	EmailSettingView *view = calloc(1, sizeof(EmailSettingView));
+	retm_if(!view, "view data is null");
 
-	vd->base.create = _create;
-	vd->base.update = _update;
-	vd->base.destroy = _destroy;
-	vd->base.on_back_key = _on_back_cb;
+	view->base.create = _create;
+	view->base.update = _update;
+	view->base.destroy = _destroy;
+	view->base.on_back_key = _on_back_cb;
 
-	debug_log("view create result: %d", email_module_create_view(&ugd->base, &vd->base));
+	debug_log("view create result: %d", email_module_create_view(&module->base, &view->base));
 }
 
 static int _create(email_view_t *self)
@@ -104,19 +104,19 @@ static int _create(email_view_t *self)
 	debug_enter();
 	retvm_if(!self, -1, "self is null");
 
-	EmailSettingVD *vd = (EmailSettingVD *)self;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = (EmailSettingView *)self;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
-	if (!setting_get_acct_full_data(ugd->account_id, &(vd->account_data))) {
+	if (!setting_get_acct_full_data(module->account_id, &(view->account_data))) {
 		debug_error("setting_get_acct_full_data failed");
 		return -1;
 	}
 
-	EMAIL_SETTING_PRINT_ACCOUNT_INFO(vd->account_data);
-	vd->base.content = setting_add_inner_layout(&vd->base);
-	_push_naviframe(vd);
+	EMAIL_SETTING_PRINT_ACCOUNT_INFO(view->account_data);
+	view->base.content = setting_add_inner_layout(&view->base);
+	_push_naviframe(view);
 
-	_update_list(vd);
+	_update_list(view);
 
 	return 0;
 }
@@ -126,40 +126,40 @@ static void _update(email_view_t *self, int flags)
 	debug_enter();
 	retm_if(!self, "self is null");
 
-	EmailSettingVD *vd = (EmailSettingVD *)self;
+	EmailSettingView *view = (EmailSettingView *)self;
 
 	if (flags & EVUF_POPPING) {
-		_update_list(vd);
+		_update_list(view);
 	}
 }
 
-static void _update_list(EmailSettingVD *vd)
+static void _update_list(EmailSettingView *view)
 {
 	debug_enter();
-	retm_if(!vd, "vd is null");
+	retm_if(!view, "view is null");
 
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
-	if (vd->genlist) {
-		elm_genlist_clear(vd->genlist);
-		evas_object_del(vd->genlist);
-		vd->genlist = NULL;
+	if (view->genlist) {
+		elm_genlist_clear(view->genlist);
+		evas_object_del(view->genlist);
+		view->genlist = NULL;
 	}
 
 	/* read account info again. */
-	if (vd->account_data) {
-		email_engine_free_account_list(&vd->account_data, 1);
-		vd->account_data = NULL;
+	if (view->account_data) {
+		email_engine_free_account_list(&view->account_data, 1);
+		view->account_data = NULL;
 	}
 
-	if (!setting_get_acct_full_data(ugd->account_id, &vd->account_data)) {
+	if (!setting_get_acct_full_data(module->account_id, &view->account_data)) {
 		debug_error("setting_get_acct_full_data failed");
 		return;
 	}
 
-	EMAIL_SETTING_PRINT_ACCOUNT_INFO(vd->account_data);
+	EMAIL_SETTING_PRINT_ACCOUNT_INFO(view->account_data);
 
-	_create_list(vd);
+	_create_list(view);
 }
 
 static void _destroy(email_view_t *self)
@@ -167,80 +167,80 @@ static void _destroy(email_view_t *self)
 	debug_enter();
 	retm_if(!self, "self is null");
 
-	EmailSettingVD *vd = (EmailSettingVD *)self;
+	EmailSettingView *view = (EmailSettingView *)self;
 
-	GSList *l = vd->list_items;
+	GSList *l = view->list_items;
 	while (l) {
 		free(l->data);
 		l = g_slist_next(l);
 	}
-	g_slist_free(vd->list_items);
+	g_slist_free(view->list_items);
 
-	free(vd);
+	free(view);
 }
 
-static void _push_naviframe(EmailSettingVD *vd)
+static void _push_naviframe(EmailSettingView *view)
 {
 	debug_enter();
 	Elm_Object_Item *navi_it = NULL;
 
-	navi_it = email_module_view_push(&vd->base, EMAIL_SETTING_STRING_NOTIFICATION_SETTINGS.id, 0);
+	navi_it = email_module_view_push(&view->base, EMAIL_SETTING_STRING_NOTIFICATION_SETTINGS.id, 0);
 	elm_object_item_domain_text_translatable_set(navi_it, EMAIL_SETTING_STRING_NOTIFICATION_SETTINGS.domain, EINA_TRUE);
 
-	evas_object_show(vd->base.content);
+	evas_object_show(view->base.content);
 }
 
-static void _create_list(EmailSettingVD *vd)
+static void _create_list(EmailSettingView *view)
 {
 	debug_enter();
 
 	Evas_Object *genlist = NULL;
 	ListItemData *li = NULL;
 
-	genlist = elm_genlist_add(vd->base.content);
+	genlist = elm_genlist_add(view->base.content);
 	elm_genlist_mode_set(genlist, ELM_LIST_COMPRESS);
 	elm_genlist_homogeneous_set(genlist, EINA_TRUE);
 	elm_scroller_policy_set(genlist, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_AUTO);
-	vd->genlist = genlist;
+	view->genlist = genlist;
 
-	vd->itc_vibro_onoff = setting_get_genlist_class_item("type1", _gl_vibro_onoff_text_get_cb, _gl_onoff_content_get_cb, NULL, NULL);
-	vd->itc_sound = setting_get_genlist_class_item("type1", _gl_ringtone_text_get_cb, NULL, NULL, NULL);
-	vd->itc_noti_onoff = setting_get_genlist_class_item("multiline", _gl_noti_onoff_text_get_cb, _gl_onoff_content_get_cb, NULL, NULL);
+	view->itc_vibro_onoff = setting_get_genlist_class_item("type1", _gl_vibro_onoff_text_get_cb, _gl_onoff_content_get_cb, NULL, NULL);
+	view->itc_sound = setting_get_genlist_class_item("type1", _gl_ringtone_text_get_cb, NULL, NULL, NULL);
+	view->itc_noti_onoff = setting_get_genlist_class_item("multiline", _gl_noti_onoff_text_get_cb, _gl_onoff_content_get_cb, NULL, NULL);
 
 	/*--Notification--*/
 	li = calloc(1, sizeof(ListItemData));
 	retm_if(!li, "memory allocation failed");
 	li->index = NOTIFICATION_LIST_ITEM;
-	li->is_checked = vd->account_data->options.notification_status ? EINA_TRUE : EINA_FALSE;
-	li->vd = vd;
-	li->it = elm_genlist_item_append(vd->genlist, vd->itc_noti_onoff, li,
+	li->is_checked = view->account_data->options.notification_status ? EINA_TRUE : EINA_FALSE;
+	li->view = view;
+	li->it = elm_genlist_item_append(view->genlist, view->itc_noti_onoff, li,
 			NULL, ELM_GENLIST_ITEM_NONE, _gl_sel_cb, li);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	view->list_items = g_slist_append(view->list_items, li);
 
 	/*--Alert ringtone--*/
 	li = calloc(1, sizeof(ListItemData));
 	retm_if(!li, "memory allocation failed");
 
 	li->index = ALERT_RINGTONE_LIST_ITEM;
-	li->vd = vd;
-	li->it = elm_genlist_item_append(vd->genlist, vd->itc_sound, li,
+	li->view = view;
+	li->it = elm_genlist_item_append(view->genlist, view->itc_sound, li,
 			NULL, ELM_GENLIST_ITEM_NONE, _alert_ringtone_setup_cb, li);
-	elm_object_item_disabled_set(li->it, vd->account_data->options.notification_status ? EINA_FALSE : EINA_TRUE);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	elm_object_item_disabled_set(li->it, view->account_data->options.notification_status ? EINA_FALSE : EINA_TRUE);
+	view->list_items = g_slist_append(view->list_items, li);
 
 	/*--vibrate--*/
 	li = calloc(1, sizeof(ListItemData));
 	retm_if(!li, "memory allocation failed");
 
 	li->index = VIBRATE_LIST_ITEM;
-	li->is_checked = vd->account_data->options.vibrate_status ? EINA_TRUE : EINA_FALSE;
-	li->vd = vd;
-	li->it = elm_genlist_item_append(vd->genlist, vd->itc_vibro_onoff, li,
+	li->is_checked = view->account_data->options.vibrate_status ? EINA_TRUE : EINA_FALSE;
+	li->view = view;
+	li->it = elm_genlist_item_append(view->genlist, view->itc_vibro_onoff, li,
 			NULL, ELM_GENLIST_ITEM_NONE, _gl_sel_cb, li);
-	elm_object_item_disabled_set(li->it, vd->account_data->options.notification_status ? EINA_FALSE : EINA_TRUE);
-	vd->list_items = g_slist_append(vd->list_items, li);
+	elm_object_item_disabled_set(li->it, view->account_data->options.notification_status ? EINA_FALSE : EINA_TRUE);
+	view->list_items = g_slist_append(view->list_items, li);
 
-	elm_object_part_content_set(vd->base.content, "elm.swallow.content", genlist);
+	elm_object_part_content_set(view->base.content, "elm.swallow.content", genlist);
 	evas_object_show(genlist);
 }
 
@@ -249,18 +249,18 @@ static void _on_back_cb(email_view_t *self)
 	debug_enter();
 	retm_if(!self, "self is NULL");
 
-	EmailSettingVD *vd = (EmailSettingVD *)self;
+	EmailSettingView *view = (EmailSettingView *)self;
 
-	_update_account_info(vd);
-	email_module_exit_view(&vd->base);
+	_update_account_info(view);
+	email_module_exit_view(&view->base);
 }
 
-static void _update_notification_options_status(EmailSettingVD *vd)
+static void _update_notification_options_status(EmailSettingView *view)
 {
 	debug_enter();
-	retm_if(!vd, "vd is NULL");
+	retm_if(!view, "view is NULL");
 
-	GSList *l = vd->list_items;
+	GSList *l = view->list_items;
 	Eina_Bool general_noti = EINA_FALSE;
 
 	/* general noti and general badge noti on&off operation */
@@ -271,7 +271,7 @@ static void _update_notification_options_status(EmailSettingVD *vd)
 		l = g_slist_next(l);
 	}
 
-	l = vd->list_items;
+	l = view->list_items;
 
 	while (l) {
 		ListItemData *li = l->data;
@@ -287,19 +287,19 @@ static void _onoff_cb(void *data, Evas_Object *obj, void *event_info)
 	debug_enter();
 
 	ListItemData *li = data;
-	EmailSettingVD *vd = li->vd;
+	EmailSettingView *view = li->view;
 
 	Eina_Bool state = elm_check_state_get(obj);
 
 	if (li->index == NOTIFICATION_LIST_ITEM) {
-		vd->account_data->options.notification_status = state;
+		view->account_data->options.notification_status = state;
 		debug_secure("notification status %d", state);
-		_update_notification_options_status(vd);
+		_update_notification_options_status(view);
 	} else if (li->index == VIBRATE_LIST_ITEM) {
-		vd->account_data->options.vibrate_status = state;
+		view->account_data->options.vibrate_status = state;
 		debug_secure("vibrate status %d", state);
 	}
-	_update_account_info(vd);
+	_update_account_info(view);
 }
 
 static void _alert_ringtone_setup_cb(void *data, Evas_Object *obj, void *event_info)
@@ -307,15 +307,15 @@ static void _alert_ringtone_setup_cb(void *data, Evas_Object *obj, void *event_i
 	debug_enter();
 	ListItemData *li = data;
 
-	EmailSettingVD *vd = li->vd;
-	EmailSettingUGD *ugd = (EmailSettingUGD *)vd->base.module;
+	EmailSettingView *view = li->view;
+	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
 
 	Elm_Object_Item *it = event_info;
 	elm_genlist_item_selected_set(it, EINA_FALSE);
 
 	const char *marked_mode = MYFILE_DEFAULT_RINGTON_VALUE;
-	if (!vd->account_data->options.default_ringtone_status) {
-		marked_mode = vd->account_data->options.alert_ringtone_path;
+	if (!view->account_data->options.default_ringtone_status) {
+		marked_mode = view->account_data->options.alert_ringtone_path;
 		if (!STR_VALID(marked_mode)) {
 			marked_mode = MYFILE_SILENT_RINGTON_VALUE;
 		}
@@ -338,7 +338,7 @@ static void _alert_ringtone_setup_cb(void *data, Evas_Object *obj, void *event_i
 		listener.cb_data = li;
 		listener.reply_cb = _ringtone_app_reply_cb;
 
-		email_module_launch_app(&ugd->base, EMAIL_LAUNCH_APP_RINGTONE, params, &listener);
+		email_module_launch_app(&module->base, EMAIL_LAUNCH_APP_RINGTONE, params, &listener);
 	}
 
 	email_params_free(&params);
@@ -353,7 +353,7 @@ static void _ringtone_app_reply_cb(void *data, app_control_result_e result, emai
 
 	ListItemData *li = data;
 
-	EmailSettingVD *vd = li->vd;
+	EmailSettingView *view = li->view;
 
 	char *ringtone_file = NULL;
 	const char *ringtone_path = NULL;
@@ -366,31 +366,31 @@ static void _ringtone_app_reply_cb(void *data, app_control_result_e result, emai
 	debug_secure("ringtone_path: %s", ringtone_path);
 	if (!g_strcmp0(MYFILE_DEFAULT_RINGTON_VALUE, ringtone_path)) {
 		if (li->index == ALERT_RINGTONE_LIST_ITEM) {
-			vd->account_data->options.default_ringtone_status = 1;
-			FREE(vd->account_data->options.alert_ringtone_path);
-			vd->account_data->options.alert_ringtone_path = strdup(DEFAULT_EMAIL_RINGTONE_PATH);
+			view->account_data->options.default_ringtone_status = 1;
+			FREE(view->account_data->options.alert_ringtone_path);
+			view->account_data->options.alert_ringtone_path = strdup(DEFAULT_EMAIL_RINGTONE_PATH);
 		}
 	} else if (!g_strcmp0(MYFILE_SILENT_RINGTON_VALUE, ringtone_path)) {
 		if (li->index == ALERT_RINGTONE_LIST_ITEM) {
-			vd->account_data->options.default_ringtone_status = 0;
-			FREE(vd->account_data->options.alert_ringtone_path);
-			vd->account_data->options.alert_ringtone_path = strdup("");
+			view->account_data->options.default_ringtone_status = 0;
+			FREE(view->account_data->options.alert_ringtone_path);
+			view->account_data->options.alert_ringtone_path = strdup("");
 		}
 	} else {
 		ringtone_file = _get_alert_title(ringtone_path);
 		debug_secure("ringtone_file:%s", ringtone_file);
 
 		if (li->index == ALERT_RINGTONE_LIST_ITEM) {
-			vd->account_data->options.default_ringtone_status = 0;
-			FREE(vd->account_data->options.alert_ringtone_path);
-			vd->account_data->options.alert_ringtone_path = strdup(ringtone_path);
+			view->account_data->options.default_ringtone_status = 0;
+			FREE(view->account_data->options.alert_ringtone_path);
+			view->account_data->options.alert_ringtone_path = strdup(ringtone_path);
 		}
 	}
 
 	elm_genlist_item_update(li->it);
 	FREE(ringtone_file);
 
-	_update_account_info(vd);
+	_update_account_info(view);
 }
 
 static void _gl_sel_cb(void *data, Evas_Object *obj, void *event_info)
@@ -451,7 +451,7 @@ static char *_gl_noti_onoff_text_get_cb(void *data, Evas_Object *obj, const char
 static char *_gl_ringtone_text_get_cb(void *data, Evas_Object *obj, const char *part)
 {
 	ListItemData *li = data;
-	EmailSettingVD *vd = li->vd;
+	EmailSettingView *view = li->view;
 
 	if (!strcmp(part, "elm.text")) {
 		return strdup(email_setting_gettext(EMAIL_SETTING_STRING_NOTI_SOUND));
@@ -461,8 +461,8 @@ static char *_gl_ringtone_text_get_cb(void *data, Evas_Object *obj, const char *
 		int value = -1;
 
 		if (li->index == ALERT_RINGTONE_LIST_ITEM) {
-			value = vd->account_data->options.default_ringtone_status;
-			ringtone = strdup(vd->account_data->options.alert_ringtone_path);
+			value = view->account_data->options.default_ringtone_status;
+			ringtone = strdup(view->account_data->options.alert_ringtone_path);
 		} else {
 			return NULL;
 		}
@@ -517,15 +517,15 @@ CATCH:
 	return alert_title;
 }
 
-static void _update_account_info(EmailSettingVD *vd)
+static void _update_account_info(EmailSettingView *view)
 {
 	debug_enter();
 
-	retm_if(!vd, "view data is null");
+	retm_if(!view, "view data is null");
 
-	retm_if(!(vd->account_data), "account_data is null");
+	retm_if(!(view->account_data), "account_data is null");
 
-	if (email_engine_update_account(vd->account_data->account_id, vd->account_data) == TRUE)
+	if (email_engine_update_account(view->account_data->account_id, view->account_data) == TRUE)
 		debug_log("Account updated successfully");
 }
 /* EOF */
