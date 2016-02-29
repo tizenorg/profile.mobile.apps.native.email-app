@@ -85,7 +85,7 @@ static void _account_result_cb(void *data, email_module_h module, email_params_h
 	/* handle result from move to folder ug */
 
 	int is_move_mail_ug = 0;
-	email_params_get_int_opt(result, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, &is_move_mail_ug);
+	email_params_get_int_opt(result, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_MODE, &is_move_mail_ug);
 
 	if (is_move_mail_ug) {
 		int b_edit_mod = 0;

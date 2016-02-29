@@ -1161,8 +1161,8 @@ static void _mailbox_title_clicked_cb(void *data, Evas_Object *obj, void *event_
 
 		if (email_params_create(&params) &&
 			email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, mailbox_ugd->account_id) &&
-			email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_UG, 0) &&
-			email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_ACCOUNT_UG, 1) &&
+			email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_MODE, 0) &&
+			email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_ACCOUNT_MODE, 1) &&
 			email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX_TYPE, mailbox_ugd->mailbox_type) &&
 			email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, mailbox_ugd->mailbox_id) &&
 			email_params_add_str(params, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, account_type)) {

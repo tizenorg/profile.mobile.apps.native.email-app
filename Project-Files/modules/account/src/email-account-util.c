@@ -36,7 +36,7 @@ static void _entry_maxlength_reached_cb(void *data, Evas_Object *obj, void *even
 static void _entry_changed_cb(void *data, Evas_Object *obj, void *event_info);
 static void _entry_clicked_cb(void *data, Evas_Object *obj, void *event_info);
 
-static void _register_entry_popup_rot_callback(Evas_Object *popup, EmailAccountUGD *ugd, const char *header);
+static void _register_entry_popup_rot_callback(Evas_Object *popup, EmailAccountView *view, const char *header);
 static void _entry_popup_keypad_down_cb(void *data, Evas_Object *obj, void *event_info);
 static void _entry_popup_keypad_up_cb(void *data, Evas_Object *obj, void *event_info);
 static void _entry_popup_rot_cb(void *data, Evas_Object *obj, void *event_info);
@@ -44,7 +44,7 @@ static void _entry_popup_del_cb(void *data, Evas *evas, Evas_Object *obj, void *
 
 EMAIL_DEFINE_GET_EDJ_PATH(email_get_account_theme_path, "/email-account.edj")
 
-char *account_get_ellipsised_folder_name(EmailAccountUGD *ug_data, char *org_filename)
+char *account_get_ellipsised_folder_name(EmailAccountView *view, char *org_filename)
 {
 	debug_enter();
 	char *after_utf8_markup = NULL;
@@ -226,22 +226,22 @@ char *account_convert_folder_alias_by_mailbox_type(email_mailbox_type_e mailbox_
 		return NULL;
 }
 
-void account_update_folder_item_dim_state(EmailAccountUGD *ug_data)
+void account_update_folder_item_dim_state(EmailAccountView *view)
 {
 	debug_enter();
 
-	if (ug_data == NULL) {
+	if (view == NULL) {
 		debug_log("data is NULL");
 		return;
 	}
-	if (ug_data->gl == NULL) {
+	if (view->gl == NULL) {
 		debug_log("genlist is NULL");
 		return;
 	}
 
 	Elm_Object_Item *it = NULL;
-	if (ug_data->gl) {
-		it = elm_genlist_first_item_get(ug_data->gl);
+	if (view->gl) {
+		it = elm_genlist_first_item_get(view->gl);
 		if (it == NULL) {
 			debug_log("elm_genlist_first_item_get is failed");
 			return;
@@ -256,11 +256,11 @@ void account_update_folder_item_dim_state(EmailAccountUGD *ug_data)
 					value_to_set = EINA_FALSE;
 					break;
 				case EMAIL_MAILBOX_TYPE_OUTBOX:
-					value_to_set = ug_data->folder_mode != ACC_FOLDER_NONE;
+					value_to_set = view->folder_mode != ACC_FOLDER_NONE;
 					break;
 				default:
-					value_to_set = (ug_data->folder_mode == ACC_FOLDER_DELETE ||
-							ug_data->folder_mode == ACC_FOLDER_RENAME);
+					value_to_set = (view->folder_mode == ACC_FOLDER_DELETE ||
+							view->folder_mode == ACC_FOLDER_RENAME);
 				}
 				elm_object_item_disabled_set(tree_item_data->it, value_to_set);
 			}
@@ -270,21 +270,21 @@ void account_update_folder_item_dim_state(EmailAccountUGD *ug_data)
 	return;
 }
 
-void account_update_view_title(EmailAccountUGD *ug_data)
+void account_update_view_title(EmailAccountView *view)
 {
-	if (ug_data == NULL) {
+	if (view == NULL) {
 		debug_log("data is NULL");
 		return;
 	}
 
-	if (ug_data->folder_view_mode == ACC_FOLDER_COMBINED_SINGLE_VIEW_MODE) {
-		if (ug_data->user_email_address) {
-			elm_object_item_text_set(ug_data->base.navi_item, ug_data->user_email_address);
+	if (view->folder_view_mode == ACC_FOLDER_COMBINED_SINGLE_VIEW_MODE) {
+		if (view->user_email_address) {
+			elm_object_item_text_set(view->base.navi_item, view->user_email_address);
 		} else {
-			elm_object_item_domain_translatable_text_set(ug_data->base.navi_item, PACKAGE, "IDS_EMAIL_HEADER_FOLDERS");
+			elm_object_item_domain_translatable_text_set(view->base.navi_item, PACKAGE, "IDS_EMAIL_HEADER_FOLDERS");
 		}
 	} else {
-		elm_object_item_domain_translatable_text_set(ug_data->base.navi_item, PACKAGE, "IDS_EMAIL_HEADER_MAILBOX_ABB");
+		elm_object_item_domain_translatable_text_set(view->base.navi_item, PACKAGE, "IDS_EMAIL_HEADER_MAILBOX_ABB");
 	}
 }
 
@@ -313,15 +313,15 @@ char *account_get_user_email_address(int account_id)
 }
 
 
-Evas_Object *account_create_entry_popup(EmailAccountUGD *ug_data, email_string_t t_title,
+Evas_Object *account_create_entry_popup(EmailAccountView *view, email_string_t t_title,
 		const char *entry_text, const char *entry_selection_text,
 		Evas_Smart_Cb _back_response_cb, Evas_Smart_Cb _done_key_cb,
 		Evas_Smart_Cb btn1_response_cb, const char *btn1_text, Evas_Smart_Cb btn2_response_cb, const char *btn2_text)
 {
 	debug_enter();
 
-	if (!ug_data) {
-		debug_log("ug_data is NULL");
+	if (!view) {
+		debug_log("view is NULL");
 		return NULL;
 	}
 
@@ -330,9 +330,9 @@ Evas_Object *account_create_entry_popup(EmailAccountUGD *ug_data, email_string_t
 	Elm_Entry_Filter_Limit_Size limit_filter_data;
 	Eina_Bool disable_btn = EINA_FALSE;
 
-	if (ug_data->popup) {
-		evas_object_del(ug_data->popup);
-		ug_data->popup = NULL;
+	if (view->popup) {
+		evas_object_del(view->popup);
+		view->popup = NULL;
 	}
 
 	if (!_back_response_cb || !_done_key_cb) {
@@ -355,9 +355,9 @@ Evas_Object *account_create_entry_popup(EmailAccountUGD *ug_data, email_string_t
 		return NULL;
 	}
 
-	popup = elm_popup_add(ug_data->base.module->navi);
+	popup = elm_popup_add(view->base.module->navi);
 	elm_popup_align_set(popup, ELM_NOTIFY_ALIGN_FILL, 1.0);
-	eext_object_event_callback_add(popup, EEXT_CALLBACK_BACK, _back_response_cb, ug_data);
+	eext_object_event_callback_add(popup, EEXT_CALLBACK_BACK, _back_response_cb, view);
 	evas_object_size_hint_weight_set(popup, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 
 	if (t_title.id) {
@@ -376,34 +376,34 @@ Evas_Object *account_create_entry_popup(EmailAccountUGD *ug_data, email_string_t
 	elm_object_style_set(btn1, "popup");
 	elm_object_domain_translatable_text_set(btn1, PACKAGE, btn1_text);
 	elm_object_part_content_set(popup, "button1", btn1);
-	evas_object_smart_callback_add(btn1, "clicked", btn1_response_cb, ug_data);
+	evas_object_smart_callback_add(btn1, "clicked", btn1_response_cb, view);
 
 	btn2 = elm_button_add(popup);
 	elm_object_style_set(btn2, "popup");
 	elm_object_domain_translatable_text_set(btn2, PACKAGE, btn2_text);
 	elm_object_part_content_set(popup, "button2", btn2);
-	evas_object_smart_callback_add(btn2, "clicked", btn2_response_cb, ug_data);
+	evas_object_smart_callback_add(btn2, "clicked", btn2_response_cb, view);
 
 	limit_filter_data.max_byte_count = 0;
 	limit_filter_data.max_char_count = MAX_FOLDER_NAME_LEN;
 	elm_entry_markup_filter_append(editfield.entry, elm_entry_filter_limit_size, &limit_filter_data);
-	evas_object_smart_callback_add(editfield.entry, "maxlength,reached", _entry_maxlength_reached_cb, ug_data);
+	evas_object_smart_callback_add(editfield.entry, "maxlength,reached", _entry_maxlength_reached_cb, view);
 
-	FREE(ug_data->original_folder_name);
+	FREE(view->original_folder_name);
 	if (entry_text) {
 		elm_entry_entry_set(editfield.entry, entry_text); /* set current folder name */
 		elm_entry_cursor_end_set(editfield.entry);
-		ug_data->original_folder_name = g_strdup(entry_text);
+		view->original_folder_name = g_strdup(entry_text);
 	}
 
 	if (entry_selection_text) {
 		elm_entry_context_menu_disabled_set(editfield.entry, EINA_TRUE);
 		elm_entry_entry_set(editfield.entry, entry_selection_text);
 		elm_entry_select_all(editfield.entry);
-		evas_object_smart_callback_add(editfield.entry, "clicked", _entry_clicked_cb, ug_data);
-		ug_data->selection_disabled = true;
+		evas_object_smart_callback_add(editfield.entry, "clicked", _entry_clicked_cb, view);
+		view->selection_disabled = true;
 	} else {
-		ug_data->selection_disabled = false;
+		view->selection_disabled = false;
 	}
 
 	if (elm_entry_is_empty(editfield.entry)) {
@@ -415,8 +415,8 @@ Evas_Object *account_create_entry_popup(EmailAccountUGD *ug_data, email_string_t
 		if (strlen(final_entry_text) == 0) {
 			debug_log("entry text includes only whitespace");
 			disable_btn = EINA_TRUE;
-		} else if (ug_data->original_folder_name) {
-			if (!g_strcmp0(final_entry_text, ug_data->original_folder_name)) {
+		} else if (view->original_folder_name) {
+			if (!g_strcmp0(final_entry_text, view->original_folder_name)) {
 				disable_btn = EINA_TRUE;
 			}
 		}
@@ -426,18 +426,18 @@ Evas_Object *account_create_entry_popup(EmailAccountUGD *ug_data, email_string_t
 	elm_object_disabled_set(btn2, disable_btn);
 	elm_entry_input_panel_return_key_disabled_set(editfield.entry, disable_btn);
 
-	evas_object_smart_callback_add(editfield.entry, "activated", _done_key_cb, ug_data);
-	evas_object_smart_callback_add(editfield.entry, "changed", _entry_changed_cb, ug_data);
-	evas_object_smart_callback_add(editfield.entry, "preedit,changed", _entry_changed_cb, ug_data);
+	evas_object_smart_callback_add(editfield.entry, "activated", _done_key_cb, view);
+	evas_object_smart_callback_add(editfield.entry, "changed", _entry_changed_cb, view);
+	evas_object_smart_callback_add(editfield.entry, "preedit,changed", _entry_changed_cb, view);
 	email_string_t EMAIL_ACCOUNT_FOLDER_NAME = { PACKAGE, "IDS_EMAIL_BODY_FOLDER_NAME"};
 	elm_object_domain_translatable_part_text_set(editfield.entry, "elm.guide", EMAIL_ACCOUNT_FOLDER_NAME.domain, EMAIL_ACCOUNT_FOLDER_NAME.id);
 
-	ug_data->entry = editfield.entry;
-	ug_data->popup = popup;
-	ug_data->popup_ok_btn = btn2;
+	view->entry = editfield.entry;
+	view->popup = popup;
+	view->popup_ok_btn = btn2;
 
 	elm_object_focus_set(editfield.entry, EINA_TRUE);
-	_register_entry_popup_rot_callback(popup, ug_data, t_title.id);
+	_register_entry_popup_rot_callback(popup, view, t_title.id);
 
 	return popup;
 }
@@ -468,12 +468,12 @@ static void _entry_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 		debug_log("data is NULL");
 		return;
 	}
-	EmailAccountUGD *ug_data = (EmailAccountUGD *)data;
+	EmailAccountView *view = (EmailAccountView *)data;
 
-	if (ug_data->selection_disabled) {
+	if (view->selection_disabled) {
 		elm_entry_context_menu_disabled_set(obj, EINA_FALSE);
 		elm_object_signal_emit(obj, "app,selection,handler,enable", "app");
-		ug_data->selection_disabled = false;
+		view->selection_disabled = false;
 		evas_object_smart_callback_del(obj, "clicked", _entry_clicked_cb);
 	}
 }
@@ -485,13 +485,13 @@ static void _entry_changed_cb(void *data, Evas_Object *obj, void *event_info)
 		debug_log("data is NULL");
 		return;
 	}
-	EmailAccountUGD *ug_data = (EmailAccountUGD *)data;
+	EmailAccountView *view = (EmailAccountView *)data;
 	Eina_Bool disable_btn = EINA_FALSE;
 
-	if (ug_data->selection_disabled) {
+	if (view->selection_disabled) {
 		elm_entry_context_menu_disabled_set(obj, EINA_FALSE);
 		elm_object_signal_emit(obj, "app,selection,handler,enable", "app");
-		ug_data->selection_disabled = false;
+		view->selection_disabled = false;
 	}
 
 	if (elm_entry_is_empty(obj)) {
@@ -503,33 +503,33 @@ static void _entry_changed_cb(void *data, Evas_Object *obj, void *event_info)
 		if (strlen(entry_text) == 0) {
 			debug_log("entry text includes only whitespace");
 			disable_btn = EINA_TRUE;
-		} else if (ug_data->original_folder_name) {
-			if (!g_strcmp0(entry_text, ug_data->original_folder_name)) {
+		} else if (view->original_folder_name) {
+			if (!g_strcmp0(entry_text, view->original_folder_name)) {
 				disable_btn = EINA_TRUE;
 			}
 		}
 		FREE(entry_text);
 	}
 
-	elm_object_disabled_set(ug_data->popup_ok_btn, disable_btn);
+	elm_object_disabled_set(view->popup_ok_btn, disable_btn);
 	elm_entry_input_panel_return_key_disabled_set(obj, disable_btn);
 }
 
-void account_stop_emf_job(EmailAccountUGD *ug_data, int handle)
+void account_stop_emf_job(EmailAccountView *view, int handle)
 {
 	debug_enter();
-	RETURN_IF_FAIL(ug_data != NULL);
+	RETURN_IF_FAIL(view != NULL);
 
-	gint account_id = ug_data->account_id;
+	gint account_id = view->account_id;
 	debug_log("stop job - handle (%d)", handle);
 	email_engine_stop_working(account_id, handle);
-	ug_data->emf_handle = EMAIL_HANDLE_INVALID;
+	view->emf_handle = EMAIL_HANDLE_INVALID;
 }
 
-void account_sync_cancel_all(EmailAccountUGD *ug_data)
+void account_sync_cancel_all(EmailAccountView *view)
 {
 	debug_enter();
-	RETURN_IF_FAIL(ug_data != NULL);
+	RETURN_IF_FAIL(view != NULL);
 
 	email_task_information_t *cur_task_info = NULL;
 	int task_info_cnt = 0;
@@ -538,7 +538,7 @@ void account_sync_cancel_all(EmailAccountUGD *ug_data)
 
 	gboolean b_default_account_exist = email_engine_get_default_account(&acct_id);
 	if (b_default_account_exist) {
-		if (ug_data->emf_handle == EMAIL_HANDLE_INVALID) {
+		if (view->emf_handle == EMAIL_HANDLE_INVALID) {
 			email_get_task_information(&cur_task_info, &task_info_cnt);
 			if (cur_task_info) {
 				for (i = 0; i < task_info_cnt; i++) {
@@ -557,63 +557,63 @@ void account_sync_cancel_all(EmailAccountUGD *ug_data)
 	}
 }
 
-static void _register_entry_popup_rot_callback(Evas_Object *popup, EmailAccountUGD *ugd, const char *header)
+static void _register_entry_popup_rot_callback(Evas_Object *popup, EmailAccountView *view, const char *header)
 {
 	debug_enter();
 
 	evas_object_data_del(popup, "_header");
 	evas_object_data_set(popup, "_header", header);
 
-	evas_object_event_callback_add(popup, EVAS_CALLBACK_DEL, _entry_popup_del_cb, ugd);
-	evas_object_smart_callback_add(ugd->base.module->conform, "virtualkeypad,state,on", _entry_popup_keypad_up_cb, ugd);
-	evas_object_smart_callback_add(ugd->base.module->conform, "virtualkeypad,state,off", _entry_popup_keypad_down_cb, ugd);
-	evas_object_smart_callback_add(ugd->base.module->win, "wm,rotation,changed", _entry_popup_rot_cb, ugd);
+	evas_object_event_callback_add(popup, EVAS_CALLBACK_DEL, _entry_popup_del_cb, view);
+	evas_object_smart_callback_add(view->base.module->conform, "virtualkeypad,state,on", _entry_popup_keypad_up_cb, view);
+	evas_object_smart_callback_add(view->base.module->conform, "virtualkeypad,state,off", _entry_popup_keypad_down_cb, view);
+	evas_object_smart_callback_add(view->base.module->win, "wm,rotation,changed", _entry_popup_rot_cb, view);
 }
 
 static void _entry_popup_keypad_down_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailAccountUGD *ugd = (EmailAccountUGD *)data;
+	EmailAccountView *view = (EmailAccountView *)data;
 	int rot = -1;
 
-	rot = elm_win_rotation_get(ugd->base.module->win);
+	rot = elm_win_rotation_get(view->base.module->win);
 	if (rot == 90 || rot == 270) {
-		const char *header = (const char *)evas_object_data_get(ugd->popup, "_header");
-		elm_object_domain_translatable_part_text_set(ugd->popup, "title,text", PACKAGE, header);
+		const char *header = (const char *)evas_object_data_get(view->popup, "_header");
+		elm_object_domain_translatable_part_text_set(view->popup, "title,text", PACKAGE, header);
 	}
-	ugd->is_keypad = 0;
+	view->is_keypad = 0;
 }
 
 static void _entry_popup_keypad_up_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailAccountUGD *ugd = (EmailAccountUGD *)data;
+	EmailAccountView *view = (EmailAccountView *)data;
 	int rot = -1;
 
-	rot = elm_win_rotation_get(ugd->base.module->win);
+	rot = elm_win_rotation_get(view->base.module->win);
 	if (rot == 90 || rot == 270) {
-		elm_object_part_text_set(ugd->popup, "title,text", NULL);
+		elm_object_part_text_set(view->popup, "title,text", NULL);
 	}
-	ugd->is_keypad = 1;
+	view->is_keypad = 1;
 }
 
 static void _entry_popup_rot_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailAccountUGD *ugd = (EmailAccountUGD *)data;
+	EmailAccountView *view = (EmailAccountView *)data;
 	int rot = -1;
-	const char *header = (const char *)evas_object_data_get(ugd->popup, "_header");
+	const char *header = (const char *)evas_object_data_get(view->popup, "_header");
 
 	rot = elm_win_rotation_get(obj);
 	if (rot == 90 || rot == 270) {
-		if (ugd->is_keypad) {
-			elm_object_domain_translatable_part_text_set(ugd->popup, "title,text", PACKAGE, header);
+		if (view->is_keypad) {
+			elm_object_domain_translatable_part_text_set(view->popup, "title,text", PACKAGE, header);
 		} else {
-			elm_object_part_text_set(ugd->popup, "title,text", NULL);
+			elm_object_part_text_set(view->popup, "title,text", NULL);
 		}
 	} else {
-		if (ugd->is_keypad) {
-			elm_object_domain_translatable_part_text_set(ugd->popup, "title,text", PACKAGE, header);
+		if (view->is_keypad) {
+			elm_object_domain_translatable_part_text_set(view->popup, "title,text", PACKAGE, header);
 		}
 	}
 }
@@ -621,24 +621,24 @@ static void _entry_popup_rot_cb(void *data, Evas_Object *obj, void *event_info)
 static void _entry_popup_del_cb(void *data, Evas *evas, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailAccountUGD *ugd = (EmailAccountUGD *)data;
+	EmailAccountView *view = (EmailAccountView *)data;
 
-	evas_object_smart_callback_del_full(ugd->base.module->conform, "virtualkeypad,state,on", _entry_popup_keypad_up_cb, ugd);
-	evas_object_smart_callback_del_full(ugd->base.module->conform, "virtualkeypad,state,off", _entry_popup_keypad_down_cb, ugd);
-	evas_object_smart_callback_del_full(ugd->base.module->win, "wm,rotation,changed", _entry_popup_rot_cb, ugd);
+	evas_object_smart_callback_del_full(view->base.module->conform, "virtualkeypad,state,on", _entry_popup_keypad_up_cb, view);
+	evas_object_smart_callback_del_full(view->base.module->conform, "virtualkeypad,state,off", _entry_popup_keypad_down_cb, view);
+	evas_object_smart_callback_del_full(view->base.module->win, "wm,rotation,changed", _entry_popup_rot_cb, view);
 }
 
-int account_color_list_get_account_color(EmailAccountUGD *ug_data, int account_id)
+int account_color_list_get_account_color(EmailAccountView *view, int account_id)
 {
-	if (account_id <= 0 || !ug_data) {
+	if (account_id <= 0 || !view) {
 		debug_log("invalid parameter, account_id : %d", account_id);
 		return 0;
 	}
 
-	if (ug_data->account_color_list) {
+	if (view->account_color_list) {
 		GList *cur = NULL;
 		EmailAccountColor *account_color_data = NULL;
-		G_LIST_FOREACH(ug_data->account_color_list, cur, account_color_data) {
+		G_LIST_FOREACH(view->account_color_list, cur, account_color_data) {
 			if (account_color_data->account_id == account_id) {
 				return account_color_data->account_color;
 			}
@@ -647,44 +647,44 @@ int account_color_list_get_account_color(EmailAccountUGD *ug_data, int account_i
 	return 0;
 }
 
-void account_color_list_free(EmailAccountUGD *ug_data)
+void account_color_list_free(EmailAccountView *view)
 {
-	retm_if(ug_data == NULL, "EmailAccountUGD[NULL]");
+	retm_if(view == NULL, "EmailAccountView[NULL]");
 
-	debug_log("ug_data->account_color_list(%p)", ug_data->account_color_list);
+	debug_log("view->account_color_list(%p)", view->account_color_list);
 
-	if (ug_data->account_color_list) {
+	if (view->account_color_list) {
 		GList *cur = NULL;
 		EmailAccountColor *account_color_data = NULL;
-		G_LIST_FOREACH(ug_data->account_color_list, cur, account_color_data) {
+		G_LIST_FOREACH(view->account_color_list, cur, account_color_data) {
 			FREE(account_color_data);
 		}
-		g_list_free(ug_data->account_color_list);
-		ug_data->account_color_list = NULL;
+		g_list_free(view->account_color_list);
+		view->account_color_list = NULL;
 	}
 }
 
-void account_color_list_add(EmailAccountUGD *ug_data, int account_id, int account_color)
+void account_color_list_add(EmailAccountView *view, int account_id, int account_color)
 {
 	debug_enter();
-	retm_if(!ug_data, "invalid parameter, mailbox_ugd is NULL");
+	retm_if(!view, "invalid parameter, mailbox_ugd is NULL");
 	debug_log("account_color : %d", account_color);
 
 	EmailAccountColor *account_color_data = MEM_ALLOC(account_color_data, 1);
 	account_color_data->account_id = account_id;
 	account_color_data->account_color = account_color;
-	ug_data->account_color_list = g_list_append(ug_data->account_color_list, account_color_data);
+	view->account_color_list = g_list_append(view->account_color_list, account_color_data);
 }
 
-void account_color_list_update(EmailAccountUGD *ug_data, int account_id, int update_color)
+void account_color_list_update(EmailAccountView *view, int account_id, int update_color)
 {
 	debug_enter();
-	retm_if(account_id <= 0 || !ug_data, "invalid parameter, account_id : %d", account_id);
+	retm_if(account_id <= 0 || !view, "invalid parameter, account_id : %d", account_id);
 
-	if (ug_data->account_color_list) {
+	if (view->account_color_list) {
 		GList *cur = NULL;
 		EmailAccountColor *account_color_data = NULL;
-		G_LIST_FOREACH(ug_data->account_color_list, cur, account_color_data) {
+		G_LIST_FOREACH(view->account_color_list, cur, account_color_data) {
 			if (account_color_data->account_id == account_id) {
 				account_color_data->account_color = update_color;
 				break;

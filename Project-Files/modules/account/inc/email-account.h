@@ -113,11 +113,11 @@ typedef enum
 	EMAIL_MAILBOX_TYPE_PRIORITY_SENDERS = EMAIL_MAILBOX_TYPE_USER_DEFINED + 1
 }email_mailbox_type_e_ext;
 
-typedef struct ug_data EmailAccountUGD;
+typedef struct _view_data EmailAccountView;
 
 typedef struct _Item_Data Item_Data;
 struct _Item_Data {
-	EmailAccountUGD *ug_data;
+	EmailAccountView *view;
 	Elm_Object_Item *it; // Genlist Item pointer
 	int i_boxtype; //for all account view
 	int b_scheduled_outbox; //If scheduled outbox, assign account id.
@@ -139,7 +139,7 @@ typedef struct _email_move_list {
 	email_mailbox_t *mailbox_list;
 } email_move_list;
 
-struct ug_data
+struct _view_data
 {
 	email_view_t base;
 
@@ -184,7 +184,7 @@ struct ug_data
 	int need_refresh;
 	bool selection_disabled;
 
-	/*move mail ug*/
+	/*move mail mode*/
 	GList *selected_mail_list_to_move;			/* revised, used to move the mails selected in previous view */
 	email_move_list *move_list;
 	int move_src_mailbox_id;
@@ -193,7 +193,7 @@ struct ug_data
 	int move_status;
 	int inserted_account_cnt;
 
-	/*account list ug*/
+	/*account list mode*/
 	GList *account_group_list;
 	gint default_account_id;	//Display default account(Drawer view)
 	int account_group_state;
@@ -218,7 +218,7 @@ struct ug_data
 
 typedef struct {
 	email_module_t base;
-	EmailAccountUGD view;
+	EmailAccountView view;
 } EmailAccountModule;
 
 #define GET_ACCOUNT_SERVER_TYPE(account_id) \
@@ -236,9 +236,9 @@ typedef struct {
 		})
 
 
-int account_create_list(EmailAccountUGD *ug_data);
-Evas_Object *account_add_empty_list(EmailAccountUGD *ug_data);
-void account_destroy_view(EmailAccountUGD *ug_data);
+int account_create_list(EmailAccountView *view);
+Evas_Object *account_add_empty_list(EmailAccountView *view);
+void account_destroy_view(EmailAccountView *view);
 void account_gdbus_event_account_receive(GDBusConnection *connection,
 											const gchar *sender_name,
 											const gchar *object_path,
@@ -247,7 +247,7 @@ void account_gdbus_event_account_receive(GDBusConnection *connection,
 											GVariant *parameters,
 											gpointer data);
 
-void account_show_all_folder(EmailAccountUGD *ug_data);
+void account_show_all_folder(EmailAccountView *view);
 
 #endif	/* __EMAIL_ACCOUNT_H__ */
 

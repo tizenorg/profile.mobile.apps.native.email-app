@@ -20,16 +20,16 @@
 
 #include "email-account.h"
 
-void account_init_genlist_item_class_for_combined_folder_list(EmailAccountUGD *ug_data);
-void account_init_genlist_item_class_for_single_folder_list(EmailAccountUGD *ug_data);
-void account_init_genlist_item_class_for_account_view_list(EmailAccountUGD *ug_data);
+void account_init_genlist_item_class_for_combined_folder_list(EmailAccountView *view);
+void account_init_genlist_item_class_for_single_folder_list(EmailAccountView *view);
+void account_init_genlist_item_class_for_account_view_list(EmailAccountView *view);
 
 void account_create_folder_create_view(void *data);
 void account_delete_folder_view(void *data);
 void account_rename_folder_view(void *data);
 
-int account_create_combined_folder_list(EmailAccountUGD *ug_data);
-int account_create_single_account_folder_list(EmailAccountUGD *ug_data);
+int account_create_combined_folder_list(EmailAccountView *view);
+int account_create_single_account_folder_list(EmailAccountView *view);
 
 void account_folder_newfolder(void *data, Evas_Object *obj, void *event_info);
 
