@@ -31,15 +31,15 @@
 
 static void _attachment_download_attachment_response_cb(void *data, Evas_Object *obj, void *event_info);
 
-static COMPOSER_ERROR_TYPE_E _attachment_check_errors_of_file_in_list(EmailComposerUGD *ugd, Eina_List *list, int to_be_moved_or_copied, Eina_Bool is_inline);
-static void _attachment_separate_list_into_relavant_lists(EmailComposerUGD *ugd, Eina_List *org_list, Eina_List **normal_list, Eina_List **image_list);
+static COMPOSER_ERROR_TYPE_E _attachment_check_errors_of_file_in_list(EmailComposerView *view, Eina_List *list, int to_be_moved_or_copied, Eina_Bool is_inline);
+static void _attachment_separate_list_into_relavant_lists(EmailComposerView *view, Eina_List *org_list, Eina_List **normal_list, Eina_List **image_list);
 
-static void _attachment_process_attachments_list(EmailComposerUGD *ugd, Eina_List *list, int to_be_moved_or_copied, Eina_Bool is_inline);
+static void _attachment_process_attachments_list(EmailComposerView *view, Eina_List *list, int to_be_moved_or_copied, Eina_Bool is_inline);
 static void _attachment_process_inline_attachments(void *data, Evas_Object *obj, void *event_info);
 static void _attachment_process_normal_attachments(void *data, Evas_Object *obj, void *event_info);
 
-static void _attachment_insert_inline_image_to_webkit(EmailComposerUGD *ugd, const char *pszImgPath);
-static void _attachment_insert_inline_image(EmailComposerUGD *ugd, const char *path);
+static void _attachment_insert_inline_image_to_webkit(EmailComposerView *view, const char *pszImgPath);
+static void _attachment_insert_inline_image(EmailComposerView *view, const char *path);
 
 static email_string_t EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
 static email_string_t EMAIL_COMPOSER_STRING_BUTTON_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
@@ -65,25 +65,25 @@ static void _attachment_download_attachment_response_cb(void *data, Evas_Object 
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (ugd->downloading_attachment) {
-		email_engine_stop_working(ugd->downloading_attachment->account_id, ugd->handle_for_downloading_attachment);
+	if (view->downloading_attachment) {
+		email_engine_stop_working(view->downloading_attachment->account_id, view->handle_for_downloading_attachment);
 	}
-	composer_attachment_download_attachment_clear_flags(ugd);
-	composer_util_popup_response_cb(ugd, obj, event_info);
+	composer_attachment_download_attachment_clear_flags(view);
+	composer_util_popup_response_cb(view, obj, event_info);
 
 	debug_leave();
 }
 
-static COMPOSER_ERROR_TYPE_E _attachment_check_errors_of_file_in_list(EmailComposerUGD *ugd, Eina_List *list, int to_be_moved_or_copied, Eina_Bool is_inline)
+static COMPOSER_ERROR_TYPE_E _attachment_check_errors_of_file_in_list(EmailComposerView *view, Eina_List *list, int to_be_moved_or_copied, Eina_Bool is_inline)
 {
 	debug_enter();
 
-	retvm_if(!ugd, COMPOSER_ERROR_INVALID_ARG, "ugd is NULL!");
+	retvm_if(!view, COMPOSER_ERROR_INVALID_ARG, "view is NULL!");
 	retvm_if(!list, COMPOSER_ERROR_INVALID_ARG, "list is NULL!");
 
-	int total_attachment_count = eina_list_count(ugd->attachment_item_list) + eina_list_count(ugd->attachment_inline_item_list);
+	int total_attachment_count = eina_list_count(view->attachment_item_list) + eina_list_count(view->attachment_inline_item_list);
 
 	COMPOSER_ERROR_TYPE_E err = COMPOSER_ERROR_NONE;
 	Eina_Bool check_exist = EINA_FALSE;
@@ -133,7 +133,7 @@ static COMPOSER_ERROR_TYPE_E _attachment_check_errors_of_file_in_list(EmailCompo
 		}
 	}
 
-	ugd->attachment_list_to_be_processed = list;
+	view->attachment_list_to_be_processed = list;
 
 	if (check_max_attach) {
 		err = COMPOSER_ERROR_ATTACHMENT_MAX_NUMBER_EXCEEDED;
@@ -145,11 +145,11 @@ static COMPOSER_ERROR_TYPE_E _attachment_check_errors_of_file_in_list(EmailCompo
 	return err;
 }
 
-static void _attachment_separate_list_into_relavant_lists(EmailComposerUGD *ugd, Eina_List *org_list, Eina_List **normal_list, Eina_List **image_list)
+static void _attachment_separate_list_into_relavant_lists(EmailComposerView *view, Eina_List *org_list, Eina_List **normal_list, Eina_List **image_list)
 {
 	debug_enter();
 
-	retm_if(!ugd, "ugd is NULL!");
+	retm_if(!view, "view is NULL!");
 	retm_if(!org_list, "org_list is NULL!");
 	retm_if(!normal_list, "normal_list is NULL!");
 	retm_if(!image_list, "image_list is NULL!");
@@ -172,33 +172,33 @@ static void _attachment_separate_list_into_relavant_lists(EmailComposerUGD *ugd,
 	debug_leave();
 }
 
-static void _attachment_process_attachments_list(EmailComposerUGD *ugd, Eina_List *list, int to_be_moved_or_copied, Eina_Bool is_inline)
+static void _attachment_process_attachments_list(EmailComposerView *view, Eina_List *list, int to_be_moved_or_copied, Eina_Bool is_inline)
 {
 	debug_enter();
 
-	retm_if(!ugd, "ugd is NULL!");
+	retm_if(!view, "view is NULL!");
 	retm_if(!list, "list is NULL!");
 
-	COMPOSER_ERROR_TYPE_E err = _attachment_check_errors_of_file_in_list(ugd, list, to_be_moved_or_copied, is_inline);
+	COMPOSER_ERROR_TYPE_E err = _attachment_check_errors_of_file_in_list(view, list, to_be_moved_or_copied, is_inline);
 
 	/* To process attachment list after showing error popup if it exists. */
 	Evas_Smart_Cb response_cb;
-	if (ugd->attachment_list_to_be_processed) {
+	if (view->attachment_list_to_be_processed) {
 		if (is_inline) {
 			response_cb = _attachment_process_inline_attachments;
 		} else {
 			response_cb = _attachment_process_normal_attachments;
-			evas_object_freeze_events_set(ugd->base.module->navi, EINA_TRUE);
-			evas_object_freeze_events_set(ugd->ewk_view, EINA_TRUE);
+			evas_object_freeze_events_set(view->base.module->navi, EINA_TRUE);
+			evas_object_freeze_events_set(view->ewk_view, EINA_TRUE);
 		}
 	} else {
 		response_cb = composer_util_popup_response_cb; /* If there're already max attachments, list is NULL. */
 	}
 
 	if (err == COMPOSER_ERROR_NONE) {
-		response_cb(ugd, NULL, NULL);
+		response_cb(view, NULL, NULL);
 	} else {
-		composer_attachment_launch_attachment_error_popup(err, response_cb, ugd);
+		composer_attachment_launch_attachment_error_popup(err, response_cb, view);
 	}
 
 	debug_leave();
@@ -208,18 +208,18 @@ static void _attachment_process_inline_attachments(void *data, Evas_Object *obj,
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	char *p = NULL;
 
-	Eina_Bool ret = composer_attachment_create_list(ugd, ugd->attachment_list_to_be_processed, EINA_TRUE, EINA_FALSE);
+	Eina_Bool ret = composer_attachment_create_list(view, view->attachment_list_to_be_processed, EINA_TRUE, EINA_FALSE);
 	if (ret) {
-		composer_util_popup_response_cb(ugd, NULL, NULL);
+		composer_util_popup_response_cb(view, NULL, NULL);
 	}
 
-	EINA_LIST_FREE(ugd->attachment_list_to_be_processed, p) {
+	EINA_LIST_FREE(view->attachment_list_to_be_processed, p) {
 		g_free(p);
 	}
-	ugd->attachment_list_to_be_processed = NULL;
+	view->attachment_list_to_be_processed = NULL;
 
 	debug_leave();
 }
@@ -228,19 +228,19 @@ static void _attachment_process_normal_attachments(void *data, Evas_Object *obj,
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	char *p = NULL;
 	Eina_Bool ret = EINA_TRUE;
 	Eina_List *normal_list = NULL;
 	Eina_List *image_list = NULL;
 
-	_attachment_separate_list_into_relavant_lists(ugd, ugd->attachment_list_to_be_processed, &normal_list, &image_list);
+	_attachment_separate_list_into_relavant_lists(view, view->attachment_list_to_be_processed, &normal_list, &image_list);
 
 	if (normal_list) {
 		/* When adding normal and image attachment together, if max attachment size is exceeded, error popup will be displayed after processing image files. */
-		ret = composer_attachment_create_list(ugd, normal_list, EINA_FALSE, (image_list ? EINA_TRUE : EINA_FALSE));
+		ret = composer_attachment_create_list(view, normal_list, EINA_FALSE, (image_list ? EINA_TRUE : EINA_FALSE));
 		if (!image_list && ret) {
-			composer_util_popup_response_cb(ugd, NULL, NULL);
+			composer_util_popup_response_cb(view, NULL, NULL);
 		}
 		EINA_LIST_FREE(normal_list, p) {
 			g_free(p);
@@ -249,22 +249,22 @@ static void _attachment_process_normal_attachments(void *data, Evas_Object *obj,
 
 	if (image_list) {
 		if (ret) {
-			composer_attachment_resize_image(ugd, image_list);
+			composer_attachment_resize_image(view, image_list);
 		}
 		EINA_LIST_FREE(image_list, p) {
 			g_free(p);
 		}
 	}
 
-	EINA_LIST_FREE(ugd->attachment_list_to_be_processed, p) {
+	EINA_LIST_FREE(view->attachment_list_to_be_processed, p) {
 		g_free(p);
 	}
-	ugd->attachment_list_to_be_processed = NULL;
+	view->attachment_list_to_be_processed = NULL;
 
 	debug_leave();
 }
 
-static void _attachment_insert_inline_image_to_webkit(EmailComposerUGD *ugd, const char *pszImgPath)
+static void _attachment_insert_inline_image_to_webkit(EmailComposerView *view, const char *pszImgPath)
 {
 	debug_enter();
 
@@ -275,15 +275,15 @@ static void _attachment_insert_inline_image_to_webkit(EmailComposerUGD *ugd, con
 	gchar *pszHtmlTag = NULL;
 	Evas_Coord x = 0, y = 0, w = 0, h = 0;
 
-	if (!composer_util_image_get_size(ugd, pszImgPath, &org_width, &org_height)) {
+	if (!composer_util_image_get_size(view, pszImgPath, &org_width, &org_height)) {
 		debug_error("composer_image_get_size() failed!");
 		return;
 	}
-	scale = ewk_view_scale_get(ugd->ewk_view);
+	scale = ewk_view_scale_get(view->ewk_view);
 	retm_if(scale <= 0.0, "ewk_view_scale_get() failed!");
 
-	evas_object_geometry_get(ugd->base.module->win, &x, &y, &w, &h);
-	if (ugd->is_horizontal) {
+	evas_object_geometry_get(view->base.module->win, &x, &y, &w, &h);
+	if (view->is_horizontal) {
 		limit = h / scale;
 	} else {
 		limit = w / scale;
@@ -303,18 +303,18 @@ static void _attachment_insert_inline_image_to_webkit(EmailComposerUGD *ugd, con
 
 	gchar *escaped_string = g_uri_escape_string(pszImgPath, G_URI_RESERVED_CHARS_ALLOWED_IN_PATH, true);
 	debug_secure("image path is %s and escaped string is %s", pszImgPath, escaped_string);
-	gchar *pszId = g_strdup_printf("%s%d", pszImgPath, eina_list_count(ugd->attachment_inline_item_list));
+	gchar *pszId = g_strdup_printf("%s%d", pszImgPath, eina_list_count(view->attachment_inline_item_list));
 	pszHtmlTag = g_strdup_printf(EC_TAG_IMG_WITH_SIZE, escaped_string, new_width, new_height, pszId);
 
 	debug_secure("pszHtmlTag : %s", pszHtmlTag);
 
-	if (!ewk_view_command_execute(ugd->ewk_view, EC_EWK_COMMAND_INSERT_HTML, pszHtmlTag)) {
+	if (!ewk_view_command_execute(view->ewk_view, EC_EWK_COMMAND_INSERT_HTML, pszHtmlTag)) {
 		debug_error("ewk_view_command_execute(%s) failed!", EC_EWK_COMMAND_INSERT_HTML);
 	}
 
 	/* XXX; Need to check the behaviour with OnNodeInserted() in email-composer.js if insert image feature is enabled. */
 	gchar *handler = g_strdup_printf(EC_JS_CONNECT_EVENT_LISTENER, pszId);
-	if (!ewk_view_script_execute(ugd->ewk_view, handler, NULL, NULL)) {
+	if (!ewk_view_script_execute(view->ewk_view, handler, NULL, NULL)) {
 		debug_error("EC_JS_CONNECT_EVENT_LISTENER is failed!");
 	}
 
@@ -326,7 +326,7 @@ static void _attachment_insert_inline_image_to_webkit(EmailComposerUGD *ugd, con
 	debug_leave();
 }
 
-static void _attachment_insert_inline_image(EmailComposerUGD *ugd, const char *path)
+static void _attachment_insert_inline_image(EmailComposerView *view, const char *path)
 {
 	debug_enter();
 
@@ -358,7 +358,7 @@ static void _attachment_insert_inline_image(EmailComposerUGD *ugd, const char *p
 	}
 	FREE(mime_type);*/
 
-	_attachment_insert_inline_image_to_webkit(ugd, path);
+	_attachment_insert_inline_image_to_webkit(view, path);
 
 	debug_leave();
 }
@@ -368,15 +368,15 @@ static void _attachment_insert_inline_image(EmailComposerUGD *ugd, const char *p
  * Definition for exported functions
  */
 
-Eina_Bool composer_attachment_create_list(EmailComposerUGD *ugd, Eina_List *attachment_list, Eina_Bool is_inline, Eina_Bool more_list_exists)
+Eina_Bool composer_attachment_create_list(EmailComposerView *view, Eina_List *attachment_list, Eina_Bool is_inline, Eina_Bool more_list_exists)
 {
 	debug_enter();
 
-	retvm_if(!ugd, EINA_FALSE, "ugd is NULL!");
+	retvm_if(!view, EINA_FALSE, "view is NULL!");
 
 	Eina_Bool ret = EINA_TRUE;
 	Eina_Bool pending_max_attach_popup = EINA_FALSE;
-	int total_attachments_size = composer_util_get_total_attachments_size(ugd, EINA_TRUE);
+	int total_attachments_size = composer_util_get_total_attachments_size(view, EINA_TRUE);
 
 	char *recv = NULL;
 	Eina_List *l = NULL;
@@ -384,18 +384,18 @@ Eina_Bool composer_attachment_create_list(EmailComposerUGD *ugd, Eina_List *atta
 		struct stat file_info;
 		if (stat(recv, &file_info) == -1) {
 			debug_error("stat() failed! (%d): %s", errno, strerror(errno));
-			composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_NOT_EXIST, composer_util_popup_response_cb, ugd);
+			composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_NOT_EXIST, composer_util_popup_response_cb, view);
 			ret = EINA_FALSE;
 			break;
 		}
 		total_attachments_size += file_info.st_size;
 
-		if (ret && !pending_max_attach_popup && (total_attachments_size > ugd->account_info->max_sending_size)) {
+		if (ret && !pending_max_attach_popup && (total_attachments_size > view->account_info->max_sending_size)) {
 			/* If there's more lists to be processed, max size popup'll be launched after processing them */
 			if (!more_list_exists) {
-				debug_secure_warning("Total size is over! (%s) current:[%d Byte], max:[%d Byte]", recv, total_attachments_size, ugd->account_info->max_sending_size);
-				composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_SIZE_EXCEEDED, composer_util_popup_response_cb, ugd);
-				ugd->need_to_display_max_size_popup = EINA_FALSE;
+				debug_secure_warning("Total size is over! (%s) current:[%d Byte], max:[%d Byte]", recv, total_attachments_size, view->account_info->max_sending_size);
+				composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_SIZE_EXCEEDED, composer_util_popup_response_cb, view);
+				view->need_to_display_max_size_popup = EINA_FALSE;
 				ret = EINA_FALSE;
 			} else {
 				pending_max_attach_popup = EINA_TRUE;
@@ -403,12 +403,12 @@ Eina_Bool composer_attachment_create_list(EmailComposerUGD *ugd, Eina_List *atta
 		}
 
 		if (is_inline) {
-			_attachment_insert_inline_image(ugd, recv);
+			_attachment_insert_inline_image(view, recv);
 		} else {
 			email_attachment_data_t *attachment_data = (email_attachment_data_t *)calloc(1, sizeof(email_attachment_data_t));
 			if (!attachment_data) {
 				debug_error("Failed to allocate memory for attachment_data!");
-				composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_OUT_OF_MEMORY, composer_util_popup_response_cb, ugd);
+				composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_OUT_OF_MEMORY, composer_util_popup_response_cb, view);
 				ret = EINA_FALSE;
 				break;
 			}
@@ -422,73 +422,73 @@ Eina_Bool composer_attachment_create_list(EmailComposerUGD *ugd, Eina_List *atta
 
 			g_strfreev(tokens);
 
-			Eina_Bool attachment_group_needed = eina_list_count(ugd->attachment_item_list) > 0 ? EINA_TRUE : EINA_FALSE;
-			composer_attachment_ui_create_item_layout(ugd, attachment_data, attachment_group_needed, EINA_TRUE);
+			Eina_Bool attachment_group_needed = eina_list_count(view->attachment_item_list) > 0 ? EINA_TRUE : EINA_FALSE;
+			composer_attachment_ui_create_item_layout(view, attachment_data, attachment_group_needed, EINA_TRUE);
 		}
 	}
 
-	if (ugd->need_to_display_max_size_popup) {
-		if (!ugd->composer_popup) {
-			composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_SIZE_EXCEEDED, composer_util_popup_response_cb, ugd);
+	if (view->need_to_display_max_size_popup) {
+		if (!view->composer_popup) {
+			composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_SIZE_EXCEEDED, composer_util_popup_response_cb, view);
 			ret = EINA_FALSE;
 		}
-		ugd->need_to_display_max_size_popup = EINA_FALSE;
+		view->need_to_display_max_size_popup = EINA_FALSE;
 	}
 
 	if (pending_max_attach_popup) {
-		ugd->need_to_display_max_size_popup = EINA_TRUE;
+		view->need_to_display_max_size_popup = EINA_TRUE;
 	}
 
-	composer_util_modify_send_button(ugd);
+	composer_util_modify_send_button(view);
 
 	debug_leave();
 	return ret;
 }
 
-void composer_attachment_process_attachments_with_string(EmailComposerUGD *ugd, const char *path_string, const char *delim, int to_be_moved_or_copied, Eina_Bool is_inline)
+void composer_attachment_process_attachments_with_string(EmailComposerView *view, const char *path_string, const char *delim, int to_be_moved_or_copied, Eina_Bool is_inline)
 {
 	debug_enter();
 
-	retm_if(!ugd, "ugd is NULL!");
+	retm_if(!view, "view is NULL!");
 	retm_if(!path_string, "path_string is NULL!");
 	retm_if(!delim, "delim is NULL!");
 
 	/* NOTE: list is freed() after processing adding attachment. Don't remove the list from the caller! */
 	Eina_List *list = composer_util_make_string_to_list(path_string, delim);
-	_attachment_process_attachments_list(ugd, list, to_be_moved_or_copied, is_inline);
+	_attachment_process_attachments_list(view, list, to_be_moved_or_copied, is_inline);
 
 	debug_leave();
 }
 
-void composer_attachment_process_attachments_with_array(EmailComposerUGD *ugd, const char **path_array, int path_len, int to_be_moved_or_copied, Eina_Bool is_inline)
+void composer_attachment_process_attachments_with_array(EmailComposerView *view, const char **path_array, int path_len, int to_be_moved_or_copied, Eina_Bool is_inline)
 {
 	debug_enter();
 
-	retm_if(!ugd, "ugd is NULL!");
+	retm_if(!view, "view is NULL!");
 	retm_if(!path_array, "path_array is NULL!");
 	retm_if(path_len <= 0, "Invalid parameter: len is [%d]!", path_len);
 
 	/* NOTE: list is freed() after processing adding attachment. Don't remove the list from the caller! */
 	Eina_List *list = composer_util_make_array_to_list(path_array, path_len);
-	_attachment_process_attachments_list(ugd, list, to_be_moved_or_copied, is_inline);
+	_attachment_process_attachments_list(view, list, to_be_moved_or_copied, is_inline);
 
 	debug_leave();
 }
 
 /* NOTE: path_list is freed() after processing adding attachment. Don't remove the list from the caller! */
-void composer_attachment_process_attachments_with_list(EmailComposerUGD *ugd, Eina_List *path_list, int to_be_moved_or_copied, Eina_Bool is_inline)
+void composer_attachment_process_attachments_with_list(EmailComposerView *view, Eina_List *path_list, int to_be_moved_or_copied, Eina_Bool is_inline)
 {
 	debug_enter();
 
-	retm_if(!ugd, "ugd is NULL!");
+	retm_if(!view, "view is NULL!");
 	retm_if(!path_list, "path_list is NULL!");
 
-	_attachment_process_attachments_list(ugd, path_list, to_be_moved_or_copied, is_inline);
+	_attachment_process_attachments_list(view, path_list, to_be_moved_or_copied, is_inline);
 
 	debug_leave();
 }
 
-void composer_attachment_download_attachment(EmailComposerUGD *ugd, email_attachment_data_t *attachment)
+void composer_attachment_download_attachment(EmailComposerView *view, email_attachment_data_t *attachment)
 {
 	debug_enter();
 
@@ -509,24 +509,24 @@ void composer_attachment_download_attachment(EmailComposerUGD *ugd, email_attach
 				break;
 			}
 		}
-		ugd->downloading_attachment_index = att_index;
+		view->downloading_attachment_index = att_index;
 
 		ret = email_free_attachment_data(&att_info, att_count);
 		debug_warning_if(ret != EMAIL_ERROR_NONE, "email_free_attachment_data() failed! It'll cause a memory leak!");
 
-		gboolean ret = email_engine_attachment_download(attachment->mail_id, att_index, &ugd->handle_for_downloading_attachment);
+		gboolean ret = email_engine_attachment_download(attachment->mail_id, att_index, &view->handle_for_downloading_attachment);
 		if (ret) {
-			ugd->downloading_attachment = attachment;
-			ugd->composer_popup = composer_util_popup_create_with_progress_horizontal(ugd, EMAIL_COMPOSER_STRING_HEADER_DOWNLOAD_ATTACHMENT_HEADER, EMAIL_COMPOSER_STRING_POP_DOWNLOADING_ING,
+			view->downloading_attachment = attachment;
+			view->composer_popup = composer_util_popup_create_with_progress_horizontal(view, EMAIL_COMPOSER_STRING_HEADER_DOWNLOAD_ATTACHMENT_HEADER, EMAIL_COMPOSER_STRING_POP_DOWNLOADING_ING,
 									_attachment_download_attachment_response_cb, EMAIL_COMPOSER_STRING_BUTTON_CANCEL, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
 		} else {
-			ugd->composer_popup = composer_util_popup_create(ugd, EMAIL_COMPOSER_STRING_HEADER_UNABLE_TO_DOWNLOAD_ATTACHMENT_ABB, EMAIL_COMPOSER_STRING_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED,
+			view->composer_popup = composer_util_popup_create(view, EMAIL_COMPOSER_STRING_HEADER_UNABLE_TO_DOWNLOAD_ATTACHMENT_ABB, EMAIL_COMPOSER_STRING_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED,
 										composer_util_popup_response_cb, EMAIL_COMPOSER_STRING_BUTTON_OK, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
 		}
 	} else {
 		debug_error("email_get_attachment_data_list() failed! ret:[%d]", ret);
 
-		ugd->composer_popup = composer_util_popup_create(ugd, EMAIL_COMPOSER_STRING_HEADER_UNABLE_TO_DOWNLOAD_ATTACHMENT_ABB, EMAIL_COMPOSER_STRING_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED,
+		view->composer_popup = composer_util_popup_create(view, EMAIL_COMPOSER_STRING_HEADER_UNABLE_TO_DOWNLOAD_ATTACHMENT_ABB, EMAIL_COMPOSER_STRING_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED,
 									composer_util_popup_response_cb, EMAIL_COMPOSER_STRING_BUTTON_OK, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
 	}
 
@@ -537,16 +537,16 @@ void composer_attachment_download_attachment_clear_flags(void *data)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	ugd->handle_for_downloading_attachment = 0;
-	ugd->downloading_attachment_index = 0;
-	ugd->downloading_attachment = NULL;
+	view->handle_for_downloading_attachment = 0;
+	view->downloading_attachment_index = 0;
+	view->downloading_attachment = NULL;
 
 	debug_leave();
 }
 
-void composer_attachment_reset_attachment(EmailComposerUGD *ugd)
+void composer_attachment_reset_attachment(EmailComposerView *view)
 {
 	debug_enter();
 
@@ -554,18 +554,18 @@ void composer_attachment_reset_attachment(EmailComposerUGD *ugd)
 	ComposerAttachmentItemData *attachment_item_data = NULL;
 	email_attachment_data_t *inline_att = NULL;
 
-	if (ugd->attachment_group_layout) {
-		elm_box_unpack(ugd->composer_box, ugd->attachment_group_layout);
-		evas_object_del(ugd->attachment_group_layout);
-		ugd->attachment_group_layout = NULL;
-		ugd->attachment_group_icon = NULL;
+	if (view->attachment_group_layout) {
+		elm_box_unpack(view->composer_box, view->attachment_group_layout);
+		evas_object_del(view->attachment_group_layout);
+		view->attachment_group_layout = NULL;
+		view->attachment_group_icon = NULL;
 	}
 
-	EINA_LIST_FOREACH(ugd->attachment_item_list, list, attachment_item_data) {
+	EINA_LIST_FOREACH(view->attachment_item_list, list, attachment_item_data) {
 		if (attachment_item_data) {
 			Evas_Object *layout = attachment_item_data->layout;
 			if (layout) {
-				elm_box_unpack(ugd->composer_box, layout);
+				elm_box_unpack(view->composer_box, layout);
 				evas_object_del(layout);
 			}
 
@@ -583,7 +583,7 @@ void composer_attachment_reset_attachment(EmailComposerUGD *ugd)
 		}
 	}
 
-	EINA_LIST_FOREACH(ugd->attachment_inline_item_list, list, inline_att) {
+	EINA_LIST_FOREACH(view->attachment_inline_item_list, list, inline_att) {
 		if (inline_att) {
 			debug_secure("attachment_data file name to be removed : %s", inline_att->attachment_path);
 
@@ -591,8 +591,8 @@ void composer_attachment_reset_attachment(EmailComposerUGD *ugd)
 		}
 	}
 
-	DELETE_LIST_OBJECT(ugd->attachment_item_list);
-	DELETE_LIST_OBJECT(ugd->attachment_inline_item_list);
+	DELETE_LIST_OBJECT(view->attachment_item_list);
+	DELETE_LIST_OBJECT(view->attachment_inline_item_list);
 
 	debug_leave();
 }
@@ -605,31 +605,31 @@ void composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_TYPE_E err
 	retm_if(!response_cb, "Invalid parameter: response_cb is NULL!");
 	retm_if(error_type == COMPOSER_ERROR_NONE, "Invalid parameter: error_type is (%d)", COMPOSER_ERROR_NONE);
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
 	if (error_type == COMPOSER_ERROR_ATTACHMENT_MAX_NUMBER_EXCEEDED) {
-		composer_util_popup_translate_set_variables(ugd, POPUP_ELEMENT_TYPE_CONTENT, PACKAGE_TYPE_PACKAGE, NULL, EMAIL_COMPOSER_STRING_POP_UNABLE_TO_ATTACH_MAXIMUM_NUMBER_OF_FILES_IS_PD.id, NULL, MAX_ATTACHMENT_ITEM);
+		composer_util_popup_translate_set_variables(view, POPUP_ELEMENT_TYPE_CONTENT, PACKAGE_TYPE_PACKAGE, NULL, EMAIL_COMPOSER_STRING_POP_UNABLE_TO_ATTACH_MAXIMUM_NUMBER_OF_FILES_IS_PD.id, NULL, MAX_ATTACHMENT_ITEM);
 
 		char buf[BUF_LEN_L] = { 0, };
 		snprintf(buf, sizeof(buf), email_get_email_string(EMAIL_COMPOSER_STRING_POP_UNABLE_TO_ATTACH_MAXIMUM_NUMBER_OF_FILES_IS_PD.id), MAX_ATTACHMENT_ITEM);
 		email_string_t EMAIL_COMPOSER_NO_TRANSITION = { NULL, buf };
-		ugd->composer_popup = composer_util_popup_create(ugd, EMAIL_COMPOSER_STRING_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB, EMAIL_COMPOSER_NO_TRANSITION,
+		view->composer_popup = composer_util_popup_create(view, EMAIL_COMPOSER_STRING_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB, EMAIL_COMPOSER_NO_TRANSITION,
 		                                                response_cb, EMAIL_COMPOSER_STRING_BUTTON_OK, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
 	} else if (error_type == COMPOSER_ERROR_ATTACHMENT_MAX_SIZE_EXCEEDED) {
 		char str[BUF_LEN_T] = { 0, };
-		snprintf(str, sizeof(str), "%.1f", ugd->account_info->max_sending_size / (float)(1024 * 1024));
-		composer_util_popup_translate_set_variables(ugd, POPUP_ELEMENT_TYPE_CONTENT, PACKAGE_TYPE_PACKAGE, NULL, EMAIL_COMPOSER_STRING_POP_THE_MAXIMUM_TOTAL_SIZE_OF_ATTACHMENTS_HPS_MB_HAS_BEEN_EXCEEDED_REMOVE_SOME_FILES_AND_TRY_AGAIN.id, str, 0);
+		snprintf(str, sizeof(str), "%.1f", view->account_info->max_sending_size / (float)(1024 * 1024));
+		composer_util_popup_translate_set_variables(view, POPUP_ELEMENT_TYPE_CONTENT, PACKAGE_TYPE_PACKAGE, NULL, EMAIL_COMPOSER_STRING_POP_THE_MAXIMUM_TOTAL_SIZE_OF_ATTACHMENTS_HPS_MB_HAS_BEEN_EXCEEDED_REMOVE_SOME_FILES_AND_TRY_AGAIN.id, str, 0);
 
 		char buf[BUF_LEN_L] = { 0, };
 		snprintf(buf, sizeof(buf), email_get_email_string(EMAIL_COMPOSER_STRING_POP_THE_MAXIMUM_TOTAL_SIZE_OF_ATTACHMENTS_HPS_MB_HAS_BEEN_EXCEEDED_REMOVE_SOME_FILES_AND_TRY_AGAIN.id), str);
 		email_string_t EMAIL_COMPOSER_NO_TRANSITION = { NULL, buf };
-		ugd->composer_popup = composer_util_popup_create(ugd, EMAIL_COMPOSER_STRING_HEADER_UNABLE_TO_SEND_EMAIL_ABB, EMAIL_COMPOSER_NO_TRANSITION,
+		view->composer_popup = composer_util_popup_create(view, EMAIL_COMPOSER_STRING_HEADER_UNABLE_TO_SEND_EMAIL_ABB, EMAIL_COMPOSER_NO_TRANSITION,
 		                                                 response_cb, EMAIL_COMPOSER_STRING_BUTTON_OK, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
 	} else if (error_type == COMPOSER_ERROR_ATTACHMENT_DUPLICATE) {
-		ugd->composer_popup = composer_util_popup_create(ugd, EMAIL_COMPOSER_STRING_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB, EMAIL_COMPOSER_STRING_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED,
+		view->composer_popup = composer_util_popup_create(view, EMAIL_COMPOSER_STRING_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB, EMAIL_COMPOSER_STRING_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED,
 		                                                response_cb, EMAIL_COMPOSER_STRING_BUTTON_OK, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
 	} else {
-		ugd->composer_popup = composer_util_popup_create(ugd, EMAIL_COMPOSER_STRING_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB, EMAIL_COMPOSER_STRING_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED,
+		view->composer_popup = composer_util_popup_create(view, EMAIL_COMPOSER_STRING_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB, EMAIL_COMPOSER_STRING_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED,
 		                                                response_cb, EMAIL_COMPOSER_STRING_BUTTON_OK, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
 	}
 

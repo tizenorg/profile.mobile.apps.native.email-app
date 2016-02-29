@@ -78,56 +78,56 @@ void composer_recipient_update_from_detail(void *data, Evas_Object *parent);
 /**
  * @brief Delete from ctxpopup
  *
- * @param[in]	ugd			Email composer data
+ * @param[in]	view			Email composer data
  *
  */
-void composer_recipient_from_ctxpopup_item_delete(EmailComposerUGD *ugd);
+void composer_recipient_from_ctxpopup_item_delete(EmailComposerView *view);
 
 /**
  * @brief Set cc field visible/hide
  *
- * @param[in]	ugd					Email composer data
+ * @param[in]	view					Email composer data
  * @param[in]	to_be_showed		The visible flag (EINA_TRUE = Visible, EINA_FALSE = hide)
  *
  */
-void composer_recipient_show_hide_cc_field(EmailComposerUGD *ugd, Eina_Bool to_be_showed);
+void composer_recipient_show_hide_cc_field(EmailComposerView *view, Eina_Bool to_be_showed);
 
 /**
  * @brief Show bcc field
  *
- * @param[in]	ugd			Email composer data
+ * @param[in]	view			Email composer data
  *
  */
-void composer_recipient_show_bcc_field(EmailComposerUGD *ugd);
+void composer_recipient_show_bcc_field(EmailComposerView *view);
 
 /**
  * @brief Hide bcc field
  *
- * @param[in]	ugd			Email composer data
+ * @param[in]	view			Email composer data
  *
  */
-void composer_recipient_hide_bcc_field(EmailComposerUGD *ugd);
+void composer_recipient_hide_bcc_field(EmailComposerView *view);
 
 /**
  * @brief Set bcc field field visible/hide
  *
- * @param[in]	ugd					Email composer data
+ * @param[in]	view					Email composer data
  * @param[in]	to_be_showed		The visible flag (EINA_TRUE = Visible, EINA_FALSE = hide)
  *
  */
-void composer_recipient_show_hide_bcc_field(EmailComposerUGD *ugd, Eina_Bool to_be_showed);
+void composer_recipient_show_hide_bcc_field(EmailComposerView *view, Eina_Bool to_be_showed);
 
 /**
  * @brief Apply updates to recipient string field
  *
- * @param[in]	ugd					Email composer data
+ * @param[in]	view					Email composer data
  * @param[in]	mbe					Multi button entry
  * @param[in]	entry				Entry
  * @param[in]	display_entry		Dispaly entry
  * @param[in]	count				Recipient count
  *
  */
-void composer_recipient_update_display_string(EmailComposerUGD *ugd, Evas_Object *mbe, Evas_Object *entry, Evas_Object *display_entry, int count);
+void composer_recipient_update_display_string(EmailComposerView *view, Evas_Object *mbe, Evas_Object *entry, Evas_Object *display_entry, int count);
 
 /**
  * @brief Attach button to recipient contact field

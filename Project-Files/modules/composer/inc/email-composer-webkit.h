@@ -22,10 +22,10 @@
  * @brief Creates body field for webkit
  *
  * @param[in]	parent		Evas_Object parent
- * @param[in]	ugd			Email composer data
+ * @param[in]	view			Email composer data
  *
  */
-void composer_webkit_create_body_field(Evas_Object *parent, EmailComposerUGD *ugd);
+void composer_webkit_create_body_field(Evas_Object *parent, EmailComposerView *view);
 
 /**
  * @brief Registers callbacks for webkit

@@ -41,9 +41,9 @@ void composer_subject_update_detail(void *data, Evas_Object *parent);
 /**
  * @brief Update subject guide text in composer
  *
- * @param[in]	ugd			Email composer data
+ * @param[in]	view			Email composer data
  *
  */
-void composer_subject_update_guide_text(EmailComposerUGD *ugd);
+void composer_subject_update_guide_text(EmailComposerView *view);
 
 #endif /* __EMAIL_COMPOSER_SUBJECT_H__ */

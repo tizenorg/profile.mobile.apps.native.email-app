@@ -29,35 +29,35 @@
  * Declaration for static functions
  */
 
-static void _initial_data_download_contents(EmailComposerUGD *ugd);
+static void _initial_data_download_contents(EmailComposerView *view);
 static void _initial_data_destroy_download_contents_popup_cb(void *data, Evas_Object *obj, void *event_info);
 
-static Eina_Bool _initial_data_mbe_append_recipients(EmailComposerUGD *ugd, Evas_Object *mbe, const char *to_be_added_recipients);
+static Eina_Bool _initial_data_mbe_append_recipients(EmailComposerView *view, Evas_Object *mbe, const char *to_be_added_recipients);
 
 static char *_initial_data_body_make_recipient_string(const char *original_list, const char *delim);
-static char *_initial_data_body_get_original_message_bar_tags(EmailComposerUGD *ugd);
-static char *_initial_data_body_get_parent_content(EmailComposerUGD *ugd);
+static char *_initial_data_body_get_original_message_bar_tags(EmailComposerView *view);
+static char *_initial_data_body_get_parent_content(EmailComposerView *view);
 
 static void _initial_data_parse_params_by_internal(email_params_h params, const char **argv, int run_type);
-static void _initial_data_parse_params_by_ug(email_params_h params, const char **argv);
-static void _initial_data_parse_params_by_appcontrol(EmailComposerUGD *ugd,
+static void _initial_data_parse_params_from_parent_module(email_params_h params, const char **argv);
+static void _initial_data_parse_params_by_appcontrol(EmailComposerView *view,
 		email_params_h params, const char **argv, const char *operation);
 
 static char *_initial_data_parse_mailto_recipients(char *recipients_list);
-static void _initial_data_parse_mailto_uri(EmailComposerUGD *ugd, const char *mailto_uri);
-static void _initial_data_parse_contacts_sharing(EmailComposerUGD *ugd, email_params_h params, const char *operation);
-static void _initial_data_parse_attachments(EmailComposerUGD *ugd, Eina_List *attachment_uri_list);
+static void _initial_data_parse_mailto_uri(EmailComposerView *view, const char *mailto_uri);
+static void _initial_data_parse_contacts_sharing(EmailComposerView *view, email_params_h params, const char *operation);
+static void _initial_data_parse_attachments(EmailComposerView *view, Eina_List *attachment_uri_list);
 
-static COMPOSER_ERROR_TYPE_E _initial_data_process_params_by_internal(EmailComposerUGD *ugd, const char **argv);
-static COMPOSER_ERROR_TYPE_E _initial_data_process_params_by_external(EmailComposerUGD *ugd, const char **argv);
+static COMPOSER_ERROR_TYPE_E _initial_data_process_params_by_internal(EmailComposerView *view, const char **argv);
+static COMPOSER_ERROR_TYPE_E _initial_data_process_params_by_external(EmailComposerView *view, const char **argv);
 
-static void _initial_data_set_mail_to_recipients(EmailComposerUGD *ugd);
-static void _initial_data_set_mail_cc_recipients(EmailComposerUGD *ugd);
-static void _initial_data_set_mail_bcc_recipients(EmailComposerUGD *ugd);
-static void _initial_data_set_mail_subject(EmailComposerUGD *ugd);
-static char *_initial_data_get_mail_body(EmailComposerUGD *ugd);
-static void _initial_data_set_mail_attachment(EmailComposerUGD *ugd);
-static void _initial_data_set_selected_entry(EmailComposerUGD *ugd);
+static void _initial_data_set_mail_to_recipients(EmailComposerView *view);
+static void _initial_data_set_mail_cc_recipients(EmailComposerView *view);
+static void _initial_data_set_mail_bcc_recipients(EmailComposerView *view);
+static void _initial_data_set_mail_subject(EmailComposerView *view);
+static char *_initial_data_get_mail_body(EmailComposerView *view);
+static void _initial_data_set_mail_attachment(EmailComposerView *view);
+static void _initial_data_set_selected_entry(EmailComposerView *view);
 
 static Eina_List *_initial_data_make_initial_recipients_list(Evas_Object *mbe);
 
@@ -75,17 +75,17 @@ static email_string_t EMAIL_COMPOSER_STRING_TPOP_LOADING_ING = { PACKAGE, "IDS_E
 /*
  * Definition for static functions
  */
-static void _initial_data_download_contents(EmailComposerUGD *ugd)
+static void _initial_data_download_contents(EmailComposerView *view)
 {
 	debug_enter();
 
-	retm_if(!ugd, "ugd is NULL!");
-	retm_if(!ugd->org_mail_info->mail_data, "ugd->org_mail_info->mail_data is NULL!");
+	retm_if(!view, "view is NULL!");
+	retm_if(!view->org_mail_info->mail_data, "view->org_mail_info->mail_data is NULL!");
 
-	Eina_Bool ret = (Eina_Bool)email_engine_body_download(ugd->org_mail_info->mail_data->account_id, ugd->org_mail_info->mail_data->mail_id, EINA_TRUE, &ugd->draft_sync_handle);
+	Eina_Bool ret = (Eina_Bool)email_engine_body_download(view->org_mail_info->mail_data->account_id, view->org_mail_info->mail_data->mail_id, EINA_TRUE, &view->draft_sync_handle);
 	if (ret == EINA_TRUE) {
-		debug_log("email_engine_body_download(handle:%d) is in progress...", ugd->draft_sync_handle);
-		ugd->composer_popup = composer_util_popup_create_with_progress_horizontal(ugd, EMAIL_COMPOSER_STRING_HEADER_OPEN_EMAIL, EMAIL_COMPOSER_STRING_TPOP_LOADING_ING, _initial_data_destroy_download_contents_popup_cb,
+		debug_log("email_engine_body_download(handle:%d) is in progress...", view->draft_sync_handle);
+		view->composer_popup = composer_util_popup_create_with_progress_horizontal(view, EMAIL_COMPOSER_STRING_HEADER_OPEN_EMAIL, EMAIL_COMPOSER_STRING_TPOP_LOADING_ING, _initial_data_destroy_download_contents_popup_cb,
 		                                                                          EMAIL_COMPOSER_STRING_BUTTON_CANCEL, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
 	}
 
@@ -98,16 +98,16 @@ static void _initial_data_destroy_download_contents_popup_cb(void *data, Evas_Ob
 
 	retm_if(!data, "data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	email_engine_stop_working(ugd->org_mail_info->mail_data->account_id, ugd->draft_sync_handle);
-	composer_initial_data_destroy_download_contents_popup(ugd);
-	composer_initial_data_set_mail_info(ugd, false);
+	email_engine_stop_working(view->org_mail_info->mail_data->account_id, view->draft_sync_handle);
+	composer_initial_data_destroy_download_contents_popup(view);
+	composer_initial_data_set_mail_info(view, false);
 
 	debug_leave();
 }
 
-static Eina_Bool _initial_data_mbe_append_recipients(EmailComposerUGD *ugd, Evas_Object *mbe, const char *to_be_added_recipients)
+static Eina_Bool _initial_data_mbe_append_recipients(EmailComposerView *view, Evas_Object *mbe, const char *to_be_added_recipients)
 {
 	debug_enter();
 
@@ -123,7 +123,7 @@ static Eina_Bool _initial_data_mbe_append_recipients(EmailComposerUGD *ugd, Evas
 				continue;
 
 			/* In the case of reply all, don't include my address in recipient fields. */
-			if ((ugd->composer_type == RUN_COMPOSER_REPLY_ALL) && (g_strstr_len(recipients_list[count], strlen(recipients_list[count]), ugd->account_info->selected_account->user_email_address)))
+			if ((view->composer_type == RUN_COMPOSER_REPLY_ALL) && (g_strstr_len(recipients_list[count], strlen(recipients_list[count]), view->account_info->selected_account->user_email_address)))
 				continue;
 
 			EmailRecpInfo *ri = composer_util_recp_make_recipient_info(recipients_list[count]);
@@ -172,7 +172,7 @@ static char *_initial_data_body_make_recipient_string(const char *original_list,
 	return recp_string;
 }
 
-static char *_initial_data_body_get_original_message_bar_tags(EmailComposerUGD *ugd)
+static char *_initial_data_body_get_original_message_bar_tags(EmailComposerView *view)
 {
 	debug_enter();
 
@@ -182,18 +182,18 @@ static char *_initial_data_body_get_original_message_bar_tags(EmailComposerUGD *
 	return original_message_bar;
 }
 
-static char *_initial_data_body_get_parent_content(EmailComposerUGD *ugd)
+static char *_initial_data_body_get_parent_content(EmailComposerView *view)
 {
 	debug_enter();
 
 	char *tmp_text = NULL;
 
-	if (ugd->org_mail_info->mail_data->file_path_html) {
+	if (view->org_mail_info->mail_data->file_path_html) {
 		debug_log("[HTML body]");
-		tmp_text = (char *)email_get_buff_from_file(ugd->org_mail_info->mail_data->file_path_html, 0);
-	} else if (ugd->org_mail_info->mail_data->file_path_plain) {
+		tmp_text = (char *)email_get_buff_from_file(view->org_mail_info->mail_data->file_path_html, 0);
+	} else if (view->org_mail_info->mail_data->file_path_plain) {
 		debug_log("[TEXT body]");
-		char *temp_body_plain = (char *)email_get_buff_from_file(ugd->org_mail_info->mail_data->file_path_plain, 0);
+		char *temp_body_plain = (char *)email_get_buff_from_file(view->org_mail_info->mail_data->file_path_plain, 0);
 
 		/* Convert plain-text to html content */
 		tmp_text = (char *)email_get_parse_plain_text(temp_body_plain, STR_LEN(temp_body_plain));
@@ -233,7 +233,7 @@ static void _initial_data_parse_params_by_internal(email_params_h params, const 
 	debug_leave();
 }
 
-static void _initial_data_parse_params_by_ug(email_params_h params, const char **argv)
+static void _initial_data_parse_params_from_parent_module(email_params_h params, const char **argv)
 {
 	debug_enter();
 
@@ -268,7 +268,7 @@ static void _initial_data_parse_params_by_ug(email_params_h params, const char *
 	debug_leave();
 }
 
-static void _initial_data_parse_params_by_appcontrol(EmailComposerUGD *ugd,
+static void _initial_data_parse_params_by_appcontrol(EmailComposerView *view,
 		email_params_h params, const char **argv, const char *operation)
 {
 	debug_enter();
@@ -279,11 +279,11 @@ static void _initial_data_parse_params_by_appcontrol(EmailComposerUGD *ugd,
 
 	if (!g_strcmp0(operation, APP_CONTROL_OPERATION_COMPOSE)) {
 
-		_recp_append_extra_data_array(&ugd->new_mail_info->mail_data->full_address_to, params, APP_CONTROL_DATA_TO);
+		_recp_append_extra_data_array(&view->new_mail_info->mail_data->full_address_to, params, APP_CONTROL_DATA_TO);
 
-		_recp_append_extra_data_array(&ugd->new_mail_info->mail_data->full_address_cc, params, APP_CONTROL_DATA_CC);
+		_recp_append_extra_data_array(&view->new_mail_info->mail_data->full_address_cc, params, APP_CONTROL_DATA_CC);
 
-		_recp_append_extra_data_array(&ugd->new_mail_info->mail_data->full_address_bcc, params, APP_CONTROL_DATA_BCC);
+		_recp_append_extra_data_array(&view->new_mail_info->mail_data->full_address_bcc, params, APP_CONTROL_DATA_BCC);
 	}
 
 	if (!g_strcmp0(operation, APP_CONTROL_OPERATION_COMPOSE) ||
@@ -329,7 +329,7 @@ static char *_initial_data_parse_mailto_recipients(char *recipients_list)
 	return new_recipients_list;
 }
 
-static void _initial_data_parse_mailto_uri(EmailComposerUGD *ugd, const char *mailto_uri)
+static void _initial_data_parse_mailto_uri(EmailComposerView *view, const char *mailto_uri)
 {
 	debug_enter();
 
@@ -346,7 +346,7 @@ static void _initial_data_parse_mailto_uri(EmailComposerUGD *ugd, const char *ma
 	if (split_mailto) {
 		gchar *first_uri = split_mailto[0] + strlen(COMPOSER_SCHEME_MAILTO);
 		if (STR_VALID(first_uri)) {
-			ugd->new_mail_info->mail_data->full_address_to = _initial_data_parse_mailto_recipients(first_uri);
+			view->new_mail_info->mail_data->full_address_to = _initial_data_parse_mailto_recipients(first_uri);
 		}
 
 		/*gchar **split_contents = g_strsplit_set(split_mailto[1], "&", -1);
@@ -354,20 +354,20 @@ static void _initial_data_parse_mailto_uri(EmailComposerUGD *ugd, const char *ma
 			int i;
 			for (i = 0; i < g_strv_length(split_contents); i++) {
 				if (g_str_has_prefix(split_contents[i], COMPOSER_MAILTO_TO_PREFIX)) {
-					_recp_append_string(&ugd->new_mail_info->mail_data->full_address_to,
+					_recp_append_string(&view->new_mail_info->mail_data->full_address_to,
 							_initial_data_parse_mailto_recipients(split_contents[i] + strlen(COMPOSER_MAILTO_TO_PREFIX)));
 				} else if (g_str_has_prefix(split_contents[i], COMPOSER_MAILTO_CC_PREFIX)) {
-					_recp_append_string(&ugd->new_mail_info->mail_data->full_address_cc,
+					_recp_append_string(&view->new_mail_info->mail_data->full_address_cc,
 							_initial_data_parse_mailto_recipients(split_contents[i] + strlen(COMPOSER_MAILTO_CC_PREFIX)));
 				} else if (g_str_has_prefix(split_contents[i], COMPOSER_MAILTO_BCC_PREFIX)) {
-					_recp_append_string(&ugd->new_mail_info->mail_data->full_address_bcc,
+					_recp_append_string(&view->new_mail_info->mail_data->full_address_bcc,
 							_initial_data_parse_mailto_recipients(split_contents[i] + strlen(COMPOSER_MAILTO_BCC_PREFIX)));
 				} else if (g_str_has_prefix(split_contents[i], COMPOSER_MAILTO_SUBJECT_PREFIX)) {
-					g_free(ugd->new_mail_info->mail_data->subject);
-					ugd->new_mail_info->mail_data->subject = g_uri_unescape_string(split_contents[i] + strlen(COMPOSER_MAILTO_SUBJECT_PREFIX), NULL);
+					g_free(view->new_mail_info->mail_data->subject);
+					view->new_mail_info->mail_data->subject = g_uri_unescape_string(split_contents[i] + strlen(COMPOSER_MAILTO_SUBJECT_PREFIX), NULL);
 				} else if (g_str_has_prefix(split_contents[i], COMPOSER_MAILTO_BODY_PREFIX)) {
-					g_free(ugd->new_mail_info->mail_data->file_path_plain);
-					ugd->new_mail_info->mail_data->file_path_plain = g_uri_unescape_string(split_contents[i] + strlen(COMPOSER_MAILTO_BODY_PREFIX), NULL);
+					g_free(view->new_mail_info->mail_data->file_path_plain);
+					view->new_mail_info->mail_data->file_path_plain = g_uri_unescape_string(split_contents[i] + strlen(COMPOSER_MAILTO_BODY_PREFIX), NULL);
 				}
 			}
 
@@ -379,7 +379,7 @@ static void _initial_data_parse_mailto_uri(EmailComposerUGD *ugd, const char *ma
 	debug_leave();
 }
 
-static void _initial_data_parse_contacts_sharing(EmailComposerUGD *ugd, email_params_h params, const char *operation)
+static void _initial_data_parse_contacts_sharing(EmailComposerView *view, email_params_h params, const char *operation)
 {
 	debug_enter();
 
@@ -387,13 +387,13 @@ static void _initial_data_parse_contacts_sharing(EmailComposerUGD *ugd, email_pa
 		const char *data_type = "person";
 
 		if (email_params_get_str_opt(params, APP_CONTROL_DATA_TYPE, &data_type) &&
-			email_params_get_int(params, APP_CONTROL_DATA_ID, &ugd->shared_contact_id)) {
+			email_params_get_int(params, APP_CONTROL_DATA_ID, &view->shared_contact_id)) {
 
-			ugd->shared_contacts_count = 1;
+			view->shared_contacts_count = 1;
 
 			if (strcmp(data_type, "person")) {
 				if (!strcmp(data_type, "my_profile")) {
-					ugd->is_sharing_my_profile = EINA_TRUE;
+					view->is_sharing_my_profile = EINA_TRUE;
 				} else {
 					debug_warning("Invalid type: %s. Assume: person", data_type);
 				}
@@ -407,29 +407,29 @@ static void _initial_data_parse_contacts_sharing(EmailComposerUGD *ugd, email_pa
 		const char **array = NULL;
 		int i = 0;
 
-		retm_if(!email_params_get_str_array(params, APP_CONTROL_DATA_ID, &array, &ugd->shared_contacts_count),
+		retm_if(!email_params_get_str_array(params, APP_CONTROL_DATA_ID, &array, &view->shared_contacts_count),
 				"email_params_get_str_array(%s) failed!", APP_CONTROL_DATA_ID);
 
-		if (ugd->shared_contacts_count > 0) {
-			ugd->shared_contact_id_list = calloc(ugd->shared_contacts_count, sizeof(int));
-			retm_if(!ugd->shared_contact_id_list, "calloc() failed");
+		if (view->shared_contacts_count > 0) {
+			view->shared_contact_id_list = calloc(view->shared_contacts_count, sizeof(int));
+			retm_if(!view->shared_contact_id_list, "calloc() failed");
 
-			for (i = 0; i < ugd->shared_contacts_count; ++i) {
-				ugd->shared_contact_id_list[i] = atoi(array[i]);
+			for (i = 0; i < view->shared_contacts_count; ++i) {
+				view->shared_contact_id_list[i] = atoi(array[i]);
 			}
 		} else {
 			debug_error("Array is empty");
 		}
 	}
 
-	ugd->is_sharing_contacts = (ugd->shared_contacts_count > 0) ? EINA_TRUE : EINA_FALSE;
+	view->is_sharing_contacts = (view->shared_contacts_count > 0) ? EINA_TRUE : EINA_FALSE;
 }
 
-static void _initial_data_parse_attachments(EmailComposerUGD *ugd, Eina_List *attachment_uri_list)
+static void _initial_data_parse_attachments(EmailComposerView *view, Eina_List *attachment_uri_list)
 {
 	debug_enter();
 
-	retm_if(!ugd, "ugd is NULL!");
+	retm_if(!view, "view is NULL!");
 	retm_if(!attachment_uri_list, "attachment_uri_list is NULL!");
 
 	Eina_List *list = NULL;
@@ -459,24 +459,24 @@ static void _initial_data_parse_attachments(EmailComposerUGD *ugd, Eina_List *at
 		g_free(file_ext);
 	}
 
-	composer_attachment_process_attachments_with_list(ugd, attachment_uri_list, ATTACH_BY_USE_ORG_FILE, EINA_FALSE);
+	composer_attachment_process_attachments_with_list(view, attachment_uri_list, ATTACH_BY_USE_ORG_FILE, EINA_FALSE);
 
 	debug_leave();
 }
 
-static COMPOSER_ERROR_TYPE_E _initial_data_process_params_by_internal(EmailComposerUGD *ugd, const char **argv)
+static COMPOSER_ERROR_TYPE_E _initial_data_process_params_by_internal(EmailComposerView *view, const char **argv)
 {
 	debug_enter();
 
 	if (argv[0]) {
-		ugd->account_info->original_account_id = atoi(argv[0]);
+		view->account_info->original_account_id = atoi(argv[0]);
 	}
 
-	switch (ugd->composer_type) {
+	switch (view->composer_type) {
 		case RUN_EML_REPLY:
 		case RUN_EML_FORWARD:
 		case RUN_EML_REPLY_ALL:
-			ugd->eml_file_path = g_strdup(argv[3]);
+			view->eml_file_path = g_strdup(argv[3]);
 			break;
 		case RUN_COMPOSER_NEW:
 			break;
@@ -485,12 +485,12 @@ static COMPOSER_ERROR_TYPE_E _initial_data_process_params_by_internal(EmailCompo
 		case RUN_COMPOSER_EDIT:
 		case RUN_COMPOSER_FORWARD:
 			if (argv[1]) {
-				ugd->original_mail_id = atoi(argv[1]);
+				view->original_mail_id = atoi(argv[1]);
 			}
 			break;
 
 		default:
-			debug_error("MUST NOT reach here!! type:[%d]", ugd->composer_type);
+			debug_error("MUST NOT reach here!! type:[%d]", view->composer_type);
 			return COMPOSER_ERROR_UNKOWN_TYPE;
 	}
 
@@ -498,63 +498,63 @@ static COMPOSER_ERROR_TYPE_E _initial_data_process_params_by_internal(EmailCompo
 	return COMPOSER_ERROR_NONE;
 }
 
-static COMPOSER_ERROR_TYPE_E _initial_data_process_params_by_external(EmailComposerUGD *ugd, const char **argv)
+static COMPOSER_ERROR_TYPE_E _initial_data_process_params_by_external(EmailComposerView *view, const char **argv)
 {
 	debug_enter();
 
 	if (STR_VALID(argv[0])) {
-		_recp_preppend_string(&ugd->new_mail_info->mail_data->full_address_to, g_strdup(argv[0]));
+		_recp_preppend_string(&view->new_mail_info->mail_data->full_address_to, g_strdup(argv[0]));
 	}
 
 	if (STR_VALID(argv[1])) {
-		_recp_preppend_string(&ugd->new_mail_info->mail_data->full_address_cc, g_strdup(argv[1]));
+		_recp_preppend_string(&view->new_mail_info->mail_data->full_address_cc, g_strdup(argv[1]));
 	}
 
 	if (STR_VALID(argv[2])) {
-		_recp_preppend_string(&ugd->new_mail_info->mail_data->full_address_bcc, g_strdup(argv[2]));
+		_recp_preppend_string(&view->new_mail_info->mail_data->full_address_bcc, g_strdup(argv[2]));
 	}
 
 	if (STR_VALID(argv[3])) {
-		g_free(ugd->new_mail_info->mail_data->subject);
-		ugd->new_mail_info->mail_data->subject = g_strdup(argv[3]);
+		g_free(view->new_mail_info->mail_data->subject);
+		view->new_mail_info->mail_data->subject = g_strdup(argv[3]);
 	}
 
 	if (STR_VALID(argv[4])) {
-		g_free(ugd->new_mail_info->mail_data->file_path_plain);
-		ugd->new_mail_info->mail_data->file_path_plain = g_strdup(argv[4]);
+		g_free(view->new_mail_info->mail_data->file_path_plain);
+		view->new_mail_info->mail_data->file_path_plain = g_strdup(argv[4]);
 	}
 
 	debug_leave();
 	return COMPOSER_ERROR_NONE;
 }
 
-static void _initial_data_set_mail_to_recipients(EmailComposerUGD *ugd)
+static void _initial_data_set_mail_to_recipients(EmailComposerView *view)
 {
 	debug_enter();
 
 	char *to_be_added_recipients = NULL;
 
-	if (ugd->org_mail_info && ugd->org_mail_info->mail_data && ugd->org_mail_info->mail_data->full_address_from) {
-		debug_secure("   full_address_from: (%s)", ugd->org_mail_info->mail_data->full_address_from);
-		debug_secure("email_address_sender: (%s)", ugd->org_mail_info->mail_data->email_address_sender);
-		debug_secure("  user_email_address: (%s)", ugd->account_info->selected_account->user_email_address);
+	if (view->org_mail_info && view->org_mail_info->mail_data && view->org_mail_info->mail_data->full_address_from) {
+		debug_secure("   full_address_from: (%s)", view->org_mail_info->mail_data->full_address_from);
+		debug_secure("email_address_sender: (%s)", view->org_mail_info->mail_data->email_address_sender);
+		debug_secure("  user_email_address: (%s)", view->account_info->selected_account->user_email_address);
 
 		char *to_be_added_sender_address = NULL;
 
 		/* In the case of "Reply all", we exclude my email address if it is a sender email address. */
-		if ((ugd->composer_type == RUN_COMPOSER_REPLY_ALL) || (ugd->composer_type == RUN_EML_REPLY_ALL)) {
-			if (!g_strstr_len(ugd->org_mail_info->mail_data->full_address_from, strlen(ugd->org_mail_info->mail_data->full_address_from), ugd->account_info->selected_account->user_email_address)) {
-				to_be_added_sender_address = ugd->org_mail_info->mail_data->full_address_from;
+		if ((view->composer_type == RUN_COMPOSER_REPLY_ALL) || (view->composer_type == RUN_EML_REPLY_ALL)) {
+			if (!g_strstr_len(view->org_mail_info->mail_data->full_address_from, strlen(view->org_mail_info->mail_data->full_address_from), view->account_info->selected_account->user_email_address)) {
+				to_be_added_sender_address = view->org_mail_info->mail_data->full_address_from;
 			}
-		} else if ((ugd->composer_type == RUN_COMPOSER_REPLY) || (ugd->composer_type == RUN_EML_REPLY)) {
-			to_be_added_sender_address = ugd->org_mail_info->mail_data->full_address_from;
+		} else if ((view->composer_type == RUN_COMPOSER_REPLY) || (view->composer_type == RUN_EML_REPLY)) {
+			to_be_added_sender_address = view->org_mail_info->mail_data->full_address_from;
 		}
 
 		if (to_be_added_sender_address) {
 			EmailRecpInfo *ri = composer_util_recp_make_recipient_info(to_be_added_sender_address);
 			if (ri) {
 				char *markup_name = elm_entry_utf8_to_markup(ri->display_name);
-				elm_multibuttonentry_item_append(ugd->recp_to_mbe, markup_name, NULL, ri);
+				elm_multibuttonentry_item_append(view->recp_to_mbe, markup_name, NULL, ri);
 				FREE(markup_name);
 			} else {
 				debug_error("From address is invalid! ri is NULL!");
@@ -562,131 +562,131 @@ static void _initial_data_set_mail_to_recipients(EmailComposerUGD *ugd)
 		}
 	}
 
-	if ((ugd->composer_type == RUN_COMPOSER_REPLY_ALL) || (ugd->composer_type == RUN_COMPOSER_EDIT) || (ugd->composer_type == RUN_EML_REPLY_ALL)) {
-		if (ugd->org_mail_info && ugd->org_mail_info->mail_data && ugd->org_mail_info->mail_data->full_address_to) {
-			debug_secure("ugd->org_mail_info->mail_data->full_address_to: (%s)", ugd->org_mail_info->mail_data->full_address_to);
-			to_be_added_recipients = ugd->org_mail_info->mail_data->full_address_to;
+	if ((view->composer_type == RUN_COMPOSER_REPLY_ALL) || (view->composer_type == RUN_COMPOSER_EDIT) || (view->composer_type == RUN_EML_REPLY_ALL)) {
+		if (view->org_mail_info && view->org_mail_info->mail_data && view->org_mail_info->mail_data->full_address_to) {
+			debug_secure("view->org_mail_info->mail_data->full_address_to: (%s)", view->org_mail_info->mail_data->full_address_to);
+			to_be_added_recipients = view->org_mail_info->mail_data->full_address_to;
 		}
-	} else if (ugd->composer_type == RUN_COMPOSER_EXTERNAL) {
-		debug_secure("ugd->new_mail_info->mail_data->full_address_to: (%s)", ugd->new_mail_info->mail_data->full_address_to);
-		to_be_added_recipients = ugd->new_mail_info->mail_data->full_address_to;
+	} else if (view->composer_type == RUN_COMPOSER_EXTERNAL) {
+		debug_secure("view->new_mail_info->mail_data->full_address_to: (%s)", view->new_mail_info->mail_data->full_address_to);
+		to_be_added_recipients = view->new_mail_info->mail_data->full_address_to;
 	}
 
-	_initial_data_mbe_append_recipients(ugd, ugd->recp_to_mbe, to_be_added_recipients);
-	elm_multibuttonentry_expanded_set(ugd->recp_to_mbe, EINA_FALSE);
+	_initial_data_mbe_append_recipients(view, view->recp_to_mbe, to_be_added_recipients);
+	elm_multibuttonentry_expanded_set(view->recp_to_mbe, EINA_FALSE);
 
 	debug_leave();
 }
 
-static void _initial_data_set_mail_cc_recipients(EmailComposerUGD *ugd)
+static void _initial_data_set_mail_cc_recipients(EmailComposerView *view)
 {
 	debug_enter();
 
 	char *to_be_added_recipients = NULL;
 
-	if ((ugd->composer_type == RUN_COMPOSER_REPLY_ALL) || (ugd->composer_type == RUN_COMPOSER_EDIT) || (ugd->composer_type == RUN_EML_REPLY_ALL)) {
-		debug_secure("ugd->org_mail_info->mail_data->full_address_cc: (%s)", ugd->org_mail_info->mail_data->full_address_cc);
-		to_be_added_recipients = ugd->org_mail_info->mail_data->full_address_cc;
-	} else if (ugd->composer_type == RUN_COMPOSER_EXTERNAL) {
-		debug_secure("ugd->new_mail_info->mail_data->full_address_cc: (%s)", ugd->new_mail_info->mail_data->full_address_cc);
-		to_be_added_recipients = ugd->new_mail_info->mail_data->full_address_cc;
+	if ((view->composer_type == RUN_COMPOSER_REPLY_ALL) || (view->composer_type == RUN_COMPOSER_EDIT) || (view->composer_type == RUN_EML_REPLY_ALL)) {
+		debug_secure("view->org_mail_info->mail_data->full_address_cc: (%s)", view->org_mail_info->mail_data->full_address_cc);
+		to_be_added_recipients = view->org_mail_info->mail_data->full_address_cc;
+	} else if (view->composer_type == RUN_COMPOSER_EXTERNAL) {
+		debug_secure("view->new_mail_info->mail_data->full_address_cc: (%s)", view->new_mail_info->mail_data->full_address_cc);
+		to_be_added_recipients = view->new_mail_info->mail_data->full_address_cc;
 	}
 
-	Eina_Bool ret = _initial_data_mbe_append_recipients(ugd, ugd->recp_cc_mbe, to_be_added_recipients);
-	if (ret && !ugd->cc_added) {
-		composer_recipient_show_hide_cc_field(ugd, EINA_TRUE);
-		composer_recipient_show_hide_bcc_field(ugd, EINA_TRUE);
+	Eina_Bool ret = _initial_data_mbe_append_recipients(view, view->recp_cc_mbe, to_be_added_recipients);
+	if (ret && !view->cc_added) {
+		composer_recipient_show_hide_cc_field(view, EINA_TRUE);
+		composer_recipient_show_hide_bcc_field(view, EINA_TRUE);
 	}
-	elm_multibuttonentry_expanded_set(ugd->recp_cc_mbe, EINA_FALSE);
+	elm_multibuttonentry_expanded_set(view->recp_cc_mbe, EINA_FALSE);
 
 	debug_leave();
 }
 
-static void _initial_data_set_mail_bcc_recipients(EmailComposerUGD *ugd)
+static void _initial_data_set_mail_bcc_recipients(EmailComposerView *view)
 {
 	debug_enter();
 
 	char *to_be_added_recipients = NULL;
 
-	if ((ugd->composer_type == RUN_COMPOSER_REPLY_ALL) || (ugd->composer_type == RUN_COMPOSER_EDIT) || (ugd->composer_type == RUN_EML_REPLY_ALL)) {
-		debug_secure("ugd->org_mail_info->mail_data->full_address_bcc: (%s)", ugd->org_mail_info->mail_data->full_address_bcc);
-		to_be_added_recipients = ugd->org_mail_info->mail_data->full_address_bcc;
-	} else if (ugd->composer_type == RUN_COMPOSER_EXTERNAL) {
-		debug_secure("ugd->new_mail_info->mail_data->full_address_bcc: (%s)", ugd->new_mail_info->mail_data->full_address_bcc);
-		to_be_added_recipients = ugd->new_mail_info->mail_data->full_address_bcc;
+	if ((view->composer_type == RUN_COMPOSER_REPLY_ALL) || (view->composer_type == RUN_COMPOSER_EDIT) || (view->composer_type == RUN_EML_REPLY_ALL)) {
+		debug_secure("view->org_mail_info->mail_data->full_address_bcc: (%s)", view->org_mail_info->mail_data->full_address_bcc);
+		to_be_added_recipients = view->org_mail_info->mail_data->full_address_bcc;
+	} else if (view->composer_type == RUN_COMPOSER_EXTERNAL) {
+		debug_secure("view->new_mail_info->mail_data->full_address_bcc: (%s)", view->new_mail_info->mail_data->full_address_bcc);
+		to_be_added_recipients = view->new_mail_info->mail_data->full_address_bcc;
 	}
 
-	Eina_Bool ret = _initial_data_mbe_append_recipients(ugd, ugd->recp_bcc_mbe, to_be_added_recipients);
-	if (ret && !ugd->bcc_added) {
-		composer_recipient_show_hide_cc_field(ugd, EINA_TRUE);
-		composer_recipient_show_hide_bcc_field(ugd, EINA_TRUE);
+	Eina_Bool ret = _initial_data_mbe_append_recipients(view, view->recp_bcc_mbe, to_be_added_recipients);
+	if (ret && !view->bcc_added) {
+		composer_recipient_show_hide_cc_field(view, EINA_TRUE);
+		composer_recipient_show_hide_bcc_field(view, EINA_TRUE);
 	}
-	elm_multibuttonentry_expanded_set(ugd->recp_bcc_mbe, EINA_FALSE);
+	elm_multibuttonentry_expanded_set(view->recp_bcc_mbe, EINA_FALSE);
 
 	debug_leave();
 }
 
-static void _initial_data_set_mail_subject(EmailComposerUGD *ugd)
+static void _initial_data_set_mail_subject(EmailComposerView *view)
 {
 	debug_enter();
 
 	char temp_subject[BUF_LEN_L] = { 0, };
 	char *to_be_added_subject = NULL;
 
-	if (ugd->org_mail_info->mail_data) {
-		if (ugd->composer_type == RUN_COMPOSER_EDIT) {
-			if (ugd->org_mail_info->mail_data->subject) {
-				to_be_added_subject = ugd->org_mail_info->mail_data->subject;
+	if (view->org_mail_info->mail_data) {
+		if (view->composer_type == RUN_COMPOSER_EDIT) {
+			if (view->org_mail_info->mail_data->subject) {
+				to_be_added_subject = view->org_mail_info->mail_data->subject;
 			}
-		} else if ((ugd->composer_type == RUN_COMPOSER_FORWARD) || (ugd->composer_type == RUN_EML_FORWARD)) {
-			if (ugd->org_mail_info->mail_data->subject) {
-				if ((strncasecmp(ugd->org_mail_info->mail_data->subject, "fw:", 3) == 0) ||
-					(strncasecmp(ugd->org_mail_info->mail_data->subject, "fwd:", 4) == 0)) {
-					char *p = strchr(ugd->org_mail_info->mail_data->subject, ':');
+		} else if ((view->composer_type == RUN_COMPOSER_FORWARD) || (view->composer_type == RUN_EML_FORWARD)) {
+			if (view->org_mail_info->mail_data->subject) {
+				if ((strncasecmp(view->org_mail_info->mail_data->subject, "fw:", 3) == 0) ||
+					(strncasecmp(view->org_mail_info->mail_data->subject, "fwd:", 4) == 0)) {
+					char *p = strchr(view->org_mail_info->mail_data->subject, ':');
 					snprintf(temp_subject, sizeof(temp_subject), "%s%s", email_get_email_string("IDS_EMAIL_BODY_FWD_C"), p + 1);
 				} else {
-					snprintf(temp_subject, sizeof(temp_subject), "%s %s", email_get_email_string("IDS_EMAIL_BODY_FWD_C"), ugd->org_mail_info->mail_data->subject);
+					snprintf(temp_subject, sizeof(temp_subject), "%s %s", email_get_email_string("IDS_EMAIL_BODY_FWD_C"), view->org_mail_info->mail_data->subject);
 				}
 			} else {
 				snprintf(temp_subject, sizeof(temp_subject), "%s ", email_get_email_string("IDS_EMAIL_BODY_FWD_C"));
 			}
 			to_be_added_subject = temp_subject;
-		} else if ((ugd->composer_type == RUN_COMPOSER_REPLY) || (ugd->composer_type == RUN_COMPOSER_REPLY_ALL) ||
-				(ugd->composer_type == RUN_EML_REPLY) || (ugd->composer_type == RUN_EML_REPLY_ALL)) {
+		} else if ((view->composer_type == RUN_COMPOSER_REPLY) || (view->composer_type == RUN_COMPOSER_REPLY_ALL) ||
+				(view->composer_type == RUN_EML_REPLY) || (view->composer_type == RUN_EML_REPLY_ALL)) {
 			char *resp_text = email_get_email_string("IDS_EMAIL_HEADER_RE_C_M_READ_REPORT");
 
-			if (ugd->org_mail_info->mail_data->subject) {
-				if (strncasecmp(ugd->org_mail_info->mail_data->subject, "re:", 3) == 0) {
-					char *p = strchr(ugd->org_mail_info->mail_data->subject, ':');
+			if (view->org_mail_info->mail_data->subject) {
+				if (strncasecmp(view->org_mail_info->mail_data->subject, "re:", 3) == 0) {
+					char *p = strchr(view->org_mail_info->mail_data->subject, ':');
 					snprintf(temp_subject, sizeof(temp_subject), "%s%s", resp_text, p + 1);
 				} else {
-					snprintf(temp_subject, sizeof(temp_subject), "%s %s", resp_text, ugd->org_mail_info->mail_data->subject);
+					snprintf(temp_subject, sizeof(temp_subject), "%s %s", resp_text, view->org_mail_info->mail_data->subject);
 				}
 			} else {
 				snprintf(temp_subject, sizeof(temp_subject), "%s ", resp_text);
 			}
 			to_be_added_subject = temp_subject;
 		}
-	} else if (ugd->new_mail_info->mail_data && ugd->new_mail_info->mail_data->subject) {
-		if (ugd->composer_type == RUN_COMPOSER_EXTERNAL) {
-			snprintf(temp_subject, sizeof(temp_subject), "%s ", ugd->new_mail_info->mail_data->subject);
+	} else if (view->new_mail_info->mail_data && view->new_mail_info->mail_data->subject) {
+		if (view->composer_type == RUN_COMPOSER_EXTERNAL) {
+			snprintf(temp_subject, sizeof(temp_subject), "%s ", view->new_mail_info->mail_data->subject);
 			to_be_added_subject = temp_subject;
 		}
 	}
 
 	if (to_be_added_subject) {
 		char *temp = elm_entry_utf8_to_markup(to_be_added_subject);
-		elm_entry_entry_set(ugd->subject_entry.entry, temp);
+		elm_entry_entry_set(view->subject_entry.entry, temp);
 		FREE(temp);
 
-		elm_entry_cursor_begin_set(ugd->subject_entry.entry);
+		elm_entry_cursor_begin_set(view->subject_entry.entry);
 	}
-	FREE(ugd->new_mail_info->mail_data->subject);
+	FREE(view->new_mail_info->mail_data->subject);
 
 	debug_leave();
 }
 
-static char *_initial_data_get_mail_body(EmailComposerUGD *ugd)
+static char *_initial_data_get_mail_body(EmailComposerView *view)
 {
 	debug_enter();
 
@@ -696,12 +696,12 @@ static char *_initial_data_get_mail_body(EmailComposerUGD *ugd)
 	char *parent_content = NULL;
 	char *original_message_bar = NULL;
 
-	if (ugd->composer_type == RUN_COMPOSER_EDIT) {
-		if (ugd->org_mail_info->mail_data->body_download_status != EMAIL_BODY_DOWNLOAD_STATUS_NONE) {
-			if (ugd->org_mail_info->mail_data->file_path_html) {
-				body_document = (char *)email_get_buff_from_file(ugd->org_mail_info->mail_data->file_path_html, 0);
-			} else if (ugd->org_mail_info->mail_data->file_path_plain) {
-				char *temp_body_plain = (char *)email_get_buff_from_file(ugd->org_mail_info->mail_data->file_path_plain, 0);
+	if (view->composer_type == RUN_COMPOSER_EDIT) {
+		if (view->org_mail_info->mail_data->body_download_status != EMAIL_BODY_DOWNLOAD_STATUS_NONE) {
+			if (view->org_mail_info->mail_data->file_path_html) {
+				body_document = (char *)email_get_buff_from_file(view->org_mail_info->mail_data->file_path_html, 0);
+			} else if (view->org_mail_info->mail_data->file_path_plain) {
+				char *temp_body_plain = (char *)email_get_buff_from_file(view->org_mail_info->mail_data->file_path_plain, 0);
 
 				/* Convert plain-text to html content */
 				body_document = (char *)email_get_parse_plain_text(temp_body_plain, STR_LEN(temp_body_plain));
@@ -711,26 +711,26 @@ static char *_initial_data_get_mail_body(EmailComposerUGD *ugd)
 			}
 
 			/* To insert css style when the mail is in outbox because there's no css style on an outgoing mail. (Outbox > Mail > Menu > Edit) */
-			if (ugd->org_mail_info->mail_data->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
+			if (view->org_mail_info->mail_data->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
 				char *temp_body = body_document;
 				body_document = g_strconcat(EC_TAG_BODY_CSS_START, temp_body, EC_TAG_BODY_END, NULL);
 				FREE(temp_body);
 			}
 		}
 	} else {
-		if (ugd->composer_type == RUN_COMPOSER_EXTERNAL) {
-			if (ugd->new_mail_info->mail_data->file_path_plain) {
-				current_content = (char *)email_get_parse_plain_text(ugd->new_mail_info->mail_data->file_path_plain, STR_LEN(ugd->new_mail_info->mail_data->file_path_plain));
+		if (view->composer_type == RUN_COMPOSER_EXTERNAL) {
+			if (view->new_mail_info->mail_data->file_path_plain) {
+				current_content = (char *)email_get_parse_plain_text(view->new_mail_info->mail_data->file_path_plain, STR_LEN(view->new_mail_info->mail_data->file_path_plain));
 				if (current_content) {
 					body_document = g_strconcat(EC_TAG_BODY_CSS_START, current_content, EC_TAG_BODY_END, NULL);
 				}
-				free(ugd->new_mail_info->mail_data->file_path_plain);
-				ugd->new_mail_info->mail_data->file_path_plain = NULL;
+				free(view->new_mail_info->mail_data->file_path_plain);
+				view->new_mail_info->mail_data->file_path_plain = NULL;
 			}
-		} else if (((ugd->composer_type == RUN_COMPOSER_REPLY || ugd->composer_type == RUN_COMPOSER_REPLY_ALL) && ugd->account_info->original_account->options.reply_with_body) ||
-			(ugd->composer_type == RUN_COMPOSER_FORWARD)) {
-			parent_content = _initial_data_body_get_parent_content(ugd);
-			original_message_bar = _initial_data_body_get_original_message_bar_tags(ugd);
+		} else if (((view->composer_type == RUN_COMPOSER_REPLY || view->composer_type == RUN_COMPOSER_REPLY_ALL) && view->account_info->original_account->options.reply_with_body) ||
+			(view->composer_type == RUN_COMPOSER_FORWARD)) {
+			parent_content = _initial_data_body_get_parent_content(view);
+			original_message_bar = _initial_data_body_get_original_message_bar_tags(view);
 
 			if (parent_content) {
 				body_document = g_strconcat(EC_TAG_BODY_ORIGINAL_MESSAGE_START, EC_TAG_NEW_MSG_START, EC_TAG_NEW_MSG_END, original_message_bar, EC_TAG_ORG_MSG_START, parent_content, EC_TAG_ORG_MSG_END, EC_TAG_BODY_END, NULL);
@@ -757,11 +757,11 @@ static char *_initial_data_get_mail_body(EmailComposerUGD *ugd)
 	return html_document;
 }
 
-static void _initial_data_set_mail_attachment(EmailComposerUGD *ugd)
+static void _initial_data_set_mail_attachment(EmailComposerView *view)
 {
 	debug_enter();
 
-	EmailComposerAccount *account_info = ugd->account_info;
+	EmailComposerAccount *account_info = view->account_info;
 	retm_if(!account_info, "account_info is NULL!");
 
 	int i, j;
@@ -771,22 +771,22 @@ static void _initial_data_set_mail_attachment(EmailComposerUGD *ugd)
 	int err = EMAIL_ERROR_NONE;
 	Eina_Bool ret = EINA_TRUE;
 
-	if (ugd->composer_type == RUN_COMPOSER_EDIT || ugd->composer_type == RUN_COMPOSER_REPLY || ugd->composer_type == RUN_COMPOSER_REPLY_ALL || ugd->composer_type == RUN_COMPOSER_FORWARD) {
+	if (view->composer_type == RUN_COMPOSER_EDIT || view->composer_type == RUN_COMPOSER_REPLY || view->composer_type == RUN_COMPOSER_REPLY_ALL || view->composer_type == RUN_COMPOSER_FORWARD) {
 		/* Check the size of the inline images first */
-		for (i = 0; i < ugd->org_mail_info->total_attachment_count; i++) {
-			email_attachment_data_t *att_data = ugd->org_mail_info->attachment_list + i;
+		for (i = 0; i < view->org_mail_info->total_attachment_count; i++) {
+			email_attachment_data_t *att_data = view->org_mail_info->attachment_list + i;
 			if (att_data && att_data->inline_content_status) {
 				total_attachment_size += att_data->attachment_size;
 				inline_count++;
 
 				if (inline_count > MAX_ATTACHMENT_ITEM) {
-					composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_NUMBER_EXCEEDED, composer_util_popup_response_cb, ugd);
+					composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_NUMBER_EXCEEDED, composer_util_popup_response_cb, view);
 					ret = EINA_FALSE;
 					break;
 				}
 
 				if (ret && (total_attachment_size > account_info->max_sending_size)) {
-					composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_SIZE_EXCEEDED, composer_util_popup_response_cb, ugd);
+					composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_SIZE_EXCEEDED, composer_util_popup_response_cb, view);
 					ret = EINA_FALSE;
 				}
 
@@ -805,21 +805,21 @@ static void _initial_data_set_mail_attachment(EmailComposerUGD *ugd)
 			}
 		}
 
-		if (ugd->composer_type == RUN_COMPOSER_EDIT || (ugd->composer_type == RUN_COMPOSER_FORWARD && account_info->original_account->options.forward_with_files)) {
-			if (ugd->org_mail_info->mail_data->attachment_count > 0) {
+		if (view->composer_type == RUN_COMPOSER_EDIT || (view->composer_type == RUN_COMPOSER_FORWARD && account_info->original_account->options.forward_with_files)) {
+			if (view->org_mail_info->mail_data->attachment_count > 0) {
 				int reference_attachment_count = 0;
 				email_attachment_data_t *reference_attachment_list = NULL;
 
-				if ((ugd->composer_type == RUN_COMPOSER_EDIT) && (ugd->org_mail_info->mail_data->reference_mail_id != 0) && ugd->org_mail_info->total_attachment_count) {
-					err = email_get_attachment_data_list(ugd->org_mail_info->mail_data->reference_mail_id, &reference_attachment_list, &reference_attachment_count);
-					debug_warning_if(err != EMAIL_ERROR_NONE, "email_get_attachment_data_list() for [%d] is failed!", ugd->org_mail_info->mail_data->reference_mail_id);
+				if ((view->composer_type == RUN_COMPOSER_EDIT) && (view->org_mail_info->mail_data->reference_mail_id != 0) && view->org_mail_info->total_attachment_count) {
+					err = email_get_attachment_data_list(view->org_mail_info->mail_data->reference_mail_id, &reference_attachment_list, &reference_attachment_count);
+					debug_warning_if(err != EMAIL_ERROR_NONE, "email_get_attachment_data_list() for [%d] is failed!", view->org_mail_info->mail_data->reference_mail_id);
 				}
 
-				for (j = 0; j < ugd->org_mail_info->total_attachment_count; j++) {
-					email_attachment_data_t *att_data = ugd->org_mail_info->attachment_list + j;
+				for (j = 0; j < view->org_mail_info->total_attachment_count; j++) {
+					email_attachment_data_t *att_data = view->org_mail_info->attachment_list + j;
 
 					/* Check the mime type of the attachment if it is for s/mime. */
-					if ((ugd->org_mail_info->mail_data->smime_type != EMAIL_SMIME_NONE) && email_is_smime_cert_attachment(att_data->attachment_mime_type)) {
+					if ((view->org_mail_info->mail_data->smime_type != EMAIL_SMIME_NONE) && email_is_smime_cert_attachment(att_data->attachment_mime_type)) {
 						debug_secure("(%s) - mime_type:(%s) - skip it!", att_data->attachment_path, att_data->attachment_mime_type);
 						continue;
 					}
@@ -833,8 +833,8 @@ static void _initial_data_set_mail_attachment(EmailComposerUGD *ugd)
 						int m = 0;
 						for (m = 0; m < reference_attachment_count; m++) {
 							if (!g_strcmp0(att_data->attachment_name, reference_attachment_list[m].attachment_name) && (att_data->attachment_size == reference_attachment_list[m].attachment_size)) {
-								debug_secure("==> replace mail_id:[%d], att_id:[%d] ==> ref_id:[%d], att_id:[%d]", ugd->org_mail_info->mail_data->mail_id, att_data->attachment_id,
-								             ugd->org_mail_info->mail_data->reference_mail_id, (reference_attachment_list + m)->attachment_id);
+								debug_secure("==> replace mail_id:[%d], att_id:[%d] ==> ref_id:[%d], att_id:[%d]", view->org_mail_info->mail_data->mail_id, att_data->attachment_id,
+								             view->org_mail_info->mail_data->reference_mail_id, (reference_attachment_list + m)->attachment_id);
 								att_data = reference_attachment_list + m;
 							}
 						}
@@ -845,19 +845,19 @@ static void _initial_data_set_mail_attachment(EmailComposerUGD *ugd)
 						attach_count++;
 
 						if (inline_count + attach_count > MAX_ATTACHMENT_ITEM) {
-							composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_NUMBER_EXCEEDED, composer_util_popup_response_cb, ugd);
+							composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_NUMBER_EXCEEDED, composer_util_popup_response_cb, view);
 							break;
 						}
 
 						if (ret && (total_attachment_size > account_info->max_sending_size)) {
-							composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_SIZE_EXCEEDED, composer_util_popup_response_cb, ugd);
+							composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_SIZE_EXCEEDED, composer_util_popup_response_cb, view);
 							ret = EINA_FALSE;
 						}
 
 						email_attachment_data_t *attachment_data = (email_attachment_data_t *)calloc(1, sizeof(email_attachment_data_t));
 						if (!attachment_data) {
 							debug_error("Failed to allocate memory for attachment_data!");
-							composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_OUT_OF_MEMORY, composer_util_popup_response_cb, ugd);
+							composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_OUT_OF_MEMORY, composer_util_popup_response_cb, view);
 							break;
 						}
 
@@ -872,10 +872,10 @@ static void _initial_data_set_mail_attachment(EmailComposerUGD *ugd)
 						attachment_data->inline_content_status = att_data->inline_content_status;
 
 						if (!attachment_data->save_status) {
-							ugd->need_download = EINA_TRUE;
+							view->need_download = EINA_TRUE;
 						}
 
-						composer_attachment_ui_create_item_layout(ugd, attachment_data, attach_count > 1, EINA_FALSE);
+						composer_attachment_ui_create_item_layout(view, attachment_data, attach_count > 1, EINA_FALSE);
 					}
 				}
 
@@ -885,34 +885,34 @@ static void _initial_data_set_mail_attachment(EmailComposerUGD *ugd)
 				}
 			}
 		}
-	} else if ((ugd->composer_type == RUN_EML_REPLY) || (ugd->composer_type == RUN_EML_REPLY_ALL) || (ugd->composer_type == RUN_EML_FORWARD)) {
+	} else if ((view->composer_type == RUN_EML_REPLY) || (view->composer_type == RUN_EML_REPLY_ALL) || (view->composer_type == RUN_EML_FORWARD)) {
 		do {
-			total_attachment_size = (int)email_get_file_size(ugd->org_mail_info->mail_data->file_path_html);
-			total_attachment_size += (int)email_get_file_size(ugd->org_mail_info->mail_data->file_path_plain);
+			total_attachment_size = (int)email_get_file_size(view->org_mail_info->mail_data->file_path_html);
+			total_attachment_size += (int)email_get_file_size(view->org_mail_info->mail_data->file_path_plain);
 
 			struct stat file_info;
-			if (stat(ugd->eml_file_path, &file_info) == -1) {
+			if (stat(view->eml_file_path, &file_info) == -1) {
 				debug_error("stat() failed! (%d): %s", errno, strerror(errno));
-				composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_NOT_EXIST, composer_util_popup_response_cb, ugd);
+				composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_NOT_EXIST, composer_util_popup_response_cb, view);
 				break;
 			}
 
 			total_attachment_size += file_info.st_size;
-			if (total_attachment_size > ugd->account_info->max_sending_size) {
-				composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_SIZE_EXCEEDED, composer_util_popup_response_cb, ugd);
+			if (total_attachment_size > view->account_info->max_sending_size) {
+				composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_SIZE_EXCEEDED, composer_util_popup_response_cb, view);
 				break;
 			}
 
 			email_attachment_data_t *attachment_data = (email_attachment_data_t *)calloc(1, sizeof(email_attachment_data_t));
 			if (!attachment_data) {
 				debug_error("Failed to allocate memory for attachment_data!");
-				composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_OUT_OF_MEMORY, composer_util_popup_response_cb, ugd);
+				composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_OUT_OF_MEMORY, composer_util_popup_response_cb, view);
 				break;
 			}
 
-			gchar **tokens = g_strsplit(ugd->eml_file_path, "/", -1);
+			gchar **tokens = g_strsplit(view->eml_file_path, "/", -1);
 			attachment_data->attachment_name = COMPOSER_STRDUP(tokens[g_strv_length(tokens) - 1]);
-			attachment_data->attachment_path = COMPOSER_STRDUP(ugd->eml_file_path);
+			attachment_data->attachment_path = COMPOSER_STRDUP(view->eml_file_path);
 			attachment_data->save_status = 1;
 			attachment_data->attachment_size = file_info.st_size;
 			g_strfreev(tokens);
@@ -920,11 +920,11 @@ static void _initial_data_set_mail_attachment(EmailComposerUGD *ugd)
 			debug_secure("attachment_data->attachment_name:%s", attachment_data->attachment_name);
 			debug_secure("attachment_data->attachment_size:%d", attachment_data->attachment_size);
 
-			composer_attachment_ui_create_item_layout(ugd, attachment_data, EINA_FALSE, EINA_FALSE);
+			composer_attachment_ui_create_item_layout(view, attachment_data, EINA_FALSE, EINA_FALSE);
 		} while (0);
 	}
 
-	composer_util_modify_send_button(ugd);
+	composer_util_modify_send_button(view);
 
 	debug_leave();
 }
@@ -955,7 +955,7 @@ static Eina_List *_initial_data_make_initial_recipients_list(Evas_Object *mbe)
  * Definition for exported functions
  */
 
-char *composer_initial_data_body_make_parent_mail_info(EmailComposerUGD *ugd)
+char *composer_initial_data_body_make_parent_mail_info(EmailComposerView *view)
 {
 	debug_enter();
 
@@ -972,11 +972,11 @@ char *composer_initial_data_body_make_parent_mail_info(EmailComposerUGD *ugd)
 	char *text_for_cc = NULL;
 	char *text_for_subject = NULL;
 
-	if (ugd->org_mail_info && ugd->org_mail_info->mail_data) {
+	if (view->org_mail_info && view->org_mail_info->mail_data) {
 		/* Show "---- Original message ----" */
 		snprintf(text_for_orig, sizeof(text_for_orig), EC_TAG_DIV_DIR_S"---- %s ----"EC_TAG_DIV_F, email_get_email_string("IDS_EMAIL_BODY_ORIGINAL_MESSAGE"));
 
-		char *stripped_from_address = composer_util_strip_quotation_marks_in_email_address(ugd->org_mail_info->mail_data->full_address_from);
+		char *stripped_from_address = composer_util_strip_quotation_marks_in_email_address(view->org_mail_info->mail_data->full_address_from);
 		if (stripped_from_address) {
 			snprintf(text_for_from, sizeof(text_for_from), EC_TAG_DIV_DIR_S"%s: %s"EC_TAG_DIV_F, email_get_email_string("IDS_EMAIL_BODY_FROM_MSENDER"), stripped_from_address);
 			free(stripped_from_address);
@@ -984,25 +984,25 @@ char *composer_initial_data_body_make_parent_mail_info(EmailComposerUGD *ugd)
 
 		sent_time_format = composer_util_get_datetime_format();
 		if (sent_time_format) {
-			localtime_r(&ugd->org_mail_info->mail_data->date_time, &sent_tm);
+			localtime_r(&view->org_mail_info->mail_data->date_time, &sent_tm);
 
 			strftime(sent_time, sizeof(sent_time), sent_time_format, &sent_tm);
 			snprintf(text_for_sent, sizeof(text_for_sent), EC_TAG_DIV_DIR_S"%s %s"EC_TAG_DIV_F, email_get_email_string("IDS_EMAIL_BODY_SENT_C_M_DATE"), sent_time);
 			g_free(sent_time_format);
 		}
 
-		char *to_string = _initial_data_body_make_recipient_string(ugd->org_mail_info->mail_data->full_address_to, ";");
+		char *to_string = _initial_data_body_make_recipient_string(view->org_mail_info->mail_data->full_address_to, ";");
 		if (!to_string) {
-			to_string = g_strdup(ugd->org_mail_info->mail_data->full_address_to);
+			to_string = g_strdup(view->org_mail_info->mail_data->full_address_to);
 		}
 		snprintf(buf, sizeof(buf), EC_TAG_DIV_DIR_S"%s: ", email_get_email_string("IDS_EMAIL_BODY_TO_M_RECIPIENT"));
 		text_for_to = g_strconcat(buf, to_string, EC_TAG_DIV_F, NULL);
 		FREE(to_string);
 
-		if (ugd->org_mail_info->mail_data->full_address_cc) {
-			char *cc_string = _initial_data_body_make_recipient_string(ugd->org_mail_info->mail_data->full_address_cc, ";");
+		if (view->org_mail_info->mail_data->full_address_cc) {
+			char *cc_string = _initial_data_body_make_recipient_string(view->org_mail_info->mail_data->full_address_cc, ";");
 			if (!cc_string) {
-				cc_string = g_strdup(ugd->org_mail_info->mail_data->full_address_cc);
+				cc_string = g_strdup(view->org_mail_info->mail_data->full_address_cc);
 			}
 			memset(buf, 0x0, sizeof(buf));
 			snprintf(buf, sizeof(buf), EC_TAG_DIV_DIR_S"%s: ", email_get_email_string("IDS_EMAIL_BODY_CC"));
@@ -1010,8 +1010,8 @@ char *composer_initial_data_body_make_parent_mail_info(EmailComposerUGD *ugd)
 			FREE(cc_string);
 		}
 
-		if (ugd->org_mail_info->mail_data->subject) {
-			char *subject_markup = elm_entry_utf8_to_markup(ugd->org_mail_info->mail_data->subject);
+		if (view->org_mail_info->mail_data->subject) {
+			char *subject_markup = elm_entry_utf8_to_markup(view->org_mail_info->mail_data->subject);
 			text_for_subject = g_strdup_printf(EC_TAG_DIV_DIR_S"%s: %s"EC_TAG_DIV_F, email_get_email_string("IDS_EMAIL_HEADER_SUBJECT"), subject_markup);
 			g_free(subject_markup);
 		} else {
@@ -1033,14 +1033,14 @@ char *composer_initial_data_body_make_parent_mail_info(EmailComposerUGD *ugd)
 	return text_for_original_info;
 }
 
-char *composer_initial_data_body_make_signature_markup(EmailComposerUGD *ugd)
+char *composer_initial_data_body_make_signature_markup(EmailComposerView *view)
 {
 	debug_enter();
 
 	char *signature = NULL;
 
-	if ((ugd->account_info->original_account->options).add_signature && (ugd->account_info->original_account->options).signature) {
-		char **sp_signature = g_strsplit(email_get_email_string((ugd->account_info->original_account->options).signature), "\"", -1);
+	if ((view->account_info->original_account->options).add_signature && (view->account_info->original_account->options).signature) {
+		char **sp_signature = g_strsplit(email_get_email_string((view->account_info->original_account->options).signature), "\"", -1);
 		char *jo_signature = g_strjoinv("\\\"", sp_signature);
 		char *markup_signature = elm_entry_utf8_to_markup(jo_signature);
 		signature = g_strdup_printf(EC_TAG_SIGNATURE_TEXT, ATO014, markup_signature);
@@ -1061,37 +1061,37 @@ void composer_initial_data_destroy_download_contents_popup(void *data)
 
 	retm_if(!data, "data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	ugd->draft_sync_handle = 0;
-	ugd->is_load_finished = EINA_FALSE;
+	view->draft_sync_handle = 0;
+	view->is_load_finished = EINA_FALSE;
 
-	DELETE_EVAS_OBJECT(ugd->composer_popup);
+	DELETE_EVAS_OBJECT(view->composer_popup);
 
 	debug_leave();
 }
 
-void composer_initial_data_set_mail_info(EmailComposerUGD *ugd, bool is_draft_sync_requested)
+void composer_initial_data_set_mail_info(EmailComposerView *view, bool is_draft_sync_requested)
 {
 	email_profiling_begin(composer_initial_data_set_mail_info);
 	debug_enter();
 
 	char *html_body = NULL;
 	char file_path[EMAIL_FILEPATH_MAX] = { 0, };
-	email_mail_data_t *mail_data = ugd->org_mail_info->mail_data;
+	email_mail_data_t *mail_data = view->org_mail_info->mail_data;
 
 	/* Check if attachment would be downloaded or not.
 	 * 1. If the mail is in draft folder and the body and attachments hasn't been downloaded yet, those should be downloaded first!
 	 * 2. If the mail is made on local (by forwarding -> save to drafts), reference_mail_id is set. In this case, downloading isn't needed.
 	 */
-	if (is_draft_sync_requested && (ugd->composer_type == RUN_COMPOSER_EDIT) && (ugd->org_mail_info->mail_data->reference_mail_id == 0)) {
+	if (is_draft_sync_requested && (view->composer_type == RUN_COMPOSER_EDIT) && (view->org_mail_info->mail_data->reference_mail_id == 0)) {
 		bool is_draft_sync_needed = false;
 		if (mail_data->body_download_status != EMAIL_BODY_DOWNLOAD_STATUS_FULLY_DOWNLOADED) {
 			is_draft_sync_needed = true;
 		} else {
 			int i = 0;
-			for (i = 0; i < ugd->org_mail_info->total_attachment_count; i++) {
-				email_attachment_data_t *attachment_list = ugd->org_mail_info->attachment_list + i;
+			for (i = 0; i < view->org_mail_info->total_attachment_count; i++) {
+				email_attachment_data_t *attachment_list = view->org_mail_info->attachment_list + i;
 				if (attachment_list && !attachment_list->save_status && !attachment_list->inline_content_status) {
 					is_draft_sync_needed = true;
 					break;
@@ -1100,55 +1100,55 @@ void composer_initial_data_set_mail_info(EmailComposerUGD *ugd, bool is_draft_sy
 		}
 
 		if (is_draft_sync_needed) {
-			_initial_data_download_contents(ugd);
+			_initial_data_download_contents(view);
 			return;
 		}
 	}
 
-	_initial_data_set_mail_to_recipients(ugd);
-	_initial_data_set_mail_cc_recipients(ugd);
-	_initial_data_set_mail_bcc_recipients(ugd);
+	_initial_data_set_mail_to_recipients(view);
+	_initial_data_set_mail_cc_recipients(view);
+	_initial_data_set_mail_bcc_recipients(view);
 
-	_initial_data_set_mail_subject(ugd);
-	html_body = _initial_data_get_mail_body(ugd);
+	_initial_data_set_mail_subject(view);
+	html_body = _initial_data_get_mail_body(view);
 	retm_if(!html_body, "html_body: is [NULL]");
-	_initial_data_set_mail_attachment(ugd);
+	_initial_data_set_mail_attachment(view);
 
-	snprintf(file_path, sizeof(file_path), "file://%s", ugd->saved_html_path);
+	snprintf(file_path, sizeof(file_path), "file://%s", view->saved_html_path);
 	debug_secure("file_path: (%s)", file_path);
 
-	ewk_view_contents_set(ugd->ewk_view, "", 1, NULL, NULL, (char *)email_get_phone_storage_url());
-	ewk_view_contents_set(ugd->ewk_view, "", 1, NULL, NULL, (char *)email_get_mmc_storage_url());
-	ewk_view_contents_set(ugd->ewk_view, "", 1, NULL, NULL, (char *)email_get_res_url());
+	ewk_view_contents_set(view->ewk_view, "", 1, NULL, NULL, (char *)email_get_phone_storage_url());
+	ewk_view_contents_set(view->ewk_view, "", 1, NULL, NULL, (char *)email_get_mmc_storage_url());
+	ewk_view_contents_set(view->ewk_view, "", 1, NULL, NULL, (char *)email_get_res_url());
 
 	/* If encoding(5th parameter) is missing, "UTF-8" is used to display contents. */
-	ewk_view_contents_set(ugd->ewk_view, html_body, strlen(html_body), NULL, ugd->original_charset, file_path);
+	ewk_view_contents_set(view->ewk_view, html_body, strlen(html_body), NULL, view->original_charset, file_path);
 
 	g_free(html_body);
 
-	_initial_data_set_selected_entry(ugd);
+	_initial_data_set_selected_entry(view);
 
 	debug_leave();
 	email_profiling_end(composer_initial_data_set_mail_info);
 }
 
-COMPOSER_ERROR_TYPE_E composer_initial_data_parse_composer_run_type(EmailComposerUGD *ugd, email_params_h params)
+COMPOSER_ERROR_TYPE_E composer_initial_data_parse_composer_run_type(EmailComposerView *view, email_params_h params)
 {
 	email_profiling_begin(composer_initial_data_parse_composer_run_type);
 	debug_enter();
 
 	const char *operation = NULL;
 
-	ugd->composer_type = RUN_TYPE_UNKNOWN;
+	view->composer_type = RUN_TYPE_UNKNOWN;
 
 	debug_warning_if(!email_params_get_operation_opt(params, &operation),
 			"email_params_get_operation_opt() failed!");
 
 	if (operation && (g_strcmp0(operation, APP_CONTROL_OPERATION_DEFAULT) != 0)) {
 		debug_secure("operation type: (%s)", operation);
-		ugd->composer_type = RUN_COMPOSER_EXTERNAL;
+		view->composer_type = RUN_COMPOSER_EXTERNAL;
 	} else {
-		debug_warning_if(!email_params_get_int(params, EMAIL_BUNDLE_KEY_RUN_TYPE, &ugd->composer_type),
+		debug_warning_if(!email_params_get_int(params, EMAIL_BUNDLE_KEY_RUN_TYPE, &view->composer_type),
 				"email_params_get_int(%s) failed!", EMAIL_BUNDLE_KEY_RUN_TYPE);
 	}
 
@@ -1157,12 +1157,12 @@ COMPOSER_ERROR_TYPE_E composer_initial_data_parse_composer_run_type(EmailCompose
 	return COMPOSER_ERROR_NONE;
 }
 
-COMPOSER_ERROR_TYPE_E composer_initial_data_pre_parse_arguments(EmailComposerUGD *ugd, email_params_h params)
+COMPOSER_ERROR_TYPE_E composer_initial_data_pre_parse_arguments(EmailComposerView *view, email_params_h params)
 {
 	email_profiling_begin(composer_initial_data_pre_parse_arguments);
 	debug_enter();
 
-	retvm_if(!ugd, COMPOSER_ERROR_INVALID_ARG, "Invalid parameter: ugd is NULL!");
+	retvm_if(!view, COMPOSER_ERROR_INVALID_ARG, "Invalid parameter: view is NULL!");
 	retvm_if(!params, COMPOSER_ERROR_INVALID_ARG, "Invalid parameter: params is NULL!");
 
 	COMPOSER_ERROR_TYPE_E return_val = COMPOSER_ERROR_NONE;
@@ -1174,25 +1174,25 @@ COMPOSER_ERROR_TYPE_E composer_initial_data_pre_parse_arguments(EmailComposerUGD
 	debug_warning_if(!email_params_get_operation_opt(params, &operation),
 			"email_params_get_operation_opt() failed!");
 
-	if (ugd->composer_type != RUN_COMPOSER_EXTERNAL) {
-		debug_log("Composer launched internally! type:[%d]", ugd->composer_type);
+	if (view->composer_type != RUN_COMPOSER_EXTERNAL) {
+		debug_log("Composer launched internally! type:[%d]", view->composer_type);
 
-		_initial_data_parse_params_by_internal(params, argv, ugd->composer_type);
+		_initial_data_parse_params_by_internal(params, argv, view->composer_type);
 
-		return_val = _initial_data_process_params_by_internal(ugd, argv);
+		return_val = _initial_data_process_params_by_internal(view, argv);
 		gotom_if(return_val != COMPOSER_ERROR_NONE, EXIT_FUNC, "_initial_data_process_params_by_internal() failed!");
 	} else {
 		debug_log("Composer launched externally!");
 
-		if (operation == NULL) { /* ug called by ug_create */
-			_initial_data_parse_params_by_ug(params, argv);
-		} else { /* ug called by appcontrol request */
+		if (operation == NULL) { /* module created by email_module_create_child */
+			_initial_data_parse_params_from_parent_module(params, argv);
+		} else { /* module created by appcontrol request */
 
 			if (!g_strcmp0(operation, APP_CONTROL_OPERATION_COMPOSE)) {
 
 				if (email_params_get_uri(params, &uri) &&
 						g_str_has_prefix(uri, COMPOSER_SCHEME_MAILTO)) {
-					_initial_data_parse_mailto_uri(ugd, uri);
+					_initial_data_parse_mailto_uri(view, uri);
 				}
 
 			} else if (!g_strcmp0(operation, APP_CONTROL_OPERATION_SHARE) ||
@@ -1200,14 +1200,14 @@ COMPOSER_ERROR_TYPE_E composer_initial_data_pre_parse_arguments(EmailComposerUGD
 
 				if (email_params_get_mime(params, &mime) &&
 						!g_strcmp0(mime, COMPOSER_MIME_CONTACT_SHARE)) {
-					_initial_data_parse_contacts_sharing(ugd, params, operation);
+					_initial_data_parse_contacts_sharing(view, params, operation);
 				}
 			}
 
-			_initial_data_parse_params_by_appcontrol(ugd, params, argv, operation);
+			_initial_data_parse_params_by_appcontrol(view, params, argv, operation);
 		}
 
-		return_val = _initial_data_process_params_by_external(ugd, argv);
+		return_val = _initial_data_process_params_by_external(view, argv);
 		gotom_if(return_val != COMPOSER_ERROR_NONE, EXIT_FUNC, "_initial_data_process_params_by_external() failed!");
 	}
 
@@ -1217,15 +1217,15 @@ EXIT_FUNC:
 	return return_val;
 }
 
-COMPOSER_ERROR_TYPE_E composer_initial_data_post_parse_arguments(EmailComposerUGD *ugd, email_params_h params)
+COMPOSER_ERROR_TYPE_E composer_initial_data_post_parse_arguments(EmailComposerView *view, email_params_h params)
 {
 	email_profiling_begin(composer_initial_data_post_parse_arguments);
 	debug_enter();
 
-	retvm_if(!ugd, COMPOSER_ERROR_INVALID_ARG, "Invalid parameter: ugd is NULL!");
+	retvm_if(!view, COMPOSER_ERROR_INVALID_ARG, "Invalid parameter: view is NULL!");
 	retvm_if(!params, COMPOSER_ERROR_INVALID_ARG, "Invalid parameter: params is NULL!");
 
-	if (ugd->composer_type == RUN_COMPOSER_EXTERNAL) {
+	if (view->composer_type == RUN_COMPOSER_EXTERNAL) {
 		const char *operation = NULL;
 		Eina_List *attachment_uri_list = NULL;
 
@@ -1233,7 +1233,7 @@ COMPOSER_ERROR_TYPE_E composer_initial_data_post_parse_arguments(EmailComposerUG
 				"email_params_get_operation_opt() failed!");
 
 		/* TODO: the first case is needed? it seems like dead case. */
-		if (operation == NULL) { /* ug called by ug_create */
+		if (operation == NULL) { /* module created by email_module_create_child */
 			const char *attachment_uri = NULL;
 			if (email_params_get_str(params, EMAIL_BUNDLE_KEY_ATTACHMENT, &attachment_uri)) {
 				gchar **split_att = g_strsplit_set(attachment_uri, ";\n", -1);
@@ -1247,24 +1247,24 @@ COMPOSER_ERROR_TYPE_E composer_initial_data_post_parse_arguments(EmailComposerUG
 			}
 
 		/* sharing contacts */
-		} else if (ugd->is_sharing_contacts) {
+		} else if (view->is_sharing_contacts) {
 
-			if (ugd->vcard_file_path) {
+			if (view->vcard_file_path) {
 
-				if (ugd->vcard_save_thread) {
-					pthread_join(ugd->vcard_save_thread, NULL);
-					ugd->vcard_save_thread = 0;
-					DELETE_TIMER_OBJECT(ugd->vcard_save_timer);
+				if (view->vcard_save_thread) {
+					pthread_join(view->vcard_save_thread, NULL);
+					view->vcard_save_thread = 0;
+					DELETE_TIMER_OBJECT(view->vcard_save_timer);
 				}
 
-				attachment_uri_list = eina_list_append(attachment_uri_list, g_strdup(ugd->vcard_file_path));
+				attachment_uri_list = eina_list_append(attachment_uri_list, g_strdup(view->vcard_file_path));
 
-			} else if (ugd->vcard_save_thread) {
-				ecore_timer_thaw(ugd->vcard_save_timer);
-				composer_create_vcard_create_popup(ugd);
+			} else if (view->vcard_save_thread) {
+				ecore_timer_thaw(view->vcard_save_timer);
+				composer_create_vcard_create_popup(view);
 			}
 
-		/* ug called by appcontrol request */
+		/* module created by appcontrol request */
 		} else if (!g_strcmp0(operation, APP_CONTROL_OPERATION_COMPOSE) ||
 					!g_strcmp0(operation, APP_CONTROL_OPERATION_SHARE) ||
 					!g_strcmp0(operation, APP_CONTROL_OPERATION_MULTI_SHARE) ||
@@ -1330,7 +1330,7 @@ COMPOSER_ERROR_TYPE_E composer_initial_data_post_parse_arguments(EmailComposerUG
 				debug_secure("[Attachment] (%s)", p);
 			}
 
-			_initial_data_parse_attachments(ugd, attachment_uri_list);
+			_initial_data_parse_attachments(view, attachment_uri_list);
 		}
 	}
 
@@ -1339,73 +1339,73 @@ COMPOSER_ERROR_TYPE_E composer_initial_data_post_parse_arguments(EmailComposerUG
 	return COMPOSER_ERROR_NONE;
 }
 
-void composer_initial_data_make_initial_contents(EmailComposerUGD *ugd)
+void composer_initial_data_make_initial_contents(EmailComposerView *view)
 {
 	email_profiling_begin(composer_initial_data_make_initial_contents);
 	debug_enter();
 
-	retm_if(!ugd, "Invalid parameter: ugd is NULL!");
+	retm_if(!view, "Invalid parameter: view is NULL!");
 
 	Eina_List *initial_list = NULL;
 	Eina_List *list = NULL;
 	ComposerAttachmentItemData *attach_item_data = NULL;
 
-	if (ugd->recp_to_mbe) {
-		ugd->initial_contents_to_list = _initial_data_make_initial_recipients_list(ugd->recp_to_mbe);
+	if (view->recp_to_mbe) {
+		view->initial_contents_to_list = _initial_data_make_initial_recipients_list(view->recp_to_mbe);
 	}
-	if (ugd->recp_cc_mbe) {
-		ugd->initial_contents_cc_list = _initial_data_make_initial_recipients_list(ugd->recp_cc_mbe);
+	if (view->recp_cc_mbe) {
+		view->initial_contents_cc_list = _initial_data_make_initial_recipients_list(view->recp_cc_mbe);
 	}
-	if (ugd->recp_bcc_mbe) {
-		ugd->initial_contents_bcc_list = _initial_data_make_initial_recipients_list(ugd->recp_bcc_mbe);
+	if (view->recp_bcc_mbe) {
+		view->initial_contents_bcc_list = _initial_data_make_initial_recipients_list(view->recp_bcc_mbe);
 	}
 
-	ugd->initial_contents_subject = g_strdup(elm_entry_entry_get(ugd->subject_entry.entry));
+	view->initial_contents_subject = g_strdup(elm_entry_entry_get(view->subject_entry.entry));
 
-	EINA_LIST_FOREACH(ugd->attachment_item_list, list, attach_item_data) {
+	EINA_LIST_FOREACH(view->attachment_item_list, list, attach_item_data) {
 		initial_list = eina_list_append(initial_list, (void *)attach_item_data);
 	}
-	ugd->initial_contents_attachment_list = initial_list;
+	view->initial_contents_attachment_list = initial_list;
 
 	debug_leave();
 	email_profiling_end(composer_initial_data_make_initial_contents);
 }
 
-void composer_initial_data_free_initial_contents(EmailComposerUGD *ugd)
+void composer_initial_data_free_initial_contents(EmailComposerView *view)
 {
 	debug_enter();
 
-	retm_if(!ugd, "Invalid parameter: ugd is NULL!");
+	retm_if(!view, "Invalid parameter: view is NULL!");
 
-	DELETE_LIST_OBJECT(ugd->initial_contents_to_list);
-	DELETE_LIST_OBJECT(ugd->initial_contents_cc_list);
-	DELETE_LIST_OBJECT(ugd->initial_contents_bcc_list);
-	DELETE_LIST_OBJECT(ugd->initial_contents_attachment_list);
+	DELETE_LIST_OBJECT(view->initial_contents_to_list);
+	DELETE_LIST_OBJECT(view->initial_contents_cc_list);
+	DELETE_LIST_OBJECT(view->initial_contents_bcc_list);
+	DELETE_LIST_OBJECT(view->initial_contents_attachment_list);
 
-	if (ugd->initial_contents_subject) {
-		g_free(ugd->initial_contents_subject);
-		ugd->initial_contents_subject = NULL;
+	if (view->initial_contents_subject) {
+		g_free(view->initial_contents_subject);
+		view->initial_contents_subject = NULL;
 	}
 
 	debug_leave();
 }
 
-static void _initial_data_set_selected_entry(EmailComposerUGD *ugd)
+static void _initial_data_set_selected_entry(EmailComposerView *view)
 {
 	debug_enter();
 
-	if (elm_multibuttonentry_first_item_get(ugd->recp_to_mbe) != NULL) {
-		if (g_strcmp0(elm_entry_entry_get(ugd->subject_entry.entry), "") == 0) {
+	if (elm_multibuttonentry_first_item_get(view->recp_to_mbe) != NULL) {
+		if (g_strcmp0(elm_entry_entry_get(view->subject_entry.entry), "") == 0) {
 			debug_log("To field is not empty, setting focus to subject_entry field.");
-			ugd->selected_entry = ugd->subject_entry.entry;
-		} else if (ugd->ewk_view) {
+			view->selected_entry = view->subject_entry.entry;
+		} else if (view->ewk_view) {
 			debug_log("To field is not empty, setting focus to ewk_view field.");
-			ugd->selected_entry = ugd->ewk_view;
-			ugd->cs_bringin_to_ewk = true;
+			view->selected_entry = view->ewk_view;
+			view->cs_bringin_to_ewk = true;
 		}
 	} else {
 		debug_log("To field is empty, setting focus to To field.");
-		ugd->selected_entry = ugd->recp_to_entry.entry;
+		view->selected_entry = view->recp_to_entry.entry;
 	}
 
 	debug_leave();

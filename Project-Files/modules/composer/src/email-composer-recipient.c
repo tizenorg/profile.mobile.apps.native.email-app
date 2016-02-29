@@ -33,11 +33,11 @@
 static void _recipient_entry_layout_clicked_cb(void *data, Evas_Object *obj, const char *emission, const char *source);
 
 static void _recipient_get_header_string(COMPOSER_RECIPIENT_TYPE_E recp_type, char *buf, int buf_len);
-static void _recipient_notify_invalid_recipient(void *data);
-static MBE_VALIDATION_ERROR _recipient_mbe_validate_email_address(EmailComposerUGD *ugd, Evas_Object *obj, char *email_address);
+static void _recipient_notify_invalid_recipient(EmailComposerView *view, MBE_VALIDATION_ERROR err);
+static MBE_VALIDATION_ERROR _recipient_mbe_validate_email_address(EmailComposerView *view, Evas_Object *obj, char *email_address);
 
-static void _recipient_from_button_update_text(EmailComposerUGD *ugd, email_account_t *account);
-static void _recipient_from_ctxpopup_move_list(EmailComposerUGD *ugd);
+static void _recipient_from_button_update_text(EmailComposerView *view, email_account_t *account);
+static void _recipient_from_ctxpopup_move_list(EmailComposerView *view);
 static void _recipient_from_ctxpopup_dismissed_cb(void *data, Evas_Object *obj, void *event_info);
 static Eina_Bool _recipient_from_ctxpopup_show(void *data);
 static void _recipient_from_ctxpopup_resized_cb(void *data, Evas *e, Evas_Object *obj, void *event_info);
@@ -46,10 +46,10 @@ static void _recipient_from_ctxpopup_item_select_cb(void *data, Evas_Object *obj
 static void _recipient_from_button_clicked_cb(void *data, Evas_Object *obj, void *event_info);
 static void _recipient_account_change_size_exceeded_cb(void *data, Evas_Object *obj, void *event_info);
 
-static Evas_Object *_recipient_create_contact_button(EmailComposerUGD *ugd, Evas_Object *parent);
-static Evas_Object *_recipient_create_mbe(Evas_Object *parent, COMPOSER_RECIPIENT_TYPE_E recp_type, EmailComposerUGD *ugd);
-static void _recipient_create_editfield(Evas_Object *parent, EmailComposerUGD *ugd, Eina_Bool is_editable, email_editfield_t *editfield);
-static Evas_Object *_recipient_create_entry_label(Evas_Object *parent, COMPOSER_RECIPIENT_TYPE_E recp_type, EmailComposerUGD *ugd);
+static Evas_Object *_recipient_create_contact_button(EmailComposerView *view, Evas_Object *parent);
+static Evas_Object *_recipient_create_mbe(Evas_Object *parent, COMPOSER_RECIPIENT_TYPE_E recp_type, EmailComposerView *view);
+static void _recipient_create_editfield(Evas_Object *parent, EmailComposerView *view, Eina_Bool is_editable, email_editfield_t *editfield);
+static Evas_Object *_recipient_create_entry_label(Evas_Object *parent, COMPOSER_RECIPIENT_TYPE_E recp_type, EmailComposerView *view);
 static Evas_Object *_recipient_create_layout(Evas_Object *parent, const char *group);
 static void _recipient_ctxpopup_back_cb(void *data, Evas_Object *obj, void *event_info);
 
@@ -57,7 +57,7 @@ static Eina_Bool _recipient_timer_duplicate_toast_cb(void *data);
 static Evas_Object *_recipient_get_mbe_with_entry(void *data, Evas_Object *entry);
 
 typedef struct _fromListItemData {
-	EmailComposerUGD *ugd;
+	EmailComposerView *view;
 	Elm_Object_Item *item;
 	int index;
 } fromListItemData;
@@ -71,23 +71,23 @@ static void _recipient_entry_layout_clicked_cb(void *data, Evas_Object *obj, con
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
-	ret_if(!ugd->is_load_finished);
+	EmailComposerView *view = (EmailComposerView *)data;
+	ret_if(!view->is_load_finished);
 
-	if (!ugd->allow_click_events) {
+	if (!view->allow_click_events) {
 		debug_log("Click was blocked.");
 		return;
 	}
 
-	if ((obj == ugd->recp_to_layout) && (ugd->selected_entry != ugd->recp_to_entry.entry)) {
-		composer_recipient_change_entry(EINA_TRUE, ugd->recp_to_box, &ugd->recp_to_entry, &ugd->recp_to_display_entry, ugd->recp_to_entry_layout, ugd->recp_to_display_entry_layout);
-		composer_util_focus_set_focus(ugd, ugd->recp_to_entry.entry);
-	} else if ((obj == ugd->recp_cc_layout) && (ugd->selected_entry != ugd->recp_cc_entry.entry)) {
-		composer_recipient_change_entry(EINA_TRUE, ugd->recp_cc_box, &ugd->recp_cc_entry, &ugd->recp_cc_display_entry, ugd->recp_cc_entry_layout, ugd->recp_cc_display_entry_layout);
-		composer_util_focus_set_focus(ugd, ugd->recp_cc_entry.entry);
-	} else if ((obj == ugd->recp_bcc_layout) && (ugd->selected_entry != ugd->recp_bcc_entry.entry)) {
-		composer_recipient_change_entry(EINA_TRUE, ugd->recp_bcc_box, &ugd->recp_bcc_entry, &ugd->recp_bcc_display_entry, ugd->recp_bcc_entry_layout, ugd->recp_bcc_display_entry_layout);
-		composer_util_focus_set_focus(ugd, ugd->recp_bcc_entry.entry);
+	if ((obj == view->recp_to_layout) && (view->selected_entry != view->recp_to_entry.entry)) {
+		composer_recipient_change_entry(EINA_TRUE, view->recp_to_box, &view->recp_to_entry, &view->recp_to_display_entry, view->recp_to_entry_layout, view->recp_to_display_entry_layout);
+		composer_util_focus_set_focus(view, view->recp_to_entry.entry);
+	} else if ((obj == view->recp_cc_layout) && (view->selected_entry != view->recp_cc_entry.entry)) {
+		composer_recipient_change_entry(EINA_TRUE, view->recp_cc_box, &view->recp_cc_entry, &view->recp_cc_display_entry, view->recp_cc_entry_layout, view->recp_cc_display_entry_layout);
+		composer_util_focus_set_focus(view, view->recp_cc_entry.entry);
+	} else if ((obj == view->recp_bcc_layout) && (view->selected_entry != view->recp_bcc_entry.entry)) {
+		composer_recipient_change_entry(EINA_TRUE, view->recp_bcc_box, &view->recp_bcc_entry, &view->recp_bcc_display_entry, view->recp_bcc_entry_layout, view->recp_bcc_display_entry_layout);
+		composer_util_focus_set_focus(view, view->recp_bcc_entry.entry);
 	}
 
 	debug_leave();
@@ -117,15 +117,12 @@ static void _recipient_get_header_string(COMPOSER_RECIPIENT_TYPE_E recp_type, ch
 	debug_leave();
 }
 
-static void _recipient_notify_invalid_recipient(void *data)
+static void _recipient_notify_invalid_recipient(EmailComposerView *view, MBE_VALIDATION_ERROR err)
 {
 	debug_enter();
 
-	COMPOSER_GET_TIMER_DATA(tdata, ugd, data);
-
-	if (!ugd->is_back_btn_clicked && !ugd->is_send_btn_clicked && !ugd->is_save_in_drafts_clicked) {
+	if (!view->is_back_btn_clicked && !view->is_send_btn_clicked && !view->is_save_in_drafts_clicked) {
 		int noti_ret = NOTIFICATION_ERROR_NONE;
-		MBE_VALIDATION_ERROR err = (MBE_VALIDATION_ERROR)tdata->data;
 		switch (err) {
 			case MBE_VALIDATION_ERROR_NO_ADDRESS:
 				noti_ret = notification_status_message_post(email_get_email_string("IDS_EMAIL_TPOP_ENTER_AT_LEAST_ONE_VALID_RECIPIENT"));
@@ -154,24 +151,22 @@ static void _recipient_notify_invalid_recipient(void *data)
 		}
 	}
 
-	composer_util_focus_set_focus_with_idler(ugd, ugd->selected_entry);
-
-	FREE(tdata);
+	composer_util_focus_set_focus_with_idler(view, view->selected_entry);
 
 	debug_leave();
 }
 
-static MBE_VALIDATION_ERROR _recipient_mbe_validate_email_address(EmailComposerUGD *ugd, Evas_Object *obj, char *email_address)
+static MBE_VALIDATION_ERROR _recipient_mbe_validate_email_address(EmailComposerView *view, Evas_Object *obj, char *email_address)
 {
 	debug_enter();
 
 	MBE_VALIDATION_ERROR ret = MBE_VALIDATION_ERROR_NONE;
 	if (email_get_address_validation(email_address)) {
-		if (composer_util_recp_is_duplicated(ugd, obj, email_address)) {
+		if (composer_util_recp_is_duplicated(view, obj, email_address)) {
 			ret = MBE_VALIDATION_ERROR_DUPLICATE_ADDRESS;
-		} else if (((obj == ugd->recp_to_mbe) && (ugd->to_recipients_cnt >= MAX_RECIPIENT_COUNT)) ||
-			((obj == ugd->recp_cc_mbe) && (ugd->cc_recipients_cnt >= MAX_RECIPIENT_COUNT)) ||
-			((obj == ugd->recp_bcc_mbe) && (ugd->bcc_recipients_cnt >= MAX_RECIPIENT_COUNT))) {
+		} else if (((obj == view->recp_to_mbe) && (view->to_recipients_cnt >= MAX_RECIPIENT_COUNT)) ||
+			((obj == view->recp_cc_mbe) && (view->cc_recipients_cnt >= MAX_RECIPIENT_COUNT)) ||
+			((obj == view->recp_bcc_mbe) && (view->bcc_recipients_cnt >= MAX_RECIPIENT_COUNT))) {
 			ret = MBE_VALIDATION_ERROR_MAX_NUMBER_REACHED;
 		}
 	} else {
@@ -181,11 +176,11 @@ static MBE_VALIDATION_ERROR _recipient_mbe_validate_email_address(EmailComposerU
 		email_get_recipient_info(email_address, &nick, &addr);
 
 		if (email_get_address_validation(addr)) {
-			if (composer_util_recp_is_duplicated(ugd, obj, addr)) {
+			if (composer_util_recp_is_duplicated(view, obj, addr)) {
 				ret = MBE_VALIDATION_ERROR_DUPLICATE_ADDRESS;
-			} else if (((obj == ugd->recp_to_mbe) && (ugd->to_recipients_cnt >= MAX_RECIPIENT_COUNT)) ||
-				((obj == ugd->recp_cc_mbe) && (ugd->cc_recipients_cnt >= MAX_RECIPIENT_COUNT)) ||
-				((obj == ugd->recp_bcc_mbe) && (ugd->bcc_recipients_cnt >= MAX_RECIPIENT_COUNT))) {
+			} else if (((obj == view->recp_to_mbe) && (view->to_recipients_cnt >= MAX_RECIPIENT_COUNT)) ||
+				((obj == view->recp_cc_mbe) && (view->cc_recipients_cnt >= MAX_RECIPIENT_COUNT)) ||
+				((obj == view->recp_bcc_mbe) && (view->bcc_recipients_cnt >= MAX_RECIPIENT_COUNT))) {
 				ret = MBE_VALIDATION_ERROR_MAX_NUMBER_REACHED;
 			}
 		} else {
@@ -216,11 +211,11 @@ static MBE_VALIDATION_ERROR _recipient_mbe_validate_email_address(EmailComposerU
 }
 
 
-static void _recipient_from_button_update_text(EmailComposerUGD *ugd, email_account_t *account)
+static void _recipient_from_button_update_text(EmailComposerView *view, email_account_t *account)
 {
 	debug_enter();
 
-	retm_if(!ugd, "Invalid parameter: data is NULL!");
+	retm_if(!view, "Invalid parameter: data is NULL!");
 	retm_if(!account, "account is NULL!");
 
 	char from_display_name[BUF_LEN_L] = { 0, };
@@ -233,7 +228,7 @@ static void _recipient_from_button_update_text(EmailComposerUGD *ugd, email_acco
 	EmailRecpInfo *ri = composer_util_recp_make_recipient_info_with_display_name(account->user_email_address, from_display_name);
 	if (ri) {
 		char *markup_name = elm_entry_utf8_to_markup(ri->display_name);
-		elm_object_part_text_set(ugd->recp_from_btn, "elm.text", markup_name);
+		elm_object_part_text_set(view->recp_from_btn, "elm.text", markup_name);
 		FREE(markup_name);
 
 		EmailAddressInfo *ai = NULL;
@@ -247,7 +242,7 @@ static void _recipient_from_button_update_text(EmailComposerUGD *ugd, email_acco
 	debug_leave();
 }
 
-static void _recipient_from_ctxpopup_move_list(EmailComposerUGD *ugd)
+static void _recipient_from_ctxpopup_move_list(EmailComposerView *view)
 {
 	debug_enter();
 
@@ -255,27 +250,27 @@ static void _recipient_from_ctxpopup_move_list(EmailComposerUGD *ugd)
 	Evas_Coord x = 0, y = 0, w = 0, h = 0;
 	Evas_Coord root_win_width = 0, root_win_height = 0;
 
-	pos = elm_win_rotation_get(ugd->base.module->win);
-	evas_object_geometry_get(ugd->recp_from_btn, &x, &y, &w, &h);
-	elm_win_screen_size_get(ugd->base.module->win, NULL, NULL, &root_win_width, &root_win_height);
+	pos = elm_win_rotation_get(view->base.module->win);
+	evas_object_geometry_get(view->recp_from_btn, &x, &y, &w, &h);
+	elm_win_screen_size_get(view->base.module->win, NULL, NULL, &root_win_width, &root_win_height);
 
 	switch (pos) {
 		case 0:
 		case 180:
 			w = root_win_width - x;
-			evas_object_move(ugd->recp_from_ctxpopup, (x / 2) + (w / 2), y + h);
+			evas_object_move(view->recp_from_ctxpopup, (x / 2) + (w / 2), y + h);
 			break;
 		case 90:
 		case 270:
 			w = root_win_height - x;
-			evas_object_move(ugd->recp_from_ctxpopup, x + (w / 2), y + h);
+			evas_object_move(view->recp_from_ctxpopup, x + (w / 2), y + h);
 			break;
 		default:
 			break;
 	}
 
-	DELETE_IDLER_OBJECT(ugd->idler_show_ctx_popup);
-	ugd->idler_show_ctx_popup = ecore_idler_add(_recipient_from_ctxpopup_show, ugd);
+	DELETE_IDLER_OBJECT(view->idler_show_ctx_popup);
+	view->idler_show_ctx_popup = ecore_idler_add(_recipient_from_ctxpopup_show, view);
 	debug_leave();
 }
 
@@ -283,11 +278,11 @@ static Eina_Bool _recipient_from_ctxpopup_show(void *data)
 {
 
 	debug_enter();
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	ugd->idler_show_ctx_popup = NULL;
+	view->idler_show_ctx_popup = NULL;
 
-	evas_object_show(ugd->recp_from_ctxpopup);
+	evas_object_show(view->recp_from_ctxpopup);
 
 	debug_leave();
 	return ECORE_CALLBACK_CANCEL;
@@ -299,12 +294,12 @@ static void _recipient_from_ctxpopup_dismissed_cb(void *data, Evas_Object *obj, 
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	evas_object_del(ugd->recp_from_ctxpopup);
-	ugd->recp_from_ctxpopup = NULL;
-	composer_recipient_from_ctxpopup_item_delete(ugd);
-	composer_util_focus_set_focus_with_idler(ugd, ugd->selected_entry);
+	evas_object_del(view->recp_from_ctxpopup);
+	view->recp_from_ctxpopup = NULL;
+	composer_recipient_from_ctxpopup_item_delete(view);
+	composer_util_focus_set_focus_with_idler(view, view->selected_entry);
 
 	debug_leave();
 }
@@ -313,9 +308,9 @@ static void _recipient_from_ctxpopup_resized_cb(void *data, Evas *e, Evas_Object
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	_recipient_from_ctxpopup_move_list(ugd);
+	_recipient_from_ctxpopup_move_list(view);
 
 	debug_leave();
 }
@@ -324,11 +319,11 @@ static void _recipient_from_ctxpopup_del_cb(void *data, Evas *e, Evas_Object *ob
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
 	/* XXX; check this. deletion for dismissed can be deleted. */
-	evas_object_smart_callback_del(ugd->recp_from_ctxpopup, "dismissed", _recipient_from_ctxpopup_dismissed_cb);
-	evas_object_event_callback_del_full(ugd->base.module->win, EVAS_CALLBACK_RESIZE, _recipient_from_ctxpopup_resized_cb, ugd);
+	evas_object_smart_callback_del(view->recp_from_ctxpopup, "dismissed", _recipient_from_ctxpopup_dismissed_cb);
+	evas_object_event_callback_del_full(view->base.module->win, EVAS_CALLBACK_RESIZE, _recipient_from_ctxpopup_resized_cb, view);
 
 	debug_leave();
 }
@@ -340,12 +335,12 @@ static void _recipient_from_ctxpopup_item_select_cb(void *data, Evas_Object *obj
 	fromListItemData *it = (fromListItemData *)data;
 	retm_if(!it, "Invalid parameter: item data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)it->ugd;
+	EmailComposerView *view = (EmailComposerView *)it->view;
 	Eina_Bool is_popup_displayed = EINA_FALSE;
 
-	if (ugd->account_info->selected_account->account_id != ugd->account_info->account_list[it->index].account_id) {
-		char *previously_selected_email = ugd->account_info->selected_account->user_email_address;
-		email_account_t *selected_account = &ugd->account_info->account_list[it->index];
+	if (view->account_info->selected_account->account_id != view->account_info->account_list[it->index].account_id) {
+		char *previously_selected_email = view->account_info->selected_account->user_email_address;
+		email_account_t *selected_account = &view->account_info->account_list[it->index];
 
 		int max_sending_size = 0;
 		if (selected_account->outgoing_server_size_limit == 0 || selected_account->outgoing_server_size_limit == -1) {
@@ -355,44 +350,44 @@ static void _recipient_from_ctxpopup_item_select_cb(void *data, Evas_Object *obj
 		}
 		debug_log("outgoing_server_size_limit:%d, max_sending_size:%d", selected_account->outgoing_server_size_limit, max_sending_size);
 
-		ugd->account_info->selected_account = selected_account;
-		ugd->account_info->account_type = selected_account->incoming_server_type;
-		ugd->account_info->max_sending_size = max_sending_size;
+		view->account_info->selected_account = selected_account;
+		view->account_info->account_type = selected_account->incoming_server_type;
+		view->account_info->max_sending_size = max_sending_size;
 
 		/* Only display notification popup to user and allowing the account switch and disabling send button */
-		if (composer_util_is_max_sending_size_exceeded(ugd)) {
-			composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_SIZE_EXCEEDED, _recipient_account_change_size_exceeded_cb, ugd);
+		if (composer_util_is_max_sending_size_exceeded(view)) {
+			composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_SIZE_EXCEEDED, _recipient_account_change_size_exceeded_cb, view);
 			is_popup_displayed = EINA_TRUE;
 		}
-		composer_util_modify_send_button(ugd);
+		composer_util_modify_send_button(view);
 
-		composer_util_update_attach_panel_bundles(ugd);
+		composer_util_update_attach_panel_bundles(view);
 
-		debug_log("changed account_id:[%d]", ugd->account_info->selected_account->account_id);
+		debug_log("changed account_id:[%d]", view->account_info->selected_account->account_id);
 
 #ifdef _ALWAYS_CC_MYSELF
 		debug_secure("removing cc/bcc address (%s)", previously_selected_email);
 		/* Remove previously added item for from address by always_cc/bcc myself */
 		if (previously_selected_email) {
-			composer_recipient_remove_myaddress(ugd->recp_cc_mbe, previously_selected_email); /* Remove cc myself if it is */
-			composer_recipient_remove_myaddress(ugd->recp_bcc_mbe, previously_selected_email); /* Remove bcc myself if it is */
+			composer_recipient_remove_myaddress(view->recp_cc_mbe, previously_selected_email); /* Remove cc myself if it is */
+			composer_recipient_remove_myaddress(view->recp_bcc_mbe, previously_selected_email); /* Remove bcc myself if it is */
 		}
 
 		/* Add item to cc or bcc field if always cc/bcc is enabled. */
-		if (ugd->account_info->selected_account->options.add_my_address_to_bcc != EMAIL_ADD_MY_ADDRESS_OPTION_DO_NOT_ADD) {
-			composer_recipient_append_myaddress(ugd, ugd->account_info->selected_account);
+		if (view->account_info->selected_account->options.add_my_address_to_bcc != EMAIL_ADD_MY_ADDRESS_OPTION_DO_NOT_ADD) {
+			composer_recipient_append_myaddress(view, view->account_info->selected_account);
 		}
 #endif
 
 		/* Change from text */
-		_recipient_from_button_update_text(ugd, ugd->account_info->selected_account);
-		composer_attachment_ui_group_update_text(ugd);
+		_recipient_from_button_update_text(view, view->account_info->selected_account);
+		composer_attachment_ui_group_update_text(view);
 	} else {
 		debug_log("No need to change from address! selected account is the same as previous one!");
 	}
 
 	if (!is_popup_displayed)
-		_recipient_from_ctxpopup_dismissed_cb(ugd, NULL, NULL);
+		_recipient_from_ctxpopup_dismissed_cb(view, NULL, NULL);
 
 	debug_leave();
 }
@@ -403,10 +398,10 @@ static void _recipient_account_change_size_exceeded_cb(void *data, Evas_Object *
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	_recipient_from_ctxpopup_dismissed_cb(ugd, NULL, NULL);
-	composer_util_popup_response_cb(ugd, NULL, NULL);
+	_recipient_from_ctxpopup_dismissed_cb(view, NULL, NULL);
+	composer_util_popup_response_cb(view, NULL, NULL);
 
 	debug_leave();
 
@@ -425,19 +420,19 @@ static void _recipient_from_button_clicked_cb(void *data, Evas_Object *obj, void
 
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (!ugd->allow_click_events) {
+	if (!view->allow_click_events) {
 		debug_log("Click was blocked.");
 		return;
 	}
 
-	if (ugd->recp_from_ctxpopup) {
-		_recipient_from_ctxpopup_dismissed_cb(ugd, NULL, NULL);
+	if (view->recp_from_ctxpopup) {
+		_recipient_from_ctxpopup_dismissed_cb(view, NULL, NULL);
 		return;
 	}
 
-	Evas_Object *ctxpopup = elm_ctxpopup_add(ugd->base.module->navi);
+	Evas_Object *ctxpopup = elm_ctxpopup_add(view->base.module->navi);
 	// TODO: Remove comment when "dropdown/list" style will be available
 	//elm_object_style_set(ctxpopup, "dropdown/list");
 	elm_ctxpopup_auto_hide_disabled_set(ctxpopup, EINA_TRUE);
@@ -445,7 +440,7 @@ static void _recipient_from_button_clicked_cb(void *data, Evas_Object *obj, void
 
 	Eina_List *item_list = NULL;
 	int index;
-	for (index = 0; index < ugd->account_info->account_count; index++) {
+	for (index = 0; index < view->account_info->account_count; index++) {
 		fromListItemData *it = (fromListItemData *)malloc(sizeof(fromListItemData));
 		if (!it) {
 			DELETE_EVAS_OBJECT(ctxpopup);
@@ -453,26 +448,26 @@ static void _recipient_from_button_clicked_cb(void *data, Evas_Object *obj, void
 			return;
 		}
 		it->index = index;
-		it->ugd = ugd;
-		it->item = elm_ctxpopup_item_append(ctxpopup, ugd->account_info->account_list[index].user_email_address, NULL, _recipient_from_ctxpopup_item_select_cb, it);
+		it->view = view;
+		it->item = elm_ctxpopup_item_append(ctxpopup, view->account_info->account_list[index].user_email_address, NULL, _recipient_from_ctxpopup_item_select_cb, it);
 		item_list = eina_list_append(item_list, it);
 	}
 
-	evas_object_smart_callback_add(ctxpopup, "dismissed", _recipient_from_ctxpopup_dismissed_cb, ugd);
-	evas_object_event_callback_add(ctxpopup, EVAS_CALLBACK_DEL, _recipient_from_ctxpopup_del_cb, ugd);
+	evas_object_smart_callback_add(ctxpopup, "dismissed", _recipient_from_ctxpopup_dismissed_cb, view);
+	evas_object_event_callback_add(ctxpopup, EVAS_CALLBACK_DEL, _recipient_from_ctxpopup_del_cb, view);
 	eext_object_event_callback_add(ctxpopup, EEXT_CALLBACK_BACK, _recipient_ctxpopup_back_cb, NULL);
 	eext_object_event_callback_add(ctxpopup, EEXT_CALLBACK_MORE, _recipient_ctxpopup_back_cb, NULL);
-	evas_object_event_callback_add(ugd->base.module->win, EVAS_CALLBACK_RESIZE, _recipient_from_ctxpopup_resized_cb, ugd);
+	evas_object_event_callback_add(view->base.module->win, EVAS_CALLBACK_RESIZE, _recipient_from_ctxpopup_resized_cb, view);
 
-	ugd->recp_from_item_list = item_list;
-	ugd->recp_from_ctxpopup = ctxpopup;
+	view->recp_from_item_list = item_list;
+	view->recp_from_ctxpopup = ctxpopup;
 
-	_recipient_from_ctxpopup_move_list(ugd);
+	_recipient_from_ctxpopup_move_list(view);
 
 	debug_leave();
 }
 
-static Evas_Object *_recipient_create_contact_button(EmailComposerUGD *ugd, Evas_Object *parent)
+static Evas_Object *_recipient_create_contact_button(EmailComposerView *view, Evas_Object *parent)
 {
 	email_profiling_begin(_recipient_create_contact_button);
 	debug_enter();
@@ -489,14 +484,14 @@ static Evas_Object *_recipient_create_contact_button(EmailComposerUGD *ugd, Evas
 
 	elm_object_part_content_set(btn, "elm.swallow.content", icon);
 
-	evas_object_smart_callback_add(btn, "clicked", _recipient_contact_button_clicked_cb, ugd);
+	evas_object_smart_callback_add(btn, "clicked", _recipient_contact_button_clicked_cb, view);
 
 	debug_leave();
 	email_profiling_end(_recipient_create_contact_button);
 	return btn;
 }
 
-static Evas_Object *_recipient_create_mbe(Evas_Object *parent, COMPOSER_RECIPIENT_TYPE_E recp_type, EmailComposerUGD *ugd)
+static Evas_Object *_recipient_create_mbe(Evas_Object *parent, COMPOSER_RECIPIENT_TYPE_E recp_type, EmailComposerView *view)
 {
 	email_profiling_begin(_recipient_create_mbe);
 	debug_enter();
@@ -509,18 +504,18 @@ static Evas_Object *_recipient_create_mbe(Evas_Object *parent, COMPOSER_RECIPIEN
 	elm_multibuttonentry_expanded_set(mbe, EINA_TRUE);
 
 	composer_recipient_label_text_set(mbe, recp_type);
-	elm_multibuttonentry_item_filter_append(mbe, _recipient_mbe_filter_cb, ugd);
-	evas_object_smart_callback_add(mbe, "item,added", _recipient_mbe_added_cb, ugd);
-	evas_object_smart_callback_add(mbe, "item,deleted", _recipient_mbe_deleted_cb, ugd);
-	evas_object_smart_callback_add(mbe, "item,clicked", _recipient_mbe_selected_cb, ugd);
-	evas_object_smart_callback_add(mbe, "focused", _recipient_mbe_focused_cb, ugd);
+	elm_multibuttonentry_item_filter_append(mbe, _recipient_mbe_filter_cb, view);
+	evas_object_smart_callback_add(mbe, "item,added", _recipient_mbe_added_cb, view);
+	evas_object_smart_callback_add(mbe, "item,deleted", _recipient_mbe_deleted_cb, view);
+	evas_object_smart_callback_add(mbe, "item,clicked", _recipient_mbe_selected_cb, view);
+	evas_object_smart_callback_add(mbe, "focused", _recipient_mbe_focused_cb, view);
 
 	debug_leave();
 	email_profiling_end(_recipient_create_mbe);
 	return mbe;
 }
 
-static void _recipient_create_editfield(Evas_Object *parent, EmailComposerUGD *ugd, Eina_Bool is_editable, email_editfield_t *editfield)
+static void _recipient_create_editfield(Evas_Object *parent, EmailComposerView *view, Eina_Bool is_editable, email_editfield_t *editfield)
 {
 	email_profiling_begin(_recipient_create_entry);
 	debug_enter();
@@ -533,12 +528,12 @@ static void _recipient_create_editfield(Evas_Object *parent, EmailComposerUGD *u
 		elm_entry_prediction_allow_set(editfield->entry, EINA_TRUE);
 		elm_entry_autocapital_type_set(editfield->entry, ELM_AUTOCAPITAL_TYPE_NONE);
 		eext_entry_selection_back_event_allow_set(editfield->entry, EINA_TRUE);
-		evas_object_smart_callback_add(editfield->entry, "preedit,changed", _recipient_entry_changed_cb, ugd);
-		evas_object_smart_callback_add(editfield->entry, "changed", _recipient_entry_changed_cb, ugd);
-		evas_object_smart_callback_add(editfield->entry, "focused", _recipient_entry_focused_cb, ugd);
-		evas_object_smart_callback_add(editfield->entry, "unfocused", _recipient_entry_unfocused_cb, ugd);
-		evas_object_event_callback_add(editfield->entry, EVAS_CALLBACK_KEY_DOWN, _recipient_entry_keydown_cb, ugd);
-		evas_object_event_callback_add(editfield->entry, EVAS_CALLBACK_KEY_UP, _recipient_entry_keyup_cb, ugd);
+		evas_object_smart_callback_add(editfield->entry, "preedit,changed", _recipient_entry_changed_cb, view);
+		evas_object_smart_callback_add(editfield->entry, "changed", _recipient_entry_changed_cb, view);
+		evas_object_smart_callback_add(editfield->entry, "focused", _recipient_entry_focused_cb, view);
+		evas_object_smart_callback_add(editfield->entry, "unfocused", _recipient_entry_unfocused_cb, view);
+		evas_object_event_callback_add(editfield->entry, EVAS_CALLBACK_KEY_DOWN, _recipient_entry_keydown_cb, view);
+		evas_object_event_callback_add(editfield->entry, EVAS_CALLBACK_KEY_UP, _recipient_entry_keyup_cb, view);
 	} else {
 		elm_entry_editable_set(editfield->entry, EINA_FALSE);
 		elm_object_focus_allow_set(editfield->entry, EINA_FALSE);
@@ -551,7 +546,7 @@ static void _recipient_create_editfield(Evas_Object *parent, EmailComposerUGD *u
 	email_profiling_end(_recipient_create_entry);
 }
 
-static Evas_Object *_recipient_create_entry_label(Evas_Object *parent, COMPOSER_RECIPIENT_TYPE_E recp_type, EmailComposerUGD *ugd)
+static Evas_Object *_recipient_create_entry_label(Evas_Object *parent, COMPOSER_RECIPIENT_TYPE_E recp_type, EmailComposerView *view)
 {
 	email_profiling_begin(_recipient_create_entry_label);
 	debug_enter();
@@ -593,10 +588,10 @@ Evas_Object *composer_recipient_create_layout(void *data, Evas_Object *parent)
 	email_profiling_begin(composer_recipient_create_layout);
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	Evas_Object *layout = _recipient_create_layout(parent, "ec/recipient/entry/base");
 
-	elm_layout_signal_callback_add(layout, "ec,action,clicked", "", _recipient_entry_layout_clicked_cb, ugd);
+	elm_layout_signal_callback_add(layout, "ec,action,clicked", "", _recipient_entry_layout_clicked_cb, view);
 
 	debug_leave();
 	email_profiling_end(composer_recipient_create_layout);
@@ -608,18 +603,18 @@ void composer_recipient_update_to_detail(void *data, Evas_Object *parent)
 	email_profiling_begin(composer_recipient_update_to_detail);
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
 	email_editfield_t editfield;
 	email_editfield_t dispaly_editfield;
 	Evas_Object *box = composer_util_create_box(parent);
 	Evas_Object *entry_layout = composer_util_create_entry_layout(box);
-	Evas_Object *label = _recipient_create_entry_label(box, COMPOSER_RECIPIENT_TYPE_TO, ugd);
-	Evas_Object *btn = _recipient_create_contact_button(ugd, parent);
+	Evas_Object *label = _recipient_create_entry_label(box, COMPOSER_RECIPIENT_TYPE_TO, view);
+	Evas_Object *btn = _recipient_create_contact_button(view, parent);
 	Evas_Object *display_entry_layout = composer_util_create_entry_layout(box);
 
-	_recipient_create_editfield(entry_layout, ugd, EINA_TRUE, &editfield);
-	_recipient_create_editfield(display_entry_layout, ugd, EINA_FALSE, &dispaly_editfield);
+	_recipient_create_editfield(entry_layout, view, EINA_TRUE, &editfield);
+	_recipient_create_editfield(display_entry_layout, view, EINA_FALSE, &dispaly_editfield);
 
 	elm_object_part_content_set(entry_layout, "ec.swallow.content", editfield.layout);
 	elm_object_part_content_set(display_entry_layout, "ec.swallow.content", dispaly_editfield.layout);
@@ -633,21 +628,21 @@ void composer_recipient_update_to_detail(void *data, Evas_Object *parent)
 	evas_object_hide(dispaly_editfield.layout);
 	evas_object_hide(display_entry_layout);
 
-	ugd->recp_to_box = box;
-	ugd->recp_to_label = label;
-	ugd->recp_to_entry = editfield;
-	ugd->recp_to_entry_layout = entry_layout;
-	ugd->recp_to_btn = btn;
-	ugd->recp_to_display_entry = dispaly_editfield;
-	ugd->recp_to_display_entry_layout = display_entry_layout;
+	view->recp_to_box = box;
+	view->recp_to_label = label;
+	view->recp_to_entry = editfield;
+	view->recp_to_entry_layout = entry_layout;
+	view->recp_to_btn = btn;
+	view->recp_to_display_entry = dispaly_editfield;
+	view->recp_to_display_entry_layout = display_entry_layout;
 
 	Evas_Object *mbe_layout = _recipient_create_layout(parent, "ec/recipient/mbe/base");
-	Evas_Object *mbe = _recipient_create_mbe(mbe_layout, COMPOSER_RECIPIENT_TYPE_TO, ugd);
+	Evas_Object *mbe = _recipient_create_mbe(mbe_layout, COMPOSER_RECIPIENT_TYPE_TO, view);
 	elm_object_part_content_set(mbe_layout, "ec.swallow.content", mbe);
 	evas_object_hide(mbe_layout);
 
-	ugd->recp_to_mbe_layout = mbe_layout;
-	ugd->recp_to_mbe = mbe;
+	view->recp_to_mbe_layout = mbe_layout;
+	view->recp_to_mbe = mbe;
 
 	debug_leave();
 	email_profiling_end(composer_recipient_update_to_detail);
@@ -658,19 +653,19 @@ void composer_recipient_update_cc_detail(void *data, Evas_Object *parent)
 	email_profiling_begin(composer_recipient_update_cc_detail);
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
 	email_editfield_t editfield;
 	email_editfield_t dispaly_editfield;
 	Evas_Object *box = composer_util_create_box(parent);
 	Evas_Object *entry_layout = composer_util_create_entry_layout(box);
-	Evas_Object *label_cc = _recipient_create_entry_label(box, COMPOSER_RECIPIENT_TYPE_CC, ugd);
-	Evas_Object *label_cc_bcc = _recipient_create_entry_label(box, COMPOSER_RECIPIENT_TYPE_CC_BCC, ugd);
-	Evas_Object *btn = _recipient_create_contact_button(ugd, parent);
+	Evas_Object *label_cc = _recipient_create_entry_label(box, COMPOSER_RECIPIENT_TYPE_CC, view);
+	Evas_Object *label_cc_bcc = _recipient_create_entry_label(box, COMPOSER_RECIPIENT_TYPE_CC_BCC, view);
+	Evas_Object *btn = _recipient_create_contact_button(view, parent);
 	Evas_Object *display_entry_layout = composer_util_create_entry_layout(box);
 
-	_recipient_create_editfield(entry_layout, ugd, EINA_TRUE, &editfield);
-	_recipient_create_editfield(display_entry_layout, ugd, EINA_FALSE, &dispaly_editfield);
+	_recipient_create_editfield(entry_layout, view, EINA_TRUE, &editfield);
+	_recipient_create_editfield(display_entry_layout, view, EINA_FALSE, &dispaly_editfield);
 
 	elm_object_part_content_set(entry_layout, "ec.swallow.content", editfield.layout);
 	elm_object_part_content_set(display_entry_layout, "ec.swallow.content", dispaly_editfield.layout);
@@ -685,22 +680,22 @@ void composer_recipient_update_cc_detail(void *data, Evas_Object *parent)
 	evas_object_hide(dispaly_editfield.layout);
 	evas_object_hide(display_entry_layout);
 
-	ugd->recp_cc_box = box;
-	ugd->recp_cc_label_cc = label_cc;
-	ugd->recp_cc_label_cc_bcc = label_cc_bcc;
-	ugd->recp_cc_entry = editfield;
-	ugd->recp_cc_entry_layout = entry_layout;
-	ugd->recp_cc_btn = btn;
-	ugd->recp_cc_display_entry = dispaly_editfield;
-	ugd->recp_cc_display_entry_layout = display_entry_layout;
+	view->recp_cc_box = box;
+	view->recp_cc_label_cc = label_cc;
+	view->recp_cc_label_cc_bcc = label_cc_bcc;
+	view->recp_cc_entry = editfield;
+	view->recp_cc_entry_layout = entry_layout;
+	view->recp_cc_btn = btn;
+	view->recp_cc_display_entry = dispaly_editfield;
+	view->recp_cc_display_entry_layout = display_entry_layout;
 
 	Evas_Object *mbe_layout = _recipient_create_layout(parent, "ec/recipient/mbe/base");
-	Evas_Object *mbe = _recipient_create_mbe(box, COMPOSER_RECIPIENT_TYPE_CC, ugd);
+	Evas_Object *mbe = _recipient_create_mbe(box, COMPOSER_RECIPIENT_TYPE_CC, view);
 	elm_object_part_content_set(mbe_layout, "ec.swallow.content", mbe);
 	evas_object_hide(mbe_layout);
 
-	ugd->recp_cc_mbe_layout = mbe_layout;
-	ugd->recp_cc_mbe = mbe;
+	view->recp_cc_mbe_layout = mbe_layout;
+	view->recp_cc_mbe = mbe;
 
 	debug_leave();
 	email_profiling_end(composer_recipient_update_cc_detail);
@@ -711,17 +706,17 @@ void composer_recipient_update_bcc_detail(void *data, Evas_Object *parent)
 	email_profiling_begin(composer_recipient_update_bcc_detail);
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	email_editfield_t editfield;
 	email_editfield_t dispaly_editfield;
 	Evas_Object *box = composer_util_create_box(parent);
 	Evas_Object *entry_layout = composer_util_create_entry_layout(box);
-	Evas_Object *label = _recipient_create_entry_label(box, COMPOSER_RECIPIENT_TYPE_BCC, ugd);
-	Evas_Object *btn = _recipient_create_contact_button(ugd, parent);
+	Evas_Object *label = _recipient_create_entry_label(box, COMPOSER_RECIPIENT_TYPE_BCC, view);
+	Evas_Object *btn = _recipient_create_contact_button(view, parent);
 	Evas_Object *display_entry_layout = composer_util_create_entry_layout(box);
 
-	_recipient_create_editfield(entry_layout, ugd, EINA_TRUE, &editfield);
-	_recipient_create_editfield(display_entry_layout, ugd, EINA_FALSE, &dispaly_editfield);
+	_recipient_create_editfield(entry_layout, view, EINA_TRUE, &editfield);
+	_recipient_create_editfield(display_entry_layout, view, EINA_FALSE, &dispaly_editfield);
 
 	elm_object_part_content_set(entry_layout, "ec.swallow.content", editfield.layout);
 	elm_object_part_content_set(display_entry_layout, "ec.swallow.content", dispaly_editfield.layout);
@@ -735,21 +730,21 @@ void composer_recipient_update_bcc_detail(void *data, Evas_Object *parent)
 	evas_object_hide(dispaly_editfield.layout);
 	evas_object_hide(display_entry_layout);
 
-	ugd->recp_bcc_box = box;
-	ugd->recp_bcc_label = label;
-	ugd->recp_bcc_entry = editfield;
-	ugd->recp_bcc_entry_layout = entry_layout;
-	ugd->recp_bcc_btn = btn;
-	ugd->recp_bcc_display_entry = dispaly_editfield;
-	ugd->recp_bcc_display_entry_layout = display_entry_layout;
+	view->recp_bcc_box = box;
+	view->recp_bcc_label = label;
+	view->recp_bcc_entry = editfield;
+	view->recp_bcc_entry_layout = entry_layout;
+	view->recp_bcc_btn = btn;
+	view->recp_bcc_display_entry = dispaly_editfield;
+	view->recp_bcc_display_entry_layout = display_entry_layout;
 
 	Evas_Object *mbe_layout = _recipient_create_layout(parent, "ec/recipient/mbe/base");
-	Evas_Object *mbe = _recipient_create_mbe(box, COMPOSER_RECIPIENT_TYPE_BCC, ugd);
+	Evas_Object *mbe = _recipient_create_mbe(box, COMPOSER_RECIPIENT_TYPE_BCC, view);
 	elm_object_part_content_set(mbe_layout, "ec.swallow.content", mbe);
 	evas_object_hide(mbe_layout);
 
-	ugd->recp_bcc_mbe_layout = mbe_layout;
-	ugd->recp_bcc_mbe = mbe;
+	view->recp_bcc_mbe_layout = mbe_layout;
+	view->recp_bcc_mbe = mbe;
 
 	debug_leave();
 	email_profiling_end(composer_recipient_update_bcc_detail);
@@ -760,10 +755,10 @@ void composer_recipient_update_from_detail(void *data, Evas_Object *parent)
 	email_profiling_begin(composer_recipient_update_from_detail);
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
 	Evas_Object *box = composer_util_create_box(parent);
-	Evas_Object *label = _recipient_create_entry_label(box, COMPOSER_RECIPIENT_TYPE_FROM, ugd);
+	Evas_Object *label = _recipient_create_entry_label(box, COMPOSER_RECIPIENT_TYPE_FROM, view);
 
 	Evas_Object *layout = elm_layout_add(box);
 	elm_layout_file_set(layout, email_get_composer_theme_path(), "ec/recipient/layout/from");
@@ -775,7 +770,7 @@ void composer_recipient_update_from_detail(void *data, Evas_Object *parent)
 	elm_object_style_set(btn, "dropdown");
 	evas_object_size_hint_weight_set(btn, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_size_hint_align_set(btn, EVAS_HINT_FILL, EVAS_HINT_FILL);
-	evas_object_smart_callback_add(btn, "clicked", _recipient_from_button_clicked_cb, ugd);
+	evas_object_smart_callback_add(btn, "clicked", _recipient_from_button_clicked_cb, view);
 	evas_object_show(btn);
 
 	elm_object_part_content_set(layout, "ec.swallow.content", btn);
@@ -785,108 +780,108 @@ void composer_recipient_update_from_detail(void *data, Evas_Object *parent)
 	elm_box_pack_end(box, layout);
 	elm_object_part_content_set(parent, "ec.swallow.content", box);
 
-	ugd->recp_from_btn = btn;
-	ugd->recp_from_label = label;
+	view->recp_from_btn = btn;
+	view->recp_from_label = label;
 
-	_recipient_from_button_update_text(ugd, ugd->account_info->original_account);
+	_recipient_from_button_update_text(view, view->account_info->original_account);
 
 	debug_leave();
 	email_profiling_end(composer_recipient_update_from_detail);
 }
 
-void composer_recipient_from_ctxpopup_item_delete(EmailComposerUGD *ugd)
+void composer_recipient_from_ctxpopup_item_delete(EmailComposerView *view)
 {
 	debug_enter();
 
-	Eina_List *list = ugd->recp_from_item_list;
+	Eina_List *list = view->recp_from_item_list;
 	fromListItemData *item_data = NULL;
 
 	EINA_LIST_FREE(list, item_data) {
 		FREE(item_data);
 	}
-	ugd->recp_from_item_list = NULL;
+	view->recp_from_item_list = NULL;
 
 	debug_leave();
 }
 
-void composer_recipient_show_hide_cc_field(EmailComposerUGD *ugd, Eina_Bool to_be_showed)
+void composer_recipient_show_hide_cc_field(EmailComposerView *view, Eina_Bool to_be_showed)
 {
 	debug_enter();
 
 	if (to_be_showed) {
-		if (!composer_util_is_object_packed_in(ugd->composer_box, ugd->recp_cc_layout)) {
-			evas_object_show(ugd->recp_cc_layout);
-			elm_box_pack_after(ugd->composer_box, ugd->recp_cc_layout, ugd->recp_to_layout);
+		if (!composer_util_is_object_packed_in(view->composer_box, view->recp_cc_layout)) {
+			evas_object_show(view->recp_cc_layout);
+			elm_box_pack_after(view->composer_box, view->recp_cc_layout, view->recp_to_layout);
 		}
-		ugd->cc_added = EINA_TRUE;
+		view->cc_added = EINA_TRUE;
 	} else {
-		if (composer_util_is_object_packed_in(ugd->composer_box, ugd->recp_cc_layout)) {
-			elm_box_unpack(ugd->composer_box, ugd->recp_cc_layout);
-			evas_object_hide(ugd->recp_cc_layout);
+		if (composer_util_is_object_packed_in(view->composer_box, view->recp_cc_layout)) {
+			elm_box_unpack(view->composer_box, view->recp_cc_layout);
+			evas_object_hide(view->recp_cc_layout);
 		}
-		ugd->cc_added = EINA_FALSE;
+		view->cc_added = EINA_FALSE;
 	}
 
 	debug_leave();
 }
 
-void composer_recipient_show_bcc_field(EmailComposerUGD *ugd)
+void composer_recipient_show_bcc_field(EmailComposerView *view)
 {
 	debug_enter();
 
 	/* XXX; need to update this? */
-	if (ugd->recp_cc_mbe) {
-		composer_recipient_label_text_set(ugd->recp_cc_mbe, COMPOSER_RECIPIENT_TYPE_CC);
+	if (view->recp_cc_mbe) {
+		composer_recipient_label_text_set(view->recp_cc_mbe, COMPOSER_RECIPIENT_TYPE_CC);
 	}
 
-	if (composer_util_is_object_packed_in(ugd->recp_cc_box, ugd->recp_cc_label_cc_bcc)) {
-		elm_box_unpack(ugd->recp_cc_box, ugd->recp_cc_label_cc_bcc);
-		evas_object_hide(ugd->recp_cc_label_cc_bcc);
-		evas_object_show(ugd->recp_cc_label_cc);
-		elm_box_pack_start(ugd->recp_cc_box, ugd->recp_cc_label_cc);
+	if (composer_util_is_object_packed_in(view->recp_cc_box, view->recp_cc_label_cc_bcc)) {
+		elm_box_unpack(view->recp_cc_box, view->recp_cc_label_cc_bcc);
+		evas_object_hide(view->recp_cc_label_cc_bcc);
+		evas_object_show(view->recp_cc_label_cc);
+		elm_box_pack_start(view->recp_cc_box, view->recp_cc_label_cc);
 	}
 
-	if (!composer_util_is_object_packed_in(ugd->composer_box, ugd->recp_bcc_layout)) {
-		evas_object_show(ugd->recp_bcc_layout);
-		elm_box_pack_after(ugd->composer_box, ugd->recp_bcc_layout, ugd->recp_cc_layout);
+	if (!composer_util_is_object_packed_in(view->composer_box, view->recp_bcc_layout)) {
+		evas_object_show(view->recp_bcc_layout);
+		elm_box_pack_after(view->composer_box, view->recp_bcc_layout, view->recp_cc_layout);
 	}
 
 	debug_leave();
 }
 
-void composer_recipient_hide_bcc_field(EmailComposerUGD *ugd)
+void composer_recipient_hide_bcc_field(EmailComposerView *view)
 {
 	debug_enter();
 
-	if (ugd->recp_cc_mbe) {
-		composer_recipient_label_text_set(ugd->recp_cc_mbe, COMPOSER_RECIPIENT_TYPE_CC_BCC);
+	if (view->recp_cc_mbe) {
+		composer_recipient_label_text_set(view->recp_cc_mbe, COMPOSER_RECIPIENT_TYPE_CC_BCC);
 	}
 
-	if (composer_util_is_object_packed_in(ugd->recp_cc_box, ugd->recp_cc_label_cc)) {
-		elm_box_unpack(ugd->recp_cc_box, ugd->recp_cc_label_cc);
-		evas_object_hide(ugd->recp_cc_label_cc);
-		evas_object_show(ugd->recp_cc_label_cc_bcc);
-		elm_box_pack_start(ugd->recp_cc_box, ugd->recp_cc_label_cc_bcc);
+	if (composer_util_is_object_packed_in(view->recp_cc_box, view->recp_cc_label_cc)) {
+		elm_box_unpack(view->recp_cc_box, view->recp_cc_label_cc);
+		evas_object_hide(view->recp_cc_label_cc);
+		evas_object_show(view->recp_cc_label_cc_bcc);
+		elm_box_pack_start(view->recp_cc_box, view->recp_cc_label_cc_bcc);
 	}
 
-	if (composer_util_is_object_packed_in(ugd->composer_box, ugd->recp_bcc_layout)) {
-		elm_box_unpack(ugd->composer_box, ugd->recp_bcc_layout);
-		evas_object_hide(ugd->recp_bcc_layout);
+	if (composer_util_is_object_packed_in(view->composer_box, view->recp_bcc_layout)) {
+		elm_box_unpack(view->composer_box, view->recp_bcc_layout);
+		evas_object_hide(view->recp_bcc_layout);
 	}
 
 	debug_leave();
 }
 
-void composer_recipient_show_hide_bcc_field(EmailComposerUGD *ugd, Eina_Bool to_be_showed)
+void composer_recipient_show_hide_bcc_field(EmailComposerView *view, Eina_Bool to_be_showed)
 {
 	debug_enter();
 
 	if (to_be_showed) {
-		composer_recipient_show_bcc_field(ugd);
+		composer_recipient_show_bcc_field(view);
 	} else {
-		composer_recipient_hide_bcc_field(ugd);
+		composer_recipient_hide_bcc_field(view);
 	}
-	ugd->bcc_added = to_be_showed;
+	view->bcc_added = to_be_showed;
 
 	debug_leave();
 }
@@ -906,19 +901,19 @@ void composer_recipient_hide_contact_button(void *data, Evas_Object *entry)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	Evas_Object *recp_layout = NULL;
 	Evas_Object *btn = NULL;
 
-	if (ugd->recp_to_entry.entry == entry) {
-		recp_layout = ugd->recp_to_layout;
-		btn = ugd->recp_to_btn;
-	} else if (ugd->recp_cc_entry.entry == entry) {
-		recp_layout = ugd->recp_cc_layout;
-		btn = ugd->recp_cc_btn;
-	} else if (ugd->recp_bcc_entry.entry == entry) {
-		recp_layout = ugd->recp_bcc_layout;
-		btn = ugd->recp_bcc_btn;
+	if (view->recp_to_entry.entry == entry) {
+		recp_layout = view->recp_to_layout;
+		btn = view->recp_to_btn;
+	} else if (view->recp_cc_entry.entry == entry) {
+		recp_layout = view->recp_cc_layout;
+		btn = view->recp_cc_btn;
+	} else if (view->recp_bcc_entry.entry == entry) {
+		recp_layout = view->recp_bcc_layout;
+		btn = view->recp_bcc_btn;
 	}
 
 	if (recp_layout) {
@@ -934,27 +929,27 @@ void composer_recipient_unfocus_entry(void *data, Evas_Object *entry)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (ugd->recp_to_entry.entry == entry) {
-		composer_recipient_reset_entry_without_mbe(ugd->composer_box, ugd->recp_to_mbe_layout, ugd->recp_to_layout, ugd->recp_to_box, ugd->recp_to_label);
-		composer_recipient_update_display_string(ugd, ugd->recp_to_mbe, ugd->recp_to_entry.entry , ugd->recp_to_display_entry.entry , ugd->to_recipients_cnt);
-		composer_recipient_change_entry(EINA_FALSE, ugd->recp_to_box, &ugd->recp_to_entry, &ugd->recp_to_display_entry, ugd->recp_to_entry_layout, ugd->recp_to_display_entry_layout);
-	} else if (ugd->recp_cc_entry.entry == entry) {
-		composer_recipient_reset_entry_without_mbe(ugd->composer_box, ugd->recp_cc_mbe_layout, ugd->recp_cc_layout, ugd->recp_cc_box, ugd->bcc_added ? ugd->recp_cc_label_cc : ugd->recp_cc_label_cc_bcc);
-		composer_recipient_update_display_string(ugd, ugd->recp_cc_mbe, ugd->recp_cc_entry.entry, ugd->recp_cc_display_entry.entry, ugd->cc_recipients_cnt);
-		composer_recipient_change_entry(EINA_FALSE, ugd->recp_cc_box, &ugd->recp_cc_entry, &ugd->recp_cc_display_entry, ugd->recp_cc_entry_layout, ugd->recp_cc_display_entry_layout);
-	} else if (ugd->recp_bcc_entry.entry == entry) {
-		composer_recipient_reset_entry_without_mbe(ugd->composer_box, ugd->recp_bcc_mbe_layout, ugd->recp_bcc_layout, ugd->recp_bcc_box, ugd->recp_bcc_label);
-		composer_recipient_update_display_string(ugd, ugd->recp_bcc_mbe, ugd->recp_bcc_entry.entry , ugd->recp_bcc_display_entry.entry , ugd->bcc_recipients_cnt);
-		composer_recipient_change_entry(EINA_FALSE, ugd->recp_bcc_box, &ugd->recp_bcc_entry, &ugd->recp_bcc_display_entry, ugd->recp_bcc_entry_layout, ugd->recp_bcc_display_entry_layout);
+	if (view->recp_to_entry.entry == entry) {
+		composer_recipient_reset_entry_without_mbe(view->composer_box, view->recp_to_mbe_layout, view->recp_to_layout, view->recp_to_box, view->recp_to_label);
+		composer_recipient_update_display_string(view, view->recp_to_mbe, view->recp_to_entry.entry , view->recp_to_display_entry.entry , view->to_recipients_cnt);
+		composer_recipient_change_entry(EINA_FALSE, view->recp_to_box, &view->recp_to_entry, &view->recp_to_display_entry, view->recp_to_entry_layout, view->recp_to_display_entry_layout);
+	} else if (view->recp_cc_entry.entry == entry) {
+		composer_recipient_reset_entry_without_mbe(view->composer_box, view->recp_cc_mbe_layout, view->recp_cc_layout, view->recp_cc_box, view->bcc_added ? view->recp_cc_label_cc : view->recp_cc_label_cc_bcc);
+		composer_recipient_update_display_string(view, view->recp_cc_mbe, view->recp_cc_entry.entry, view->recp_cc_display_entry.entry, view->cc_recipients_cnt);
+		composer_recipient_change_entry(EINA_FALSE, view->recp_cc_box, &view->recp_cc_entry, &view->recp_cc_display_entry, view->recp_cc_entry_layout, view->recp_cc_display_entry_layout);
+	} else if (view->recp_bcc_entry.entry == entry) {
+		composer_recipient_reset_entry_without_mbe(view->composer_box, view->recp_bcc_mbe_layout, view->recp_bcc_layout, view->recp_bcc_box, view->recp_bcc_label);
+		composer_recipient_update_display_string(view, view->recp_bcc_mbe, view->recp_bcc_entry.entry , view->recp_bcc_display_entry.entry , view->bcc_recipients_cnt);
+		composer_recipient_change_entry(EINA_FALSE, view->recp_bcc_box, &view->recp_bcc_entry, &view->recp_bcc_display_entry, view->recp_bcc_entry_layout, view->recp_bcc_display_entry_layout);
 	}
-	composer_recipient_hide_contact_button(ugd, entry);
+	composer_recipient_hide_contact_button(view, entry);
 
 	debug_leave();
 }
 
-void composer_recipient_update_display_string(EmailComposerUGD *ugd, Evas_Object *mbe, Evas_Object *entry, Evas_Object *display_entry, int count)
+void composer_recipient_update_display_string(EmailComposerView *view, Evas_Object *mbe, Evas_Object *entry, Evas_Object *display_entry, int count)
 {
 	debug_enter();
 
@@ -979,12 +974,12 @@ void composer_recipient_update_display_string(EmailComposerUGD *ugd, Evas_Object
 			elm_entry_entry_set(display_entry, recp_string);
 			elm_entry_entry_append(display_entry, ", ");
 			elm_entry_entry_append(display_entry, entry_string);
-			entry_ellipsised_string = composer_util_get_ellipsised_entry_name(ugd, display_entry, elm_entry_entry_get(display_entry));
+			entry_ellipsised_string = composer_util_get_ellipsised_entry_name(view, display_entry, elm_entry_entry_get(display_entry));
 		} else {
-			entry_ellipsised_string = composer_util_get_ellipsised_entry_name(ugd, display_entry, entry_string);
+			entry_ellipsised_string = composer_util_get_ellipsised_entry_name(view, display_entry, entry_string);
 		}
 	} else if (strlen(recp_string) > 0) {
-		entry_ellipsised_string = composer_util_get_ellipsised_entry_name(ugd, display_entry, recp_string);
+		entry_ellipsised_string = composer_util_get_ellipsised_entry_name(view, display_entry, recp_string);
 	}
 
 	if (entry_ellipsised_string) {
@@ -1087,10 +1082,10 @@ static Eina_Bool _recipient_timer_duplicate_toast_cb(void *data)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	ugd->timer_duplicate_toast_in_reciepients = NULL;
-	ugd->prev_toast_error = 0;
+	view->timer_duplicate_toast_in_reciepients = NULL;
+	view->prev_toast_error = 0;
 
 	debug_leave();
 	return ECORE_CALLBACK_CANCEL;
@@ -1100,29 +1095,14 @@ void composer_recipient_display_error_string(void *data, MBE_VALIDATION_ERROR er
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (!ugd->timer_duplicate_toast_in_reciepients) {
-		ugd->prev_toast_error = (int)err;
-		ugd->timer_duplicate_toast_in_reciepients = ecore_timer_add(3.0f, _recipient_timer_duplicate_toast_cb, ugd);
+	if (!view->timer_duplicate_toast_in_reciepients || (view->prev_toast_error != (int)err)) {
+		DELETE_TIMER_OBJECT(view->timer_duplicate_toast_in_reciepients);
+		view->prev_toast_error = (int)err;
+		view->timer_duplicate_toast_in_reciepients = ecore_timer_add(3.0f, _recipient_timer_duplicate_toast_cb, view);
 
-		email_common_timer_data_t *tdata = (email_common_timer_data_t *)calloc(1, sizeof(email_common_timer_data_t));
-		retm_if(!tdata, "tdata is NULL!");
-		tdata->ug_data = (void *)ugd;
-		tdata->data = (void *)err;
-
-		_recipient_notify_invalid_recipient(tdata);
-	} else if (ugd->prev_toast_error != (int)err) {
-		DELETE_TIMER_OBJECT(ugd->timer_duplicate_toast_in_reciepients);
-		ugd->prev_toast_error = (int)err;
-		ugd->timer_duplicate_toast_in_reciepients = ecore_timer_add(3.0f, _recipient_timer_duplicate_toast_cb, ugd);
-
-		email_common_timer_data_t *tdata = (email_common_timer_data_t *)calloc(1, sizeof(email_common_timer_data_t));
-		retm_if(!tdata, "tdata is NULL!");
-		tdata->ug_data = (void *)ugd;
-		tdata->data = (void *)err;
-
-		_recipient_notify_invalid_recipient(tdata);
+		_recipient_notify_invalid_recipient(view, err);
 	}
 
 	debug_leave();
@@ -1136,7 +1116,7 @@ Eina_Bool composer_recipient_mbe_validate_email_address_list(void *data, Evas_Ob
 	retvm_if(!invalid_list, MBE_VALIDATION_ERROR_INVALID_ADDRESS, "Invalid parameter: invalid_list is NULL!");
 	retvm_if(!ret_err, MBE_VALIDATION_ERROR_INVALID_ADDRESS, "Invalid parameter: ret_err is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	Eina_Bool ret = EINA_TRUE;
 	char *invalid_addr = NULL;
 	gchar **split_email = g_strsplit_set(address, ",;", -1);
@@ -1148,7 +1128,7 @@ Eina_Bool composer_recipient_mbe_validate_email_address_list(void *data, Evas_Ob
 			if (split_email[i] && (strlen(split_email[i]) == 0))
 				continue;
 
-			MBE_VALIDATION_ERROR err = _recipient_mbe_validate_email_address(ugd, obj, split_email[i]);
+			MBE_VALIDATION_ERROR err = _recipient_mbe_validate_email_address(view, obj, split_email[i]);
 			if (err == MBE_VALIDATION_ERROR_NONE) {
 				EmailRecpInfo *ri = composer_util_recp_make_recipient_info(split_email[i]);
 				if (ri) {
@@ -1160,7 +1140,7 @@ Eina_Bool composer_recipient_mbe_validate_email_address_list(void *data, Evas_Ob
 				}
 			} else {
 				if (err == MBE_VALIDATION_ERROR_QUOTATIONS) {
-					if (ugd->recipient_added_from_contacts) {
+					if (view->recipient_added_from_contacts) {
 						char *nick = NULL;
 						char *addr = NULL;
 						char *email_addr = NULL;
@@ -1196,10 +1176,10 @@ Eina_Bool composer_recipient_mbe_validate_email_address_list(void *data, Evas_Ob
 
 		ret = EINA_FALSE;
 	} else {
-		MBE_VALIDATION_ERROR err = _recipient_mbe_validate_email_address(ugd, obj, address);
+		MBE_VALIDATION_ERROR err = _recipient_mbe_validate_email_address(view, obj, address);
 		if (err != MBE_VALIDATION_ERROR_NONE) {
 			if (err == MBE_VALIDATION_ERROR_QUOTATIONS) {
-				if (ugd->recipient_added_from_contacts) {
+				if (view->recipient_added_from_contacts) {
 					char *nick = NULL;
 					char *addr = NULL;
 					char *email_addr = NULL;
@@ -1241,12 +1221,12 @@ Eina_Bool composer_recipient_commit_recipient_on_entry(void *data, Evas_Object *
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	Eina_Bool ret = EINA_TRUE;
 
 	const char *str = elm_entry_entry_get(entry);
 	if (str && (strlen(str) > 0)) {
-		Evas_Object *mbe = _recipient_get_mbe_with_entry(ugd, entry);
+		Evas_Object *mbe = _recipient_get_mbe_with_entry(view, entry);
 		Elm_Object_Item *it = elm_multibuttonentry_item_append(mbe, str, NULL, NULL);
 		if (it) {
 			elm_entry_entry_set(entry, "");
@@ -1264,10 +1244,10 @@ Eina_Bool composer_recipient_is_recipient_entry(void *data, Evas_Object *entry)
 	retvm_if(!data, EINA_FALSE, "Invalid parameter: data is NULL!");
 	retvm_if(!entry, EINA_FALSE, "Invalid parameter: entry is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	Eina_Bool ret = EINA_FALSE;
 
-	if ((entry == ugd->recp_to_entry.entry) || (entry == ugd->recp_cc_entry.entry) || (entry == ugd->recp_bcc_entry.entry)) {
+	if ((entry == view->recp_to_entry.entry) || (entry == view->recp_cc_entry.entry) || (entry == view->recp_bcc_entry.entry)) {
 		ret = EINA_TRUE;
 	}
 
@@ -1279,15 +1259,15 @@ static Evas_Object *_recipient_get_mbe_with_entry(void *data, Evas_Object *entry
 	retvm_if(!data, NULL, "Invalid parameter: data is NULL!");
 	retvm_if(!entry, NULL, "Invalid parameter: entry is NULL!");
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 	Evas_Object *mbe = NULL;
 
-	if (entry == ugd->recp_to_entry.entry) {
-		mbe = ugd->recp_to_mbe;
-	} else if (entry == ugd->recp_cc_entry.entry) {
-		mbe = ugd->recp_cc_mbe;
-	} else if (entry == ugd->recp_bcc_entry.entry) {
-		mbe = ugd->recp_bcc_mbe;
+	if (entry == view->recp_to_entry.entry) {
+		mbe = view->recp_to_mbe;
+	} else if (entry == view->recp_cc_entry.entry) {
+		mbe = view->recp_cc_mbe;
+	} else if (entry == view->recp_bcc_entry.entry) {
+		mbe = view->recp_bcc_mbe;
 	}
 
 	return mbe;
@@ -1298,7 +1278,7 @@ void composer_recipient_append_myaddress(void *data, email_account_t *account)
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
 	Evas_Object *dest_mbe = NULL;
 	EmailRecpInfo *ri = composer_util_recp_make_recipient_info_with_display_name(account->user_email_address, account->account_name);
@@ -1307,9 +1287,9 @@ void composer_recipient_append_myaddress(void *data, email_account_t *account)
 	ri->is_always_bcc = true;
 
 	if (account->options.add_my_address_to_bcc == EMAIL_ADD_MY_ADDRESS_OPTION_ALWAYS_ADD_TO_CC) {
-		dest_mbe = ugd->recp_cc_mbe;
+		dest_mbe = view->recp_cc_mbe;
 	} else {
-		dest_mbe = ugd->recp_bcc_mbe;
+		dest_mbe = view->recp_bcc_mbe;
 	}
 
 	Elm_Object_Item *mbe_item = elm_multibuttonentry_first_item_get(dest_mbe);

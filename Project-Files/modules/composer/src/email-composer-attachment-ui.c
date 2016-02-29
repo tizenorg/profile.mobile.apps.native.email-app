@@ -32,10 +32,10 @@
  * Declaration for static functions
  */
 
-static char *_attachment_thumbnail_create_thumbnail_for_image(EmailComposerUGD *ugd, const char *source);
+static char *_attachment_thumbnail_create_thumbnail_for_image(EmailComposerView *view, const char *source);
 static char *_attachment_thumbnail_create_thumbnail_for_video(const char *source);
 static char *_attachment_thumbnail_create_thumbnail_for_audio(const char *source);
-static Evas_Object *_attachment_thumbnail_create_thumbnail(EmailComposerUGD *ugd, const char *filepath, const char *filename, Evas_Object *parent);
+static Evas_Object *_attachment_thumbnail_create_thumbnail(EmailComposerView *view, const char *filepath, const char *filename, Evas_Object *parent);
 
 static void _attachment_ui_item_delete_button_clicked_cb(void *data, Evas_Object *obj, void *event_info);
 static void _attachment_ui_item_clicked_cb(void *data, Evas_Object *obj, const char *emission, const char *source);
@@ -45,8 +45,8 @@ static void _attachment_ui_item_create_delete_button(ComposerAttachmentItemData 
 static void _attachment_ui_item_create_layout(ComposerAttachmentItemData *attachment_item_data, Evas_Object *parent);
 
 static void _attachment_ui_group_clicked_cb(void *data, Evas_Object *obj, const char *emission, const char *source);
-static void _attachment_ui_group_update_icon(EmailComposerUGD *ugd);
-static void _attachment_ui_group_create_layout(EmailComposerUGD *ugd, Evas_Object *parent);
+static void _attachment_ui_group_update_icon(EmailComposerView *view);
+static void _attachment_ui_group_create_layout(EmailComposerView *view, Evas_Object *parent);
 
 static email_string_t EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
 static email_string_t EMAIL_COMPOSER_STRING_BUTTON_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
@@ -58,7 +58,7 @@ static email_string_t EMAIL_COMPOSER_STRING_UNABLE_TO_DISPLAY_ATTACHMENT = { NUL
  * Definition for static functions
  */
 
-static char *_attachment_thumbnail_create_thumbnail_for_image(EmailComposerUGD *ugd, const char *source)
+static char *_attachment_thumbnail_create_thumbnail_for_image(EmailComposerView *view, const char *source)
 {
 	debug_enter();
 
@@ -66,7 +66,7 @@ static char *_attachment_thumbnail_create_thumbnail_for_image(EmailComposerUGD *
 
 	char *thumb_path = NULL;
 
-	if (ugd->is_load_finished || (ugd->composer_type == RUN_COMPOSER_EXTERNAL)) {
+	if (view->is_load_finished || (view->composer_type == RUN_COMPOSER_EXTERNAL)) {
 		/* for images, we will get thumbnail from media-content db */
 		email_media_content_get_image_thumbnail(source, &thumb_path);
 	}
@@ -242,7 +242,7 @@ EXIT_FUNC:
 	return thumb_path;
 }
 
-static Evas_Object *_attachment_thumbnail_create_thumbnail(EmailComposerUGD *ugd, const char *filepath, const char *filename, Evas_Object *parent)
+static Evas_Object *_attachment_thumbnail_create_thumbnail(EmailComposerView *view, const char *filepath, const char *filename, Evas_Object *parent)
 {
 	debug_enter();
 
@@ -265,7 +265,7 @@ static Evas_Object *_attachment_thumbnail_create_thumbnail(EmailComposerUGD *ugd
 		debug_secure("filepath: (%s)", filepath);
 
 		if (ftype == EMAIL_FILE_TYPE_IMAGE) {
-			thumb_path = _attachment_thumbnail_create_thumbnail_for_image(ugd, filepath);
+			thumb_path = _attachment_thumbnail_create_thumbnail_for_image(view, filepath);
 		} else if (ftype == EMAIL_FILE_TYPE_VIDEO) {
 			thumb_path = _attachment_thumbnail_create_thumbnail_for_video(filepath);
 		} else if (ftype == EMAIL_FILE_TYPE_MUSIC) {
@@ -304,11 +304,11 @@ static void _attachment_ui_item_delete_button_clicked_cb(void *data, Evas_Object
 	retm_if(!obj, "data is NULL!");
 
 	ComposerAttachmentItemData *attachment_item_data = (ComposerAttachmentItemData *)data;
-	EmailComposerUGD *ugd = (EmailComposerUGD *)attachment_item_data->ugd;
+	EmailComposerView *view = (EmailComposerView *)attachment_item_data->view;
 	Evas_Object *attachment_layout = attachment_item_data->layout;
 	email_attachment_data_t *attachment_data = attachment_item_data->attachment_data;
 
-	ugd->attachment_item_list = eina_list_remove(ugd->attachment_item_list, attachment_item_data);
+	view->attachment_item_list = eina_list_remove(view->attachment_item_list, attachment_item_data);
 
 	if (attachment_data) {
 		debug_secure("attachment filename: (%s)", attachment_data->attachment_path);
@@ -327,21 +327,21 @@ static void _attachment_ui_item_delete_button_clicked_cb(void *data, Evas_Object
 	}
 
 	if (attachment_layout) {
-		elm_box_unpack(ugd->composer_box, attachment_layout);
+		elm_box_unpack(view->composer_box, attachment_layout);
 		evas_object_del(attachment_layout);
 	}
 	FREE(attachment_item_data);
 
-	if (ugd->attachment_group_layout) {
+	if (view->attachment_group_layout) {
 		/* Group layout is removed when the number of attachment is reduced to 1 from 2. In other cases, update group layout text. */
-		if (eina_list_count(ugd->attachment_item_list) == 1) {
-			elm_box_unpack(ugd->composer_box, ugd->attachment_group_layout);
-			DELETE_EVAS_OBJECT(ugd->attachment_group_layout);
-			ugd->attachment_group_layout = NULL;
-			ugd->attachment_group_icon = NULL;
-			ugd->is_attachment_list_expanded = EINA_TRUE;
+		if (eina_list_count(view->attachment_item_list) == 1) {
+			elm_box_unpack(view->composer_box, view->attachment_group_layout);
+			DELETE_EVAS_OBJECT(view->attachment_group_layout);
+			view->attachment_group_layout = NULL;
+			view->attachment_group_icon = NULL;
+			view->is_attachment_list_expanded = EINA_TRUE;
 		} else {
-			composer_attachment_ui_group_update_text(ugd);
+			composer_attachment_ui_group_update_text(view);
 		}
 	}
 
@@ -349,16 +349,16 @@ static void _attachment_ui_item_delete_button_clicked_cb(void *data, Evas_Object
 	Eina_Bool is_needed_to_download = EINA_FALSE;
 	Eina_List *list = NULL;
 	ComposerAttachmentItemData *attach_item_data = NULL;
-	EINA_LIST_FOREACH(ugd->attachment_item_list, list, attach_item_data) {
+	EINA_LIST_FOREACH(view->attachment_item_list, list, attach_item_data) {
 		email_attachment_data_t *att = attach_item_data->attachment_data;
 		if ((att->attachment_id > 0) && (att->save_status == 0)) {
 			is_needed_to_download = EINA_TRUE;
 			break;
 		}
 	}
-	ugd->need_download = is_needed_to_download;
+	view->need_download = is_needed_to_download;
 
-	composer_util_modify_send_button(ugd);
+	composer_util_modify_send_button(view);
 
 	debug_leave();
 }
@@ -370,25 +370,25 @@ static void _attachment_ui_item_clicked_cb(void *data, Evas_Object *obj, const c
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
 	ComposerAttachmentItemData *attach_item_data = (ComposerAttachmentItemData *)data;
-	EmailComposerUGD *ugd = (EmailComposerUGD *)attach_item_data->ugd;
+	EmailComposerView *view = (EmailComposerView *)attach_item_data->view;
 	email_attachment_data_t *attachment = attach_item_data->attachment_data;
 
-	if (!ugd->allow_click_events) {
+	if (!view->allow_click_events) {
 		debug_log("Click was blocked.");
 		return;
 	}
 
 	/* When a user clicks attachment layout multiple times quickly, app launch requested is called multiple times. */
-	ret_if(ugd->base.module->is_launcher_busy);
+	ret_if(view->base.module->is_launcher_busy);
 
 	email_feedback_play_tap_sound();
 
 	if (!attachment->save_status) {
-		if (ugd->account_info->account_type == EMAIL_SERVER_TYPE_POP3 && ugd->org_mail_info && ugd->org_mail_info->mail_data && (ugd->org_mail_info->mail_data->body_download_status != EMAIL_BODY_DOWNLOAD_STATUS_FULLY_DOWNLOADED)) {
-			ugd->composer_popup = composer_util_popup_create(ugd, EMAIL_COMPOSER_STRING_UNABLE_TO_OPEN_FILE, EMAIL_COMPOSER_STRING_UNABLE_TO_DISPLAY_ATTACHMENT,
+		if (view->account_info->account_type == EMAIL_SERVER_TYPE_POP3 && view->org_mail_info && view->org_mail_info->mail_data && (view->org_mail_info->mail_data->body_download_status != EMAIL_BODY_DOWNLOAD_STATUS_FULLY_DOWNLOADED)) {
+			view->composer_popup = composer_util_popup_create(view, EMAIL_COMPOSER_STRING_UNABLE_TO_OPEN_FILE, EMAIL_COMPOSER_STRING_UNABLE_TO_DISPLAY_ATTACHMENT,
 									composer_util_popup_response_cb, EMAIL_COMPOSER_STRING_BUTTON_OK, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
 		} else {
-			composer_attachment_download_attachment(ugd, attachment);
+			composer_attachment_download_attachment(view, attachment);
 		}
 	} else {
 		composer_util_show_preview(attach_item_data);
@@ -418,7 +418,7 @@ static void _attachment_ui_item_update_thumbnail(ComposerAttachmentItemData *att
 {
 	debug_enter();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)attachment_item_data->ugd;
+	EmailComposerView *view = (EmailComposerView *)attachment_item_data->view;
 	Evas_Object *layout = attachment_item_data->layout;
 	email_attachment_data_t *attachment_data = attachment_item_data->attachment_data;
 
@@ -430,7 +430,7 @@ static void _attachment_ui_item_update_thumbnail(ComposerAttachmentItemData *att
 	elm_layout_theme_set(thumbnail_layout, "layout", "list/B/type.2", "email/default");
 	evas_object_show(thumbnail_layout);
 
-	Evas_Object *thumbnail = _attachment_thumbnail_create_thumbnail(ugd, attachment_data->attachment_path, attachment_data->attachment_name, thumbnail_layout);
+	Evas_Object *thumbnail = _attachment_thumbnail_create_thumbnail(view, attachment_data->attachment_path, attachment_data->attachment_name, thumbnail_layout);
 
 	elm_layout_content_set(thumbnail_layout, "ec.swallow.content", thumbnail);
 	elm_object_part_content_set(layout, "ec.swallow.icon", thumbnail_layout);
@@ -468,9 +468,9 @@ static void _attachment_ui_item_create_layout(ComposerAttachmentItemData *attach
 	evas_object_size_hint_align_set(layout, EVAS_HINT_FILL, EVAS_HINT_FILL);
 	evas_object_show(layout);
 	elm_layout_signal_callback_add(layout, "ec,action,clicked", "", _attachment_ui_item_clicked_cb, attachment_item_data);
-	EmailComposerUGD *ugd = (EmailComposerUGD *)attachment_item_data->ugd;
-	if (ugd->richtext_toolbar) {
-		elm_box_pack_before(parent, layout, ugd->richtext_toolbar);
+	EmailComposerView *view = (EmailComposerView *)attachment_item_data->view;
+	if (view->richtext_toolbar) {
+		elm_box_pack_before(parent, layout, view->richtext_toolbar);
 	} else {
 		elm_box_pack_end(parent, layout);
 	}
@@ -490,30 +490,30 @@ static void _attachment_ui_group_clicked_cb(void *data, Evas_Object *obj, const 
 
 	email_feedback_play_tap_sound();
 
-	EmailComposerUGD *ugd = (EmailComposerUGD *)data;
+	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (ugd->is_attachment_list_expanded) {
-		composer_attachment_ui_contract_attachment_list(ugd);
+	if (view->is_attachment_list_expanded) {
+		composer_attachment_ui_contract_attachment_list(view);
 	} else {
-		composer_attachment_ui_expand_attachment_list(ugd);
+		composer_attachment_ui_expand_attachment_list(view);
 	}
 
 	debug_leave();
 }
 
-static void _attachment_ui_group_update_icon(EmailComposerUGD *ugd)
+static void _attachment_ui_group_update_icon(EmailComposerView *view)
 {
 	debug_enter();
 
-	if (ugd->is_attachment_list_expanded) {
-		elm_layout_file_set(ugd->attachment_group_icon, email_get_common_theme_path(), EMAIL_IMAGE_COMPOSER_EXPAND_OPEN);
+	if (view->is_attachment_list_expanded) {
+		elm_layout_file_set(view->attachment_group_icon, email_get_common_theme_path(), EMAIL_IMAGE_COMPOSER_EXPAND_OPEN);
 	} else {
-		elm_layout_file_set(ugd->attachment_group_icon, email_get_common_theme_path(), EMAIL_IMAGE_COMPOSER_EXPAND_CLOSE);
+		elm_layout_file_set(view->attachment_group_icon, email_get_common_theme_path(), EMAIL_IMAGE_COMPOSER_EXPAND_CLOSE);
 	}
 	debug_leave();
 }
 
-static void _attachment_ui_group_create_layout(EmailComposerUGD *ugd, Evas_Object *parent)
+static void _attachment_ui_group_create_layout(EmailComposerView *view, Evas_Object *parent)
 {
 	debug_enter();
 
@@ -527,14 +527,14 @@ static void _attachment_ui_group_create_layout(EmailComposerUGD *ugd, Evas_Objec
 	elm_layout_file_set(group_icon, email_get_common_theme_path(), EMAIL_IMAGE_COMPOSER_EXPAND_OPEN);
 	evas_object_show(group_icon);
 
-	elm_layout_signal_callback_add(layout, "ec,action,clicked", "", _attachment_ui_group_clicked_cb, ugd);
+	elm_layout_signal_callback_add(layout, "ec,action,clicked", "", _attachment_ui_group_clicked_cb, view);
 	elm_object_part_content_set(layout, "ec.swallow.icon", group_icon);
 	elm_object_tree_focus_allow_set(layout, EINA_FALSE);
 
-	elm_box_pack_after(parent, layout, ugd->subject_layout);
+	elm_box_pack_after(parent, layout, view->subject_layout);
 
-	ugd->attachment_group_icon = group_icon;
-	ugd->attachment_group_layout = layout;
+	view->attachment_group_icon = group_icon;
+	view->attachment_group_layout = layout;
 
 	debug_leave();
 }
@@ -544,38 +544,38 @@ static void _attachment_ui_group_create_layout(EmailComposerUGD *ugd, Evas_Objec
  * Definition for exported functions
  */
 
-void composer_attachment_ui_create_item_layout(EmailComposerUGD *ugd, email_attachment_data_t *attachment_data, Eina_Bool is_group_needed, Eina_Bool is_from_user)
+void composer_attachment_ui_create_item_layout(EmailComposerView *view, email_attachment_data_t *attachment_data, Eina_Bool is_group_needed, Eina_Bool is_from_user)
 {
 	debug_enter();
 
-	retm_if(!ugd, "ugd is NULL!");
+	retm_if(!view, "view is NULL!");
 	retm_if(!attachment_data, "attachment_data is NULL!");
 	retm_if(attachment_data->inline_content_status, "attachment_data->inline_content_status is TRUE!");
 
-	if (is_group_needed && !ugd->attachment_group_layout) {
-		_attachment_ui_group_create_layout(ugd, ugd->composer_box);
-		_attachment_ui_group_update_icon(ugd);
+	if (is_group_needed && !view->attachment_group_layout) {
+		_attachment_ui_group_create_layout(view, view->composer_box);
+		_attachment_ui_group_update_icon(view);
 	}
 
-	if (!ugd->is_attachment_list_expanded) {
-		composer_attachment_ui_expand_attachment_list(ugd);
+	if (!view->is_attachment_list_expanded) {
+		composer_attachment_ui_expand_attachment_list(view);
 	}
 
 	ComposerAttachmentItemData *attachment_item_data = NULL;
 	attachment_item_data = calloc(1, sizeof(ComposerAttachmentItemData));
 	retm_if(!attachment_item_data, "attachment_item_data is NULL!");
-	attachment_item_data->ugd = (void *)ugd;
+	attachment_item_data->view = (void *)view;
 	attachment_item_data->attachment_data = attachment_data;
 	attachment_item_data->preview_path = NULL;
 	attachment_item_data->from_user = is_from_user;
 
-	_attachment_ui_item_create_layout(attachment_item_data, ugd->composer_box);
+	_attachment_ui_item_create_layout(attachment_item_data, view->composer_box);
 	_attachment_ui_item_create_delete_button(attachment_item_data, attachment_item_data->layout);
 	composer_attachment_ui_update_item(attachment_item_data);
-	ugd->attachment_item_list = eina_list_append(ugd->attachment_item_list, attachment_item_data);
+	view->attachment_item_list = eina_list_append(view->attachment_item_list, attachment_item_data);
 
-	if (ugd->attachment_group_layout) {
-		composer_attachment_ui_group_update_text(ugd);
+	if (view->attachment_group_layout) {
+		composer_attachment_ui_group_update_text(view);
 	}
 
 	debug_leave();
@@ -593,20 +593,20 @@ void composer_attachment_ui_update_item(ComposerAttachmentItemData *attachment_i
 	debug_leave();
 }
 
-void composer_attachment_ui_group_update_text(EmailComposerUGD *ugd)
+void composer_attachment_ui_group_update_text(EmailComposerView *view)
 {
 	debug_enter();
 
 	char summary_string[BUF_LEN_S] = { 0, };
-	int size = composer_util_get_total_attachments_size(ugd, EINA_FALSE);
+	int size = composer_util_get_total_attachments_size(view, EINA_FALSE);
 	char *file_size = (char *)email_get_file_size_string((guint64)size);
 
-	snprintf(summary_string, sizeof(summary_string), email_get_email_string("IDS_EMAIL_BODY_PD_FILES_ABB"), eina_list_count(ugd->attachment_item_list));
+	snprintf(summary_string, sizeof(summary_string), email_get_email_string("IDS_EMAIL_BODY_PD_FILES_ABB"), eina_list_count(view->attachment_item_list));
 
-	if ((ugd->account_info->selected_account->outgoing_server_size_limit == 0) || (ugd->account_info->selected_account->outgoing_server_size_limit == -1)) {
+	if ((view->account_info->selected_account->outgoing_server_size_limit == 0) || (view->account_info->selected_account->outgoing_server_size_limit == -1)) {
 		snprintf(summary_string + strlen(summary_string), sizeof(summary_string) - strlen(summary_string), " (%s)", file_size);
 	} else {
-		char *max_size = (char *)email_get_file_size_string((guint64)ugd->account_info->max_sending_size);
+		char *max_size = (char *)email_get_file_size_string((guint64)view->account_info->max_sending_size);
 		if (max_size) {
 			snprintf(summary_string + strlen(summary_string), sizeof(summary_string) - strlen(summary_string), " (%s/%s)", file_size, max_size);
 			free(max_size);
@@ -615,52 +615,52 @@ void composer_attachment_ui_group_update_text(EmailComposerUGD *ugd)
 		}
 	}
 
-	elm_object_part_text_set(ugd->attachment_group_layout, "ec.text.main", summary_string);
+	elm_object_part_text_set(view->attachment_group_layout, "ec.text.main", summary_string);
 
 	FREE(file_size);
 
 	debug_leave();
 }
 
-void composer_attachment_ui_contract_attachment_list(EmailComposerUGD *ugd)
+void composer_attachment_ui_contract_attachment_list(EmailComposerView *view)
 {
 	debug_enter();
 
-	retm_if(!ugd, "ugd is NULL!");
+	retm_if(!view, "view is NULL!");
 
-	if (ugd->attachment_group_layout) {
+	if (view->attachment_group_layout) {
 		Eina_List *l = NULL;
 		ComposerAttachmentItemData *attachment_item_data = NULL;
-		EINA_LIST_FOREACH(ugd->attachment_item_list, l, attachment_item_data) {
-			elm_box_unpack(ugd->composer_box, attachment_item_data->layout);
+		EINA_LIST_FOREACH(view->attachment_item_list, l, attachment_item_data) {
+			elm_box_unpack(view->composer_box, attachment_item_data->layout);
 			evas_object_hide(attachment_item_data->layout);
 		}
-		ugd->is_attachment_list_expanded = EINA_FALSE;
-		_attachment_ui_group_update_icon(ugd);
+		view->is_attachment_list_expanded = EINA_FALSE;
+		_attachment_ui_group_update_icon(view);
 	}
 
 	debug_leave();
 }
 
-void composer_attachment_ui_expand_attachment_list(EmailComposerUGD *ugd)
+void composer_attachment_ui_expand_attachment_list(EmailComposerView *view)
 {
 	debug_enter();
 
-	retm_if(!ugd, "ugd is NULL!");
+	retm_if(!view, "view is NULL!");
 
 	Eina_List *l = NULL;
 	ComposerAttachmentItemData *attachment_item_data = NULL;
-	EINA_LIST_FOREACH(ugd->attachment_item_list, l, attachment_item_data) {
+	EINA_LIST_FOREACH(view->attachment_item_list, l, attachment_item_data) {
 		evas_object_show(attachment_item_data->layout);
-		if (ugd->richtext_toolbar) {
-			elm_box_pack_before(ugd->composer_box, attachment_item_data->layout, ugd->richtext_toolbar);
+		if (view->richtext_toolbar) {
+			elm_box_pack_before(view->composer_box, attachment_item_data->layout, view->richtext_toolbar);
 		} else {
-			elm_box_pack_end(ugd->composer_box, attachment_item_data->layout);
+			elm_box_pack_end(view->composer_box, attachment_item_data->layout);
 		}
 
 	}
-	ugd->is_attachment_list_expanded = EINA_TRUE;
-	_attachment_ui_group_update_icon(ugd);
+	view->is_attachment_list_expanded = EINA_TRUE;
+	_attachment_ui_group_update_icon(view);
 
 	debug_leave();
 }

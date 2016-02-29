@@ -41,7 +41,7 @@
 /**
  * @brief TODO Need to revise all the types of structure and enum for consistency
  */
-#define COMPOSER_EVAS_DATA_NAME "ComposerUGD"
+#define COMPOSER_EVAS_DATA_NAME "ComposerModule"
 #define COMPOSER_EVAS_DATA_NAME_POPUP_IS_GENGRID "popup_gengrid"
 #define COMPOSER_EVAS_DATA_NAME_POPUP_ITEM_COUNT "popup_item_count"
 #define COMPOSER_EVAS_DATA_NAME_POPUP_ITEM_HEIGHT "popup_item_height"
@@ -277,7 +277,7 @@ struct _EmailComposerMail {
  * @brief Composer attachment item data
  */
 struct _ComposerAttachmentItemData {
-	void *ugd;
+	void *view;
 	email_attachment_data_t *attachment_data;
 	char *preview_path;
 	Evas_Object *layout;
@@ -315,7 +315,7 @@ typedef enum {
 #define GET_VALUE_WITH_RATE(total, rate) ((int)((float)(total) * rate / 100))
 
 #define COMPOSER_GET_TIMER_DATA(tdata, name, data) \
-        COMMON_GET_TIMER_DATA(tdata, EmailComposerUGD, name, data) \
+        COMMON_GET_TIMER_DATA(tdata, EmailComposerView, name, data) \
 
 /**
  * @brief Rich button state data

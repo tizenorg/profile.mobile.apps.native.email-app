@@ -23,42 +23,42 @@
 /**
  * @brief Provides preview attachment
  *
- * @param[in]	ugd		Email composer data
+ * @param[in]	view		Email composer data
  * @param[in]	uri		Physical path
  *
  */
-void composer_launcher_preview_attachment(EmailComposerUGD *ugd, const char *uri);
+void composer_launcher_preview_attachment(EmailComposerView *view, const char *uri);
 
 /**
  * @brief Launch contact application and pick contacts
  *
- * @param[in]	ugd		Email composer data
+ * @param[in]	view		Email composer data
  *
  */
-void composer_launcher_pick_contacts(EmailComposerUGD *ugd);
+void composer_launcher_pick_contacts(EmailComposerView *view);
 
 /**
  * @brief Launch contact application and update contact
  *
- * @param[in]	ugd		Email composer data
+ * @param[in]	view		Email composer data
  *
  */
-void composer_launcher_update_contact(EmailComposerUGD *ugd);
+void composer_launcher_update_contact(EmailComposerView *view);
 
 /**
  * @brief Launch contact application and add contact
  *
- * @param[in]	ugd		Email composer data
+ * @param[in]	view		Email composer data
  *
  */
-void composer_launcher_add_contact(EmailComposerUGD *ugd);
+void composer_launcher_add_contact(EmailComposerView *view);
 
 /**
  * @brief Launch setting application to provide storage settings
  *
- * @param[in]	ugd		Email composer data
+ * @param[in]	view		Email composer data
  *
  */
-void composer_launcher_launch_storage_settings(EmailComposerUGD *ugd);
+void composer_launcher_launch_storage_settings(EmailComposerView *view);
 
 #endif /* __EMAIL_COMPOSER_LAUNCHER_H__ */
