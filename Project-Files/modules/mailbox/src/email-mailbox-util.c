@@ -42,7 +42,7 @@ EMAIL_DEFINE_GET_EDJ_PATH(email_get_mailbox_theme_path, "/email-mailbox.edj")
  */
 
 typedef struct _EmailMailboxIdlerData {
-	void *mailbox_ugd;
+	void *view;
 	void *data;
 } EmailMailboxIdlerData;
 
@@ -70,21 +70,21 @@ static void _mailbox_password_popup_ok_cb(void *data, Evas_Object *obj, void *ev
 {
 	debug_enter();
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
+	EmailMailboxView *view = (EmailMailboxView *)data;
 
-	mailbox_sync_folder_with_new_password((int)(ptrdiff_t)event_info, mailbox_ugd->sync_needed_mailbox_id, data);
-	mailbox_ugd->sync_needed_mailbox_id = -1;
+	mailbox_sync_folder_with_new_password((int)(ptrdiff_t)event_info, view->sync_needed_mailbox_id, data);
+	view->sync_needed_mailbox_id = -1;
 
-	DELETE_EVAS_OBJECT(mailbox_ugd->passwd_popup);
+	DELETE_EVAS_OBJECT(view->passwd_popup);
 }
 
 static void _mailbox_password_popup_canceled_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
-	DELETE_EVAS_OBJECT(mailbox_ugd->passwd_popup);
-	mailbox_ugd->sync_needed_mailbox_id = -1;
+	EmailMailboxView *view = (EmailMailboxView *)data;
+	DELETE_EVAS_OBJECT(view->passwd_popup);
+	view->sync_needed_mailbox_id = -1;
 }
 
 
@@ -156,19 +156,19 @@ static int _is_yesterday(const time_t req_time)
  * Definition for exported functions
  */
 
-void mailbox_clear_prev_mailbox_info(EmailMailboxUGD *mailbox_ugd)
+void mailbox_clear_prev_mailbox_info(EmailMailboxView *view)
 {
 	debug_enter();
 
-	G_FREE(mailbox_ugd->account_name);
-	G_FREE(mailbox_ugd->mailbox_alias);
-	mailbox_ugd->account_id = 0;
-	mailbox_ugd->mode = EMAIL_MAILBOX_MODE_UNKOWN;
-	mailbox_ugd->mailbox_type = EMAIL_MAILBOX_TYPE_NONE;
-	mailbox_ugd->mailbox_id = 0;
+	G_FREE(view->account_name);
+	G_FREE(view->mailbox_alias);
+	view->account_id = 0;
+	view->mode = EMAIL_MAILBOX_MODE_UNKOWN;
+	view->mailbox_type = EMAIL_MAILBOX_TYPE_NONE;
+	view->mailbox_id = 0;
 }
 
-void mailbox_set_last_updated_time(time_t last_update_time, EmailMailboxUGD *mailbox_ugd)
+void mailbox_set_last_updated_time(time_t last_update_time, EmailMailboxView *view)
 {
 	debug_enter();
 
@@ -181,17 +181,17 @@ void mailbox_set_last_updated_time(time_t last_update_time, EmailMailboxUGD *mai
 	retm_if(ret != I18N_ERROR_NONE, "i18n_ulocale_get_default() failed! ret:[%d]");
 
 	if (_is_today(last_update_time)) {
-		skeleton = (!mailbox_ugd->b_format_24hour) ?
+		skeleton = (!view->b_format_24hour) ?
 				EMAIL_TIME_FORMAT_12 : EMAIL_TIME_FORMAT_24;
 		formatted_text = email_get_date_text(icu_locale, skeleton, &last_update_time);
 		snprintf(updatetime, sizeof(updatetime), "%s : %s %s", _("IDS_EMAIL_BODY_LAST_UPDATED"), _("IDS_EMAIL_BODY_TODAY"), formatted_text);
 	} else if (_is_yesterday(last_update_time)) {
-		skeleton = (!mailbox_ugd->b_format_24hour) ?
+		skeleton = (!view->b_format_24hour) ?
 				EMAIL_TIME_FORMAT_12 : EMAIL_TIME_FORMAT_24;
 		formatted_text = email_get_date_text(icu_locale, skeleton, &last_update_time);
 		snprintf(updatetime, sizeof(updatetime), "%s : %s %s", _("IDS_EMAIL_BODY_LAST_UPDATED"), _("IDS_EMAIL_BODY_YESTERDAY"), formatted_text);
 	} else {
-		skeleton = (!mailbox_ugd->b_format_24hour) ?
+		skeleton = (!view->b_format_24hour) ?
 			EMAIL_DATETIME_FORMAT_12 : EMAIL_DATETIME_FORMAT_24;
 		formatted_text = email_get_date_text(icu_locale, skeleton, &last_update_time);
 		snprintf(updatetime, sizeof(updatetime), "%s : %s", _("IDS_EMAIL_BODY_LAST_UPDATED"), formatted_text);
@@ -200,10 +200,10 @@ void mailbox_set_last_updated_time(time_t last_update_time, EmailMailboxUGD *mai
 	debug_secure("date&time: %d [%s]", last_update_time, updatetime);
 
 	FREE(formatted_text);
-	FREE(mailbox_ugd->last_updated_time);
-	mailbox_ugd->last_updated_time = calloc(1, LAST_UPDATED_TIME);
-	retm_if(!mailbox_ugd->last_updated_time, "mailbox_ugd->last_updated_time is NULL!");
-	memcpy(mailbox_ugd->last_updated_time, updatetime, LAST_UPDATED_TIME);
+	FREE(view->last_updated_time);
+	view->last_updated_time = calloc(1, LAST_UPDATED_TIME);
+	retm_if(!view->last_updated_time, "view->last_updated_time is NULL!");
+	memcpy(view->last_updated_time, updatetime, LAST_UPDATED_TIME);
 
 }
 
@@ -216,13 +216,13 @@ int mailbox_compare_mailid_in_list(gconstpointer a, gconstpointer b)
 		return 1;
 }
 
-Evas_Object *mailbox_create_timeout_popup(EmailMailboxUGD *mailbox_ugd, const char *title_text, const char *contents_text, double timeout)
+Evas_Object *mailbox_create_timeout_popup(EmailMailboxView *view, const char *title_text, const char *contents_text, double timeout)
 {
 	debug_enter();
-	retvm_if(!mailbox_ugd, NULL, "mailbox_ugd is NULL");
+	retvm_if(!view, NULL, "view is NULL");
 	retvm_if(!contents_text, NULL, "contents_text is NULL");
 
-	Evas_Object *popup = elm_popup_add(mailbox_ugd->base.module->navi);
+	Evas_Object *popup = elm_popup_add(view->base.module->navi);
 
 	evas_object_size_hint_weight_set(popup, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	elm_popup_align_set(popup, ELM_NOTIFY_ALIGN_FILL, 1.0);
@@ -242,17 +242,17 @@ Evas_Object *mailbox_create_timeout_popup(EmailMailboxUGD *mailbox_ugd, const ch
 	return popup;
 }
 
-Evas_Object *mailbox_create_popup(EmailMailboxUGD *mailbox_ugd, const char *title, const char *content, Evas_Smart_Cb back_button_cb,
+Evas_Object *mailbox_create_popup(EmailMailboxView *view, const char *title, const char *content, Evas_Smart_Cb back_button_cb,
 		Evas_Smart_Cb btn1_response_cb, const char *btn1_text, Evas_Smart_Cb btn2_response_cb, const char *btn2_text)
 {
 	debug_enter();
-	retvm_if(!mailbox_ugd, NULL, "mailbox_ugd is NULL");
+	retvm_if(!view, NULL, "view is NULL");
 	retvm_if(!content, NULL, "content is NULL");
 	retvm_if(!back_button_cb, NULL, "response_cb is NULL");
 	retvm_if(!btn1_response_cb || !btn1_text, NULL, "btn1_response_cb or btn1_text is NULL");
 
-	Evas_Object *popup = elm_popup_add(mailbox_ugd->base.module->navi);
-	eext_object_event_callback_add(popup, EEXT_CALLBACK_BACK, back_button_cb, mailbox_ugd);
+	Evas_Object *popup = elm_popup_add(view->base.module->navi);
+	eext_object_event_callback_add(popup, EEXT_CALLBACK_BACK, back_button_cb, view);
 	evas_object_size_hint_weight_set(popup, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	elm_popup_align_set(popup, ELM_NOTIFY_ALIGN_FILL, 1.0);
 
@@ -268,21 +268,21 @@ Evas_Object *mailbox_create_popup(EmailMailboxUGD *mailbox_ugd, const char *titl
 		elm_object_style_set(btn1, "popup");
 		elm_object_domain_translatable_text_set(btn1, PACKAGE, btn1_text);
 		elm_object_part_content_set(popup, "button1", btn1);
-		evas_object_smart_callback_add(btn1, "clicked", btn1_response_cb, mailbox_ugd);
+		evas_object_smart_callback_add(btn1, "clicked", btn1_response_cb, view);
 		elm_object_focus_set(btn1, EINA_TRUE);
 
 		Evas_Object *btn2 = elm_button_add(popup);
 		elm_object_style_set(btn2, "popup");
 		elm_object_domain_translatable_text_set(btn2, PACKAGE, btn2_text);
 		elm_object_part_content_set(popup, "button2", btn2);
-		evas_object_smart_callback_add(btn2, "clicked", btn2_response_cb, mailbox_ugd);
+		evas_object_smart_callback_add(btn2, "clicked", btn2_response_cb, view);
 
 	} else {
 		Evas_Object *btn1 = elm_button_add(popup);
 		elm_object_style_set(btn1, "popup");
 		elm_object_domain_translatable_text_set(btn1, PACKAGE, btn1_text);
 		elm_object_part_content_set(popup, "button1", btn1);
-		evas_object_smart_callback_add(btn1, "clicked", btn1_response_cb, mailbox_ugd);
+		evas_object_smart_callback_add(btn1, "clicked", btn1_response_cb, view);
 		elm_object_focus_set(btn1, EINA_TRUE);
 	}
 
@@ -291,7 +291,7 @@ Evas_Object *mailbox_create_popup(EmailMailboxUGD *mailbox_ugd, const char *titl
 	return popup;
 }
 
-void mailbox_create_error_popup(int error_type, int account_id, EmailMailboxUGD *mailbox_ugd)
+void mailbox_create_error_popup(int error_type, int account_id, EmailMailboxView *view)
 {
 	debug_enter();
 
@@ -344,59 +344,59 @@ void mailbox_create_password_changed_popup(void *data, int account_id)
 {
 	debug_enter();
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
+	EmailMailboxView *view = (EmailMailboxView *)data;
 
-	DELETE_EVAS_OBJECT(mailbox_ugd->passwd_popup);
-	mailbox_ugd->passwd_popup = email_util_create_password_changed_popup(
-			mailbox_ugd->base.module->navi, account_id, _mailbox_password_popup_ok_cb,
+	DELETE_EVAS_OBJECT(view->passwd_popup);
+	view->passwd_popup = email_util_create_password_changed_popup(
+			view->base.module->navi, account_id, _mailbox_password_popup_ok_cb,
 			_mailbox_password_popup_canceled_cb, data);
 }
 
-void mailbox_check_sort_type_validation(EmailMailboxUGD *mailbox_ugd)
+void mailbox_check_sort_type_validation(EmailMailboxView *view)
 {
 	debug_enter();
 
-	if (mailbox_ugd->sort_type == EMAIL_SORT_IMPORTANT) {
-		if (!(mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX &&
-			mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX && mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_DRAFT)) {
+	if (view->sort_type == EMAIL_SORT_IMPORTANT) {
+		if (!(view->mode == EMAIL_MAILBOX_MODE_MAILBOX &&
+			view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX && view->mailbox_type != EMAIL_MAILBOX_TYPE_DRAFT)) {
 			debug_log("Account options. sort_type is changed into EMAIL_SORT_DATE_RECENT");
-			mailbox_ugd->sort_type_index = SORTBY_DATE_RECENT;
-			mailbox_ugd->sort_type = EMAIL_SORT_DATE_RECENT;
+			view->sort_type_index = SORTBY_DATE_RECENT;
+			view->sort_type = EMAIL_SORT_DATE_RECENT;
 		}
 	}
 
-	if (mailbox_ugd->sort_type == EMAIL_SORT_TO_CC_BCC) {
-		if (mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX ||
-			mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_DRAFT ||
-			mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_SENTBOX) {
+	if (view->sort_type == EMAIL_SORT_TO_CC_BCC) {
+		if (view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX ||
+			view->mailbox_type == EMAIL_MAILBOX_TYPE_DRAFT ||
+			view->mailbox_type == EMAIL_MAILBOX_TYPE_SENTBOX) {
 			debug_log("Not outbox options. sort_type is changed into EMAIL_SORT_DATE_RECENT");
-			mailbox_ugd->sort_type_index = SORTBY_DATE_RECENT;
-			mailbox_ugd->sort_type = EMAIL_SORT_DATE_RECENT;
+			view->sort_type_index = SORTBY_DATE_RECENT;
+			view->sort_type = EMAIL_SORT_DATE_RECENT;
 		}
 	}
 }
 
-void mailbox_account_color_list_add(EmailMailboxUGD *mailbox_ugd, int account_id, int account_color)
+void mailbox_account_color_list_add(EmailMailboxView *view, int account_id, int account_color)
 {
 	debug_enter();
-	retm_if(!mailbox_ugd, "invalid parameter, mailbox_ugd is NULL");
+	retm_if(!view, "invalid parameter, view is NULL");
 	debug_log("account_color : %d", account_color);
 
 	MailboxAccountColor *account_color_data = MEM_ALLOC(account_color_data, 1);
 	account_color_data->account_id = account_id;
 	account_color_data->account_color = account_color;
-	mailbox_ugd->account_color_list = g_list_append(mailbox_ugd->account_color_list, account_color_data);
+	view->account_color_list = g_list_append(view->account_color_list, account_color_data);
 }
 
-void mailbox_account_color_list_update(EmailMailboxUGD *mailbox_ugd, int account_id, int update_color)
+void mailbox_account_color_list_update(EmailMailboxView *view, int account_id, int update_color)
 {
 	debug_enter();
-	retm_if(account_id <= 0 || !mailbox_ugd, "invalid parameter, account_id : %d", account_id);
+	retm_if(account_id <= 0 || !view, "invalid parameter, account_id : %d", account_id);
 
-	if (mailbox_ugd->account_color_list) {
+	if (view->account_color_list) {
 		GList *cur = NULL;
 		MailboxAccountColor *account_color_data = NULL;
-		G_LIST_FOREACH(mailbox_ugd->account_color_list, cur, account_color_data) {
+		G_LIST_FOREACH(view->account_color_list, cur, account_color_data) {
 			if (account_color_data->account_id == account_id) {
 				account_color_data->account_color = update_color;
 				break;
@@ -405,18 +405,18 @@ void mailbox_account_color_list_update(EmailMailboxUGD *mailbox_ugd, int account
 	}
 }
 
-void mailbox_account_color_list_remove(EmailMailboxUGD *mailbox_ugd, int account_id)
+void mailbox_account_color_list_remove(EmailMailboxView *view, int account_id)
 {
 	debug_enter();
-	retm_if(account_id <= 0 || !mailbox_ugd, "invalid parameter, account_id : %d", account_id);
+	retm_if(account_id <= 0 || !view, "invalid parameter, account_id : %d", account_id);
 	debug_log("account_id : %d", account_id);
 
-	if (mailbox_ugd->account_color_list) {
+	if (view->account_color_list) {
 		GList *cur = NULL;
 		MailboxAccountColor *account_color_data = NULL;
-		G_LIST_FOREACH(mailbox_ugd->account_color_list, cur, account_color_data) {
+		G_LIST_FOREACH(view->account_color_list, cur, account_color_data) {
 			if (account_color_data->account_id == account_id) {
-				mailbox_ugd->account_color_list = g_list_remove(mailbox_ugd->account_color_list, account_color_data);
+				view->account_color_list = g_list_remove(view->account_color_list, account_color_data);
 				FREE(account_color_data);
 				break;
 			}
@@ -424,17 +424,17 @@ void mailbox_account_color_list_remove(EmailMailboxUGD *mailbox_ugd, int account
 	}
 }
 
-int mailbox_account_color_list_get_account_color(EmailMailboxUGD *mailbox_ugd, int account_id)
+int mailbox_account_color_list_get_account_color(EmailMailboxView *view, int account_id)
 {
-	if (account_id <= 0 || !mailbox_ugd) {
+	if (account_id <= 0 || !view) {
 		debug_log("invalid parameter, account_id : %d", account_id);
 		return 0;
 	}
 
-	if (mailbox_ugd->account_color_list) {
+	if (view->account_color_list) {
 		GList *cur = NULL;
 		MailboxAccountColor *account_color_data = NULL;
-		G_LIST_FOREACH(mailbox_ugd->account_color_list, cur, account_color_data) {
+		G_LIST_FOREACH(view->account_color_list, cur, account_color_data) {
 			if (account_color_data->account_id == account_id) {
 				return account_color_data->account_color;
 			}
@@ -443,20 +443,20 @@ int mailbox_account_color_list_get_account_color(EmailMailboxUGD *mailbox_ugd, i
 	return 0;
 }
 
-void mailbox_account_color_list_free(EmailMailboxUGD *mailbox_ugd)
+void mailbox_account_color_list_free(EmailMailboxView *view)
 {
-	retm_if(mailbox_ugd == NULL, "mailbox_ugd[NULL]");
+	retm_if(view == NULL, "view[NULL]");
 
-	debug_log("mailbox_ugd->account_color_list(%p)", mailbox_ugd->account_color_list);
+	debug_log("view->account_color_list(%p)", view->account_color_list);
 
-	if (mailbox_ugd->account_color_list) {
+	if (view->account_color_list) {
 		GList *cur = NULL;
 		MailboxAccountColor *account_color_data = NULL;
-		G_LIST_FOREACH(mailbox_ugd->account_color_list, cur, account_color_data) {
+		G_LIST_FOREACH(view->account_color_list, cur, account_color_data) {
 			FREE(account_color_data);
 		}
-		g_list_free(mailbox_ugd->account_color_list);
-		mailbox_ugd->account_color_list = NULL;
+		g_list_free(view->account_color_list);
+		view->account_color_list = NULL;
 	}
 }
 

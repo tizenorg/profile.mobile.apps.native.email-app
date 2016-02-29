@@ -20,9 +20,9 @@
 
 /**
  * @brief Cancel search mode in Mailbox and return to normal view
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_finish_search_mode(EmailMailboxUGD *mailbox_ugd);
+void mailbox_finish_search_mode(EmailMailboxView *view);
 
 /**
  * @brief Free Email search data
@@ -38,21 +38,21 @@ void _search_button_clicked_cb(void *data, Evas_Object *obj EINA_UNUSED, void *e
 
 /**
  * @brief Callback that provides click on search button
- * @param[in]	mailbox_ugd				Email mailbox data
+ * @param[in]	view				Email mailbox data
  * @param[in]	show_search_layout		Bool value to define the search state
  */
-void mailbox_change_search_layout_state(EmailMailboxUGD *mailbox_ugd, bool show_search_layout);
+void mailbox_change_search_layout_state(EmailMailboxView *view, bool show_search_layout);
 
 /**
  * @brief Create and initialize Email search data
  * @param[in]	data				User data (Email mailbox data)
  */
-email_search_data_t *mailbox_make_search_data(EmailMailboxUGD *mailbox_ugd);
+email_search_data_t *mailbox_make_search_data(EmailMailboxView *view);
 
 /**
  * @brief Show search result
- * @param[in]	mailbox_ugd			Email mailbox data
+ * @param[in]	view			Email mailbox data
  */
-int mailbox_show_search_result(EmailMailboxUGD *mailbox_ugd);
+int mailbox_show_search_result(EmailMailboxView *view);
 
 #endif	/* __DEF_EMAIL_MAILBOX_SEARCH_H_ */

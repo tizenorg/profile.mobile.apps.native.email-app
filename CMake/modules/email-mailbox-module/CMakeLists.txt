@@ -15,7 +15,7 @@ SET(SRCS
 	${CURRENT_SOURCE_DIR}/src/email-mailbox-sync.c
 	${CURRENT_SOURCE_DIR}/src/email-mailbox-title.c
 	${CURRENT_SOURCE_DIR}/src/email-mailbox-toolbar.c
-	${CURRENT_SOURCE_DIR}/src/email-mailbox-ug-util.c
+	${CURRENT_SOURCE_DIR}/src/email-mailbox-module-util.c
 	${CURRENT_SOURCE_DIR}/src/email-mailbox-util.c
 )
 

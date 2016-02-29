@@ -20,10 +20,10 @@
 
 /**
  * @brief Creates the toolbar more button for Mailbox viewer
- * @param[in]	mailbox_ugd			Email mailbox data
+ * @param[in]	view			Email mailbox data
  * @return Evas_Object instance with suitable more button, otherwise NULL
  */
-Evas_Object *mailbox_create_toolbar_more_btn(EmailMailboxUGD *mailbox_ugd);
+Evas_Object *mailbox_create_toolbar_more_btn(EmailMailboxView *view);
 
 /**
  * @brief Delete emails from selected mail list in Email mailbox, at the end shows popup that deletion operation is done
@@ -63,21 +63,21 @@ void mailbox_markread_mail(void *data);
 
 /**
  * @brief Creates floating button on Mailbox viewer to provide compose of new message
- * @param[in]	mailbox_ugd			Email mailbox data
+ * @param[in]	view			Email mailbox data
  */
-void mailbox_create_compose_btn(EmailMailboxUGD *mailbox_ugd);
+void mailbox_create_compose_btn(EmailMailboxView *view);
 
 /**
  * @brief Show on Mailbox viewer previously created compose new message floating button
- * @param[in]	mailbox_ugd			Email mailbox data
+ * @param[in]	view			Email mailbox data
  */
-void mailbox_show_compose_btn(EmailMailboxUGD *mailbox_ugd);
+void mailbox_show_compose_btn(EmailMailboxView *view);
 
 /**
  * @brief Hide compose new message floating button
- * @param[in]	mailbox_ugd			Email mailbox data
+ * @param[in]	view			Email mailbox data
  */
-void mailbox_hide_compose_btn(EmailMailboxUGD *mailbox_ugd);
+void mailbox_hide_compose_btn(EmailMailboxView *view);
 
 
 #endif	/* __DEF_EMAIL_MAILBOX_MORE_MENU_H_ */

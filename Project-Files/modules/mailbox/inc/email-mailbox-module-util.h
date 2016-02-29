@@ -15,8 +15,8 @@
  *
  */
 
-#ifndef __DEF_EMAIL_MAILBOX_UG_UTIL_H_
-#define __DEF_EMAIL_MAILBOX_UG_UTIL_H_
+#ifndef __DEF_EMAIL_MAILBOX_MODULE_UTIL_H_
+#define __DEF_EMAIL_MAILBOX_MODULE_UTIL_H_
 
 /**
  * @brief Creates Composer module from Mailbox view
@@ -82,4 +82,4 @@ email_module_h mailbox_setting_module_create(void *data, email_module_type_e typ
  */
 void mailbox_setting_module_destroy(void *priv, email_module_h module);
 
-#endif /*__DEF_EMAIL_MAILBOX_UG_UTIL_H_*/
+#endif /*__DEF_EMAIL_MAILBOX_MODULE_UTIL_H_*/

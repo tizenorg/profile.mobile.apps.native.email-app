@@ -20,46 +20,46 @@
 
 /**
  * @brief Pack title layout to Mailbox view content
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_view_title_pack(EmailMailboxUGD *mailbox_ugd);
+void mailbox_view_title_pack(EmailMailboxView *view);
 
 /**
  * @brief Unpack title from Mailbox view
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_view_title_unpack(EmailMailboxUGD *mailbox_ugd);
+void mailbox_view_title_unpack(EmailMailboxView *view);
 
 /**
  * @brief Updates title for Mailbox view
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_view_title_update_all(EmailMailboxUGD *mailbox_ugd);
+void mailbox_view_title_update_all(EmailMailboxView *view);
 
 /**
  * @brief Apply updated title to Mailbox view
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_view_title_update_all_without_mailbox_change(EmailMailboxUGD *mailbox_ugd);
+void mailbox_view_title_update_all_without_mailbox_change(EmailMailboxView *view);
 
 /**
  * @brief Update account name for Mailbox view title
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_view_title_update_account_name(EmailMailboxUGD *mailbox_ugd);
+void mailbox_view_title_update_account_name(EmailMailboxView *view);
 
 /**
  * @brief Actual updates of mail count for Mailbox view title
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_view_title_update_mail_count(EmailMailboxUGD *mailbox_ugd);
+void mailbox_view_title_update_mail_count(EmailMailboxView *view);
 
 /**
  * @brief Updates Mailbox view title for total and unread mails
  * @param[in]	total_count		Count of total mails
  * @param[in]	unread_count	Count of unread mails
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_view_title_increase_mail_count(int total_count, int unread_count, EmailMailboxUGD *mailbox_ugd);
+void mailbox_view_title_increase_mail_count(int total_count, int unread_count, EmailMailboxView *view);
 
 #endif				/* __DEF_EMAIL_MAILBOX_TITLE_H_ */

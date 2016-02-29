@@ -25,7 +25,7 @@
 #include "email-mailbox-noti-mgr.h"
 #include "email-mailbox-request.h"
 #include "email-mailbox-title.h"
-#include "email-mailbox-ug-util.h"
+#include "email-mailbox-module-util.h"
 #include "email-mailbox-util.h"
 #include "email-mailbox-toolbar.h"
 
@@ -39,8 +39,8 @@ static void _parse_set_rule_buf(char *inbuf, GList **mail_list);
 static void _parse_set_move_buf(char *inbuf, int *from_box_id, int *to_box_id, GList **mail_list);
 static void _parse_set_flag_buf(char *inbuf, char **field_name, GList **mail_list);
 static Eina_Bool _check_req_handle_list(int handle);
-static void _sending_mail_list_add_mail_id(EmailMailboxUGD *mailbox_ugd, int mail_id);
-static Eina_Bool _check_sending_mail_list(EmailMailboxUGD *mailbox_ugd, int mail_id);
+static void _sending_mail_list_add_mail_id(EmailMailboxView *view, int mail_id);
+static Eina_Bool _check_sending_mail_list(EmailMailboxView *view, int mail_id);
 static Eina_Bool _check_req_account_list(int account);
 static void _mailbox_remove_deleted_flag_mail(int mail_id, void *data);
 
@@ -71,9 +71,9 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 	debug_enter();
 
 	debug_secure("Object path=%s, interface name=%s, signal name=%s", object_path, interface_name, signal_name);
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
+	EmailMailboxView *view = (EmailMailboxView *)data;
 
-	if (mailbox_ugd == NULL) {
+	if (view == NULL) {
 		debug_warning("data is NULL");
 		return;
 	}
@@ -96,7 +96,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 		int mailid = 0;
 		int mailbox_id = 0;
 		int err = 0;
-		email_sort_type_e sort_type = mailbox_ugd->sort_type;
+		email_sort_type_e sort_type = view->sort_type;
 		email_mailbox_type_e mailbox_type = EMAIL_MAILBOX_TYPE_NONE;
 		email_mailbox_t *mailbox = NULL;
 		email_account_t *account = NULL;
@@ -109,7 +109,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 		case NOTI_ACCOUNT_ADD:
 			debug_trace("NOTI_ACCOUNT_ADD");
 
-			if (mailbox_ugd->b_restoring) {
+			if (view->b_restoring) {
 				debug_trace("email account is being restored now.");
 				break;
 			}
@@ -117,19 +117,19 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 			account_id = data1;
 
 			if (email_engine_get_account_list(&account_count, &account_list))
-				mailbox_ugd->account_count = account_count;
+				view->account_count = account_count;
 			else
-				mailbox_ugd->account_count = 0;
+				view->account_count = 0;
 
 			if (account_list)
 				email_engine_free_account_list(&account_list, account_count);
 
-			/* destroy all top ug and refresh all emails */
-			if (mailbox_ugd->account) {
-				mailbox_account_module_destroy(mailbox_ugd, mailbox_ugd->account);
+			/* destroy all top modules and refresh all emails */
+			if (view->account) {
+				mailbox_account_module_destroy(view, view->account);
 			}
-			if (mailbox_ugd->composer) {
-				mailbox_composer_module_destroy(mailbox_ugd, mailbox_ugd->composer);
+			if (view->composer) {
+				mailbox_composer_module_destroy(view, view->composer);
 			}
 
 			err = email_get_account(account_id, EMAIL_ACC_GET_OPT_DEFAULT, &account);
@@ -140,40 +140,40 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 				break;
 			}
 
-			mailbox_hide_no_contents_view(mailbox_ugd);
+			mailbox_hide_no_contents_view(view);
 
-			mailbox_ugd->account_id = account_id;
-			mailbox_ugd->account_type = account->incoming_server_type;
-			mailbox_ugd->mode = EMAIL_MAILBOX_MODE_MAILBOX;
-			mailbox_ugd->mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
+			view->account_id = account_id;
+			view->account_type = account->incoming_server_type;
+			view->mode = EMAIL_MAILBOX_MODE_MAILBOX;
+			view->mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
 
-			mailbox_account_color_list_add(mailbox_ugd, account_id, account->color_label);
+			mailbox_account_color_list_add(view, account_id, account->color_label);
 
-			G_FREE(mailbox_ugd->account_name);
-			G_FREE(mailbox_ugd->mailbox_alias);
+			G_FREE(view->account_name);
+			G_FREE(view->mailbox_alias);
 
-			mailbox_ugd->account_name = g_strdup(account->user_email_address);
+			view->account_name = g_strdup(account->user_email_address);
 
 			email_free_account(&account, 1);
 
-			err = email_get_mailbox_by_mailbox_type(mailbox_ugd->account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox);
+			err = email_get_mailbox_by_mailbox_type(view->account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox);
 			if (err == EMAIL_ERROR_NONE && mailbox) {
-				mailbox_ugd->mailbox_id = mailbox->mailbox_id;
+				view->mailbox_id = mailbox->mailbox_id;
 				email_free_mailbox(&mailbox, 1);
 			} else {
-				mailbox_ugd->mailbox_id = 0;
-				debug_warning("email_get_mailbox_by_mailbox_type : account_id(%d) type(INBOX) - err(%d) or mailbox is NULL(%p)", mailbox_ugd->account_id, err, mailbox);
+				view->mailbox_id = 0;
+				debug_warning("email_get_mailbox_by_mailbox_type : account_id(%d) type(INBOX) - err(%d) or mailbox is NULL(%p)", view->account_id, err, mailbox);
 			}
 
-			if (mailbox_ugd->b_editmode) {
-				mailbox_exit_edit_mode(mailbox_ugd);
+			if (view->b_editmode) {
+				mailbox_exit_edit_mode(view);
 			}
 
-			mailbox_view_title_update_all(mailbox_ugd);
-			mailbox_update_notifications_status(mailbox_ugd);
-			mailbox_list_refresh(mailbox_ugd, NULL);
-			mailbox_load_more_messages_item_remove(mailbox_ugd);
-			mailbox_no_more_emails_item_remove(mailbox_ugd);
+			mailbox_view_title_update_all(view);
+			mailbox_update_notifications_status(view);
+			mailbox_list_refresh(view, NULL);
+			mailbox_load_more_messages_item_remove(view);
+			mailbox_no_more_emails_item_remove(view);
 
 			mailbox_req_handle_list_free();
 
@@ -182,73 +182,73 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 		case NOTI_ACCOUNT_DELETE:
 			debug_log("NOTI_ACCOUNT_DELETE");
 
-			if (mailbox_ugd->b_restoring) {
+			if (view->b_restoring) {
 				debug_trace("email account is being restored now.");
 				break;
 			}
 
 			account_id = data1;
 
-			mailbox_ugd->account_count--;
-			mailbox_account_color_list_remove(mailbox_ugd, account_id);
+			view->account_count--;
+			mailbox_account_color_list_remove(view, account_id);
 
-			/* destroy all top ug and refresh all emails */
-			if (mailbox_ugd->account) {
-				mailbox_account_module_destroy(mailbox_ugd, mailbox_ugd->account);
+			/* destroy all top modules and refresh all emails */
+			if (view->account) {
+				mailbox_account_module_destroy(view, view->account);
 			}
-			if (mailbox_ugd->composer) {
-				mailbox_composer_module_destroy(mailbox_ugd, mailbox_ugd->composer);
+			if (view->composer) {
+				mailbox_composer_module_destroy(view, view->composer);
 			}
 
-			if (mailbox_ugd->account_count <= 0) {
+			if (view->account_count <= 0) {
 				debug_log("no account exists");
 				email_set_need_restart_flag(true);
-				email_module_make_destroy_request(mailbox_ugd->base.module);
+				email_module_make_destroy_request(view->base.module);
 				return;
 			}
 
-			if (mailbox_ugd->account_id == 0 || mailbox_ugd->account_id == account_id) {
-				if (mailbox_ugd->account_count == 1) {
+			if (view->account_id == 0 || view->account_id == account_id) {
+				if (view->account_count == 1) {
 					int err = 0;
 					email_mailbox_t *mailbox = NULL;
 					int default_account_id = 0;
 
 					if (email_engine_get_default_account(&default_account_id)) {
-						mailbox_ugd->account_id = default_account_id;
+						view->account_id = default_account_id;
 
-						err = email_get_mailbox_by_mailbox_type(mailbox_ugd->account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox);
+						err = email_get_mailbox_by_mailbox_type(view->account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox);
 						if (err == EMAIL_ERROR_NONE && mailbox) {
-							mailbox_ugd->mailbox_id = mailbox->mailbox_id;
+							view->mailbox_id = mailbox->mailbox_id;
 						} else {
-							mailbox_ugd->mailbox_id = 0;
-							debug_warning("email_get_mailbox_by_mailbox_type : account_id(%d) type(INBOX) - err(%d) or mailbox is NULL(%p)", mailbox_ugd->account_id, err, mailbox);
+							view->mailbox_id = 0;
+							debug_warning("email_get_mailbox_by_mailbox_type : account_id(%d) type(INBOX) - err(%d) or mailbox is NULL(%p)", view->account_id, err, mailbox);
 						}
 						if (mailbox)
 							email_free_mailbox(&mailbox, 1);
 
-						mailbox_ugd->mode = EMAIL_MAILBOX_MODE_MAILBOX;
-						mailbox_ugd->mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
+						view->mode = EMAIL_MAILBOX_MODE_MAILBOX;
+						view->mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
 					} else {
 						debug_log("email_engine_get_default_account failed");
 					}
 				} else {
-					mailbox_ugd->account_id = 0;
-					mailbox_ugd->mode = EMAIL_MAILBOX_MODE_ALL;
-					mailbox_ugd->mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
-					mailbox_ugd->mailbox_id = 0;
-					G_FREE(mailbox_ugd->account_name);
-					G_FREE(mailbox_ugd->mailbox_alias);
+					view->account_id = 0;
+					view->mode = EMAIL_MAILBOX_MODE_ALL;
+					view->mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
+					view->mailbox_id = 0;
+					G_FREE(view->account_name);
+					G_FREE(view->mailbox_alias);
 				}
 
-				if (mailbox_ugd->b_editmode)
-					mailbox_exit_edit_mode(mailbox_ugd);
+				if (view->b_editmode)
+					mailbox_exit_edit_mode(view);
 
-				if (mailbox_ugd->b_searchmode)
-					mailbox_finish_search_mode(mailbox_ugd);
+				if (view->b_searchmode)
+					mailbox_finish_search_mode(view);
 
-				mailbox_view_title_update_all(mailbox_ugd);
-				mailbox_update_notifications_status(mailbox_ugd);
-				mailbox_list_refresh(mailbox_ugd, NULL);
+				mailbox_view_title_update_all(view);
+				mailbox_update_notifications_status(view);
+				mailbox_list_refresh(view, NULL);
 			}
 
 			break;
@@ -263,26 +263,26 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 				return;
 			}
 			if (account) {
-				mailbox_account_color_list_update(mailbox_ugd, account_id, account->color_label);
+				mailbox_account_color_list_update(view, account_id, account->color_label);
 				email_engine_free_account_list(&account, 1);
 			}
 
-			if (account_id == mailbox_ugd->account_id)
-				mailbox_view_title_update_account_name(mailbox_ugd);
+			if (account_id == view->account_id)
+				mailbox_view_title_update_account_name(view);
 
 			break;
 
 		case NOTI_ACCOUNT_UPDATE_SYNC_STATUS:
 			debug_log("NOTI_ACCOUNT_UPDATE_SYNC_STATUS");
 			account_id = data1;
-			if (data2 == SYNC_STATUS_FINISHED && (mailbox_ugd->account_id == 0 || mailbox_ugd->account_id == account_id)) {
-				mailbox_view_title_update_mail_count(mailbox_ugd);
+			if (data2 == SYNC_STATUS_FINISHED && (view->account_id == 0 || view->account_id == account_id)) {
+				mailbox_view_title_update_mail_count(view);
 			}
 			if (data2 == SYNC_STATUS_HAVE_NEW_MAILS
-				&& mailbox_ugd->base.state == EV_STATE_ACTIVE
-				&& mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX
-				&& mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX
-				&& mailbox_ugd->account_id != account_id) {
+				&& view->base.state == EV_STATE_ACTIVE
+				&& view->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX
+				&& view->mode == EMAIL_MAILBOX_MODE_MAILBOX
+				&& view->account_id != account_id) {
 				debug_log("update notification bar(%d)", account_id);
 				email_update_notification_bar(account_id, 0, 0, 0);
 			}
@@ -294,12 +294,12 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 			mailbox_id = data2;
 			mailbox_type = data4;
 
-			if (mailbox_ugd->account_id == account_id
-				&& mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX
-				&& mailbox_ugd->mailbox_type == mailbox_type
-				&& mailbox_ugd->mailbox_id == 0) {
-				mailbox_ugd->mailbox_id = mailbox_id;
-				debug_log("mailbox_ugd->mailbox_id(%d) is set", mailbox_ugd->mailbox_id);
+			if (view->account_id == account_id
+				&& view->mode == EMAIL_MAILBOX_MODE_MAILBOX
+				&& view->mailbox_type == mailbox_type
+				&& view->mailbox_id == 0) {
+				view->mailbox_id = mailbox_id;
+				debug_log("view->mailbox_id(%d) is set", view->mailbox_id);
 			}
 
 			break;
@@ -309,17 +309,17 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 			account_id = data1;
 			mailbox_id = data2;
 
-			if (mailbox_ugd->mailbox_id == data2 && mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX) {
-				mailbox_ugd->mailbox_id = GET_MAILBOX_ID(account_id, EMAIL_MAILBOX_TYPE_INBOX);
-				debug_log("current folder view is destroyed.(mailbox_id : %d -> %d)", data2, mailbox_ugd->mailbox_id);
-				if (mailbox_ugd->b_editmode) {
-					mailbox_exit_edit_mode(mailbox_ugd);
-				} else if (mailbox_ugd->b_searchmode) {
-					mailbox_finish_search_mode(mailbox_ugd);
+			if (view->mailbox_id == data2 && view->mode == EMAIL_MAILBOX_MODE_MAILBOX) {
+				view->mailbox_id = GET_MAILBOX_ID(account_id, EMAIL_MAILBOX_TYPE_INBOX);
+				debug_log("current folder view is destroyed.(mailbox_id : %d -> %d)", data2, view->mailbox_id);
+				if (view->b_editmode) {
+					mailbox_exit_edit_mode(view);
+				} else if (view->b_searchmode) {
+					mailbox_finish_search_mode(view);
 				}
-				mailbox_view_title_update_all(mailbox_ugd);
-				mailbox_check_sort_type_validation(mailbox_ugd);
-				mailbox_list_refresh(mailbox_ugd, NULL);
+				mailbox_view_title_update_all(view);
+				mailbox_check_sort_type_validation(view);
+				mailbox_list_refresh(view, NULL);
 			}
 
 			break;
@@ -358,19 +358,19 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 			}
 			debug_log("account_id : %d, from_box_id= %d, to_box_id =%d, size of moved_count : %d", account_id, from_box_id, to_box_id, moved_count);
 
-			if (mailbox_ugd->move_status == EMAIL_ERROR_NONE) {
-				mailbox_ugd->move_status = -1;
-				if (mailbox_ugd->moved_mailbox_name) {
+			if (view->move_status == EMAIL_ERROR_NONE) {
+				view->move_status = -1;
+				if (view->moved_mailbox_name) {
 					if (moved_count == 1) {
 						char str[MAX_STR_LEN] = { 0, };
-						snprintf(str, sizeof(str), email_get_email_string("IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_PS"), mailbox_ugd->moved_mailbox_name);
+						snprintf(str, sizeof(str), email_get_email_string("IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_PS"), view->moved_mailbox_name);
 						ret = notification_status_message_post(str);
 					} else {
 						char str[MAX_STR_LEN] = { 0, };
-						snprintf(str, sizeof(str), email_get_email_string("IDS_EMAIL_TPOP_P1SD_EMAILS_MOVED_TO_P2SS"), moved_count, mailbox_ugd->moved_mailbox_name);
+						snprintf(str, sizeof(str), email_get_email_string("IDS_EMAIL_TPOP_P1SD_EMAILS_MOVED_TO_P2SS"), moved_count, view->moved_mailbox_name);
 						ret = notification_status_message_post(str);
 					}
-					G_FREE(mailbox_ugd->moved_mailbox_name);
+					G_FREE(view->moved_mailbox_name);
 				} else {
 					if (moved_count == 1) {
 						ret = notification_status_message_post(email_get_email_string("IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_SELECTED_FOLDER"));
@@ -383,25 +383,25 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 				if (ret != NOTIFICATION_ERROR_NONE) {
 					debug_log("notification_status_message_post() failed: %d", ret);
 				}
-			} else if (mailbox_ugd->need_deleted_noti) {
-				mailbox_ugd->need_deleted_noti = false;
+			} else if (view->need_deleted_noti) {
+				view->need_deleted_noti = false;
 			}
 
 			if (sort_type == EMAIL_SORT_SENDER_ATOZ || sort_type == EMAIL_SORT_SENDER_ZTOA
 					|| sort_type == EMAIL_SORT_RCPT_ATOZ || sort_type == EMAIL_SORT_RCPT_ZTOA
 					|| sort_type == EMAIL_SORT_SUBJECT_ATOZ || sort_type == EMAIL_SORT_SUBJECT_ZTOA) {
-				mailbox_list_refresh(mailbox_ugd, NULL);
+				mailbox_list_refresh(view, NULL);
 			} else {
 				MoveMailReqData *req = MEM_ALLOC(req, 1);
 				retm_if(!req, "req is NULL");
-				*req = (MoveMailReqData) {account_id, 0, g_strdup(msg_buf), mailbox_ugd};
+				*req = (MoveMailReqData) {account_id, 0, g_strdup(msg_buf), view};
 
-				if (!email_request_queue_add_request(mailbox_ugd->request_queue, EMAIL_REQUEST_TYPE_MOVE_MAIL, req)) {
+				if (!email_request_queue_add_request(view->request_queue, EMAIL_REQUEST_TYPE_MOVE_MAIL, req)) {
 					debug_error("failed to add request EMAIL_REQUEST_TYPE_MOVE_WORKER");
 					free(req);
 				}
 
-				mailbox_view_title_update_mail_count(mailbox_ugd);
+				mailbox_view_title_update_mail_count(view);
 			}
 
 			break;
@@ -420,13 +420,13 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 
 		case NOTI_MAIL_MOVE_FAIL:
 			debug_log("NOTI_MAIL_MOVE_FAIL");
-			debug_log("move status is %d, %d", mailbox_ugd->move_status, EMAIL_ERROR_NONE);
+			debug_log("move status is %d, %d", view->move_status, EMAIL_ERROR_NONE);
 			int ret = 1;
-			if (mailbox_ugd->move_status != EMAIL_ERROR_NONE) {
+			if (view->move_status != EMAIL_ERROR_NONE) {
 				ret = notification_status_message_post(email_get_email_string("IDS_EMAIL_POP_FAILED_TO_MOVE"));
-			} else if (mailbox_ugd->need_deleted_noti) {
+			} else if (view->need_deleted_noti) {
 				ret = notification_status_message_post(email_get_email_string("IDS_EMAIL_POP_FAILED_TO_MOVE"));
-				mailbox_ugd->need_deleted_noti = false;
+				view->need_deleted_noti = false;
 			}
 			if (ret != NOTIFICATION_ERROR_NONE) {
 				debug_log("notification_status_message_post() failed: %d", ret);
@@ -438,36 +438,36 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 			account_id = data1;
 			msg_buf = data3;
 
-			if (mailbox_ugd->need_deleted_noti) {
-				/*if(mailbox_ugd->mode == EMAIL_MAILBOX_MODE_SCHEDULED_OUTBOX)
+			if (view->need_deleted_noti) {
+				/*if(view->mode == EMAIL_MAILBOX_MODE_SCHEDULED_OUTBOX)
 					notification_status_message_post(_("IDS_EMAIL_BODY_SCHEDULED_EMAIL_DELETED"));
 				else
 					notification_status_message_post(dgettext(PACKAGE, "IDS_EMAIL_BUTTON_DELETE_ABB4"));
 				*/
-				mailbox_ugd->need_deleted_noti = false;
+				view->need_deleted_noti = false;
 			}
 
 			DeleteMailReqData *req = MEM_ALLOC(req, 1);
 			retm_if(!req, "req is NULL");
 			/* this dynamic var should be freed in NotiCB */
-			*req = (DeleteMailReqData) {account_id, 0, g_strdup(msg_buf), mailbox_ugd};
+			*req = (DeleteMailReqData) {account_id, 0, g_strdup(msg_buf), view};
 
-			if (!email_request_queue_add_request(mailbox_ugd->request_queue, EMAIL_REQUEST_TYPE_DELETE_MAIL, req)) {
+			if (!email_request_queue_add_request(view->request_queue, EMAIL_REQUEST_TYPE_DELETE_MAIL, req)) {
 				debug_error("failed to add request EMAIL_REQUEST_TYPE_DELETE_WORKER");
 				free(req);
 			}
 
-			mailbox_view_title_update_mail_count(mailbox_ugd);
+			mailbox_view_title_update_mail_count(view);
 			break;
 
 		case NOTI_MAIL_DELETE_FAIL:
 			debug_log("NOTI_MAIL_DELETE_FAIL");
-			if (mailbox_ugd->need_deleted_noti) {
+			if (view->need_deleted_noti) {
 				int ret = notification_status_message_post(email_get_email_string("IDS_EMAIL_POP_FAILED_TO_DELETE"));
 				if (ret != NOTIFICATION_ERROR_NONE) {
 					debug_log("notification_status_message_post() failed: %d", ret);
 				}
-				mailbox_ugd->need_deleted_noti = false;
+				view->need_deleted_noti = false;
 			}
 			break;
 
@@ -478,24 +478,24 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 			mailid = data2;
 			mailbox_id = atoi(data3);
 
-			debug_log("mailbox_ugd->mode(%d), mailbox_ugd->mailbox_type(%d), mailbox_ugd->mailbox_id(%d)",
-					mailbox_ugd->mode, mailbox_ugd->mailbox_type, mailbox_ugd->mailbox_id);
+			debug_log("view->mode(%d), view->mailbox_type(%d), view->mailbox_id(%d)",
+					view->mode, view->mailbox_type, view->mailbox_id);
 
-			if ((mailbox_ugd->mode == EMAIL_MAILBOX_MODE_ALL && mailbox_ugd->mailbox_type == GET_MAILBOX_TYPE(mailbox_id))
-					|| (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX && mailbox_ugd->mailbox_id == mailbox_id)) {
+			if ((view->mode == EMAIL_MAILBOX_MODE_ALL && view->mailbox_type == GET_MAILBOX_TYPE(mailbox_id))
+					|| (view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->mailbox_id == mailbox_id)) {
 				AddMailReqData *req = MEM_ALLOC(req, 1);
 				retm_if(!req, "req is NULL");
 				/* this dynamic variable(req) should be freed in func_notify */
-				*req = (AddMailReqData) {account_id, thread_id, mailid, mailbox_id, mailbox_ugd->mailbox_type, true,
-					mailbox_ugd->mode, mailbox_ugd};
+				*req = (AddMailReqData) {account_id, thread_id, mailid, mailbox_id, view->mailbox_type, true,
+					view->mode, view};
 
-				if (!email_request_queue_add_request(mailbox_ugd->request_queue, EMAIL_REQUEST_TYPE_ADD_MAIL, req)) {
+				if (!email_request_queue_add_request(view->request_queue, EMAIL_REQUEST_TYPE_ADD_MAIL, req)) {
 					debug_error("failed to add request EMAIL_REQUEST_TYPE_ADD_MAIL_WORKER");
 					free(req);
 				}
 			}
 #ifndef _FEATURE_PRIORITY_SENDER_DISABLE_
-			else if (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER) {
+			else if (view->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER) {
 				email_mail_list_item_t *mail_info = NULL;
 				mail_info = email_engine_get_mail_by_mailid(mailid);
 				if (!mail_info) break;
@@ -505,10 +505,10 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 					AddMailReqData *req = MEM_ALLOC(req, 1);
 					retm_if(!req, "req is NULL");
 					/* this dynamic variable(req) should be freed in func_notify */
-					*req = (AddMailReqData) {account_id, thread_id, mailid, mailbox_id, mailbox_ugd->mailbox_type, true,
-						mailbox_ugd->mode, mailbox_ugd};
+					*req = (AddMailReqData) {account_id, thread_id, mailid, mailbox_id, view->mailbox_type, true,
+						view->mode, view};
 
-					if (!email_request_queue_add_request(mailbox_ugd->request_queue, EMAIL_REQUEST_TYPE_ADD_MAIL, req)) {
+					if (!email_request_queue_add_request(view->request_queue, EMAIL_REQUEST_TYPE_ADD_MAIL, req)) {
 						debug_error("failed to add request EMAIL_REQUEST_TYPE_ADD_MAIL_WORKER");
 						free(req);
 					}
@@ -525,7 +525,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 			int type = data4;
 
 			if (type == UPDATE_PARTIAL_BODY_DOWNLOAD || type == APPEND_BODY) {
-				MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(mailid, mailbox_ugd->mail_list);
+				MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(mailid, view->mail_list);
 				if (ld) {
 					email_mail_list_item_t *mail_info = NULL;
 					mail_info = email_engine_get_mail_by_mailid(mailid);
@@ -543,28 +543,28 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 						STR_NCPY(ld->title, _subject, title_len + TAG_LEN);
 						FREE(_subject);
 					}
-					MAILBOX_UPDATE_GENLIST_ITEM(mailbox_ugd->gl, ld->item);
+					MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
 					FREE(mail_info);
 				}
 			} else if (type == UPDATE_EXTRA_FLAG) {
-				if (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX && mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
-					MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(mailid, mailbox_ugd->mail_list);
+				if (view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
+					MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(mailid, view->mail_list);
 					if (ld) {
 						email_mail_list_item_t *mail_info = NULL;
 						mail_info = email_engine_get_mail_by_mailid(mailid);
 						if (!mail_info) break;
 						if (mail_info->save_status == EMAIL_MAIL_STATUS_SEND_SCHEDULED) {
-							mailbox_list_remove_mail_item(mailbox_ugd, ld);
-							mailbox_view_title_update_mail_count(mailbox_ugd);
+							mailbox_list_remove_mail_item(view, ld);
+							mailbox_view_title_update_mail_count(view);
 						} else {
 							ld->mail_status = mail_info->save_status;
-							MAILBOX_UPDATE_GENLIST_ITEM(mailbox_ugd->gl, ld->item);
+							MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
 						}
 						FREE(mail_info);
 					}
 				}
 			} else if (type == UPDATE_MAIL || type == UPDATE_MEETING) {
-				MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(mailid, mailbox_ugd->mail_list);
+				MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(mailid, view->mail_list);
 				if (ld) {
 					email_mail_list_item_t *mail_info = NULL;
 					mail_info = email_engine_get_mail_by_mailid(mailid);
@@ -578,22 +578,22 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 							(sort_type == EMAIL_SORT_UNREAD && ld->is_seen != mail_info->flags_seen_field) ||
 							(sort_type == EMAIL_SORT_IMPORTANT && ld->flag_type != mail_info->flags_flagged_field)) {
 						int mailbox_id = ld->mailbox_id;
-						mailbox_list_remove_mail_item(mailbox_ugd, ld);
+						mailbox_list_remove_mail_item(view, ld);
 						FREE(mail_info);
 
 						AddMailReqData *req = MEM_ALLOC(req, 1);
 						retm_if(!req, "req is NULL");
 						/* this dynamic variable(req) should be freed in func_notify */
-						*req = (AddMailReqData) {account_id, 0, mailid, mailbox_id, mailbox_ugd->mailbox_type, false,
-							mailbox_ugd->mode, mailbox_ugd};
+						*req = (AddMailReqData) {account_id, 0, mailid, mailbox_id, view->mailbox_type, false,
+							view->mode, view};
 
-						if (!email_request_queue_add_request(mailbox_ugd->request_queue, EMAIL_REQUEST_TYPE_ADD_MAIL, req)) {
+						if (!email_request_queue_add_request(view->request_queue, EMAIL_REQUEST_TYPE_ADD_MAIL, req)) {
 							debug_error("failed to add request EMAIL_REQUEST_TYPE_ADD_MAIL_WORKER");
 							free(req);
 						}
 					} else {
 						ld->is_attachment = mail_info->attachment_count;
-						if (mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_DRAFT) {
+						if (view->mailbox_type == EMAIL_MAILBOX_TYPE_DRAFT) {
 							email_address_info_list_t *addrs_info_list = NULL;
 							email_address_info_t *addrs_info = NULL;
 
@@ -639,17 +639,17 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 						if (ld->is_seen != mail_info->flags_seen_field) {
 							debug_log("read status has been changed.(%d, %d)", ld->is_seen, mail_info->flags_seen_field);
 							ld->is_seen = mail_info->flags_seen_field;
-							MAILBOX_UPDATE_GENLIST_ITEM_READ_STATE(mailbox_ugd->gl, ld->item, ld->is_seen);
+							MAILBOX_UPDATE_GENLIST_ITEM_READ_STATE(view->gl, ld->item, ld->is_seen);
 						}
 						ld->flag_type = mail_info->flags_flagged_field;
 						ld->reply_flag = mail_info->flags_answered_field;
 						ld->forward_flag = mail_info->flags_forwarded_field;
-						MAILBOX_UPDATE_GENLIST_ITEM(mailbox_ugd->gl, ld->item);
+						MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
 						FREE(mail_info);
 					}
 				} else {
-					if ((mailbox_ugd->mode == EMAIL_MAILBOX_MODE_ALL || mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX)
-						&& mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX) {
+					if ((view->mode == EMAIL_MAILBOX_MODE_ALL || view->mode == EMAIL_MAILBOX_MODE_MAILBOX)
+						&& view->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX) {
 						email_mail_list_item_t *mail_info = NULL;
 						mail_info = email_engine_get_mail_by_mailid(mailid);
 						if (!mail_info) break;
@@ -659,9 +659,9 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 							retm_if(!req, "req is NULL");
 							/* this dynamic variable(req) should be freed in func_notify */
 							*req = (AddMailReqData) {account_id, mail_info->thread_id, mailid, mail_info->mailbox_id, mail_info->mailbox_type, true,
-												mailbox_ugd->mode, mailbox_ugd};
+												view->mode, view};
 
-							if (!email_request_queue_add_request(mailbox_ugd->request_queue, EMAIL_REQUEST_TYPE_ADD_MAIL, req)) {
+							if (!email_request_queue_add_request(view->request_queue, EMAIL_REQUEST_TYPE_ADD_MAIL, req)) {
 								debug_error("failed to add request EMAIL_REQUEST_TYPE_ADD_MAIL_WORKER");
 								free(req);
 							}
@@ -669,7 +669,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 						FREE(mail_info);
 					}
 #ifndef _FEATURE_PRIORITY_SENDER_DISABLE_
-					else if (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER) {
+					else if (view->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER) {
 						email_mail_list_item_t *mail_info = NULL;
 						mail_info = email_engine_get_mail_by_mailid(mailid);
 						if (!mail_info) break;
@@ -679,10 +679,10 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 							AddMailReqData *req = MEM_ALLOC(req, 1);
 							retm_if(!req, "req is NULL");
 							/* this dynamic variable(req) should be freed in func_notify */
-							*req = (AddMailReqData) {account_id, thread_id, mailid, mailbox_id, mailbox_ugd->mailbox_type, true,
-								mailbox_ugd->mode, mailbox_ugd};
+							*req = (AddMailReqData) {account_id, thread_id, mailid, mailbox_id, view->mailbox_type, true,
+								view->mode, view};
 
-							if (!email_request_queue_add_request(mailbox_ugd->request_queue, EMAIL_REQUEST_TYPE_ADD_MAIL, req)) {
+							if (!email_request_queue_add_request(view->request_queue, EMAIL_REQUEST_TYPE_ADD_MAIL, req)) {
 								debug_error("failed to add request EMAIL_REQUEST_TYPE_ADD_MAIL_WORKER");
 								free(req);
 							}
@@ -709,14 +709,14 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 			switch (update_type) {
 			case EMAIL_MAIL_ATTRIBUTE_FLAGS_DELETED_FIELD:
 				debug_log("DELETED FILED UPDATE");
-				if (mailbox_ugd->move_status == EMAIL_ERROR_NONE) {
-					mailbox_ugd->move_status = -1;
+				if (view->move_status == EMAIL_ERROR_NONE) {
+					view->move_status = -1;
 					int ret = 1;
-					if (mailbox_ugd->moved_mailbox_name) {
+					if (view->moved_mailbox_name) {
 						char str[MAX_STR_LEN] = { 0, };
-						snprintf(str, sizeof(str), email_get_email_string("IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_PS"), mailbox_ugd->moved_mailbox_name);
+						snprintf(str, sizeof(str), email_get_email_string("IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_PS"), view->moved_mailbox_name);
 						ret = notification_status_message_post(str);
-						G_FREE(mailbox_ugd->moved_mailbox_name);
+						G_FREE(view->moved_mailbox_name);
 					} else {
 						ret = notification_status_message_post(email_get_email_string("IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_SELECTED_FOLDER"));
 					}
@@ -727,19 +727,19 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 				if (value) {
 					G_LIST_FOREACH(mail_list, cur, idx) {
 						debug_log("idx: [%d]", *idx);
-						_mailbox_remove_deleted_flag_mail(*idx, mailbox_ugd);
+						_mailbox_remove_deleted_flag_mail(*idx, view);
 					}
 				}
-				mailbox_view_title_update_mail_count(mailbox_ugd);
+				mailbox_view_title_update_mail_count(view);
 				break;
 			case EMAIL_MAIL_ATTRIBUTE_FLAGS_SEEN_FIELD:
 				G_LIST_FOREACH(mail_list, cur, idx) {
 					debug_log("idx: [%d]", *idx);
-					MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, mailbox_ugd->mail_list);
+					MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, view->mail_list);
 					if (ld) {
 						if (sort_type == EMAIL_SORT_UNREAD) {
 							int mailbox_id = ld->mailbox_id;
-							mailbox_list_remove_mail_item(mailbox_ugd, ld);
+							mailbox_list_remove_mail_item(view, ld);
 
 							AddMailReqData *req = MEM_ALLOC(req, 1);
 							if (!req) {
@@ -748,37 +748,37 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 								return;
 							}
 							/* this dynamic variable(req) should be freed in func_notify */
-							*req = (AddMailReqData) {account_id, 0, *idx, mailbox_id, mailbox_ugd->mailbox_type, false,
-												mailbox_ugd->mode, mailbox_ugd};
+							*req = (AddMailReqData) {account_id, 0, *idx, mailbox_id, view->mailbox_type, false,
+												view->mode, view};
 
-							if (!email_request_queue_add_request(mailbox_ugd->request_queue, EMAIL_REQUEST_TYPE_ADD_MAIL, req)) {
+							if (!email_request_queue_add_request(view->request_queue, EMAIL_REQUEST_TYPE_ADD_MAIL, req)) {
 								debug_error("failed to add request EMAIL_REQUEST_TYPE_ADD_MAIL_WORKER");
 								free(req);
 							}
 						} else {
 							ld->is_seen = value;
-							MAILBOX_UPDATE_GENLIST_ITEM_READ_STATE(mailbox_ugd->gl, ld->item, ld->is_seen);
+							MAILBOX_UPDATE_GENLIST_ITEM_READ_STATE(view->gl, ld->item, ld->is_seen);
 						}
 					}
 				}
-				mailbox_view_title_update_mail_count(mailbox_ugd);
+				mailbox_view_title_update_mail_count(view);
 				break;
 			case EMAIL_MAIL_ATTRIBUTE_FLAGS_FLAGGED_FIELD:
 				G_LIST_FOREACH(mail_list, cur, idx) {
 					debug_log("idx: [%d]", *idx);
-					MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, mailbox_ugd->mail_list);
+					MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, view->mail_list);
 
 					if (ld) {
 						if ((value == EMAIL_FLAG_NONE || value == EMAIL_FLAG_TASK_STATUS_CLEAR || value == EMAIL_FLAG_TASK_STATUS_COMPLETE)
-							&& mailbox_ugd->mode == EMAIL_MAILBOX_MODE_ALL && mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED) {
-							mailbox_list_remove_mail_item(mailbox_ugd, ld);
-							mailbox_view_title_update_mail_count(mailbox_ugd);
-							if (!g_list_length(mailbox_ugd->mail_list))
-								mailbox_show_no_contents_view(mailbox_ugd);
+							&& view->mode == EMAIL_MAILBOX_MODE_ALL && view->mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED) {
+							mailbox_list_remove_mail_item(view, ld);
+							mailbox_view_title_update_mail_count(view);
+							if (!g_list_length(view->mail_list))
+								mailbox_show_no_contents_view(view);
 						} else if (sort_type == EMAIL_SORT_IMPORTANT) {
 							int mailbox_id = ld->mailbox_id;
-							mailbox_list_remove_mail_item(mailbox_ugd, ld);
-							mailbox_view_title_update_mail_count(mailbox_ugd);
+							mailbox_list_remove_mail_item(view, ld);
+							mailbox_view_title_update_mail_count(view);
 
 							AddMailReqData *req = MEM_ALLOC(req, 1);
 							if (!req) {
@@ -787,25 +787,25 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 								return;
 							}
 							/* this dynamic variable(req) should be freed in func_notify */
-							*req = (AddMailReqData) {account_id, 0, *idx, mailbox_id, mailbox_ugd->mailbox_type, false,
-												mailbox_ugd->mode, mailbox_ugd};
+							*req = (AddMailReqData) {account_id, 0, *idx, mailbox_id, view->mailbox_type, false,
+												view->mode, view};
 
-							if (!email_request_queue_add_request(mailbox_ugd->request_queue, EMAIL_REQUEST_TYPE_ADD_MAIL, req)) {
+							if (!email_request_queue_add_request(view->request_queue, EMAIL_REQUEST_TYPE_ADD_MAIL, req)) {
 								debug_error("failed to add request EMAIL_REQUEST_TYPE_ADD_MAIL_WORKER");
 								free(req);
 							}
 
 						} else {
 							ld->flag_type = value;
-							MAILBOX_UPDATE_GENLIST_ITEM_FLAG_STATE(mailbox_ugd->gl, ld->item, ld->flag_type);
+							MAILBOX_UPDATE_GENLIST_ITEM_FLAG_STATE(view->gl, ld->item, ld->flag_type);
 						}
 
-						if (true == mailbox_ugd->b_editmode) {
-							mailbox_update_select_info(mailbox_ugd);
+						if (true == view->b_editmode) {
+							mailbox_update_select_info(view);
 						}
 					} else {
 						if ((value == EMAIL_FLAG_FLAGED || value == EMAIL_FLAG_TASK_STATUS_ACTIVE)
-							&& mailbox_ugd->mode == EMAIL_MAILBOX_MODE_ALL && mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED) {
+							&& view->mode == EMAIL_MAILBOX_MODE_ALL && view->mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED) {
 							AddMailReqData *req = MEM_ALLOC(req, 1);
 							if (!req) {
 								debug_log("req is NULL");
@@ -813,10 +813,10 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 								return;
 							}
 							/* this dynamic variable(req) should be freed in func_notify */
-							*req = (AddMailReqData) {account_id, 0, *idx, mailbox_id, mailbox_ugd->mailbox_type, false,
-												mailbox_ugd->mode, mailbox_ugd};
+							*req = (AddMailReqData) {account_id, 0, *idx, mailbox_id, view->mailbox_type, false,
+												view->mode, view};
 
-							if (!email_request_queue_add_request(mailbox_ugd->request_queue, EMAIL_REQUEST_TYPE_ADD_MAIL, req)) {
+							if (!email_request_queue_add_request(view->request_queue, EMAIL_REQUEST_TYPE_ADD_MAIL, req)) {
 								debug_error("failed to add request EMAIL_REQUEST_TYPE_ADD_MAIL_WORKER");
 								free(req);
 							}
@@ -827,20 +827,20 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 			case EMAIL_MAIL_ATTRIBUTE_FLAGS_ANSWERED_FIELD:
 				G_LIST_FOREACH(mail_list, cur, idx) {
 					debug_log("idx: [%d]", *idx);
-					MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, mailbox_ugd->mail_list);
+					MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, view->mail_list);
 					if (ld) {
 						ld->reply_flag = value;
-						MAILBOX_UPDATE_GENLIST_ITEM(mailbox_ugd->gl, ld->item);
+						MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
 					}
 				}
 				break;
 			case EMAIL_MAIL_ATTRIBUTE_FLAGS_FORWARDED_FIELD:
 				G_LIST_FOREACH(mail_list, cur, idx) {
 					debug_log("idx: [%d]", *idx);
-					MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, mailbox_ugd->mail_list);
+					MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, view->mail_list);
 					if (ld) {
 						ld->forward_flag = value;
-						MAILBOX_UPDATE_GENLIST_ITEM(mailbox_ugd->gl, ld->item);
+						MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
 					}
 				}
 				break;
@@ -848,12 +848,12 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 				G_LIST_FOREACH(mail_list, cur, idx) {
 
 					debug_log("idx: [%d]", *idx);
-					MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, mailbox_ugd->mail_list);
+					MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, view->mail_list);
 					if (ld) {
-						debug_log("mailbox_ugd->mailbox_type: [%d], ld->mailbox_type : %d", mailbox_ugd->mailbox_type, ld->mailbox_type);
+						debug_log("view->mailbox_type: [%d], ld->mailbox_type : %d", view->mailbox_type, ld->mailbox_type);
 						{
 							ld->mail_status = value;
-							MAILBOX_UPDATE_GENLIST_ITEM(mailbox_ugd->gl, ld->item);
+							MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
 						}
 					}
 				}
@@ -874,7 +874,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 			debug_log("NOTI_MAIL_DELETE_FINISH");
 			account_id = data1;
 
-			mailbox_view_title_update_mail_count(mailbox_ugd);
+			mailbox_view_title_update_mail_count(view);
 			break;
 
 		case NOTI_RULE_APPLY:
@@ -892,10 +892,10 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 
 			G_LIST_FOREACH(mail_list, cur, idx) {
 				debug_log("idx: [%d]", *idx);
-				MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, mailbox_ugd->mail_list);
+				MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, view->mail_list);
 				if (ld) {
 					ld->is_priority_sender_mail = true;
-					MAILBOX_UPDATE_GENLIST_ITEM(mailbox_ugd->gl, ld->item);
+					MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
 				}
 			}
 
@@ -924,10 +924,10 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 
 			G_LIST_FOREACH(mail_list, cur, idx) {
 				debug_log("idx: [%d]", *idx);
-				MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, mailbox_ugd->mail_list);
+				MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, view->mail_list);
 				if (ld) {
 					ld->is_priority_sender_mail = false;
-					MAILBOX_UPDATE_GENLIST_ITEM(mailbox_ugd->gl, ld->item);
+					MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
 				}
 			}
 
@@ -961,7 +961,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 			} else {
 				G_LIST_FOREACH(mail_list, cur, idx) {
 					debug_log("idx: [%d]", *idx);
-					MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, mailbox_ugd->mail_list);
+					MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, view->mail_list);
 					if (ld) {
 						for (i = 0; i < count; i++) {
 							if (rule_list[i].type == EMAIL_PRIORITY_SENDER) {
@@ -978,7 +978,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 								ld->is_priority_sender_mail = false;
 							}
 						}
-						MAILBOX_UPDATE_GENLIST_ITEM(mailbox_ugd->gl, ld->item);
+						MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
 					}
 				}
 				email_free_rule(&rule_list, count);
@@ -1024,12 +1024,12 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 			debug_log("NOTI_DOWNLOAD_FINISH");
 			account_id = data1;
 			mailbox_id = data2 ? atoi(data2) : 0;
-			if (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX
-				&& mailbox_ugd->only_local == FALSE
-				&& !mailbox_ugd->b_searchmode && !mailbox_ugd->b_editmode
-				&& (mailbox_id == mailbox_ugd->mailbox_id || (account_id == mailbox_ugd->account_id && mailbox_id == 0))
-				&& g_list_length(mailbox_ugd->mail_list)) {
-				mailbox_last_updated_time_item_update(mailbox_ugd->mailbox_id, mailbox_ugd);
+			if (view->mode == EMAIL_MAILBOX_MODE_MAILBOX
+				&& view->only_local == FALSE
+				&& !view->b_searchmode && !view->b_editmode
+				&& (mailbox_id == view->mailbox_id || (account_id == view->account_id && mailbox_id == 0))
+				&& g_list_length(view->mail_list)) {
+				mailbox_last_updated_time_item_update(view->mailbox_id, view);
 
 			}
 
@@ -1040,19 +1040,19 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 					mailbox_req_handle_list_free();
 				}
 
-				mailbox_get_more_progress_item_remove(mailbox_ugd);
-				if (0 < g_list_length(mailbox_ugd->mail_list)) {
-					if (!mailbox_ugd->b_searchmode && !mailbox_ugd->b_editmode
-						&& ((mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX && mailbox_ugd->only_local == false
-						&& mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX
-						&& mailbox_ugd->account_type == EMAIL_SERVER_TYPE_IMAP4)
-					|| (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX && mailbox_ugd->only_local == false
-						&& mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX
-						&& mailbox_ugd->account_type == EMAIL_SERVER_TYPE_POP3))) {
-						mailbox_load_more_messages_item_add(mailbox_ugd);
-					} else if (!mailbox_ugd->b_searchmode && !mailbox_ugd->b_editmode
-						&& mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX) {
-						mailbox_no_more_emails_item_add(mailbox_ugd);
+				mailbox_get_more_progress_item_remove(view);
+				if (0 < g_list_length(view->mail_list)) {
+					if (!view->b_searchmode && !view->b_editmode
+						&& ((view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->only_local == false
+						&& view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX
+						&& view->account_type == EMAIL_SERVER_TYPE_IMAP4)
+					|| (view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->only_local == false
+						&& view->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX
+						&& view->account_type == EMAIL_SERVER_TYPE_POP3))) {
+						mailbox_load_more_messages_item_add(view);
+					} else if (!view->b_searchmode && !view->b_editmode
+						&& view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX) {
+						mailbox_no_more_emails_item_add(view);
 					}
 				}
 			} else {
@@ -1069,25 +1069,25 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 					mailbox_req_handle_list_free();
 				}
 
-				mailbox_get_more_progress_item_remove(mailbox_ugd);
-				if (0 < g_list_length(mailbox_ugd->mail_list)) {
-					if (!mailbox_ugd->b_searchmode && !mailbox_ugd->b_editmode
-						&& ((mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX && mailbox_ugd->only_local == false
-						&& mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX
-						&& mailbox_ugd->account_type == EMAIL_SERVER_TYPE_IMAP4)
-							|| (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX && mailbox_ugd->only_local == false
-						&& mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX
-						&& mailbox_ugd->account_type == EMAIL_SERVER_TYPE_POP3))) {
-						mailbox_load_more_messages_item_add(mailbox_ugd);
-					} else if (!mailbox_ugd->b_searchmode && !mailbox_ugd->b_editmode
-						&& mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX) {
-						mailbox_no_more_emails_item_add(mailbox_ugd);
+				mailbox_get_more_progress_item_remove(view);
+				if (0 < g_list_length(view->mail_list)) {
+					if (!view->b_searchmode && !view->b_editmode
+						&& ((view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->only_local == false
+						&& view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX
+						&& view->account_type == EMAIL_SERVER_TYPE_IMAP4)
+							|| (view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->only_local == false
+						&& view->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX
+						&& view->account_type == EMAIL_SERVER_TYPE_POP3))) {
+						mailbox_load_more_messages_item_add(view);
+					} else if (!view->b_searchmode && !view->b_editmode
+						&& view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX) {
+						mailbox_no_more_emails_item_add(view);
 					}
 				}
 
-				if (data4 != EMAIL_ERROR_NONE && mailbox_ugd->composer == NULL
-					&& mailbox_ugd->setting == NULL
-					&& mailbox_ugd->viewer == NULL && mailbox_ugd->account == NULL) {
+				if (data4 != EMAIL_ERROR_NONE && view->composer == NULL
+					&& view->setting == NULL
+					&& view->viewer == NULL && view->account == NULL) {
 					if (subtype == NOTI_DOWNLOAD_FAIL && data4 == EMAIL_ERROR_AUTHENTICATE) {
 						email_authentication_method_t auth_method = EMAIL_AUTHENTICATION_METHOD_NO_AUTH;
 						email_account_t *account = NULL;
@@ -1099,15 +1099,15 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 							email_free_account(&account, 1);
 
 						if (auth_method == EMAIL_AUTHENTICATION_METHOD_XOAUTH2) {
-							mailbox_create_error_popup(data4, data1, mailbox_ugd);
+							mailbox_create_error_popup(data4, data1, view);
 						} else {
 							int mailbox_id = 0;
 							if (data2)
 								mailbox_id = atoi(data2);
 
 							debug_log("error : %d, account_id = %d, mailbox_id = %d", data4, data1, mailbox_id);
-							mailbox_ugd->sync_needed_mailbox_id = mailbox_id;
-							mailbox_create_password_changed_popup(mailbox_ugd, data1);
+							view->sync_needed_mailbox_id = mailbox_id;
+							mailbox_create_password_changed_popup(view, data1);
 						}
 					} else if (subtype == NOTI_DOWNLOAD_FAIL && data4 == EMAIL_ERROR_LOGIN_FAILURE) {
 						int mailbox_id = 0;
@@ -1115,10 +1115,10 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 							mailbox_id = atoi(data2);
 
 						debug_log("error : %d, account_id = %d, mailbox_id = %d", data4, data1, mailbox_id);
-						mailbox_ugd->sync_needed_mailbox_id = mailbox_id;
-						mailbox_create_password_changed_popup(mailbox_ugd, data1);
+						view->sync_needed_mailbox_id = mailbox_id;
+						mailbox_create_password_changed_popup(view, data1);
 					} else {
-						mailbox_create_error_popup(data4, data1, mailbox_ugd);
+						mailbox_create_error_popup(data4, data1, view);
 					}
 				}
 			} else {
@@ -1130,13 +1130,13 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 			debug_log("NOTI_DOWNLOAD_BODY_FINISH");
 			mail_id = data1;
 
-			MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(mail_id, mailbox_ugd->mail_list);
+			MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(mail_id, view->mail_list);
 			if (ld) {
 				email_mail_list_item_t *mail_info = NULL;
 				mail_info = email_engine_get_mail_by_mailid(mail_id);
 				if (!mail_info) break;
 				ld->is_attachment = mail_info->attachment_count;
-				MAILBOX_UPDATE_GENLIST_ITEM(mailbox_ugd->gl, ld->item);
+				MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
 				FREE(mail_info);
 			}
 			break;
@@ -1144,12 +1144,12 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 		case NOTI_SEND_START:
 			debug_log("NOTI_SEND_START");
 			mail_id = data3;
-			if ((mailbox_ugd->mode == EMAIL_MAILBOX_MODE_ALL
-					|| mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX)
-					&& mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
+			if ((view->mode == EMAIL_MAILBOX_MODE_ALL
+					|| view->mode == EMAIL_MAILBOX_MODE_MAILBOX)
+					&& view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
 				if (data4 >= 0) {
-					_sending_mail_list_add_mail_id(mailbox_ugd, mail_id);
-					mailbox_send_all_btn_remove(mailbox_ugd);
+					_sending_mail_list_add_mail_id(view, mail_id);
+					mailbox_send_all_btn_remove(view);
 				}
 			}
 			break;
@@ -1157,13 +1157,13 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 		case NOTI_SEND_FINISH:
 			debug_log("NOTI_SEND_FINISH");
 			mail_id = data3;
-			if (!mailbox_ugd->b_searchmode && !mailbox_ugd->b_editmode
-					&& mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX
-					&& (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_ALL
-					|| mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX)) {
-				if (_check_sending_mail_list(mailbox_ugd, mail_id)) {
-					if (g_list_first(mailbox_ugd->mail_list)) {
-						mailbox_send_all_btn_add(mailbox_ugd);
+			if (!view->b_searchmode && !view->b_editmode
+					&& view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX
+					&& (view->mode == EMAIL_MAILBOX_MODE_ALL
+					|| view->mode == EMAIL_MAILBOX_MODE_MAILBOX)) {
+				if (_check_sending_mail_list(view, mail_id)) {
+					if (g_list_first(view->mail_list)) {
+						mailbox_send_all_btn_add(view);
 					}
 				}
 			}
@@ -1171,15 +1171,15 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 
 		case NOTI_SEND_FAIL:
 			account_id = data1;
-			debug_log("NOTI_SEND_FAIL: arg_accountid: %d, mailbox_ugd->account_id: %d", account_id, mailbox_ugd->account_id);
+			debug_log("NOTI_SEND_FAIL: arg_accountid: %d, view->account_id: %d", account_id, view->account_id);
 			mail_id = data3;
-			if (!mailbox_ugd->b_searchmode && !mailbox_ugd->b_editmode
-					&& mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX
-					&& (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_ALL
-					|| mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX)) {
-				if (_check_sending_mail_list(mailbox_ugd, mail_id)) {
-					if (g_list_first(mailbox_ugd->mail_list)) {
-						mailbox_send_all_btn_add(mailbox_ugd);
+			if (!view->b_searchmode && !view->b_editmode
+					&& view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX
+					&& (view->mode == EMAIL_MAILBOX_MODE_ALL
+					|| view->mode == EMAIL_MAILBOX_MODE_MAILBOX)) {
+				if (_check_sending_mail_list(view, mail_id)) {
+					if (g_list_first(view->mail_list)) {
+						mailbox_send_all_btn_add(view);
 					}
 				}
 			}
@@ -1187,15 +1187,15 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 
 		case NOTI_SEND_CANCEL:
 			account_id = data1;
-			debug_log("NOTI_SEND_CANCEL: arg_accountid: %d, mailbox_ugd->account_id: %d", account_id, mailbox_ugd->account_id);
+			debug_log("NOTI_SEND_CANCEL: arg_accountid: %d, view->account_id: %d", account_id, view->account_id);
 			mail_id = data3;
-			if (!mailbox_ugd->b_searchmode && !mailbox_ugd->b_editmode
-					&& mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX
-					&& (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_ALL
-					|| mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX)) {
-				if (_check_sending_mail_list(mailbox_ugd, mail_id)) {
-					if (g_list_first(mailbox_ugd->mail_list)) {
-						mailbox_send_all_btn_add(mailbox_ugd);
+			if (!view->b_searchmode && !view->b_editmode
+					&& view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX
+					&& (view->mode == EMAIL_MAILBOX_MODE_ALL
+					|| view->mode == EMAIL_MAILBOX_MODE_MAILBOX)) {
+				if (_check_sending_mail_list(view, mail_id)) {
+					if (g_list_first(view->mail_list)) {
+						mailbox_send_all_btn_add(view);
 					}
 				}
 			}
@@ -1396,39 +1396,39 @@ static Eina_Bool _check_req_handle_list(int handle)
 		return TRUE;
 }
 
-static void _sending_mail_list_add_mail_id(EmailMailboxUGD *mailbox_ugd, int mail_id)
+static void _sending_mail_list_add_mail_id(EmailMailboxView *view, int mail_id)
 {
-	debug_log("mail_id(%d), g_sending_mail_list(%p)", mail_id, mailbox_ugd->g_sending_mail_list);
+	debug_log("mail_id(%d), g_sending_mail_list(%p)", mail_id, view->g_sending_mail_list);
 
-	GList *cur = g_list_find(mailbox_ugd->g_sending_mail_list, GINT_TO_POINTER(mail_id));
+	GList *cur = g_list_find(view->g_sending_mail_list, GINT_TO_POINTER(mail_id));
 
 	if (!cur) {
-		mailbox_ugd->g_sending_mail_list = g_list_append(mailbox_ugd->g_sending_mail_list, GINT_TO_POINTER(mail_id));
+		view->g_sending_mail_list = g_list_append(view->g_sending_mail_list, GINT_TO_POINTER(mail_id));
 	} else {
 		debug_log("already exist.");
 	}
 
-	debug_log("mail_count(%d)", g_list_length(mailbox_ugd->g_sending_mail_list));
+	debug_log("mail_count(%d)", g_list_length(view->g_sending_mail_list));
 }
 
-static Eina_Bool _check_sending_mail_list(EmailMailboxUGD *mailbox_ugd, int mail_id)
+static Eina_Bool _check_sending_mail_list(EmailMailboxView *view, int mail_id)
 {
-	debug_log("mail_id(%d), g_sending_mail_list(%p)", mail_id, mailbox_ugd->g_sending_mail_list);
+	debug_log("mail_id(%d), g_sending_mail_list(%p)", mail_id, view->g_sending_mail_list);
 
 	GList *it = NULL;
 	int *_mail_id = NULL;
 
-	int mail_count = g_list_length(mailbox_ugd->g_sending_mail_list);
+	int mail_count = g_list_length(view->g_sending_mail_list);
 	debug_log("mail_count(%d)", mail_count);
 
-	G_LIST_FOREACH(mailbox_ugd->g_sending_mail_list, it, _mail_id) {
+	G_LIST_FOREACH(view->g_sending_mail_list, it, _mail_id) {
 		if (GPOINTER_TO_INT(_mail_id) == mail_id) {
-			mailbox_ugd->g_sending_mail_list = g_list_remove(mailbox_ugd->g_sending_mail_list, _mail_id);
+			view->g_sending_mail_list = g_list_remove(view->g_sending_mail_list, _mail_id);
 			debug_log("mail_id(%d) was removed", _mail_id);
 		}
 	}
 
-	mail_count = g_list_length(mailbox_ugd->g_sending_mail_list);
+	mail_count = g_list_length(view->g_sending_mail_list);
 	debug_log("mail_count(%d)", mail_count);
 
 	if (mail_count)
@@ -1472,41 +1472,41 @@ static void _mailbox_remove_deleted_flag_mail(int mail_id, void *data)
 {
 	debug_enter();
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
+	EmailMailboxView *view = (EmailMailboxView *)data;
 
 	if (mail_id <= 0) {
 		debug_log("Invalid parameter(mail_id)");
 		return;
 	}
 
-	MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(mail_id, mailbox_ugd->mail_list);
+	MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(mail_id, view->mail_list);
 	if (ld) {
-		if ((mailbox_ugd->mode == EMAIL_MAILBOX_MODE_ALL && mailbox_ugd->mailbox_type == ld->mailbox_type)
-				|| (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX && ld->mailbox_id == mailbox_ugd->mailbox_id)) {
+		if ((view->mode == EMAIL_MAILBOX_MODE_ALL && view->mailbox_type == ld->mailbox_type)
+				|| (view->mode == EMAIL_MAILBOX_MODE_MAILBOX && ld->mailbox_id == view->mailbox_id)) {
 			debug_log("Remove mail from list mail_id : %d", ld->mail_id);
 
-			if (mailbox_ugd->b_editmode) {
+			if (view->b_editmode) {
 				debug_log("edit list update first");
-				mailbox_update_edit_list_view(ld, mailbox_ugd);
+				mailbox_update_edit_list_view(ld, view);
 			}
 
-			mailbox_list_remove_mail_item(mailbox_ugd, ld);
+			mailbox_list_remove_mail_item(view, ld);
 
-			if (g_list_length(mailbox_ugd->mail_list) > 0) {
-				if (!mailbox_ugd->b_searchmode && !mailbox_ugd->b_editmode
-					&& ((mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX && mailbox_ugd->only_local == false
-					&& mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX
-					&& mailbox_ugd->account_type == EMAIL_SERVER_TYPE_IMAP4)
-						|| (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX && mailbox_ugd->only_local == false
-					&& mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX
-					&& mailbox_ugd->account_type == EMAIL_SERVER_TYPE_POP3))) {
-					mailbox_load_more_messages_item_add(mailbox_ugd);
-				} else if (!mailbox_ugd->b_searchmode && !mailbox_ugd->b_editmode
-						&& mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX) {
-					mailbox_no_more_emails_item_add(mailbox_ugd);
+			if (g_list_length(view->mail_list) > 0) {
+				if (!view->b_searchmode && !view->b_editmode
+					&& ((view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->only_local == false
+					&& view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX
+					&& view->account_type == EMAIL_SERVER_TYPE_IMAP4)
+						|| (view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->only_local == false
+					&& view->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX
+					&& view->account_type == EMAIL_SERVER_TYPE_POP3))) {
+					mailbox_load_more_messages_item_add(view);
+				} else if (!view->b_searchmode && !view->b_editmode
+						&& view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX) {
+					mailbox_no_more_emails_item_add(view);
 				}
 			} else {
-				mailbox_show_no_contents_view(mailbox_ugd);
+				mailbox_show_no_contents_view(view);
 			}
 		}
 	}
@@ -1517,7 +1517,7 @@ static void _mailbox_remove_deleted_flag_mail(int mail_id, void *data)
  * Definition for exported functions
  */
 
-void mailbox_setup_dbus_receiver(EmailMailboxUGD *mailbox_ugd)
+void mailbox_setup_dbus_receiver(EmailMailboxView *view)
 {
 	debug_enter();
 
@@ -1531,14 +1531,14 @@ void mailbox_setup_dbus_receiver(EmailMailboxUGD *mailbox_ugd)
 		}
 
 		_storage_id = g_dbus_connection_signal_subscribe(_g_mailbox_conn, NULL, "User.Email.StorageChange", "email", "/User/Email/StorageChange",
-													NULL, G_DBUS_SIGNAL_FLAGS_NONE, _gdbus_event_mailbox_receive, (void *)mailbox_ugd, NULL);
+													NULL, G_DBUS_SIGNAL_FLAGS_NONE, _gdbus_event_mailbox_receive, (void *)view, NULL);
 
 		if (_storage_id == GDBUS_SIGNAL_SUBSCRIBE_FAILURE) {
 			debug_log("Failed to g_dbus_connection_signal_subscribe()");
 			return;
 		}
 		_network_id = g_dbus_connection_signal_subscribe(_g_mailbox_conn, NULL, "User.Email.NetworkStatus", "email", "/User/Email/NetworkStatus",
-													NULL, G_DBUS_SIGNAL_FLAGS_NONE, _gdbus_event_mailbox_receive, (void *)mailbox_ugd, NULL);
+													NULL, G_DBUS_SIGNAL_FLAGS_NONE, _gdbus_event_mailbox_receive, (void *)view, NULL);
 		if (_network_id == GDBUS_SIGNAL_SUBSCRIBE_FAILURE) {
 			debug_critical("Failed to g_dbus_connection_signal_subscribe()");
 			return;
@@ -1586,12 +1586,12 @@ void mailbox_req_account_list_free()
 	}
 }
 
-void mailbox_sending_mail_list_free(EmailMailboxUGD *mailbox_ugd)
+void mailbox_sending_mail_list_free(EmailMailboxView *view)
 {
-	debug_log("g_sending_mail_list(%p)", mailbox_ugd->g_sending_mail_list);
+	debug_log("g_sending_mail_list(%p)", view->g_sending_mail_list);
 
-	if (mailbox_ugd->g_sending_mail_list) {
-		g_list_free(mailbox_ugd->g_sending_mail_list);
-		mailbox_ugd->g_sending_mail_list = NULL;
+	if (view->g_sending_mail_list) {
+		g_list_free(view->g_sending_mail_list);
+		view->g_sending_mail_list = NULL;
 	}
 }

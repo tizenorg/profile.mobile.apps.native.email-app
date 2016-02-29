@@ -20,9 +20,9 @@
 
 /**
  * @brief Create content for Mailbox view
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_list_create_view(EmailMailboxUGD *mailbox_ugd);
+void mailbox_list_create_view(EmailMailboxView *view);
 
 /**
  * @brief Show content of mail
@@ -33,9 +33,9 @@ void mailbox_list_open_email_viewer(MailItemData *ld);
 /**
  * @brief System settings callback register
  * @remark Operation registers system accessibility for font size changes
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_list_system_settings_callback_register(EmailMailboxUGD *mailbox_ugd);
+void mailbox_list_system_settings_callback_register(EmailMailboxView *view);
 
 /**
  * @brief System settings callback unregister
@@ -46,40 +46,40 @@ void mailbox_list_system_settings_callback_unregister();
 /**
  * @brief Refresh content of mail list in Mailbox
  * @remark Optionally search tag can be added
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  * @param[in]	search_data		Email search data
  */
-void mailbox_list_refresh(EmailMailboxUGD *mailbox_ugd, const email_search_data_t *search_data);
+void mailbox_list_refresh(EmailMailboxView *view, const email_search_data_t *search_data);
 
 /**
  * @brief Insert item to Mailbox genlist
  * @param[in]	ld				Mail item data to attach
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_list_insert_mail_item(MailItemData *ld, EmailMailboxUGD *mailbox_ugd);
+void mailbox_list_insert_mail_item(MailItemData *ld, EmailMailboxView *view);
 
 /**
  * @brief Insert item to Mailbox genlist used when needed check email if already consistent in Mailbox
  * @param[in]	temp_ld			Mail item data to attach
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_list_insert_mail_item_from_noti(MailItemData **temp_ld, EmailMailboxUGD *mailbox_ugd);
+void mailbox_list_insert_mail_item_from_noti(MailItemData **temp_ld, EmailMailboxView *view);
 
 /**
  * @brief Remove email item from Mailbox genlist content
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  * @param[in]	ld				Mail item data to be removed
  */
-void mailbox_list_remove_mail_item(EmailMailboxUGD * mailbox_ugd, MailItemData * ld);
+void mailbox_list_remove_mail_item(EmailMailboxView * view, MailItemData * ld);
 
 /**
  * @brief Provides creation of Mail Item data from email service received data
  * @param[in]	mail_info		Email mail list item data
  * @param[in]	search_data		Email Search data
- * @param[in]	mailbox_ugd		Email Mailbox data
+ * @param[in]	view		Email Mailbox data
  * @return MailItemData structure or NULL if none or an error occurred
  */
-MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t* mail_info, const email_search_data_t *search_data, EmailMailboxUGD *mailbox_ugd);
+MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t* mail_info, const email_search_data_t *search_data, EmailMailboxView *view);
 
 /**
  * @brief Get Mail Item data structure from Mail List by Mail ID
@@ -105,27 +105,27 @@ void mailbox_list_free_mail_item_data(MailItemData *ld);
 
 /**
  * @brief Free all Mail Item data structures from Email Mailbox
- * @param[in]	mailbox_ugd		Email Mailbox data
+ * @param[in]	view		Email Mailbox data
  */
-void mailbox_list_free_all_item_data(EmailMailboxUGD *mailbox_ugd);
+void mailbox_list_free_all_item_data(EmailMailboxView *view);
 
 /**
  * @brief Remove an item class in a given Email Mailbox data.
- * @param[in]	mailbox_ugd		Email Mailbox data
+ * @param[in]	view		Email Mailbox data
  */
-void mailbox_list_free_all_item_class_data(EmailMailboxUGD *mailbox_ugd);
+void mailbox_list_free_all_item_class_data(EmailMailboxView *view);
 
 /**
  * @brief Provides selection functionality for content of Mailbox
- * @param[in]	mailbox_ugd		Email Mailbox data
+ * @param[in]	view		Email Mailbox data
  */
-void mailbox_create_select_info(EmailMailboxUGD *mailbox_ugd);
+void mailbox_create_select_info(EmailMailboxView *view);
 
 /**
  * @brief Updates select info
- * @param[in]	mailbox_ugd		Email Mailbox data
+ * @param[in]	view		Email Mailbox data
  */
-void mailbox_update_select_info(EmailMailboxUGD *mailbox_ugd);
+void mailbox_update_select_info(EmailMailboxView *view);
 
 /**
  * @brief Provides exit from edit mode
@@ -135,16 +135,16 @@ void mailbox_exit_edit_mode(void *data);
 
 /**
  * @brief Clear edit mode content data
- * @param[in]	mailbox_ugd		Email Mailbox data
+ * @param[in]	view		Email Mailbox data
  */
-void mailbox_clear_edit_mode_list(EmailMailboxUGD *mailbox_ugd);
+void mailbox_clear_edit_mode_list(EmailMailboxView *view);
 
 /**
  * @brief The main purpose of this function is to remove from selected items list recieved Mail Item data and update recent of the list
  * @param[in]	ld				Mail Item data
- * @param[in]	mailbox_ugd		Email Mailbox data
+ * @param[in]	view		Email Mailbox data
  */
-void mailbox_update_edit_list_view(MailItemData *ld, EmailMailboxUGD * mailbox_ugd);
+void mailbox_update_edit_list_view(MailItemData *ld, EmailMailboxView * view);
 
 /**
  * @brief Remove all unnecessary items (prompts) from genlist content
@@ -163,9 +163,9 @@ bool mailbox_check_searched_mail(int mail_id, void *data);
 
 /**
  * @brief Add thread queue job request to make remaining items from AddRemainingMailReq data
- * @param[in]	mailbox_ugd		Email Mailbox data
+ * @param[in]	view		Email Mailbox data
  * @param[in]	req				Email AddRemainingMailReq data
  */
-void mailbox_list_make_remaining_items_in_thread(EmailMailboxUGD *mailbox_ugd, AddRemainingMailReqData *req);
+void mailbox_list_make_remaining_items_in_thread(EmailMailboxView *view, AddRemainingMailReqData *req);
 
 #endif	/* __DEF_EMAIL_MAILBOX_LIST_H_ */

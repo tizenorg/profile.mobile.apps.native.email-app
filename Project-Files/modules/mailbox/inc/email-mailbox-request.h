@@ -27,7 +27,7 @@ typedef struct {
 	int account_id;
 	int mailbox_type;
 	char *msg_buf;
-	EmailMailboxUGD *mailbox_ugd;
+	EmailMailboxView *view;
 } DeleteMailReqData;
 
 /**
@@ -37,7 +37,7 @@ typedef struct {
 	int account_id;
 	int mailbox_type;
 	char *msg_buf;
-	EmailMailboxUGD *mailbox_ugd;
+	EmailMailboxView *view;
 } MoveMailReqData;
 
 /**
@@ -51,7 +51,7 @@ typedef struct {
 	email_mailbox_type_e mailbox_type;
 	bool need_increase_mail_count;
 	EmailMailboxMode mode;
-	EmailMailboxUGD *mailbox_ugd;
+	EmailMailboxView *view;
 } AddMailReqData;
 
 /**
@@ -62,7 +62,7 @@ typedef struct add_remaining_mail_req_data {
 	int start;
 	int count;
 	email_search_data_t *search_data;
-	EmailMailboxUGD *mailbox_ugd;
+	EmailMailboxView *view;
 } AddRemainingMailReqData;
 
 /**
@@ -104,8 +104,8 @@ void mailbox_requests_cbs_unregister();
 
 /**
  * @brief If in Mailbox exist request queue it cancle all requests
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_cancel_all_requests(EmailMailboxUGD *mailbox_ugd);
+void mailbox_cancel_all_requests(EmailMailboxView *view);
 
 #endif /*_EMAIL_MAILBOX_REQUEST_H_*/

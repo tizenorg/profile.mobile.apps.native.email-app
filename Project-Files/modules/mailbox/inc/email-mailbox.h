@@ -96,12 +96,12 @@ typedef struct {
 	int used_index;
 } EmailMailboxCheckCache;
 
-typedef struct ug_data EmailMailboxUGD;
+typedef struct _view_data EmailMailboxView;
 
 /**
  * @brief Email mailbox data
  */
-struct ug_data {
+struct _view_data {
 	email_view_t base;
 
 	email_run_type_e run_type;
@@ -238,7 +238,7 @@ struct ug_data {
  */
 typedef struct {
 	email_module_t base;
-	EmailMailboxUGD view;
+	EmailMailboxView view;
 
 	Ecore_Thread *start_thread;
 	volatile bool start_thread_done;
@@ -251,7 +251,7 @@ typedef struct {
  * @brief Email group item data
  */
 typedef struct {
-	EmailMailboxUGD *mailbox_ugd;
+	EmailMailboxView *view;
 
 	gchar *group_title;
 	int mail_count;
@@ -265,7 +265,7 @@ typedef struct {
  * @brief Email mailbox mail item data
  */
 typedef struct {
-	EmailMailboxUGD *mailbox_ugd;
+	EmailMailboxView *view;
 
 	gchar *alias;
 	gchar *sender;
@@ -325,70 +325,70 @@ typedef struct {
 
 /**
  * @brief Request from email service update notification status for all accounts or to specified account ID
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_update_notifications_status(EmailMailboxUGD *mailbox_ugd);
+void mailbox_update_notifications_status(EmailMailboxView *view);
 
 /**
  * @brief Create no content view with search mode or not.
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  * @param[in]	search_mode		If TRUE "search" layout will be used, if FALSE view will be hidden with "default" layout
  */
-void mailbox_create_no_contents_view(EmailMailboxUGD *mailbox_ugd, bool search_mode);
+void mailbox_create_no_contents_view(EmailMailboxView *view, bool search_mode);
 
 /**
  * @brief Function provides show appearance to the no content view
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_show_no_contents_view(EmailMailboxUGD *mailbox_ugd);
+void mailbox_show_no_contents_view(EmailMailboxView *view);
 
 /**
  * @brief Function hides no content view
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_hide_no_contents_view(EmailMailboxUGD *mailbox_ugd);
+void mailbox_hide_no_contents_view(EmailMailboxView *view);
 
 /**
  * @brief Provides refresh for Mailbox including title or not
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  * @param[in]	update_title	If TRUE "title" will be updated, otherwise not
  */
-void mailbox_refresh_fullview(EmailMailboxUGD *mailbox_ugd, bool update_title);
+void mailbox_refresh_fullview(EmailMailboxView *view, bool update_title);
 
 /**
  * @brief Provides removing the Mailbox button from naviframe
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_naviframe_mailbox_button_remove(EmailMailboxUGD *mailbox_ugd);
+void mailbox_naviframe_mailbox_button_remove(EmailMailboxView *view);
 
 /**
  * @brief Provides adding the Mailbox button to naviframe
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_naviframe_mailbox_button_add(EmailMailboxUGD *mailbox_ugd);
+void mailbox_naviframe_mailbox_button_add(EmailMailboxView *view);
 
 /**
  * @brief Handles message from Viewer to open the next mail
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  * @return 0 on success, otherwise a negative error value
  */
-int mailbox_handle_next_msg_bundle(EmailMailboxUGD *mailbox_ugd, email_params_h msg);
+int mailbox_handle_next_msg_bundle(EmailMailboxView *view, email_params_h msg);
 
 /**
  * @brief Handles message from Viewer to open the previous mail
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  * @return 0 on success, otherwise a negative error value
  */
-int mailbox_handle_prev_msg_bundle(EmailMailboxUGD *mailbox_ugd, email_params_h msg);
+int mailbox_handle_prev_msg_bundle(EmailMailboxView *view, email_params_h msg);
 
 /**
  * @brief Provides functionality to open the Email viewer
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  * @param[in]	account_id		Account ID
  * @param[in]	mailbox_id		Mailbox ID
  * @param[in]	mail_id			Mail ID
  * @return 0 on success, otherwise a negative error value
  */
-int mailbox_open_email_viewer(EmailMailboxUGD *mailbox_ugd, int account_id, int mailbox_id, int mail_id);
+int mailbox_open_email_viewer(EmailMailboxView *view, int account_id, int mailbox_id, int mail_id);
 
 #endif				/* __DEF_EMAIL_MAILBOX_H_ */

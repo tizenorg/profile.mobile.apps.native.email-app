@@ -34,14 +34,14 @@ typedef struct _MailboxSelectedList {
  */
 typedef struct {
 	Eina_List *requested_mail_list;
-	EmailMailboxUGD *mailbox_ugd;
+	EmailMailboxView *view;
 } edit_req_t;
 
 /**
  * @brief Provides process of mail move accordingly to Mailbox data source and destination
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_process_move_mail(EmailMailboxUGD *mailbox_ugd);
+void mailbox_process_move_mail(EmailMailboxView *view);
 
 /**
  * @brief Ecore thread heavy callback that provides delete mails routine
