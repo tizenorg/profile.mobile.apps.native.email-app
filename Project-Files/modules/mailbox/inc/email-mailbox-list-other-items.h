@@ -25,89 +25,89 @@ void mailbox_free_other_item_class_data();
 
 /**
  * @brief Provides adding the last updated time item to Mailbox viewer
- * @param[in]	mailbox_ugd			Email mailbox data
+ * @param[in]	view			Email mailbox data
  * @param[in]	show_directly»		If TRUE immediately bring scroller to the item
  */
-void mailbox_last_updated_time_item_add(EmailMailboxUGD *mailbox_ugd, bool show_directly);
+void mailbox_last_updated_time_item_add(EmailMailboxView *view, bool show_directly);
 
 /**
  * @brief Provides request from email service for last updated time with specified Mailbox ID and shows result in Mailbox viewer item
  * @param[in]	mailbox_id»		The Mailbox ID from email service
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_last_updated_time_item_update(int mailbox_id, EmailMailboxUGD *mailbox_ugd);
+void mailbox_last_updated_time_item_update(int mailbox_id, EmailMailboxView *view);
 
 /**
  * @brief Free and release last updated time item from Mailbox viewer
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_last_updated_time_item_remove(EmailMailboxUGD *mailbox_ugd);
+void mailbox_last_updated_time_item_remove(EmailMailboxView *view);
 
 /**
  * @brief Provides registration of callbacks for refresh operation in Mailbox viewer
  * @remark To genlist "edge,bottom" callback is added and gesture layout with flicks callbacks is added as well
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_refresh_flicks_cb_register(EmailMailboxUGD *mailbox_ugd);
+void mailbox_refresh_flicks_cb_register(EmailMailboxView *view);
 
 /**
  * @brief When waiting for refresh for a new messages in Mailbox viewer the function provides appearance of progress item in Mailbox viewer
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_get_more_progress_item_add(EmailMailboxUGD *mailbox_ugd);
+void mailbox_get_more_progress_item_add(EmailMailboxView *view);
 
 /**
  * @brief Free and release progress time item from Mailbox viewer
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_get_more_progress_item_remove(EmailMailboxUGD *mailbox_ugd);
+void mailbox_get_more_progress_item_remove(EmailMailboxView *view);
 
 /**
  * @brief Provides adding the load more messages item to Mailbox viewer
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_load_more_messages_item_add(EmailMailboxUGD *mailbox_ugd);
+void mailbox_load_more_messages_item_add(EmailMailboxView *view);
 
 /**
  * @brief Free and release load more messages item from Mailbox viewer
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_load_more_messages_item_remove(EmailMailboxUGD *mailbox_ugd);
+void mailbox_load_more_messages_item_remove(EmailMailboxView *view);
 
 /**
  * @brief Provides functionality for send all messages from outbox in Mailbox viewer
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_send_all_btn_add(EmailMailboxUGD *mailbox_ugd);
+void mailbox_send_all_btn_add(EmailMailboxView *view);
 
 /**
  * @brief Free and release functionality of send all messages from Mailbox viewer
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_send_all_btn_remove(EmailMailboxUGD *mailbox_ugd);
+void mailbox_send_all_btn_remove(EmailMailboxView *view);
 
 /**
  * @brief Provides functionality for select all messages to Mailbox viewer
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_select_all_item_add(EmailMailboxUGD *mailbox_ugd);
+void mailbox_select_all_item_add(EmailMailboxView *view);
 
 /**
  * @brief Free and release functionality for select all messages from Mailbox viewer
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_select_all_item_remove(EmailMailboxUGD *mailbox_ugd);
+void mailbox_select_all_item_remove(EmailMailboxView *view);
 
 /**
  * @brief Provides adding the "no more emails" item to Mailbox viewer
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_no_more_emails_item_add(EmailMailboxUGD *mailbox_ugd);
+void mailbox_no_more_emails_item_add(EmailMailboxView *view);
 
 /**
  * @brief Free and release for "no more emails" from Mailbox viewer
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_no_more_emails_item_remove(EmailMailboxUGD *mailbox_ugd);
+void mailbox_no_more_emails_item_remove(EmailMailboxView *view);
 
 #endif	/* __DEF_EMAIL_MAILBOX_LIST_OTHER_ITEMS_H_ */

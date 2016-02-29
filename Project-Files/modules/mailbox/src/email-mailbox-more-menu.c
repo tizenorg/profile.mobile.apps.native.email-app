@@ -21,7 +21,7 @@
 #include "email-mailbox-toolbar.h"
 #include "email-mailbox-item.h"
 #include "email-mailbox-list.h"
-#include "email-mailbox-ug-util.h"
+#include "email-mailbox-module-util.h"
 #include "email-mailbox-util.h"
 #include "email-mailbox-more-menu.h"
 #include "email-mailbox-noti-mgr.h"
@@ -42,8 +42,8 @@ static void _resize_more_ctxpopup_cb(void *data, Evas *e, Evas_Object *obj, void
 static void _delete_more_ctxpopup_cb(void *data, Evas *e, Evas_Object *obj, void *event_info);
 static void _more_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_info);
 static void _compose_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_info);
-static void _change_view_for_selection_mode(EmailMailboxUGD *mailbox_ugd);
-static void _setup_edit_mode(EmailMailboxUGD *mailbox_ugd, mailbox_edit_type_e edit_type);
+static void _change_view_for_selection_mode(EmailMailboxView *view);
+static void _setup_edit_mode(EmailMailboxView *view, mailbox_edit_type_e edit_type);
 
 /*
  * Definitions
@@ -58,7 +58,7 @@ static void _setup_edit_mode(EmailMailboxUGD *mailbox_ugd, mailbox_edit_type_e e
 typedef struct {
 	int index;
 	Evas_Object *radio;
-	EmailMailboxUGD *mailbox_ugd;
+	EmailMailboxView *view;
 } RadioItemData;
 
 
@@ -70,20 +70,20 @@ typedef struct {
  * Definition for static functions
  */
 
-static void _setup_edit_mode(EmailMailboxUGD *mailbox_ugd, mailbox_edit_type_e edit_type)
+static void _setup_edit_mode(EmailMailboxView *view, mailbox_edit_type_e edit_type)
 {
-	DELETE_EVAS_OBJECT(mailbox_ugd->more_ctxpopup);
-	if (!mailbox_ugd->b_editmode) {
-		mailbox_ugd->editmode_type = edit_type;
-		mailbox_ugd->selected_mail_list = eina_list_free(mailbox_ugd->selected_mail_list);
-		mailbox_ugd->selected_mail_list = NULL;
-		debug_log("Enter edit mode. type:(%d)", mailbox_ugd->editmode_type);
+	DELETE_EVAS_OBJECT(view->more_ctxpopup);
+	if (!view->b_editmode) {
+		view->editmode_type = edit_type;
+		view->selected_mail_list = eina_list_free(view->selected_mail_list);
+		view->selected_mail_list = NULL;
+		debug_log("Enter edit mode. type:(%d)", view->editmode_type);
 
-		mailbox_ugd->b_editmode = true;
-		_change_view_for_selection_mode(mailbox_ugd);
-		mailbox_sync_cancel_all(mailbox_ugd);
-		mailbox_toolbar_create(mailbox_ugd);
-		mailbox_create_select_info(mailbox_ugd);
+		view->b_editmode = true;
+		_change_view_for_selection_mode(view);
+		mailbox_sync_cancel_all(view);
+		mailbox_toolbar_create(view);
+		mailbox_create_select_info(view);
 	} else {
 		debug_warning("error status: already edit mode");
 	}
@@ -94,8 +94,8 @@ static void _more_edit_delete_mode_cb(void *data, Evas_Object *obj, void *event_
 	debug_enter();
 	retm_if(!data, "data is NULL");
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
-	_setup_edit_mode(mailbox_ugd, MAILBOX_EDIT_TYPE_DELETE);
+	EmailMailboxView *view = (EmailMailboxView *)data;
+	_setup_edit_mode(view, MAILBOX_EDIT_TYPE_DELETE);
 }
 
 static void _more_edit_move_mode_cb(void *data, Evas_Object *obj, void *event_info)
@@ -103,8 +103,8 @@ static void _more_edit_move_mode_cb(void *data, Evas_Object *obj, void *event_in
 	debug_enter();
 	retm_if(!data, "data is NULL");
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
-	_setup_edit_mode(mailbox_ugd, MAILBOX_EDIT_TYPE_MOVE);
+	EmailMailboxView *view = (EmailMailboxView *)data;
+	_setup_edit_mode(view, MAILBOX_EDIT_TYPE_MOVE);
 
 }
 
@@ -113,8 +113,8 @@ static void _more_edit_spam_mode_cb(void *data, Evas_Object *obj, void *event_in
 	debug_enter();
 	retm_if(!data, "data is NULL");
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
-	_setup_edit_mode(mailbox_ugd, MAILBOX_EDIT_TYPE_ADD_SPAM);
+	EmailMailboxView *view = (EmailMailboxView *)data;
+	_setup_edit_mode(view, MAILBOX_EDIT_TYPE_ADD_SPAM);
 }
 
 static void _more_edit_remove_spam_mode_cb(void *data, Evas_Object *obj, void *event_info)
@@ -122,8 +122,8 @@ static void _more_edit_remove_spam_mode_cb(void *data, Evas_Object *obj, void *e
 	debug_enter();
 	retm_if(!data, "data is NULL");
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
-	_setup_edit_mode(mailbox_ugd, MAILBOX_EDIT_TYPE_REMOVE_SPAM);
+	EmailMailboxView *view = (EmailMailboxView *)data;
+	_setup_edit_mode(view, MAILBOX_EDIT_TYPE_REMOVE_SPAM);
 
 }
 
@@ -132,8 +132,8 @@ static void _more_edit_read_mode_cb(void *data, Evas_Object *obj, void *event_in
 	debug_enter();
 	retm_if(!data, "data is NULL");
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
-	_setup_edit_mode(mailbox_ugd, MAILBOX_EDIT_TYPE_MARK_READ);
+	EmailMailboxView *view = (EmailMailboxView *)data;
+	_setup_edit_mode(view, MAILBOX_EDIT_TYPE_MARK_READ);
 
 }
 
@@ -142,8 +142,8 @@ static void _more_edit_unread_mode_cb(void *data, Evas_Object *obj, void *event_
 	debug_enter();
 	retm_if(!data, "data is NULL");
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
-	_setup_edit_mode(mailbox_ugd, MAILBOX_EDIT_TYPE_MARK_UNREAD);
+	EmailMailboxView *view = (EmailMailboxView *)data;
+	_setup_edit_mode(view, MAILBOX_EDIT_TYPE_MARK_UNREAD);
 
 }
 
@@ -152,15 +152,15 @@ static void _settings_cb(void *data, Evas_Object *obj, void *event_info)
 	debug_enter();
 	retm_if(!data, "data is NULL");
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
+	EmailMailboxView *view = (EmailMailboxView *)data;
 	email_params_h params = NULL;
 
-	DELETE_EVAS_OBJECT(mailbox_ugd->more_ctxpopup);
+	DELETE_EVAS_OBJECT(view->more_ctxpopup);
 
 	if (email_params_create(&params) &&
 		email_params_add_str(params, EMAIL_BUNDLE_KEY_VIEW_TYPE, EMAIL_BUNDLE_VAL_VIEW_SETTING)) {
 
-		mailbox_ugd->setting = mailbox_setting_module_create(mailbox_ugd, EMAIL_MODULE_SETTING, params);
+		view->setting = mailbox_setting_module_create(view, EMAIL_MODULE_SETTING, params);
 	}
 
 	email_params_free(&params);
@@ -182,8 +182,8 @@ static void _more_ctxpopup_dismissed_cb(void *data, Evas_Object *obj, void *even
 	debug_enter();
 	retm_if(!data, "data is NULL");
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
-	DELETE_EVAS_OBJECT(mailbox_ugd->more_ctxpopup);
+	EmailMailboxView *view = (EmailMailboxView *)data;
+	DELETE_EVAS_OBJECT(view->more_ctxpopup);
 }
 
 static void _move_more_ctxpopup(Evas_Object *ctxpopup, Evas_Object *win)
@@ -216,8 +216,8 @@ static void _resize_more_ctxpopup_cb(void *data, Evas *e, Evas_Object *obj, void
 	debug_enter();
 	retm_if(!data, "data is NULL");
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
-	_move_more_ctxpopup(mailbox_ugd->more_ctxpopup, mailbox_ugd->base.module->win);
+	EmailMailboxView *view = (EmailMailboxView *)data;
+	_move_more_ctxpopup(view->more_ctxpopup, view->base.module->win);
 }
 
 static void _delete_more_ctxpopup_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
@@ -225,57 +225,57 @@ static void _delete_more_ctxpopup_cb(void *data, Evas *e, Evas_Object *obj, void
 	debug_enter();
 	retm_if(!data, "data is NULL");
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
+	EmailMailboxView *view = (EmailMailboxView *)data;
 
-	evas_object_event_callback_del(mailbox_ugd->base.module->navi, EVAS_CALLBACK_RESIZE, _resize_more_ctxpopup_cb);
-	eext_object_event_callback_del(mailbox_ugd->more_ctxpopup, EEXT_CALLBACK_BACK, _more_ctxpopup_back_cb);
-	eext_object_event_callback_del(mailbox_ugd->more_ctxpopup, EEXT_CALLBACK_MORE, _more_ctxpopup_back_cb);
-	evas_object_smart_callback_del(mailbox_ugd->more_ctxpopup, "dismissed", _more_ctxpopup_dismissed_cb);
-	evas_object_event_callback_del(mailbox_ugd->more_ctxpopup, EVAS_CALLBACK_DEL, _delete_more_ctxpopup_cb);
+	evas_object_event_callback_del(view->base.module->navi, EVAS_CALLBACK_RESIZE, _resize_more_ctxpopup_cb);
+	eext_object_event_callback_del(view->more_ctxpopup, EEXT_CALLBACK_BACK, _more_ctxpopup_back_cb);
+	eext_object_event_callback_del(view->more_ctxpopup, EEXT_CALLBACK_MORE, _more_ctxpopup_back_cb);
+	evas_object_smart_callback_del(view->more_ctxpopup, "dismissed", _more_ctxpopup_dismissed_cb);
+	evas_object_event_callback_del(view->more_ctxpopup, EVAS_CALLBACK_DEL, _delete_more_ctxpopup_cb);
 }
 
 void _sync_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
+	EmailMailboxView *view = (EmailMailboxView *)data;
 
-	DELETE_EVAS_OBJECT(mailbox_ugd->more_ctxpopup);
+	DELETE_EVAS_OBJECT(view->more_ctxpopup);
 
-	mailbox_sync_current_mailbox(mailbox_ugd);
+	mailbox_sync_current_mailbox(view);
 }
 
 static void _compose_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
-	RETURN_IF_FAIL(mailbox_ugd != NULL);
+	EmailMailboxView *view = (EmailMailboxView *)data;
+	RETURN_IF_FAIL(view != NULL);
 
-	retm_if(mailbox_ugd->is_module_launching, "is_module_launching is true;");
-	mailbox_ugd->is_module_launching = true;
+	retm_if(view->is_module_launching, "is_module_launching is true;");
+	view->is_module_launching = true;
 
 	int account_id = 0;
 
-	DELETE_EVAS_OBJECT(mailbox_ugd->more_ctxpopup);
-	DELETE_EVAS_OBJECT(mailbox_ugd->error_popup);
+	DELETE_EVAS_OBJECT(view->more_ctxpopup);
+	DELETE_EVAS_OBJECT(view->error_popup);
 
-	if (mailbox_ugd->account_count == 0) {
-		mailbox_create_timeout_popup(mailbox_ugd, _("IDS_ST_HEADER_WARNING"),
+	if (view->account_count == 0) {
+		mailbox_create_timeout_popup(view, _("IDS_ST_HEADER_WARNING"),
 				_("IDS_EMAIL_POP_YOU_HAVE_NOT_YET_CREATED_AN_EMAIL_ACCOUNT_CREATE_AN_EMAIL_ACCOUNT_AND_TRY_AGAIN"), 3.0);
-		mailbox_ugd->is_module_launching = false;
+		view->is_module_launching = false;
 		return;
 	}
 
-	if (mailbox_ugd->composer) {
-		debug_log("Composer UG is already launched");
-		mailbox_ugd->is_module_launching = false;
+	if (view->composer) {
+		debug_log("Composer module is already launched");
+		view->is_module_launching = false;
 		return;
 	}
 
-	mailbox_sync_cancel_all(mailbox_ugd);
+	mailbox_sync_cancel_all(view);
 
 	gint composer_type = RUN_COMPOSER_NEW;
-	account_id = mailbox_ugd->account_id;
+	account_id = view->account_id;
 	if (account_id == 0) {	/* If user execute all emails view, we will use default account id */
 		int default_account_id = 0;
 		if (!email_engine_get_default_account(&default_account_id)) {
@@ -287,7 +287,7 @@ static void _compose_toolbar_clicked_cb(void *data, Evas_Object *obj, void *even
 
 	if (account_id <= 0) {
 		debug_log("No account");
-		mailbox_ugd->is_module_launching = false;
+		view->is_module_launching = false;
 		return;
 	}
 
@@ -300,20 +300,20 @@ static void _compose_toolbar_clicked_cb(void *data, Evas_Object *obj, void *even
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_RUN_TYPE, composer_type) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, account_id)) {
 
-		mailbox_ugd->composer = mailbox_composer_module_create(mailbox_ugd, EMAIL_MODULE_COMPOSER, params);
+		view->composer = mailbox_composer_module_create(view, EMAIL_MODULE_COMPOSER, params);
 	} else {
-		mailbox_ugd->is_module_launching = false;
+		view->is_module_launching = false;
 	}
 
 	email_params_free(&params);
 	debug_leave();
 }
 
-static Elm_Object_Item *_add_ctx_menu_item(EmailMailboxUGD *mailbox_ugd, const char *str, Evas_Object *icon, Evas_Smart_Cb cb)
+static Elm_Object_Item *_add_ctx_menu_item(EmailMailboxView *view, const char *str, Evas_Object *icon, Evas_Smart_Cb cb)
 {
 	Elm_Object_Item *ctx_menu_item = NULL;
 
-	ctx_menu_item = elm_ctxpopup_item_append(mailbox_ugd->more_ctxpopup, str, icon, cb, mailbox_ugd);
+	ctx_menu_item = elm_ctxpopup_item_append(view->more_ctxpopup, str, icon, cb, view);
 	elm_object_item_domain_text_translatable_set(ctx_menu_item, PACKAGE, EINA_TRUE);
 	return ctx_menu_item;
 }
@@ -323,75 +323,75 @@ static void _more_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_i
 	debug_enter();
 	retm_if(!data, "data is NULL");
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
+	EmailMailboxView *view = (EmailMailboxView *)data;
 
-	retm_if(mailbox_ugd->composer, "mailbox_ugd->composer(%p) is being shown.", mailbox_ugd->composer);
-	retm_if(mailbox_ugd->viewer, "mailbox_ugd->viewer(%p) is being shown.", mailbox_ugd->viewer);
-	retm_if(mailbox_ugd->account, "mailbox_ugd->account(%p) is being shown.", mailbox_ugd->account);
-	debug_log("b_searchmode: %d, b_editmode: %d", mailbox_ugd->b_searchmode, mailbox_ugd->b_editmode);
-	retm_if(mailbox_ugd->b_searchmode, "mailbox_ugd->b_searchmode(%d) Search mode is ON.", mailbox_ugd->b_searchmode);
-	retm_if(mailbox_ugd->b_editmode, "mailbox_ugd->b_editmode(%d) Edit mode is ON.", mailbox_ugd->b_editmode);
+	retm_if(view->composer, "view->composer(%p) is being shown.", view->composer);
+	retm_if(view->viewer, "view->viewer(%p) is being shown.", view->viewer);
+	retm_if(view->account, "view->account(%p) is being shown.", view->account);
+	debug_log("b_searchmode: %d, b_editmode: %d", view->b_searchmode, view->b_editmode);
+	retm_if(view->b_searchmode, "view->b_searchmode(%d) Search mode is ON.", view->b_searchmode);
+	retm_if(view->b_editmode, "view->b_editmode(%d) Edit mode is ON.", view->b_editmode);
 
-	mailbox_ugd->more_ctxpopup = elm_ctxpopup_add(mailbox_ugd->base.module->win);
+	view->more_ctxpopup = elm_ctxpopup_add(view->base.module->win);
 
-	elm_ctxpopup_auto_hide_disabled_set(mailbox_ugd->more_ctxpopup, EINA_TRUE);
-	elm_object_style_set(mailbox_ugd->more_ctxpopup, "more/default");
-	eext_object_event_callback_add(mailbox_ugd->more_ctxpopup, EEXT_CALLBACK_BACK, _more_ctxpopup_back_cb, mailbox_ugd);
-	eext_object_event_callback_add(mailbox_ugd->more_ctxpopup, EEXT_CALLBACK_MORE, _more_ctxpopup_back_cb, mailbox_ugd);
-	evas_object_smart_callback_add(mailbox_ugd->more_ctxpopup, "dismissed", _more_ctxpopup_dismissed_cb, mailbox_ugd);
+	elm_ctxpopup_auto_hide_disabled_set(view->more_ctxpopup, EINA_TRUE);
+	elm_object_style_set(view->more_ctxpopup, "more/default");
+	eext_object_event_callback_add(view->more_ctxpopup, EEXT_CALLBACK_BACK, _more_ctxpopup_back_cb, view);
+	eext_object_event_callback_add(view->more_ctxpopup, EEXT_CALLBACK_MORE, _more_ctxpopup_back_cb, view);
+	evas_object_smart_callback_add(view->more_ctxpopup, "dismissed", _more_ctxpopup_dismissed_cb, view);
 
-	evas_object_event_callback_add(mailbox_ugd->more_ctxpopup, EVAS_CALLBACK_DEL, _delete_more_ctxpopup_cb, mailbox_ugd);
-	evas_object_event_callback_add(mailbox_ugd->base.module->navi, EVAS_CALLBACK_RESIZE, _resize_more_ctxpopup_cb, mailbox_ugd);
+	evas_object_event_callback_add(view->more_ctxpopup, EVAS_CALLBACK_DEL, _delete_more_ctxpopup_cb, view);
+	evas_object_event_callback_add(view->base.module->navi, EVAS_CALLBACK_RESIZE, _resize_more_ctxpopup_cb, view);
 
-	_add_ctx_menu_item(mailbox_ugd, "IDS_EMAIL_OPT_REFRESH", NULL, _sync_toolbar_clicked_cb);
-	_add_ctx_menu_item(mailbox_ugd, "IDS_EMAIL_OPT_SEARCH", NULL, _search_button_clicked_cb);
+	_add_ctx_menu_item(view, "IDS_EMAIL_OPT_REFRESH", NULL, _sync_toolbar_clicked_cb);
+	_add_ctx_menu_item(view, "IDS_EMAIL_OPT_SEARCH", NULL, _search_button_clicked_cb);
 
-	if (g_list_length(mailbox_ugd->mail_list) > 0) {
-		_add_ctx_menu_item(mailbox_ugd, "IDS_EMAIL_OPT_DELETE", NULL, _more_edit_delete_mode_cb);
-		if (mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX
-				|| mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_TRASH
-				|| mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_SPAMBOX
-				|| mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_USER_DEFINED) {
-			_add_ctx_menu_item(mailbox_ugd, "IDS_EMAIL_OPT_MOVE", NULL, _more_edit_move_mode_cb);
-			if (mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_SPAMBOX) {
-				_add_ctx_menu_item(mailbox_ugd, "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX", NULL, _more_edit_spam_mode_cb);
+	if (g_list_length(view->mail_list) > 0) {
+		_add_ctx_menu_item(view, "IDS_EMAIL_OPT_DELETE", NULL, _more_edit_delete_mode_cb);
+		if (view->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX
+				|| view->mailbox_type == EMAIL_MAILBOX_TYPE_TRASH
+				|| view->mailbox_type == EMAIL_MAILBOX_TYPE_SPAMBOX
+				|| view->mailbox_type == EMAIL_MAILBOX_TYPE_USER_DEFINED) {
+			_add_ctx_menu_item(view, "IDS_EMAIL_OPT_MOVE", NULL, _more_edit_move_mode_cb);
+			if (view->mailbox_type != EMAIL_MAILBOX_TYPE_SPAMBOX) {
+				_add_ctx_menu_item(view, "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX", NULL, _more_edit_spam_mode_cb);
 			} else {
-				_add_ctx_menu_item(mailbox_ugd, "IDS_EMAIL_OPT_REMOVE_FROM_SPAM_ABB", NULL, _more_edit_remove_spam_mode_cb);
+				_add_ctx_menu_item(view, "IDS_EMAIL_OPT_REMOVE_FROM_SPAM_ABB", NULL, _more_edit_remove_spam_mode_cb);
 			}
 		}
-		if (mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX && mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_DRAFT
-				&& mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_TRASH && mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_SPAMBOX) {
-			_add_ctx_menu_item(mailbox_ugd, "IDS_EMAIL_OPT_MARK_AS_READ_ABB", NULL, _more_edit_read_mode_cb);
-			_add_ctx_menu_item(mailbox_ugd, "IDS_EMAIL_OPT_MARK_AS_UNREAD_ABB", NULL, _more_edit_unread_mode_cb);
+		if (view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX && view->mailbox_type != EMAIL_MAILBOX_TYPE_DRAFT
+				&& view->mailbox_type != EMAIL_MAILBOX_TYPE_TRASH && view->mailbox_type != EMAIL_MAILBOX_TYPE_SPAMBOX) {
+			_add_ctx_menu_item(view, "IDS_EMAIL_OPT_MARK_AS_READ_ABB", NULL, _more_edit_read_mode_cb);
+			_add_ctx_menu_item(view, "IDS_EMAIL_OPT_MARK_AS_UNREAD_ABB", NULL, _more_edit_unread_mode_cb);
 		}
 	}
-	_add_ctx_menu_item(mailbox_ugd, "IDS_EMAIL_OPT_SETTINGS", NULL, _settings_cb);
+	_add_ctx_menu_item(view, "IDS_EMAIL_OPT_SETTINGS", NULL, _settings_cb);
 
-	elm_ctxpopup_direction_priority_set(mailbox_ugd->more_ctxpopup, ELM_CTXPOPUP_DIRECTION_UP, ELM_CTXPOPUP_DIRECTION_UNKNOWN, ELM_CTXPOPUP_DIRECTION_UNKNOWN, ELM_CTXPOPUP_DIRECTION_UNKNOWN);
-	_move_more_ctxpopup(mailbox_ugd->more_ctxpopup, mailbox_ugd->base.module->win);
+	elm_ctxpopup_direction_priority_set(view->more_ctxpopup, ELM_CTXPOPUP_DIRECTION_UP, ELM_CTXPOPUP_DIRECTION_UNKNOWN, ELM_CTXPOPUP_DIRECTION_UNKNOWN, ELM_CTXPOPUP_DIRECTION_UNKNOWN);
+	_move_more_ctxpopup(view->more_ctxpopup, view->base.module->win);
 
-	evas_object_show(mailbox_ugd->more_ctxpopup);
+	evas_object_show(view->more_ctxpopup);
 }
 
-static void _change_view_for_selection_mode(EmailMailboxUGD *mailbox_ugd)
+static void _change_view_for_selection_mode(EmailMailboxView *view)
 {
 	debug_enter();
-	retm_if(!mailbox_ugd, "mailbox_ugd is NULL");
-	elm_genlist_realized_items_update(mailbox_ugd->gl);
+	retm_if(!view, "view is NULL");
+	elm_genlist_realized_items_update(view->gl);
 
-	if ((mailbox_ugd->mode == EMAIL_MAILBOX_MODE_ALL
-	|| mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX)
-	&& mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
-		mailbox_send_all_btn_remove(mailbox_ugd);
+	if ((view->mode == EMAIL_MAILBOX_MODE_ALL
+	|| view->mode == EMAIL_MAILBOX_MODE_MAILBOX)
+	&& view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
+		mailbox_send_all_btn_remove(view);
 	}
 
 	/* Last updated item should be removed after select all item is added. */
-	mailbox_select_all_item_add(mailbox_ugd);
-	mailbox_remove_unnecessary_list_item_for_edit_mode(mailbox_ugd);
+	mailbox_select_all_item_add(view);
+	mailbox_remove_unnecessary_list_item_for_edit_mode(view);
 
-	mailbox_hide_compose_btn(mailbox_ugd);
-	if (mailbox_ugd->btn_mailbox)
-		mailbox_naviframe_mailbox_button_remove(mailbox_ugd);
+	mailbox_hide_compose_btn(view);
+	if (view->btn_mailbox)
+		mailbox_naviframe_mailbox_button_remove(view);
 
 }
 
@@ -399,29 +399,29 @@ static void _change_view_for_selection_mode(EmailMailboxUGD *mailbox_ugd)
  * Definition for exported functions
  */
 
-Evas_Object *mailbox_create_toolbar_more_btn(EmailMailboxUGD *mailbox_ugd)
+Evas_Object *mailbox_create_toolbar_more_btn(EmailMailboxView *view)
 {
 	debug_enter();
 
-	Evas_Object *btn = elm_button_add(mailbox_ugd->base.module->navi);
+	Evas_Object *btn = elm_button_add(view->base.module->navi);
 	if (!btn) return NULL;
 	elm_object_style_set(btn, "naviframe/more/default");
-	evas_object_smart_callback_add(btn, "clicked", _more_toolbar_clicked_cb, mailbox_ugd);
+	evas_object_smart_callback_add(btn, "clicked", _more_toolbar_clicked_cb, view);
 	return btn;
 }
 
-void mailbox_create_compose_btn(EmailMailboxUGD *mailbox_ugd)
+void mailbox_create_compose_btn(EmailMailboxView *view)
 {
 	debug_enter();
-	retm_if(!mailbox_ugd, "mailbox_ugd is NULL");
+	retm_if(!view, "view is NULL");
 
-	Evas_Object *floating_btn = eext_floatingbutton_add(mailbox_ugd->base.content);
-	elm_object_part_content_set(mailbox_ugd->base.content, "elm.swallow.floatingbutton", floating_btn);
+	Evas_Object *floating_btn = eext_floatingbutton_add(view->base.content);
+	elm_object_part_content_set(view->base.content, "elm.swallow.floatingbutton", floating_btn);
 	evas_object_repeat_events_set(floating_btn, EINA_FALSE);
 
 	Evas_Object *btn = elm_button_add(floating_btn);
 	elm_object_part_content_set(floating_btn, "button1", btn);
-	evas_object_smart_callback_add(btn, "clicked", _compose_toolbar_clicked_cb, mailbox_ugd);
+	evas_object_smart_callback_add(btn, "clicked", _compose_toolbar_clicked_cb, view);
 
 	Evas_Object *img = elm_layout_add(btn);
 	elm_layout_file_set(img, email_get_common_theme_path(), EMAIL_IMAGE_COMPOSE_BUTTON);
@@ -429,33 +429,33 @@ void mailbox_create_compose_btn(EmailMailboxUGD *mailbox_ugd)
 
 	evas_object_show(img);
 	evas_object_show(floating_btn);
-	mailbox_ugd->compose_btn = floating_btn;
+	view->compose_btn = floating_btn;
 
 	debug_leave();
 }
 
-void mailbox_show_compose_btn(EmailMailboxUGD *mailbox_ugd)
+void mailbox_show_compose_btn(EmailMailboxView *view)
 {
 	debug_enter();
-	retm_if(!mailbox_ugd, "mailbox_ugd is NULL");
+	retm_if(!view, "view is NULL");
 
-	if (mailbox_ugd->compose_btn && !mailbox_ugd->b_editmode && !mailbox_ugd->b_searchmode) {
-		elm_object_part_content_set(mailbox_ugd->base.content, "elm.swallow.floatingbutton", mailbox_ugd->compose_btn);
-		evas_object_repeat_events_set(mailbox_ugd->compose_btn, EINA_FALSE);
-		evas_object_show(mailbox_ugd->compose_btn);
+	if (view->compose_btn && !view->b_editmode && !view->b_searchmode) {
+		elm_object_part_content_set(view->base.content, "elm.swallow.floatingbutton", view->compose_btn);
+		evas_object_repeat_events_set(view->compose_btn, EINA_FALSE);
+		evas_object_show(view->compose_btn);
 	}
 
 	debug_leave();
 }
 
-void mailbox_hide_compose_btn(EmailMailboxUGD *mailbox_ugd)
+void mailbox_hide_compose_btn(EmailMailboxView *view)
 {
 	debug_enter();
-	retm_if(!mailbox_ugd, "mailbox_ugd is NULL");
+	retm_if(!view, "view is NULL");
 
-	if (mailbox_ugd->compose_btn) {
-		elm_object_part_content_unset(mailbox_ugd->base.content, "elm.swallow.floatingbutton");
-		evas_object_hide(mailbox_ugd->compose_btn);
+	if (view->compose_btn) {
+		elm_object_part_content_unset(view->base.content, "elm.swallow.floatingbutton");
+		evas_object_hide(view->compose_btn);
 	}
 	debug_leave();
 }

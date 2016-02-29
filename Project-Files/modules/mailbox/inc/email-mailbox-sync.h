@@ -20,23 +20,23 @@
 
 /**
  * @brief Provides synchronization for current Mailbox with email service
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  * @return TRUE on success or FALSE if none or an error occurred
  */
-bool mailbox_sync_current_mailbox(EmailMailboxUGD *mailbox_ugd);
+bool mailbox_sync_current_mailbox(EmailMailboxView *view);
 
 /**
  * @brief Provides synchronization for more messages request from email service
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  * @return TRUE on success or FALSE if none or an error occurred
  */
-bool mailbox_sync_more_messages(EmailMailboxUGD *mailbox_ugd);
+bool mailbox_sync_more_messages(EmailMailboxView *view);
 
 /**
  * @brief Cancel all synchronization processes email service
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_sync_cancel_all(EmailMailboxUGD *mailbox_ugd);
+void mailbox_sync_cancel_all(EmailMailboxView *view);
 
 /**
  * @brief Provides synchronization for current folder

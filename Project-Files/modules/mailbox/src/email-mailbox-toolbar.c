@@ -22,7 +22,7 @@
 #include "email-mailbox-item.h"
 #include "email-mailbox-list.h"
 #include "email-mailbox-list-other-items.h"
-#include "email-mailbox-ug-util.h"
+#include "email-mailbox-module-util.h"
 #include "email-mailbox-util.h"
 #include "email-mailbox-more-menu.h"
 #include "email-mailbox-sync.h"
@@ -63,8 +63,8 @@ typedef enum {
 /*
  * Declaration for static functions
  */
-static void _create_control_option(EmailMailboxUGD *ad);
-static void _create_edit_control_option(EmailMailboxUGD *ad);
+static void _create_control_option(EmailMailboxView *ad);
+static void _create_edit_control_option(EmailMailboxView *ad);
 
 static void _popup_response_delete_ok_cb(void *data, Evas_Object *obj, void *event_info);
 
@@ -77,8 +77,8 @@ static void _error_popup_destroy_cb(void *data, Evas_Object *obj, void *event_in
 	debug_enter();
 	retm_if(!data, "data is NULL");
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
-	DELETE_EVAS_OBJECT(mailbox_ugd->error_popup);
+	EmailMailboxView *view = (EmailMailboxView *)data;
+	DELETE_EVAS_OBJECT(view->error_popup);
 }
 
 static void _error_popup_mouseup_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
@@ -89,25 +89,25 @@ static void _error_popup_mouseup_cb(void *data, Evas *e, Evas_Object *obj, void 
 	}
 }
 
-static void _create_control_option(EmailMailboxUGD *mailbox_ugd)
+static void _create_control_option(EmailMailboxView *view)
 {
 	debug_enter();
 
-	if (!mailbox_ugd->controlbar_more_btn) {
-		mailbox_ugd->controlbar_more_btn = mailbox_create_toolbar_more_btn(mailbox_ugd);
-		elm_object_item_part_content_set(mailbox_ugd->base.navi_item, "toolbar_more_btn", mailbox_ugd->controlbar_more_btn);
+	if (!view->controlbar_more_btn) {
+		view->controlbar_more_btn = mailbox_create_toolbar_more_btn(view);
+		elm_object_item_part_content_set(view->base.navi_item, "toolbar_more_btn", view->controlbar_more_btn);
 	}
 	return;
 }
 
-static void _create_edit_control_option(EmailMailboxUGD *mailbox_ugd)
+static void _create_edit_control_option(EmailMailboxView *view)
 {
 	debug_enter();
 
 	int i = 0;
 	bool use_ReadUnread_popup = false;
 	bool use_StarUnstar_popup = false;
-	int checked_count = eina_list_count(mailbox_ugd->selected_mail_list);
+	int checked_count = eina_list_count(view->selected_mail_list);
 	Eina_List *first_list = NULL;
 	MailItemData *first_ld = NULL;
 	int first_read_status = 0;
@@ -117,14 +117,14 @@ static void _create_edit_control_option(EmailMailboxUGD *mailbox_ugd)
 		debug_log("selected count %d", checked_count);
 		checked_count = 0;
 	} else {
-		first_list = eina_list_nth_list(mailbox_ugd->selected_mail_list, 0);
+		first_list = eina_list_nth_list(view->selected_mail_list, 0);
 		first_ld = eina_list_data_get(first_list);
 		first_read_status = first_ld->is_seen;
 		first_favourite_status = first_ld->flag_type;
 	}
 
 	for (i = 1; checked_count > 1 && i < checked_count; i++) {
-		Eina_List *nth_list = eina_list_nth_list(mailbox_ugd->selected_mail_list, i);
+		Eina_List *nth_list = eina_list_nth_list(view->selected_mail_list, i);
 		MailItemData *ld = eina_list_data_get(nth_list);
 
 		if (ld->is_seen != first_read_status && false == use_ReadUnread_popup) {
@@ -143,15 +143,15 @@ static void _create_edit_control_option(EmailMailboxUGD *mailbox_ugd)
  * Definition for exported functions
  */
 
-void mailbox_toolbar_create(EmailMailboxUGD *mailbox_ugd)
+void mailbox_toolbar_create(EmailMailboxView *view)
 {
 	debug_enter();
-	retm_if(!mailbox_ugd, "mailbox_ugd is NULL.");
+	retm_if(!view, "view is NULL.");
 
-	if (mailbox_ugd->b_editmode) {
-		_create_edit_control_option(mailbox_ugd);
+	if (view->b_editmode) {
+		_create_edit_control_option(view);
 	} else {
-		_create_control_option(mailbox_ugd);
+		_create_control_option(view);
 	}
 }
 
@@ -160,14 +160,14 @@ static void _popup_response_delete_ok_cb(void *data, Evas_Object *obj, void *eve
 	debug_enter();
 	retm_if(!data, "data is NULL");
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
+	EmailMailboxView *view = (EmailMailboxView *)data;
 
 	edit_req_t *req = MEM_ALLOC(req, 1);
 	retm_if(!req, "memory allocation failed.");
 
 	Eina_List *cur = NULL;
 	MailItemData *ld = NULL;
-	EINA_LIST_FOREACH(mailbox_ugd->selected_mail_list, cur, ld) {
+	EINA_LIST_FOREACH(view->selected_mail_list, cur, ld) {
 		DeleteRequestedMail *requested_mail = MEM_ALLOC(requested_mail, 1);
 		requested_mail->account_id = ld->account_id;
 		requested_mail->mail_id = ld->mail_id;
@@ -176,10 +176,10 @@ static void _popup_response_delete_ok_cb(void *data, Evas_Object *obj, void *eve
 		requested_mail->mail_status = ld->mail_status;
 		req->requested_mail_list = eina_list_append(req->requested_mail_list, requested_mail);
 	}
-	req->mailbox_ugd = mailbox_ugd;
+	req->view = view;
 	ecore_thread_feedback_run(mailbox_process_delete_mail, NULL, NULL, NULL, req, EINA_TRUE);
 
-	mailbox_exit_edit_mode(mailbox_ugd);
+	mailbox_exit_edit_mode(view);
 }
 
 void mailbox_move_mail(void *data)
@@ -191,26 +191,26 @@ void mailbox_move_mail(void *data)
 		return;
 	}
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
+	EmailMailboxView *view = (EmailMailboxView *)data;
 
-	if (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_ALL || mailbox_ugd->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER) {
-		MailItemData *ld = eina_list_data_get(mailbox_ugd->selected_mail_list);
+	if (view->mode == EMAIL_MAILBOX_MODE_ALL || view->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER) {
+		MailItemData *ld = eina_list_data_get(view->selected_mail_list);
 		int first_account_id = ld->account_id;
 
 		Eina_List *cur = NULL;
-		EINA_LIST_FOREACH(mailbox_ugd->selected_mail_list, cur, ld) {
+		EINA_LIST_FOREACH(view->selected_mail_list, cur, ld) {
 			if (first_account_id != ld->account_id) {
 				debug_log("first_account_id : %d, account_id : %d", first_account_id, ld->account_id);
-				DELETE_EVAS_OBJECT(mailbox_ugd->error_popup);
-				mailbox_ugd->error_popup = mailbox_create_popup(mailbox_ugd, _("IDS_EMAIL_HEADER_UNABLE_TO_MOVE_EMAILS_ABB"), _("IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"), _error_popup_destroy_cb,
+				DELETE_EVAS_OBJECT(view->error_popup);
+				view->error_popup = mailbox_create_popup(view, _("IDS_EMAIL_HEADER_UNABLE_TO_MOVE_EMAILS_ABB"), _("IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"), _error_popup_destroy_cb,
 				_error_popup_destroy_cb, "IDS_EMAIL_BUTTON_OK", NULL, NULL);
-				evas_object_event_callback_add(mailbox_ugd->error_popup, EVAS_CALLBACK_MOUSE_UP, _error_popup_mouseup_cb, mailbox_ugd);
+				evas_object_event_callback_add(view->error_popup, EVAS_CALLBACK_MOUSE_UP, _error_popup_mouseup_cb, view);
 				return;
 			}
 		}
 	}
 
-	mailbox_process_move_mail(mailbox_ugd);
+	mailbox_process_move_mail(view);
 }
 
 void mailbox_from_spam_mail(void *data)
@@ -222,9 +222,9 @@ void mailbox_from_spam_mail(void *data)
 		return;
 	}
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
+	EmailMailboxView *view = (EmailMailboxView *)data;
 
-	DELETE_EVAS_OBJECT(mailbox_ugd->more_ctxpopup);
+	DELETE_EVAS_OBJECT(view->more_ctxpopup);
 
 	int i = 0, unblock_count = 0, j = 0;
 
@@ -235,7 +235,7 @@ void mailbox_from_spam_mail(void *data)
 		return;
 	}
 
-	int checked_count = eina_list_count(mailbox_ugd->selected_mail_list);
+	int checked_count = eina_list_count(view->selected_mail_list);
 	if (checked_count <= 0) return;
 
 	GList *mail_list[max_account_id];
@@ -243,7 +243,7 @@ void mailbox_from_spam_mail(void *data)
 
 	int ret = 0;
 	for (j = 0; j < checked_count; j++) {
-		Eina_List *nth_list = eina_list_nth_list(mailbox_ugd->selected_mail_list, j);
+		Eina_List *nth_list = eina_list_nth_list(view->selected_mail_list, j);
 
 		MailItemData *ld = eina_list_data_get(nth_list);
 		mail_list[ld->account_id-1] = g_list_prepend(mail_list[ld->account_id-1], GINT_TO_POINTER(ld->mail_id));
@@ -289,7 +289,7 @@ void mailbox_from_spam_mail(void *data)
 					}
 					email_free_mailbox(&inbox, 1);
 				} else {
-					debug_warning("email_get_mailbox_by_mailbox_type : account_id(%d) type(INBOX) - err(%d) or mailbox is NULL(%p)", mailbox_ugd->account_id, err, inbox);
+					debug_warning("email_get_mailbox_by_mailbox_type : account_id(%d) type(INBOX) - err(%d) or mailbox is NULL(%p)", view->account_id, err, inbox);
 				}
 			}
 		}
@@ -304,7 +304,7 @@ void mailbox_from_spam_mail(void *data)
 		}
 	}
 
-	mailbox_exit_edit_mode(mailbox_ugd);
+	mailbox_exit_edit_mode(view);
 	debug_leave();
 }
 
@@ -317,7 +317,7 @@ void mailbox_to_spam_mail(void *data)
 		return;
 	}
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
+	EmailMailboxView *view = (EmailMailboxView *)data;
 	int i = 0, block_count = 0;
 	int max_account_id = email_engine_get_max_account_id();
 	int ret = 1;
@@ -327,9 +327,9 @@ void mailbox_to_spam_mail(void *data)
 		return;
 	}
 
-	int checked_count = eina_list_count(mailbox_ugd->selected_mail_list);
+	int checked_count = eina_list_count(view->selected_mail_list);
 
-	DELETE_EVAS_OBJECT(mailbox_ugd->more_ctxpopup);
+	DELETE_EVAS_OBJECT(view->more_ctxpopup);
 
 	if (checked_count <= 0) return;
 
@@ -337,7 +337,7 @@ void mailbox_to_spam_mail(void *data)
 	memset(mail_list, 0, max_account_id * sizeof(GList *));
 
 	for (i = 0; i < checked_count; i++) {
-		Eina_List *nth_list = eina_list_nth_list(mailbox_ugd->selected_mail_list, i);
+		Eina_List *nth_list = eina_list_nth_list(view->selected_mail_list, i);
 
 		MailItemData *ld = eina_list_data_get(nth_list);
 		mail_list[ld->account_id-1] = g_list_prepend(mail_list[ld->account_id-1], GINT_TO_POINTER(ld->mail_id));
@@ -361,7 +361,7 @@ void mailbox_to_spam_mail(void *data)
 			debug_log("notification_status_message_post() failed: %d", ret);
 		}
 
-		mailbox_ugd->need_deleted_noti = false;
+		view->need_deleted_noti = false;
 
 		for (i = 0; i < max_account_id; i++) {
 			if (!mail_list[i]) continue;
@@ -399,7 +399,7 @@ void mailbox_to_spam_mail(void *data)
 			}
 		}
 	}
-	mailbox_exit_edit_mode(mailbox_ugd);
+	mailbox_exit_edit_mode(view);
 }
 
 void mailbox_markunread_mail(void *data)
@@ -411,7 +411,7 @@ void mailbox_markunread_mail(void *data)
 		return;
 	}
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
+	EmailMailboxView *view = (EmailMailboxView *)data;
 	int i = 0;
 	int max_account_id = email_engine_get_max_account_id();
 	int ret = 0;
@@ -421,9 +421,9 @@ void mailbox_markunread_mail(void *data)
 		return;
 	}
 
-	int checked_count = eina_list_count(mailbox_ugd->selected_mail_list);
+	int checked_count = eina_list_count(view->selected_mail_list);
 
-	DELETE_EVAS_OBJECT(mailbox_ugd->more_ctxpopup);
+	DELETE_EVAS_OBJECT(view->more_ctxpopup);
 
 	if (checked_count <= 0) return;
 
@@ -431,7 +431,7 @@ void mailbox_markunread_mail(void *data)
 	memset(mail_list, 0, max_account_id * sizeof(GList *));
 
 	for (i = 0; i < checked_count; i++) {
-		Eina_List *nth_list = eina_list_nth_list(mailbox_ugd->selected_mail_list, i);
+		Eina_List *nth_list = eina_list_nth_list(view->selected_mail_list, i);
 		MailItemData *ld = eina_list_data_get(nth_list);
 		mail_list[ld->account_id-1] = g_list_prepend(mail_list[ld->account_id-1], GINT_TO_POINTER(ld->mail_id));
 	}
@@ -468,7 +468,7 @@ void mailbox_markunread_mail(void *data)
 		debug_log("notification_status_message_post() failed: %d", ret);
 	}
 
-	mailbox_exit_edit_mode(mailbox_ugd);
+	mailbox_exit_edit_mode(view);
 
 	for (i = 0; i < max_account_id; ++i) {
 		if (mail_list[i] != NULL) {
@@ -487,7 +487,7 @@ void mailbox_markread_mail(void *data)
 		return;
 	}
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
+	EmailMailboxView *view = (EmailMailboxView *)data;
 	int i = 0;
 	int max_account_id = email_engine_get_max_account_id();
 	int ret = 0;
@@ -497,9 +497,9 @@ void mailbox_markread_mail(void *data)
 		return;
 	}
 
-	int checked_count = eina_list_count(mailbox_ugd->selected_mail_list);
+	int checked_count = eina_list_count(view->selected_mail_list);
 
-	DELETE_EVAS_OBJECT(mailbox_ugd->more_ctxpopup);
+	DELETE_EVAS_OBJECT(view->more_ctxpopup);
 
 	if (checked_count <= 0) return;
 
@@ -507,7 +507,7 @@ void mailbox_markread_mail(void *data)
 	memset(mail_list, 0, max_account_id * sizeof(GList *));
 
 	for (i = 0; i < checked_count; i++) {
-		Eina_List *nth_list = eina_list_nth_list(mailbox_ugd->selected_mail_list, i);
+		Eina_List *nth_list = eina_list_nth_list(view->selected_mail_list, i);
 		MailItemData *ld = eina_list_data_get(nth_list);
 		mail_list[ld->account_id-1] = g_list_prepend(mail_list[ld->account_id-1], GINT_TO_POINTER(ld->mail_id));
 	}
@@ -544,7 +544,7 @@ void mailbox_markread_mail(void *data)
 		debug_log("notification_status_message_post() failed: %d", ret);
 	}
 
-	mailbox_exit_edit_mode(mailbox_ugd);
+	mailbox_exit_edit_mode(view);
 
 	for (i = 0; i < max_account_id; ++i) {
 		if (mail_list[i] != NULL) {

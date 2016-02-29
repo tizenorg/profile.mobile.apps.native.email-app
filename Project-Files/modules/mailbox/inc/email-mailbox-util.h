@@ -214,16 +214,16 @@ const char *email_get_mailbox_theme_path();
 
 /**
  * @brief Clear Mailbox info data
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_clear_prev_mailbox_info(EmailMailboxUGD *mailbox_ugd);
+void mailbox_clear_prev_mailbox_info(EmailMailboxView *view);
 
 /**
  * @brief Copies a byte string encoded to time format for last updated string
  * @param[in]	last_update_time	Structure represented time
- * @param[in]	mailbox_ugd			Email mailbox data
+ * @param[in]	view			Email mailbox data
  */
-void mailbox_set_last_updated_time(time_t last_update_time, EmailMailboxUGD *mailbox_ugd);
+void mailbox_set_last_updated_time(time_t last_update_time, EmailMailboxView *view);
 
 /**
  * @brief Compare received Mail ID if exist in Mail item data
@@ -235,17 +235,17 @@ int mailbox_compare_mailid_in_list(gconstpointer a, gconstpointer b);
 
 /**
  * @brief Creates popup with duration
- * @param[in]	mailbox_ugd			Email mailbox data
+ * @param[in]	view			Email mailbox data
  * @param[in]	title_text			Title text
  * @param[in]	contents_text		Content body text
  * @param[in]	timeout				time duration
  * @return Evas_Object with suitable popup notification, otherwise NULL
  */
-Evas_Object *mailbox_create_timeout_popup(EmailMailboxUGD *mailbox_ugd, const char *title_text, const char *contents_text, double timeout);
+Evas_Object *mailbox_create_timeout_popup(EmailMailboxView *view, const char *title_text, const char *contents_text, double timeout);
 
 /**
  * @brief Creates popup
- * @param[in]	mailbox_ugd			Email mailbox data
+ * @param[in]	view			Email mailbox data
  * @param[in]	title				Title text
  * @param[in]	content				Content body text
  * @param[in]	_response_cb		Evas_Smart callback function for back button
@@ -255,15 +255,15 @@ Evas_Object *mailbox_create_timeout_popup(EmailMailboxUGD *mailbox_ugd, const ch
  * @param[in]	btn2_text			String data for button #2
  * @return Evas_Object with suitable popup notification, otherwise NULL
  */
-Evas_Object *mailbox_create_popup(EmailMailboxUGD *mailbox_ugd, const char *title, const char *content, Evas_Smart_Cb _response_cb,
+Evas_Object *mailbox_create_popup(EmailMailboxView *view, const char *title, const char *content, Evas_Smart_Cb _response_cb,
 		Evas_Smart_Cb btn1_response_cb, const char *btn1_text, Evas_Smart_Cb btn2_response_cb, const char *btn2_text);
 /**
  * @brief Creates error popup
  * @param[in]	error_type			Error type
  * @param[in]	account_id			Account ID
- * @param[in]	mailbox_ugd			Email mailbox data
+ * @param[in]	view			Email mailbox data
  */
-void mailbox_create_error_popup(int error_type, int account_id, EmailMailboxUGD *mailbox_ugd);
+void mailbox_create_error_popup(int error_type, int account_id, EmailMailboxView *view);
 
 /**
  * @brief Creates password change popup
@@ -274,46 +274,46 @@ void mailbox_create_password_changed_popup(void *data, int account_id);
 
 /**
  * @brief Check sort type validation
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_check_sort_type_validation(EmailMailboxUGD *mailbox_ugd);
+void mailbox_check_sort_type_validation(EmailMailboxView *view);
 
 /**
  * @brief Add account color to Email settings data Mailbox Account list
- * @param[in]	mailbox_ugd			Email mailbox data
+ * @param[in]	view			Email mailbox data
  * @param[in]	account_id			Account ID
  * @param[in]	account_color		Account color
  */
-void mailbox_account_color_list_add(EmailMailboxUGD *mailbox_ugd, int account_id, int account_color);
+void mailbox_account_color_list_add(EmailMailboxView *view, int account_id, int account_color);
 
 /**
  * @brief Pass the elements of the Mailbox Account Color list and update color to appropriate account ID
- * @param[in]	mailbox_ugd			Email mailbox data
+ * @param[in]	view			Email mailbox data
  * @param[in]	account_id			Account ID
  * @param[in]	update_color		Account color RGB type
  */
-void mailbox_account_color_list_update(EmailMailboxUGD *mailbox_ugd, int account_id, int update_color);
+void mailbox_account_color_list_update(EmailMailboxView *view, int account_id, int update_color);
 
 /**
  * @brief Pass the elements of the Mailbox Account Color list and delete color from appropriate account ID
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  * @param[in]	account_id		Account ID
  */
-void mailbox_account_color_list_remove(EmailMailboxUGD *mailbox_ugd, int account_id);
+void mailbox_account_color_list_remove(EmailMailboxView *view, int account_id);
 
 /**
  * @brief Pass the elements of the Mailbox Account Color list and return color for appropriate account ID
- * @param[in]	mailbox_ugd			Email mailbox data
+ * @param[in]	view			Email mailbox data
  * @param[in]	account_id			Account ID
  * @return color for appropriate account ID, otherwise 0
  */
-int mailbox_account_color_list_get_account_color(EmailMailboxUGD *mailbox_ugd, int account_id);
+int mailbox_account_color_list_get_account_color(EmailMailboxView *view, int account_id);
 
 /**
  * @brief Free all elements from Mailbox Account Color list
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_account_color_list_free(EmailMailboxUGD *mailbox_ugd);
+void mailbox_account_color_list_free(EmailMailboxView *view);
 
 /**
  * @brief Markup filter function for text inserted in the entry

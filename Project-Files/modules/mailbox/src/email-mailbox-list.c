@@ -31,7 +31,7 @@
 #include "email-mailbox-noti-mgr.h"
 #include "email-mailbox-request.h"
 #include "email-mailbox-title.h"
-#include "email-mailbox-ug-util.h"
+#include "email-mailbox-module-util.h"
 #include "email-mailbox-util.h"
 #include "email-mailbox-more-menu.h"
 
@@ -84,18 +84,18 @@ static void _mail_item_important_status_changed_cb(void *data, Evas_Object *obj,
 
 static void _mail_item_data_insert_search_tag(char *dest, int dest_len, const char *src, const char *key);
 static void _mail_item_data_list_free(GList **mail_item_data_list);
-static void _mail_item_class_update(EmailMailboxUGD *mailbox_ugd);
+static void _mail_item_class_update(EmailMailboxView *view);
 
 static void _mailbox_star_ly_del_cb(void *data, Evas *e, Evas_Object *obj, void *event_info);
 static void _mailbox_select_checkbox_ly_del_cb(void *data, Evas *e, Evas_Object *obj, void *event_info);
 
 /* insert mail item data into list */
-static void _insert_mail_item_to_list(EmailMailboxUGD *mailbox_ugd, MailItemData *ld);
-static void _insert_mail_item_to_list_from_noti(EmailMailboxUGD *mailbox_ugd, MailItemData *ld, MailItemData *prev, MailItemData *next);
+static void _insert_mail_item_to_list(EmailMailboxView *view, MailItemData *ld);
+static void _insert_mail_item_to_list_from_noti(EmailMailboxView *view, MailItemData *ld, MailItemData *prev, MailItemData *next);
 static gint _compare_mail_item_order(gconstpointer a, gconstpointer b);
 
 /* get mail list */
-static email_mail_list_item_t *_mailbox_get_mail_list(EmailMailboxUGD *mailbox_ugd, const email_search_data_t *search_data, int *mail_count);
+static email_mail_list_item_t *_mailbox_get_mail_list(EmailMailboxView *view, const email_search_data_t *search_data, int *mail_count);
 static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_id(int account_id, int mailbox_id, int sort_type, int thread_id, const email_search_data_t *search_data, int *mail_count);
 static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_type(int account_id, int mailbox_type, int sort_type, int thread_id, const email_search_data_t *search_data, int *mail_count);
 static email_mail_list_item_t *_mailbox_get_priority_sender_mail_list(int sort_type, int thread_id, const email_search_data_t *search_data, int *mail_count);
@@ -106,10 +106,10 @@ static void _add_search_data_into_filter_list(const email_search_data_t *search_
 static void _make_sorting_rule_list(email_sort_type_e sort_type, int account_id, email_list_sorting_rule_t *sorting_rule_list);
 
 /* mail list */
-static void _mailbox_make_list(EmailMailboxUGD *mailbox_ugd, const email_search_data_t *search_data);
-static void _mailbox_make_remaining_items(EmailMailboxUGD *mailbox_ugd, const email_search_data_t *search_data,
+static void _mailbox_make_list(EmailMailboxView *view, const email_search_data_t *search_data);
+static void _mailbox_make_remaining_items(EmailMailboxView *view, const email_search_data_t *search_data,
 		email_mail_list_item_t *mail_list, int mail_count);
-static void _mailbox_clear_list(EmailMailboxUGD *mailbox_ugd);
+static void _mailbox_clear_list(EmailMailboxView *view);
 static void _mailbox_free_req_data(AddRemainingMailReqData **req);
 static email_search_data_t *_clone_search_data(const email_search_data_t *search_data);
 
@@ -126,7 +126,7 @@ static void _mailbox_check_cache_init(EmailMailboxCheckCache *cache, const char 
 static void _mailbox_check_cache_free(EmailMailboxCheckCache *cache);
 static Evas_Object *_mailbox_check_cache_get_obj(EmailMailboxCheckCache *cache, Evas_Object *parent);
 static void _mailbox_check_cache_release_obj(EmailMailboxCheckCache *cache, Evas_Object *obj);
-static void _mailbox_list_insert_n_mails(EmailMailboxUGD *mailbox_ugd, email_mail_list_item_t* mail_list, int count, const email_search_data_t *search_data);
+static void _mailbox_list_insert_n_mails(EmailMailboxView *view, email_mail_list_item_t* mail_list, int count, const email_search_data_t *search_data);
 /*
  * Definition for static functions
  */
@@ -179,10 +179,10 @@ static void _pressed_item_cb(void *data, Evas_Object *obj, void *event_info)
 
 static void _mailbox_gl_free_cb(void *data, Evas *e, Evas_Object *o, void *info)
 {
-	EmailMailboxUGD *mailbox_ugd = data;
+	EmailMailboxView *view = data;
 
-	_mailbox_check_cache_free(&mailbox_ugd->star_check_cache);
-	_mailbox_check_cache_free(&mailbox_ugd->select_check_cache);
+	_mailbox_check_cache_free(&view->star_check_cache);
+	_mailbox_check_cache_free(&view->select_check_cache);
 }
 
 static Evas_Object *_mail_item_gl_account_colorbar_add(Evas_Object *parent, MailItemData *ld)
@@ -193,7 +193,7 @@ static Evas_Object *_mail_item_gl_account_colorbar_add(Evas_Object *parent, Mail
 	Evas_Object *account_colorbar = evas_object_rectangle_add(evas_object_evas_get(parent));
 	evas_object_size_hint_fill_set(account_colorbar, EVAS_HINT_FILL, EVAS_HINT_FILL);
 
-	int account_color = mailbox_account_color_list_get_account_color(ld->mailbox_ugd, ld->account_id);
+	int account_color = mailbox_account_color_list_get_account_color(ld->view, ld->account_id);
 	int r = R_MASKING(account_color);
 	int g = G_MASKING(account_color);
 	int b = B_MASKING(account_color);
@@ -213,7 +213,7 @@ static Evas_Object *_mail_item_gl_select_checkbox_add(Evas_Object *parent, MailI
 	evas_object_size_hint_weight_set(select_checkbox_ly, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	elm_layout_file_set(select_checkbox_ly, email_get_mailbox_theme_path(), "email/layout/select.icon");
 
-	Evas_Object *select_checkbox = _mailbox_check_cache_get_obj(&ld->mailbox_ugd->select_check_cache, parent);
+	Evas_Object *select_checkbox = _mailbox_check_cache_get_obj(&ld->view->select_check_cache, parent);
 
 	elm_check_state_set(select_checkbox, ld->checked);
 	evas_object_smart_callback_add(select_checkbox, "changed", _mail_item_check_changed_cb, ld);
@@ -236,7 +236,7 @@ static Evas_Object *_mail_item_gl_star_checkbox_add(Evas_Object *parent, MailIte
 	evas_object_size_hint_weight_set(star_ly, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	elm_layout_file_set(star_ly, email_get_mailbox_theme_path(), "email/layout/star.icon");
 
-	Evas_Object *star_checkbox = _mailbox_check_cache_get_obj(&ld->mailbox_ugd->star_check_cache, parent);
+	Evas_Object *star_checkbox = _mailbox_check_cache_get_obj(&ld->view->star_check_cache, parent);
 
 	if (ld->flag_type == EMAIL_FLAG_FLAGED) {
 		elm_check_state_set(star_checkbox, EINA_TRUE);
@@ -244,7 +244,7 @@ static Evas_Object *_mail_item_gl_star_checkbox_add(Evas_Object *parent, MailIte
 		elm_check_state_set(star_checkbox, EINA_FALSE);
 	}
 
-	if (!ld->mailbox_ugd->b_editmode) {
+	if (!ld->view->b_editmode) {
 		evas_object_freeze_events_set(star_checkbox, EINA_FALSE);
 		evas_object_smart_callback_add(star_checkbox, "changed", _mail_item_important_status_changed_cb, ld);
 	} else {
@@ -370,8 +370,8 @@ static char *_mail_item_gl_text_get(void *data, Evas_Object *obj, const char *pa
 	retvm_if(!data, NULL, "data is NULL");
 
 	MailItemData *ld = (MailItemData *)data;
-	EmailMailboxUGD *mailbox_ugd = ld->mailbox_ugd;
-	retvm_if(!mailbox_ugd, NULL, "mailbox_ugd is NULL");
+	EmailMailboxView *view = ld->view;
+	retvm_if(!view, NULL, "view is NULL");
 
 	if (!strcmp(part, "email.data.text")) {
 		return _mail_item_gl_time_stamp_text_add(ld);
@@ -390,29 +390,29 @@ static Evas_Object *_mail_item_gl_content_get(void *data, Evas_Object *obj, cons
 	retvm_if(!data, NULL, "data is NULL");
 
 	MailItemData *ld = (MailItemData *)data;
-	EmailMailboxUGD *mailbox_ugd = ld->mailbox_ugd;
-	retvm_if(!mailbox_ugd, NULL, "mailbox_ugd is NULL");
+	EmailMailboxView *view = ld->view;
+	retvm_if(!view, NULL, "view is NULL");
 
-	if (!strcmp(part, "select_checkbox_icon") && (mailbox_ugd->b_editmode == true)) {
+	if (!strcmp(part, "select_checkbox_icon") && (view->b_editmode == true)) {
 			return _mail_item_gl_select_checkbox_add(obj, ld);
 	}
 
-	if (!strcmp(part, "account_colorbar") && mailbox_ugd && ld->account_id > 0 && mailbox_ugd->account_count > 1 && (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_ALL
+	if (!strcmp(part, "account_colorbar") && view && ld->account_id > 0 && view->account_count > 1 && (view->mode == EMAIL_MAILBOX_MODE_ALL
 #ifndef _FEATURE_PRIORITY_SENDER_DISABLE_
-					|| mailbox_ugd->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER
+					|| view->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER
 #endif
 			)) {
 		return _mail_item_gl_account_colorbar_add(obj, ld);
 	}
 
-	if (!strcmp(part, "email.star.icon") && (mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX && ld->mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_DRAFT)) {
+	if (!strcmp(part, "email.star.icon") && (view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX && ld->view->mailbox_type != EMAIL_MAILBOX_TYPE_DRAFT)) {
 		return _mail_item_gl_star_checkbox_add(obj, ld);
 	}
 
-	if (!strcmp(part, "email.status.icon") && (ld->reply_flag || ld->forward_flag ||  (ld->is_priority_sender_mail &&  (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_ALL
-						|| mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX
+	if (!strcmp(part, "email.status.icon") && (ld->reply_flag || ld->forward_flag ||  (ld->is_priority_sender_mail &&  (view->mode == EMAIL_MAILBOX_MODE_ALL
+						|| view->mode == EMAIL_MAILBOX_MODE_MAILBOX
 #ifndef _FEATURE_PRIORITY_SENDER_DISABLE_
-						|| mailbox_ugd->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER
+						|| view->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER
 #endif
 						)))) {
 		return  _mail_item_gl_status_icons_add(obj, ld);
@@ -434,15 +434,15 @@ static void _mail_item_gl_selected_cb(void *data, Evas_Object *obj, void *event_
 	MailItemData *ld = elm_object_item_data_get(it);
 
 	retm_if(!ld, "ld is NULL");
-	retm_if(!ld->mailbox_ugd, "ld->mailbox_ugd == NULL");
+	retm_if(!ld->view, "ld->view == NULL");
 	elm_genlist_item_selected_set((Elm_Object_Item *)it, EINA_FALSE);
-	if (ld->mailbox_ugd->b_editmode) {
+	if (ld->view->b_editmode) {
 		_mail_item_check_changed_cb(ld, obj, NULL);
 		return;
 	}
-	DELETE_EVAS_OBJECT(ld->mailbox_ugd->more_ctxpopup);
+	DELETE_EVAS_OBJECT(ld->view->more_ctxpopup);
 
-	mailbox_sync_cancel_all(ld->mailbox_ugd);
+	mailbox_sync_cancel_all(ld->view);
 	int id = ld->mail_id;
 	email_mailbox_t *mbox = NULL;
 	int e = email_get_mailbox_by_mailbox_id(ld->mailbox_id, &mbox);
@@ -453,8 +453,8 @@ static void _mail_item_gl_selected_cb(void *data, Evas_Object *obj, void *event_
 	}
 
 	if (mbox->mailbox_type == EMAIL_MAILBOX_TYPE_DRAFT && email_engine_check_body_download(ld->mail_id)) {
-		if (ld->mailbox_ugd->composer) {
-			debug_log("Composer UG is already launched");
+		if (ld->view->composer) {
+			debug_log("Composer module is already launched");
 			return;
 		}
 
@@ -466,7 +466,7 @@ static void _mail_item_gl_selected_cb(void *data, Evas_Object *obj, void *event_
 			email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, ld->mailbox_id) &&
 			email_params_add_int(params, EMAIL_BUNDLE_KEY_MAIL_ID, id)) {
 
-			ld->mailbox_ugd->composer = mailbox_composer_module_create(ld->mailbox_ugd, EMAIL_MODULE_COMPOSER, params);
+			ld->view->composer = mailbox_composer_module_create(ld->view, EMAIL_MODULE_COMPOSER, params);
 		}
 
 		email_params_free(&params);
@@ -504,54 +504,54 @@ static void _mail_item_check_process_change(MailItemData *ld)
 {
 	debug_enter();
 
-	EmailMailboxUGD *mailbox_ugd = ld->mailbox_ugd;
+	EmailMailboxView *view = ld->view;
 
 	if (ld->checked) {
-		mailbox_ugd->selected_mail_list = eina_list_append(mailbox_ugd->selected_mail_list, ld);
+		view->selected_mail_list = eina_list_append(view->selected_mail_list, ld);
 	} else {
-		mailbox_ugd->selected_mail_list = eina_list_remove(mailbox_ugd->selected_mail_list, ld);
+		view->selected_mail_list = eina_list_remove(view->selected_mail_list, ld);
 	}
 
-	int cnt = eina_list_count(mailbox_ugd->selected_mail_list);
+	int cnt = eina_list_count(view->selected_mail_list);
 	debug_log("list count = %d", cnt);
 
-	if (!mailbox_ugd->b_editmode) {
+	if (!view->b_editmode) {
 		debug_log("Enter edit mode.[%d]", cnt);
-		if (cnt == 1 && !mailbox_ugd->b_editmode) {
-			debug_log("mailbox_ugd->selected_mail_list has something wrong.[%d]", cnt);
-			mailbox_ugd->selected_mail_list = eina_list_free(mailbox_ugd->selected_mail_list);
-			mailbox_ugd->selected_mail_list = NULL;
+		if (cnt == 1 && !view->b_editmode) {
+			debug_log("view->selected_mail_list has something wrong.[%d]", cnt);
+			view->selected_mail_list = eina_list_free(view->selected_mail_list);
+			view->selected_mail_list = NULL;
 			if (ld->checked) {
-				mailbox_ugd->selected_mail_list = eina_list_append(mailbox_ugd->selected_mail_list, ld);
+				view->selected_mail_list = eina_list_append(view->selected_mail_list, ld);
 			}
 		}
 
-		mailbox_ugd->b_editmode = true;
+		view->b_editmode = true;
 
-		mailbox_sync_cancel_all(mailbox_ugd);
-		if ((mailbox_ugd->mode == EMAIL_MAILBOX_MODE_ALL
-			|| mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX)
-			&& mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
-				mailbox_send_all_btn_remove(mailbox_ugd);
+		mailbox_sync_cancel_all(view);
+		if ((view->mode == EMAIL_MAILBOX_MODE_ALL
+			|| view->mode == EMAIL_MAILBOX_MODE_MAILBOX)
+			&& view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
+				mailbox_send_all_btn_remove(view);
 			}
-		mailbox_change_search_layout_state(mailbox_ugd, false);
+		mailbox_change_search_layout_state(view, false);
 
-		mailbox_create_select_info(mailbox_ugd);
-		mailbox_toolbar_create(mailbox_ugd);
-	} else if (true == mailbox_ugd->b_editmode) {
+		mailbox_create_select_info(view);
+		mailbox_toolbar_create(view);
+	} else if (true == view->b_editmode) {
 		debug_log("Update edit mode");
-		mailbox_update_select_info(mailbox_ugd);
+		mailbox_update_select_info(view);
 	}
 
 	/* Update Select All Checkbox */
-	int checked_count = eina_list_count(mailbox_ugd->selected_mail_list);
-	int total_count = elm_genlist_items_count(mailbox_ugd->gl);
+	int checked_count = eina_list_count(view->selected_mail_list);
+	int total_count = elm_genlist_items_count(view->gl);
 	if (checked_count == (total_count-1)) {
-		mailbox_ugd->selectAll_chksel = EINA_TRUE;
-		elm_check_state_set(mailbox_ugd->selectAll_check, mailbox_ugd->selectAll_chksel);
-	} else if (mailbox_ugd->selectAll_chksel) {
-		mailbox_ugd->selectAll_chksel = EINA_FALSE;
-		elm_check_state_set(mailbox_ugd->selectAll_check, mailbox_ugd->selectAll_chksel);
+		view->selectAll_chksel = EINA_TRUE;
+		elm_check_state_set(view->selectAll_check, view->selectAll_chksel);
+	} else if (view->selectAll_chksel) {
+		view->selectAll_chksel = EINA_FALSE;
+		elm_check_state_set(view->selectAll_check, view->selectAll_chksel);
 	}
 
 }
@@ -565,15 +565,15 @@ static void _mail_item_important_status_changed_cb(void *data, Evas_Object *obj,
 	retm_if(!ld, "ld is NULL");
 	retm_if(!ld->check_favorite_btn, "ld->check_favorite_btn is NULL");
 
-	ld->mailbox_ugd->important_list = g_list_prepend(ld->mailbox_ugd->important_list,
+	ld->view->important_list = g_list_prepend(ld->view->important_list,
 			GINT_TO_POINTER(ld->mail_id));
 	count = 1;
 
-	if (ld->mailbox_ugd->important_list) {
+	if (ld->view->important_list) {
 		int mail_ids[count];
 		memset(mail_ids, 0, sizeof(mail_ids));
 		int i = 0;
-		GList *cur = g_list_first(ld->mailbox_ugd->important_list);
+		GList *cur = g_list_first(ld->view->important_list);
 		for ( ; i < count; ++i, cur = g_list_next(cur)) {
 			mail_ids[i] = (int)(ptrdiff_t)g_list_nth_data(cur, 0);
 		}
@@ -583,8 +583,8 @@ static void _mail_item_important_status_changed_cb(void *data, Evas_Object *obj,
 			debug_warning("_mail_item_important_status_changed_cb account_id(%d) count(%d)- err (%d)",
 										ld->account_id, count, e);
 		}
-		g_list_free(ld->mailbox_ugd->important_list);
-		ld->mailbox_ugd->important_list = NULL;
+		g_list_free(ld->view->important_list);
+		ld->view->important_list = NULL;
 	}
 }
 
@@ -646,16 +646,16 @@ static void _mail_item_data_list_free(GList **mail_item_data_list)
 	*mail_item_data_list = NULL;
 }
 
-static void _mail_item_class_update(EmailMailboxUGD *mailbox_ugd)
+static void _mail_item_class_update(EmailMailboxView *view)
 {
 	debug_enter();
-	retm_if(!mailbox_ugd, "mailbox_ugd is NULL");
+	retm_if(!view, "view is NULL");
 
-	mailbox_ugd->itc.item_style = "email_mailbox";
-	mailbox_ugd->itc.func.text_get = _mail_item_gl_text_get;
-	mailbox_ugd->itc.func.content_get = _mail_item_gl_content_get;
-	mailbox_ugd->itc.func.state_get = NULL;
-	mailbox_ugd->itc.func.del = NULL;
+	view->itc.item_style = "email_mailbox";
+	view->itc.func.text_get = _mail_item_gl_text_get;
+	view->itc.func.content_get = _mail_item_gl_content_get;
+	view->itc.func.state_get = NULL;
+	view->itc.func.del = NULL;
 
 	debug_leave();
 
@@ -668,7 +668,7 @@ static void _mailbox_star_ly_del_cb(void *data, Evas *e, Evas_Object *obj, void 
 
 	evas_object_smart_callback_del(ld->check_favorite_btn, "changed", _mail_item_important_status_changed_cb);
 
-	_mailbox_check_cache_release_obj(&ld->mailbox_ugd->star_check_cache, ld->check_favorite_btn);
+	_mailbox_check_cache_release_obj(&ld->view->star_check_cache, ld->check_favorite_btn);
 
 	ld->check_favorite_btn = NULL;
 }
@@ -679,46 +679,46 @@ static void _mailbox_select_checkbox_ly_del_cb(void *data, Evas *e, Evas_Object 
 
 	evas_object_smart_callback_del(ld->check_btn, "changed", _mail_item_check_changed_cb);
 
-	_mailbox_check_cache_release_obj(&ld->mailbox_ugd->select_check_cache, ld->check_btn);
+	_mailbox_check_cache_release_obj(&ld->view->select_check_cache, ld->check_btn);
 
 	ld->check_btn = NULL;
 }
 
-static void _insert_mail_item_to_list(EmailMailboxUGD *mailbox_ugd, MailItemData *ld)
+static void _insert_mail_item_to_list(EmailMailboxView *view, MailItemData *ld)
 {
 	debug_enter();
 
 	/* insert normal item */
-	if (mailbox_ugd->get_more_progress_item != NULL) {
-		ld->item = elm_genlist_item_insert_before(mailbox_ugd->gl,
-						&mailbox_ugd->itc,
+	if (view->get_more_progress_item != NULL) {
+		ld->item = elm_genlist_item_insert_before(view->gl,
+						&view->itc,
 						ld,
 						NULL,
-						mailbox_ugd->get_more_progress_item,
+						view->get_more_progress_item,
 						ELM_GENLIST_ITEM_NONE,
 						_mail_item_gl_selected_cb,
 						NULL);
-	} else if (mailbox_ugd->load_more_messages_item != NULL) {
-		ld->item = elm_genlist_item_insert_before(mailbox_ugd->gl,
-						&mailbox_ugd->itc,
+	} else if (view->load_more_messages_item != NULL) {
+		ld->item = elm_genlist_item_insert_before(view->gl,
+						&view->itc,
 						ld,
 						NULL,
-						mailbox_ugd->load_more_messages_item,
+						view->load_more_messages_item,
 						ELM_GENLIST_ITEM_NONE,
 						_mail_item_gl_selected_cb,
 						NULL);
-	} else if (mailbox_ugd->no_more_emails_item != NULL) {
-		ld->item = elm_genlist_item_insert_before(mailbox_ugd->gl,
-						&mailbox_ugd->itc,
+	} else if (view->no_more_emails_item != NULL) {
+		ld->item = elm_genlist_item_insert_before(view->gl,
+						&view->itc,
 						ld,
 						NULL,
-						mailbox_ugd->no_more_emails_item,
+						view->no_more_emails_item,
 						ELM_GENLIST_ITEM_NONE,
 						_mail_item_gl_selected_cb,
 						NULL);
 	} else {
-		ld->item = elm_genlist_item_append(mailbox_ugd->gl,
-						&mailbox_ugd->itc,
+		ld->item = elm_genlist_item_append(view->gl,
+						&view->itc,
 						ld,
 						NULL,
 						ELM_GENLIST_ITEM_NONE,
@@ -728,31 +728,31 @@ static void _insert_mail_item_to_list(EmailMailboxUGD *mailbox_ugd, MailItemData
 	debug_leave();
 }
 
-static void _insert_mail_item_to_list_from_noti(EmailMailboxUGD *mailbox_ugd, MailItemData *ld, MailItemData *prev, MailItemData *next)
+static void _insert_mail_item_to_list_from_noti(EmailMailboxView *view, MailItemData *ld, MailItemData *prev, MailItemData *next)
 {
 	debug_enter();
 	debug_secure_trace("prev->title: [%s], next->title: [%s]", prev ? prev->title : "NULL", next ? next->title : "NULL");
 
 	if (!prev) {
-		if (mailbox_ugd->last_updated_time_item) {
-			ld->item = elm_genlist_item_insert_after(mailbox_ugd->gl,
-								&mailbox_ugd->itc,
+		if (view->last_updated_time_item) {
+			ld->item = elm_genlist_item_insert_after(view->gl,
+								&view->itc,
 								ld,
 								NULL,
-								mailbox_ugd->last_updated_time_item,
+								view->last_updated_time_item,
 								ELM_GENLIST_ITEM_NONE,
 								_mail_item_gl_selected_cb, NULL);
-		} else if (mailbox_ugd->select_all_item) {
-			ld->item = elm_genlist_item_insert_after(mailbox_ugd->gl,
-								&mailbox_ugd->itc,
+		} else if (view->select_all_item) {
+			ld->item = elm_genlist_item_insert_after(view->gl,
+								&view->itc,
 								ld,
 								NULL,
-								mailbox_ugd->select_all_item,
+								view->select_all_item,
 								ELM_GENLIST_ITEM_NONE,
 								_mail_item_gl_selected_cb, NULL);
 		} else {
-			ld->item = elm_genlist_item_prepend(mailbox_ugd->gl,
-								&mailbox_ugd->itc,
+			ld->item = elm_genlist_item_prepend(view->gl,
+								&view->itc,
 								ld,
 								NULL,
 								ELM_GENLIST_ITEM_NONE,
@@ -762,8 +762,8 @@ static void _insert_mail_item_to_list_from_noti(EmailMailboxUGD *mailbox_ugd, Ma
 			elm_genlist_item_show(ld->item, ELM_GENLIST_ITEM_SCROLLTO_TOP);
 		}
 	} else {
-		ld->item = elm_genlist_item_insert_after(mailbox_ugd->gl,
-								&mailbox_ugd->itc,
+		ld->item = elm_genlist_item_insert_after(view->gl,
+								&view->itc,
 								ld,
 								NULL,
 								prev->item,
@@ -780,9 +780,9 @@ gint _compare_mail_item_order(gconstpointer a, gconstpointer b)
 		return 0;
 	MailItemData *first_item = (MailItemData *)a;
 	MailItemData *second_item = (MailItemData *)b;
-	EmailMailboxUGD *mailbox_ugd = first_item->mailbox_ugd;
+	EmailMailboxView *view = first_item->view;
 
-	int sort_type = mailbox_ugd->sort_type;
+	int sort_type = view->sort_type;
 
 	switch (sort_type) {
 		case EMAIL_SORT_DATE_RECENT:
@@ -936,47 +936,47 @@ gint _compare_mail_item_order(gconstpointer a, gconstpointer b)
 	return ret;
 }
 
-static email_mail_list_item_t *_mailbox_get_mail_list(EmailMailboxUGD *mailbox_ugd, const email_search_data_t *search_data, int *mail_count)
+static email_mail_list_item_t *_mailbox_get_mail_list(EmailMailboxView *view, const email_search_data_t *search_data, int *mail_count)
 {
 	debug_enter();
 
 	email_mail_list_item_t *mail_data = NULL;
 	int mailbox_type = EMAIL_MAILBOX_TYPE_NONE;
 
-	if (mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_NONE)
+	if (view->mailbox_type == EMAIL_MAILBOX_TYPE_NONE)
 		mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
 	else
-		mailbox_type = mailbox_ugd->mailbox_type;
+		mailbox_type = view->mailbox_type;
 
-	if (mailbox_ugd->b_searchmode) {
-		if (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_ALL) {
+	if (view->b_searchmode) {
+		if (view->mode == EMAIL_MAILBOX_MODE_ALL) {
 			if (mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED)
-				mail_data = _mailbox_get_favourite_mail_list(mailbox_ugd->sort_type, EMAIL_GET_MAIL_NORMAL, search_data, mail_count);
+				mail_data = _mailbox_get_favourite_mail_list(view->sort_type, EMAIL_GET_MAIL_NORMAL, search_data, mail_count);
 			else
 				mail_data = _mailbox_get_mail_list_by_mailbox_type(0, mailbox_type, EMAIL_SORT_DATE_RECENT, EMAIL_GET_MAIL_NORMAL, search_data, mail_count);
 		}
 #ifndef _FEATURE_PRIORITY_SENDER_DISABLE_
-		else if (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER) {
+		else if (view->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER) {
 			mail_data = _mailbox_get_priority_sender_mail_list(EMAIL_SORT_DATE_RECENT, EMAIL_GET_MAIL_NORMAL, search_data, mail_count);
 		}
 #endif
 		else {
-			mail_data = _mailbox_get_mail_list_by_mailbox_id(mailbox_ugd->account_id, mailbox_ugd->mailbox_id, EMAIL_SORT_DATE_RECENT, EMAIL_GET_MAIL_NORMAL, search_data, mail_count);
+			mail_data = _mailbox_get_mail_list_by_mailbox_id(view->account_id, view->mailbox_id, EMAIL_SORT_DATE_RECENT, EMAIL_GET_MAIL_NORMAL, search_data, mail_count);
 		}
 	} else {
-		if (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_ALL) {
+		if (view->mode == EMAIL_MAILBOX_MODE_ALL) {
 			if (mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED)
-				mail_data = _mailbox_get_favourite_mail_list(mailbox_ugd->sort_type, EMAIL_GET_MAIL_NORMAL, NULL, mail_count);
+				mail_data = _mailbox_get_favourite_mail_list(view->sort_type, EMAIL_GET_MAIL_NORMAL, NULL, mail_count);
 			else
-				mail_data = _mailbox_get_mail_list_by_mailbox_type(0, mailbox_type, mailbox_ugd->sort_type, EMAIL_GET_MAIL_NORMAL, NULL, mail_count);
+				mail_data = _mailbox_get_mail_list_by_mailbox_type(0, mailbox_type, view->sort_type, EMAIL_GET_MAIL_NORMAL, NULL, mail_count);
 		}
 #ifndef _FEATURE_PRIORITY_SENDER_DISABLE_
-		else if (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER) {
-			mail_data = _mailbox_get_priority_sender_mail_list(mailbox_ugd->sort_type, EMAIL_GET_MAIL_NORMAL, NULL, mail_count);
+		else if (view->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER) {
+			mail_data = _mailbox_get_priority_sender_mail_list(view->sort_type, EMAIL_GET_MAIL_NORMAL, NULL, mail_count);
 		}
 #endif
 		else {
-			mail_data = _mailbox_get_mail_list_by_mailbox_id(mailbox_ugd->account_id, mailbox_ugd->mailbox_id, mailbox_ugd->sort_type, EMAIL_GET_MAIL_NORMAL, NULL, mail_count);
+			mail_data = _mailbox_get_mail_list_by_mailbox_id(view->account_id, view->mailbox_id, view->sort_type, EMAIL_GET_MAIL_NORMAL, NULL, mail_count);
 		}
 	}
 
@@ -1728,39 +1728,39 @@ static void _make_sorting_rule_list(email_sort_type_e sort_type, int account_id,
 	}
 }
 
-static void _mailbox_make_list(EmailMailboxUGD *mailbox_ugd, const email_search_data_t *search_data)
+static void _mailbox_make_list(EmailMailboxView *view, const email_search_data_t *search_data)
 {
 	debug_enter();
 
 	email_mail_list_item_t *mail_list = NULL;
 	int mail_count = 0;
 
-	debug_log("mode: %d, mailbox_type: %d", mailbox_ugd->mode, mailbox_ugd->mailbox_type);
+	debug_log("mode: %d, mailbox_type: %d", view->mode, view->mailbox_type);
 
-	mail_list = _mailbox_get_mail_list(mailbox_ugd, search_data, &mail_count);
+	mail_list = _mailbox_get_mail_list(view, search_data, &mail_count);
 
 	if (mail_list) {
 		/* Display last updated time for individual accounts */
-		if (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX
-				&& mailbox_ugd->only_local == FALSE && !mailbox_ugd->b_searchmode) {
-			mailbox_last_updated_time_item_add(mailbox_ugd, false);
+		if (view->mode == EMAIL_MAILBOX_MODE_MAILBOX
+				&& view->only_local == FALSE && !view->b_searchmode) {
+			mailbox_last_updated_time_item_add(view, false);
 		}
 
-		_mailbox_list_insert_n_mails(mailbox_ugd, mail_list, MIN(mail_count, FIRST_BLOCK_SIZE), search_data);
+		_mailbox_list_insert_n_mails(view, mail_list, MIN(mail_count, FIRST_BLOCK_SIZE), search_data);
 		debug_log("COUNT: %d", mail_count);
 
 		/* add remaining items */
-		_mailbox_make_remaining_items(mailbox_ugd, search_data, mail_list, mail_count);
+		_mailbox_make_remaining_items(view, search_data, mail_list, mail_count);
 
-		if (mailbox_ugd->b_searchmode) {
-			mailbox_hide_no_contents_view(mailbox_ugd);
+		if (view->b_searchmode) {
+			mailbox_hide_no_contents_view(view);
 		} else {
-			if ((mailbox_ugd->mode == EMAIL_MAILBOX_MODE_ALL || mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX)
-				&& mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX && mail_count > 0) {
+			if ((view->mode == EMAIL_MAILBOX_MODE_ALL || view->mode == EMAIL_MAILBOX_MODE_MAILBOX)
+				&& view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX && mail_count > 0) {
 				bool sending_mail_exist = false;
 				GList *cur = NULL;
 				MailItemData *ld = NULL;
-				G_LIST_FOREACH(mailbox_ugd->mail_list, cur, ld) {
+				G_LIST_FOREACH(view->mail_list, cur, ld) {
 					if (ld->mail_status == EMAIL_MAIL_STATUS_SENDING) {
 						sending_mail_exist = true;
 						break;
@@ -1768,42 +1768,42 @@ static void _mailbox_make_list(EmailMailboxUGD *mailbox_ugd, const email_search_
 				}
 
 				if (!sending_mail_exist) {
-					mailbox_send_all_btn_add(mailbox_ugd);
+					mailbox_send_all_btn_add(view);
 				}
 			}
 
-			if ((mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX && mailbox_ugd->only_local == false
-					&& mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX
-					&& mailbox_ugd->account_type == EMAIL_SERVER_TYPE_IMAP4)
-				|| (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX && mailbox_ugd->only_local == false
-					&& mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX
-					&& mailbox_ugd->account_type == EMAIL_SERVER_TYPE_POP3)) {
+			if ((view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->only_local == false
+					&& view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX
+					&& view->account_type == EMAIL_SERVER_TYPE_IMAP4)
+				|| (view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->only_local == false
+					&& view->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX
+					&& view->account_type == EMAIL_SERVER_TYPE_POP3)) {
 				/* since there is a delay in receiving noti from email-service,creating more progress item directly. */
-				mailbox_load_more_messages_item_add(mailbox_ugd);
-			} else if (mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX) {
-				mailbox_no_more_emails_item_add(mailbox_ugd);
+				mailbox_load_more_messages_item_add(view);
+			} else if (view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX) {
+				mailbox_no_more_emails_item_add(view);
 			}
 
-			mailbox_hide_no_contents_view(mailbox_ugd);
+			mailbox_hide_no_contents_view(view);
 		}
-		mailbox_ugd->b_edge_bottom = false;
-		mailbox_ugd->b_enable_get_more = true;
+		view->b_edge_bottom = false;
+		view->b_enable_get_more = true;
 	} else {
 		debug_log("no email exists.");
 
-		if (mailbox_ugd->b_searchmode) {
-			mailbox_show_no_contents_view(mailbox_ugd);
+		if (view->b_searchmode) {
+			mailbox_show_no_contents_view(view);
 		} else {
-			if (mailbox_ugd->b_editmode)
-				mailbox_exit_edit_mode(mailbox_ugd);
-			mailbox_show_no_contents_view(mailbox_ugd);
+			if (view->b_editmode)
+				mailbox_exit_edit_mode(view);
+			mailbox_show_no_contents_view(view);
 		}
 	}
 
 	debug_leave();
 }
 
-static void _mailbox_make_remaining_items(EmailMailboxUGD *mailbox_ugd, const email_search_data_t *search_data,
+static void _mailbox_make_remaining_items(EmailMailboxView *view, const email_search_data_t *search_data,
 		email_mail_list_item_t *mail_list, int mail_count)
 {
 	debug_enter();
@@ -1816,7 +1816,7 @@ static void _mailbox_make_remaining_items(EmailMailboxUGD *mailbox_ugd, const em
 			break;
 		}
 
-		if (mailbox_ugd->b_searchmode && search_data)
+		if (view->b_searchmode && search_data)
 		{
 			search_data_clone = _clone_search_data(search_data);
 			if (!search_data_clone) {
@@ -1832,13 +1832,13 @@ static void _mailbox_make_remaining_items(EmailMailboxUGD *mailbox_ugd, const em
 		}
 
 		*req = (AddRemainingMailReqData) {mail_list, FIRST_BLOCK_SIZE, mail_count,
-			search_data_clone, mailbox_ugd};
+			search_data_clone, view};
 
-		if (mailbox_ugd->base.state != EV_STATE_ACTIVE) {
+		if (view->base.state != EV_STATE_ACTIVE) {
 			debug_log("wait for active state...");
-			mailbox_ugd->remaining_req = req;
+			view->remaining_req = req;
 		} else {
-			mailbox_list_make_remaining_items_in_thread(mailbox_ugd, req);
+			mailbox_list_make_remaining_items_in_thread(view, req);
 		}
 
 		return;
@@ -1851,38 +1851,38 @@ static void _mailbox_make_remaining_items(EmailMailboxUGD *mailbox_ugd, const em
 	debug_leave();
 }
 
-static void _mailbox_clear_list(EmailMailboxUGD *mailbox_ugd)
+static void _mailbox_clear_list(EmailMailboxView *view)
 {
 	debug_enter();
 
-	if (mailbox_ugd == NULL) {
-		debug_warning("mailbox_ugd is NULL");
+	if (view == NULL) {
+		debug_warning("view is NULL");
 		return;
 	}
 
-	debug_log("mailbox_ugd->mail_list[%p]", mailbox_ugd->mail_list);
+	debug_log("view->mail_list[%p]", view->mail_list);
 
-	mailbox_cancel_all_requests(mailbox_ugd);
+	mailbox_cancel_all_requests(view);
 
-	if (mailbox_ugd->b_editmode)
-		mailbox_exit_edit_mode(mailbox_ugd);
+	if (view->b_editmode)
+		mailbox_exit_edit_mode(view);
 
-	mailbox_get_more_progress_item_remove(mailbox_ugd);
-	mailbox_load_more_messages_item_remove(mailbox_ugd);
-	mailbox_no_more_emails_item_remove(mailbox_ugd);
-	mailbox_send_all_btn_remove(mailbox_ugd);
+	mailbox_get_more_progress_item_remove(view);
+	mailbox_load_more_messages_item_remove(view);
+	mailbox_no_more_emails_item_remove(view);
+	mailbox_send_all_btn_remove(view);
 
-	debug_log("mailbox_ugd->gl: 0x%x", mailbox_ugd->gl);
-	if (mailbox_ugd->gl) {
-		elm_genlist_clear(mailbox_ugd->gl);
+	debug_log("view->gl: 0x%x", view->gl);
+	if (view->gl) {
+		elm_genlist_clear(view->gl);
 	} else {
-		debug_warning("mailbox_ugd->gl is null");
+		debug_warning("view->gl is null");
 		return;
 	}
 
-	mailbox_list_free_all_item_data(mailbox_ugd);
+	mailbox_list_free_all_item_data(view);
 
-	mailbox_ugd->last_updated_time_item = NULL;
+	view->last_updated_time_item = NULL;
 
 	debug_leave();
 }
@@ -1925,9 +1925,9 @@ static void _mailbox_system_font_change_cb(system_settings_key_e key, void *data
 	debug_enter();
 	retm_if(!data, "data si NULL");
 
-	EmailMailboxUGD *mailbox_ugd = data;
+	EmailMailboxView *view = data;
 
-	mailbox_refresh_fullview(mailbox_ugd, true);
+	mailbox_refresh_fullview(view, true);
 }
 
 static char *_mailbox_get_ricipient_display_string(int mail_id)
@@ -2045,20 +2045,20 @@ static void _mailbox_get_recipient_display_information(const gchar *addr_list, c
 
 }
 
-static void _mailbox_list_insert_n_mails(EmailMailboxUGD *mailbox_ugd, email_mail_list_item_t *mail_list, int count, const email_search_data_t *search_data)
+static void _mailbox_list_insert_n_mails(EmailMailboxView *view, email_mail_list_item_t *mail_list, int count, const email_search_data_t *search_data)
 {
 	debug_enter();
-	retm_if(!mailbox_ugd, "mailbox_ugd is NULL");
+	retm_if(!view, "view is NULL");
 	retm_if(!mail_list, "mail_list is NULL");
 
 	int i = 0;
 	for (; i < count; i++) {
-		MailItemData *ld = mailbox_list_make_mail_item_data(mail_list + i, search_data, mailbox_ugd);
+		MailItemData *ld = mailbox_list_make_mail_item_data(mail_list + i, search_data, view);
 		if (!ld) {
 			continue;
 		}
 
-		mailbox_list_insert_mail_item(ld, mailbox_ugd);
+		mailbox_list_insert_mail_item(ld, view);
 
 	}
 }
@@ -2067,29 +2067,29 @@ static void _mailbox_list_insert_n_mails(EmailMailboxUGD *mailbox_ugd, email_mai
  * Definition for exported functions
  */
 
-void mailbox_list_create_view(EmailMailboxUGD *mailbox_ugd)
+void mailbox_list_create_view(EmailMailboxView *view)
 {
 	debug_enter();
-	retm_if(!mailbox_ugd, "mailbox_ugd is NULL");
-	debug_log("mailbox_type[%d]", mailbox_ugd->mailbox_type);
+	retm_if(!view, "view is NULL");
+	debug_log("mailbox_type[%d]", view->mailbox_type);
 
-	if (mailbox_ugd->gl) {
-		elm_genlist_clear(mailbox_ugd->gl);
-		evas_object_del(mailbox_ugd->gl);
-		mailbox_ugd->gl = NULL;
+	if (view->gl) {
+		elm_genlist_clear(view->gl);
+		evas_object_del(view->gl);
+		view->gl = NULL;
 	}
 
-	_mail_item_class_update(mailbox_ugd);
+	_mail_item_class_update(view);
 
-	Evas_Object *gl = elm_genlist_add(mailbox_ugd->content_layout);
-	if (mailbox_ugd->theme) {
-		elm_object_theme_set(gl, mailbox_ugd->theme);
+	Evas_Object *gl = elm_genlist_add(view->content_layout);
+	if (view->theme) {
+		elm_object_theme_set(gl, view->theme);
 	}
 
 	debug_log("genlist = %p", gl);
-	evas_object_smart_callback_add(gl, "realized", _realized_item_cb, mailbox_ugd);
-	evas_object_smart_callback_add(gl, "unhighlighted", _realized_item_cb, mailbox_ugd);
-	evas_object_smart_callback_add(gl, "highlighted", _pressed_item_cb, mailbox_ugd);
+	evas_object_smart_callback_add(gl, "realized", _realized_item_cb, view);
+	evas_object_smart_callback_add(gl, "unhighlighted", _realized_item_cb, view);
+	evas_object_smart_callback_add(gl, "highlighted", _pressed_item_cb, view);
 
 	elm_scroller_policy_set(gl, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_AUTO);
 	elm_genlist_block_count_set(gl, BLOCK_COUNT);
@@ -2100,18 +2100,18 @@ void mailbox_list_create_view(EmailMailboxUGD *mailbox_ugd)
 	evas_object_size_hint_weight_set(gl, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 
 	evas_object_show(gl);
-	mailbox_ugd->gl = gl;
+	view->gl = gl;
 
-	mailbox_ugd->selected_mail_list = eina_list_free(mailbox_ugd->selected_mail_list);
-	mailbox_ugd->selected_group_list = eina_list_free(mailbox_ugd->selected_group_list);
-	mailbox_refresh_flicks_cb_register(mailbox_ugd);
+	view->selected_mail_list = eina_list_free(view->selected_mail_list);
+	view->selected_group_list = eina_list_free(view->selected_group_list);
+	mailbox_refresh_flicks_cb_register(view);
 
-	_mailbox_check_cache_init(&mailbox_ugd->star_check_cache, "favorite");
-	_mailbox_check_cache_init(&mailbox_ugd->select_check_cache, "default");
+	_mailbox_check_cache_init(&view->star_check_cache, "favorite");
+	_mailbox_check_cache_init(&view->select_check_cache, "default");
 
 	evas_object_event_callback_add(gl, EVAS_CALLBACK_MOUSE_DOWN, mailbox_set_main_thread_busy_cb, NULL);
 	evas_object_event_callback_add(gl, EVAS_CALLBACK_MOUSE_UP, mailbox_reset_main_thread_busy_cb, NULL);
-	evas_object_event_callback_add(gl, EVAS_CALLBACK_FREE, _mailbox_gl_free_cb, mailbox_ugd);
+	evas_object_event_callback_add(gl, EVAS_CALLBACK_FREE, _mailbox_gl_free_cb, view);
 
 	return;
 }
@@ -2122,18 +2122,18 @@ void mailbox_list_open_email_viewer(MailItemData *ld)
 	retm_if(!ld, "ld == NULL");
 	retm_if(ld->mail_id <= 0, "mail_id(%d) <= 0", ld->mail_id);
 
-	EmailMailboxUGD *mailbox_ugd = ld->mailbox_ugd;
-	retm_if(!mailbox_ugd, "mailbox_ugd == NULL");
+	EmailMailboxView *view = ld->view;
+	retm_if(!view, "view == NULL");
 
-	mailbox_open_email_viewer(mailbox_ugd, ld->account_id, ld->mailbox_id, ld->mail_id);
+	mailbox_open_email_viewer(view, ld->account_id, ld->mailbox_id, ld->mail_id);
 }
 
-void mailbox_list_system_settings_callback_register(EmailMailboxUGD *mailbox_ugd)
+void mailbox_list_system_settings_callback_register(EmailMailboxView *view)
 {
 	debug_enter();
 
 	int ret = -1;
-	ret = email_register_accessibility_font_size_changed_callback(_mailbox_system_font_change_cb, mailbox_ugd);
+	ret = email_register_accessibility_font_size_changed_callback(_mailbox_system_font_change_cb, view);
 	if (ret == -1)
 		debug_error("email_register_accessibility_font_size_changed_callback failed");
 
@@ -2149,42 +2149,42 @@ void mailbox_list_system_settings_callback_unregister()
 		debug_error("email_unregister_accessibility_font_size_changed_callback failed");
 }
 
-void mailbox_list_refresh(EmailMailboxUGD *mailbox_ugd, const email_search_data_t *search_data)
+void mailbox_list_refresh(EmailMailboxView *view, const email_search_data_t *search_data)
 {
 	debug_enter();
-	_mailbox_clear_list(mailbox_ugd);
-	_mailbox_make_list(mailbox_ugd, search_data);
+	_mailbox_clear_list(view);
+	_mailbox_make_list(view, search_data);
 
 	debug_leave();
 }
 
-void mailbox_list_insert_mail_item(MailItemData *ld, EmailMailboxUGD *mailbox_ugd)
+void mailbox_list_insert_mail_item(MailItemData *ld, EmailMailboxView *view)
 {
 	debug_enter();
 
-	ld->mailbox_ugd = mailbox_ugd;
-	mailbox_ugd->mail_list = g_list_append(mailbox_ugd->mail_list, ld);
+	ld->view = view;
+	view->mail_list = g_list_append(view->mail_list, ld);
 
-	_insert_mail_item_to_list(mailbox_ugd, ld);
+	_insert_mail_item_to_list(view, ld);
 }
 
-void mailbox_list_insert_mail_item_from_noti(MailItemData **ld_ptr, EmailMailboxUGD *mailbox_ugd)
+void mailbox_list_insert_mail_item_from_noti(MailItemData **ld_ptr, EmailMailboxView *view)
 {
 	debug_enter();
 	if (*ld_ptr == NULL)
 		return;
 	MailItemData *ld = *ld_ptr; /* ld variable used for better readability. */
-	ld->mailbox_ugd = mailbox_ugd;
+	ld->view = view;
 
-	if (mailbox_list_get_mail_item_data_by_mailid(ld->mail_id, mailbox_ugd->mail_list)) {
+	if (mailbox_list_get_mail_item_data_by_mailid(ld->mail_id, view->mail_list)) {
 		debug_log("this mail(%d) is already inserted in the current list.", ld->mail_id);
 		mailbox_list_free_mail_item_data(ld);
 		*ld_ptr = NULL;		/* *ld_ptr should be assigned to NULL as mailbox_list_free_mail_item_data frees the memory that *ld_ptr holds*/
 		return;
 	}
 
-	if (mailbox_ugd->b_searchmode) {
-		if (mailbox_check_searched_mail(ld->mail_id, mailbox_ugd)) {
+	if (view->b_searchmode) {
+		if (mailbox_check_searched_mail(ld->mail_id, view)) {
 			debug_log("While searching, mail is inserted.");
 		} else {
 			mailbox_list_free_mail_item_data(ld);
@@ -2194,9 +2194,9 @@ void mailbox_list_insert_mail_item_from_noti(MailItemData **ld_ptr, EmailMailbox
 		}
 	}
 
-	mailbox_ugd->mail_list = g_list_insert_sorted(mailbox_ugd->mail_list, ld, _compare_mail_item_order);
+	view->mail_list = g_list_insert_sorted(view->mail_list, ld, _compare_mail_item_order);
 
-	GList *cur = g_list_find(mailbox_ugd->mail_list, ld);
+	GList *cur = g_list_find(view->mail_list, ld);
 	retm_if(!cur, "No such ld");
 
 	GList *prev = g_list_previous(cur);
@@ -2204,11 +2204,11 @@ void mailbox_list_insert_mail_item_from_noti(MailItemData **ld_ptr, EmailMailbox
 	GList *next = g_list_next(cur);
 	MailItemData *next_data = next ? g_list_nth_data(next, 0) : NULL;
 
-	_insert_mail_item_to_list_from_noti(mailbox_ugd, ld, prev_data, next_data);
+	_insert_mail_item_to_list_from_noti(view, ld, prev_data, next_data);
 
 }
 
-void mailbox_list_remove_mail_item(EmailMailboxUGD *mailbox_ugd, MailItemData *ld)
+void mailbox_list_remove_mail_item(EmailMailboxView *view, MailItemData *ld)
 {
 	debug_enter();
 	if (ld == NULL || ld->item == NULL) {
@@ -2217,17 +2217,17 @@ void mailbox_list_remove_mail_item(EmailMailboxUGD *mailbox_ugd, MailItemData *l
 	}
 
 	elm_object_item_del(ld->item);
-	mailbox_ugd->mail_list = g_list_remove(mailbox_ugd->mail_list, ld);
+	view->mail_list = g_list_remove(view->mail_list, ld);
 
-	if (mailbox_ugd->selected_mail_list) {
-		mailbox_ugd->selected_mail_list = eina_list_remove(mailbox_ugd->selected_mail_list, ld);
-		debug_log("Remove from mailbox_ugd->selected_mail_list, ld->mail_id : %d", ld->mail_id);
+	if (view->selected_mail_list) {
+		view->selected_mail_list = eina_list_remove(view->selected_mail_list, ld);
+		debug_log("Remove from view->selected_mail_list, ld->mail_id : %d", ld->mail_id);
 	}
 
 	mailbox_list_free_mail_item_data(ld);
 }
 
-MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t *mail_info, const email_search_data_t *search_data, EmailMailboxUGD *mailbox_ugd)
+MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t *mail_info, const email_search_data_t *search_data, EmailMailboxView *view)
 {
 	retvm_if(!mail_info, NULL, "mail_info is NULL");
 
@@ -2254,7 +2254,7 @@ MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t *mail_info
 	ld->mailbox_type = mail_info->mailbox_type;
 	ld->reply_flag = mail_info->flags_answered_field;
 	ld->forward_flag = mail_info->flags_forwarded_field;
-	ld->mailbox_ugd = mailbox_ugd;
+	ld->view = view;
 	ld->checked = EINA_FALSE;
 	ld->is_highlited = EINA_FALSE;
 
@@ -2273,7 +2273,7 @@ MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t *mail_info
 		char *_subject = elm_entry_utf8_to_markup(buf);
 		int title_len = STR_LEN(_subject);
 		ld->title = MEM_ALLOC_STR(title_len + TAG_LEN + 1);
-		if (mailbox_ugd->b_searchmode && search_data && STR_VALID(search_data->subject)) {
+		if (view->b_searchmode && search_data && STR_VALID(search_data->subject)) {
 			char *_search_subject = elm_entry_utf8_to_markup(search_data->subject);
 			_mail_item_data_insert_search_tag(ld->title, title_len + TAG_LEN, (const char *) _subject, _search_subject);
 			FREE(_search_subject);
@@ -2296,7 +2296,7 @@ MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t *mail_info
 		char *_alias = elm_entry_utf8_to_markup(alias);
 		int alias_len = STR_LEN(_alias);
 		ld->alias = MEM_ALLOC_STR(alias_len + TAG_LEN + 1);
-		if (mailbox_ugd->b_searchmode && search_data && STR_VALID(search_data->sender)) {
+		if (view->b_searchmode && search_data && STR_VALID(search_data->sender)) {
 			char *_search_sender = elm_entry_utf8_to_markup(search_data->sender);
 			_mail_item_data_insert_search_tag(ld->alias, alias_len + TAG_LEN, (const char *) _alias, _search_sender);
 			FREE(_search_sender);
@@ -2319,7 +2319,7 @@ MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t *mail_info
 			char *_recipient = elm_entry_utf8_to_markup(recipient);
 			int recipient_len = STR_LEN(_recipient);
 			ld->recipient = MEM_ALLOC_STR(recipient_len + TAG_LEN + 1);
-			if (mailbox_ugd->b_searchmode && search_data && STR_VALID(search_data->recipient)) {
+			if (view->b_searchmode && search_data && STR_VALID(search_data->recipient)) {
 				char *_search_recipient = elm_entry_utf8_to_markup(search_data->recipient);
 				_mail_item_data_insert_search_tag(ld->recipient, recipient_len + TAG_LEN, (const char *) _recipient, _search_recipient);
 				FREE(_search_recipient);
@@ -2340,7 +2340,7 @@ MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t *mail_info
 	ld->absolute_time = mail_info->date_time;
 	ld->timeordate = email_get_str_datetime(ld->absolute_time);
 
-	if (mailbox_ugd->sort_type == EMAIL_SORT_TO_CC_BCC) {
+	if (view->sort_type == EMAIL_SORT_TO_CC_BCC) {
 		int err;
 		int i;
 		int account_count = 0;
@@ -2351,7 +2351,7 @@ MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t *mail_info
 		err = email_get_account_list(&account_list, &account_count);
 		if (err == EMAIL_ERROR_NONE && account_list) {
 			for (i = 0; i < account_count; i++) {
-				if (mailbox_ugd->account_id == 0 || mailbox_ugd->account_id == account_list[i].account_id) {
+				if (view->account_id == 0 || view->account_id == account_list[i].account_id) {
 					if (g_strstr_len(mail_info->email_address_recipient, -1, account_list[i].user_email_address)) {
 						ld->is_to_address_mail = true;
 						break;
@@ -2400,29 +2400,29 @@ MailItemData *mailbox_list_get_mail_item_data_by_threadid(int thread_id, GList *
 	return NULL;
 }
 
-void mailbox_list_free_all_item_class_data(EmailMailboxUGD *mailbox_ugd)
+void mailbox_list_free_all_item_class_data(EmailMailboxView *view)
 {
 	debug_enter();
-	retm_if(!mailbox_ugd, "mailbox_ugd is NULL");
+	retm_if(!view, "view is NULL");
 
-	mailbox_ugd->itc.item_style = NULL;
-	mailbox_ugd->itc.func.text_get = NULL;
-	mailbox_ugd->itc.func.content_get = NULL;
-	mailbox_ugd->itc.func.state_get = NULL;
-	mailbox_ugd->itc.func.del = NULL;
-	elm_genlist_item_class_free(&mailbox_ugd->itc);
+	view->itc.item_style = NULL;
+	view->itc.func.text_get = NULL;
+	view->itc.func.content_get = NULL;
+	view->itc.func.state_get = NULL;
+	view->itc.func.del = NULL;
+	elm_genlist_item_class_free(&view->itc);
 
 	mailbox_free_other_item_class_data();
 }
 
-void mailbox_list_free_all_item_data(EmailMailboxUGD *mailbox_ugd)
+void mailbox_list_free_all_item_data(EmailMailboxView *view)
 {
 	debug_enter();
-	retm_if(!mailbox_ugd, "mailbox_ugd is NULL");
+	retm_if(!view, "view is NULL");
 
-	_mail_item_data_list_free(&(mailbox_ugd->mail_list));
+	_mail_item_data_list_free(&(view->mail_list));
 
-	_mailbox_free_req_data(&mailbox_ugd->remaining_req);
+	_mailbox_free_req_data(&view->remaining_req);
 }
 
 void mailbox_list_free_mail_item_data(MailItemData *ld)
@@ -2441,78 +2441,78 @@ void mailbox_list_free_mail_item_data(MailItemData *ld)
 	FREE(ld);
 }
 
-void mailbox_create_select_info(EmailMailboxUGD *mailbox_ugd)
+void mailbox_create_select_info(EmailMailboxView *view)
 {
 	debug_enter();
 
 	int cnt = 0;
 	char text[128];
 
-	cnt = eina_list_count(mailbox_ugd->selected_mail_list);
-	mailbox_view_title_unpack(mailbox_ugd);
-	elm_naviframe_item_title_enabled_set(mailbox_ugd->base.navi_item, EINA_TRUE, EINA_TRUE);
-	elm_naviframe_item_style_set(mailbox_ugd->base.navi_item, NULL);
+	cnt = eina_list_count(view->selected_mail_list);
+	mailbox_view_title_unpack(view);
+	elm_naviframe_item_title_enabled_set(view->base.navi_item, EINA_TRUE, EINA_TRUE);
+	elm_naviframe_item_style_set(view->base.navi_item, NULL);
 
 	snprintf(text, sizeof(text), email_get_email_string("IDS_EMAIL_HEADER_PD_SELECTED_ABB2"), cnt);
-	elm_object_item_text_set(mailbox_ugd->base.navi_item, text);
-	elm_object_item_part_text_set(mailbox_ugd->base.navi_item, "subtitle", NULL);
+	elm_object_item_text_set(view->base.navi_item, text);
+	elm_object_item_part_text_set(view->base.navi_item, "subtitle", NULL);
 
 	/* Title Cancel Button */
-	if (!mailbox_ugd->cancel_btn) {
-		mailbox_ugd->cancel_btn = elm_button_add(mailbox_ugd->base.module->navi);
-		elm_object_style_set(mailbox_ugd->cancel_btn, "naviframe/title_left");
-		elm_object_domain_translatable_text_set(mailbox_ugd->cancel_btn, PACKAGE, "IDS_TPLATFORM_ACBUTTON_CANCEL_ABB");
-		evas_object_smart_callback_add(mailbox_ugd->cancel_btn, "clicked", mailbox_exit_clicked_edit_mode, mailbox_ugd);
+	if (!view->cancel_btn) {
+		view->cancel_btn = elm_button_add(view->base.module->navi);
+		elm_object_style_set(view->cancel_btn, "naviframe/title_left");
+		elm_object_domain_translatable_text_set(view->cancel_btn, PACKAGE, "IDS_TPLATFORM_ACBUTTON_CANCEL_ABB");
+		evas_object_smart_callback_add(view->cancel_btn, "clicked", mailbox_exit_clicked_edit_mode, view);
 	}
-	elm_object_item_part_content_set(mailbox_ugd->base.navi_item, "title_left_btn", mailbox_ugd->cancel_btn);
+	elm_object_item_part_content_set(view->base.navi_item, "title_left_btn", view->cancel_btn);
 
 	/* Title Done Button */
-	if (!mailbox_ugd->save_btn) {
-		mailbox_ugd->save_btn = elm_button_add(mailbox_ugd->base.module->navi);
-		elm_object_style_set(mailbox_ugd->save_btn, "naviframe/title_right");
-		if (mailbox_ugd->editmode_type == MAILBOX_EDIT_TYPE_DELETE) {
-			elm_object_domain_translatable_text_set(mailbox_ugd->save_btn, PACKAGE, "IDS_TPLATFORM_ACBUTTON_DELETE_ABB");
+	if (!view->save_btn) {
+		view->save_btn = elm_button_add(view->base.module->navi);
+		elm_object_style_set(view->save_btn, "naviframe/title_right");
+		if (view->editmode_type == MAILBOX_EDIT_TYPE_DELETE) {
+			elm_object_domain_translatable_text_set(view->save_btn, PACKAGE, "IDS_TPLATFORM_ACBUTTON_DELETE_ABB");
 		} else {
-			elm_object_domain_translatable_text_set(mailbox_ugd->save_btn, PACKAGE, "IDS_TPLATFORM_ACBUTTON_DONE_ABB");
+			elm_object_domain_translatable_text_set(view->save_btn, PACKAGE, "IDS_TPLATFORM_ACBUTTON_DONE_ABB");
 		}
-		evas_object_smart_callback_add(mailbox_ugd->save_btn, "clicked", mailbox_update_done_clicked_edit_mode, mailbox_ugd);
+		evas_object_smart_callback_add(view->save_btn, "clicked", mailbox_update_done_clicked_edit_mode, view);
 	}
-	elm_object_item_part_content_set(mailbox_ugd->base.navi_item, "title_right_btn", mailbox_ugd->save_btn);
+	elm_object_item_part_content_set(view->base.navi_item, "title_right_btn", view->save_btn);
 
 	if (cnt == 0) {
-		elm_object_disabled_set(mailbox_ugd->save_btn, EINA_TRUE);
+		elm_object_disabled_set(view->save_btn, EINA_TRUE);
 	} else {
-		elm_object_disabled_set(mailbox_ugd->save_btn, EINA_FALSE);
+		elm_object_disabled_set(view->save_btn, EINA_FALSE);
 	}
 
 	debug_leave();
 }
 
-void mailbox_update_select_info(EmailMailboxUGD *mailbox_ugd)
+void mailbox_update_select_info(EmailMailboxView *view)
 {
 	debug_enter();
 
 	int cnt = 0;
 	char text[128];
 
-	cnt = eina_list_count(mailbox_ugd->selected_mail_list);
-	int cnt_mail_list = g_list_length(mailbox_ugd->mail_list);
+	cnt = eina_list_count(view->selected_mail_list);
+	int cnt_mail_list = g_list_length(view->mail_list);
 
 	if (cnt_mail_list == 0) {
-		debug_log("no email remain. b_editmode [%d], list count = %d", mailbox_ugd->b_editmode, cnt_mail_list);
-		mailbox_exit_edit_mode(mailbox_ugd);
+		debug_log("no email remain. b_editmode [%d], list count = %d", view->b_editmode, cnt_mail_list);
+		mailbox_exit_edit_mode(view);
 		return;
 	}
 
 	snprintf(text, sizeof(text), email_get_email_string("IDS_EMAIL_HEADER_PD_SELECTED_ABB2"), cnt);
 
-	elm_object_item_text_set(mailbox_ugd->base.navi_item, text);
-	elm_object_item_part_text_set(mailbox_ugd->base.navi_item, "subtitle", NULL);
+	elm_object_item_text_set(view->base.navi_item, text);
+	elm_object_item_part_text_set(view->base.navi_item, "subtitle", NULL);
 
 	if (cnt == 0) {
-		elm_object_disabled_set(mailbox_ugd->save_btn, EINA_TRUE);
+		elm_object_disabled_set(view->save_btn, EINA_TRUE);
 	} else {
-		elm_object_disabled_set(mailbox_ugd->save_btn, EINA_FALSE);
+		elm_object_disabled_set(view->save_btn, EINA_FALSE);
 	}
 
 	debug_leave();
@@ -2521,11 +2521,11 @@ void mailbox_update_select_info(EmailMailboxUGD *mailbox_ugd)
 static void mailbox_update_done_clicked_edit_mode(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
-	debug_log("mailbox_ugd->b_editmode %d", mailbox_ugd->b_editmode);
+	EmailMailboxView *view = (EmailMailboxView *)data;
+	debug_log("view->b_editmode %d", view->b_editmode);
 
 	int cnt = 0;
-	cnt = eina_list_count(mailbox_ugd->selected_mail_list);
+	cnt = eina_list_count(view->selected_mail_list);
 	if (cnt == 0) {
 		int ret = notification_status_message_post(email_get_email_string("IDS_EMAIL_HEADER_SELECT_EMAILS"));
 		if (ret != NOTIFICATION_ERROR_NONE) {
@@ -2534,18 +2534,18 @@ static void mailbox_update_done_clicked_edit_mode(void *data, Evas_Object *obj, 
 		return;
 	}
 
-	if (mailbox_ugd->editmode_type == MAILBOX_EDIT_TYPE_DELETE) {
-		mailbox_delete_mail(mailbox_ugd);
-	} else if (mailbox_ugd->editmode_type == MAILBOX_EDIT_TYPE_MOVE) {
-		mailbox_move_mail(mailbox_ugd);
-	} else if (mailbox_ugd->editmode_type == MAILBOX_EDIT_TYPE_ADD_SPAM) {
-		mailbox_to_spam_mail(mailbox_ugd);
-	} else if (mailbox_ugd->editmode_type == MAILBOX_EDIT_TYPE_REMOVE_SPAM) {
-		mailbox_from_spam_mail(mailbox_ugd);
-	} else if (mailbox_ugd->editmode_type == MAILBOX_EDIT_TYPE_MARK_READ) {
-		mailbox_markread_mail(mailbox_ugd);
-	} else if (mailbox_ugd->editmode_type == MAILBOX_EDIT_TYPE_MARK_UNREAD) {
-		mailbox_markunread_mail(mailbox_ugd);
+	if (view->editmode_type == MAILBOX_EDIT_TYPE_DELETE) {
+		mailbox_delete_mail(view);
+	} else if (view->editmode_type == MAILBOX_EDIT_TYPE_MOVE) {
+		mailbox_move_mail(view);
+	} else if (view->editmode_type == MAILBOX_EDIT_TYPE_ADD_SPAM) {
+		mailbox_to_spam_mail(view);
+	} else if (view->editmode_type == MAILBOX_EDIT_TYPE_REMOVE_SPAM) {
+		mailbox_from_spam_mail(view);
+	} else if (view->editmode_type == MAILBOX_EDIT_TYPE_MARK_READ) {
+		mailbox_markread_mail(view);
+	} else if (view->editmode_type == MAILBOX_EDIT_TYPE_MARK_UNREAD) {
+		mailbox_markunread_mail(view);
 	}
 
 	debug_leave();
@@ -2554,66 +2554,66 @@ static void mailbox_update_done_clicked_edit_mode(void *data, Evas_Object *obj, 
 static void mailbox_exit_clicked_edit_mode(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
+	EmailMailboxView *view = (EmailMailboxView *)data;
 
-	mailbox_exit_edit_mode(mailbox_ugd);
+	mailbox_exit_edit_mode(view);
 }
 
 void mailbox_exit_edit_mode(void *data)
 {
 	debug_enter();
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
+	EmailMailboxView *view = (EmailMailboxView *)data;
 
-	DELETE_EVAS_OBJECT(mailbox_ugd->more_ctxpopup);
+	DELETE_EVAS_OBJECT(view->more_ctxpopup);
 
 	/*clear checked status of mail item*/
-	mailbox_clear_edit_mode_list(mailbox_ugd);
+	mailbox_clear_edit_mode_list(view);
 
-	elm_naviframe_item_title_enabled_set(mailbox_ugd->base.navi_item, EINA_FALSE, EINA_TRUE);
-	mailbox_view_title_pack(mailbox_ugd);
-	mailbox_view_title_update_all_without_mailbox_change(mailbox_ugd);
+	elm_naviframe_item_title_enabled_set(view->base.navi_item, EINA_FALSE, EINA_TRUE);
+	mailbox_view_title_pack(view);
+	mailbox_view_title_update_all_without_mailbox_change(view);
 
-	if ((mailbox_ugd->mode == EMAIL_MAILBOX_MODE_ALL || mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX)
-		&& mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
-		mailbox_send_all_btn_add(mailbox_ugd);
+	if ((view->mode == EMAIL_MAILBOX_MODE_ALL || view->mode == EMAIL_MAILBOX_MODE_MAILBOX)
+		&& view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
+		mailbox_send_all_btn_add(view);
 	}
 
-	debug_log("b_editmode [%d]", mailbox_ugd->b_editmode);
+	debug_log("b_editmode [%d]", view->b_editmode);
 	debug_leave();
 }
 
-void mailbox_clear_edit_mode_list(EmailMailboxUGD *mailbox_ugd)
+void mailbox_clear_edit_mode_list(EmailMailboxView *view)
 {
 	debug_enter();
 
 	int i = 0;
-	int checked_count = eina_list_count(mailbox_ugd->selected_mail_list);
+	int checked_count = eina_list_count(view->selected_mail_list);
 	debug_log("checked_count [%d]", checked_count);
-	mailbox_ugd->b_editmode = false;
+	view->b_editmode = false;
 
 	/*Remove Cancel and Done buttons*/
-	elm_object_item_part_content_unset(mailbox_ugd->base.navi_item, "title_left_btn");
-	DELETE_EVAS_OBJECT(mailbox_ugd->cancel_btn);
-	elm_object_item_part_content_unset(mailbox_ugd->base.navi_item, "title_right_btn");
-	DELETE_EVAS_OBJECT(mailbox_ugd->save_btn);
+	elm_object_item_part_content_unset(view->base.navi_item, "title_left_btn");
+	DELETE_EVAS_OBJECT(view->cancel_btn);
+	elm_object_item_part_content_unset(view->base.navi_item, "title_right_btn");
+	DELETE_EVAS_OBJECT(view->save_btn);
 
-	if (0 < g_list_length(mailbox_ugd->mail_list)) {
-		if (!mailbox_ugd->b_searchmode
-			&& ((mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX && mailbox_ugd->only_local == false
-					&& mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX
-					&& mailbox_ugd->account_type == EMAIL_SERVER_TYPE_IMAP4)
-				|| (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX && mailbox_ugd->only_local == false
-					&& mailbox_ugd->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX
-					&& mailbox_ugd->account_type == EMAIL_SERVER_TYPE_POP3))) {
-			mailbox_load_more_messages_item_add(mailbox_ugd);
-		} else if (!mailbox_ugd->b_searchmode
-				&& mailbox_ugd->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX) {
-			mailbox_no_more_emails_item_add(mailbox_ugd);
+	if (0 < g_list_length(view->mail_list)) {
+		if (!view->b_searchmode
+			&& ((view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->only_local == false
+					&& view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX
+					&& view->account_type == EMAIL_SERVER_TYPE_IMAP4)
+				|| (view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->only_local == false
+					&& view->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX
+					&& view->account_type == EMAIL_SERVER_TYPE_POP3))) {
+			mailbox_load_more_messages_item_add(view);
+		} else if (!view->b_searchmode
+				&& view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX) {
+			mailbox_no_more_emails_item_add(view);
 		}
 	}
 
 	for (i = 0; i < checked_count; i++) {
-		Eina_List *nth_list = eina_list_nth_list(mailbox_ugd->selected_mail_list, i);
+		Eina_List *nth_list = eina_list_nth_list(view->selected_mail_list, i);
 		MailItemData *ld = (MailItemData *)eina_list_data_get(nth_list);
 		if (ld) {
 			if (ld->checked == EINA_TRUE) {
@@ -2622,48 +2622,48 @@ void mailbox_clear_edit_mode_list(EmailMailboxUGD *mailbox_ugd)
 		}
 	}
 
-	mailbox_ugd->selected_mail_list = eina_list_free(mailbox_ugd->selected_mail_list);
-	mailbox_ugd->selected_group_list = eina_list_free(mailbox_ugd->selected_group_list);
+	view->selected_mail_list = eina_list_free(view->selected_mail_list);
+	view->selected_group_list = eina_list_free(view->selected_group_list);
 
-	mailbox_ugd->selectAll_chksel = EINA_FALSE;
-	elm_genlist_realized_items_update(mailbox_ugd->gl);
+	view->selectAll_chksel = EINA_FALSE;
+	elm_genlist_realized_items_update(view->gl);
 
-	mailbox_select_all_item_remove(mailbox_ugd);
-	mailbox_show_compose_btn(mailbox_ugd);
-	if (mailbox_ugd->mode == EMAIL_MAILBOX_MODE_MAILBOX
-		&& mailbox_ugd->only_local == FALSE && !mailbox_ugd->b_searchmode) {
+	mailbox_select_all_item_remove(view);
+	mailbox_show_compose_btn(view);
+	if (view->mode == EMAIL_MAILBOX_MODE_MAILBOX
+		&& view->only_local == FALSE && !view->b_searchmode) {
 
 		Evas_Coord scroll_x = 0, scroll_y = 0, scroll_w = 0, scroll_h = 0;
-		elm_scroller_region_get(mailbox_ugd->gl, &scroll_x, &scroll_y, &scroll_w, &scroll_h);
+		elm_scroller_region_get(view->gl, &scroll_x, &scroll_y, &scroll_w, &scroll_h);
 
 		if (scroll_y <= 0 || (scroll_y <= SELECT_ALL_LIST_ITEM_HEIGHT)) {
-			mailbox_last_updated_time_item_add(mailbox_ugd, true);
+			mailbox_last_updated_time_item_add(view, true);
 		} else {
-			mailbox_last_updated_time_item_add(mailbox_ugd, false);
+			mailbox_last_updated_time_item_add(view, false);
 		}
 	}
 
 	debug_leave();
 }
 
-void mailbox_update_edit_list_view(MailItemData *ld, EmailMailboxUGD *mailbox_ugd)
+void mailbox_update_edit_list_view(MailItemData *ld, EmailMailboxView *view)
 {
 	debug_enter();
 	retm_if(!ld, "ld is NULL");
 	retm_if(!ld->item, "ld->item is NULL");
 
-	mailbox_ugd->selected_mail_list = eina_list_remove(mailbox_ugd->selected_mail_list, ld);
+	view->selected_mail_list = eina_list_remove(view->selected_mail_list, ld);
 
-	/*int cnt = eina_list_count(mailbox_ugd->selected_mail_list);*/
-	int cnt_mail_list = g_list_length(mailbox_ugd->mail_list);
-	debug_log("b_editmode [%d], list count = %d", mailbox_ugd->b_editmode, cnt_mail_list);
+	/*int cnt = eina_list_count(view->selected_mail_list);*/
+	int cnt_mail_list = g_list_length(view->mail_list);
+	debug_log("b_editmode [%d], list count = %d", view->b_editmode, cnt_mail_list);
 
-	if (cnt_mail_list <= 0 && mailbox_ugd->b_editmode == true) {
+	if (cnt_mail_list <= 0 && view->b_editmode == true) {
 		debug_log("Exit edit mode due to empty list");
 		/* update controlbar to mailbox menu */
-		mailbox_exit_edit_mode(mailbox_ugd);
+		mailbox_exit_edit_mode(view);
 	} else {
-		mailbox_update_select_info(mailbox_ugd);
+		mailbox_update_select_info(view);
 	}
 }
 
@@ -2672,14 +2672,14 @@ void mailbox_remove_unnecessary_list_item_for_edit_mode(void *data)
 	debug_enter();
 	retm_if(!data, "data is NULL");
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
+	EmailMailboxView *view = (EmailMailboxView *)data;
 
-	if (mailbox_ugd->last_updated_time_item)
-		mailbox_last_updated_time_item_remove(mailbox_ugd);
+	if (view->last_updated_time_item)
+		mailbox_last_updated_time_item_remove(view);
 
-	mailbox_load_more_messages_item_remove(mailbox_ugd);
-	mailbox_no_more_emails_item_remove(mailbox_ugd);
-	mailbox_get_more_progress_item_remove(mailbox_ugd);
+	mailbox_load_more_messages_item_remove(view);
+	mailbox_no_more_emails_item_remove(view);
+	mailbox_get_more_progress_item_remove(view);
 }
 
 bool mailbox_check_searched_mail(int mail_id, void *data)
@@ -2691,9 +2691,9 @@ bool mailbox_check_searched_mail(int mail_id, void *data)
 	int i = 0;
 	int total_count = 0, unread_count = 0;
 
-	EmailMailboxUGD *mailbox_ugd = (EmailMailboxUGD *)data;
+	EmailMailboxView *view = (EmailMailboxView *)data;
 
-	email_search_data_t *search_data = mailbox_make_search_data(mailbox_ugd);
+	email_search_data_t *search_data = mailbox_make_search_data(view);
 
 	if (search_data)
 		cnt_filter_list += _get_filter_cnt_for_search_data(search_data);
@@ -2740,12 +2740,12 @@ bool mailbox_check_searched_mail(int mail_id, void *data)
 		return false;
 }
 
-void mailbox_list_make_remaining_items_in_thread(EmailMailboxUGD *mailbox_ugd, AddRemainingMailReqData *req)
+void mailbox_list_make_remaining_items_in_thread(EmailMailboxView *view, AddRemainingMailReqData *req)
 {
 	debug_enter();
-	retm_if(!mailbox_ugd, "mailbox_ugd is NULL");
+	retm_if(!view, "view is NULL");
 	retm_if(!req, "req is NULL");
-	if (email_request_queue_add_request(mailbox_ugd->request_queue, EMAIL_REQUEST_TYPE_ADD_REMAINING_MAIL, req)) {
+	if (email_request_queue_add_request(view->request_queue, EMAIL_REQUEST_TYPE_ADD_REMAINING_MAIL, req)) {
 		debug_log("Request added");
 	} else {
 		debug_error("Added request failed");

@@ -21,14 +21,14 @@
 #include "email-mailbox-list.h"
 #include "email-mailbox-sync.h"
 #include "email-mailbox-request.h"
-#include "email-mailbox-ug-util.h"
+#include "email-mailbox-module-util.h"
 #include "email-mailbox-util.h"
 
-void mailbox_process_move_mail(EmailMailboxUGD *mailbox_ugd)
+void mailbox_process_move_mail(EmailMailboxView *view)
 {
 	debug_enter();
 
-	int checked_count = eina_list_count(mailbox_ugd->selected_mail_list);
+	int checked_count = eina_list_count(view->selected_mail_list);
 	int account_id = 0;
 	int i = 0;
 
@@ -47,34 +47,34 @@ void mailbox_process_move_mail(EmailMailboxUGD *mailbox_ugd)
 	}
 
 	for (i = 0; i < checked_count; i++) {
-		Eina_List *nth_list = eina_list_nth_list(mailbox_ugd->selected_mail_list, i);
+		Eina_List *nth_list = eina_list_nth_list(view->selected_mail_list, i);
 		MailItemData *ld = eina_list_data_get(nth_list);
 
 		if (account_id < 1) {
 			account_id = ld->account_id;
-			mailbox_ugd->move_src_mailbox_id = ld->mailbox_id;
+			view->move_src_mailbox_id = ld->mailbox_id;
 		}
 
 		snprintf(selected_mail_list[i], MAIL_ID_SIZE, "%d", (int)ld->mail_id);
 	}
 
-	mailbox_sync_cancel_all(mailbox_ugd);
+	mailbox_sync_cancel_all(view);
 
-	debug_log("account_id: %d, mailbox_id: %d", account_id, mailbox_ugd->move_src_mailbox_id);
+	debug_log("account_id: %d, mailbox_id: %d", account_id, view->move_src_mailbox_id);
 
 	email_params_h params = NULL;
 
 	if (email_params_create(&params) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, account_id) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, mailbox_ugd->move_src_mailbox_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, view->move_src_mailbox_id) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_MODE, 1) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX_MOVE_MODE, EMAIL_MOVE_VIEW_NORMAL) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_EDIT_MODE, mailbox_ugd->b_editmode) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_MOVE_SRC_MAILBOX_ID, mailbox_ugd->move_src_mailbox_id) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_EDIT_MODE, view->b_editmode) &&
+		email_params_add_int(params, EMAIL_BUNDLE_KEY_MOVE_SRC_MAILBOX_ID, view->move_src_mailbox_id) &&
 		email_params_add_str_array(params, EMAIL_BUNDLE_KEY_ARRAY_SELECTED_MAIL_IDS,
 				(const char **)selected_mail_list, checked_count)) {
 
-		mailbox_ugd->account = mailbox_account_module_create(mailbox_ugd, EMAIL_MODULE_ACCOUNT, params);
+		view->account = mailbox_account_module_create(view, EMAIL_MODULE_ACCOUNT, params);
 	}
 
 	email_params_free(&params);
@@ -95,7 +95,7 @@ void mailbox_process_delete_mail(void *data, Ecore_Thread *thd)
 	DeleteRequestedMail *requested_mail = NULL;
 
 	edit_req_t *req = (edit_req_t *)data;
-	EmailMailboxUGD *mailbox_ugd = req->mailbox_ugd;
+	EmailMailboxView *view = req->view;
 	Eina_List *list = req->requested_mail_list;
 
 	/*gotom_if(max_account_id < 0, CATCH_ERROR, "Invalid max_account_id(%d) was returned.", max_account_id);*/
@@ -163,7 +163,7 @@ void mailbox_process_delete_mail(void *data, Ecore_Thread *thd)
 				result = email_delete_mail(trashbox_id, mail_ids, count, delete_option);
 				if (result != EMAIL_ERROR_NONE) {
 					debug_warning("email_delete_message mailbox_id(%d) count(%d)- err (%d)",
-												mailbox_ugd->mailbox_id, count, result);
+												view->mailbox_id, count, result);
 				}
 			} else {
 				/* making dest folder - trash */
@@ -179,9 +179,9 @@ void mailbox_process_delete_mail(void *data, Ecore_Thread *thd)
 	}
 
 	if (result == EMAIL_ERROR_NONE) {
-		mailbox_ugd->need_deleted_noti = true;
+		view->need_deleted_noti = true;
 	} else {
-		mailbox_ugd->need_deleted_noti = false;
+		view->need_deleted_noti = false;
 		int ret = notification_status_message_post(email_get_email_string("IDS_EMAIL_POP_FAILED_TO_DELETE"));
 		if (ret != NOTIFICATION_ERROR_NONE) {
 			debug_log("fail to notification_status_message_post() : %d\n", ret);

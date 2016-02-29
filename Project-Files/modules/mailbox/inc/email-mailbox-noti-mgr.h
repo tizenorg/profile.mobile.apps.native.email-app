@@ -31,9 +31,9 @@ typedef struct _noti_event {
 
 /**
  * @brief Initialize module notification system
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_setup_dbus_receiver(EmailMailboxUGD *mailbox_ugd);
+void mailbox_setup_dbus_receiver(EmailMailboxView *view);
 
 /**
  * @brief Remove module notification system
@@ -53,9 +53,9 @@ void mailbox_req_handle_list_free();
 
 /**
  * @brief Remove and free sending mail list
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_sending_mail_list_free(EmailMailboxUGD *mailbox_ugd);
+void mailbox_sending_mail_list_free(EmailMailboxView *view);
 
 /**
  * @brief Remove and free request account list

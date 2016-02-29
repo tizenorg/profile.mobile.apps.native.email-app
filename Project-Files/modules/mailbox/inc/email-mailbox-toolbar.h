@@ -20,8 +20,8 @@
 
 /**
  * @brief Create toolbar control option for Mailbox view
- * @param[in]	mailbox_ugd		Email mailbox data
+ * @param[in]	view		Email mailbox data
  */
-void mailbox_toolbar_create(EmailMailboxUGD *mailbox_ugd);
+void mailbox_toolbar_create(EmailMailboxView *view);
 
 #endif	/* __DEF_EMAIL_MAILBOX_TOOLBAR_H_ */
