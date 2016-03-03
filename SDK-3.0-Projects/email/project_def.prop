@@ -1,0 +1,96 @@
+
+# Project Name
+APPNAME = email
+
+# Project Type
+type = app
+
+# Project Profile
+profile = mobile-3.0
+
+# C Sources
+USER_SRCS = \
+	../../Project-Files/main/email-main.c \
+	../../Project-Files/common/src/*.c \
+	../../Project-Files/modules/account/src/*.c \
+	../../Project-Files/modules/composer/src/*.c \
+	../../Project-Files/modules/filter/src/*.c \
+	../../Project-Files/modules/mailbox/src/*.c \
+	../../Project-Files/modules/setting/src/*.c \
+	../../Project-Files/modules/viewer/src/*.c
+
+# EDC Sources
+USER_EDCS = \
+	../../Project-Files/resources/edc/account/email-account.edc \
+	../../Project-Files/resources/edc/common/email-common-theme.edc \
+	../../Project-Files/resources/edc/composer/email-composer-view.edc \
+	../../Project-Files/resources/edc/filter/email-filter.edc \
+	../../Project-Files/resources/edc/mailbox/email-mailbox.edc \
+	../../Project-Files/resources/edc/setting/email-setting-theme.edc \
+	../../Project-Files/resources/edc/viewer/email-viewer.edc
+
+# PO Sources
+USER_POS = res/po/*.po
+
+# User Defines
+USER_DEFS = _EWK_LOAD_NONEMPTY_LAYOUT_FINISHED_CB_UNAVAILABLE_ 
+USER_CPP_DEFS = 
+
+# User Undefines
+USER_UNDEFS = 
+USER_CPP_UNDEFS = 
+
+# User Libraries
+USER_LIBS = 
+
+# User Objects
+USER_OBJS = 
+USER_OBJS_ABS = 
+
+# User Includes
+## C Compiler
+USER_INC_DIRS = \
+	../../Project-Files/common/inc \
+	../../Project-Files/modules/account/inc \
+	../../Project-Files/modules/composer/inc \
+	../../Project-Files/modules/filter/inc \
+	../../Project-Files/modules/mailbox/inc \
+	../../Project-Files/modules/setting/inc \
+	../../Project-Files/modules/viewer/inc
+
+USER_INC_DIRS_ABS = 
+USER_INC_FILES = 
+USER_INC_FILES_ABS = 
+## C++ Compiler
+USER_CPP_INC_DIRS = 
+USER_CPP_INC_DIRS_ABS = 
+USER_CPP_INC_FILES = 
+USER_CPP_INC_FILES_ABS = 
+
+# User Library Path
+USER_LIB_DIRS = 
+USER_LIB_DIRS_ABS = 
+
+# EDC Resource Path
+USER_EDCS_IMAGE_DIRS = \
+	res/images/composer_icon \
+	res/images/list_icon \
+	../../Project-Files/resources/edc_images \
+	../../Project-Files/resources/edc_images/composer_icon \
+	../../Project-Files/resources/edc_images/list_icon \
+	../../Project-Files/resources/edc_images/myfiles_list_icon \
+	../../Project-Files/resources/edc_images/viewer_icon \
+	../../Project-Files/resources/edc_images/rich_text_bar_icon
+	
+USER_EDCS_IMAGE_DIRS_ABS = 
+USER_EDCS_SOUND_DIRS = 
+USER_EDCS_SOUND_DIRS_ABS = 
+USER_EDCS_FONT_DIRS = 
+USER_EDCS_FONT_DIRS_ABS = 
+
+# EDC Flags
+USER_EXT_EDC_KEYS = 
+
+# Resource Filter
+USER_RES_INCLUDE = 
+USER_RES_EXCLUDE = 
