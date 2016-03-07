@@ -302,10 +302,10 @@ static void _exit_composer_cb(Evas_Object *obj, const char *result, void *data)
 
 	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (view->is_save_in_drafts_clicked || view->is_back_btn_clicked) {
-		_exit_composer_without_sending_mail(view);
-	} else {
+	if (view->is_send_btn_clicked) {
 		_exit_composer_with_sending_mail(view);
+	} else {
+		_exit_composer_without_sending_mail(view);
 	}
 
 	debug_leave();

@@ -48,6 +48,8 @@
 static void _initial_view_back_button_clicked_cb(void *data, Evas_Object *obj, void *event_info);
 static void _initial_view_send_button_clicked_cb(void *data, Evas_Object *obj, void *event_info);
 
+static Eina_Bool _initial_view_exit_idler_cb(void *data);
+
 static Evas_Object *_initial_view_create_root_layout(Evas_Object *parent, EmailComposerView *view);
 static Evas_Object *_initial_view_create_composer_layout(Evas_Object *parent);
 static void _initial_view_create_naviframe_buttons(Evas_Object *parent, Evas_Object *content, EmailComposerView *view);
@@ -116,6 +118,9 @@ static void _initial_view_back_button_clicked_cb(void *data, Evas_Object *obj, v
 	view->is_back_btn_clicked = EINA_TRUE;
 	if (imf_state != ECORE_IMF_INPUT_PANEL_STATE_SHOW) {
 		composer_exit_composer_get_contents(view);
+	} else {
+		DELETE_IDLER_OBJECT(view->idler_destroy_self);
+		view->idler_destroy_self = ecore_idler_add(_initial_view_exit_idler_cb, view);
 	}
 
 	debug_leave();
@@ -137,14 +142,26 @@ static void _initial_view_send_button_clicked_cb(void *data, Evas_Object *obj, v
 	 * Because result callback for the launching request is called after the composer is destroyed.
 	 */
 	retm_if(view->base.module->is_launcher_busy, "is_launcher_busy = true");
-
-	/* if a user clicks 'send' button more than once. it may cause B/S */
-	retm_if(view->is_send_btn_clicked, "_initial_view_send_button_clicked_cb() return; view->is_send_btn_clicked is already clicked");
+	retm_if(view->is_back_btn_clicked || view->is_save_in_drafts_clicked || view->is_send_btn_clicked, "while destroying composer!");
 
 	view->is_send_btn_clicked = EINA_TRUE;
 	composer_exit_composer_get_contents(view);
 
 	debug_leave();
+}
+
+static Eina_Bool _initial_view_exit_idler_cb(void *data)
+{
+	debug_enter();
+	retvm_if(!data, ECORE_CALLBACK_CANCEL, "Invalid parameter: data is NULL!");
+
+	EmailComposerView *view = (EmailComposerView *)data;
+
+	view->idler_destroy_self = NULL;
+
+	composer_exit_composer_get_contents(view);
+
+	return ECORE_CALLBACK_CANCEL;
 }
 
 static Evas_Object *_initial_view_create_composer_box(Evas_Object *parent)

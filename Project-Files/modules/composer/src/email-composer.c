@@ -1427,11 +1427,6 @@ static void _composer_virtualkeypad_state_off_cb(void *data, Evas_Object *obj, v
 
 	EmailComposerView *view = (EmailComposerView *)data;
 
-	/* When user rotate device with "Stop composing email" popup, this callback is called even though the popup has already shown. */
-	if (view->is_back_btn_clicked && !view->composer_popup) {
-		composer_exit_composer_get_contents(view);
-	}
-
 	if (view->ps_box) {
 		composer_ps_change_layout_size(view);
 	}
