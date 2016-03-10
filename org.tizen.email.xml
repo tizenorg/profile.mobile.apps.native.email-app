@@ -80,7 +80,7 @@
         </app-control>
         <app-control>
             <operation name="http://tizen.org/appcontrol/operation/multi_share"/>
-            <mime name="application/xhtml+xml"/>
+            <mime name="*/*"/>
         </app-control>
         <app-control>
             <operation name="http://tizen.org/appcontrol/operation/multi_share"/>
