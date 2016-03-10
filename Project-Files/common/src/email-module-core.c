@@ -2069,7 +2069,7 @@ void _email_view_item_del_cb(void *data, Evas_Object *obj, void *event_info)
 
 	debug_enter();
 	retm_if(!data && !event_info, "data and event_info are NULL");
-	warn_if(!data, "data is NULL");
+	debug_warning_if(!data, "data is NULL");
 
 	/* If deleted item is popped item */
 	if (MODULE_MGR.popped_item == event_info) {

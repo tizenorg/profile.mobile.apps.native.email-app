@@ -26,7 +26,7 @@
 								<option id="gnu.cpp.compiler.option.optimization.level.2094780226" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option defaultValue="gnu.cpp.compiler.debugging.level.max" id="sbi.gnu.cpp.compiler.option.debugging.level.core.1537991202" name="Debug level" superClass="sbi.gnu.cpp.compiler.option.debugging.level.core" valueType="enumerated"/>
 								<option id="sbi.gnu.cpp.compiler.option.1523618383" name="Tizen-Target" superClass="sbi.gnu.cpp.compiler.option" valueType="userObjs">
-									<listOptionValue builtIn="false" value="mobile-3.0-device.core_llvm36.armel.core.app"/>
+									<listOptionValue builtIn="false" value="mobile-3.0-device.core.private_llvm36.armel.core.app"/>
 								</option>
 								<option id="sbi.gnu.cpp.compiler.option.frameworks_inc.core.1176462851" name="Tizen-Frameworks-Include-Path" superClass="sbi.gnu.cpp.compiler.option.frameworks_inc.core" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${SBI_SYSROOT}/usr/include/libxml2&quot;"/>
@@ -148,7 +148,7 @@
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.1417551598" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" valueType="enumerated"/>
 								<option defaultValue="gnu.c.debugging.level.max" id="sbi.gnu.c.compiler.option.debugging.level.core.1930760565" name="Debug level" superClass="sbi.gnu.c.compiler.option.debugging.level.core" valueType="enumerated"/>
 								<option id="sbi.gnu.c.compiler.option.694582685" name="Tizen-Target" superClass="sbi.gnu.c.compiler.option" valueType="userObjs">
-									<listOptionValue builtIn="false" value="mobile-3.0-device.core_llvm36.armel.core.app"/>
+									<listOptionValue builtIn="false" value="mobile-3.0-device.core.private_llvm36.armel.core.app"/>
 								</option>
 								<option id="sbi.gnu.c.compiler.option.frameworks_inc.core.144987042" name="Tizen-Frameworks-Include-Path" superClass="sbi.gnu.c.compiler.option.frameworks_inc.core" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${SBI_SYSROOT}/usr/include/libxml2&quot;"/>
@@ -295,7 +295,7 @@
 							<tool id="org.tizen.nativecore.tool.sbi.gnu.archiver.mergelib.1611393507" name="Archive Generator" superClass="org.tizen.nativecore.tool.sbi.gnu.archiver.mergelib"/>
 							<tool id="org.tizen.nativecore.tool.sbi.po.compiler.1856774696" name="PO Resource Compiler" superClass="org.tizen.nativecore.tool.sbi.po.compiler"/>
 							<tool id="org.tizen.nativecore.tool.sbi.edc.compiler.578191361" name="EDC Resource Compiler" superClass="org.tizen.nativecore.tool.sbi.edc.compiler">
-								<option id="sbi.gnu.edc.compiler.option.misc.id.879597268" name="Image Path (-id)" superClass="sbi.gnu.edc.compiler.option.misc.id" valueType="stringList">
+								<option command="-id " id="sbi.gnu.edc.compiler.option.misc.id.879597268" name="Image Path (-id)" superClass="sbi.gnu.edc.compiler.option.misc.id" valueType="stringList">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/edc_images}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/edc_images/composer_icon}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/edc_images/list_icon}&quot;"/>
@@ -305,8 +305,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/res/images/composer_icon}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/res/images/list_icon}&quot;"/>
 								</option>
-								<option id="sbi.gnu.edc.compiler.option.misc.sd.1070783399" name="Sound Path (-sd)" superClass="sbi.gnu.edc.compiler.option.misc.sd"/>
-								<option id="sbi.gnu.edc.compiler.option.misc.fd.1159250073" name="Font Path (-fd)" superClass="sbi.gnu.edc.compiler.option.misc.fd"/>
+								<option command="-sd " id="sbi.gnu.edc.compiler.option.misc.sd.1070783399" name="Sound Path (-sd)" superClass="sbi.gnu.edc.compiler.option.misc.sd"/>
+								<option command="-fd " id="sbi.gnu.edc.compiler.option.misc.fd.1159250073" name="Font Path (-fd)" superClass="sbi.gnu.edc.compiler.option.misc.fd"/>
 							</tool>
 						</toolChain>
 					</folderInfo>
@@ -345,7 +345,7 @@
 								<option id="gnu.cpp.compiler.option.optimization.level.1701289191" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
 								<option defaultValue="gnu.cpp.compiler.debugging.level.default" id="sbi.gnu.cpp.compiler.option.debugging.level.core.1284337376" name="Debug level" superClass="sbi.gnu.cpp.compiler.option.debugging.level.core" valueType="enumerated"/>
 								<option id="sbi.gnu.cpp.compiler.option.626099143" name="Tizen-Target" superClass="sbi.gnu.cpp.compiler.option" valueType="userObjs">
-									<listOptionValue builtIn="false" value="mobile-3.0-device.core_llvm36.armel.core.app"/>
+									<listOptionValue builtIn="false" value="mobile-3.0-device.core.private_llvm36.armel.core.app"/>
 								</option>
 								<option id="sbi.gnu.cpp.compiler.option.frameworks_inc.core.981270356" name="Tizen-Frameworks-Include-Path" superClass="sbi.gnu.cpp.compiler.option.frameworks_inc.core" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${SBI_SYSROOT}/usr/include/libxml2&quot;"/>
@@ -466,7 +466,7 @@
 								<option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.option.optimization.level.2015369817" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" valueType="enumerated"/>
 								<option defaultValue="gnu.c.debugging.level.default" id="sbi.gnu.c.compiler.option.debugging.level.core.494821323" name="Debug level" superClass="sbi.gnu.c.compiler.option.debugging.level.core" valueType="enumerated"/>
 								<option id="sbi.gnu.c.compiler.option.1092442948" name="Tizen-Target" superClass="sbi.gnu.c.compiler.option" valueType="userObjs">
-									<listOptionValue builtIn="false" value="mobile-3.0-device.core_llvm36.armel.core.app"/>
+									<listOptionValue builtIn="false" value="mobile-3.0-device.core.private_llvm36.armel.core.app"/>
 								</option>
 								<option id="sbi.gnu.c.compiler.option.frameworks_inc.core.379204472" name="Tizen-Frameworks-Include-Path" superClass="sbi.gnu.c.compiler.option.frameworks_inc.core" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${SBI_SYSROOT}/usr/include/libxml2&quot;"/>
@@ -612,7 +612,7 @@
 							<tool id="org.tizen.nativecore.tool.sbi.gnu.archiver.mergelib.652761047" name="Archive Generator" superClass="org.tizen.nativecore.tool.sbi.gnu.archiver.mergelib"/>
 							<tool id="org.tizen.nativecore.tool.sbi.po.compiler.1730923067" name="PO Resource Compiler" superClass="org.tizen.nativecore.tool.sbi.po.compiler"/>
 							<tool id="org.tizen.nativecore.tool.sbi.edc.compiler.36745342" name="EDC Resource Compiler" superClass="org.tizen.nativecore.tool.sbi.edc.compiler">
-								<option id="sbi.gnu.edc.compiler.option.misc.id.457450646" name="Image Path (-id)" superClass="sbi.gnu.edc.compiler.option.misc.id" valueType="stringList">
+								<option command="-id " id="sbi.gnu.edc.compiler.option.misc.id.457450646" name="Image Path (-id)" superClass="sbi.gnu.edc.compiler.option.misc.id" valueType="stringList">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/edc_images}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/edc_images/composer_icon}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/edc_images/list_icon}&quot;"/>
@@ -622,8 +622,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/res/images/composer_icon}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/res/images/list_icon}&quot;"/>
 								</option>
-								<option id="sbi.gnu.edc.compiler.option.misc.sd.371048442" name="Sound Path (-sd)" superClass="sbi.gnu.edc.compiler.option.misc.sd"/>
-								<option id="sbi.gnu.edc.compiler.option.misc.fd.731638430" name="Font Path (-fd)" superClass="sbi.gnu.edc.compiler.option.misc.fd"/>
+								<option command="-sd " id="sbi.gnu.edc.compiler.option.misc.sd.371048442" name="Sound Path (-sd)" superClass="sbi.gnu.edc.compiler.option.misc.sd"/>
+								<option command="-fd " id="sbi.gnu.edc.compiler.option.misc.fd.731638430" name="Font Path (-fd)" superClass="sbi.gnu.edc.compiler.option.misc.fd"/>
 							</tool>
 						</toolChain>
 					</folderInfo>

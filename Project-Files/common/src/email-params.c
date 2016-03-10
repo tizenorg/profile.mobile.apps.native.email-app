@@ -94,7 +94,7 @@ EMAIL_API void email_params_free(email_params_h *params)
 
 	if (*params) {
 		int ret = bundle_free(*params);
-		warn_if(ret != BUNDLE_ERROR_NONE, "bundle_free() failed! ret = %d", ret);
+		debug_warning_if(ret != BUNDLE_ERROR_NONE, "bundle_free() failed! ret = %d", ret);
 
 		*params = NULL;
 	}

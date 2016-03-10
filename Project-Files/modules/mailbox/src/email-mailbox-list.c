@@ -1110,7 +1110,7 @@ static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_id(int account_
 	_make_sorting_rule_list(sort_type, account_id, sorting_rule_list);
 
 	err = email_get_mail_list_ex(filter_list, cnt_filter_list, sorting_rule_list, cnt_soring_rule, -1, -1, &mail_list, mail_count);
-	warn_if(err != EMAIL_ERROR_NONE, "email_get_mail_list_ex - err (%d)", err);
+	debug_warning_if(err != EMAIL_ERROR_NONE, "email_get_mail_list_ex - err (%d)", err);
 
 	FREE(sorting_rule_list);
 	email_free_list_filter(&filter_list, cnt_filter_list);
@@ -1246,7 +1246,7 @@ static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_type(int accoun
 	_make_sorting_rule_list(sort_type, account_id, sorting_rule_list);
 
 	err = email_get_mail_list_ex(filter_list, cnt_filter_list, sorting_rule_list, cnt_soring_rule, -1, -1, &mail_list, mail_count);
-	warn_if(err != EMAIL_ERROR_NONE, "email_get_mail_list_ex - err (%d)", err);
+	debug_warning_if(err != EMAIL_ERROR_NONE, "email_get_mail_list_ex - err (%d)", err);
 
 	FREE(sorting_rule_list);
 	email_free_list_filter(&filter_list, cnt_filter_list);
@@ -1345,7 +1345,7 @@ static email_mail_list_item_t *_mailbox_get_priority_sender_mail_list(int sort_t
 	_make_sorting_rule_list(sort_type, 0, sorting_rule_list);
 
 	err = email_get_mail_list_ex(filter_list, j, sorting_rule_list, cnt_soring_rule, -1, -1, &mail_list, mail_count);
-	warn_if(err != EMAIL_ERROR_NONE, "email_get_mail_list_ex - err (%d)", err);
+	debug_warning_if(err != EMAIL_ERROR_NONE, "email_get_mail_list_ex - err (%d)", err);
 
 	FREE(sorting_rule_list);
 	email_free_list_filter(&filter_list, cnt_filter_list);
@@ -1467,7 +1467,7 @@ static email_mail_list_item_t *_mailbox_get_favourite_mail_list(int sort_type, i
 	_make_sorting_rule_list(sort_type, 0, sorting_rule_list);
 
 	err = email_get_mail_list_ex(filter_list, cnt_filter_list, sorting_rule_list, cnt_soring_rule, -1, -1, &mail_list, mail_count);
-	warn_if(err != EMAIL_ERROR_NONE, "email_get_mail_list_ex - err (%d)", err);
+	debug_warning_if(err != EMAIL_ERROR_NONE, "email_get_mail_list_ex - err (%d)", err);
 
 	FREE(sorting_rule_list);
 	email_free_list_filter(&filter_list, cnt_filter_list);
@@ -2726,7 +2726,7 @@ bool mailbox_check_searched_mail(int mail_id, void *data)
 		_add_search_data_into_filter_list(search_data, filter_list, &i);
 
 	err = email_count_mail(filter_list, cnt_filter_list, &total_count, &unread_count);
-	warn_if(err != EMAIL_ERROR_NONE, "email_count_mail - err (%d)", err);
+	debug_warning_if(err != EMAIL_ERROR_NONE, "email_count_mail - err (%d)", err);
 
 	email_free_list_filter(&filter_list, cnt_filter_list);
 

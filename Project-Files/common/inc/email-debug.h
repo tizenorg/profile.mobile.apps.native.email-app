@@ -37,6 +37,9 @@
 
 G_BEGIN_DECLS
 
+#undef _debug
+#undef _debug_secure
+
 #undef debug_trace
 #undef debug_log
 #undef debug_warning
@@ -65,88 +68,100 @@ G_BEGIN_DECLS
 #undef debug_enter
 #undef debug_leave
 
-#ifdef _DEBUG
-
-// LOG Level: V < D < I < W < E < F
-#define debug_trace(fmt, args...)		do { LOGD(fmt, ##args); } while (0)
-#define debug_log(fmt, args...)			do { LOGI(fmt, ##args); } while (0)
-#define debug_warning(fmt, args...)		do { LOGW(fmt, ##args); } while (0)
-#define debug_error(fmt, args...)		do { LOGE(fmt, ##args); } while (0)
-#define debug_critical(fmt, args...)		do { LOGE(fmt, ##args); } while (0)
-#define debug_fatal(fmt, args...)		do { LOGF(fmt, ##args); } while (0)
+#ifndef __MODULE__
+#define __MODULE__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+#endif
 
 #define COND(expr)	(__builtin_expect((expr) != 0, 0))
 
-#define debug_trace_if(expr, fmt, args...)		do { if (COND(expr)) LOGD(fmt, ##args); } while (0)
-#define debug_log_if(expr, fmt, args...)		do { if (COND(expr)) LOGI(fmt, ##args); } while (0)
-#define debug_warning_if(expr, fmt, args...)	do { if (COND(expr)) LOGW(fmt, ##args); } while (0)
-#define debug_error_if(expr, fmt, args...)		do { if (COND(expr)) LOGE(fmt, ##args); } while (0)
-#define debug_fatal_if(expr, fmt, args...)		do { if (COND(expr)) LOGF(fmt, ##args); } while (0)
+#define _debug(prio, fmt, arg...) \
+	dlog_print(prio, LOG_TAG, "%s: %s(%d) > " fmt, __MODULE__, __func__, __LINE__, ##arg)
+
+#define _debug_secure(prio, fmt, arg...) \
+	dlog_print(prio, LOG_TAG, "%s: %s(%d) > [SECURE_LOG] " fmt, __MODULE__, __func__, __LINE__, ##arg)
+
+#define _debug_nop(fmt, args...) _debug_nop_impl("" fmt, ##args)
+
+#define _debug_nop_expr(expr, fmt, args...) _debug_nop_expr_impl(expr, "" fmt, ##args)
+
+static inline int _debug_nop_impl(const char *fmt __attribute__((unused)), ...) { return 0; }
+static inline int _debug_nop_expr_impl(bool expr __attribute__((unused)),
+		const char *fmt __attribute__((unused)), ...) { return 0; }
+
+#define debug_warning(fmt, args...)		_debug(DLOG_WARN, fmt, ##args)
+#define debug_error(fmt, args...)		_debug(DLOG_ERROR, fmt, ##args)
+#define debug_fatal(fmt, args...)		_debug(DLOG_FATAL, fmt, ##args)
+#define debug_critical(fmt, args...)	_debug(DLOG_ERROR, fmt, ##args)
+
+#define debug_warning_if(expr, fmt, args...)	do { if (COND(expr)) debug_warning(fmt, ##args); } while (0)
+#define debug_error_if(expr, fmt, args...)		do { if (COND(expr)) debug_error(fmt, ##args); } while (0)
+#define debug_fatal_if(expr, fmt, args...)		do { if (COND(expr)) debug_fatal(fmt, ##args); } while (0)
 
 #ifdef TIZEN_DEBUG_ENABLE
-#define debug_secure_trace(fmt, args...)		do { SECURE_LOGD(fmt, ##args); } while (0)
-#define debug_secure(fmt, args...)		do { SECURE_LOGI(fmt, ##args); } while (0)
-#define debug_secure_warning(fmt, args...)		do { SECURE_LOGW(fmt, ##args); } while (0)
-#define debug_secure_error(fmt, args...)		do { SECURE_LOGE(fmt, ##args); } while (0)
-#define debug_secure_fatal(fmt, args...)		do { SECURE_LOGF(fmt, ##args); } while (0)
+#define debug_secure_warning(fmt, args...)	_debug_secure(DLOG_WARN, fmt, ##args)
+#define debug_secure_error(fmt, args...)	_debug_secure(DLOG_ERROR, fmt, ##args)
+#define debug_secure_fatal(fmt, args...)	_debug_secure(DLOG_FATAL, fmt, ##args)
 
-#define debug_secure_trace_if(expr, fmt, args...)		do { if (COND(expr)) SECURE_LOGD(fmt, ##args); } while (0)
-#define debug_secure_log_if(expr, fmt, args...)		do { if (COND(expr)) SECURE_LOGI(fmt, ##args); } while (0)
-#define debug_secure_warning_if(expr, fmt, args...)	do { if (COND(expr)) SECURE_LOGW(fmt, ##args); } while (0)
-#define debug_secure_error_if(expr, fmt, args...)		do { if (COND(expr)) SECURE_LOGE(fmt, ##args); } while (0)
-#define debug_secure_fatal_if(expr, fmt, args...)		do { if (COND(expr)) SECURE_LOGF(fmt, ##args); } while (0)
+#define debug_secure_warning_if(expr, fmt, args...)	do { if (COND(expr)) debug_secure_warning(fmt, ##args); } while (0)
+#define debug_secure_error_if(expr, fmt, args...)	do { if (COND(expr)) debug_secure_error(fmt, ##args); } while (0)
+#define debug_secure_fatal_if(expr, fmt, args...)	do { if (COND(expr)) debug_secure_fatal(fmt, ##args); } while (0)
 #else
-#define debug_secure_trace(fmt, args...)
-#define debug_secure(fmt, args...)
-#define debug_secure_warning(fmt, args...)
-#define debug_secure_error(fmt, args...)
-#define debug_secure_fatal(fmt, args...)
+#define debug_secure_warning(fmt, args...)	_debug_nop(fmt, ##args)
+#define debug_secure_error(fmt, args...)	_debug_nop(fmt, ##args)
+#define debug_secure_fatal(fmt, args...)	_debug_nop(fmt, ##args)
 
-#define debug_secure_trace_if(expr, fmt, args...)
-#define debug_secure_log_if(expr, fmt, args...)
-#define debug_secure_warning_if(expr, fmt, args...)
-#define debug_secure_error_if(expr, fmt, args...)
-#define debug_secure_fatal_if(expr, fmt, args...)
-#endif
+#define debug_secure_warning_if(expr, fmt, args...)	_debug_nop_expr(expr, fmt, ##args)
+#define debug_secure_error_if(expr, fmt, args...)	_debug_nop_expr(expr, fmt, ##args)
+#define debug_secure_fatal_if(expr, fmt, args...)	_debug_nop_expr(expr, fmt, ##args)
+#endif /* TIZEN_DEBUG_ENABLE */
 
-#define debug_enter()					do { debug_trace(" * Enter *"); } while (0)
-#define debug_leave()					do { debug_trace(" * Leave *"); } while (0)
+#ifdef _DEBUG
+
+#define debug_trace(fmt, args...)		_debug(DLOG_DEBUG, fmt, ##args)
+#define debug_log(fmt, args...)			_debug(DLOG_INFO, fmt, ##args)
+
+#define debug_trace_if(expr, fmt, args...)		do { if (COND(expr)) debug_trace(fmt, ##args); } while (0)
+#define debug_log_if(expr, fmt, args...)		do { if (COND(expr)) debug_log(fmt, ##args); } while (0)
+
+#ifdef TIZEN_DEBUG_ENABLE
+#define debug_secure_trace(fmt, args...)	_debug_secure(DLOG_DEBUG, fmt, ##args)
+#define debug_secure(fmt, args...)			_debug_secure(DLOG_INFO, fmt, ##args)
+
+#define debug_secure_trace_if(expr, fmt, args...)	do { if (COND(expr)) debug_secure_trace(fmt, ##args); } while (0)
+#define debug_secure_log_if(expr, fmt, args...)		do { if (COND(expr)) debug_secure(fmt, ##args); } while (0)
+#else
+#define debug_secure_trace(fmt, args...)	_debug_nop(fmt, ##args)
+#define debug_secure(fmt, args...)			_debug_nop(fmt, ##args)
+
+#define debug_secure_trace_if(expr, fmt, args...)	_debug_nop_expr(expr, fmt, ##args)
+#define debug_secure_log_if(expr, fmt, args...)		_debug_nop_expr(expr, fmt, ##args)
+#endif /* TIZEN_DEBUG_ENABLE */
+
+#define debug_enter()	debug_trace(" * Enter *")
+#define debug_leave()	debug_trace(" * Leave *")
 
 #else	/* _DEBUG */
 
-#define debug_trace(fmt, args...) do { NOP("" fmt, ##args); } while (0)
-#define debug_log(fmt, args...) do { NOP("" fmt, ##args); } while (0)
-#define debug_warning(fmt, args...) do { NOP("" fmt, ##args); } while (0)
-#define debug_error(fmt, args...) do { NOP("" fmt, ##args); } while (0)
-#define debug_critical(fmt, args...) do { NOP("" fmt, ##args); } while (0)
-#define debug_fatal(fmt, args...) do { NOP("" fmt, ##args); } while (0)
+#define debug_trace(fmt, args...)		_debug_nop(fmt, ##args)
+#define debug_log(fmt, args...)			_debug_nop(fmt, ##args)
 
-#define debug_trace_if(fmt, args...)
-#define debug_log_if(fmt, args...)
-#define debug_warning_if(expr, fmt, args...) do { if (expr) NOP("" fmt, ##args); } while (0)
-#define debug_error_if(expr, fmt, args...) do { if (expr) NOP("" fmt, ##args); } while (0)
-#define debug_fatal_if(expr, fmt, args...) do { if (expr) NOP("" fmt, ##args); } while (0)
+#define debug_trace_if(fmt, args...)	_debug_nop_expr(expr, fmt, ##args)
+#define debug_log_if(fmt, args...)		_debug_nop_expr(expr, fmt, ##args)
 
-#define debug_secure_trace(fmt, args...)
-#define debug_secure(fmt, args...)
-#define debug_secure_warning(fmt, args...)
-#define debug_secure_error(fmt, args...)
-#define debug_secure_fatal(fmt, args...)
+#define debug_secure_trace(fmt, args...)	_debug_nop(fmt, ##args)
+#define debug_secure(fmt, args...)			_debug_nop(fmt, ##args)
 
-#define debug_secure_trace_if(fmt, args...)
-#define debug_secure_log_if(fmt, args...)
-#define debug_secure_warning_if(fmt, args...)
-#define debug_secure_error_if(fmt, args...)
-#define debug_secure_fatal_if(fmt, args...)
+#define debug_secure_trace_if(fmt, args...)	_debug_nop_expr(expr, fmt, ##args)
+#define debug_secure_log_if(fmt, args...)	_debug_nop_expr(expr, fmt, ##args)
 
-#define debug_enter()
-#define debug_leave()
+#define debug_enter()	_debug_nop("")
+#define debug_leave()	_debug_nop("")
 
 #endif	/* _DEBUG */
 
 #define RETURN_IF_FAIL(expr) \
 	do { \
-		if (!(expr)) { \
+		if (!COND(expr)) { \
 			debug_error("expr : (%s) failed", #expr); \
 			return; \
 		} \
@@ -154,7 +169,7 @@ G_BEGIN_DECLS
 
 #define RETURN_VAL_IF_FAIL(expr, val) \
 	do { \
-		if (!(expr)) { \
+		if (!COND(expr)) { \
 			debug_error("expr : (%s) failed", #expr); \
 			return (val); \
 		} \
@@ -162,57 +177,49 @@ G_BEGIN_DECLS
 
 #define ret_if(expr) \
 	do { \
-		if (expr) { \
+		if (COND(expr)) { \
 			return; \
 		} \
 	} while (0)
 
 #define retv_if(expr, val) \
 	do { \
-		if (expr) { \
+		if (COND(expr)) { \
 			return (val); \
 		} \
 	} while (0)
 
 #define retm_if(expr, fmt, arg...) \
 	do { \
-		if (expr) { \
+		if (COND(expr)) { \
 			debug_error(fmt, ##arg); \
 			return; \
 		} \
 	} while (0)
 
-#define warn_if(expr, fmt, arg...) \
-	do { \
-		if (expr) { \
-			debug_warning(fmt, ##arg); \
-		} \
-	} while (0)
-
-#define gotom_if(expr, label, fmt, arg...) \
-	do { \
-		if (expr) { \
-			debug_error(fmt, ##arg); \
-			goto label; \
-		} \
-	} while (0)
-
 #define retvm_if(expr, val, fmt, arg...) \
 	do { \
-		if (expr) { \
+		if (COND(expr)) { \
 			debug_error(fmt, ##arg); \
 			return (val); \
 		} \
 	} while (0)
 
-typedef enum {
-	EMAIL_DEBUG_CRITICAL = 0,
-	EMAIL_DEBUG_WARNING,
-	EMAIL_DEBUG_EXPR,
-	EMAIL_DEBUG_TIME,
-	EMAIL_DEBUG_LOG,
-	EMAIL_DEBUG_MAX
-} EmailDebugType;
+#define gotom_if(expr, label, fmt, arg...) \
+	do { \
+		if (COND(expr)) { \
+			debug_error(fmt, ##arg); \
+			goto label; \
+		} \
+	} while (0)
+
+#define break_if(expr, fmt, arg...) \
+	do { \
+		if (COND(expr)) { \
+			debug_error(fmt, ##arg); \
+			break; \
+		} \
+	} while (0)
 
 G_END_DECLS
 #endif	/* _EMAIL_DEBUG_H_ */

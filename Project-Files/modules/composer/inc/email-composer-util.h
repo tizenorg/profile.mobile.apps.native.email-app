@@ -45,13 +45,15 @@ enum {
 	RESIZE_IMAGE_ORIGINAL_SIZE = 100
 };
 
+#ifdef _DEBUG
 #define _USE_PROFILE_
+#endif
 #ifdef _USE_PROFILE_
 #define email_profiling_begin(pfid) \
 	struct timeval __prf_1_##pfid; \
 	do { \
 		gettimeofday(&__prf_1_##pfid, 0); \
-		__dlog_print(LOG_ID_MAIN, DLOG_DEBUG, "PROFILING", "[ BEGIN ] "#pfid" -> %u.%06u", (unsigned int)__prf_1_##pfid.tv_sec, (unsigned int)__prf_1_##pfid.tv_usec); \
+		debug_trace("PROFILING [ BEGIN ] "#pfid" -> %u.%06u", (unsigned int)__prf_1_##pfid.tv_sec, (unsigned int)__prf_1_##pfid.tv_usec); \
 	} while (0)
 
 #define email_profiling_end(pfid) \
@@ -61,7 +63,7 @@ enum {
 		long __ds = __prf_2_##pfid.tv_sec - __prf_1_##pfid.tv_sec; \
 		long __dm = __prf_2_##pfid.tv_usec - __prf_1_##pfid.tv_usec; \
 		if ( __dm < 0 ) { __ds--; __dm = 1000000 + __dm; } \
-		__dlog_print(LOG_ID_MAIN, DLOG_DEBUG, "PROFILING", "[Elapsed] "#pfid" -> %u.%06u", (unsigned int)(__ds), (unsigned int)(__dm)); \
+		debug_trace("PROFILING [Elapsed] "#pfid" -> %u.%06u", (unsigned int)(__ds), (unsigned int)(__dm)); \
 	} while (0)
 #else
 #define email_profiling_begin(pfid)
