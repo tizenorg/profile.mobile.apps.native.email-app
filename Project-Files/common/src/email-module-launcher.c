@@ -102,9 +102,8 @@ static int _email_module_create_attach_panel(email_module_t *module);
  *
  * @param[in]	module			pointer to the module
  * @param[in]	notify_close	true - need to notify listener, false - otherwise
- * @param[in]	reset_listener	true - need to reset listener, false - otherwise
  */
-static void _email_module_close_attach_panel(email_module_t *module, bool notify_close, bool reset_listener);
+static void _email_module_close_attach_panel(email_module_t *module, bool notify_close);
 
 /**
  * @brief Handler method of the attach panel reply callback
@@ -223,16 +222,13 @@ int email_module_launch_app(email_module_t *module, email_launch_app_type_e app_
 	return -1;
 }
 
-int email_module_launch_attach_panel(email_module_t *module, email_attach_panel_listener_t *listener)
+int email_module_launch_attach_panel(email_module_t *module)
 {
 	debug_enter();
 	/* Check state and input arguments */
 	retvm_if(!module, -1, "module is NULL");
 	retvm_if(module->is_attach_panel_launched, -1, "Attach panel is running");
 	retvm_if(module->is_launcher_busy, -1, "Launcher is busy");
-
-	/* Reset previous listener */
-	memset(&module->_attach_panel_listener, 0, sizeof(module->_attach_panel_listener));
 
 	/* We should create attach panel if not created.
 	 * Or recreate if bundles changes */
@@ -256,13 +252,24 @@ int email_module_launch_attach_panel(email_module_t *module, email_attach_panel_
 	/* Launching attach panel */
 	attach_panel_show(module->_attach_panel);
 
-	/* Copy listener if it was specified */
-	if (listener) {
-		memcpy(&module->_attach_panel_listener, listener, sizeof(*listener));
-	}
-
 	/* Initialzie attach panel launch state */
 	module->is_attach_panel_launched = true;
+
+	debug_leave();
+	return 0;
+}
+
+int email_module_set_attach_panel_listener(email_module_t *module,
+		email_attach_panel_listener_t *listener)
+{
+	debug_enter();
+	retvm_if(!module, -1, "module is NULL");
+
+	if (listener) {
+		memcpy(&module->_attach_panel_listener, listener, sizeof(*listener));
+	} else {
+		memset(&module->_attach_panel_listener, 0, sizeof(module->_attach_panel_listener));
+	}
 
 	debug_leave();
 	return 0;
@@ -386,7 +393,7 @@ void _email_module_terminate_any_launched_app(email_module_t *module, bool notif
 		debug_log("Closing attach panel");
 
 		/* Close it before freeing */
-		_email_module_close_attach_panel(module, notify_close, true);
+		_email_module_close_attach_panel(module, notify_close);
 	}
 
 	/* Free the attach panel in any case */
@@ -595,7 +602,7 @@ int _email_module_create_attach_panel(email_module_t *module)
 	return 0;
 }
 
-void _email_module_close_attach_panel(email_module_t *module, bool notify_close, bool reset_listener)
+void _email_module_close_attach_panel(email_module_t *module, bool notify_close)
 {
 	debug_enter();
 
@@ -612,12 +619,6 @@ void _email_module_close_attach_panel(email_module_t *module, bool notify_close,
 		if (notify_close) {
 			module->_attach_panel_listener.close_cb(module->_attach_panel_listener.cb_data);
 		}
-		module->_attach_panel_listener.close_cb = NULL;
-	}
-
-	/* Reset listener */
-	if (reset_listener && !module->is_attach_panel_launched ) {
-		memset(&module->_attach_panel_listener, 0, sizeof(module->_attach_panel_listener));
 	}
 
 	debug_leave();
@@ -668,8 +669,6 @@ void _email_module_attach_panel_result_cb(attach_panel_h attach_panel,
 			/* We must unlock GUI thread */
 			ecore_thread_main_loop_end();
 		}
-
-		module->_attach_panel_listener.reply_cb = NULL;
 	}
 
 	/* Free path array and items */
@@ -697,7 +696,7 @@ void _email_module_attach_panel_event_cb(attach_panel_h attach_panel,
 		if (module->is_attach_panel_launched) {
 			/* Reset state so we do not hide attach panel twice (it was already hidden) */
 			module->is_attach_panel_launched = false;
-			_email_module_close_attach_panel(module, true, false);
+			_email_module_close_attach_panel(module, true);
 		} else {
 			debug_log("event ignored");
 		}

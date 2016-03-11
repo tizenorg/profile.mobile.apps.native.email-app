@@ -63,6 +63,8 @@ static COMPOSER_ERROR_TYPE_E _composer_initialize_services(void *data);
 static COMPOSER_ERROR_TYPE_E _composer_initialize_themes(void *data);
 static COMPOSER_ERROR_TYPE_E _composer_construct_composer_data(void *data);
 
+static void _composer_attach_panel_reply_cb(void *data, const char **path_array, int array_len);
+
 static void *_composer_vcard_save_worker(void *data);
 static Eina_Bool _composer_vcard_save_timer_cb(void *data);
 
@@ -407,6 +409,12 @@ static COMPOSER_ERROR_TYPE_E _composer_initialize_account_data(void *data)
 
 	composer_util_update_attach_panel_bundles(view);
 
+	email_attach_panel_listener_t listener = { 0 };
+	listener.cb_data = view;
+	listener.reply_cb = _composer_attach_panel_reply_cb;
+
+	email_module_set_attach_panel_listener(view->base.module, &listener);
+
 	debug_log("outgoing_server_size_limit:%d, max_sending_size:%d", account_info->original_account->outgoing_server_size_limit, account_info->max_sending_size);
 
 	debug_leave();
@@ -720,6 +728,17 @@ static COMPOSER_ERROR_TYPE_E _composer_construct_composer_data(void *data)
 CATCH:
 	debug_leave();
 	return ret;
+}
+
+static void _composer_attach_panel_reply_cb(void *data, const char **path_array, int array_len)
+{
+	debug_enter();
+	EmailComposerView *view = data;
+
+	composer_attachment_process_attachments_with_array(view,
+			path_array, array_len, ATTACH_BY_USE_ORG_FILE, EINA_FALSE);
+
+	debug_leave();
 }
 
 static void _composer_remove_temp_folders()
@@ -1268,6 +1287,7 @@ static void _composer_on_message(email_module_t *self, email_params_h msg)
 	if (g_strcmp0(msg_type, EMAIL_BUNDLE_VAL_EMAIL_COMPOSER_SAVE_DRAFT) == 0) {
 
 		email_module_terminate_any_launched_app(view->base.module, false);
+		email_module_set_attach_panel_listener(view->base.module, NULL);
 
 		view->is_force_destroy = EINA_TRUE;
 		if (view->is_load_finished) {

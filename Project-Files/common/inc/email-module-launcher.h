@@ -142,7 +142,18 @@ EMAIL_API int email_module_launch_app(email_module_t *module, email_launch_app_t
  * @return 0 - on success,
  * 		negative value - on error
  */
-EMAIL_API int email_module_launch_attach_panel(email_module_t *module,
+EMAIL_API int email_module_launch_attach_panel(email_module_t *module);
+
+/**
+ * @brief Registers the attach panel listener
+ *
+ * @param[in]	module		pointer to the module
+ * @param[in]	listener	attach panel listener (or NULL to unset)
+ *
+ * @return 0 - on success,
+ * 		negative value - on error
+ */
+EMAIL_API int email_module_set_attach_panel_listener(email_module_t *module,
 		email_attach_panel_listener_t *listener);
 
 /**

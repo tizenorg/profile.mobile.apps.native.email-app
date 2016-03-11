@@ -44,7 +44,6 @@ static void _subject_attach_files_clicked(void *data, Evas_Object *obj, void *ev
 static void _entry_filter_accept_set(void *data, Evas_Object *entry, char **text);
 
 static void _show_attach_panel(EmailComposerView *view);
-static void _attach_panel_reply_cb(void *data, const char **path_array, int array_len);
 
 static email_string_t EMAIL_COMPOSER_STRING_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED = { PACKAGE, "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED" };
 
@@ -196,12 +195,7 @@ static void _show_attach_panel(EmailComposerView *view)
 {
 	debug_enter();
 
-	email_attach_panel_listener_t listener = { 0 };
-
-	listener.cb_data = view;
-	listener.reply_cb = _attach_panel_reply_cb;
-
-	if (email_module_launch_attach_panel(view->base.module, &listener) == 0) {
+	if (email_module_launch_attach_panel(view->base.module) == 0) {
 		// To update inline image list to calculate total attachment size
 		if (ewk_view_script_execute(view->ewk_view, EC_JS_GET_IMAGE_LIST,
 				composer_util_get_image_list_cb, (void *)view) == EINA_FALSE) {
@@ -213,17 +207,6 @@ static void _show_attach_panel(EmailComposerView *view)
 			composer_rich_text_disable_set(view, EINA_TRUE);
 		}
 	}
-
-	debug_leave();
-}
-
-static void _attach_panel_reply_cb(void *data, const char **path_array, int array_len)
-{
-	debug_enter();
-	EmailComposerView *view = data;
-
-	composer_attachment_process_attachments_with_array(view,
-			path_array, array_len, ATTACH_BY_USE_ORG_FILE, EINA_FALSE);
 
 	debug_leave();
 }
