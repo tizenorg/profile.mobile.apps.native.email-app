@@ -857,6 +857,7 @@ static char *_gl_attachment_group_text_get(void *data, Evas_Object *obj, const c
 static Evas_Object *_viewer_create_gl_item_progress_bar(Evas_Object *parent)
 {
 	Evas_Object *obj = elm_progressbar_add(parent);
+	elm_progressbar_unit_format_set(obj, NULL);
 	elm_progressbar_horizontal_set(obj, EINA_TRUE);
 	evas_object_size_hint_weight_set(obj, EVAS_HINT_EXPAND, 0.0);
 	evas_object_size_hint_align_set(obj, EVAS_HINT_FILL, 0.5);
