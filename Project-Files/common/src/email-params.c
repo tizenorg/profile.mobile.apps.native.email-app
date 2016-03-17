@@ -138,7 +138,7 @@ static bool _app_control_extra_data_cb(app_control_h app_control, const char *ke
 			result = email_params_add_str_array(*params, key, (const char **)array, array_length);
 		}
 
-		for (i = 0; i < array_length; ++ array_length) {
+		for (i = 0; i < array_length; ++i) {
 			free(array[i]);
 		}
 		free(array);
