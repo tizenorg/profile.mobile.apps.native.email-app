@@ -364,6 +364,8 @@ bool _app_init_main_layouts(app_data_t *ad)
 {
 	elm_app_base_scale_set(APP_BASE_SCALE);
 
+	elm_config_accel_preference_set("3d");
+
 	ad->win = elm_win_util_standard_add(APP_WIN_NAME, APP_WIN_NAME);
 	if (!ad->win) {
 		debug_error("elm_win_add(): failed");
