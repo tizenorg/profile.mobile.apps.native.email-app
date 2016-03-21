@@ -283,28 +283,30 @@ EMAIL_API gboolean email_engine_get_account_list(int *count, email_account_t **_
 EMAIL_API gboolean email_engine_free_account_list(email_account_t **_account_list, int count)
 {
 	debug_enter();
+	RETURN_VAL_IF_FAIL(_account_list != NULL, FALSE);
+	RETURN_VAL_IF_FAIL(count > 0, FALSE);
 	int err = 0;
 
 	err = email_free_account(_account_list, count);
 	if (err != EMAIL_ERROR_NONE) {
 		debug_critical("Fail to free account list Err(%d)", err);
 		return FALSE;
-	} else {
-		debug_log("Succeed in freeing account list");
-		return TRUE;
 	}
+
+	debug_log("Succeed in freeing account list");
+	return TRUE;
 }
 
-EMAIL_API gboolean email_engine_get_account_full_data(int acctid, email_account_t **account)
+EMAIL_API gboolean email_engine_get_account_data(int acctid, int options, email_account_t **account)
 {
 	debug_enter();
-	debug_log("email_engine_get_account_full_data. acctid:%d", acctid);
+	debug_log("acctid: %d", acctid);
 	RETURN_VAL_IF_FAIL(acctid > ACCOUNT_MIN, FALSE);
 	int err = 0;
 
-	err = email_get_account(acctid, GET_FULL_DATA_WITHOUT_PASSWORD, account);
+	err = email_get_account(acctid, options, account);
 	if (err != EMAIL_ERROR_NONE) {
-		debug_critical("email_get_account full data error Err(%d)", err);
+		debug_critical("email_get_account() failed(%d)", err);
 
 		/* email-service API can return error value even though account is allocated. */
 		if (*account) {
@@ -315,13 +317,27 @@ EMAIL_API gboolean email_engine_get_account_full_data(int acctid, email_account_
 		}
 		return FALSE;
 	}
-	if (*account) {
-		debug_secure("Account name: %s", (*account)->account_name);
-		if ((*account)->options.signature)
-			debug_secure("Signature: %s", (*account)->options.signature);
-	} else {
+
+	if (!*account) {
 		debug_critical("account is NULL");
 		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_get_account_full_data(int acctid, email_account_t **account)
+{
+	debug_enter();
+
+	if (!email_engine_get_account_data(acctid, GET_FULL_DATA_WITHOUT_PASSWORD, account)) {
+		debug_error("email_engine_get_account_data() failed");
+		return FALSE;
+	}
+
+	debug_secure("Account name: %s", (*account)->account_name);
+	if ((*account)->options.signature) {
+		debug_secure("Signature: %s", (*account)->options.signature);
 	}
 
 	return TRUE;
@@ -490,43 +506,6 @@ EMAIL_API gchar *email_engine_get_mailbox_service_name(const gchar *folder_name)
 	g_strfreev(token_list);	/* MUST BE */
 
 	return name;
-}
-
-EMAIL_API void email_engine_free_mailbox_list(GList **list)
-{
-	debug_enter();
-
-	GList *mailbox_list = (*list);
-	gint i = 0;
-
-	LIST_ITER_START(i, mailbox_list) {
-		email_mailbox_list_info_t *info = (email_mailbox_list_info_t *) LIST_ITER_GET_DATA(i, mailbox_list);
-		if (info) {
-			if (info->name) {
-				g_free(info->name);
-			}
-			if (info->alias) {
-				g_free(info->alias);
-			}
-			if (info->account_name) {
-				g_free(info->account_name);
-			}
-			if (info->mail_addr) {
-				g_free(info->mail_addr);
-			}
-			if (info->thumb_path) {
-				g_free(info->thumb_path);
-			}
-			if (info->sub_list) {
-				email_engine_free_mailbox_list(&info->sub_list);
-			}
-			g_free(info);
-		}
-	}
-	if (mailbox_list) {
-		g_list_free(mailbox_list);
-		(*list) = NULL;
-	}
 }
 
 EMAIL_API email_mailbox_list_info_t *email_engine_get_mailbox_info(gint account_id, const gchar *folder_name)
@@ -1095,14 +1074,12 @@ EMAIL_API gboolean email_engine_delete_all_mail(gint account_id, int mailbox_id,
 	return res;
 }
 
-EMAIL_API gboolean email_engine_move_mail(gint account_id, int mailbox_id, gint mail_id)
+EMAIL_API gboolean email_engine_move_mail(int mailbox_id, gint mail_id)
 {
 	debug_enter();
-	RETURN_VAL_IF_FAIL(account_id > ACCOUNT_MIN, FALSE);
 	RETURN_VAL_IF_FAIL(mailbox_id > 0, FALSE);
 	RETURN_VAL_IF_FAIL(mail_id > 0, FALSE);
 
-	debug_log("account_id: %d", account_id);
 	debug_log("mailbox_id: %d", mailbox_id);
 	debug_log("mail_id: %d", mail_id);
 
@@ -1122,38 +1099,42 @@ EMAIL_API gboolean email_engine_move_mail(gint account_id, int mailbox_id, gint 
 	return res;
 }
 
-EMAIL_API gboolean email_engine_move_mail_list(gint account_id, int mailbox_id, GList *id_list)
+EMAIL_API int email_engine_move_mail_list(int dst_mailbox_id, GList *id_list, int src_mailbox_id)
 {
 	debug_enter();
-	RETURN_VAL_IF_FAIL(account_id > ACCOUNT_MIN, FALSE);
-	RETURN_VAL_IF_FAIL(mailbox_id > 0, FALSE);
+	RETURN_VAL_IF_FAIL(dst_mailbox_id > 0, FALSE);
+	RETURN_VAL_IF_FAIL(src_mailbox_id >= 0, FALSE);
 	RETURN_VAL_IF_FAIL(id_list != NULL, FALSE);
 
-	debug_log("account_id: %d", account_id);
-	debug_log("mailbox_id: %d", mailbox_id);
+	debug_log("dst_mailbox_id: %d", dst_mailbox_id);
+	debug_log("src_mailbox_id: %d", src_mailbox_id);
 
 	guint size = g_list_length(id_list);
 	RETURN_VAL_IF_FAIL(size > 0, FALSE);
 	debug_log("size (%d)", size);
 
 	int err = 0;
-	gboolean res = TRUE;	/* MUST BE initialized TRUE. */
 	int mail_ids[size];
+	int task_id = 0;
 
 	guint i = 0;
 	GList *cur = g_list_first(id_list);
 
 	for (i = 0; i < size; ++i, cur = g_list_next(cur))
-		mail_ids[i] = (int)(ptrdiff_t)g_list_nth_data(cur, 0);
+		mail_ids[i] = (int)(intptr_t)cur->data;
 
-	err = email_move_mail_to_mailbox(mail_ids, (int)size, mailbox_id);
-
-	if (err != EMAIL_ERROR_NONE) {
-		debug_warning("email_move_mail_to_mailbox mailbox_id(%d) - err (%d)", mailbox_id, err);
-		res = FALSE;
+	if (src_mailbox_id != 0) {
+		err = email_move_mails_to_mailbox_of_another_account(
+				src_mailbox_id, mail_ids, (int)size, dst_mailbox_id, &task_id);
+	} else {
+		err = email_move_mail_to_mailbox(mail_ids, (int)size, dst_mailbox_id);
 	}
 
-	return res;
+	if (err != EMAIL_ERROR_NONE) {
+		debug_warning("email_move_mail_to_mailbox_*** - err (%d)", err);
+	}
+
+	return err;
 }
 
 EMAIL_API gboolean email_engine_move_all_mail(gint account_id, int old_mailbox_id, int new_mailbox_id)
@@ -1566,29 +1547,39 @@ EMAIL_API void email_engine_free_ca_mailbox_list_using_glist(GList **mailbox_lis
 	*mailbox_list = NULL;
 }
 
-EMAIL_API int email_engine_get_ca_mailbox_list(int account_id, email_mailbox_t **mailbox_list)
+EMAIL_API int email_engine_get_mailbox_list(int account_id, email_mailbox_t **mailbox_list)
 {
 	debug_enter();
 	int count = 0;
 
-	debug_log("account_id: %d", account_id);
-	debug_log("mailbox_list: 0x%x", mailbox_list);
-
 	if (email_get_mailbox_list(account_id, EMAIL_MAILBOX_ALL, mailbox_list, &count) != EMAIL_ERROR_NONE) {
 		debug_critical("email_get_mailbox_list return error");
-		return 0;
+		return -1;
 	}
-
-	debug_log("count: %d", count);
 
 	return count;
 }
 
-EMAIL_API void email_engine_free_ca_mailbox_list(email_mailbox_t **mailbox_list, int count)
+EMAIL_API int email_engine_get_mailbox_list_with_mail_count(int account_id, email_mailbox_t **mailbox_list)
+{
+	debug_enter();
+	int count = 0;
+
+	if (email_get_mailbox_list_ex(account_id, EMAIL_MAILBOX_ALL, 1, mailbox_list, &count) != EMAIL_ERROR_NONE) {
+		debug_critical("email_get_mailbox_list_ex return error");
+		return 0;
+	}
+
+	return count;
+}
+
+EMAIL_API void email_engine_free_mailbox_list(email_mailbox_t **mailbox_list, int count)
 {
 	debug_enter();
 
-	email_free_mailbox(mailbox_list, count);
+	if (email_free_mailbox(mailbox_list, count) != EMAIL_ERROR_NONE) {
+		debug_critical("email_free_mailbox return error");
+	}
 }
 
 EMAIL_API int email_engine_get_max_account_id(void)
@@ -1637,6 +1628,86 @@ EMAIL_API int email_engine_get_count_account(void)
 
 	debug_leave();
 	return count;
+}
+
+EMAIL_API gboolean email_engine_get_mailbox_by_mailbox_type(int account_id, email_mailbox_type_e mailbox_type, email_mailbox_t **mailbox)
+{
+	debug_enter();
+
+	int err = email_get_mailbox_by_mailbox_type(account_id, mailbox_type, mailbox);
+	if (err != EMAIL_ERROR_NONE || !mailbox) {
+		debug_error("email_get_mailbox_by_mailbox_type failed: %d; account_id: %d; mailbox_type: %d",
+				err, account_id, mailbox_type);
+		email_engine_free_mailbox_list(mailbox, 1);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_get_mailbox_by_mailbox_id(int mailbox_id, email_mailbox_t **mailbox)
+{
+	debug_enter();
+
+	int err = email_get_mailbox_by_mailbox_id(mailbox_id, mailbox);
+	if (err != EMAIL_ERROR_NONE || !mailbox) {
+		debug_error("email_get_mailbox_by_mailbox_id failed: %d; mailbox_id: %d", err, mailbox_id);
+		email_engine_free_mailbox_list(mailbox, 1);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API int email_engine_delete_mailbox(int mailbox_id, int on_server, int *handle)
+{
+	debug_enter();
+
+	int err = email_delete_mailbox(mailbox_id, on_server, handle);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_delete_mailbox failed: %d; mailbox_id: %d; on_server: %d",
+				err, mailbox_id, on_server);
+	}
+
+	return err;
+}
+
+EMAIL_API int email_engine_rename_mailbox(int mailbox_id, char *mailbox_name, char *mailbox_alias, int on_server, int *handle)
+{
+	debug_enter();
+
+	int err = email_rename_mailbox(mailbox_id, mailbox_name, mailbox_alias, on_server, handle);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_rename_mailbox failed: %d; "
+				"mailbox_name: %s; mailbox_alias: %s; mailbox_id: %d; on_server: %d",
+				err, mailbox_name, mailbox_alias, mailbox_id, on_server);
+	}
+
+	return err;
+}
+
+EMAIL_API int email_engine_add_mailbox(email_mailbox_t *new_mailbox, int on_server, int *handle)
+{
+	debug_enter();
+
+	int err = email_add_mailbox(new_mailbox, on_server, handle);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_engine_add_mailbox failed: %d; on_server: %d", err, on_server);
+	}
+
+	return err;
+}
+
+EMAIL_API int email_engine_get_task_information(email_task_information_t **task_information, int *task_information_count)
+{
+	debug_enter();
+
+	int err = email_get_task_information(task_information, task_information_count);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_engine_add_mailbox failed: %d", err);
+	}
+
+	return err;
 }
 
 /* EOF */

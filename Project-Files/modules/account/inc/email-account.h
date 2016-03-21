@@ -225,13 +225,11 @@ typedef struct {
 		({\
 			email_account_t *email_account = NULL;\
 			int server_type = 0;\
-			int e = email_get_account(account_id, EMAIL_ACC_GET_OPT_DEFAULT, &email_account);\
-			if (e != EMAIL_ERROR_NONE || !email_account) {\
-				debug_warning("email_get_account acct(%d) - err(%d) or acct NULL(%p)",\
-								account_id, e, email_account);\
+			if (!email_engine_get_account_data(account_id, EMAIL_ACC_GET_OPT_DEFAULT, &email_account)) {\
+				debug_warning("email_engine_get_account_data failed acct(%d)", account_id);\
 			}\
 			else server_type = email_account->incoming_server_type;\
-			if(email_account) email_free_account(&email_account, 1);\
+			if (email_account) email_engine_free_account_list(&email_account, 1);\
 			server_type;\
 		})
 

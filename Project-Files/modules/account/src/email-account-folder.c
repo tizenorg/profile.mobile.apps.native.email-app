@@ -355,25 +355,25 @@ static Eina_Bool _try_add_group_item_to_list(EmailAccountView *view)
 	Item_Data *tree_item_data = NULL;
 	email_mailbox_t *mailbox = NULL;
 
-	int res = email_get_mailbox_by_mailbox_type(view->account_id, EMAIL_MAILBOX_TYPE_USER_DEFINED, &mailbox);
-	if (res == EMAIL_ERROR_NONE && mailbox != NULL) {
-		tree_item_data = calloc(1, sizeof(Item_Data));
-		if (!tree_item_data) {
-			email_free_mailbox(&mailbox, 1);
-			debug_error("sorting_rule_list is NULL - allocation memory failed");
-			return EINA_FALSE;
-		}
-		tree_item_data->view = view;
-
-		tree_item_data->it = elm_genlist_item_append(view->gl, view->itc_group, tree_item_data, NULL, ELM_GENLIST_ITEM_NONE, NULL, NULL);
-		tree_item_data->view->group_title_item = tree_item_data->it;
-		elm_genlist_item_select_mode_set(tree_item_data->it, ELM_OBJECT_SELECT_MODE_DISPLAY_ONLY);
-		email_free_mailbox(&mailbox, 1);
-		return EINA_TRUE;
+	if (!email_engine_get_mailbox_by_mailbox_type(view->account_id, EMAIL_MAILBOX_TYPE_USER_DEFINED, &mailbox)) {
+		return EINA_FALSE;
 	}
-	email_free_mailbox(&mailbox, 1);
 
-	return EINA_FALSE;
+	tree_item_data = calloc(1, sizeof(Item_Data));
+	if (!tree_item_data) {
+		email_engine_free_mailbox_list(&mailbox, 1);
+		debug_error("sorting_rule_list is NULL - allocation memory failed");
+		return EINA_FALSE;
+	}
+	tree_item_data->view = view;
+
+	tree_item_data->it = elm_genlist_item_append(view->gl, view->itc_group, tree_item_data, NULL, ELM_GENLIST_ITEM_NONE, NULL, NULL);
+	tree_item_data->view->group_title_item = tree_item_data->it;
+	elm_genlist_item_select_mode_set(tree_item_data->it, ELM_OBJECT_SELECT_MODE_DISPLAY_ONLY);
+
+	email_engine_free_mailbox_list(&mailbox, 1);
+
+	return EINA_TRUE;
 }
 
 static int _add_custom_folders_to_list(EmailAccountView *view, int mailbox_type)
@@ -543,9 +543,9 @@ int account_create_single_account_folder_list(EmailAccountView *view)
 			EMAIL_MAILBOX_TYPE_TRASH
 	};
 
-	res = email_get_mailbox_list_ex(view->account_id, -1, 1, &mailbox_list, &mailbox_list_count);
-	if (res != EMAIL_ERROR_NONE) {
-		debug_critical("email_get_mailbox_list return error, err : %d", res);
+	mailbox_list_count = email_engine_get_mailbox_list_with_mail_count(view->account_id, &mailbox_list);
+	if (mailbox_list_count <= 0) {
+		debug_critical("email_engine_get_mailbox_list_with_mail_count return error");
 		return -1;
 	}
 
@@ -568,11 +568,7 @@ int account_create_single_account_folder_list(EmailAccountView *view)
 		_add_user_defined_folders_to_list(view, mailbox_list, mailbox_list_count, &inserted_count);
 	}
 
-	res = email_free_mailbox(&mailbox_list, mailbox_list_count);
-	if (res != EMAIL_ERROR_NONE) {
-		debug_critical("fail to free mailbox list - err(%d)", res);
-		return -1;
-	}
+	email_engine_free_mailbox_list(&mailbox_list, mailbox_list_count);
 
 	debug_leave();
 	return inserted_count;
@@ -1243,9 +1239,8 @@ static void _update_folder_list_after_folder_create_action(void *data, int mailb
 	debug_log("emf_handle [%d], folder_mode[%d]", view->emf_handle, view->folder_mode);
 	view->emf_handle = EMAIL_HANDLE_INVALID;
 
-	int e = email_get_mailbox_by_mailbox_id(mailbox_id, &selected_mailbox);
-	if (e != EMAIL_ERROR_NONE || !selected_mailbox) {
-		debug_warning("email_get_mailbox_by_mailbox_id mailbox_id(%d)- err[%d]", mailbox_id, e);
+	if (!email_engine_get_mailbox_by_mailbox_id(mailbox_id, &selected_mailbox)) {
+		debug_warning("email_engine_get_mailbox_by_mailbox_id mailbox_id(%d)", mailbox_id);
 		goto FINISH;
 	}
 
@@ -1317,7 +1312,7 @@ FINISH:
 
 	_update_folder_view_after_folder_action(data);
 
-	email_free_mailbox(&selected_mailbox, 1);
+	email_engine_free_mailbox_list(&selected_mailbox, 1);
 
 	return;
 }
@@ -1696,7 +1691,7 @@ static void _delete_folder_ok_cb(void *data, Evas_Object *obj, void *event_info)
 
 	debug_secure("delfolder name[%s], account_id[%d], on_server[%d], mbox.mailbox_id[%d]", item_data->mailbox_name, view->account_id, on_server, item_data->mailbox_id);
 
-	err_code = email_delete_mailbox(item_data->mailbox_id, on_server, &handle);
+	err_code = email_engine_delete_mailbox(item_data->mailbox_id, on_server, &handle);
 
 	if (err_code < 0) {
 		debug_log("\n email_delete_mailbox failed");
@@ -1841,7 +1836,7 @@ static void _rename_folder_ok_cb(void *data, Evas_Object *obj, void *event_info)
 	int on_server = (EMAIL_SERVER_TYPE_POP3 == GET_ACCOUNT_SERVER_TYPE(view->account_id) ? 0 : 1);
 	debug_secure("name[%s], alias[%s], on_server[%d]", mailbox_name, mailbox_alias, on_server);
 
-	int err_code = email_rename_mailbox(mailbox_id, mailbox_name, mailbox_alias, on_server, &handle);
+	int err_code = email_engine_rename_mailbox(mailbox_id, mailbox_name, mailbox_alias, on_server, &handle);
 	if (err_code < 0) {
 		debug_log("email_rename_mailbox failed");
 		_popup_fail_cb(view, obj, event_info, err_code);
@@ -1894,7 +1889,7 @@ static void _create_folder_ok_cb(void *data, Evas_Object *obj, void *event_info)
 	mbox.local = 0;
 	mbox.mailbox_type = EMAIL_MAILBOX_TYPE_USER_DEFINED;
 	mbox.account_id = view->account_id;
-	int err_code = email_add_mailbox(&mbox, on_server, &handle);
+	int err_code = email_engine_add_mailbox(&mbox, on_server, &handle);
 
 	if (err_code < 0) {
 		debug_log("email_add_mailbox failed");

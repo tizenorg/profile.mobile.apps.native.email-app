@@ -805,7 +805,6 @@ void account_destroy_view(EmailAccountView *view)
 	RETURN_IF_FAIL(view != NULL);
 
 	int i = 0;
-	int err = 0;
 
 	DELETE_EVAS_OBJECT(view->popup);
 	DELETE_EVAS_OBJECT(view->more_ctxpopup);
@@ -816,10 +815,7 @@ void account_destroy_view(EmailAccountView *view)
 			email_move_list *move_list = view->move_list;
 			for (i = 0; i < view->account_count; i++) {
 				if (move_list[i].mailbox_list) {
-					err = email_free_mailbox(&(move_list[i].mailbox_list), move_list[i].mailbox_cnt);
-					if (err != EMAIL_ERROR_NONE) {
-						debug_critical("fail to free mailbox list - err(%d)", err);
-					}
+					email_engine_free_mailbox_list(&(move_list[i].mailbox_list), move_list[i].mailbox_cnt);
 					move_list[i].mailbox_list = NULL;
 				}
 			}
