@@ -292,26 +292,19 @@ char *account_get_user_email_address(int account_id)
 {
 	email_account_t *email_account = NULL;
 	char *address = NULL;
-	int res = email_get_account(account_id, EMAIL_ACC_GET_OPT_DEFAULT, &email_account);
 
-	if (res != EMAIL_ERROR_NONE || !email_account) {
-		debug_log("email_get_account failed, account_name is NULL");
-		email_free_account(&email_account, 1);
+	if (!email_engine_get_account_data(account_id, EMAIL_ACC_GET_OPT_DEFAULT, &email_account)) {
+		debug_log("email_engine_get_account_data failed, account_name is NULL");
 		return NULL;
 	}
 	debug_log("%s", email_account->user_email_address);
 
 	address = strdup(email_account->user_email_address);
 
-	res = email_free_account(&email_account, 1);
-	if (res != EMAIL_ERROR_NONE) {
-		debug_critical("fail to free account data - err(%d)", res);
-		free(address);
-		return NULL;
-	}
+	email_engine_free_account_list(&email_account, 1);
+
 	return address;
 }
-
 
 Evas_Object *account_create_entry_popup(EmailAccountView *view, email_string_t t_title,
 		const char *entry_text, const char *entry_selection_text,
@@ -539,7 +532,7 @@ void account_sync_cancel_all(EmailAccountView *view)
 	gboolean b_default_account_exist = email_engine_get_default_account(&acct_id);
 	if (b_default_account_exist) {
 		if (view->emf_handle == EMAIL_HANDLE_INVALID) {
-			email_get_task_information(&cur_task_info, &task_info_cnt);
+			email_engine_get_task_information(&cur_task_info, &task_info_cnt);
 			if (cur_task_info) {
 				for (i = 0; i < task_info_cnt; i++) {
 					debug_log("account_id(%d), handle(%d), type(%d)", cur_task_info[i].account_id, cur_task_info[i].handle, cur_task_info[i].type);

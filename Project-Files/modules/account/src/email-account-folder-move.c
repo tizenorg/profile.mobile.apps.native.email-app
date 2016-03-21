@@ -80,14 +80,14 @@ static void _account_list_for_mail_move(EmailAccountView *view, int account_inde
 	Evas_Object *gl = view->gl;
 	List_Item_Data *tree_item_data = NULL, *group_tree_item_data = NULL;
 	int mailbox_list_count = 0;
-	int err = 0;
 	int j = 0;
 	email_mailbox_t *mailbox_list = NULL;
 	int i = account_index;
 
-	err = email_get_mailbox_list_ex(view->account_list[i].account_id, -1, 1, &mailbox_list, &mailbox_list_count);
-	if (err != EMAIL_ERROR_NONE) {
-		debug_critical("email_get_mailbox_list return error");
+	mailbox_list_count = email_engine_get_mailbox_list_with_mail_count(
+			view->account_list[i].account_id, &mailbox_list);
+	if (mailbox_list_count <= 0) {
+		debug_critical("email_engine_get_mailbox_list_with_mail_count return error");
 	}
 
 	view->move_list[i].account_info = &(view->account_list[i]);
@@ -97,7 +97,7 @@ static void _account_list_for_mail_move(EmailAccountView *view, int account_inde
 
 	tree_item_data = calloc(1, sizeof(List_Item_Data));
 	if (!tree_item_data) {
-		email_free_mailbox(&mailbox_list, mailbox_list_count);
+		email_engine_free_mailbox_list(&mailbox_list, mailbox_list_count);
 		debug_error("tree_item_data is NULL - allocation memory failed");
 		return;
 	}
@@ -117,7 +117,7 @@ static void _account_list_for_mail_move(EmailAccountView *view, int account_inde
 				&& view->folder_id != mailbox_list[j].mailbox_id) {
 				tree_item_data = calloc(1, sizeof(List_Item_Data));
 				if (!tree_item_data) {
-					email_free_mailbox(&mailbox_list, mailbox_list_count);
+					email_engine_free_mailbox_list(&mailbox_list, mailbox_list_count);
 					debug_error("tree_item_data is NULL - allocation memory failed");
 					return;
 				}
@@ -135,6 +135,8 @@ static void _account_list_for_mail_move(EmailAccountView *view, int account_inde
 			}
 		}
 	}
+
+	email_engine_free_mailbox_list(&mailbox_list, mailbox_list_count);
 
 	debug_leave();
 }
@@ -374,50 +376,37 @@ static void _gl_sel(void *data, Evas_Object *obj, void *event_info)
 	Elm_Object_Item *it = event_info;
 
 	EmailAccountView *view = item_data->view;
-	int i = 0, err = 0, task_id = 0;
+	int err = 0;
 	email_mail_list_item_t *mail_info = NULL;
 
-	int count = g_list_length(view->selected_mail_list_to_move);
-	int mail_ids[count];
+	GList *first = g_list_first(view->selected_mail_list_to_move);
 
 	elm_genlist_item_selected_set(it, EINA_FALSE);
 	debug_log("selected account_id : %d, selected mailbox_id : %d", move_list->account_info->account_id, item_data->mailbox_id);
 
-	if (count <= 0) {
+	if (!first) {
 		debug_warning("There's no selected mail.");
 		goto FINISH;
-	} else {
-		debug_log("there is %d mails to move", count);
 	}
 
 	if (move_list->move_view_mode == EMAIL_MOVE_VIEW_NORMAL) {
-		memset(mail_ids, 0, sizeof(mail_ids));
+		int src_mailbox_id = 0;
 
-		GList *cur = g_list_first(view->selected_mail_list_to_move);
-		for (; i < count ; i++, cur = g_list_next(cur)) {
-			mail_ids[i] = (int)(ptrdiff_t) g_list_nth_data(cur, 0);
-			debug_log("mail_id (%d)", mail_ids[i]);
-		}
-		mail_info = email_engine_get_mail_by_mailid(mail_ids[0]);
+		mail_info = email_engine_get_mail_by_mailid((int)(intptr_t)first->data);
 		if (!mail_info) {
-			debug_log("email_engine_get_mail_by_mailid is failed(mail_id : %d)", mail_ids[0]);
+			debug_log("email_engine_get_mail_by_mailid is failed(mail_id : %d)", (int)(intptr_t)first->data);
 			goto FINISH;
 		}
 
-		if (mail_info->account_id == move_list->account_info->account_id) {
-			err = email_move_mail_to_mailbox(mail_ids, count, item_data->mailbox_id);
-			if (err != EMAIL_ERROR_NONE) {
-				debug_warning("email_move_mail_to_mailbox acct(%d) mailbox_id(%d) num(%d) - err (%d)",
-						move_list->account_info->account_id, item_data->mailbox_id, count, err);
-				ret = notification_status_message_post(email_get_email_string("IDS_EMAIL_POP_FAILED_TO_MOVE"));
-			}
-		} else {
-			err = email_move_mails_to_mailbox_of_another_account(mail_info->mailbox_id, mail_ids, count, item_data->mailbox_id, &task_id);
-			if (err != EMAIL_ERROR_NONE) {
-				debug_warning("email_move_mails_to_mailbox_of_another_account src mailbox(%d), dest acc(%d) mailbox_id(%d) num(%d) - err (%d)",
-						mail_info->mailbox_id, move_list->account_info->account_id, item_data->mailbox_id, count, err);
-				ret = notification_status_message_post(email_get_email_string("IDS_EMAIL_POP_FAILED_TO_MOVE"));
-			}
+		if (mail_info->account_id != move_list->account_info->account_id) {
+			src_mailbox_id = mail_info->mailbox_id;
+		}
+
+		err = email_engine_move_mail_list(item_data->mailbox_id, view->selected_mail_list_to_move, src_mailbox_id);
+		if (err != EMAIL_ERROR_NONE) {
+			debug_warning("email_engine_move_mail_list src mailbox(%d), dest acc(%d) mailbox_id(%d) - err (%d)",
+					src_mailbox_id, move_list->account_info->account_id, item_data->mailbox_id, err);
+			ret = notification_status_message_post(email_get_email_string("IDS_EMAIL_POP_FAILED_TO_MOVE"));
 		}
 
 		if (ret != NOTIFICATION_ERROR_NONE) {

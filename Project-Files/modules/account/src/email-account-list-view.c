@@ -255,7 +255,6 @@ static void _create_account_single_accout_list(EmailAccountView *view, int accou
 	debug_enter();
 	retm_if(!view, "view is NULL");
 
-	int err = 0;
 	int i = 0;
 
 	email_account_t *email_account = NULL;
@@ -265,16 +264,12 @@ static void _create_account_single_accout_list(EmailAccountView *view, int accou
 
 	Evas_Object *gl = view->gl;
 
-	err = email_get_account(account_id, EMAIL_ACC_GET_OPT_DEFAULT, &email_account);
-	if (err != EMAIL_ERROR_NONE || !email_account) {
-		debug_log("email_get_account failed, account_name is NULL");
-		email_free_account(&email_account, 1);
+	if (!email_engine_get_account_data(account_id, EMAIL_ACC_GET_OPT_DEFAULT, &email_account)) {
+		debug_error("email_engine_get_account_data() failed, account_name is NULL");
 		return;
 	}
 
-	err = email_get_mailbox_by_mailbox_type(account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox);
-	if (err != EMAIL_ERROR_NONE || !mailbox) {
-		debug_log("email_get_mailbox_by_mailbox_type failed : %d", err);
+	if (!email_engine_get_mailbox_by_mailbox_type(account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox)) {
 
 		item_data = calloc(1, sizeof(Account_Item_Data));
 		group_item_data = item_data;
@@ -309,9 +304,7 @@ static void _create_account_single_accout_list(EmailAccountView *view, int accou
 
 		debug_log("it : %p", item_data->it);
 
-		email_free_mailbox(&mailbox, 1);
-		if (email_account)
-			email_free_account(&email_account, 1);
+		if (email_account) email_engine_free_account_list(&email_account, 1);
 		return;
 	}
 
@@ -342,7 +335,7 @@ static void _create_account_single_accout_list(EmailAccountView *view, int accou
 	group_item_data->sub_items = eina_list_append(group_item_data->sub_items, item_data);
 	debug_log("it : %p", item_data->it);
 
-	email_free_mailbox(&mailbox, 1);
+	email_engine_free_mailbox_list(&mailbox, 1);
 
 	debug_log("it : %p", item_data->it);
 
@@ -363,12 +356,8 @@ static void _create_account_single_accout_list(EmailAccountView *view, int accou
 			break;
 		}
 
-		err = email_get_mailbox_by_mailbox_type(account_id, mailbox_type, &mailbox);
-		if (err != EMAIL_ERROR_NONE || !mailbox) {
-			debug_log("email_get_mailbox_by_mailbox_type failed : %d", err);
-			email_free_mailbox(&mailbox, 1);
-			if (email_account)
-				email_free_account(&email_account, 1);
+		if (!email_engine_get_mailbox_by_mailbox_type(account_id, mailbox_type, &mailbox)) {
+			if (email_account) email_engine_free_account_list(&email_account, 1);
 			return;
 		}
 
@@ -401,7 +390,7 @@ static void _create_account_single_accout_list(EmailAccountView *view, int accou
 			group_item_data->sub_items = eina_list_append(group_item_data->sub_items, item_data);
 			debug_log("it : %p", item_data->it);
 		}
-		email_free_mailbox(&mailbox, 1);
+		email_engine_free_mailbox_list(&mailbox, 1);
 	}
 
 	/* Insert Show all folders item */
@@ -413,8 +402,7 @@ static void _create_account_single_accout_list(EmailAccountView *view, int accou
 			ELM_GENLIST_ITEM_NONE, _gl_account_list_item_sel, item_data);
 	group_item_data->sub_items = eina_list_append(group_item_data->sub_items, item_data);
 
-	if (email_account)
-		email_free_account(&email_account, 1);
+	if (email_account) email_engine_free_account_list(&email_account, 1);
 }
 
 void account_init_genlist_item_class_for_account_view_list(EmailAccountView *view)

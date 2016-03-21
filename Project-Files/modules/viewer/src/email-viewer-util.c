@@ -389,7 +389,7 @@ int viewer_move_email(EmailViewerView *view, int dest_folder_id, gboolean is_del
 	debug_enter();
 	retvm_if(view == NULL, 0, "Invalid parameter: view[NULL]");
 
-	if (!email_engine_move_mail(view->account_id, dest_folder_id, view->mail_id)) {
+	if (!email_engine_move_mail(dest_folder_id, view->mail_id)) {
 		debug_log("Moving email is failed.");
 
 		if (is_delete)
