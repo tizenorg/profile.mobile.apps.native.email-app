@@ -169,7 +169,7 @@ static void _update_list(EmailFilterView *view)
 	}
 
 	if (view->filter_rule_list) {
-		email_free_rule(&view->filter_rule_list, view->filter_rule_count);
+		email_engine_free_rule(&view->filter_rule_list, view->filter_rule_count);
 	}
 
 	ret = _get_filter_rule_list(view, &view->filter_rule_list, &view->filter_rule_count);
@@ -207,7 +207,7 @@ static void _destroy(email_view_t *self)
 	}
 
 	if (view->filter_rule_list) {
-		email_free_rule(&view->filter_rule_list, view->filter_rule_count);
+		email_engine_free_rule(&view->filter_rule_list, view->filter_rule_count);
 	}
 
 	if (view->content_layout) {
@@ -333,13 +333,12 @@ static int _get_filter_rule_list(EmailFilterView *view, email_rule_t **filter_ru
 	EmailFilterModule *module = (EmailFilterModule *)view->base.module;
 	email_rule_t *rule_list = NULL;
 	int count;
-	int ret = 0;
 	int i = 0;
 	int ret_count = 0;
 	int op_type = 0;
 
-	ret = email_get_rule_list(&rule_list, &count);
-	retvm_if(ret != EMAIL_ERROR_NONE, -1, "email_get_rule_list failed: %d", ret);
+	retvm_if(!email_engine_get_rule_list(&rule_list, &count), -1,
+			"email_engine_get_rule_list failed");
 
 	/* get count */
 	for (i = 0; i < count; i++) {

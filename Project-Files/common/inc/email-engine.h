@@ -214,6 +214,13 @@ EMAIL_API int email_engine_add_mailbox(email_mailbox_t *new_mailbox, int on_serv
 
 EMAIL_API int email_engine_get_task_information(email_task_information_t **task_information, int *task_information_count);
 
+EMAIL_API gboolean email_engine_get_rule_list(email_rule_t **filtering_set, int *count);
+EMAIL_API gboolean email_engine_add_rule(email_rule_t *filtering_set);
+EMAIL_API gboolean email_engine_update_rule(int filter_id, email_rule_t *new_set);
+EMAIL_API gboolean email_engine_delete_rule(int filter_id);
+EMAIL_API gboolean email_engine_apply_rule(int filter_id);
+EMAIL_API gboolean email_engine_free_rule(email_rule_t **filtering_set, int count);
+
 G_END_DECLS
 #endif	/* _EMAIL_ENGINE_H_ */
 

@@ -241,25 +241,23 @@ static void _add_new_rule(EmailFilterView *view)
 		if (ret != NOTIFICATION_ERROR_NONE) {
 			debug_log("fail to notification_status_message_post() : %d\n", ret);
 		}
-		email_free_rule(&filter_rule, 1);
+		email_engine_free_rule(&filter_rule, 1);
 		evas_object_smart_callback_add(done_btn, "clicked", _done_cb, view);
 		return;
 	}
 
-	ret = email_add_rule(filter_rule);
-	if (ret != EMAIL_ERROR_NONE) {
-		debug_warning("email_add_rule failed: %d", ret);
+	if (!email_engine_add_rule(filter_rule)) {
+		debug_warning("email_engine_add_rule failed");
 	} else {
-		debug_secure("email_add_rule success: %s", filter_rule->filter_name);
-		ret = email_apply_rule(filter_rule->filter_id);
-		if (ret != EMAIL_ERROR_NONE) {
-			debug_warning("email_apply_rule failed: %d", ret);
+		debug_secure("email_engine_add_rule success: %s", filter_rule->filter_name);
+		if (!email_engine_apply_rule(filter_rule->filter_id)) {
+			debug_warning("email_engine_apply_rule failed");
 		} else {
-			debug_log("email_apply_rule success");
+			debug_log("email_engine_apply_rule success");
 			email_filter_publish_changed_noti(module);
 		}
 	}
-	email_free_rule(&filter_rule, 1);
+	email_engine_free_rule(&filter_rule, 1);
 
 	email_module_exit_view(&view->base);
 
@@ -297,16 +295,14 @@ static void _apply_rule_changes(EmailFilterView *view)
 		return;
 	}
 
-	ret = email_update_rule(filter_rule->filter_id, filter_rule);
-	if (ret != EMAIL_ERROR_NONE) {
-		debug_warning("email_update_rule failed: %d", ret);
+	if (!email_engine_update_rule(filter_rule->filter_id, filter_rule)) {
+		debug_warning("email_engine_update_rule failed");
 	} else {
-		debug_secure("email_update_rule success: %s", filter_rule->filter_name);
-		ret = email_apply_rule(filter_rule->filter_id);
-		if (ret != EMAIL_ERROR_NONE) {
-			debug_warning("email_apply_rule failed: %d", ret);
+		debug_secure("email_engine_update_rule success: %s", filter_rule->filter_name);
+		if (!email_engine_apply_rule(filter_rule->filter_id)) {
+			debug_warning("email_engine_apply_rule failed");
 		} else {
-			debug_log("email_apply_rule success");
+			debug_log("email_engine_apply_rule success");
 			email_filter_publish_changed_noti(module);
 		}
 	}
@@ -626,8 +622,8 @@ static int _checking_is_dup_rule(EmailFilterView *view, email_rule_t *filter_rul
 
 	input_str = filter_rule->value2;
 
-	ret = email_get_rule_list(&rule_list, &count);
-	retvm_if(ret != EMAIL_ERROR_NONE, 0, "email_get_rule_list failed: %d", ret);
+	retvm_if(!email_engine_get_rule_list(&rule_list, &count), 0,
+			"email_engine_get_rule_list failed");
 
 	ret = 0;
 	for (i = 0; i < count; i++) {
@@ -642,6 +638,6 @@ static int _checking_is_dup_rule(EmailFilterView *view, email_rule_t *filter_rul
 		}
 	}
 
-	email_free_rule(&rule_list, count);
+	email_engine_free_rule(&rule_list, count);
 	return ret;
 }

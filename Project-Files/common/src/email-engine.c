@@ -1704,10 +1704,90 @@ EMAIL_API int email_engine_get_task_information(email_task_information_t **task_
 
 	int err = email_get_task_information(task_information, task_information_count);
 	if (err != EMAIL_ERROR_NONE) {
-		debug_error("email_engine_add_mailbox failed: %d", err);
+		debug_error("email_get_task_information failed: %d", err);
 	}
 
 	return err;
+}
+
+EMAIL_API gboolean email_engine_get_rule_list(email_rule_t **filtering_set, int *count)
+{
+	debug_enter();
+
+	int err = email_get_rule_list(filtering_set, count);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_get_rule_list failed: %d", err);
+		*filtering_set = NULL;
+		*count = 0;
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_add_rule(email_rule_t *filtering_set)
+{
+	debug_enter();
+
+	int err = email_add_rule(filtering_set);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_add_rule failed: %d", err);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_update_rule(int filter_id, email_rule_t *new_set)
+{
+	debug_enter();
+
+	int err = email_update_rule(filter_id, new_set);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_update_rule failed: %d; filter_id: %d", err, filter_id);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_delete_rule(int filter_id)
+{
+	debug_enter();
+
+	int err = email_delete_rule(filter_id);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_delete_rule failed: %d; filter_id: %d", err, filter_id);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_apply_rule(int filter_id)
+{
+	debug_enter();
+
+	int err = email_apply_rule(filter_id);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_apply_rule failed: %d; filter_id: %d", err, filter_id);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_free_rule(email_rule_t **filtering_set, int count)
+{
+	debug_enter();
+
+	int err = email_free_rule(filtering_set, count);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_free_rule failed: %d", err);
+		return FALSE;
+	}
+
+	return TRUE;
 }
 
 /* EOF */

@@ -185,7 +185,7 @@ static void _update_list(EmailFilterView *view)
 	}
 
 	if (view->filter_rule_list) {
-		email_free_rule(&view->filter_rule_list, view->filter_rule_count);
+		email_engine_free_rule(&view->filter_rule_list, view->filter_rule_count);
 	}
 	ret = _get_filter_rule_list(view, &view->filter_rule_list, &view->filter_rule_count);
 
@@ -224,7 +224,7 @@ static void _destroy(email_view_t *self)
 		view->list_items = NULL;
 	}
 	if (view->filter_rule_list) {
-		email_free_rule(&view->filter_rule_list, view->filter_rule_count);
+		email_engine_free_rule(&view->filter_rule_list, view->filter_rule_count);
 	}
 
 	if (view->content_layout) {
@@ -276,11 +276,10 @@ static void _delete_filter_cb(void *data, Evas_Object *obj, void *event_info)
 		ListItemData *li = l->data;
 		if (li->index >= 0 && li->is_delete == EINA_TRUE) {
 			email_rule_t *filter_rule = li->filter_rule;
-			ret = email_delete_rule(filter_rule->filter_id);
-			if (ret != EMAIL_ERROR_NONE)
-				debug_warning("email_delete_rule failed: %d", ret);
+			if (!email_engine_delete_rule(filter_rule->filter_id))
+				debug_warning("email_engine_delete_rule failed");
 			else {
-				debug_log("email_delete_rule success");
+				debug_log("email_engine_delete_rule success");
 				count++;
 			}
 		}
@@ -403,12 +402,11 @@ static int _get_filter_rule_list(EmailFilterView *view, email_rule_t **filter_ru
 	debug_enter();
 	email_rule_t *rule_list = NULL;
 	int count;
-	int ret = 0;
 	int i = 0;
 	int ret_count = 0;
 
-	ret = email_get_rule_list(&rule_list, &count);
-	retvm_if(ret != EMAIL_ERROR_NONE, -1, "email_get_rule_list failed: %d", ret);
+	retvm_if(!email_engine_get_rule_list(&rule_list, &count), -1,
+			"email_engine_get_rule_list failed");
 
 	/* get count */
 	for (i = 0; i < count; i++) {
