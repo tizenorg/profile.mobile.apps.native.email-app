@@ -681,7 +681,10 @@ static void _initial_data_set_mail_subject(EmailComposerView *view)
 
 		elm_entry_cursor_begin_set(view->subject_entry.entry);
 	}
-	FREE(view->new_mail_info->mail_data->subject);
+
+	if (view->new_mail_info->mail_data) {
+		FREE(view->new_mail_info->mail_data->subject);
+	}
 
 	debug_leave();
 }
@@ -771,6 +774,8 @@ static void _initial_data_set_mail_attachment(EmailComposerView *view)
 	int err = EMAIL_ERROR_NONE;
 	Eina_Bool ret = EINA_TRUE;
 
+	char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
+
 	if (view->composer_type == RUN_COMPOSER_EDIT || view->composer_type == RUN_COMPOSER_REPLY || view->composer_type == RUN_COMPOSER_REPLY_ALL || view->composer_type == RUN_COMPOSER_FORWARD) {
 		/* Check the size of the inline images first */
 		for (i = 0; i < view->org_mail_info->total_attachment_count; i++) {
@@ -799,7 +804,7 @@ static void _initial_data_set_mail_attachment(EmailComposerView *view)
 
 					int result = symlink(att_data->attachment_path, dest);
 					if (result == -1) {
-						debug_log("symlink() failed! (%d): %s", result, strerror(errno));
+						debug_log("symlink() failed! (%d): %s", result, strerror_r(errno, err_buff, sizeof(err_buff)));
 					}
 				}
 			}
@@ -828,7 +833,7 @@ static void _initial_data_set_mail_attachment(EmailComposerView *view)
 
 					struct stat sb;
 					if (stat(att_data->attachment_path, &sb) == -1) {
-						debug_log("stat() failed! (%d): %s", errno, strerror(errno));
+						debug_log("stat() failed! (%d): %s", errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 
 						int m = 0;
 						for (m = 0; m < reference_attachment_count; m++) {
@@ -892,7 +897,7 @@ static void _initial_data_set_mail_attachment(EmailComposerView *view)
 
 			struct stat file_info;
 			if (stat(view->eml_file_path, &file_info) == -1) {
-				debug_error("stat() failed! (%d): %s", errno, strerror(errno));
+				debug_error("stat() failed! (%d): %s", errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 				composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_NOT_EXIST, composer_util_popup_response_cb, view);
 				break;
 			}

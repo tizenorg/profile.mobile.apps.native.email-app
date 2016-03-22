@@ -586,6 +586,7 @@ void viewer_make_hard_link_for_inline_images(void *data, const char *path)
 
 	int i = 0;
 	char dest[BUF_LEN_L] = { 0, };
+	char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
 	int result = -1;
 
 	debug_log("view->body_download_status : %d", view->body_download_status);
@@ -597,12 +598,14 @@ void viewer_make_hard_link_for_inline_images(void *data, const char *path)
 			if (email_file_exists(dest)) {
 				result = email_file_remove(dest);
 				if (result == -1) {
-					debug_error("remove(dest) failed! (%d): %s", result, strerror(errno));
+					debug_error("remove(dest) failed! (%d): %s", result,
+							strerror_r(errno, err_buff, sizeof(err_buff)));
 				}
 			}
 
 			if (!email_file_cp(attach_data[i].attachment_path, dest)) {
-				debug_error("link() failed! (%d): %s", result, strerror(errno));
+				debug_error("link() failed! (%d): %s", result,
+						strerror_r(errno, err_buff, sizeof(err_buff)));
 			}
 		}
 	}
@@ -621,6 +624,7 @@ void viewer_remove_hard_link_for_inline_images(void *data)
 
 	int i = 0;
 	char dest[BUF_LEN_L] = { 0, };
+	char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
 	int result = -1;
 
 	debug_log("view->body_download_status : %d", view->body_download_status);
@@ -633,7 +637,8 @@ void viewer_remove_hard_link_for_inline_images(void *data)
 				if (email_file_exists(dest)) {
 					result = email_file_remove(dest);
 					if (result == -1) {
-						debug_error("remove(dest) failed! (%d): %s", result, strerror(errno));
+						debug_error("remove(dest) failed! (%d): %s", result,
+								strerror_r(errno, err_buff, sizeof(err_buff)));
 					}
 				}
 			}

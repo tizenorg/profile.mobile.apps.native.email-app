@@ -383,7 +383,8 @@ Eina_Bool composer_attachment_create_list(EmailComposerView *view, Eina_List *at
 	EINA_LIST_FOREACH(attachment_list, l, recv) {
 		struct stat file_info;
 		if (stat(recv, &file_info) == -1) {
-			debug_error("stat() failed! (%d): %s", errno, strerror(errno));
+			char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
+			debug_error("stat() failed! (%d): %s", errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 			composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_NOT_EXIST, composer_util_popup_response_cb, view);
 			ret = EINA_FALSE;
 			break;

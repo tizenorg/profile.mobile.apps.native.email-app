@@ -154,10 +154,9 @@ static void _set_display_name_with_email_addr(char *email_addr, char **display_n
 
 	retm_if(!email_addr, "invalid parameter");
 
-	char *buf;
-
-	buf = g_strdup(email_addr);
-	*display_name = g_strdup(strtok(buf, "@"));
+	char *buf = g_strdup(email_addr);
+	char *save_ptr = NULL;
+	*display_name = g_strdup(strtok_r(buf, "@", &save_ptr));
 	debug_secure("email address : %s", email_addr);
 	debug_secure("buf email address :%s", buf);
 	debug_secure("display_name :%s", *display_name);

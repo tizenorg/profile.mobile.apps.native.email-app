@@ -198,7 +198,6 @@ EMAIL_API void email_engine_free_ca_mailbox_list(email_mailbox_t **mailbox_list,
 EMAIL_API gchar *email_engine_convert_from_folder_to_srcbox(gint account_id, email_mailbox_type_e mailbox_type);
 EMAIL_API GList *email_engine_get_ca_mailbox_list_using_glist(int account_id);
 EMAIL_API void email_engine_free_ca_mailbox_list_using_glist(GList **mailbox_list);
-EMAIL_API GList *email_engine_get_mail_list_data(email_mail_list_item_t *mailbox_data, int mail_count, const char *folder_name, const char *key);
 EMAIL_API gboolean email_engine_get_smtp_mail_size(gint account_id, int *handle);
 
 EMAIL_API int email_engine_get_max_account_id(void);

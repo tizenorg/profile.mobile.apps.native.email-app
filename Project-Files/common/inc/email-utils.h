@@ -92,7 +92,9 @@ G_BEGIN_DECLS
 		const char *_src = (const char *) src;\
 		if ( n > 0 && dest && _src ) {\
 			char *e = strncpy(dest, _src, n);\
-			if (!e) debug_critical("strncpy error: (%s)", strerror(errno));\
+			char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };\
+			if (!e) debug_critical("strncpy error: (%s)",\
+					strerror_r(errno, err_buff, sizeof(err_buff)));\
 			dest[n] = '\0';\
 		}\
 		dest;\
@@ -106,7 +108,9 @@ G_BEGIN_DECLS
 		char *_src = src;\
 		if ( _src && n > 0 ) {\
 			_ret = strndup(_src, n);\
-			if ( !_ret ) debug_critical("strndup error: (%s)", strerror(errno));\
+			char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };\
+			if ( !_ret ) debug_critical("strndup error: (%s)",\
+					strerror_r(errno, err_buff, sizeof(err_buff)));\
 		}\
 		_ret;\
 	})
@@ -371,10 +375,8 @@ EMAIL_API int email_open_pattern_generator(void);
 EMAIL_API int email_close_pattern_generator(void);
 EMAIL_API int email_generate_pattern_for_local(const char *local, const char *pattern_format, char *gen_pattern, int gen_pattern_size);
 
-EMAIL_API void email_mutex_init(void);
 EMAIL_API void email_mutex_lock(void);
 EMAIL_API void email_mutex_unlock(void);
-EMAIL_API void email_mutex_destroy(void);
 
 EMAIL_API void email_feedback_init(void);
 EMAIL_API void email_feedback_deinit(void);

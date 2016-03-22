@@ -530,7 +530,8 @@ static bool _email_contacts_write_vcard_to_file(int fd, contacts_record_h record
 		while (size_left) {
 			int written = write(fd, vcard_buff, size_left);
 			if (written == -1) {
-				debug_error("write() failed: %s", strerror(errno));
+				char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
+				debug_error("write() failed: %s", strerror_r(errno, err_buff, sizeof(err_buff)));
 				break;
 			}
 			size_left -= written;
@@ -765,7 +766,8 @@ EMAIL_API char *email_contacts_create_vcard_from_id_list(const int *id_list, int
 
 		fd = open(vcard_path, O_WRONLY | O_CREAT | O_TRUNC, VCARD_FILE_ACCESS_MODE);
 		if (fd == -1) {
-			debug_error("open(%s) Failed(%s)", vcard_path, strerror(errno));
+			char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
+			debug_error("open(%s) Failed(%s)", vcard_path, strerror_r(errno, err_buff, sizeof(err_buff)));
 			break;
 		}
 
@@ -829,7 +831,8 @@ EMAIL_API char* email_contacts_create_vcard_from_id(int id, const char *vcard_di
 
 		fd = open(vcard_path, O_WRONLY | O_CREAT | O_TRUNC, VCARD_FILE_ACCESS_MODE);
 		if (fd == -1) {
-			debug_error("open(%s) Failed(%s)", vcard_path, strerror(errno));
+			char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
+			debug_error("open(%s) Failed(%s)", vcard_path, strerror_r(errno, err_buff, sizeof(err_buff)));
 			break;
 		}
 

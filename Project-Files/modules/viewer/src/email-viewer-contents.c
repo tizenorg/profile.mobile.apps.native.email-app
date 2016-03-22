@@ -1258,7 +1258,8 @@ void viewer_set_webview_content(EmailViewerView *view)
 	if (email_file_exists(view->temp_viewer_html_file_path)) {
 		int r = email_file_remove(view->temp_viewer_html_file_path);
 		if (r == -1) {
-			debug_error("remove(temp_viewer_html_file_path) failed! (%d): %s", r, strerror(errno));
+			char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
+			debug_error("remove(temp_viewer_html_file_path) failed! (%d): %s", r, strerror_r(errno, err_buff, sizeof(err_buff)));
 		}
 	}
 

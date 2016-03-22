@@ -836,20 +836,21 @@ static char *_gl_attachment_group_text_get(void *data, Evas_Object *obj, const c
 	EmailViewerView *view = (EmailViewerView *)data;
 
 	if ((strcmp(part, "elm.text")) == 0) {
-		char item_count_info[BUF_LEN_S];
+		int n = 0;
+		char total_file_info[BUF_LEN_S];
 		if (view->normal_att_count == 1) {
-			snprintf(item_count_info, sizeof(item_count_info), "%s", email_get_email_string("IDS_EMAIL_BODY_1_FILE_ABB"));
+			n = snprintf(total_file_info, sizeof(total_file_info), "%s", email_get_email_string("IDS_EMAIL_BODY_1_FILE_ABB"));
 		} else {
-			snprintf(item_count_info, sizeof(item_count_info), email_get_email_string("IDS_EMAIL_BODY_PD_FILES_ABB"), view->normal_att_count);
+			n = snprintf(total_file_info, sizeof(total_file_info), email_get_email_string("IDS_EMAIL_BODY_PD_FILES_ABB"), view->normal_att_count);
 		}
 
-		char *total_file_size = NULL;
-		total_file_size = email_get_file_size_string(view->total_att_size);
+		gchar *total_file_size = email_get_file_size_string(view->total_att_size);
 
-		strcat(strcat(strcat(item_count_info, " ("), total_file_size), ")");
+		snprintf(total_file_info + n, BUF_LEN_S - n, " (%s)", total_file_size);
+
 		g_free(total_file_size);
 
-		return strdup(item_count_info);
+		return strdup(total_file_info);
 	}
 	return NULL;
 }

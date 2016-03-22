@@ -820,7 +820,8 @@ static void _set_username_before_at(EmailSettingView *view)
 	}
 
 	char *buf = g_strdup(account->user_email_address);
-	account->incoming_server_user_name = g_strdup(strtok(buf, "@"));
+	char *save_ptr = NULL;
+	account->incoming_server_user_name = g_strdup(strtok_r(buf, "@", &save_ptr));
 	account->outgoing_server_user_name = g_strdup(account->incoming_server_user_name);
 	g_free(buf);
 

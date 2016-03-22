@@ -590,7 +590,8 @@ static COMPOSER_ERROR_TYPE_E _composer_make_composer_tmp_dir(const char *path)
 	int curent_umask = umask(0);
 	int result = COMPOSER_ERROR_NONE;
 	if (mkdir(path, EMAIL_COMPOSER_TMP_FOLDER_PERMISSION) == -1) {
-		debug_error("mkdir() for composer folder failed! (%d): %s", errno, strerror(errno));
+		char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
+		debug_error("mkdir() for composer folder failed! (%d): %s", errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 		result = COMPOSER_ERROR_FAIL;
 	}
 	umask(curent_umask);
