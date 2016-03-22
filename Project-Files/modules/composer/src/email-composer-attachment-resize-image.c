@@ -127,7 +127,8 @@ static void _attachment_resize_image_thread_worker(void *data, Ecore_Thread *th)
 			if (composer_util_image_scale_down_with_quality(recv, dst_filepath, view->resize_image_quality)) {
 				struct stat file_info;
 				if (stat(dst_filepath, &file_info) == -1) {
-					debug_error("stat() failed! (%d): %s", errno, strerror(errno));
+					char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
+					debug_error("stat() failed! (%d): %s", errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 				} else {
 					debug_secure("image resized (%s) => (%s)", recv, dst_filepath);
 					g_free(recv);
@@ -284,7 +285,8 @@ void composer_attachment_resize_image(EmailComposerView *view, Eina_List *attach
 
 	EINA_LIST_FOREACH(attachment_list, l, recv) {
 		if ((return_stat = stat(recv, &file_info)) == -1) {
-			debug_error("stat() failed! (%d): %s", errno, strerror(errno));
+			char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
+			debug_error("stat() failed! (%d): %s", errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 			break;
 		}
 

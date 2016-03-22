@@ -229,6 +229,8 @@ int composer_util_get_total_attachments_size(EmailComposerView *view, Eina_Bool 
 	Eina_List *l = NULL;
 	email_attachment_data_t *att_data;
 
+	char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
+
 	ComposerAttachmentItemData *attachment_item_data = NULL;
 	EINA_LIST_FOREACH(view->attachment_item_list, l, attachment_item_data) {
 		email_attachment_data_t *att = attachment_item_data->attachment_data;
@@ -237,7 +239,7 @@ int composer_util_get_total_attachments_size(EmailComposerView *view, Eina_Bool 
 				/*debug_secure("size(%s): %d", att->attachment_path, file_info.st_size);*/
 				attach_size += file_info.st_size;
 			} else {
-				debug_secure("stat(%s) failed! (%d): %s", att->attachment_path, errno, strerror(errno));
+				debug_secure("stat(%s) failed! (%d): %s", att->attachment_path, errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 				attach_size += att->attachment_size;
 			}
 		}
@@ -250,7 +252,7 @@ int composer_util_get_total_attachments_size(EmailComposerView *view, Eina_Bool 
 					/*debug_secure("size(%s): %d", att_data->attachment_path, file_info.st_size);*/
 					inline_size += file_info.st_size;
 				} else {
-					debug_secure("stat(%s) failed! (%d): %s", att_data->attachment_path, errno, strerror(errno));
+					debug_secure("stat(%s) failed! (%d): %s", att_data->attachment_path, errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 				}
 			}
 		}
@@ -324,6 +326,8 @@ void composer_util_get_image_list_cb(Evas_Object *o, const char *result, void *d
 	Eina_List *l = NULL;
 	email_attachment_data_t *att_data = NULL;
 
+	char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
+
 	EINA_LIST_FOREACH(view->attachment_inline_item_list, l, att_data) {
 		if (att_data) {
 			email_free_attachment_data(&att_data, 1);
@@ -356,7 +360,7 @@ void composer_util_get_image_list_cb(Evas_Object *o, const char *result, void *d
 
 					struct stat file_info;
 					if (stat(new_att->attachment_path, &file_info) == -1) {
-						debug_error("stat() failed! (%d): %s", errno, strerror(errno));
+						debug_error("stat() failed! (%d): %s", errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 						new_att->attachment_size = 0;
 						new_att->save_status = 0;
 					} else {

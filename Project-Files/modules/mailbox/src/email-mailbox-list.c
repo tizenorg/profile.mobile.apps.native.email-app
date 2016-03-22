@@ -605,19 +605,14 @@ static void _mail_item_data_insert_search_tag(char *dest, int dest_len, const ch
 		return;
 	}
 
-	/* pre unmatched */
-	int pre_len = src_len - STR_LEN(sub);
-	dest[0] = '\0';
-	strncat(dest, src, pre_len);
+	int sub_len = STR_LEN(sub);
+	int pre_len = src_len - sub_len;
 
-	/* tagged key */
-	strcat(dest, "<match>");
-	strncat(dest, src + pre_len, STR_LEN(key));
-	strcat(dest, "</match>");
+	char fmt[EMAIL_BUFF_SIZE_MID];
+	snprintf(fmt, sizeof(fmt), "%%.%ds<match>%%.%ds</match>%%.%ds",
+			pre_len, key_len, sub_len - key_len);
 
-	/* remainder */
-	const char *remainder = src + pre_len + STR_LEN(key);
-	strcat(dest, remainder);
+	snprintf(dest, dest_len, fmt, src, src + pre_len, src + pre_len + key_len);
 }
 
 static void _mail_item_data_list_free(GList **mail_item_data_list)

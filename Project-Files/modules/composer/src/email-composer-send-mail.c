@@ -1008,6 +1008,8 @@ static void _make_mail_make_attachment_list(EmailComposerView *view)
 	email_attachment_data_t *inline_att = NULL;
 	ComposerAttachmentItemData *attachment_item_data = NULL;
 
+	char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
+
 	/* If attachment hasn't been downloaded yet, it shouldn't be included in sending mail.
 	 * But to support email_send_mail_with_downloading_attachment_of_original_mail() API, forward case is excluded.
 	 */
@@ -1016,7 +1018,7 @@ static void _make_mail_make_attachment_list(EmailComposerView *view)
 		struct stat sb;
 		if (!att->attachment_path || (stat(att->attachment_path, &sb) == -1)) {
 			if (att->attachment_path) {
-				debug_log("stat() failed! (%d): %s", errno, strerror(errno));
+				debug_log("stat() failed! (%d): %s", errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 			}
 
 			bool is_changed = true;
@@ -1047,7 +1049,7 @@ static void _make_mail_make_attachment_list(EmailComposerView *view)
 		struct stat sb;
 		if (!inline_att->attachment_path || (stat(inline_att->attachment_path, &sb) == -1)) {
 			if (inline_att->attachment_path) {
-				debug_log("stat() failed! (%d): %s", errno, strerror(errno));
+				debug_log("stat() failed! (%d): %s", errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 			}
 
 			if (view->new_mail_info->mail_data->reference_mail_id == 0) {

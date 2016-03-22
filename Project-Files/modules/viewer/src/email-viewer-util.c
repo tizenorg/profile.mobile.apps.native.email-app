@@ -477,15 +477,20 @@ static int _get_filepath_from_path(const char *default_path, char *origin_path, 
 	email_parse_get_filename_n_ext_from_path(tmp_path, &file_name, &file_ext);
 
 	debug_secure("file_name:%s, file_ext:%s", file_name, file_ext);
-	if (file_ext == NULL)
-		file_ext = "";
 
-	char *save_ptr = NULL;
-	file_ext = strtok_r(file_ext, "?", &save_ptr);
+	if (file_ext != NULL) {
+		char *save_ptr = NULL;
+		char *new_file_ext = strtok_r(file_ext, "?", &save_ptr);
+		if (new_file_ext != file_ext) {
+			new_file_ext = g_strdup(new_file_ext ? new_file_ext : "");
+			g_free(file_ext);
+			file_ext = new_file_ext;
+		}
+	} else {
+		file_ext = g_strdup("");
+	}
+
 	debug_secure("file_ext:%s", file_ext);
-
-	if (file_ext == NULL)
-		file_ext = "";
 
 	if (file_name != NULL) {
 		debug_secure("file_name:%s", file_name);
@@ -1136,7 +1141,9 @@ void viewer_remove_folder(char *path)
 	debug_secure("filepath:(%s)", path);
 
 	if (email_file_recursive_rm(path) == EINA_FALSE) {
-		debug_error("email_file_recursive_rm failed! (%d): %s", errno, strerror(errno));
+		char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
+		debug_error("email_file_recursive_rm failed! (%d): %s", errno,
+				strerror_r(errno, err_buff, sizeof(err_buff)));
 	}
 	debug_leave();
 }
@@ -1192,8 +1199,9 @@ char *viewer_get_datetime_string(void)
 
 	time_t now_time = time(NULL);
 
-	struct tm *dummy = localtime(&now_time);
-	retvm_if(!dummy, NULL, "localtime() - failed");
+	struct tm tm_buff = { 0, };
+	struct tm *dummy = localtime_r(&now_time, &tm_buff);
+	retvm_if(!dummy, NULL, "localtime_r() - failed");
 	struct tm now_tm;
 	memcpy(&now_tm, dummy, sizeof(struct tm));
 
@@ -1296,7 +1304,8 @@ void viewer_remove_temp_files(EmailViewerView *view)
 
 	if (email_file_exists(view->temp_viewer_html_file_path)) {
 		if (!email_file_remove(view->temp_viewer_html_file_path)) {
-			debug_error("email_file_remove(temp_viewer_html_file_path) failed! : %s", strerror(errno));
+			char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
+			debug_error("email_file_remove(temp_viewer_html_file_path) failed! : %s", strerror_r(errno, err_buff, sizeof(err_buff)));
 		}
 		G_FREE(view->temp_viewer_html_file_path);
 	}

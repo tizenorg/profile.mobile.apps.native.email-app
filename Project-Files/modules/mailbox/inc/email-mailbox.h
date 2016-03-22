@@ -241,7 +241,7 @@ typedef struct {
 	EmailMailboxView view;
 
 	Ecore_Thread *start_thread;
-	volatile bool start_thread_done;
+	bool start_thread_done;
 
 	Evas_Object *init_pupup;
 

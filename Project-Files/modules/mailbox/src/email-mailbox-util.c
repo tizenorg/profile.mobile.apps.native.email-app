@@ -109,13 +109,15 @@ static int _is_today(const time_t req_time)
 {
 	time_t now_time = time(NULL);
 
-	struct tm *dummy = localtime(&now_time);
-	retvm_if(!dummy, 0, "localtime() - failed");
+	struct tm tm_buff = { 0, };
+
+	struct tm *dummy = localtime_r(&now_time, &tm_buff);
+	retvm_if(!dummy, 0, "localtime_r() - failed");
 	struct tm now_tm;
 	memcpy(&now_tm, dummy, sizeof(struct tm));
 
-	dummy = localtime(&req_time);
-	retvm_if(!dummy, 0, "localtime() - failed");
+	dummy = localtime_r(&req_time, &tm_buff);
+	retvm_if(!dummy, 0, "localtime_r() - failed");
 	struct tm req_tm;
 	memcpy(&req_tm, dummy, sizeof(struct tm));
 
@@ -129,13 +131,15 @@ static int _is_yesterday(const time_t req_time)
 {
 	time_t now_time = time(NULL);
 
-	struct tm *dummy = localtime(&now_time);
-	retvm_if(!dummy, 0, "localtime() - failed");
+	struct tm tm_buff = { 0, };
+
+	struct tm *dummy = localtime_r(&now_time, &tm_buff);
+	retvm_if(!dummy, 0, "localtime_r() - failed");
 	struct tm now_tm;
 	memcpy(&now_tm, dummy, sizeof(struct tm));
 
-	dummy = localtime(&req_time);
-	retvm_if(!dummy, 0, "localtime() - failed");
+	dummy = localtime_r(&req_time, &tm_buff);
+	retvm_if(!dummy, 0, "localtime_r() - failed");
 	struct tm req_tm;
 	memcpy(&req_tm, dummy, sizeof(struct tm));
 

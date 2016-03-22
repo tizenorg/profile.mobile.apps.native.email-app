@@ -37,8 +37,7 @@
  * Definitions
  */
 
-#define EMAIL_SERIVE_PING_CHECK_INTERVAL_SEC 0.005
-#define EMAIL_SERIVE_PING_CHECK_INTERVAL_USEC ((int)1000000 * EMAIL_SERIVE_PING_CHECK_INTERVAL_SEC + 0.5)
+#define NANOS 1000000000
 #define EMAIL_SERIVE_PING_TIMEOUT_SEC 0.1
 #define EMAIL_SERIVE_PING_RETRY_DELAY_SEC 3
 
@@ -51,6 +50,9 @@
  * Globals
  */
 
+
+static pthread_mutex_t START_THREAD_MUTEX = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t START_THREAD_COND = PTHREAD_COND_INITIALIZER;
 
 /*
  * Declaration for static functions
@@ -120,16 +122,28 @@ static int _mailbox_module_create(email_module_t *self, email_params_h params)
 		return -1;
 	}
 
-	double wait_time = 0.0;
+	bool wait_timed_out = false;
 
+	struct timespec wait_until;
+	clock_gettime(CLOCK_REALTIME, &wait_until);
+	wait_until.tv_nsec += EMAIL_SERIVE_PING_TIMEOUT_SEC * NANOS;
+	wait_until.tv_sec += wait_until.tv_nsec / NANOS;
+	wait_until.tv_nsec %= NANOS;
+
+	pthread_mutex_lock(&START_THREAD_MUTEX);
 	while (!module->start_thread_done) {
-		usleep(EMAIL_SERIVE_PING_CHECK_INTERVAL_USEC);
-		wait_time += EMAIL_SERIVE_PING_CHECK_INTERVAL_SEC;
-		if (wait_time >= EMAIL_SERIVE_PING_TIMEOUT_SEC) {
-			_mailbox_module_show_initialising_popup(module);
-			debug_leave();
-			return 0;
+		int r = pthread_cond_timedwait(&START_THREAD_COND, &START_THREAD_MUTEX, &wait_until);
+		if (r == ETIMEDOUT) {
+			wait_timed_out = true;
+			break;
 		}
+	}
+	pthread_mutex_unlock(&START_THREAD_MUTEX);
+
+	if (wait_timed_out) {
+		_mailbox_module_show_initialising_popup(module);
+		debug_leave();
+		return 0;
 	}
 
 	_mailbox_email_service_ping_thread_notify_cb(module, NULL, NULL);
@@ -178,7 +192,10 @@ static void _mailbox_email_service_ping_thread_heavy_cb(void *data, Ecore_Thread
 
 		if (ret) {
 			ecore_thread_feedback(thread, NULL);
+			pthread_mutex_lock(&START_THREAD_MUTEX);
 			module->start_thread_done = true;
+			pthread_mutex_unlock(&START_THREAD_MUTEX);
+			pthread_cond_signal(&START_THREAD_COND);
 		}
 
 		email_engine_finalize_force();

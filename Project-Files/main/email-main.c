@@ -337,8 +337,6 @@ void _app_signal_handler(int signum, siginfo_t *info, void *context)
 
 bool _app_init(app_data_t *ad)
 {
-	email_mutex_init();
-
 	email_feedback_init();
 
 	if (!_app_init_main_layouts(ad)) {
@@ -476,8 +474,6 @@ void _app_finalize(app_data_t *ad)
 	evas_object_del(ad->win);
 
 	email_feedback_deinit();
-
-	email_mutex_destroy();
 
 	email_engine_finalize_force();
 }

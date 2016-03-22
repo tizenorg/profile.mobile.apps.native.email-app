@@ -682,17 +682,18 @@ EMAIL_API gboolean email_save_file(const gchar *path, const gchar *buf, gsize le
 	gboolean success_flag = TRUE;
 
 	if (STR_LEN((gchar *)buf) > 0 && len > 0) {
+		char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
 		int fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
 		if (fd != -1) {
 			ssize_t nwrite = write(fd, (const void *)buf, (size_t) len);
 			debug_log("nwrite(%d)", nwrite);
 			if (nwrite == -1) {
-				debug_error("write() failed! (%d): %s", errno, strerror(errno));
+				debug_error("write() failed! (%d): %s", errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 				success_flag = FALSE;
 			}
 			close(fd);
 		} else {
-			debug_error("open() failed! (%d): %s", errno, strerror(errno));
+			debug_error("open() failed! (%d): %s", errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 			success_flag = FALSE;
 		}
 	} else {
@@ -834,7 +835,8 @@ EMAIL_API guint64 email_get_file_size(const gchar *path)
 			debug_secure("size (%llu)", size);
 		}
 	} else {
-		debug_error("stat() failed! (%d): %s", errno, strerror(errno));
+		char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
+		debug_error("stat() failed! (%d): %s", errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 		size = 0;
 	}
 	return size;
@@ -1048,13 +1050,14 @@ EMAIL_API char *email_get_str_datetime(const time_t req_time)
 
 	time_t now_time = time(NULL);
 
-	struct tm *dummy = localtime(&now_time);
-	retvm_if(!dummy, NULL, "localtime() - failed");
+	struct tm tm_buff = { 0, };
+	struct tm *dummy = localtime_r(&now_time, &tm_buff);
+	retvm_if(!dummy, NULL, "localtime_r() - failed");
 	struct tm now_tm;
 	memcpy(&now_tm, dummy, sizeof(struct tm));
 
-	dummy = localtime(&req_time);
-	retvm_if(!dummy, NULL, "localtime() - failed");
+	dummy = localtime_r(&req_time, &tm_buff);
+	retvm_if(!dummy, NULL, "localtime_r() - failed");
 	struct tm req_tm;
 	memcpy(&req_tm, dummy, sizeof(struct tm));
 
@@ -1144,12 +1147,6 @@ EMAIL_API void email_feedback_play_tap_sound(void)
 	feedback_play(FEEDBACK_PATTERN_TAP);
 }
 
-EMAIL_API void email_mutex_init(void)
-{
-	debug_enter();
-	pthread_mutex_init(&mutex, NULL);
-}
-
 EMAIL_API void email_mutex_lock(void)
 {
 	pthread_mutex_lock(&mutex);
@@ -1158,12 +1155,6 @@ EMAIL_API void email_mutex_lock(void)
 EMAIL_API void email_mutex_unlock(void)
 {
 	pthread_mutex_unlock(&mutex);
-}
-
-EMAIL_API void email_mutex_destroy(void)
-{
-	debug_enter();
-	pthread_mutex_destroy(&mutex);
 }
 
 EMAIL_API int email_open_pattern_generator(void)
@@ -1357,7 +1348,8 @@ EMAIL_API int email_create_folder(const char *path)
 		nErr = mkdir(path, 0755);
 		debug_secure("errno: %d, filepath: (%s)", nErr, path);
 		if (nErr == -1) {
-			debug_error("mkdir() failed! (%d): %s", errno, strerror(errno));
+			char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
+			debug_error("mkdir() failed! (%d): %s", errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 			return -1;
 		}
 	} else {
@@ -1387,16 +1379,17 @@ EMAIL_API gboolean email_copy_file_feedback(const char *src_full_path, const cha
 	clock_t finish;		/* consumed time to copy whole file */
 	double totaltime;
 	float percentage = 0.0;
+	char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
 
 	fs = fopen(src_full_path, "rb");
 	if (fs == NULL) {
-		debug_error("fopen() failed! (%d): %s", errno, strerror(errno));
+		debug_error("fopen() failed! (%d): %s", errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 		return FALSE;
 	}
 
 	ret = fstat(fileno(fs), &statbuf);
 	if (ret != 0) {
-		debug_error("fstat() failed! (%d): %s", errno, strerror(errno));
+		debug_error("fstat() failed! (%d): %s", errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 		fclose(fs);
 		return FALSE;
 	}
@@ -1410,7 +1403,7 @@ EMAIL_API gboolean email_copy_file_feedback(const char *src_full_path, const cha
 	remove_dest = TRUE;
 
 	if (fd == NULL) {
-		debug_error("fopen() failed! (%d): %s", errno, strerror(errno));
+		debug_error("fopen() failed! (%d): %s", errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 		fclose(fs);
 		return FALSE;
 	}
@@ -1429,7 +1422,7 @@ EMAIL_API gboolean email_copy_file_feedback(const char *src_full_path, const cha
 				m = fwrite(buff, sizeof(char), n, fd);
 
 				if (m <= 0) {
-					debug_error("fwrite() failed! (%d): %s", errno, strerror(errno));
+					debug_error("fwrite() failed! (%d): %s", errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 					result = FALSE;
 					goto CATCH;
 				}
@@ -1451,7 +1444,7 @@ EMAIL_API gboolean email_copy_file_feedback(const char *src_full_path, const cha
 					cnt = 0;
 				}
 			} else {
-				debug_error("fread() failed! (%d): %s", errno, strerror(errno));
+				debug_error("fread() failed! (%d): %s", errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 				result = TRUE;
 				goto CATCH;
 			}
@@ -1475,7 +1468,7 @@ EMAIL_API gboolean email_copy_file_feedback(const char *src_full_path, const cha
 
 	if (remove_dest && result == FALSE) {
 		if (-1 == remove(dest_full_path)) {
-			debug_error("remove() failed! (%d): %s", errno, strerror(errno));
+			debug_error("remove() failed! (%d): %s", errno, strerror_r(errno, err_buff, sizeof(err_buff)));
 		}
 		sync();
 	}
@@ -2779,11 +2772,11 @@ EMAIL_API Eina_Bool email_file_recursive_rm(const char *dir)
 	if (NULL == dir_handle) {
 		return EINA_FALSE;
 	}
+	struct dirent dir_buf = { 0, };
 	struct dirent *dir_entry = NULL;
 	Eina_Bool result = EINA_TRUE;
 	do {
-		dir_entry = readdir(dir_handle);
-
+		(void)readdir_r(dir_handle, &dir_buf, &dir_entry);
 		if (NULL == dir_entry) {
 			break;
 		}
@@ -2793,7 +2786,7 @@ EMAIL_API Eina_Bool email_file_recursive_rm(const char *dir)
 		}
 
 		char file_path[MAX_PATH_LEN] = {'\0'};
-		sprintf(file_path, "%s/%s", dir, dir_entry->d_name);
+		snprintf(file_path, MAX_PATH_LEN, "%s/%s", dir, dir_entry->d_name);
 
 		if (EINA_FALSE == email_file_is_dir(file_path)) {
 			if (EINA_FALSE == email_file_unlink(file_path)) {
