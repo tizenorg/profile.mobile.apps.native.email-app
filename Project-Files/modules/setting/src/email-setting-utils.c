@@ -907,21 +907,14 @@ int setting_is_duplicate_account(const char *email_addr)
 
 	retvm_if(!email_addr, -1, "invalid parameter");
 
-	int ret = EMAIL_ERROR_NONE;
 	int dup_ret = 0;
 	int account_count = -1;
 	email_account_t *account_list = NULL;
 	int i = 0;
 	char *addr = NULL;
 
-	ret = email_get_account_list(&account_list, &account_count);
-
-	if (ret == EMAIL_ERROR_ACCOUNT_NOT_FOUND) {
-		debug_error("there is no account");
-		dup_ret = 0;
-		goto CATCH;
-	} else if (ret != EMAIL_ERROR_NONE) {
-		debug_error("email_engine_get_account_list failed ret(%d)",ret);
+	if (!email_engine_get_account_list(&account_count, &account_list)) {
+		debug_error("email_engine_get_account_list failed");
 		dup_ret = -1;
 		goto CATCH;
 	}
@@ -942,9 +935,9 @@ int setting_is_duplicate_account(const char *email_addr)
 	}
 
 CATCH:
-	email_free_account(&account_list, account_count);
-	if (addr)
-		g_free(addr);
+	if (account_list)
+		email_engine_free_account_list(&account_list, account_count);
+	g_free(addr);
 	return dup_ret;
 }
 
@@ -974,8 +967,8 @@ void setting_cancel_job_by_account_id(int account_id)
 	int ret = EMAIL_ERROR_NONE;
 	int i = 0;
 
-	ret = email_get_task_information(&task_info_arr, &task_info_count);
-	retm_if(ret != EMAIL_ERROR_NONE, "email_get_task_information failed: %d", ret);
+	ret = email_engine_get_task_information(&task_info_arr, &task_info_count);
+	retm_if(ret != EMAIL_ERROR_NONE, "email_engine_get_task_information failed: %d", ret);
 
 	debug_log("account_id: %d, all job will be cancelled", account_id);
 	for (i = 0; i < task_info_count; i++) {

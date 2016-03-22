@@ -267,8 +267,13 @@ EMAIL_API gboolean email_engine_get_account_list(int *count, email_account_t **_
 
 	err = email_get_account_list(_account_list, count);
 	if (err != EMAIL_ERROR_NONE) {
-		debug_warning("email_get_account_list error Err(%d)", err);
-		return FALSE;
+		*count = 0;
+		*_account_list = NULL;
+		if (err != EMAIL_ERROR_ACCOUNT_NOT_FOUND) {
+			debug_warning("email_get_account_list error Err(%d)", err);
+			return FALSE;
+		}
+		debug_log("No accounts found");
 	}
 	debug_log("valid account count :(%d)", *count);
 
@@ -1784,6 +1789,22 @@ EMAIL_API gboolean email_engine_free_rule(email_rule_t **filtering_set, int coun
 	int err = email_free_rule(filtering_set, count);
 	if (err != EMAIL_ERROR_NONE) {
 		debug_error("email_free_rule failed: %d", err);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_get_password_length_of_account(int account_id,
+		email_get_password_length_type password_type, int *password_length)
+{
+	debug_enter();
+
+	int err = email_get_password_length_of_account(account_id, password_type, password_length);
+	if (err != EMAIL_ERROR_NONE) {
+		*password_length = 0;
+		debug_error("email_get_password_length_of_account failed: %d; "
+				"account_id: %d; password_type: %d", err, account_id, (int)password_type);
 		return FALSE;
 	}
 

@@ -1219,10 +1219,9 @@ static char *_population_password_str(int password_type)
 	char password_buf[MAX_STR_LEN] = { 0, };
 	int pass_len = 0;
 	int i = 0;
-	int ret = EMAIL_ERROR_NONE;
 
-	ret = email_get_password_length_of_account(account_data->account_id, password_type, &pass_len);
-	retvm_if(ret != EMAIL_ERROR_NONE, NULL, "email_get_password_length_of_account failed: %d", ret);
+	retvm_if(!email_engine_get_password_length_of_account(account_data->account_id, password_type, &pass_len),
+			NULL, "email_engine_get_password_length_of_account failed");
 
 	if (pass_len > 0 && pass_len < MAX_STR_LEN) {
 		for (i = 0; i < pass_len; i++) {

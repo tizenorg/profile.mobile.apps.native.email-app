@@ -692,10 +692,9 @@ static char *_population_password_str(int password_type)
 	char password_buf[MAX_STR_LEN] = { 0, };
 	int pass_len = 0;
 	int i = 0;
-	int ret = EMAIL_ERROR_NONE;
 
-	ret = email_get_password_length_of_account(account_data->account_id, password_type, &pass_len);
-	retvm_if(ret != EMAIL_ERROR_NONE, NULL, "email_get_password_length_of_account failed: %d", ret);
+	retvm_if(!email_engine_get_password_length_of_account(account_data->account_id, password_type, &pass_len),
+			NULL, "email_engine_get_password_length_of_account failed");
 
 	if (pass_len > 0 && pass_len < MAX_STR_LEN) {
 		for (i = 0; i < pass_len; i++) {
@@ -1011,12 +1010,10 @@ static void _perform_sync(EmailSettingView *view)
 	view->sync_status_canceled = EINA_FALSE;
 	_update_toolbar_sync_button_state(view);
 	/* Inbox sync */
-	int ret = 0;
 	gboolean res = FALSE;
 	email_mailbox_t *mailbox = NULL;
-	ret = email_get_mailbox_by_mailbox_type(account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox);
-	if (ret != EMAIL_ERROR_NONE || mailbox == NULL) {
-		debug_error("email_get_mailbox_by_mailbox_type failed: %d", ret);
+	if (!email_engine_get_mailbox_by_mailbox_type(account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox)) {
+		debug_error("email_engine_get_mailbox_by_mailbox_type failed");
 		view->sync_status_failed = EINA_TRUE;
 		return;
 	}
@@ -1025,7 +1022,7 @@ static void _perform_sync(EmailSettingView *view)
 	debug_log("handle: %d, res: %d", handle, res);
 
 	view->handle = handle;
-	email_free_mailbox(&mailbox, 1);
+	email_engine_free_mailbox_list(&mailbox, 1);
 
 	GSList *l = view->list_items;
 	while (l) {
@@ -1355,8 +1352,7 @@ static char *_gl_sync_onoff_text_get_cb(void *data, Evas_Object *obj, const char
 			snprintf(sync_failed_text, sizeof(sync_failed_text), SYNC_FAILED_TEXT_STYLE, email_setting_gettext(EMAIL_SETTING_STRING_SYNCING_FAILED));
 			return strdup(sync_failed_text);
 		} else {
-			int ret = email_get_mailbox_by_mailbox_type(account_data->account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox);
-			if (ret == EMAIL_ERROR_NONE && mailbox) {
+			if (email_engine_get_mailbox_by_mailbox_type(account_data->account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox)) {
 				bool is_24hour = false;
 				const char *skeleton = NULL;
 				system_settings_get_value_bool(SYSTEM_SETTINGS_KEY_LOCALE_TIMEFORMAT_24HOUR, &is_24hour);
@@ -1367,7 +1363,7 @@ static char *_gl_sync_onoff_text_get_cb(void *data, Evas_Object *obj, const char
 
 				char datetime_string[MAX_STR_LEN] = {0,};
 				snprintf(datetime_string, sizeof(datetime_string), "%s %s", date_string, time_string);
-				email_free_mailbox(&mailbox, 1);
+				email_engine_free_mailbox_list(&mailbox, 1);
 				if (STR_VALID(date_string) || STR_VALID(time_string)) {
 					FREE(date_string);
 					FREE(time_string);
@@ -1378,7 +1374,7 @@ static char *_gl_sync_onoff_text_get_cb(void *data, Evas_Object *obj, const char
 					return strdup(email_setting_gettext(EMAIL_SETTING_STRING_NOT_SYNCED_YET));
 				}
 			} else {
-				debug_warning("email_get_mailbox_by_mailbox_type failed: %d", ret);
+				debug_warning("email_engine_get_mailbox_by_mailbox_type failed");
 				return g_strdup(email_setting_gettext(EMAIL_SETTING_STRING_NOT_SYNCED_YET));
 			}
 		}

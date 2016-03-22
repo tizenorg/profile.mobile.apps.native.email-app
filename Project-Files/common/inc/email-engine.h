@@ -221,6 +221,9 @@ EMAIL_API gboolean email_engine_delete_rule(int filter_id);
 EMAIL_API gboolean email_engine_apply_rule(int filter_id);
 EMAIL_API gboolean email_engine_free_rule(email_rule_t **filtering_set, int count);
 
+EMAIL_API gboolean email_engine_get_password_length_of_account(int account_id,
+		email_get_password_length_type password_type, int *password_length);
+
 G_END_DECLS
 #endif	/* _EMAIL_ENGINE_H_ */
 

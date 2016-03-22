@@ -569,14 +569,12 @@ static void _mailbox_sync_end_cb(int account_id, email_setting_response_data *re
 	/* Inbox sync */
 	if (!account_data->sync_disabled) {
 		debug_log("initial sync start");
-		int ret = 0;
 		email_mailbox_t *mailbox = NULL;
-		ret = email_get_mailbox_by_mailbox_type(account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox);
-		if (ret != EMAIL_ERROR_NONE || mailbox == NULL) {
-			debug_error("email_get_mailbox_by_mailbox_type failed");
+		if (!email_engine_get_mailbox_by_mailbox_type(account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox)) {
+			debug_error("email_engine_get_mailbox_by_mailbox_type failed");
 		} else {
 			email_engine_sync_folder(account_id, mailbox->mailbox_id, &handle);
-			email_free_mailbox(&mailbox, 1);
+			email_engine_free_mailbox_list(&mailbox, 1);
 		}
 	} else {
 		debug_log("initial sync was disabled!");
