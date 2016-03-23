@@ -319,16 +319,15 @@ static COMPOSER_ERROR_TYPE_E _composer_initialize_mail_info(void *data)
 
 	retvm_if(!data, COMPOSER_ERROR_INVALID_ARG, "Invalid parameter: data is NULL!");
 
-	int err = 0;
 	EmailComposerView *view = (EmailComposerView *)data;
 
 	/* Get mail data */
 	if (view->composer_type == RUN_COMPOSER_EDIT || view->composer_type == RUN_COMPOSER_REPLY || view->composer_type == RUN_COMPOSER_REPLY_ALL || view->composer_type == RUN_COMPOSER_FORWARD) {
-		err = email_get_mail_data(view->original_mail_id, &view->org_mail_info->mail_data);
-		retvm_if(err != EMAIL_ERROR_NONE, COMPOSER_ERROR_SERVICE_INIT_FAIL, "email_get_mail_data() failed! err:[%d]", err);
+		retvm_if(!email_engine_get_mail_data(view->original_mail_id, &view->org_mail_info->mail_data),
+				COMPOSER_ERROR_SERVICE_INIT_FAIL, "email_engine_get_mail_data() failed!");
 
-		err = email_get_attachment_data_list(view->original_mail_id, &view->org_mail_info->attachment_list, &view->org_mail_info->total_attachment_count);
-		retvm_if(err != EMAIL_ERROR_NONE, COMPOSER_ERROR_SERVICE_INIT_FAIL, "email_get_attachment_data_list() failed! err:[%d]", err);
+		retvm_if(!email_engine_get_attachment_data_list(view->original_mail_id, &view->org_mail_info->attachment_list, &view->org_mail_info->total_attachment_count),
+				COMPOSER_ERROR_SERVICE_INIT_FAIL, "email_engine_get_attachment_data_list() failed!");
 
 		debug_warning_if(view->org_mail_info->mail_data->attachment_count+view->org_mail_info->mail_data->inline_content_count != view->org_mail_info->total_attachment_count,
 				"ATTACHMENT count is different! [%d != %d]", view->org_mail_info->mail_data->attachment_count+view->org_mail_info->mail_data->inline_content_count,
@@ -340,15 +339,15 @@ static COMPOSER_ERROR_TYPE_E _composer_initialize_mail_info(void *data)
 
 		if (view->composer_type == RUN_COMPOSER_EDIT) {
 			/* Need to update seen flag for original mail in draft folder */
-			err = email_set_flags_field(view->account_info->original_account_id, &view->original_mail_id, 1, EMAIL_FLAGS_SEEN_FIELD, 1, 1);
-			debug_warning_if(err != EMAIL_ERROR_NONE, "email_set_flags_field() failed! ret:[%d]", err);
+			email_engine_set_flags_field(view->account_info->original_account_id, &view->original_mail_id, 1, EMAIL_FLAGS_SEEN_FIELD, 1, 1);
 
 			/* Set priority information */
 			view->priority_option = view->org_mail_info->mail_data->priority;
 		}
 	} else if ((view->composer_type == RUN_EML_REPLY) || (view->composer_type == RUN_EML_REPLY_ALL) || (view->composer_type == RUN_EML_FORWARD)) {
-		err = email_parse_mime_file(view->eml_file_path, &view->org_mail_info->mail_data, &view->org_mail_info->attachment_list, &view->org_mail_info->total_attachment_count);
-		retvm_if(err != EMAIL_ERROR_NONE, COMPOSER_ERROR_SERVICE_INIT_FAIL, "email_parse_mime_file() failed! err:[%d]", err);
+		retvm_if(!email_engine_parse_mime_file(view->eml_file_path, &view->org_mail_info->mail_data,
+				&view->org_mail_info->attachment_list, &view->org_mail_info->total_attachment_count),
+				COMPOSER_ERROR_SERVICE_INIT_FAIL, "email_engine_parse_mime_file() failed!");
 
 		debug_secure("full_address_from :%s", view->org_mail_info->mail_data->full_address_from);
 		debug_secure("full_address_reply :%s", view->org_mail_info->mail_data->full_address_reply);
@@ -370,8 +369,8 @@ static COMPOSER_ERROR_TYPE_E _composer_load_account_list(void *data)
 
 	EmailComposerView *view = (EmailComposerView *)data;
 
-	int err = email_get_account_list(&view->account_info->account_list, &view->account_info->account_count);
-	retvm_if(err != EMAIL_ERROR_NONE, COMPOSER_ERROR_NO_ACCOUNT_LIST, "email_get_account_list() failed! err:[%d]", err);
+	retvm_if(!email_engine_get_account_list(&view->account_info->account_count, &view->account_info->account_list),
+			COMPOSER_ERROR_NO_ACCOUNT_LIST, "email_engine_get_account_list() failed!");
 
 	/* If there's no account id, set account_id as default account id); */
 	if (!view->account_info->original_account_id && (email_engine_get_default_account(&view->account_info->original_account_id) == false)) {
@@ -788,7 +787,7 @@ static void _composer_destroy_email_info(EmailComposerView *view)
 
 	if (view->account_info) {
 		if (view->account_info->account_list) {
-			email_free_account(&view->account_info->account_list, view->account_info->account_count);
+			email_engine_free_account_list(&view->account_info->account_list, view->account_info->account_count);
 			view->account_info->account_list = NULL;
 		}
 		free(view->account_info);
@@ -797,12 +796,12 @@ static void _composer_destroy_email_info(EmailComposerView *view)
 
 	if (view->org_mail_info) {
 		if (view->org_mail_info->attachment_list) {
-			email_free_attachment_data(&view->org_mail_info->attachment_list, view->org_mail_info->total_attachment_count);
+			email_engine_free_attachment_data_list(&view->org_mail_info->attachment_list, view->org_mail_info->total_attachment_count);
 			view->org_mail_info->attachment_list = NULL;
 		}
 
 		if (view->org_mail_info->mail_data) {
-			email_free_mail_data(&view->org_mail_info->mail_data, 1);
+			email_engine_free_mail_data_list(&view->org_mail_info->mail_data, 1);
 			view->org_mail_info->mail_data = NULL;
 		}
 
@@ -812,12 +811,12 @@ static void _composer_destroy_email_info(EmailComposerView *view)
 
 	if (view->new_mail_info) {
 		if (view->new_mail_info->attachment_list) {
-			email_free_attachment_data(&view->new_mail_info->attachment_list, view->new_mail_info->total_attachment_count);
+			email_engine_free_attachment_data_list(&view->new_mail_info->attachment_list, view->new_mail_info->total_attachment_count);
 			view->new_mail_info->attachment_list = NULL;
 		}
 
 		if (view->new_mail_info->mail_data) {
-			email_free_mail_data(&view->new_mail_info->mail_data, 1);
+			email_engine_free_mail_data_list(&view->new_mail_info->mail_data, 1);
 			view->new_mail_info->mail_data = NULL;
 		}
 
@@ -1536,17 +1535,17 @@ static void _composer_gdbus_signal_receiver_cb(GDBusConnection *connection,
 				if (view->downloading_attachment && (view->downloading_attachment->mail_id == data1) && (view->downloading_attachment_index == data3)) {
 					email_attachment_data_t *new_attachment_list = NULL;
 					int new_attachment_count = 0;
-					int ret = EMAIL_ERROR_NONE;
+					gboolean ok = FALSE;
 
 					/* 1-1. Update attachment info for existing mail */
 					if (view->downloading_attachment->mail_id == view->org_mail_info->mail_data->mail_id) {
-						ret = email_get_attachment_data_list(view->org_mail_info->mail_data->mail_id, &new_attachment_list, &new_attachment_count);
+						ok = email_engine_get_attachment_data_list(view->org_mail_info->mail_data->mail_id, &new_attachment_list, &new_attachment_count);
 					/* 1-2. Update attachment info for reference mail */
 					} else if (view->downloading_attachment->mail_id == view->org_mail_info->mail_data->reference_mail_id) {
-						ret = email_get_attachment_data_list(view->org_mail_info->mail_data->reference_mail_id, &new_attachment_list, &new_attachment_count);
+						ok = email_engine_get_attachment_data_list(view->org_mail_info->mail_data->reference_mail_id, &new_attachment_list, &new_attachment_count);
 					}
 
-					if (ret == EMAIL_ERROR_NONE) {
+					if (ok) {
 						/* 2. Update attachment info for new mail. */
 						int i = 0;
 						email_attachment_data_t *curr_att = NULL;
@@ -1565,14 +1564,12 @@ static void _composer_gdbus_signal_receiver_cb(GDBusConnection *connection,
 						}
 
 						if (view->downloading_attachment->mail_id == view->org_mail_info->mail_data->mail_id) {
-							ret = email_free_attachment_data(&view->org_mail_info->attachment_list, view->org_mail_info->total_attachment_count);
-							debug_warning_if(ret != EMAIL_ERROR_NONE, "email_free_attachment_data() failed! It'll cause a memory leak!");
+							email_engine_free_attachment_data_list(&view->org_mail_info->attachment_list, view->org_mail_info->total_attachment_count);
 
 							view->org_mail_info->attachment_list = new_attachment_list;
 							view->org_mail_info->total_attachment_count = new_attachment_count;
 						} else {
-							ret = email_free_attachment_data(&new_attachment_list, new_attachment_count);
-							debug_warning_if(ret != EMAIL_ERROR_NONE, "email_free_attachment_data() failed! It'll cause a memory leak!");
+							email_engine_free_attachment_data_list(&new_attachment_list, new_attachment_count);
 						}
 						new_attachment_list = NULL;
 						new_attachment_count = 0;
@@ -1600,7 +1597,7 @@ static void _composer_gdbus_signal_receiver_cb(GDBusConnection *connection,
 						/* Update need_download flag. */
 						view->need_download = is_needed_to_download; /* this attachment is from existing mail, but it hasn't been downloaded yet. */
 					} else {
-						debug_error("email_get_attachment_data_list() failed! ret:[%d]", ret);
+						debug_error("email_engine_get_attachment_data_list() failed!");
 						view->composer_popup = composer_util_popup_create(view, EMAIL_COMPOSER_STRING_HEADER_UNABLE_TO_DOWNLOAD_ATTACHMENT_ABB, EMAIL_COMPOSER_STRING_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED,
 													composer_util_popup_response_cb, EMAIL_COMPOSER_STRING_BUTTON_OK, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
 					}

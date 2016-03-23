@@ -394,21 +394,20 @@ static COMPOSER_ERROR_TYPE_E _send_mail(EmailComposerView *view)
 
 	COMPOSER_ERROR_TYPE_E ret = COMPOSER_ERROR_NONE;
 	int handle = 0;
-	int err = 0;
+	gboolean ok = FALSE;
 
 	ret = _add_mail(view, EMAIL_MAILBOX_TYPE_OUTBOX);
 	retvm_if(ret != COMPOSER_ERROR_NONE, ret, "_add_mail() failed: %d", ret);
 
 	if (((view->composer_type == RUN_COMPOSER_FORWARD) || (view->composer_type == RUN_COMPOSER_EDIT)) && view->need_download && view->new_mail_info->mail_data->reference_mail_id) {
-		debug_log(">> email_send_mail_with_downloading_attachment_of_original_mail()");
-		err = email_send_mail_with_downloading_attachment_of_original_mail(view->new_mail_info->mail_data->mail_id, &handle);
-		debug_warning_if(err != EMAIL_ERROR_NONE, "email_send_mail_with_downloading_attachment_of_original_mail() failed! err:[%d]", err);
+		debug_log(">> email_engine_send_mail_with_downloading_attachment_of_original_mail()");
+		ok = email_engine_send_mail_with_downloading_attachment_of_original_mail(view->new_mail_info->mail_data->mail_id, &handle);
 	} else {
-		debug_log(">> email_send_mail()");
-		err = email_send_mail(view->new_mail_info->mail_data->mail_id, &handle);
+		debug_log(">> email_engine_send_mail()");
+		ok = email_engine_send_mail(view->new_mail_info->mail_data->mail_id, &handle);
 	}
 
-	if (err == EMAIL_ERROR_NONE) {
+	if (ok) {
 		debug_log("Sending email succeeded!");
 
 		/* Update Reply/Forward state and time */
@@ -417,27 +416,23 @@ static COMPOSER_ERROR_TYPE_E _send_mail(EmailComposerView *view)
 
 		if (view->composer_type == RUN_COMPOSER_REPLY || view->composer_type == RUN_COMPOSER_REPLY_ALL) {
 			if (view->org_mail_info->mail_data->flags_forwarded_field) {
-				email_set_flags_field(view->account_info->original_account->account_id, &view->original_mail_id, 1, EMAIL_FLAGS_FORWARDED_FIELD, 0, 1);
+				email_engine_set_flags_field(view->account_info->original_account->account_id, &view->original_mail_id, 1, EMAIL_FLAGS_FORWARDED_FIELD, 0, 1);
 			}
 
-			err = email_update_mail_attribute(view->org_mail_info->mail_data->account_id, &view->org_mail_info->mail_data->mail_id, 1, EMAIL_MAIL_ATTRIBUTE_REPLIED_TIME, sending_time);
-			debug_error_if(err != EMAIL_ERROR_NONE, "email_update_mail_attribute() failed! err:[%d]", err);
+			email_engine_update_mail_attribute(view->org_mail_info->mail_data->account_id, &view->org_mail_info->mail_data->mail_id, 1, EMAIL_MAIL_ATTRIBUTE_REPLIED_TIME, sending_time);
 
-			err = email_set_flags_field(view->account_info->original_account->account_id, &view->original_mail_id, 1, EMAIL_FLAGS_ANSWERED_FIELD, 1, 1);
-			debug_error_if(err != EMAIL_ERROR_NONE, "email_set_flags_field() failed! err:[%d]", err);
+			email_engine_set_flags_field(view->account_info->original_account->account_id, &view->original_mail_id, 1, EMAIL_FLAGS_ANSWERED_FIELD, 1, 1);
 		} else if (view->composer_type == RUN_COMPOSER_FORWARD) {
 			if (view->org_mail_info->mail_data->flags_answered_field) {
-				email_set_flags_field(view->account_info->original_account->account_id, &view->original_mail_id, 1, EMAIL_FLAGS_ANSWERED_FIELD, 0, 1);
+				email_engine_set_flags_field(view->account_info->original_account->account_id, &view->original_mail_id, 1, EMAIL_FLAGS_ANSWERED_FIELD, 0, 1);
 			}
 
-			err = email_update_mail_attribute(view->org_mail_info->mail_data->account_id, &view->org_mail_info->mail_data->mail_id, 1, EMAIL_MAIL_ATTRIBUTE_FORWARDED_TIME, sending_time);
-			debug_error_if(err != EMAIL_ERROR_NONE, "email_update_mail_attribute() failed! err:[%d]", err);
+			email_engine_update_mail_attribute(view->org_mail_info->mail_data->account_id, &view->org_mail_info->mail_data->mail_id, 1, EMAIL_MAIL_ATTRIBUTE_FORWARDED_TIME, sending_time);
 
-			err = email_set_flags_field(view->account_info->original_account->account_id, &view->original_mail_id, 1, EMAIL_FLAGS_FORWARDED_FIELD, 1, 1);
-			debug_error_if(err != EMAIL_ERROR_NONE, "email_set_flags_field() failed! err:[%d]", err);
+			email_engine_set_flags_field(view->account_info->original_account->account_id, &view->original_mail_id, 1, EMAIL_FLAGS_FORWARDED_FIELD, 1, 1);
 		}
 	} else {
-		debug_error("Sending email failed: [%d]", err);
+		debug_error("Sending email failed");
 		return COMPOSER_ERROR_SEND_FAIL;
 	}
 
@@ -457,9 +452,9 @@ static COMPOSER_ERROR_TYPE_E _add_mail(EmailComposerView *view, email_mailbox_ty
 	ret = _make_mail(view, mailbox_type);
 	retv_if(ret != COMPOSER_ERROR_NONE, ret);
 
-	ret = email_add_mail(view->new_mail_info->mail_data, view->new_mail_info->attachment_list, view->new_mail_info->total_attachment_count, NULL, 0);
+	ret = email_engine_add_mail(view->new_mail_info->mail_data, view->new_mail_info->attachment_list, view->new_mail_info->total_attachment_count, NULL, 0);
 	if (ret != EMAIL_ERROR_NONE) {
-		debug_error("email_add_mail() failed! ret:[%d]", ret);
+		debug_error("email_engine_add_mail() failed! ret:[%d]", ret);
 		return (ret == EMAIL_ERROR_MAIL_MEMORY_FULL) ? COMPOSER_ERROR_MAIL_STORAGE_FULL : COMPOSER_ERROR_FAIL;
 	}
 
@@ -649,7 +644,7 @@ static void _save_in_drafts_in_thread(EmailComposerView *view)
 	debug_enter();
 
 	/* It takes too long time to save files to disk on kiran device that has small storage and poor disk controller. (Around 6MB/s)
-	 * When we save large size of attachment, email_add_mail() takes too long time because of the above problem. So we handle this API in thread.
+	 * When we save large size of attachment, email_engine_add_mail() takes too long time because of the above problem. So we handle this API in thread.
 	 *
 	 * We should show progress popup while saving a mail because saving email in thread takes too long time if attachment size exceeds threshold.
 	 * In case of force destroy, we do not show progress popup while saving a mail because composer is not shown on the top of the screen.
@@ -844,25 +839,20 @@ static COMPOSER_ERROR_TYPE_E _make_mail_set_mailbox_info(EmailComposerView *view
 {
 	debug_enter();
 
-	int err = EMAIL_ERROR_NONE;
 	email_mailbox_t *mailbox = NULL;
 	EmailComposerAccount *account_info = view->account_info;
 	retvm_if(!account_info, COMPOSER_ERROR_NULL_POINTER, "account_info is NULL!");
 
-	err = email_get_mailbox_by_mailbox_type(account_info->selected_account->account_id, mailbox_type, &mailbox);
-	if (err != EMAIL_ERROR_NONE) {
-		debug_log("email_get_mailbox_by_mailbox_type() failed! %d", err);
-		return err;
+	if (!email_engine_get_mailbox_by_mailbox_type(account_info->selected_account->account_id, mailbox_type, &mailbox)) {
+		debug_log("email_engine_get_mailbox_by_mailbox_type() failed!");
+		return COMPOSER_ERROR_FAIL;
 	}
 	debug_log("mailbox_id = %d", mailbox->mailbox_id);
 
 	view->new_mail_info->mail_data->mailbox_id = mailbox->mailbox_id;
 	view->new_mail_info->mail_data->mailbox_type = mailbox->mailbox_type;
 
-	err = email_free_mailbox(&mailbox, 1);
-	if (err != EMAIL_ERROR_NONE) {
-		debug_warning("email_free_mailbox() failed: [%d], it will cause memory leak", err);
-	}
+	email_engine_free_mailbox_list(&mailbox, 1);
 
 	debug_leave();
 	return COMPOSER_ERROR_NONE;
@@ -1011,7 +1001,7 @@ static void _make_mail_make_attachment_list(EmailComposerView *view)
 	char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
 
 	/* If attachment hasn't been downloaded yet, it shouldn't be included in sending mail.
-	 * But to support email_send_mail_with_downloading_attachment_of_original_mail() API, forward case is excluded.
+	 * But to support email_engine_send_mail_with_downloading_attachment_of_original_mail() API, forward case is excluded.
 	 */
 	EINA_LIST_FOREACH(view->attachment_item_list, list, attachment_item_data) {
 		email_attachment_data_t *att = attachment_item_data->attachment_data;

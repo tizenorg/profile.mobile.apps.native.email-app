@@ -501,8 +501,7 @@ void composer_attachment_download_attachment(EmailComposerView *view, email_atta
 	email_attachment_data_t *att_info = NULL;
 
 	/* To get attachment index. */
-	int ret = email_get_attachment_data_list(attachment->mail_id, &att_info, &att_count);
-	if (ret == EMAIL_ERROR_NONE) {
+	if (email_engine_get_attachment_data_list(attachment->mail_id, &att_info, &att_count)) {
 		int i = 0;
 		for (i = 0; i < att_count; i++) {
 			att_index++;
@@ -512,8 +511,7 @@ void composer_attachment_download_attachment(EmailComposerView *view, email_atta
 		}
 		view->downloading_attachment_index = att_index;
 
-		ret = email_free_attachment_data(&att_info, att_count);
-		debug_warning_if(ret != EMAIL_ERROR_NONE, "email_free_attachment_data() failed! It'll cause a memory leak!");
+		email_engine_free_attachment_data_list(&att_info, att_count);
 
 		gboolean ret = email_engine_attachment_download(attachment->mail_id, att_index, &view->handle_for_downloading_attachment);
 		if (ret) {
@@ -525,7 +523,7 @@ void composer_attachment_download_attachment(EmailComposerView *view, email_atta
 										composer_util_popup_response_cb, EMAIL_COMPOSER_STRING_BUTTON_OK, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
 		}
 	} else {
-		debug_error("email_get_attachment_data_list() failed! ret:[%d]", ret);
+		debug_error("email_engine_get_attachment_data_list() failed!");
 
 		view->composer_popup = composer_util_popup_create(view, EMAIL_COMPOSER_STRING_HEADER_UNABLE_TO_DOWNLOAD_ATTACHMENT_ABB, EMAIL_COMPOSER_STRING_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED,
 									composer_util_popup_response_cb, EMAIL_COMPOSER_STRING_BUTTON_OK, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
@@ -574,7 +572,7 @@ void composer_attachment_reset_attachment(EmailComposerView *view)
 			if (att) {
 				debug_secure("attachment_data file name to be removed : %s", att->attachment_path);
 
-				email_free_attachment_data(&att, 1);
+				email_engine_free_attachment_data_list(&att, 1);
 			}
 
 			if (attachment_item_data->preview_path) {
@@ -588,7 +586,7 @@ void composer_attachment_reset_attachment(EmailComposerView *view)
 		if (inline_att) {
 			debug_secure("attachment_data file name to be removed : %s", inline_att->attachment_path);
 
-			email_free_attachment_data(&inline_att, 1);
+			email_engine_free_attachment_data_list(&inline_att, 1);
 		}
 	}
 

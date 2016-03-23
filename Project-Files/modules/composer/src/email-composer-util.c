@@ -330,7 +330,7 @@ void composer_util_get_image_list_cb(Evas_Object *o, const char *result, void *d
 
 	EINA_LIST_FOREACH(view->attachment_inline_item_list, l, att_data) {
 		if (att_data) {
-			email_free_attachment_data(&att_data, 1);
+			email_engine_free_attachment_data_list(&att_data, 1);
 		}
 	}
 	eina_list_free(view->attachment_inline_item_list);

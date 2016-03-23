@@ -1811,4 +1811,143 @@ EMAIL_API gboolean email_engine_get_password_length_of_account(int account_id,
 	return TRUE;
 }
 
+EMAIL_API gboolean email_engine_get_mail_data(int mail_id, email_mail_data_t **mail_data)
+{
+	debug_enter();
+
+	int err = email_get_mail_data(mail_id, mail_data);
+	if (err != EMAIL_ERROR_NONE) {
+		*mail_data = NULL;
+		debug_error("email_get_mail_data failed: %d; mail_id: %d", err, mail_id);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_get_attachment_data_list(int mail_id,
+		email_attachment_data_t **attachment_data, int *attachment_count)
+{
+	debug_enter();
+
+	int err = email_get_attachment_data_list(mail_id, attachment_data, attachment_count);
+	if (err != EMAIL_ERROR_NONE) {
+		*attachment_data = NULL;
+		*attachment_count = 0;
+		debug_error("email_get_attachment_data_list failed: %d; mail_id: %d", err, mail_id);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_parse_mime_file(char *eml_file_path, email_mail_data_t **mail_data,
+		email_attachment_data_t **attachment_data, int *attachment_count)
+{
+	debug_enter();
+
+	int err = email_parse_mime_file(eml_file_path, mail_data, attachment_data, attachment_count);
+	if (err != EMAIL_ERROR_NONE) {
+		*mail_data = NULL;
+		*attachment_data = NULL;
+		*attachment_count = 0;
+		debug_error("email_parse_mime_file failed: %d; eml_file_path: %s", err, eml_file_path);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API void email_engine_free_mail_data_list(email_mail_data_t** mail_list, int count)
+{
+	debug_enter();
+
+	int err = email_free_mail_data(mail_list, count);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_free_mail_data_list failed: %d");
+	}
+}
+
+EMAIL_API void email_engine_free_attachment_data_list(
+		email_attachment_data_t **attachment_data_list, int attachment_count)
+{
+	debug_enter();
+
+	int err = email_free_attachment_data(attachment_data_list, attachment_count);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_free_attachment_data failed: %d");
+	}
+}
+
+EMAIL_API int email_engine_add_mail(email_mail_data_t *mail_data, email_attachment_data_t *attachment_data_list,
+		int attachment_count, email_meeting_request_t* meeting_request, int from_eas)
+{
+	debug_enter();
+
+	int err = email_add_mail(mail_data, attachment_data_list, attachment_count, meeting_request, from_eas);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_add_mail failed: %d; from_eas: %d", err, from_eas);
+	}
+
+	return err;
+}
+
+EMAIL_API gboolean email_engine_send_mail(int mail_id, int *handle)
+{
+	debug_enter();
+
+	int err = email_send_mail(mail_id, handle);
+	if (err != EMAIL_ERROR_NONE) {
+		*handle = 0;
+		debug_error("email_send_mail failed: %d; mail_id: %d", err, mail_id);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_send_mail_with_downloading_attachment_of_original_mail(int mail_id, int *handle)
+{
+	debug_enter();
+
+	int err = email_send_mail_with_downloading_attachment_of_original_mail(mail_id, handle);
+	if (err != EMAIL_ERROR_NONE) {
+		*handle = 0;
+		debug_error("email_send_mail_with_downloading_attachment_of_original_mail failed: %d; mail_id: %d", err, mail_id);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_set_flags_field(int account_id, int *mail_ids, int num,
+		email_flags_field_type field_type, int value, int onserver)
+{
+	debug_enter();
+
+	int err = email_set_flags_field(account_id, mail_ids, num, field_type, value, onserver);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_set_flags_field failed: %d; account_id: %d; field_type: %d; "
+				"value: %d; onserver: %d", err, account_id, (int)field_type, value, onserver);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_update_mail_attribute(int account_id, int *mail_ids, int num,
+		email_mail_attribute_type attribute_type, email_mail_attribute_value_t value)
+{
+	debug_enter();
+
+	int err = email_update_mail_attribute(account_id, mail_ids, num, attribute_type, value);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_update_mail_attribute failed: %d; account_id: %d; field_type: %d; "
+				"value: %d", err, account_id, (int)attribute_type, value);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
 /* EOF */

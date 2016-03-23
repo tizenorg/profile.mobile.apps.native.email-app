@@ -224,6 +224,25 @@ EMAIL_API gboolean email_engine_free_rule(email_rule_t **filtering_set, int coun
 EMAIL_API gboolean email_engine_get_password_length_of_account(int account_id,
 		email_get_password_length_type password_type, int *password_length);
 
+EMAIL_API gboolean email_engine_get_mail_data(int mail_id, email_mail_data_t **mail_data);
+EMAIL_API gboolean email_engine_get_attachment_data_list(int mail_id,
+		email_attachment_data_t **attachment_data, int *attachment_count);
+EMAIL_API gboolean email_engine_parse_mime_file(char *eml_file_path, email_mail_data_t **mail_data,
+		email_attachment_data_t **attachment_data, int *attachment_count);
+
+EMAIL_API void email_engine_free_mail_data_list(email_mail_data_t** mail_list, int count);
+EMAIL_API void email_engine_free_attachment_data_list(
+		email_attachment_data_t **attachment_data_list, int attachment_count);
+
+EMAIL_API int email_engine_add_mail(email_mail_data_t *mail_data, email_attachment_data_t *attachment_data_list,
+		int attachment_count, email_meeting_request_t* meeting_request, int from_eas);
+EMAIL_API gboolean email_engine_send_mail(int mail_id, int *handle);
+EMAIL_API gboolean email_engine_send_mail_with_downloading_attachment_of_original_mail(int mail_id, int *handle);
+EMAIL_API gboolean email_engine_set_flags_field(int account_id, int *mail_ids, int num,
+		email_flags_field_type field_type, int value, int onserver);
+EMAIL_API gboolean email_engine_update_mail_attribute(int account_id, int *mail_ids, int num,
+		email_mail_attribute_type attribute_type, email_mail_attribute_value_t value);
+
 G_END_DECLS
 #endif	/* _EMAIL_ENGINE_H_ */
 

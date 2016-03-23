@@ -771,7 +771,6 @@ static void _initial_data_set_mail_attachment(EmailComposerView *view)
 	int inline_count = 0, attach_count = 0;
 	int total_attachment_size = 0;
 
-	int err = EMAIL_ERROR_NONE;
 	Eina_Bool ret = EINA_TRUE;
 
 	char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
@@ -816,8 +815,7 @@ static void _initial_data_set_mail_attachment(EmailComposerView *view)
 				email_attachment_data_t *reference_attachment_list = NULL;
 
 				if ((view->composer_type == RUN_COMPOSER_EDIT) && (view->org_mail_info->mail_data->reference_mail_id != 0) && view->org_mail_info->total_attachment_count) {
-					err = email_get_attachment_data_list(view->org_mail_info->mail_data->reference_mail_id, &reference_attachment_list, &reference_attachment_count);
-					debug_warning_if(err != EMAIL_ERROR_NONE, "email_get_attachment_data_list() for [%d] is failed!", view->org_mail_info->mail_data->reference_mail_id);
+					email_engine_get_attachment_data_list(view->org_mail_info->mail_data->reference_mail_id, &reference_attachment_list, &reference_attachment_count);
 				}
 
 				for (j = 0; j < view->org_mail_info->total_attachment_count; j++) {
@@ -885,8 +883,7 @@ static void _initial_data_set_mail_attachment(EmailComposerView *view)
 				}
 
 				if (reference_attachment_list) {
-					err = email_free_attachment_data(&reference_attachment_list, reference_attachment_count);
-					debug_warning_if(err != EMAIL_ERROR_NONE, "email_free_attachment_data() failed! It'll cause a memory leak!");
+					email_engine_free_attachment_data_list(&reference_attachment_list, reference_attachment_count);
 				}
 			}
 		}

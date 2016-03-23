@@ -322,8 +322,7 @@ static void _attachment_ui_item_delete_button_clicked_cb(void *data, Evas_Object
 		}
 		FREE(att_dirname);
 
-		email_free_attachment_data(&attachment_data, 1);
-		attachment_data = NULL;
+		email_engine_free_attachment_data_list(&attachment_data, 1);
 	}
 
 	if (attachment_layout) {
