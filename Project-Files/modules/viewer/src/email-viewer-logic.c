@@ -55,34 +55,25 @@ gboolean viewer_get_internal_mail_info(void *data)
 	retvm_if(data == NULL, EINA_FALSE, "Invalid parameter: data[NULL]");
 	EmailViewerView *view = (EmailViewerView *) data;
 
-	int err = 0;
+	email_engine_free_mail_data_list(&view->mail_info, 1);
 
-	if (view->mail_info) {
-		debug_log("mail_info freed");
-		email_free_mail_data(&(view->mail_info), 1);
-		view->mail_info = NULL;
-	}
-
-	if (view->attachment_info && view->attachment_count > 0) {
+	if (view->attachment_info) {
 		debug_log("attachment_info freed p[%p] n[%d]", view->attachment_info, view->attachment_count);
-		email_free_attachment_data(&(view->attachment_info), view->attachment_count);
-		view->attachment_info = NULL;
+		email_engine_free_attachment_data_list(&view->attachment_info, view->attachment_count);
 		view->attachment_count = 0;
 	}
 
 	debug_secure("view->eml_file_path:%s", view->eml_file_path);
 	if (view->eml_file_path == NULL) {
-		if ((err = email_get_mail_data(view->mail_id, &(view->mail_info))) != EMAIL_ERROR_NONE) {
-			debug_log("fail to get mail data - err (%d)", err);
-			email_free_mail_data(&view->mail_info, 1);
+		if (!email_engine_get_mail_data(view->mail_id, &(view->mail_info))) {
+			debug_log("fail to get mail data");
 			return FALSE;
 		}
 
 		retvm_if(view->mail_info == NULL, FALSE, "mail_info is NULL");
 
-		if ((err = email_get_attachment_data_list(view->mail_id, &(view->attachment_info), &(view->attachment_count))) != EMAIL_ERROR_NONE) {
-			debug_log("fail to get attachment data - err (%d)", err);
-			email_free_attachment_data(&(view->attachment_info), view->attachment_count);
+		if (!email_engine_get_attachment_data_list(view->mail_id, &(view->attachment_info), &(view->attachment_count))) {
+			debug_log("fail to get attachment data");
 			return FALSE;
 		}
 	} else {
@@ -90,8 +81,8 @@ gboolean viewer_get_internal_mail_info(void *data)
 			debug_log("eml file size: zero");
 			return FALSE;
 		}
-		if ((err = email_parse_mime_file(view->eml_file_path, &(view->mail_info), &(view->attachment_info), &(view->attachment_count))) != EMAIL_ERROR_NONE) {
-			debug_log("email_parse_mime_file failed - err (%d)", err);
+		if (!email_engine_parse_mime_file(view->eml_file_path, &(view->mail_info), &(view->attachment_info), &(view->attachment_count))) {
+			debug_log("email_engine_parse_mime_file failed");
 			return FALSE;
 		}
 
@@ -173,17 +164,11 @@ void viewer_set_mail_seen(void *data)
 	email_mail_data_t *mail_info = view->mail_info;
 	retm_if(mail_info == NULL, "view->mail_info is NULL");
 
-	int err = 0;
-
 	if (!mail_info->flags_seen_field) {
 		debug_log("newly arrived mail");
 
 		int mail_id = mail_info->mail_id;
-		err = email_set_flags_field(mail_info->account_id, &mail_id, 1, EMAIL_FLAGS_SEEN_FIELD, 1, 1);
-
-		if (err != EMAIL_ERROR_NONE) {
-			debug_log("Failed to modify mail seen flag");
-		}
+		email_engine_set_flags_field(mail_info->account_id, &mail_id, 1, EMAIL_FLAGS_SEEN_FIELD, 1, 1);
 	}
 	debug_leave();
 }

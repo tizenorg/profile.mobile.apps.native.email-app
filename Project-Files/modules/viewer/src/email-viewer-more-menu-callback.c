@@ -128,8 +128,8 @@ void viewer_ctxpopup_add_vip_rule_cb(void *data, Evas_Object *obj, void *event_i
 	debug_secure("VIP address: %s", addr);
 	DELETE_EVAS_OBJECT(view->con_popup);
 
-	int ret_add = 0;
-	int ret_apply = 0;
+	int add_ok = 0;
+	int apply_ok = 0;
 	email_rule_t *rule = NULL;
 
 	/* add filtering rule */
@@ -142,21 +142,20 @@ void viewer_ctxpopup_add_vip_rule_cb(void *data, Evas_Object *obj, void *event_i
 	rule->flag1 = 1;
 	rule->flag2 = RULE_TYPE_EXACTLY;
 
-	ret_add = email_add_rule(rule);
-	if (ret_add != EMAIL_ERROR_NONE) {
-		debug_warning("email_add_rule failed: %d", ret_add);
+	add_ok = email_engine_add_rule(rule);
+	if (!add_ok) {
+		debug_warning("email_engine_add_rule failed");
 	} else {
-		debug_secure("email_add_rule success: %s", rule->filter_name);
-		ret_apply = email_apply_rule(rule->filter_id);
-		if (ret_apply != EMAIL_ERROR_NONE)
-			debug_warning("email_apply_rule failed: %d", ret_apply);
+		debug_secure("email_engine_add_rule success: %s", rule->filter_name);
+		apply_ok = email_engine_apply_rule(rule->filter_id);
+		if (!apply_ok)
+			debug_warning("email_engine_apply_rule failed");
 		else
-			debug_log("email_apply_rule success");
+			debug_log("email_engine_apply_rule success");
+		email_engine_free_rule_list(&rule, 1);
 	}
-	email_free_rule(&rule, 1);
 
-	if (ret_add != EMAIL_ERROR_NONE || ret_apply != EMAIL_ERROR_NONE) {
-		debug_log("email_add_rule(%d) or email_apply_rule(%d) failed!", ret_add, ret_apply);
+	if (!add_ok || !apply_ok) {
 		notification_status_message_post(_("IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"));
 	} else {
 		int ret = email_update_vip_rule_value();
@@ -196,13 +195,13 @@ void viewer_ctxpopup_remove_vip_rule_cb(void *data, Evas_Object *obj, void *even
 	DELETE_EVAS_OBJECT(view->con_popup);
 
 	int count, i;
-	int ret = EMAIL_ERROR_NONE;
+	gboolean ok = FALSE;
 	email_rule_t *rule_list = NULL;
 
 	/* get the rule list from service */
-	ret = email_get_rule_list(&rule_list, &count);
-	if (ret < 0) {
-		debug_log("email_get_rule_list failed");
+	ok = email_engine_get_rule_list(&rule_list, &count);
+	if (!ok) {
+		debug_log("email_engine_get_rule_list failed");
 	} else {
 		if (count > 0) {
 			for (i = 0; i < count; i++) {
@@ -210,17 +209,17 @@ void viewer_ctxpopup_remove_vip_rule_cb(void *data, Evas_Object *obj, void *even
 					/*debug_secure("vip address %s", rule_list[i].value2);*/
 					if (g_strcmp0(rule_list[i].value2, addr) == 0) {
 						debug_secure("[%s] already set", rule_list[i].value2);
-						ret = email_delete_rule(rule_list[i].filter_id);
+						ok = email_engine_delete_rule(rule_list[i].filter_id) && ok;
 					}
 				}
 			}
 		}
 		/* free email rule_list */
-		email_free_rule(&rule_list, count);
+		email_engine_free_rule_list(&rule_list, count);
 	}
 
-	if (ret != EMAIL_ERROR_NONE) {
-		debug_log("email_delete_rule failed %d", ret);
+	if (!ok) {
+		debug_log("operation failed!");
 		notification_status_message_post(_("IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"));
 	} else {
 		int ret = email_update_vip_rule_value();
@@ -329,13 +328,9 @@ void viewer_mark_as_unread_cb(void *data, Evas_Object *obj, void *event_info)
 
 	DELETE_EVAS_OBJECT(view->con_popup);
 
-	int err = 0;
 	debug_log("view->mail_id(%d), mail_info->mail_id(%d)", view->mail_id, view->mail_info->mail_id);
 
-	err = email_set_flags_field(view->account_id, &view->mail_id, 1, EMAIL_FLAGS_SEEN_FIELD, 0, 1);
-	debug_log("email_set_flags_field - err(%d)", err);
-
-	if (err != EMAIL_ERROR_NONE) {
+	if (!email_engine_set_flags_field(view->account_id, &view->mail_id, 1, EMAIL_FLAGS_SEEN_FIELD, 0, 1)) {
 		notification_status_message_post(_("IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"));
 	} else {
 		notification_status_message_post(_("IDS_EMAIL_TPOP_EMAIL_MARKED_AS_UNREAD"));
@@ -379,9 +374,7 @@ void viewer_edit_scheduled_email_cb(void *data, Evas_Object *obj, void *event_in
 
 	debug_log("view->mail_id:%d", view->mail_id);
 
-	int err = email_cancel_sending_mail(view->mail_id);
-	if (err != EMAIL_ERROR_NONE)
-		debug_warning("email_cancel_sending_mail failed - err(%d)", err);
+	email_engine_cancel_sending_mail(view->mail_id);
 
 	DELETE_EVAS_OBJECT(view->con_popup);
 
@@ -412,10 +405,7 @@ void viewer_cancel_send_cb(void *data, Evas_Object *obj, void *event_info)
 	debug_log("view->account_id(%d), mail_info->account_id(%d)", view->account_id, view->mail_info->account_id);
 	debug_log("view->mail_id(%d), mail_info->mail_id(%d)", view->mail_id, view->mail_info->mail_id);
 
-	int err = email_cancel_sending_mail(view->mail_id);
-	if (err != EMAIL_ERROR_NONE) {
-		debug_warning("email_cancel_sending_mail failed - err(%d)", err);
-	}
+	email_engine_cancel_sending_mail(view->mail_id);
 	view->is_cancel_sending_btn_clicked = EINA_TRUE;
 
 	debug_leave();
@@ -428,37 +418,29 @@ void viewer_resend_cb(void *data, Evas_Object *obj, void *event_info)
 
 	EmailViewerView *view = (EmailViewerView *)data;
 	DELETE_EVAS_OBJECT(view->con_popup);
-	int err = 0;
 
 	/* Send email again */
 	debug_log("view->account_id(%d), mail_info->account_id(%d)", view->account_id, view->mail_info->account_id);
 	debug_log("view->mail_id(%d), mail_info->mail_id(%d)", view->mail_id, view->mail_info->mail_id);
 
 	email_account_t *account = NULL;
-	err = email_get_account(view->account_id, EMAIL_ACC_GET_OPT_DEFAULT, &account);
-	if (err == EMAIL_ERROR_NONE && account) {
+	if (email_engine_get_account_data(view->account_id, EMAIL_ACC_GET_OPT_DEFAULT, &account)) {
 		email_mail_attribute_value_t mail_attr;
 
 		mail_attr.integer_type_value = (account->auto_resend_times == EMAIL_NO_LIMITED_RETRY_COUNT) ? 10 : account->auto_resend_times;
-		err = email_update_mail_attribute(view->account_id, &view->mail_id, 1, EMAIL_MAIL_ATTRIBUTE_REMAINING_RESEND_TIMES, mail_attr);
+		email_engine_update_mail_attribute(view->account_id, &view->mail_id, 1, EMAIL_MAIL_ATTRIBUTE_REMAINING_RESEND_TIMES, mail_attr);
 		debug_log("mail_id(%d) resend tme(%d)", view->mail_id, mail_attr.integer_type_value);
-		if (err != EMAIL_ERROR_NONE) {
-			debug_warning("email_update_mail_attribute failed! - err(%d) mail_id(%d) resend tme(%d)", err, view->mail_id, mail_attr.integer_type_value);
-		}
 	} else {
-		debug_warning("email_get_account failed! account_id(%d) - err(%d) or account NULL", view->account_id, err);
+		debug_warning("email_engine_get_account failed! account_id(%d)", view->account_id);
 	}
 
 	if (account) {
-		email_free_account(&account, 1);
+		email_engine_free_account_list(&account, 1);
 		account = NULL;
 	}
 
 	int handle = 0;
-	err = email_send_mail(view->mail_id, &handle);
+	email_engine_send_mail(view->mail_id, &handle);
 	debug_log("sending handle(%d)", handle);
-	if (err != EMAIL_ERROR_NONE) {
-		debug_warning("email_send_mail failed - err(%d)", err);
-	}
 	debug_leave();
 }

@@ -295,11 +295,10 @@ static void _handle_auth_error(EmailViewerView *view, int error, Evas_Smart_Cb c
 {
 	email_authentication_method_t auth_method = EMAIL_AUTHENTICATION_METHOD_NO_AUTH;
 	email_account_t *account = NULL;
-	int ret = email_get_account(view->account_id, EMAIL_ACC_GET_OPT_DEFAULT, &account);
-	if (ret == EMAIL_ERROR_NONE && account) {
+	if (email_engine_get_account_data(view->account_id, EMAIL_ACC_GET_OPT_DEFAULT, &account)) {
 		auth_method = account->incoming_server_authentication_method;
+		email_engine_free_account_list(&account, 1);
 	}
-	if (account) email_free_account(&account, 1);
 
 	bool show_passwd_popup =
 		error == EMAIL_ERROR_AUTH_REQUIRED ||
@@ -503,21 +502,15 @@ static void _noti_mgr_on_gdbus_event_receive(GDBusConnection *connection,
 				case EMAIL_MAIL_ATTRIBUTE_FLAGS_FLAGGED_FIELD:
 					debug_log("EMAIL_MAIL_ATTRIBUTE_FLAGS_FLAGGED_FIELD");
 					if (view->mail_id == *idx) {
-						int err = 0;
 						email_mail_data_t *mail_data = NULL;
-						err = email_get_mail_data(view->mail_id, &mail_data);
-						if (err == EMAIL_ERROR_NONE && mail_data != NULL) {
+						if (email_engine_get_mail_data(view->mail_id, &mail_data)) {
 							view->favorite = mail_data->flags_flagged_field;
 							debug_log("favorite (%d)", view->favorite);
 
 							header_update_favorite_icon(view);
 						}
 
-						if (mail_data != NULL) {
-							debug_log("free mail_data");
-							email_free_mail_data(&mail_data, 1);
-							mail_data = NULL;
-						}
+						email_engine_free_mail_data_list(&mail_data, 1);
 					}
 					break;
 
@@ -527,20 +520,14 @@ static void _noti_mgr_on_gdbus_event_receive(GDBusConnection *connection,
 				case EMAIL_MAIL_ATTRIBUTE_FLAGS_ANSWERED_FIELD:
 					debug_log("EMAIL_MAIL_ATTRIBUTE_FLAGS_ANSWERED_FIELD");
 					if (view->mail_id == *idx) {
-						int err = 0;
 						email_mail_data_t *mail_data = NULL;
-						err = email_get_mail_data(view->mail_id, &mail_data);
-						if (err == EMAIL_ERROR_NONE && mail_data != NULL) {
+						if (email_engine_get_mail_data(view->mail_id, &mail_data)) {
 							if (view->subject_ly) {
 								header_update_response_icon(view, mail_data);
 							}
 						}
 
-						if (mail_data != NULL) {
-							debug_log("free mail_data");
-							email_free_mail_data(&mail_data, 1);
-							mail_data = NULL;
-						}
+						email_engine_free_mail_data_list(&mail_data, 1);
 					}
 					break;
 

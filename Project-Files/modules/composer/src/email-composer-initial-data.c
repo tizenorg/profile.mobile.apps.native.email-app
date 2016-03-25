@@ -882,9 +882,7 @@ static void _initial_data_set_mail_attachment(EmailComposerView *view)
 					}
 				}
 
-				if (reference_attachment_list) {
-					email_engine_free_attachment_data_list(&reference_attachment_list, reference_attachment_count);
-				}
+				email_engine_free_attachment_data_list(&reference_attachment_list, reference_attachment_count);
 			}
 		}
 	} else if ((view->composer_type == RUN_EML_REPLY) || (view->composer_type == RUN_EML_REPLY_ALL) || (view->composer_type == RUN_EML_FORWARD)) {

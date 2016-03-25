@@ -575,9 +575,7 @@ void composer_attachment_reset_attachment(EmailComposerView *view)
 				email_engine_free_attachment_data_list(&att, 1);
 			}
 
-			if (attachment_item_data->preview_path) {
-				FREE(attachment_item_data->preview_path);
-			}
+			free(attachment_item_data->preview_path);
 			free(attachment_item_data);
 		}
 	}

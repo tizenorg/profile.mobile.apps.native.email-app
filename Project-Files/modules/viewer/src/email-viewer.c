@@ -1579,9 +1579,7 @@ static void _popup_response_delete_ok_cb(void *data, Evas_Object *obj, void *eve
 	if (view->mailbox_type == EMAIL_MAILBOX_TYPE_TRASH || view->save_status == EMAIL_MAIL_STATUS_SEND_SCHEDULED) {
 		/*cancel scheduled email before deleting the mail*/
 		if (view->save_status == EMAIL_MAIL_STATUS_SEND_SCHEDULED) {
-			int err = email_cancel_sending_mail(view->mail_id);
-			if (err != EMAIL_ERROR_NONE)
-				debug_log("email_cancel_sending_mail() failed: [%d]", err);
+			email_engine_cancel_sending_mail(view->mail_id);
 		}
 		ret = viewer_delete_email(view);
 	} else if (view->viewer_type == EML_VIEWER) {
@@ -1685,16 +1683,11 @@ int viewer_reset_mail_data(EmailViewerView *view)
 	retvm_if(view == NULL, VIEWER_ERROR_INVALID_ARG, "Invalid parameter: view[NULL]");
 
 	/* Create Email Viewer Private variables */
-	if (view->mail_info) {
-		debug_log("mail_info freed");
-		email_free_mail_data(&(view->mail_info), 1);
-		view->mail_info = NULL;
-	}
+	email_engine_free_mail_data_list(&view->mail_info, 1);
 
-	if (view->attachment_info && view->attachment_count > 0) {
+	if (view->attachment_info) {
 		debug_log("attachment_info freed p[%p] n[%d]", view->attachment_info, view->attachment_count);
-		email_free_attachment_data(&(view->attachment_info), view->attachment_count);
-		view->attachment_info = NULL;
+		email_engine_free_attachment_data_list(&view->attachment_info, view->attachment_count);
 		view->attachment_count = 0;
 	}
 
@@ -1788,10 +1781,7 @@ void viewer_delete_account_data(EmailViewerView *view)
 	debug_enter();
 	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
-	if (view->account) {
-		email_free_account(&view->account, 1);
-		view->account = NULL;
-	}
+	email_engine_free_account_list(&view->account, 1);
 
 	debug_leave();
 }

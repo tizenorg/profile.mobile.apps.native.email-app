@@ -16,6 +16,7 @@
  */
 
 #include "email-debug.h"
+#include "email-engine.h"
 #include "email-viewer.h"
 #include "email-viewer-util.h"
 #include "email-viewer-more-menu.h"
@@ -634,8 +635,8 @@ bool recipient_is_priority_email_address(char *email_address)
 	bool is_vip = FALSE;
 
 	/* get the rule list from service */
-	if (email_get_rule_list(&rule_list, &count) < 0) {
-		debug_log("email_get_rule_list failed");
+	if (!email_engine_get_rule_list(&rule_list, &count)) {
+		debug_log("email_engine_get_rule_list failed");
 	} else {
 		if (count > 0) {
 			for (i = 0; i < count; i++) {
@@ -651,7 +652,7 @@ bool recipient_is_priority_email_address(char *email_address)
 			}
 		}
 		/* free email rule_list */
-		email_free_rule(&rule_list, count);
+		email_engine_free_rule_list(&rule_list, count);
 	}
 	debug_leave();
 	return is_vip;
@@ -667,8 +668,8 @@ bool recipient_is_blocked_email_address(char *email_address)
 	bool is_blocked = FALSE;
 
 	/* get the rule list from service */
-	if (email_get_rule_list(&rule_list, &count) < 0) {
-		debug_log("email_get_rule_list failed");
+	if (!email_engine_get_rule_list(&rule_list, &count)) {
+		debug_log("email_engine_get_rule_list failed");
 	} else {
 		if (count > 0) {
 			for (i = 0; i < count; i++) {
@@ -684,7 +685,7 @@ bool recipient_is_blocked_email_address(char *email_address)
 			}
 		}
 		/* free email rule_list */
-		email_free_rule(&rule_list, count);
+		email_engine_free_rule_list(&rule_list, count);
 	}
 	debug_leave();
 	return is_blocked;

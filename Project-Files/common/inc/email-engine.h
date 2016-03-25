@@ -219,7 +219,7 @@ EMAIL_API gboolean email_engine_add_rule(email_rule_t *filtering_set);
 EMAIL_API gboolean email_engine_update_rule(int filter_id, email_rule_t *new_set);
 EMAIL_API gboolean email_engine_delete_rule(int filter_id);
 EMAIL_API gboolean email_engine_apply_rule(int filter_id);
-EMAIL_API gboolean email_engine_free_rule(email_rule_t **filtering_set, int count);
+EMAIL_API void email_engine_free_rule_list(email_rule_t **filtering_set, int count);
 
 EMAIL_API gboolean email_engine_get_password_length_of_account(int account_id,
 		email_get_password_length_type password_type, int *password_length);
@@ -238,6 +238,7 @@ EMAIL_API int email_engine_add_mail(email_mail_data_t *mail_data, email_attachme
 		int attachment_count, email_meeting_request_t* meeting_request, int from_eas);
 EMAIL_API gboolean email_engine_send_mail(int mail_id, int *handle);
 EMAIL_API gboolean email_engine_send_mail_with_downloading_attachment_of_original_mail(int mail_id, int *handle);
+EMAIL_API gboolean email_engine_cancel_sending_mail(int mail_id);
 EMAIL_API gboolean email_engine_set_flags_field(int account_id, int *mail_ids, int num,
 		email_flags_field_type field_type, int value, int onserver);
 EMAIL_API gboolean email_engine_update_mail_attribute(int account_id, int *mail_ids, int num,
