@@ -146,8 +146,7 @@ static void _show_image_cb(void *data, Evas_Object *obj, void *event_info)
 		email_mail_attribute_value_t image_dn_status;
 		debug_log("show_image_set");
 		image_dn_status.integer_type_value = view->body_download_status | EMAIL_BODY_DOWNLOAD_STATUS_IMAGES_DOWNLOADED;
-		int err = email_update_mail_attribute(view->account_id, &view->mail_id, 1, EMAIL_MAIL_ATTRIBUTE_BODY_DOWNLOAD_STATUS, image_dn_status);
-		debug_error_if(err != EMAIL_ERROR_NONE, "email_update_mail_attribute() failed! err:[%d]", err);
+		email_engine_update_mail_attribute(view->account_id, &view->mail_id, 1, EMAIL_MAIL_ATTRIBUTE_BODY_DOWNLOAD_STATUS, image_dn_status);
 	}
 
 	if (view->webview != NULL) {

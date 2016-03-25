@@ -432,10 +432,7 @@ int viewer_delete_email(EmailViewerView *view)
 			}
 		}
 
-		if (account_data) {
-			email_free_account(&account_data, 1);
-			account_data = NULL;
-		}
+		email_engine_free_account_list(&account_data, 1);
 	}
 
 	if (!email_engine_delete_mail(view->account_id, view->mailbox_id, view->mail_id, sync)) {

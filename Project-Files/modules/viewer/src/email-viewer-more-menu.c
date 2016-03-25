@@ -221,12 +221,11 @@ void viewer_create_more_ctxpopup(EmailViewerView *view)
 	debug_log("mailbox_type:%d", view->mailbox_type);
 
 	/* get save_status of mail_data */
-	int err = EMAIL_ERROR_NONE;
 	email_mail_data_t *mail_info = NULL;
-	err = email_get_mail_data(view->mail_id, &mail_info);
+	email_engine_get_mail_data(view->mail_id, &mail_info);
 
 	if (view->viewer_type == EMAIL_VIEWER) {
-		if (err == EMAIL_ERROR_NONE && mail_info != NULL) {
+		if (mail_info != NULL) {
 			if (view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
 				if (mail_info->save_status == EMAIL_MAIL_STATUS_SEND_CANCELED || mail_info->save_status == EMAIL_MAIL_STATUS_SEND_FAILURE) {
 					_add_ctxpopup_menu_item(view, "IDS_EMAIL_OPT_SEND", icon, viewer_resend_cb);
@@ -248,7 +247,7 @@ void viewer_create_more_ctxpopup(EmailViewerView *view)
 				_viewer_more_menu_add_item(view->con_popup, NULL, "IDS_EMAIL_OPT_DELETE", _delete_cb, (void *)view);
 			}
 		} else {
-			debug_log("fail to get mail data - err (%d), mail_info is NULL? (%d)", err, (mail_info == NULL));
+			debug_log("fail to get mail data");
 		}
 
 		if (view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX) {
@@ -289,10 +288,7 @@ void viewer_create_more_ctxpopup(EmailViewerView *view)
 		elm_object_item_domain_text_translatable_set(ctx_menu_item, PACKAGE, EINA_TRUE);
 	}
 
-	if (mail_info != NULL) {
-		email_free_mail_data(&mail_info, 1);
-		mail_info = NULL;
-	}
+	email_engine_free_mail_data_list(&mail_info, 1);
 
 	viewer_more_menu_move_ctxpopup(view->con_popup, view->base.module->win);
 

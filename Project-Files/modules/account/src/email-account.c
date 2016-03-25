@@ -814,10 +814,7 @@ void account_destroy_view(EmailAccountView *view)
 		if (view->account_list && view->move_list) {
 			email_move_list *move_list = view->move_list;
 			for (i = 0; i < view->account_count; i++) {
-				if (move_list[i].mailbox_list) {
-					email_engine_free_mailbox_list(&(move_list[i].mailbox_list), move_list[i].mailbox_cnt);
-					move_list[i].mailbox_list = NULL;
-				}
+				email_engine_free_mailbox_list(&move_list[i].mailbox_list, move_list[i].mailbox_cnt);
 			}
 			FREE(move_list);
 		}

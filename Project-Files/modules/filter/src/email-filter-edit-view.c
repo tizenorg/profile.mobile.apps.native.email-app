@@ -241,7 +241,7 @@ static void _add_new_rule(EmailFilterView *view)
 		if (ret != NOTIFICATION_ERROR_NONE) {
 			debug_log("fail to notification_status_message_post() : %d\n", ret);
 		}
-		email_engine_free_rule(&filter_rule, 1);
+		email_engine_free_rule_list(&filter_rule, 1);
 		evas_object_smart_callback_add(done_btn, "clicked", _done_cb, view);
 		return;
 	}
@@ -257,7 +257,7 @@ static void _add_new_rule(EmailFilterView *view)
 			email_filter_publish_changed_noti(module);
 		}
 	}
-	email_engine_free_rule(&filter_rule, 1);
+	email_engine_free_rule_list(&filter_rule, 1);
 
 	email_module_exit_view(&view->base);
 
@@ -638,6 +638,6 @@ static int _checking_is_dup_rule(EmailFilterView *view, email_rule_t *filter_rul
 		}
 	}
 
-	email_engine_free_rule(&rule_list, count);
+	email_engine_free_rule_list(&rule_list, count);
 	return ret;
 }

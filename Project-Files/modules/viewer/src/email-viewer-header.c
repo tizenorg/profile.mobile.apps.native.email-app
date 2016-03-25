@@ -440,7 +440,6 @@ static void _header_favorite_clicked_cb(void *data, Evas_Object *obj, const char
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
 	EmailViewerView *view = (EmailViewerView *)data;
-	int err = EMAIL_ERROR_NONE;
 
 	DELETE_EVAS_OBJECT(view->con_popup);
 
@@ -457,9 +456,7 @@ static void _header_favorite_clicked_cb(void *data, Evas_Object *obj, const char
 	}
 	debug_log("After view->favorite: %d", view->favorite);
 
-	err = email_set_flags_field(view->account_id, &view->mail_id, 1, EMAIL_FLAGS_FLAGGED_FIELD, view->favorite, 1);
-
-	if (err != EMAIL_ERROR_NONE) {
+	if (!email_engine_set_flags_field(view->account_id, &view->mail_id, 1, EMAIL_FLAGS_FLAGGED_FIELD, view->favorite, 1)) {
 		if ((view->favorite == EMAIL_FLAG_NONE) || (view->favorite == EMAIL_FLAG_FLAGED)) {
 			util_create_notify(view, EMAIL_VIEWER_POP_ERROR,
 					EMAIL_VIEWER_STR_FAILED_TO_SET_FAVOURITE, 1,

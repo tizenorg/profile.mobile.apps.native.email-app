@@ -77,17 +77,10 @@ Eina_Bool viewer_free_viewer_data(void *data)
 		view->email_handle = 0;
 	}
 
-	debug_log("free mail_info");
-	if (view->mail_info) {
-		email_free_mail_data(&(view->mail_info), 1);
-		view->mail_info = NULL;
-	}
+	email_engine_free_mail_data_list(&view->mail_info, 1);
 
-	if (view->attachment_info && view->attachment_count > 0) {
-		email_free_attachment_data(&(view->attachment_info), view->attachment_count);
-		view->attachment_info = NULL;
-		view->attachment_count = 0;
-	}
+	email_engine_free_attachment_data_list(&view->attachment_info, view->attachment_count);
+	view->attachment_count = 0;
 
 	view->eml_file_path = NULL;
 	FREE(view->file_id);

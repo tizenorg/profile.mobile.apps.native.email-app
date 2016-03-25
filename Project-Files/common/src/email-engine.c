@@ -290,9 +290,15 @@ EMAIL_API gboolean email_engine_free_account_list(email_account_t **_account_lis
 	debug_enter();
 	RETURN_VAL_IF_FAIL(_account_list != NULL, FALSE);
 	RETURN_VAL_IF_FAIL(count > 0, FALSE);
+
+	if (!*_account_list) {
+		return TRUE;
+	}
+
 	int err = 0;
 
 	err = email_free_account(_account_list, count);
+	*_account_list = NULL;
 	if (err != EMAIL_ERROR_NONE) {
 		debug_critical("Fail to free account list Err(%d)", err);
 		return FALSE;
@@ -1423,9 +1429,13 @@ EMAIL_API gboolean email_engine_set_account_info(gint account_id, email_account_
 EMAIL_API void email_engine_free_account_info(email_account_info_t **account_info)
 {
 	debug_enter();
-	RETURN_IF_FAIL(*account_info != NULL);
+	RETURN_IF_FAIL(account_info != NULL);
 
-	email_account_info_t *info = (*account_info);
+	if (!*account_info) {
+		return;
+	}
+
+	email_account_info_t *info = *account_info;
 
 	if (STR_VALID(info->account_name)) {
 		free(info->account_name);
@@ -1468,7 +1478,7 @@ EMAIL_API void email_engine_free_account_info(email_account_info_t **account_inf
 	}
 
 	free(info);
-	info = NULL;
+	*account_info = NULL;
 }
 
 EMAIL_API GList *email_engine_get_ca_mailbox_list_using_glist(int account_id)
@@ -1555,11 +1565,17 @@ EMAIL_API void email_engine_free_ca_mailbox_list_using_glist(GList **mailbox_lis
 EMAIL_API int email_engine_get_mailbox_list(int account_id, email_mailbox_t **mailbox_list)
 {
 	debug_enter();
+	retvm_if(!mailbox_list, 0, "mailbox_list is NULL");
+
 	int count = 0;
 
-	if (email_get_mailbox_list(account_id, EMAIL_MAILBOX_ALL, mailbox_list, &count) != EMAIL_ERROR_NONE) {
-		debug_critical("email_get_mailbox_list return error");
-		return -1;
+	*mailbox_list = NULL;
+
+	int err = email_get_mailbox_list(account_id, EMAIL_MAILBOX_ALL, mailbox_list, &count);
+	if ((err != EMAIL_ERROR_NONE) || (*mailbox_list && (count <= 0))) {
+		*mailbox_list = NULL;
+		debug_critical("email_get_mailbox_list return error: %d", err);
+		return 0;
 	}
 
 	return count;
@@ -1568,10 +1584,16 @@ EMAIL_API int email_engine_get_mailbox_list(int account_id, email_mailbox_t **ma
 EMAIL_API int email_engine_get_mailbox_list_with_mail_count(int account_id, email_mailbox_t **mailbox_list)
 {
 	debug_enter();
+	retvm_if(!mailbox_list, 0, "mailbox_list is NULL");
+
 	int count = 0;
 
-	if (email_get_mailbox_list_ex(account_id, EMAIL_MAILBOX_ALL, 1, mailbox_list, &count) != EMAIL_ERROR_NONE) {
-		debug_critical("email_get_mailbox_list_ex return error");
+	*mailbox_list = NULL;
+
+	int err = email_get_mailbox_list_ex(account_id, EMAIL_MAILBOX_ALL, 1, mailbox_list, &count);
+	if ((err != EMAIL_ERROR_NONE) || (*mailbox_list && (count <= 0))) {
+		*mailbox_list = NULL;
+		debug_critical("email_get_mailbox_list_ex return error: %d", err);
 		return 0;
 	}
 
@@ -1581,10 +1603,16 @@ EMAIL_API int email_engine_get_mailbox_list_with_mail_count(int account_id, emai
 EMAIL_API void email_engine_free_mailbox_list(email_mailbox_t **mailbox_list, int count)
 {
 	debug_enter();
+	retm_if(!mailbox_list, "mailbox_list is NULL");
 
-	if (email_free_mailbox(mailbox_list, count) != EMAIL_ERROR_NONE) {
-		debug_critical("email_free_mailbox return error");
+	if (*mailbox_list) {
+		int err = email_free_mailbox(mailbox_list, count);
+		if (err != EMAIL_ERROR_NONE) {
+			debug_critical("email_free_mailbox return error: %d", err);
+		}
 	}
+
+	*mailbox_list = NULL;
 }
 
 EMAIL_API int email_engine_get_max_account_id(void)
@@ -1638,12 +1666,15 @@ EMAIL_API int email_engine_get_count_account(void)
 EMAIL_API gboolean email_engine_get_mailbox_by_mailbox_type(int account_id, email_mailbox_type_e mailbox_type, email_mailbox_t **mailbox)
 {
 	debug_enter();
+	retvm_if(!mailbox, FALSE, "mailbox is NULL");
+
+	*mailbox = NULL;
 
 	int err = email_get_mailbox_by_mailbox_type(account_id, mailbox_type, mailbox);
-	if (err != EMAIL_ERROR_NONE || !mailbox) {
+	if ((err != EMAIL_ERROR_NONE) || !*mailbox) {
+		*mailbox = NULL;
 		debug_error("email_get_mailbox_by_mailbox_type failed: %d; account_id: %d; mailbox_type: %d",
 				err, account_id, mailbox_type);
-		email_engine_free_mailbox_list(mailbox, 1);
 		return FALSE;
 	}
 
@@ -1653,11 +1684,14 @@ EMAIL_API gboolean email_engine_get_mailbox_by_mailbox_type(int account_id, emai
 EMAIL_API gboolean email_engine_get_mailbox_by_mailbox_id(int mailbox_id, email_mailbox_t **mailbox)
 {
 	debug_enter();
+	retvm_if(!mailbox, FALSE, "mailbox is NULL");
+
+	*mailbox = NULL;
 
 	int err = email_get_mailbox_by_mailbox_id(mailbox_id, mailbox);
-	if (err != EMAIL_ERROR_NONE || !mailbox) {
+	if ((err != EMAIL_ERROR_NONE) || !*mailbox) {
+		*mailbox = NULL;
 		debug_error("email_get_mailbox_by_mailbox_id failed: %d; mailbox_id: %d", err, mailbox_id);
-		email_engine_free_mailbox_list(mailbox, 1);
 		return FALSE;
 	}
 
@@ -1718,9 +1752,14 @@ EMAIL_API int email_engine_get_task_information(email_task_information_t **task_
 EMAIL_API gboolean email_engine_get_rule_list(email_rule_t **filtering_set, int *count)
 {
 	debug_enter();
+	retvm_if(!filtering_set, FALSE, "filtering_set is NULL");
+	retvm_if(!count, FALSE, "count is NULL");
+
+	*filtering_set = NULL;
+	*count = 0;
 
 	int err = email_get_rule_list(filtering_set, count);
-	if (err != EMAIL_ERROR_NONE) {
+	if ((err != EMAIL_ERROR_NONE) || (*filtering_set && (*count <= 0))) {
 		debug_error("email_get_rule_list failed: %d", err);
 		*filtering_set = NULL;
 		*count = 0;
@@ -1782,17 +1821,19 @@ EMAIL_API gboolean email_engine_apply_rule(int filter_id)
 	return TRUE;
 }
 
-EMAIL_API gboolean email_engine_free_rule(email_rule_t **filtering_set, int count)
+EMAIL_API void email_engine_free_rule_list(email_rule_t **filtering_set, int count)
 {
 	debug_enter();
+	retm_if(!filtering_set, "filtering_set is NULL");
 
-	int err = email_free_rule(filtering_set, count);
-	if (err != EMAIL_ERROR_NONE) {
-		debug_error("email_free_rule failed: %d", err);
-		return FALSE;
+	if (*filtering_set) {
+		int err = email_free_rule(filtering_set, count);
+		if (err != EMAIL_ERROR_NONE) {
+			debug_error("email_free_rule failed: %d", err);
+		}
 	}
 
-	return TRUE;
+	*filtering_set = NULL;
 }
 
 EMAIL_API gboolean email_engine_get_password_length_of_account(int account_id,
@@ -1814,9 +1855,12 @@ EMAIL_API gboolean email_engine_get_password_length_of_account(int account_id,
 EMAIL_API gboolean email_engine_get_mail_data(int mail_id, email_mail_data_t **mail_data)
 {
 	debug_enter();
+	retvm_if(!mail_data, FALSE, "mail_data is NULL");
+
+	*mail_data = NULL;
 
 	int err = email_get_mail_data(mail_id, mail_data);
-	if (err != EMAIL_ERROR_NONE) {
+	if ((err != EMAIL_ERROR_NONE) || !*mail_data) {
 		*mail_data = NULL;
 		debug_error("email_get_mail_data failed: %d; mail_id: %d", err, mail_id);
 		return FALSE;
@@ -1829,9 +1873,14 @@ EMAIL_API gboolean email_engine_get_attachment_data_list(int mail_id,
 		email_attachment_data_t **attachment_data, int *attachment_count)
 {
 	debug_enter();
+	retvm_if(!attachment_data, FALSE, "attachment_data is NULL");
+	retvm_if(!attachment_count, FALSE, "attachment_count is NULL");
+
+	*attachment_data = NULL;
+	*attachment_count = 0;
 
 	int err = email_get_attachment_data_list(mail_id, attachment_data, attachment_count);
-	if (err != EMAIL_ERROR_NONE) {
+	if ((err != EMAIL_ERROR_NONE) || (*attachment_data && (*attachment_count <= 0))) {
 		*attachment_data = NULL;
 		*attachment_count = 0;
 		debug_error("email_get_attachment_data_list failed: %d; mail_id: %d", err, mail_id);
@@ -1845,14 +1894,26 @@ EMAIL_API gboolean email_engine_parse_mime_file(char *eml_file_path, email_mail_
 		email_attachment_data_t **attachment_data, int *attachment_count)
 {
 	debug_enter();
+	retvm_if(!mail_data, FALSE, "mail_data is NULL");
+	retvm_if(!attachment_data, FALSE, "attachment_data is NULL");
+	retvm_if(!attachment_count, FALSE, "attachment_count is NULL");
+
+	*mail_data = NULL;
+	*attachment_data = NULL;
+	*attachment_count = 0;
 
 	int err = email_parse_mime_file(eml_file_path, mail_data, attachment_data, attachment_count);
-	if (err != EMAIL_ERROR_NONE) {
+	if ((err != EMAIL_ERROR_NONE) || !*mail_data || (*attachment_data && (*attachment_count <= 0))) {
 		*mail_data = NULL;
 		*attachment_data = NULL;
 		*attachment_count = 0;
 		debug_error("email_parse_mime_file failed: %d; eml_file_path: %s", err, eml_file_path);
 		return FALSE;
+	}
+
+	if (*attachment_count <= 0) {
+		debug_warning("attachment_count <= 0");
+		*attachment_count = 0;
 	}
 
 	return TRUE;
@@ -1861,22 +1922,32 @@ EMAIL_API gboolean email_engine_parse_mime_file(char *eml_file_path, email_mail_
 EMAIL_API void email_engine_free_mail_data_list(email_mail_data_t** mail_list, int count)
 {
 	debug_enter();
+	retm_if(!mail_list, "mail_list is NULL");
 
-	int err = email_free_mail_data(mail_list, count);
-	if (err != EMAIL_ERROR_NONE) {
-		debug_error("email_free_mail_data_list failed: %d");
+	if (*mail_list) {
+		int err = email_free_mail_data(mail_list, count);
+		if (err != EMAIL_ERROR_NONE) {
+			debug_error("email_free_mail_data_list failed: %d");
+		}
 	}
+
+	*mail_list = NULL;
 }
 
 EMAIL_API void email_engine_free_attachment_data_list(
 		email_attachment_data_t **attachment_data_list, int attachment_count)
 {
 	debug_enter();
+	retm_if(!attachment_data_list, "attachment_data_list is NULL");
 
-	int err = email_free_attachment_data(attachment_data_list, attachment_count);
-	if (err != EMAIL_ERROR_NONE) {
-		debug_error("email_free_attachment_data failed: %d");
+	if (*attachment_data_list) {
+		int err = email_free_attachment_data(attachment_data_list, attachment_count);
+		if (err != EMAIL_ERROR_NONE) {
+			debug_error("email_free_attachment_data failed: %d");
+		}
 	}
+
+	*attachment_data_list = NULL;
 }
 
 EMAIL_API int email_engine_add_mail(email_mail_data_t *mail_data, email_attachment_data_t *attachment_data_list,
@@ -1914,6 +1985,19 @@ EMAIL_API gboolean email_engine_send_mail_with_downloading_attachment_of_origina
 	if (err != EMAIL_ERROR_NONE) {
 		*handle = 0;
 		debug_error("email_send_mail_with_downloading_attachment_of_original_mail failed: %d; mail_id: %d", err, mail_id);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_cancel_sending_mail(int mail_id)
+{
+	debug_enter();
+
+	int err = email_cancel_sending_mail(mail_id);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_cancel_sending_mail failed: %d; mail_id: %d", err, mail_id);
 		return FALSE;
 	}
 

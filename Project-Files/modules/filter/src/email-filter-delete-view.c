@@ -184,9 +184,7 @@ static void _update_list(EmailFilterView *view)
 		DELETE_EVAS_OBJECT(view->content_layout);
 	}
 
-	if (view->filter_rule_list) {
-		email_engine_free_rule(&view->filter_rule_list, view->filter_rule_count);
-	}
+	email_engine_free_rule_list(&view->filter_rule_list, view->filter_rule_count);
 	ret = _get_filter_rule_list(view, &view->filter_rule_list, &view->filter_rule_count);
 
 	if (ret < 0)
@@ -223,9 +221,7 @@ static void _destroy(email_view_t *self)
 		g_slist_free(view->list_items);
 		view->list_items = NULL;
 	}
-	if (view->filter_rule_list) {
-		email_engine_free_rule(&view->filter_rule_list, view->filter_rule_count);
-	}
+	email_engine_free_rule_list(&view->filter_rule_list, view->filter_rule_count);
 
 	if (view->content_layout) {
 		elm_layout_content_unset(view->base.content, "elm.swallow.content");

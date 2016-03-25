@@ -2585,8 +2585,7 @@ EMAIL_API Evas_Object *email_util_create_password_changed_popup(
 		if (account_info && account_info->email_address) {
 			elm_object_part_text_set(layout, "elm.text", account_info->email_address);
 		}
-		if (account_info)
-			email_engine_free_account_info(&account_info);
+		email_engine_free_account_info(&account_info);
 	}
 	email_common_util_editfield_create(pdata->popup, EF_PASSWORD, &pdata->editfield);
 	elm_entry_input_panel_return_key_disabled_set(pdata->editfield.entry, EINA_TRUE);

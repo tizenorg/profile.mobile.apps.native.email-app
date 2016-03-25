@@ -795,33 +795,19 @@ static void _composer_destroy_email_info(EmailComposerView *view)
 	}
 
 	if (view->org_mail_info) {
-		if (view->org_mail_info->attachment_list) {
-			email_engine_free_attachment_data_list(&view->org_mail_info->attachment_list, view->org_mail_info->total_attachment_count);
-			view->org_mail_info->attachment_list = NULL;
-		}
+		email_engine_free_attachment_data_list(&view->org_mail_info->attachment_list, view->org_mail_info->total_attachment_count);
 
-		if (view->org_mail_info->mail_data) {
-			email_engine_free_mail_data_list(&view->org_mail_info->mail_data, 1);
-			view->org_mail_info->mail_data = NULL;
-		}
+		email_engine_free_mail_data_list(&view->org_mail_info->mail_data, 1);
 
-		free(view->org_mail_info);
-		view->org_mail_info = NULL;
+		FREE(view->org_mail_info);
 	}
 
 	if (view->new_mail_info) {
-		if (view->new_mail_info->attachment_list) {
-			email_engine_free_attachment_data_list(&view->new_mail_info->attachment_list, view->new_mail_info->total_attachment_count);
-			view->new_mail_info->attachment_list = NULL;
-		}
+		email_engine_free_attachment_data_list(&view->new_mail_info->attachment_list, view->new_mail_info->total_attachment_count);
 
-		if (view->new_mail_info->mail_data) {
-			email_engine_free_mail_data_list(&view->new_mail_info->mail_data, 1);
-			view->new_mail_info->mail_data = NULL;
-		}
+		email_engine_free_mail_data_list(&view->new_mail_info->mail_data, 1);
 
-		free(view->new_mail_info);
-		view->new_mail_info = NULL;
+		FREE(view->new_mail_info);
 	}
 
 	g_free(view->original_charset);
