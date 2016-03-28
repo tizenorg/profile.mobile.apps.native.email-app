@@ -95,7 +95,6 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 		int thread_id = 0;
 		int mailid = 0;
 		int mailbox_id = 0;
-		int err = 0;
 		email_sort_type_e sort_type = view->sort_type;
 		email_mailbox_type_e mailbox_type = EMAIL_MAILBOX_TYPE_NONE;
 		email_mailbox_t *mailbox = NULL;
@@ -132,11 +131,8 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 				mailbox_composer_module_destroy(view, view->composer);
 			}
 
-			err = email_get_account(account_id, EMAIL_ACC_GET_OPT_DEFAULT, &account);
-			if (err != EMAIL_ERROR_NONE || !account) {
-				if (account)
-					email_free_account(&account, 1);
-				debug_error("email_get_account : account_id(%d) failed", account_id);
+			if (!email_engine_get_account_data(account_id, EMAIL_ACC_GET_OPT_DEFAULT, &account)) {
+				debug_error("email_engine_get_account_data : account_id(%d) failed", account_id);
 				break;
 			}
 
@@ -154,15 +150,14 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 
 			view->account_name = g_strdup(account->user_email_address);
 
-			email_free_account(&account, 1);
+			email_engine_free_account_list(&account, 1);
 
-			err = email_get_mailbox_by_mailbox_type(view->account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox);
-			if (err == EMAIL_ERROR_NONE && mailbox) {
+			if (email_engine_get_mailbox_by_mailbox_type(view->account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox)) {
 				view->mailbox_id = mailbox->mailbox_id;
-				email_free_mailbox(&mailbox, 1);
+				email_engine_free_mailbox_list(&mailbox, 1);
 			} else {
 				view->mailbox_id = 0;
-				debug_warning("email_get_mailbox_by_mailbox_type : account_id(%d) type(INBOX) - err(%d) or mailbox is NULL(%p)", view->account_id, err, mailbox);
+				debug_warning("email_engine_get_mailbox_by_mailbox_type : account_id(%d) type(INBOX)", view->account_id);
 			}
 
 			if (view->b_editmode) {
@@ -209,22 +204,19 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 
 			if (view->account_id == 0 || view->account_id == account_id) {
 				if (view->account_count == 1) {
-					int err = 0;
 					email_mailbox_t *mailbox = NULL;
 					int default_account_id = 0;
 
 					if (email_engine_get_default_account(&default_account_id)) {
 						view->account_id = default_account_id;
 
-						err = email_get_mailbox_by_mailbox_type(view->account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox);
-						if (err == EMAIL_ERROR_NONE && mailbox) {
+						if (email_engine_get_mailbox_by_mailbox_type(view->account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox)) {
 							view->mailbox_id = mailbox->mailbox_id;
+							email_engine_free_mailbox_list(&mailbox, 1);
 						} else {
 							view->mailbox_id = 0;
-							debug_warning("email_get_mailbox_by_mailbox_type : account_id(%d) type(INBOX) - err(%d) or mailbox is NULL(%p)", view->account_id, err, mailbox);
+							debug_warning("email_engine_get_mailbox_by_mailbox_type : account_id(%d) type(INBOX)", view->account_id);
 						}
-						if (mailbox)
-							email_free_mailbox(&mailbox, 1);
 
 						view->mode = EMAIL_MAILBOX_MODE_MAILBOX;
 						view->mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
@@ -284,7 +276,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 				&& view->mode == EMAIL_MAILBOX_MODE_MAILBOX
 				&& view->account_id != account_id) {
 				debug_log("update notification bar(%d)", account_id);
-				email_update_notification_bar(account_id, 0, 0, 0);
+				email_engine_update_notification_bar(account_id);
 			}
 			break;
 
@@ -598,8 +590,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 							email_address_info_t *addrs_info = NULL;
 
 							FREE(ld->recipient);
-							email_get_address_info_list(mailid, &addrs_info_list);
-							if (addrs_info_list) {
+							if (email_engine_get_address_info_list(mailid, &addrs_info_list)) {
 								if (addrs_info_list->to) {
 									addrs_info = g_list_nth_data(addrs_info_list->to, 0);
 								}
@@ -615,7 +606,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 								} else {
 									ld->recipient = STRNDUP(email_get_email_string("IDS_EMAIL_SBODY_NO_RECIPIENTS_M_NOUN"), RECIPIENT_LEN - 1);
 								}
-								email_free_address_info_list(&addrs_info_list);
+								email_engine_free_address_info_list(&addrs_info_list);
 							} else {
 								ld->recipient = STRNDUP(email_get_email_string("IDS_EMAIL_SBODY_NO_RECIPIENTS_M_NOUN"), RECIPIENT_LEN - 1);
 							}
@@ -956,8 +947,8 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 			_parse_set_rule_buf(data3, &mail_list);
 			debug_log("update_type : %d, value : %d, size of mail_list : %d", update_type, value, g_list_length(mail_list));
 
-			if (email_get_rule_list(&rule_list, &count) < 0) {
-				debug_log("email_get_rule_list failed");
+			if (!email_engine_get_rule_list(&rule_list, &count)) {
+				debug_log("email_engine_get_rule_list failed");
 			} else {
 				G_LIST_FOREACH(mail_list, cur, idx) {
 					debug_log("idx: [%d]", *idx);
@@ -981,7 +972,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 						MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
 					}
 				}
-				email_free_rule(&rule_list, count);
+				email_engine_free_rule_list(&rule_list, count);
 			}
 
 			if (mail_list) {
@@ -1091,12 +1082,10 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 					if (subtype == NOTI_DOWNLOAD_FAIL && data4 == EMAIL_ERROR_AUTHENTICATE) {
 						email_authentication_method_t auth_method = EMAIL_AUTHENTICATION_METHOD_NO_AUTH;
 						email_account_t *account = NULL;
-						int ret = email_get_account(data1, EMAIL_ACC_GET_OPT_DEFAULT, &account);
-						if (ret == EMAIL_ERROR_NONE && account) {
+						if (email_engine_get_account_data(data1, EMAIL_ACC_GET_OPT_DEFAULT, &account)) {
 							auth_method = account->incoming_server_authentication_method;
+							email_engine_free_account_list(&account, 1);
 						}
-						if (account)
-							email_free_account(&account, 1);
 
 						if (auth_method == EMAIL_AUTHENTICATION_METHOD_XOAUTH2) {
 							mailbox_create_error_popup(data4, data1, view);

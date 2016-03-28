@@ -433,7 +433,6 @@ static int _mailbox_initialize(EmailMailboxView *view)
 		view->mode = EMAIL_MAILBOX_MODE_ALL;
 		view->mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
 	} else {
-		int err = 0;
 		email_mailbox_t *mailbox = NULL;
 
 		view->mode = EMAIL_MAILBOX_MODE_MAILBOX;
@@ -443,13 +442,12 @@ static int _mailbox_initialize(EmailMailboxView *view)
 		}
 
 		if (view->mailbox_id == 0) {
-			err = email_get_mailbox_by_mailbox_type(view->account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox);
-			if (err == EMAIL_ERROR_NONE && mailbox) {
+			if (email_engine_get_mailbox_by_mailbox_type(view->account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox)) {
 				view->mailbox_id = mailbox->mailbox_id;
-				email_free_mailbox(&mailbox, 1);
+				email_engine_free_mailbox_list(&mailbox, 1);
 			} else {
 				view->mailbox_id = 0;
-				debug_warning("email_get_mailbox_by_mailbox_type : account_id(%d) type(INBOX) - err(%d) or mailbox is NULL(%p)", view->account_id, err, mailbox);
+				debug_warning("email_engine_get_mailbox_by_mailbox_type : account_id(%d) type(INBOX)", view->account_id);
 			}
 		}
 	}
@@ -882,7 +880,6 @@ static int _mailbox_update_mailbox(EmailMailboxView *view, int account_id, int m
 		view->mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
 		view->only_local = FALSE;
 	} else {
-		int err = 0;
 		email_mailbox_t *mailbox = NULL;
 
 		view->mode = EMAIL_MAILBOX_MODE_MAILBOX;
@@ -890,12 +887,11 @@ static int _mailbox_update_mailbox(EmailMailboxView *view, int account_id, int m
 		view->mailbox_id = mailbox_id;
 
 		if (mailbox_id == 0) {
-			err = email_get_mailbox_by_mailbox_type(view->account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox);
-			if ((err == EMAIL_ERROR_NONE) && mailbox) {
+			if (email_engine_get_mailbox_by_mailbox_type(view->account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox)) {
 				view->mailbox_id = mailbox->mailbox_id;
-				email_free_mailbox(&mailbox, 1);
+				email_engine_free_mailbox_list(&mailbox, 1);
 			} else {
-				debug_warning("email_get_mailbox_by_mailbox_type : account_id(%d) type(INBOX) - err(%d) or mailbox is NULL(%p)", view->account_id, err, mailbox);
+				debug_warning("email_engine_get_mailbox_by_mailbox_type : account_id(%d) type(INBOX)", view->account_id);
 				view->mailbox_id = 0;
 			}
 		}
@@ -1213,15 +1209,13 @@ static void _mailbox_on_back_key(email_view_t *self)
 			mailbox_sync_cancel_all(view);
 
 			if (view->mode == EMAIL_MAILBOX_MODE_MAILBOX) {
-				int ret = 0;
 				email_mailbox_t *mailbox = NULL;
-				ret = email_get_mailbox_by_mailbox_type(view->account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox);
-				if (ret == EMAIL_ERROR_NONE && mailbox) {
+				if (email_engine_get_mailbox_by_mailbox_type(view->account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox)) {
 					view->mailbox_id = mailbox->mailbox_id;
 					view->mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
-					email_free_mailbox(&mailbox, 1);
+					email_engine_free_mailbox_list(&mailbox, 1);
 				} else {
-					debug_log("email_get_mailbox_by_mailbox_type failed : %d", ret);
+					debug_warning("email_engine_get_mailbox_by_mailbox_type failed");
 					view->mailbox_id = 0;
 					view->mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
 				}
@@ -1232,18 +1226,16 @@ static void _mailbox_on_back_key(email_view_t *self)
 				debug_log("account_count:%d", account_count);
 
 				if (account_count == 1 && account_list) {
-					int ret = 0;
 					email_mailbox_t *mailbox = NULL;
 					view->account_id = account_list[0].account_id;
-					ret = email_get_mailbox_by_mailbox_type(view->account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox);
-					if (ret == EMAIL_ERROR_NONE && mailbox) {
+					if (email_engine_get_mailbox_by_mailbox_type(view->account_id, EMAIL_MAILBOX_TYPE_INBOX, &mailbox)) {
 						debug_log("account_id:%d, account_count:%d, mailbox_id:%d", view->account_id, account_count, mailbox->mailbox_id);
 						view->mailbox_id = mailbox->mailbox_id;
 						view->mode = EMAIL_MAILBOX_MODE_MAILBOX;
 						view->mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
-						email_free_mailbox(&mailbox, 1);
+						email_engine_free_mailbox_list(&mailbox, 1);
 					} else {
-						debug_log("email_get_mailbox_by_mailbox_type failed : %d", ret);
+						debug_warning("email_engine_get_mailbox_by_mailbox_type failed");
 						view->mailbox_id = 0;
 						view->mode = EMAIL_MAILBOX_MODE_MAILBOX;
 						view->mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
@@ -1454,9 +1446,9 @@ void mailbox_update_notifications_status(EmailMailboxView *view)
 		(view->mode != EMAIL_MAILBOX_MODE_PRIORITY_SENDER)) {
 		email_set_is_inbox_active(true);
 		if (view->mode == EMAIL_MAILBOX_MODE_MAILBOX) {
-			email_clear_notification_bar(view->account_id);
+			email_engine_clear_notification_bar(view->account_id);
 		} else {
-			email_clear_notification_bar(ALL_ACCOUNT);
+			email_engine_clear_notification_bar(ALL_ACCOUNT);
 		}
 	} else {
 		email_set_is_inbox_active(false);

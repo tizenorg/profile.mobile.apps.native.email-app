@@ -19,7 +19,6 @@
 #define _EMAIL_ENGINE_H_
 
 #include <glib.h>
-#include <email-api.h>
 #include "email-common-types.h"
 
 G_BEGIN_DECLS
@@ -158,14 +157,14 @@ EMAIL_API gboolean email_engine_set_default_account(gint account_id);
 EMAIL_API email_mail_list_item_t *email_engine_get_mail_by_mailid(int mail_id);
 EMAIL_API gchar *email_engine_get_mailbox_service_name(const gchar *folder_name);	/* g_free(). */
 
-/* See EmailMailboxListInfo. */
 EMAIL_API email_mailbox_list_info_t *email_engine_get_mailbox_info(gint account_id, const gchar *folder_name);
 EMAIL_API void email_engine_free_mailbox_info(email_mailbox_list_info_t **info);
 
-/* See EmailMailboxInfo. */
-EMAIL_API void email_engine_free_mail_list(GList **list);
-EMAIL_API guint email_engine_get_mail_list(int account_id, int mailbox_id, email_mail_list_item_t **mail_list, int *mail_count);
-EMAIL_API guint email_engine_get_mail_list_count(gint account_id, const gchar *folder_name);
+EMAIL_API gboolean email_engine_get_mail_list(email_list_filter_t *filter_list, int filter_count,
+		email_list_sorting_rule_t *sorting_rule_list, int sorting_rule_count,
+		int start_index, int limit_count, email_mail_list_item_t **mail_list, int *mail_count);
+EMAIL_API gboolean email_engine_get_mail_count(email_list_filter_t *filter_list, int filter_count,
+		int *total_mail_count, int *unseen_mail_count);
 
 EMAIL_API gboolean email_engine_sync_folder(gint account_id, int mailbox_id, int *handle);
 EMAIL_API gboolean email_engine_sync_all_folder(gint account_id, int *handle1, int *handle2);
@@ -179,12 +178,12 @@ EMAIL_API int email_engine_check_body_download(int mail_id);
 EMAIL_API gboolean email_engine_body_download(gint account_id, gint mail_id, gboolean remove_rights, int *handle);
 EMAIL_API gboolean email_engine_attachment_download(gint mail_id, gint index, int *handle);
 
-EMAIL_API gboolean email_engine_delete_mail(gint account_id, int mailbox_id, gint mail_id, int sync);
-EMAIL_API gboolean email_engine_delete_mail_list(gint account_id, int mailbox_id, GList *id_list, int sync);
-EMAIL_API gboolean email_engine_delete_all_mail(gint account_id, int mailbox_id, int sync);
+EMAIL_API gboolean email_engine_delete_mail(int mailbox_id, gint mail_id, int sync);
+EMAIL_API gboolean email_engine_delete_mail_list(int mailbox_id, GList *id_list, int sync);
+EMAIL_API gboolean email_engine_delete_all_mail(int mailbox_id, int sync);
 EMAIL_API gboolean email_engine_move_mail(int mailbox_id, gint mail_id);
 EMAIL_API int email_engine_move_mail_list(int dst_mailbox_id, GList *id_list, int src_mailbox_id);
-EMAIL_API gboolean email_engine_move_all_mail(gint account_id, int old_mailbox_id, int new_mailbox_id);
+EMAIL_API gboolean email_engine_move_all_mail(int old_mailbox_id, int new_mailbox_id);
 EMAIL_API gint email_engine_get_unread_mail_count(gint account_id, const gchar *folder_name);
 
 EMAIL_API gchar *email_engine_get_attachment_path(gint attach_id);	/* g_free(). */
@@ -215,6 +214,7 @@ EMAIL_API int email_engine_add_mailbox(email_mailbox_t *new_mailbox, int on_serv
 EMAIL_API int email_engine_get_task_information(email_task_information_t **task_information, int *task_information_count);
 
 EMAIL_API gboolean email_engine_get_rule_list(email_rule_t **filtering_set, int *count);
+EMAIL_API gboolean email_engine_get_rule(int filter_id, email_rule_t** filtering_set);
 EMAIL_API gboolean email_engine_add_rule(email_rule_t *filtering_set);
 EMAIL_API gboolean email_engine_update_rule(int filter_id, email_rule_t *new_set);
 EMAIL_API gboolean email_engine_delete_rule(int filter_id);
@@ -243,6 +243,21 @@ EMAIL_API gboolean email_engine_set_flags_field(int account_id, int *mail_ids, i
 		email_flags_field_type field_type, int value, int onserver);
 EMAIL_API gboolean email_engine_update_mail_attribute(int account_id, int *mail_ids, int num,
 		email_mail_attribute_type attribute_type, email_mail_attribute_value_t value);
+
+EMAIL_API void email_engine_free_list_filter(email_list_filter_t **filter_list, int count);
+
+EMAIL_API gboolean email_engine_get_address_info_list(int mail_id, email_address_info_list_t** address_info_list);
+EMAIL_API void email_engine_free_address_info_list(email_address_info_list_t** address_info_list);
+
+EMAIL_API gboolean email_engine_set_mail_slot_size(int account_id, int mailbox_id, int new_slot_size);
+
+EMAIL_API gboolean email_engine_update_notification_bar(int account_id);
+EMAIL_API gboolean email_engine_clear_notification_bar(int account_id);
+
+EMAIL_API gboolean email_engine_open_db(void);
+EMAIL_API gboolean email_engine_close_db(void);
+
+EMAIL_API gboolean email_engine_cancel_job(int account_id, int handle, email_cancelation_type cancel_type);
 
 G_END_DECLS
 #endif	/* _EMAIL_ENGINE_H_ */

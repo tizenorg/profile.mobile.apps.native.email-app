@@ -540,7 +540,7 @@ void account_sync_cancel_all(EmailAccountView *view)
 							&& cur_task_info[i].type != EMAIL_EVENT_DELETE_MAIL
 							&& cur_task_info[i].type != EMAIL_EVENT_DELETE_MAIL_ALL
 							&& cur_task_info[i].type != EMAIL_EVENT_SEND_MAIL) {
-						email_cancel_job(cur_task_info[i].account_id, cur_task_info[i].handle, EMAIL_CANCELED_BY_USER);
+						email_engine_cancel_job(cur_task_info[i].account_id, cur_task_info[i].handle, EMAIL_CANCELED_BY_USER);
 					}
 				}
 

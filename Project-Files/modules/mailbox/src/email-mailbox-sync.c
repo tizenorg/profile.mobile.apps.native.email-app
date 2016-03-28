@@ -53,31 +53,27 @@ static bool _mailbox_sync_single_mailbox(EmailMailboxView *view)
 {
 	debug_enter();
 
-	int err = 0;
 	int handle = 0;
 	int account_id = view->account_id;
 	int mailbox_id = view->mailbox_id;
 	email_account_t *account = NULL;
 	char buf[MAX_STR_LEN] = {0};
 
-	err = email_get_account(account_id, (EMAIL_ACC_GET_OPT_DEFAULT | EMAIL_ACC_GET_OPT_OPTIONS), &account);
-	if (err == EMAIL_ERROR_NONE && account) {
-		if (account->sync_disabled == true) {
+	if (email_engine_get_account_data(account_id, (EMAIL_ACC_GET_OPT_DEFAULT | EMAIL_ACC_GET_OPT_OPTIONS), &account)) {
+		if (account->sync_disabled) {
 			debug_log("sync of this account(%d) was disabled.", account_id);
 			snprintf(buf, sizeof(buf), email_get_email_string("IDS_EMAIL_TPOP_SYNC_EMAIL_DISABLED_FOR_PS"), account->user_email_address);
 			int ret = notification_status_message_post(buf);
 			if (ret != NOTIFICATION_ERROR_NONE) {
 				debug_log("notification_status_message_post() failed: %d", ret);
 			}
-			email_free_account(&account, 1);
+			email_engine_free_account_list(&account, 1);
 			return false;
 		}
+		email_engine_free_account_list(&account, 1);
 	} else {
-		debug_warning("email_get_account failed(%d)", err);
+		debug_warning("email_engine_get_account_data failed");
 	}
-
-	if (account)
-		email_free_account(&account, 1);
 
 	if (view->account_type == EMAIL_SERVER_TYPE_IMAP4) {
 		debug_warning("syncing IMAP4 mailbox");
@@ -110,14 +106,12 @@ static bool _mailbox_sync_combined_mailbox(EmailMailboxView *view)
 	else
 		mailbox_type = view->mailbox_type;
 
-	int e = email_get_account_list(&account_list, &account_cnt);
-	if (e != EMAIL_ERROR_NONE) {
-		debug_warning("email_get_account_list - err(%d)", e);
-		email_free_account(&account_list, account_cnt);
+	if (!email_engine_get_account_list(&account_cnt, &account_list)) {
+		debug_warning("email_engine_get_account_list fail");
 		return false;
 	}
 
-	if (account_cnt > 0 && account_list) {
+	if (account_cnt > 0) {
 		int handle = 0;
 		int err = 0;
 
@@ -138,7 +132,7 @@ static bool _mailbox_sync_combined_mailbox(EmailMailboxView *view)
 				err = email_engine_sync_folder(account_list[i].account_id, GET_MAILBOX_ID(account_list[i].account_id, mailbox_type), &handle);
 				if (err == false) {
 					debug_warning("fail to sync header - account_id(%d)", account_list[i].account_id);
-					email_free_account(&account_list, account_cnt);
+					email_engine_free_account_list(&account_list, account_cnt);
 					return false;
 				} else {
 					debug_log("account_id(%d), handle(%d)", account_list[i].account_id, handle);
@@ -149,7 +143,7 @@ static bool _mailbox_sync_combined_mailbox(EmailMailboxView *view)
 		}
 	}
 
-	email_free_account(&account_list, account_cnt);
+	email_engine_free_account_list(&account_list, account_cnt);
 
 	return ret;
 }
@@ -202,7 +196,6 @@ bool mailbox_sync_more_messages(EmailMailboxView *view)
 	debug_enter();
 
 	int new_slot_size = 0;
-	int err = 0;
 	bool ret = false;
 	int handle = 0;
 
@@ -211,10 +204,8 @@ bool mailbox_sync_more_messages(EmailMailboxView *view)
 		email_account_t *account_list = NULL;
 		int account_count = 0;
 		int i = 0;
-		err = email_get_account_list(&account_list, &account_count);
-		if (err != EMAIL_ERROR_NONE) {
-			debug_log("email_get_account() failed(%d)", err);
-			email_free_account(&account_list, account_count);
+		if (!email_engine_get_account_list(&account_count, &account_list)) {
+			debug_log("email_engine_get_account_list() failed");
 			return false;
 		}
 
@@ -223,29 +214,27 @@ bool mailbox_sync_more_messages(EmailMailboxView *view)
 				&& (account_list[i].incoming_server_type == EMAIL_SERVER_TYPE_POP3 || account_list[i].incoming_server_type == EMAIL_SERVER_TYPE_IMAP4)) {
 				int mailbox_id = 0;
 				email_mailbox_t *mailbox = NULL;
-				err = email_get_mailbox_by_mailbox_type(account_list[i].account_id, view->mailbox_type, &mailbox);
-				if (err == EMAIL_ERROR_NONE && mailbox) {
+				if (email_engine_get_mailbox_by_mailbox_type(account_list[i].account_id, view->mailbox_type, &mailbox)) {
 					new_slot_size = mailbox->mail_slot_size + 25;
 					mailbox_id = mailbox->mailbox_id;
-					email_free_mailbox(&mailbox, 1);
+					email_engine_free_mailbox_list(&mailbox, 1);
 				} else {
 					debug_error("mailbox is NULL");
-					email_free_account(&account_list, account_count);
+					email_engine_free_account_list(&account_list, account_count);
 					return false;
 				}
 
-				err = email_set_mail_slot_size(account_list[i].account_id, mailbox_id, new_slot_size);
 				debug_log("account_id: [%d], mailbox_id: [%d], slot_size: [%d]", account_list[i].account_id, mailbox_id, new_slot_size);
-				if (err != EMAIL_ERROR_NONE) {
-					debug_error("email_set_mail_slot_size() failed(%d)", err);
-					email_free_account(&account_list, account_count);
+				if (!email_engine_set_mail_slot_size(account_list[i].account_id, mailbox_id, new_slot_size)) {
+					debug_error("email_engine_set_mail_slot_size() failed");
+					email_engine_free_account_list(&account_list, account_count);
 					return false;
 				}
 
 				ret = email_engine_sync_folder(account_list[i].account_id, mailbox_id, &handle);
 				if (ret == false) {
 					debug_warning("fail to sync header - account_id(%d)", account_list[i].account_id);
-					email_free_account(&account_list, account_count);
+					email_engine_free_account_list(&account_list, account_count);
 					return false;
 				} else {
 					mailbox_req_handle_list_add_handle(handle);
@@ -256,37 +245,29 @@ bool mailbox_sync_more_messages(EmailMailboxView *view)
 			}
 		}
 
-		email_free_account(&account_list, account_count);
+		email_engine_free_account_list(&account_list, account_count);
 	} else if (view->mode == EMAIL_MAILBOX_MODE_MAILBOX) {
 		/* mailbox mode */
 		email_account_t *account = NULL;
-		err = email_get_account(view->account_id, EMAIL_ACC_GET_OPT_OPTIONS, &account);
-		if (err != EMAIL_ERROR_NONE) {
-			debug_log("email_get_account() failed(%d)", err);
-			email_free_account(&account, 1);
+		if (!email_engine_get_account_data(view->account_id, EMAIL_ACC_GET_OPT_OPTIONS, &account)) {
+			debug_log("email_engine_get_account_data() failed");
 			return false;
 		}
-		if (!account) {
-			debug_log("account NULL");
-			email_free_account(&account, 1);
-			return false;
-		}
-		if (account->sync_disabled == true) {
+		bool sync_disabled = account->sync_disabled;
+		email_engine_free_account_list(&account, 1);
+		if (sync_disabled) {
 			debug_log("sync of this account(%d) was disabled.", view->account_id);
-			email_free_account(&account, 1);
 			return false;
 		}
-		email_free_account(&account, 1);
 
 		email_mailbox_t *mailbox = NULL;
-		err = email_get_mailbox_by_mailbox_id(view->mailbox_id, &mailbox);
-		retvm_if(err != EMAIL_ERROR_NONE, false, "email_get_mailbox_by_mailbox_id() failed(%d)", err);
-		retvm_if(!mailbox, false, "mailboxis NULL");
+		retvm_if(!email_engine_get_mailbox_by_mailbox_id(view->mailbox_id, &mailbox),
+				false, "email_engine_get_mailbox_by_mailbox_id() failed");
 		new_slot_size = mailbox->mail_slot_size + 25;
-		email_free_mailbox(&mailbox, 1);
+		email_engine_free_mailbox_list(&mailbox, 1);
 
-		err = email_set_mail_slot_size(view->account_id, view->mailbox_id, new_slot_size);
-		retvm_if(err != EMAIL_ERROR_NONE, false, "email_set_mail_slot_size() failed(%d)", err);
+		retvm_if(!email_engine_set_mail_slot_size(view->account_id, view->mailbox_id, new_slot_size),
+				false, "email_engine_set_mail_slot_size() failed");
 		debug_log("account_id: [%d], mailbox_id: [%d], slot_size: [%d]", view->account_id, view->mailbox_id, new_slot_size);
 
 		ret = email_engine_sync_folder(view->account_id, view->mailbox_id, &handle);
@@ -311,7 +292,7 @@ void mailbox_sync_cancel_all(EmailMailboxView *view)
 
 	gboolean b_default_account_exist = email_engine_get_default_account(&acct_id);
 	if (b_default_account_exist) {
-		email_get_task_information(&cur_task_info, &task_info_cnt);
+		email_engine_get_task_information(&cur_task_info, &task_info_cnt);
 		if (cur_task_info) {
 			for (i = 0; i < task_info_cnt; i++) {
 				debug_log("account_id(%d), handle(%d), type(%d)", cur_task_info[i].account_id, cur_task_info[i].handle, cur_task_info[i].type);
@@ -321,7 +302,7 @@ void mailbox_sync_cancel_all(EmailMailboxView *view)
 					&& cur_task_info[i].type != EMAIL_EVENT_SEND_MAIL
 					&& cur_task_info[i].type != EMAIL_EVENT_SYNC_FLAGS_FIELD_TO_SERVER
 					&& cur_task_info[i].type != EMAIL_EVENT_SYNC_MAIL_FLAG_TO_SERVER) {
-					email_cancel_job(cur_task_info[i].account_id, cur_task_info[i].handle, EMAIL_CANCELED_BY_USER);
+					email_engine_cancel_job(cur_task_info[i].account_id, cur_task_info[i].handle, EMAIL_CANCELED_BY_USER);
 				}
 			}
 

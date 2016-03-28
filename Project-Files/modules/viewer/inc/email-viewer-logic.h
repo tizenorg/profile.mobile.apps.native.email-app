@@ -21,7 +21,6 @@
 #include <Elementary.h>
 #include <glib.h>
 #include <sys/time.h>
-#include <email-api.h>
 #include <email-types.h>
 #include "email-viewer-types.h"
 

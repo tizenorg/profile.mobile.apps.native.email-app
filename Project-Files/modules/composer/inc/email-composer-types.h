@@ -26,7 +26,6 @@
 #include <Edje.h>
 #include <Eina.h>
 #include <gio/gio.h>
-#include <email-api.h>
 #include <app_common.h>
 
 #include "email-module-dev.h"

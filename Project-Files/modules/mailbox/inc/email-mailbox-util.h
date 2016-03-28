@@ -31,13 +31,10 @@
 			int _type = folder_type;\
 			int _folder = 0;\
 			email_mailbox_t *mbox = NULL;\
-			int e = email_get_mailbox_by_mailbox_type(_acct, _type, &mbox);\
-			if( e != EMAIL_ERROR_NONE || !mbox ) {\
-				debug_warning("Error to get mailbox id acct(%d) type(%d) - err(%d) or mbox is NULL(%p)",\
-								_acct, _type, e, mbox);\
+			if (email_engine_get_mailbox_by_mailbox_type(_acct, _type, &mbox)) {\
+				_folder = mbox->mailbox_id;\
+				email_engine_free_mailbox_list(&mbox, 1);\
 			}\
-			else _folder = mbox->mailbox_id;\
-			if(mbox) email_free_mailbox(&mbox, 1);\
 			_folder;\
 		})
 
@@ -47,12 +44,10 @@
 			int _folder = mailbox_id;\
 			email_mailbox_t *mbox = NULL;\
 			int type = EMAIL_MAILBOX_TYPE_NONE;\
-			int e = email_get_mailbox_by_mailbox_id(_folder, &mbox);\
-			if( e != EMAIL_ERROR_NONE || !mbox )\
-				debug_warning("email_get_mailbox_by_mailbox_id folder(%d) - err(%d) or mbox is NULL(%p)",\
-				_folder, e, mbox);\
-			else type = mbox->mailbox_type;\
-			if(mbox) email_free_mailbox(&mbox, 1);\
+			if (email_engine_get_mailbox_by_mailbox_id(_folder, &mbox)) {\
+				type = mbox->mailbox_type;\
+				email_engine_free_mailbox_list(&mbox, 1);\
+			}\
 			type;\
 		})
 
@@ -60,13 +55,10 @@
 		({\
 			email_account_t *email_account = NULL;\
 			int server_type = 0;\
-			int e = email_get_account(account_id, EMAIL_ACC_GET_OPT_DEFAULT, &email_account);\
-			if (e != EMAIL_ERROR_NONE || !email_account) {\
-				debug_warning("email_get_account acct(%d) - err(%d) or acct NULL(%p)",\
-								account_id, e, email_account);\
+			if (email_engine_get_account_data(account_id, EMAIL_ACC_GET_OPT_DEFAULT, &email_account)) {\
+				server_type = email_account->incoming_server_type;\
+				email_engine_free_account_list(&email_account, 1);\
 			}\
-			else server_type = email_account->incoming_server_type;\
-			if(email_account) email_free_account(&email_account, 1);\
 			server_type;\
 		})
 
@@ -74,13 +66,10 @@
 		({\
 			email_account_t *email_account = NULL;\
 			int sync_disabled = 0;\
-			int e = email_get_account(account_id, (EMAIL_ACC_GET_OPT_DEFAULT | EMAIL_ACC_GET_OPT_OPTIONS), &email_account);\
-			if (e != EMAIL_ERROR_NONE || !email_account) {\
-				debug_warning("email_get_account acct(%d) - err(%d) or acct NULL(%p)",\
-								account_id, e, email_account);\
+			if (email_engine_get_account_data(account_id, (EMAIL_ACC_GET_OPT_DEFAULT | EMAIL_ACC_GET_OPT_OPTIONS), &email_account)) {\
+				sync_disabled = email_account->sync_disabled;\
+				email_engine_free_account_list(&email_account, 1);\
 			}\
-			else sync_disabled = email_account->sync_disabled;\
-			if(email_account) email_free_account(&email_account, 1);\
 			sync_disabled;\
 		})
 
@@ -89,12 +78,10 @@
 			int _folder = GET_MAILBOX_ID(account_id, EMAIL_MAILBOX_TYPE_INBOX);\
 			email_mailbox_t *mbox = NULL;\
 			int i_getmore = 0;\
-			int e = email_get_mailbox_by_mailbox_id(_folder, &mbox);\
-			if( e != EMAIL_ERROR_NONE || !mbox )\
-				debug_warning("email_get_mailbox_by_mailbox_id folder(%d) - err(%d) or mbox is NULL(%p)",\
-				_folder, e, mbox);\
-			else i_getmore = (mbox->total_mail_count_on_server-mbox->total_mail_count_on_local);\
-			if(mbox) email_free_mailbox(&mbox, 1);\
+			if (email_engine_get_mailbox_by_mailbox_id(_folder, &mbox)) {\
+				i_getmore = (mbox->total_mail_count_on_server-mbox->total_mail_count_on_local);\
+				email_engine_free_mailbox_list(&mbox, 1);\
+			}\
 			i_getmore;\
 		})
 
@@ -103,12 +90,10 @@
 			int _folder = mailbox_id;\
 			email_mailbox_t *mbox = NULL;\
 			int i_getmore = 0;\
-			int e = email_get_mailbox_by_mailbox_id(_folder, &mbox);\
-			if( e != EMAIL_ERROR_NONE || !mbox )\
-				debug_warning("email_get_mailbox_by_mailbox_id folder(%d) - err(%d) or mbox is NULL(%p)",\
-				_folder, e, mbox);\
-			else i_getmore = (mbox->total_mail_count_on_server-mbox->total_mail_count_on_local);\
-			if(mbox) email_free_mailbox(&mbox, 1);\
+			if (email_engine_get_mailbox_by_mailbox_id(_folder, &mbox)) {\
+				i_getmore = (mbox->total_mail_count_on_server-mbox->total_mail_count_on_local);\
+				email_engine_free_mailbox_list(&mbox, 1);\
+			}\
 			i_getmore;\
 		})
 

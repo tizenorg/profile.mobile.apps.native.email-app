@@ -19,7 +19,6 @@
 
 #include <string.h>
 #include <notification.h>
-#include <email-api.h>
 
 #include "email-engine.h"
 #include "email-utils.h"
@@ -467,7 +466,7 @@ static COMPOSER_ERROR_TYPE_E _add_mail(EmailComposerView *view, email_mailbox_ty
 
 		debug_secure("Original account_id:[%d], mailbox_id:[%d], mail_id:[%d]", account_info->original_account->account_id, view->org_mail_info->mail_data->mailbox_id, view->original_mail_id);
 
-		if (!email_engine_delete_mail(account_info->original_account->account_id, view->org_mail_info->mail_data->mailbox_id, view->original_mail_id, sync)) {
+		if (!email_engine_delete_mail(view->org_mail_info->mail_data->mailbox_id, view->original_mail_id, sync)) {
 			debug_error("email_engine_delete_mail() failed!");
 			return COMPOSER_ERROR_SEND_FAIL;
 		}

@@ -266,7 +266,7 @@ EMAIL_API gboolean email_engine_get_account_list(int *count, email_account_t **_
 	int i, err = 0;
 
 	err = email_get_account_list(_account_list, count);
-	if (err != EMAIL_ERROR_NONE) {
+	if ((err != EMAIL_ERROR_NONE) || (*_account_list && (*count <= 0))) {
 		*count = 0;
 		*_account_list = NULL;
 		if (err != EMAIL_ERROR_ACCOUNT_NOT_FOUND) {
@@ -275,6 +275,11 @@ EMAIL_API gboolean email_engine_get_account_list(int *count, email_account_t **_
 		}
 		debug_log("No accounts found");
 	}
+
+	if (!*_account_list) {
+		*count = 0;
+	}
+
 	debug_log("valid account count :(%d)", *count);
 
 	for (i = 0; i < *count; i++) {
@@ -626,22 +631,6 @@ EMAIL_API void email_engine_free_mailbox_info(email_mailbox_list_info_t **info)
 	}
 }
 
-EMAIL_API void email_engine_free_mail_list(GList **list)
-{
-	debug_enter();
-	RETURN_IF_FAIL(list != NULL);
-
-	GList *cur = g_list_first(*list);
-	email_mailbox_info_t *item = NULL;
-	while (cur) {
-		item = (email_mailbox_info_t *) g_list_nth_data(cur, 0);
-		FREE(item);
-		cur = g_list_next(cur);
-	}
-	g_list_free(*list);
-	*list = NULL;
-}
-
 EMAIL_API gchar *email_engine_convert_from_folder_to_srcbox(gint account_id, email_mailbox_type_e mailbox_type)
 {
 	debug_enter();
@@ -672,69 +661,52 @@ EMAIL_API gchar *email_engine_convert_from_folder_to_srcbox(gint account_id, ema
 	return mailbox_name;
 }
 
-EMAIL_API guint email_engine_get_mail_list(int account_id, int mailbox_id, email_mail_list_item_t **mail_list, int *mail_count)
+EMAIL_API gboolean email_engine_get_mail_list(email_list_filter_t *filter_list, int filter_count,
+		email_list_sorting_rule_t *sorting_rule_list, int sorting_rule_count,
+		int start_index, int limit_count, email_mail_list_item_t **mail_list, int *mail_count)
 {
 	debug_enter();
-	debug_log("account id:%d, mailbox_id:%d", account_id, mailbox_id);
-	RETURN_VAL_IF_FAIL(account_id > ACCOUNT_MIN, FALSE);
+	retvm_if(!mail_list, FALSE, "mail_list is NULL");
+	retvm_if(!mail_count, FALSE, "mail_count is NULL");
 
-	char _where[QUERY_SIZE] = { 0 };
-	int err = 0;
+	*mail_list = NULL;
+	*mail_count = 0;
 
-	if (account_id == 0)
-		snprintf(_where, sizeof(_where), "WHERE mailbox_id = %d AND flags_deleted_field = 0 ORDER BY date_time DESC", mailbox_id);
-	else
-		snprintf(_where, sizeof(_where), "WHERE mailbox_id = %d AND account_id = %d AND flags_deleted_field = 0 ORDER BY date_time DESC", mailbox_id, account_id);
-
-	err = email_query_mail_list(_where, mail_list, mail_count);
-	if (err == EMAIL_ERROR_NONE) {
-		return TRUE;
-	} else {
-		debug_log("Error(%d)", err);
+	int err = email_get_mail_list_ex(filter_list, filter_count, sorting_rule_list, sorting_rule_count,
+			start_index, limit_count, mail_list, mail_count);
+	if ((err != EMAIL_ERROR_NONE) || (*mail_list && (*mail_count <= 0))) {
+		*mail_list = NULL;
+		*mail_count = 0;
+		debug_error("email_get_mail_list_ex failed: %d;");
 		return FALSE;
 	}
+
+	if (!*mail_list) {
+		*mail_count = 0;
+	}
+
+	return TRUE;
 }
 
-EMAIL_API guint email_engine_get_mail_list_count(gint account_id, const gchar *folder_name)
+EMAIL_API gboolean email_engine_get_mail_count(email_list_filter_t *filter_list, int filter_count,
+		int *total_mail_count, int *unseen_mail_count)
 {
 	debug_enter();
-	RETURN_VAL_IF_FAIL(account_id > ACCOUNT_MIN, 0);
-	RETURN_VAL_IF_FAIL(STR_VALID(folder_name), 0);
+	retvm_if(!total_mail_count, FALSE, "total_mail_count is NULL");
+	retvm_if(!unseen_mail_count, FALSE, "unseen_mail_count is NULL");
 
-	email_mailbox_t mailbox;
-	int total_count = 0;
-	int unread_count = 0;
-	gchar *src_box = g_strdup(folder_name);
+	*total_mail_count = 0;
+	*unseen_mail_count = 0;
 
-	memset(&mailbox, 0, sizeof(email_mailbox_t));
-	mailbox.mailbox_name = src_box;
-	mailbox.account_id = account_id;
-
-	email_list_filter_t *filter_list = NULL;
-	int filter_count = 1;
-
-	filter_list = malloc(sizeof(email_list_filter_t)*filter_count);
-	if (filter_list != NULL) {
-		memset(filter_list, 0, sizeof(email_list_filter_t)*filter_count);
-
-		filter_list[0].list_filter_item_type = EMAIL_LIST_FILTER_ITEM_RULE;
-		filter_list[0].list_filter_item.rule.rule_type = EMAIL_LIST_FILTER_RULE_EQUAL;
-		filter_list[0].list_filter_item.rule.target_attribute = EMAIL_MAIL_ATTRIBUTE_MAILBOX_NAME;
-		filter_list[0].list_filter_item.rule.key_value.string_type_value = src_box;
-		filter_list[0].list_filter_item.rule.case_sensitivity = EMAIL_CASE_INSENSITIVE;
-
-		email_count_mail(filter_list, filter_count, &total_count, &unread_count);
-
-		debug_log("total_count (%d) unread_count (%d)", total_count, unread_count);
-
-		email_free_list_filter(&filter_list, filter_count);
-		filter_list = NULL;
+	int err = email_count_mail(filter_list, filter_count, total_mail_count, unseen_mail_count);
+	if ((err != EMAIL_ERROR_NONE) || (*total_mail_count < *unseen_mail_count)) {
+		*total_mail_count = 0;
+		*unseen_mail_count = 0;
+		debug_error("email_count_mail failed: %d;");
+		return FALSE;
 	}
 
-	if (src_box) {
-		g_free(src_box);	/* MUST BE. */
-	}
-	return (guint)total_count;
+	return TRUE;
 }
 
 EMAIL_API gboolean email_engine_sync_folder(gint account_id, int mailbox_id, int *handle)
@@ -993,14 +965,12 @@ error:
 	return res;
 }
 
-EMAIL_API gboolean email_engine_delete_mail(gint account_id, int mailbox_id, gint mail_id, int sync)
+EMAIL_API gboolean email_engine_delete_mail(int mailbox_id, gint mail_id, int sync)
 {
 	debug_enter();
-	RETURN_VAL_IF_FAIL(account_id > ACCOUNT_MIN, FALSE);
 	RETURN_VAL_IF_FAIL(mailbox_id > 0, FALSE);
 	RETURN_VAL_IF_FAIL(mail_id > 0, FALSE);
 
-	debug_log("account_id: %d", account_id);
 	debug_log("mailbox_id: %d", mailbox_id);
 	debug_log("mail_id: %d", mail_id);
 	debug_log("sync: %d", sync);
@@ -1022,17 +992,12 @@ EMAIL_API gboolean email_engine_delete_mail(gint account_id, int mailbox_id, gin
 	return res;
 }
 
-EMAIL_API gboolean email_engine_delete_mail_list(gint account_id, int mailbox_id, GList *id_list, int sync)
+EMAIL_API gboolean email_engine_delete_mail_list(int mailbox_id, GList *id_list, int sync)
 {
 	debug_enter();
-	RETURN_VAL_IF_FAIL(account_id > 0, FALSE);
 	RETURN_VAL_IF_FAIL(mailbox_id > 0, FALSE);
-	/*
-	RETURN_VAL_IF_FAIL(STR_VALID(folder_name), FALSE);
-	*/
 	RETURN_VAL_IF_FAIL(id_list != NULL, FALSE);
 
-	debug_log("account_id: %d", account_id);
 	debug_log("mailbox_id: %d", mailbox_id);
 	debug_log("sync: %d", sync);
 
@@ -1044,31 +1009,29 @@ EMAIL_API gboolean email_engine_delete_mail_list(gint account_id, int mailbox_id
 	gboolean res = TRUE;	/* MUST BE initialized TRUE. */
 	int mail_ids[size];
 	guint i = 0;
+	GList *cur = g_list_first(id_list);
 
-	for (i = 0; i < size; ++i) {
-		mail_ids[i] = (int)((ptrdiff_t)g_list_nth_data(id_list, i));
+	for (i = 0; i < size; ++i, cur = g_list_next(cur)) {
+		mail_ids[i] = (int)(intptr_t)cur->data;
 	}
 
 	err = email_delete_mail(mailbox_id, mail_ids, (int)size, sync);
 
 	if (err != EMAIL_ERROR_NONE) {
-		debug_warning("email_delete_message account_id(%d), mailbox_id(%d) - err (%d)",
-									account_id, mailbox_id, err);
+		debug_warning("email_delete_message mailbox_id(%d) - err (%d)", mailbox_id, err);
 		res = FALSE;
 	}
 
 	return res;
 }
 
-EMAIL_API gboolean email_engine_delete_all_mail(gint account_id, int mailbox_id, int sync)
+EMAIL_API gboolean email_engine_delete_all_mail(int mailbox_id, int sync)
 {
 	debug_enter();
-	RETURN_VAL_IF_FAIL(account_id > ACCOUNT_MIN, FALSE);
 	RETURN_VAL_IF_FAIL(mailbox_id > 0, FALSE);
 	/*
 	RETURN_VAL_IF_FAIL(STR_VALID(folder_name), FALSE);
 	*/
-	debug_log("account_id: %d", account_id);
 	debug_log("mailbox_id: %d", mailbox_id);
 	debug_log("sync: %d", sync);
 
@@ -1148,10 +1111,9 @@ EMAIL_API int email_engine_move_mail_list(int dst_mailbox_id, GList *id_list, in
 	return err;
 }
 
-EMAIL_API gboolean email_engine_move_all_mail(gint account_id, int old_mailbox_id, int new_mailbox_id)
+EMAIL_API gboolean email_engine_move_all_mail(int old_mailbox_id, int new_mailbox_id)
 {
 	debug_enter();
-	RETURN_VAL_IF_FAIL(account_id > ACCOUNT_MIN, FALSE);
 	RETURN_VAL_IF_FAIL(old_mailbox_id > 0, FALSE);
 	RETURN_VAL_IF_FAIL(new_mailbox_id > 0, FALSE);
 
@@ -1578,6 +1540,10 @@ EMAIL_API int email_engine_get_mailbox_list(int account_id, email_mailbox_t **ma
 		return 0;
 	}
 
+	if (!*mailbox_list) {
+		count = 0;
+	}
+
 	return count;
 }
 
@@ -1595,6 +1561,10 @@ EMAIL_API int email_engine_get_mailbox_list_with_mail_count(int account_id, emai
 		*mailbox_list = NULL;
 		debug_critical("email_get_mailbox_list_ex return error: %d", err);
 		return 0;
+	}
+
+	if (!*mailbox_list) {
+		count = 0;
 	}
 
 	return count;
@@ -1766,6 +1736,27 @@ EMAIL_API gboolean email_engine_get_rule_list(email_rule_t **filtering_set, int 
 		return FALSE;
 	}
 
+	if (!*filtering_set) {
+		count = 0;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_get_rule(int filter_id, email_rule_t** filtering_set)
+{
+	debug_enter();
+	retvm_if(!filtering_set, FALSE, "filtering_set is NULL");
+
+	*filtering_set = NULL;
+
+	int err = email_get_rule(filter_id, filtering_set);
+	if ((err != EMAIL_ERROR_NONE) || !*filtering_set) {
+		debug_error("email_get_rule failed: %d; filter_id: %d", err, filter_id);
+		*filtering_set = NULL;
+		return FALSE;
+	}
+
 	return TRUE;
 }
 
@@ -1887,6 +1878,10 @@ EMAIL_API gboolean email_engine_get_attachment_data_list(int mail_id,
 		return FALSE;
 	}
 
+	if (!*attachment_data) {
+		*attachment_count = 0;
+	}
+
 	return TRUE;
 }
 
@@ -1911,8 +1906,7 @@ EMAIL_API gboolean email_engine_parse_mime_file(char *eml_file_path, email_mail_
 		return FALSE;
 	}
 
-	if (*attachment_count <= 0) {
-		debug_warning("attachment_count <= 0");
+	if (!*attachment_data) {
 		*attachment_count = 0;
 	}
 
@@ -2028,6 +2022,133 @@ EMAIL_API gboolean email_engine_update_mail_attribute(int account_id, int *mail_
 	if (err != EMAIL_ERROR_NONE) {
 		debug_error("email_update_mail_attribute failed: %d; account_id: %d; field_type: %d; "
 				"value: %d", err, account_id, (int)attribute_type, value);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API void email_engine_free_list_filter(email_list_filter_t **filter_list, int count)
+{
+	debug_enter();
+	retm_if(!filter_list, "filter_list is NULL");
+
+	if (*filter_list) {
+		int err = email_free_list_filter(filter_list, count);
+		if (err != EMAIL_ERROR_NONE) {
+			debug_error("email_free_list_filter failed: %d");
+		}
+	}
+
+	*filter_list = NULL;
+}
+
+EMAIL_API gboolean email_engine_get_address_info_list(int mail_id, email_address_info_list_t** address_info_list)
+{
+	debug_enter();
+	retvm_if(!address_info_list, FALSE, "address_info_list is NULL");
+
+	*address_info_list = NULL;
+
+	int err = email_get_address_info_list(mail_id, address_info_list);
+	if ((err != EMAIL_ERROR_NONE) || !*address_info_list) {
+		*address_info_list = NULL;
+		debug_error("email_get_address_info_list failed: %d; mail_id: %d", err, mail_id);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API void email_engine_free_address_info_list(email_address_info_list_t** address_info_list)
+{
+	debug_enter();
+	retm_if(!address_info_list, "address_info_list is NULL");
+
+	if (*address_info_list) {
+		int err = email_free_address_info_list(address_info_list);
+		if (err != EMAIL_ERROR_NONE) {
+			debug_error("email_free_address_info_list failed: %d");
+		}
+	}
+
+	*address_info_list = NULL;
+}
+
+EMAIL_API gboolean email_engine_set_mail_slot_size(int account_id, int mailbox_id, int new_slot_size)
+{
+	debug_enter();
+
+	int err = email_set_mail_slot_size(account_id, mailbox_id, new_slot_size);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_set_mail_slot_size failed: %d; account_id: %d; "
+				"mailbox_id: %d; new_slot_size: %d", err, account_id, mailbox_id, new_slot_size);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_update_notification_bar(int account_id)
+{
+	debug_enter();
+
+	int err = email_update_notification_bar(account_id, 0, 0, 0);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_update_notification_bar failed: %d; account_id: %d", err, account_id);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_clear_notification_bar(int account_id)
+{
+	debug_enter();
+
+	int err = email_clear_notification_bar(account_id);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_clear_notification_bar failed: %d; account_id: %d", err, account_id);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_open_db(void)
+{
+	debug_enter();
+
+	int err = email_open_db();
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_open_db failed: %d", err);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_close_db(void)
+{
+	debug_enter();
+
+	int err = email_close_db();
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_close_db failed: %d", err);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_cancel_job(int account_id, int handle, email_cancelation_type cancel_type)
+{
+	debug_enter();
+
+	int err = email_cancel_job(account_id, handle, cancel_type);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_error("email_cancel_job failed: %d; account_id: %d; cancel_type: %d",
+				err, account_id, (int)cancel_type);
 		return FALSE;
 	}
 

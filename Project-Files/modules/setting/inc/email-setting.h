@@ -32,7 +32,6 @@
 #include <gio/gio.h>
 
 #include "email-types.h"
-#include "email-api.h"
 
 #include "email-engine.h"
 #include "email-debug.h"

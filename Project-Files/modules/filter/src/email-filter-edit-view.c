@@ -89,8 +89,8 @@ void create_filter_edit_view(EmailFilterModule *module, filter_edit_view_mode mo
 
 	if (mode == FILTER_EDIT_VIEW_MODE_EDIT_EXISTENT) {
 		email_rule_t *filter_rule = NULL;
-		email_get_rule(filter_id, &filter_rule);
-		retvm_if(!filter_rule, free(view), "filter_rule to be edited is null");
+		retvm_if(!email_engine_get_rule(filter_id, &filter_rule),
+				free(view), "filter_rule to be edited is null");
 		view->filter_rule = filter_rule;
 	}
 

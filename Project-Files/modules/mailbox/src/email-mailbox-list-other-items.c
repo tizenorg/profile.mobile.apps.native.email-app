@@ -331,11 +331,10 @@ void mailbox_last_updated_time_item_update(int mailbox_id, EmailMailboxView *vie
 
 	email_mailbox_t *mailbox = NULL;
 
-	int err = email_get_mailbox_by_mailbox_id(mailbox_id, &mailbox);
-	if (err == EMAIL_ERROR_NONE && mailbox) {
+	if (email_engine_get_mailbox_by_mailbox_id(mailbox_id, &mailbox)) {
 		mailbox_set_last_updated_time(mailbox->last_sync_time, view);
+		email_engine_free_mailbox_list(&mailbox, 1);
 	}
-	email_free_mailbox(&mailbox, 1);
 
 	if (view->last_updated_time_item)
 		elm_genlist_item_update(view->last_updated_time_item);
@@ -457,7 +456,6 @@ void mailbox_get_more_progress_item_add(EmailMailboxView *view)
 {
 	debug_enter();
 
-	int err;
 	int i;
 	int total_mail_count = 0;
 	int unread_mail_count = 0;
@@ -479,34 +477,25 @@ void mailbox_get_more_progress_item_add(EmailMailboxView *view)
 	view->unread_mail_count = 0;
 
 	if (view->mode == EMAIL_MAILBOX_MODE_ALL) {
-		err = email_get_account_list(&account_list, &account_count);
-		if (err == EMAIL_ERROR_NONE && account_list) {
+		if (email_engine_get_account_list(&account_count, &account_list)) {
 			for (i = 0; i < account_count; i++) {
 				debug_log("account_id(%d), mailbox_type(%d)", account_list->account_id, view->mailbox_type);
-				err = email_get_mailbox_by_mailbox_type(account_list->account_id, view->mailbox_type, &mailbox_list);
-				if (err == EMAIL_ERROR_NONE && mailbox_list) {
+				if (email_engine_get_mailbox_by_mailbox_type(account_list->account_id, view->mailbox_type, &mailbox_list)) {
 					total_mail_count += mailbox_list->total_mail_count_on_local;
 					unread_mail_count += mailbox_list->unread_count;
 					debug_log("unread_mail_count(%d), total_mail_count(%d)", unread_mail_count, total_mail_count);
-				}
-				if (mailbox_list) {
-					email_free_mailbox(&mailbox_list, 1);
+					email_engine_free_mailbox_list(&mailbox_list, 1);
 				}
 			}
-		}
-		if (account_list) {
-			email_free_account(&account_list, account_count);
+			email_engine_free_account_list(&account_list, account_count);
 		}
 	} else if (view->mode == EMAIL_MAILBOX_MODE_MAILBOX) {
 		debug_log("account_id(%d), mailbox_type(%d)", view->account_id, view->mailbox_type);
-		err = email_get_mailbox_by_mailbox_id(view->mailbox_id, &mailbox_list);
-		if (err == EMAIL_ERROR_NONE && mailbox_list) {
+		if (email_engine_get_mailbox_by_mailbox_id(view->mailbox_id, &mailbox_list)) {
 			total_mail_count = mailbox_list->total_mail_count_on_local;
 			unread_mail_count = mailbox_list->unread_count;
 			debug_log("unread_mail_count(%d), total_mail_count(%d)", unread_mail_count, total_mail_count);
-		}
-		if (mailbox_list) {
-			email_free_mailbox(&mailbox_list, 1);
+			email_engine_free_mailbox_list(&mailbox_list, 1);
 		}
 	}
 
@@ -663,7 +652,6 @@ static void _mailbox_send_outgoing_messages_thread_worker(void *data, Ecore_Thre
 {
 	debug_enter();
 	email_account_t *account = NULL;
-	int err = 0;
 	MailOutgoingListData *send_thread_data = NULL;
 	int handle = 0;
 	MailOutgoingItem *ld = NULL;
@@ -681,23 +669,17 @@ static void _mailbox_send_outgoing_messages_thread_worker(void *data, Ecore_Thre
 
 		if (ld) {
 			debug_log("ld->mail_id: %d", ld->mail_id);
-			err = email_get_account(ld->account_id, EMAIL_ACC_GET_OPT_DEFAULT, &account);
-			if (err == EMAIL_ERROR_NONE && account) {
+			if (email_engine_get_account_data(ld->account_id, EMAIL_ACC_GET_OPT_DEFAULT, &account)) {
 				email_mail_attribute_value_t attribute_value = {0};
 				attribute_value.integer_type_value = account->auto_resend_times;
 				debug_log("ld->mail_id : %d, attribute_value->integer_type_value : %d", ld->mail_id, attribute_value.integer_type_value);
-				email_update_mail_attribute(ld->account_id, &(ld->mail_id), 1, EMAIL_MAIL_ATTRIBUTE_REMAINING_RESEND_TIMES, attribute_value);
-			}
-
-			if (account) {
-				email_free_account(&account, 1);
+				email_engine_update_mail_attribute(ld->account_id, &(ld->mail_id), 1, EMAIL_MAIL_ATTRIBUTE_REMAINING_RESEND_TIMES, attribute_value);
+				email_engine_free_account_list(&account, 1);
 			}
 
 			/* Send email again */
-			err = email_send_mail(ld->mail_id, &handle);
-
-			if (err != EMAIL_ERROR_NONE) {
-				debug_warning("email_send_mail acct(%d) - err(%d)", ld->account_id, err);
+			if (!email_engine_send_mail(ld->mail_id, &handle)) {
+				debug_warning("email_engine_send_mail acct(%d)", ld->account_id);
 				*(send_thread_data->send_all_runned) = false;
 				return;
 			}

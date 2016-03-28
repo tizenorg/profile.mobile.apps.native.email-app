@@ -36,7 +36,6 @@
 #include <gio/gio.h>
 #include <notification.h>
 
-#include "email-api.h"
 #include "email-types.h"
 
 #include "email-utils.h"

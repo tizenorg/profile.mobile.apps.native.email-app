@@ -265,31 +265,13 @@ void mailbox_from_spam_mail(void *data)
 		}
 
 		for (i = 0; i < max_account_id; i++) {
-			if (!mail_list[i]) continue;
-			else {
-				int count = g_list_length(mail_list[i]);
-				int mail_ids[count];
-				int err = 0;
-				memset(mail_ids, 0, sizeof(mail_ids));
-
-				int j = 0;
-				GList *cur = g_list_first(mail_list[i]);
-				for (j = 0; j < count; j++, cur = g_list_next(cur))
-					mail_ids[j] = (int)(ptrdiff_t)g_list_nth_data(cur, 0);
-
-				debug_log("account_id : %d, count : %d", i+1, count);
-
+			if (mail_list[i] != NULL) {
 				email_mailbox_t *inbox = NULL;
-				err = email_get_mailbox_by_mailbox_type(i+1, EMAIL_MAILBOX_TYPE_INBOX, &inbox);
-				if (err == EMAIL_ERROR_NONE && inbox) {
-					err = email_move_mail_to_mailbox(mail_ids, count, inbox->mailbox_id);
-					if (err != EMAIL_ERROR_NONE) {
-						debug_warning("email_move_mail_to_mailbox acct(%d) mailbox_id(%d) num(%d) - err (%d)",
-								i+1, inbox->mailbox_id, count, err);
-					}
-					email_free_mailbox(&inbox, 1);
+				if (email_engine_get_mailbox_by_mailbox_type(i+1, EMAIL_MAILBOX_TYPE_INBOX, &inbox)) {
+					email_engine_move_mail_list(inbox->mailbox_id, mail_list[i], 0);
+					email_engine_free_mailbox_list(&inbox, 1);
 				} else {
-					debug_warning("email_get_mailbox_by_mailbox_type : account_id(%d) type(INBOX) - err(%d) or mailbox is NULL(%p)", view->account_id, err, inbox);
+					debug_warning("email_engine_get_mailbox_by_mailbox_type : account_id(%d) type(INBOX)", view->account_id);
 				}
 			}
 		}
@@ -364,28 +346,11 @@ void mailbox_to_spam_mail(void *data)
 		view->need_deleted_noti = false;
 
 		for (i = 0; i < max_account_id; i++) {
-			if (!mail_list[i]) continue;
-			else {
-				int count = g_list_length(mail_list[i]);
-				int mail_ids[count];
-				memset(mail_ids, 0, sizeof(mail_ids));
-
-				int j = 0;
-				GList *cur = g_list_first(mail_list[i]);
-				for (j = 0; j < count; j++, cur = g_list_next(cur))
-					mail_ids[j] = (int)(ptrdiff_t)g_list_nth_data(cur, 0);
-
-				debug_log("account_id : %d, count : %d", i+1, count);
-
+			if (mail_list[i] != NULL) {
 				email_mailbox_t *spambox = NULL;
-				email_get_mailbox_by_mailbox_type(i+1, EMAIL_MAILBOX_TYPE_SPAMBOX, &spambox);
-				if (spambox) {
-					int err = email_move_mail_to_mailbox(mail_ids, count, spambox->mailbox_id);
-					if (err != EMAIL_ERROR_NONE) {
-						debug_warning("email_move_mail_to_mailbox acct(%d) mailbox_id(%d) num(%d) - err (%d)",
-								i+1, spambox->mailbox_id, count, err);
-					}
-					email_free_mailbox(&spambox, 1);
+				if (email_engine_get_mailbox_by_mailbox_type(i+1, EMAIL_MAILBOX_TYPE_SPAMBOX, &spambox)) {
+					email_engine_move_mail_list(spambox->mailbox_id, mail_list[i], 0);
+					email_engine_free_mailbox_list(&spambox, 1);
 				}
 			}
 		}
@@ -450,10 +415,7 @@ void mailbox_markunread_mail(void *data)
 
 			debug_log("account_id : %d, count : %d", i+1, count);
 
-			int err = email_set_flags_field(i+1, mail_ids, count, EMAIL_FLAGS_SEEN_FIELD, 0, 1);
-			if (err != EMAIL_ERROR_NONE)
-				debug_log("email_set_flags_field - err(%d)", err);
-
+			email_engine_set_flags_field(i+1, mail_ids, count, EMAIL_FLAGS_SEEN_FIELD, 0, 1);
 		}
 	}
 
@@ -526,10 +488,7 @@ void mailbox_markread_mail(void *data)
 
 			debug_log("account_id : %d, count : %d", i+1, count);
 
-			int err = email_set_flags_field(i+1, mail_ids, count, EMAIL_FLAGS_SEEN_FIELD, 1, 1);
-			if (err != EMAIL_ERROR_NONE)
-				debug_log("email_set_flags_field - err(%d)", err);
-
+			email_engine_set_flags_field(i+1, mail_ids, count, EMAIL_FLAGS_SEEN_FIELD, 1, 1);
 		}
 	}
 

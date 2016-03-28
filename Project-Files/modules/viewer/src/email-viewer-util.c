@@ -435,7 +435,7 @@ int viewer_delete_email(EmailViewerView *view)
 		email_engine_free_account_list(&account_data, 1);
 	}
 
-	if (!email_engine_delete_mail(view->account_id, view->mailbox_id, view->mail_id, sync)) {
+	if (!email_engine_delete_mail(view->mailbox_id, view->mail_id, sync)) {
 		debug_log("Deleting email is failed.");
 		util_create_notify(view, EMAIL_VIEWER_POP_ERROR,
 				EMAIL_VIEWER_POP_FAILED_TO_DELETE, 1,

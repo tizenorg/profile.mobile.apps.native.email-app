@@ -89,7 +89,7 @@ void mailbox_process_delete_mail(void *data, Ecore_Thread *thd)
 
 	int i = 0;
 	int max_account_id = email_engine_get_max_account_id();
-	int result = EMAIL_ERROR_UNKNOWN;
+	bool ok = false;
 	int is_trash = false;
 	Eina_List *cur = NULL;
 	DeleteRequestedMail *requested_mail = NULL;
@@ -124,61 +124,40 @@ void mailbox_process_delete_mail(void *data, Ecore_Thread *thd)
 	int acct = 0;
 	for (acct = 0; acct < max_account_id; ++acct) {
 		if (!mail_list[acct]) continue;
-		else {
-			/* convert GList to int array */
-			int count = g_list_length(mail_list[acct]);
-			int mail_ids[count]; memset(mail_ids, 0, sizeof(mail_ids));
-			int i = 0;
-			GList *cur = g_list_first(mail_list[acct]);
-			for (; i < count; i++, cur = g_list_next(cur))
-				mail_ids[i] = (int)(ptrdiff_t)g_list_nth_data(cur, 0);
 
-			debug_log("account_id : %d, count : %d", acct+1, count);
+		int trashbox_id = GET_MAILBOX_ID(acct+1, EMAIL_MAILBOX_TYPE_TRASH);
 
-			if (is_trash) {
-				email_delete_option_t delete_option = EMAIL_DELETE_LOCAL_AND_SERVER;
+		if (is_trash) {
+			email_delete_option_t delete_option = EMAIL_DELETE_LOCAL_AND_SERVER;
 
-				if (GET_ACCOUNT_SERVER_TYPE(acct+1) == EMAIL_SERVER_TYPE_POP3) {
-					debug_log("EMAIL_SERVER_TYPE_POP3..");
-					email_account_t *account_data = NULL;
-					if (email_engine_get_account_full_data(acct+1, &account_data)) {
-						if (account_data) {
-							account_user_data_t *user_data = (account_user_data_t *)account_data->user_data;
-							if (user_data != NULL) {
-								debug_log("pop3_deleting_option:%d", user_data->pop3_deleting_option);
-								if (user_data->pop3_deleting_option == 0) {
-									delete_option = EMAIL_DELETE_LOCALLY;
-								} else if (user_data->pop3_deleting_option == 1) {
-									delete_option = EMAIL_DELETE_LOCAL_AND_SERVER;
-								}
-							}
-							email_free_account(&account_data, 1);
-							account_data = NULL;
+			if (GET_ACCOUNT_SERVER_TYPE(acct+1) == EMAIL_SERVER_TYPE_POP3) {
+				debug_log("EMAIL_SERVER_TYPE_POP3..");
+				email_account_t *account_data = NULL;
+				if (email_engine_get_account_full_data(acct+1, &account_data)) {
+					account_user_data_t *user_data = (account_user_data_t *)account_data->user_data;
+					if (user_data != NULL) {
+						debug_log("pop3_deleting_option:%d", user_data->pop3_deleting_option);
+						if (user_data->pop3_deleting_option == 0) {
+							delete_option = EMAIL_DELETE_LOCALLY;
+						} else if (user_data->pop3_deleting_option == 1) {
+							delete_option = EMAIL_DELETE_LOCAL_AND_SERVER;
 						}
 					}
+					email_engine_free_account_list(&account_data, 1);
 				}
+			}
 
-				int trashbox_id = GET_MAILBOX_ID(acct+1, EMAIL_MAILBOX_TYPE_TRASH);
-
-				result = email_delete_mail(trashbox_id, mail_ids, count, delete_option);
-				if (result != EMAIL_ERROR_NONE) {
-					debug_warning("email_delete_message mailbox_id(%d) count(%d)- err (%d)",
-												view->mailbox_id, count, result);
-				}
-			} else {
-				/* making dest folder - trash */
-				int trashbox_id = GET_MAILBOX_ID(acct+1, EMAIL_MAILBOX_TYPE_TRASH);
-
-				result = email_move_mail_to_mailbox(mail_ids, count, trashbox_id);
-				if (result != EMAIL_ERROR_NONE) {
-					debug_warning("email_move_mail_to_mailbox num(%d) folder_id(%d) - err (%d)",
-									count, trashbox_id, result);
-				}
+			if (email_engine_delete_mail_list(trashbox_id, mail_list[i], delete_option)) {
+				ok = true;
+			}
+		} else {
+			if (email_engine_move_mail_list(trashbox_id, mail_list[i], 0)) {
+				ok = true;
 			}
 		}
 	}
 
-	if (result == EMAIL_ERROR_NONE) {
+	if (ok) {
 		view->need_deleted_noti = true;
 	} else {
 		view->need_deleted_noti = false;

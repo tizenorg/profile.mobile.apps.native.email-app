@@ -1288,11 +1288,8 @@ void viewer_delete_evas_objects(EmailViewerView *view, Eina_Bool isHide)
 	}
 
 	/* mailbox list */
-	if (view->move_mailbox_list) {
-		email_free_mailbox(&view->move_mailbox_list, view->move_mailbox_count);
-		view->move_mailbox_list = NULL;
-		view->move_mailbox_count = 0;
-	}
+	email_engine_free_mailbox_list(&view->move_mailbox_list, view->move_mailbox_count);
+	view->move_mailbox_count = 0;
 
 	/* Evas Object */
 	DELETE_EVAS_OBJECT(view->passwd_popup);

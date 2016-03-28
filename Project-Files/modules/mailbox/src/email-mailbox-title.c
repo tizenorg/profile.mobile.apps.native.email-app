@@ -83,7 +83,6 @@ void mailbox_view_title_update_all(EmailMailboxView *view)
 
 	int total_count = 0;
 	int unread_count = 0;
-	int ret;
 
 	/* initialize account name and mailbox name */
 	G_FREE(view->account_name);
@@ -154,18 +153,15 @@ void mailbox_view_title_update_all(EmailMailboxView *view)
 #endif
 	else if (view->mode == EMAIL_MAILBOX_MODE_MAILBOX) {
 		email_account_t *account = NULL;
-		ret = email_get_account(view->account_id, GET_FULL_DATA_WITHOUT_PASSWORD, &account);
-		if (ret == EMAIL_ERROR_NONE && account) {
+		if (email_engine_get_account_data(view->account_id, GET_FULL_DATA_WITHOUT_PASSWORD, &account)) {
 			view->account_name = g_strdup(account->user_email_address);
 			view->account_type = account->incoming_server_type;
+			email_engine_free_account_list(&account, 1);
 		}
-		if (account)
-			email_free_account(&account, 1);
 
 		if (view->mailbox_id > 0) {
 			email_mailbox_t *mailbox = NULL;
-			ret = email_get_mailbox_by_mailbox_id(view->mailbox_id, &mailbox);
-			if (ret == EMAIL_ERROR_NONE && mailbox) {
+			if (email_engine_get_mailbox_by_mailbox_id(view->mailbox_id, &mailbox)) {
 				view->mailbox_type = mailbox->mailbox_type;
 
 				switch (view->mailbox_type) {
@@ -201,8 +197,8 @@ void mailbox_view_title_update_all(EmailMailboxView *view)
 				view->only_local = mailbox->local;
 
 				mailbox_set_last_updated_time(mailbox->last_sync_time, view);
+				email_engine_free_mailbox_list(&mailbox, 1);
 			}
-			email_free_mailbox(&mailbox, 1);
 		} else if (view->mailbox_id == 0) {
 			/* This is for the first entrance during creating an account. */
 			view->mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
@@ -300,18 +296,15 @@ void mailbox_view_title_update_account_name(EmailMailboxView *view)
 	debug_log("mode: [%d], account_id: [%d], b_searchmode[%d], b_editmode[%d]",
 		view->mode, view->account_id, view->b_searchmode, view->b_editmode);
 
-	int ret = 0;
 	email_account_t *account = NULL;
 	char *markup_subtitle = NULL;
 	char mailbox_alias_buf[MAX_STR_LEN] = { 0, };
 
-	ret = email_get_account(view->account_id, EMAIL_ACC_GET_OPT_DEFAULT, &account);
-	if (ret == EMAIL_ERROR_NONE && account) {
+	if (email_engine_get_account_data(view->account_id, EMAIL_ACC_GET_OPT_DEFAULT, &account)) {
 		G_FREE(view->account_name);
 		view->account_name = g_strdup(account->user_email_address);
+		email_engine_free_account_list(&account, 1);
 	}
-	if (account)
-		email_free_account(&account, 1);
 
 	if (view->b_editmode)
 		return;
@@ -330,7 +323,6 @@ void mailbox_view_title_update_account_name(EmailMailboxView *view)
 static Eina_Bool _get_total_and_unread_count_from_curr_mailbox(EmailMailboxView *view, int *total_count, int *unread_count)
 {
 	debug_enter();
-	int ret;
 	*total_count = 0;
 	*unread_count = 0;
 
@@ -339,24 +331,22 @@ static Eina_Bool _get_total_and_unread_count_from_curr_mailbox(EmailMailboxView 
 			email_account_t *account_list = NULL;
 			int account_count = 0, i = 0;
 
-			ret = email_get_account_list(&account_list, &account_count);
-			if (ret == EMAIL_ERROR_NONE && account_list) {
+			if (email_engine_get_account_list(&account_count, &account_list)) {
 				for (i = 0; i < account_count; i++) {
 					email_mailbox_t *mailbox = NULL;
-					ret = email_get_mailbox_by_mailbox_type(account_list[i].account_id,
-							(view->mailbox_type == EMAIL_MAILBOX_TYPE_NONE) ? EMAIL_MAILBOX_TYPE_INBOX : view->mailbox_type, &mailbox);
-					if (ret == EMAIL_ERROR_NONE && mailbox) {
+					if (email_engine_get_mailbox_by_mailbox_type(account_list[i].account_id,
+							(view->mailbox_type == EMAIL_MAILBOX_TYPE_NONE) ?
+									EMAIL_MAILBOX_TYPE_INBOX : view->mailbox_type, &mailbox)) {
 						*total_count = *total_count + mailbox->total_mail_count_on_local;
 						*unread_count = *unread_count + mailbox->unread_count;
-						email_free_mailbox(&mailbox, 1);
+						email_engine_free_mailbox_list(&mailbox, 1);
 					}
 				}
 				if (view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
 					*total_count = *total_count - email_get_scheduled_outbox_mail_count_by_account_id(0, false);
 				}
+				email_engine_free_account_list(&account_list, account_count);
 			}
-			if (account_list)
-				email_free_account(&account_list, account_count);
 		}
 	}
 #ifndef _FEATURE_PRIORITY_SENDER_DISABLE_
@@ -367,16 +357,15 @@ static Eina_Bool _get_total_and_unread_count_from_curr_mailbox(EmailMailboxView 
 #endif
 	else if (view->mode == EMAIL_MAILBOX_MODE_MAILBOX) {
 		email_mailbox_t *mailbox = NULL;
-		ret = email_get_mailbox_by_mailbox_id(view->mailbox_id, &mailbox);
-		if (ret == EMAIL_ERROR_NONE && mailbox) {
+		if (email_engine_get_mailbox_by_mailbox_id(view->mailbox_id, &mailbox)) {
 			if (view->mailbox_type == EMAIL_MAILBOX_TYPE_DRAFT)
 				*total_count = mailbox->total_mail_count_on_local;
 			else if (view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX)
 				*total_count = mailbox->total_mail_count_on_local - email_get_scheduled_outbox_mail_count_by_account_id(view->account_id, false);
 			else
 				*unread_count = mailbox->unread_count;
+			email_engine_free_mailbox_list(&mailbox, 1);
 		}
-		email_free_mailbox(&mailbox, 1);
 	} else {
 		debug_warning("INVALID view->mode(%d)", view->mode);
 		return EINA_FALSE;

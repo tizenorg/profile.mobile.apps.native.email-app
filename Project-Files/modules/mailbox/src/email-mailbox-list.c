@@ -445,10 +445,8 @@ static void _mail_item_gl_selected_cb(void *data, Evas_Object *obj, void *event_
 	mailbox_sync_cancel_all(ld->view);
 	int id = ld->mail_id;
 	email_mailbox_t *mbox = NULL;
-	int e = email_get_mailbox_by_mailbox_id(ld->mailbox_id, &mbox);
-	if (e != EMAIL_ERROR_NONE) {
-		debug_warning("email_get_mailbox_by_mailbox_id mailbox_id(%d)- err[%d]", ld->mailbox_id, e);
-		email_free_mailbox(&mbox, 1);
+	if (!email_engine_get_mailbox_by_mailbox_id(ld->mailbox_id, &mbox)) {
+		debug_warning("email_engine_get_mailbox_by_mailbox_id mailbox_id(%d)", ld->mailbox_id);
 		return;
 	}
 
@@ -473,7 +471,7 @@ static void _mail_item_gl_selected_cb(void *data, Evas_Object *obj, void *event_
 	} else {
 		mailbox_list_open_email_viewer(ld);
 	}
-	email_free_mailbox(&mbox, 1);
+	email_engine_free_mailbox_list(&mbox, 1);
 }
 
 static void _mail_item_check_changed_cb(void *data, Evas_Object *obj, void *event_info)
@@ -578,11 +576,8 @@ static void _mail_item_important_status_changed_cb(void *data, Evas_Object *obj,
 			mail_ids[i] = (int)(ptrdiff_t)g_list_nth_data(cur, 0);
 		}
 
-		int e = email_set_flags_field(ld->account_id, mail_ids, count, EMAIL_FLAGS_FLAGGED_FIELD, ld->flag_type ? 0 : 1, true);
-		if (e != EMAIL_ERROR_NONE) {
-			debug_warning("_mail_item_important_status_changed_cb account_id(%d) count(%d)- err (%d)",
-										ld->account_id, count, e);
-		}
+		email_engine_set_flags_field(ld->account_id, mail_ids, count, EMAIL_FLAGS_FLAGGED_FIELD, ld->flag_type ? 0 : 1, true);
+
 		g_list_free(ld->view->important_list);
 		ld->view->important_list = NULL;
 	}
@@ -988,7 +983,6 @@ static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_id(int account_
 	email_list_sorting_rule_t *sorting_rule_list = NULL;
 	int cnt_filter_list = 0;
 	int cnt_soring_rule = 0;
-	int err = 0;
 	int i = 0;
 	bool isOutbox = false;
 
@@ -1097,18 +1091,17 @@ static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_id(int account_
 
 	sorting_rule_list = calloc(cnt_soring_rule, sizeof(email_list_sorting_rule_t));
 	if (!sorting_rule_list) {
-		email_free_list_filter(&filter_list, cnt_filter_list);
+		email_engine_free_list_filter(&filter_list, cnt_filter_list);
 		debug_error("sorting_rule_list is NULL - allocation memory failed");
 		return NULL;
 	}
 
 	_make_sorting_rule_list(sort_type, account_id, sorting_rule_list);
 
-	err = email_get_mail_list_ex(filter_list, cnt_filter_list, sorting_rule_list, cnt_soring_rule, -1, -1, &mail_list, mail_count);
-	debug_warning_if(err != EMAIL_ERROR_NONE, "email_get_mail_list_ex - err (%d)", err);
+	email_engine_get_mail_list(filter_list, cnt_filter_list, sorting_rule_list, cnt_soring_rule, -1, -1, &mail_list, mail_count);
 
 	FREE(sorting_rule_list);
-	email_free_list_filter(&filter_list, cnt_filter_list);
+	email_engine_free_list_filter(&filter_list, cnt_filter_list);
 
 	debug_log("mail_count(%d)", *mail_count);
 
@@ -1126,7 +1119,6 @@ static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_type(int accoun
 	email_list_sorting_rule_t *sorting_rule_list = NULL;
 	int cnt_filter_list = 0;
 	int cnt_soring_rule = 0;
-	int err = 0;
 	int i = 0;
 	bool isOutbox = (mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) ? true : false;
 
@@ -1233,18 +1225,17 @@ static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_type(int accoun
 
 	sorting_rule_list = calloc(cnt_soring_rule, sizeof(email_list_sorting_rule_t));
 	if (!sorting_rule_list) {
-		email_free_list_filter(&filter_list, cnt_filter_list);
+		email_engine_free_list_filter(&filter_list, cnt_filter_list);
 		debug_error("sorting_rule_list is NULL - allocation memory failed");
 		return NULL;
 	}
 
 	_make_sorting_rule_list(sort_type, account_id, sorting_rule_list);
 
-	err = email_get_mail_list_ex(filter_list, cnt_filter_list, sorting_rule_list, cnt_soring_rule, -1, -1, &mail_list, mail_count);
-	debug_warning_if(err != EMAIL_ERROR_NONE, "email_get_mail_list_ex - err (%d)", err);
+	email_engine_get_mail_list(filter_list, cnt_filter_list, sorting_rule_list, cnt_soring_rule, -1, -1, &mail_list, mail_count);
 
 	FREE(sorting_rule_list);
-	email_free_list_filter(&filter_list, cnt_filter_list);
+	email_engine_free_list_filter(&filter_list, cnt_filter_list);
 
 	debug_log("mail_count(%d)", *mail_count);
 
@@ -1256,7 +1247,6 @@ static email_mail_list_item_t *_mailbox_get_priority_sender_mail_list(int sort_t
 	debug_log("sort_type: %d", sort_type);
 
 	int j = 0;
-	int err;
 	email_mail_list_item_t *mail_list = NULL;
 	email_list_filter_t *filter_list = NULL;
 	email_list_sorting_rule_t *sorting_rule_list = NULL;
@@ -1332,18 +1322,17 @@ static email_mail_list_item_t *_mailbox_get_priority_sender_mail_list(int sort_t
 
 	sorting_rule_list = calloc(cnt_soring_rule, sizeof(email_list_sorting_rule_t));
 	if (!sorting_rule_list) {
-		email_free_list_filter(&filter_list, cnt_filter_list);
+		email_engine_free_list_filter(&filter_list, cnt_filter_list);
 		debug_error("sorting_rule_list is NULL - allocation memory failed");
 		return NULL;
 	}
 
 	_make_sorting_rule_list(sort_type, 0, sorting_rule_list);
 
-	err = email_get_mail_list_ex(filter_list, j, sorting_rule_list, cnt_soring_rule, -1, -1, &mail_list, mail_count);
-	debug_warning_if(err != EMAIL_ERROR_NONE, "email_get_mail_list_ex - err (%d)", err);
+	email_engine_get_mail_list(filter_list, j, sorting_rule_list, cnt_soring_rule, -1, -1, &mail_list, mail_count);
 
 	FREE(sorting_rule_list);
-	email_free_list_filter(&filter_list, cnt_filter_list);
+	email_engine_free_list_filter(&filter_list, cnt_filter_list);
 
 	debug_log("mail_count(%d)", *mail_count);
 
@@ -1359,7 +1348,6 @@ static email_mail_list_item_t *_mailbox_get_favourite_mail_list(int sort_type, i
 	email_list_sorting_rule_t *sorting_rule_list = NULL;
 	int cnt_filter_list = 0;
 	int cnt_soring_rule = 0;
-	int err = 0;
 	int i = 0;
 
 	cnt_filter_list += 9;
@@ -1453,7 +1441,7 @@ static email_mail_list_item_t *_mailbox_get_favourite_mail_list(int sort_type, i
 		cnt_soring_rule = 1;
 	sorting_rule_list = malloc(sizeof(email_list_sorting_rule_t)*cnt_soring_rule);
 	if (!sorting_rule_list) {
-		email_free_list_filter(&filter_list, cnt_filter_list);
+		email_engine_free_list_filter(&filter_list, cnt_filter_list);
 		debug_error("sorting_rule_list is NULL - allocation memory failed");
 		return NULL;
 	}
@@ -1461,11 +1449,10 @@ static email_mail_list_item_t *_mailbox_get_favourite_mail_list(int sort_type, i
 
 	_make_sorting_rule_list(sort_type, 0, sorting_rule_list);
 
-	err = email_get_mail_list_ex(filter_list, cnt_filter_list, sorting_rule_list, cnt_soring_rule, -1, -1, &mail_list, mail_count);
-	debug_warning_if(err != EMAIL_ERROR_NONE, "email_get_mail_list_ex - err (%d)", err);
+	email_engine_get_mail_list(filter_list, cnt_filter_list, sorting_rule_list, cnt_soring_rule, -1, -1, &mail_list, mail_count);
 
 	FREE(sorting_rule_list);
-	email_free_list_filter(&filter_list, cnt_filter_list);
+	email_engine_free_list_filter(&filter_list, cnt_filter_list);
 
 	debug_log("mail_count(%d)", *mail_count);
 
@@ -1668,7 +1655,6 @@ static void _make_sorting_rule_list(email_sort_type_e sort_type, int account_id,
 
 	case EMAIL_SORT_TO_CC_BCC:
 		{
-			int err;
 			email_account_t *account = NULL;
 
 			sorting_rule_list[0].target_attribute = EMAIL_MAIL_ATTRIBUTE_RECIPIENT_ADDRESS;
@@ -1676,13 +1662,11 @@ static void _make_sorting_rule_list(email_sort_type_e sort_type, int account_id,
 			if (account_id == 0) {
 				sorting_rule_list[0].sort_order = EMAIL_SORT_ORDER_TO_CCBCC_ALL;
 			} else {
-				err = email_get_account(account_id, EMAIL_ACC_GET_OPT_DEFAULT, &account);
-				if (err == EMAIL_ERROR_NONE && account) {
+				if (email_engine_get_account_data(account_id, EMAIL_ACC_GET_OPT_DEFAULT, &account)) {
 					if (account->user_email_address)
 						sorting_rule_list[0].key_value.string_type_value = g_strdup(account->user_email_address);
+					email_engine_free_account_list(&account, 1);
 				}
-				if (account)
-					email_free_account(&account, 1);
 
 				sorting_rule_list[0].sort_order = EMAIL_SORT_ORDER_TO_CCBCC;
 			}
@@ -1933,9 +1917,7 @@ static char *_mailbox_get_ricipient_display_string(int mail_id)
 	char *display_string = NULL;
 	int total_cnt = 0;
 
-	int err = email_get_mail_data(mail_id, &mail_data);
-
-	if (err == EMAIL_ERROR_NONE && mail_data) {
+	if (email_engine_get_mail_data(mail_id, &mail_data)) {
 
 		if (STR_VALID(mail_data->full_address_to)) {
 			_mailbox_get_recipient_display_information(mail_data->full_address_to, &recipient_str, &total_cnt, false);
@@ -1974,10 +1956,8 @@ static char *_mailbox_get_ricipient_display_string(int mail_id)
 			display_string = STRNDUP(mail_data->alias_recipient, RECIPIENT_LEN - 1);
 			debug_secure("alias_recipient :%s, %s", mail_data->alias_recipient, mail_data->full_address_to);
 		}
-	}
 
-	if (mail_data) {
-		email_free_mail_data(&mail_data, 1);
+		email_engine_free_mail_data_list(&mail_data, 1);
 	}
 
 	return display_string;
@@ -2336,15 +2316,13 @@ MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t *mail_info
 	ld->timeordate = email_get_str_datetime(ld->absolute_time);
 
 	if (view->sort_type == EMAIL_SORT_TO_CC_BCC) {
-		int err;
 		int i;
 		int account_count = 0;
 		email_account_t *account_list = NULL;
 
 		ld->is_to_address_mail = false;
 
-		err = email_get_account_list(&account_list, &account_count);
-		if (err == EMAIL_ERROR_NONE && account_list) {
+		if (email_engine_get_account_list(&account_count, &account_list)) {
 			for (i = 0; i < account_count; i++) {
 				if (view->account_id == 0 || view->account_id == account_list[i].account_id) {
 					if (g_strstr_len(mail_info->email_address_recipient, -1, account_list[i].user_email_address)) {
@@ -2353,9 +2331,8 @@ MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t *mail_info
 					}
 				}
 			}
+			email_engine_free_account_list(&account_list, account_count);
 		}
-		if (account_list)
-			email_free_account(&account_list, account_count);
 	}
 	return ld;
 }
@@ -2682,7 +2659,6 @@ bool mailbox_check_searched_mail(int mail_id, void *data)
 	retvm_if(!data, false, "data is NULL");
 	email_list_filter_t *filter_list = NULL;
 	int cnt_filter_list = 3;
-	int err = 0;
 	int i = 0;
 	int total_count = 0, unread_count = 0;
 
@@ -2720,10 +2696,9 @@ bool mailbox_check_searched_mail(int mail_id, void *data)
 	if (search_data)
 		_add_search_data_into_filter_list(search_data, filter_list, &i);
 
-	err = email_count_mail(filter_list, cnt_filter_list, &total_count, &unread_count);
-	debug_warning_if(err != EMAIL_ERROR_NONE, "email_count_mail - err (%d)", err);
+	email_engine_get_mail_count(filter_list, cnt_filter_list, &total_count, &unread_count);
 
-	email_free_list_filter(&filter_list, cnt_filter_list);
+	email_engine_free_list_filter(&filter_list, cnt_filter_list);
 
 	debug_log("total_count(%d)", total_count);
 
