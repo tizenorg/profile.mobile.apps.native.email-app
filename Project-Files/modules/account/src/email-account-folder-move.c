@@ -136,8 +136,6 @@ static void _account_list_for_mail_move(EmailAccountView *view, int account_inde
 		}
 	}
 
-	email_engine_free_mailbox_list(&mailbox_list, mailbox_list_count);
-
 	debug_leave();
 }
 
