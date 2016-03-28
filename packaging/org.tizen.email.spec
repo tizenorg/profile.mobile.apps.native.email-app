@@ -94,9 +94,9 @@ Description: Native email application
 %define _sys_license_dir %{TZ_SYS_SHARE}/license
 %endif
 
-export CFLAGS="${CFLAGS} -Wall -fvisibility=hidden"
-export CXXFLAGS="${CXXFLAGS} -Wall -fvisibility=hidden"
-export LDFLAGS="${LDFLAGS} -Wl,--hash-style=both -Wl,--rpath=%{_pkg_lib_dir} -Wl,--as-needed -Wl,-zdefs"
+export CFLAGS="${CFLAGS} -Wall -fvisibility=hidden -flto"
+export CXXFLAGS="${CXXFLAGS} -Wall -fvisibility=hidden -flto"
+export LDFLAGS="${LDFLAGS} -Wl,--hash-style=both -Wl,--rpath=%{_pkg_lib_dir} -Wl,--as-needed -Wl,-zdefs -flto"
 
 %if 0%{?sec_build_binary_debug_enable}
 export CFLAGS="${CFLAGS} -DTIZEN_DEBUG_ENABLE"
