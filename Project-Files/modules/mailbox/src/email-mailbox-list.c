@@ -488,6 +488,10 @@ static void _mail_item_check_changed_cb(void *data, Evas_Object *obj, void *even
 			debug_log("email being sent selected - unselect it(%d)", ld->mail_status);
 			ld->checked = EINA_FALSE;
 			elm_check_state_set(ld->check_btn, ld->checked);
+			int ret = notification_status_message_post(email_get_email_string("IDS_EMAIL_TPOP_SENDING_EMAIL_ING"));
+			if (ret != NOTIFICATION_ERROR_NONE) {
+				debug_warning("notification_status_message_post() failed: %d", ret);
+			}
 			return;
 		}
 
