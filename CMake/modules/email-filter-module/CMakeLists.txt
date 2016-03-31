@@ -23,9 +23,9 @@ ENDIF(${BUILD_SHARED_LIBS})
 ADD_CUSTOM_COMMAND(
 	OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/email-filter.edj
 	COMMAND edje_cc -no-save -id ${PROJECT_EDC_IMAGES_DIR} ${EDJE_CC_DEFINITIONS}
-	${PROJECT_EDC_DIR}/filter/email-filter.edc ${CMAKE_CURRENT_BINARY_DIR}/email-filter.edj
-	DEPENDS ${PROJECT_EDC_DIR}/filter/email-filter.edc
-	${PROJECT_EDC_DIR}/filter/email-filter-address-edit-view.edc)
+	${PROJECT_EDJE_DIR}/email-filter.edc ${CMAKE_CURRENT_BINARY_DIR}/email-filter.edj
+	DEPENDS ${PROJECT_EDJE_DIR}/email-filter.edc
+			${PROJECT_EDC_DIR}/filter/email-filter-address-edit-view.edc)
 
 ADD_CUSTOM_TARGET(email-filter.edj ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/email-filter.edj)
 

@@ -33,8 +33,8 @@ ENDIF(${BUILD_SHARED_LIBS})
 ADD_CUSTOM_COMMAND(
 		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/email-viewer.edj
 		COMMAND edje_cc -no-save -id ${PROJECT_EDC_IMAGES_DIR} ${EDJE_CC_DEFINITIONS}
-		${PROJECT_EDC_DIR}/viewer/email-viewer.edc ${CMAKE_CURRENT_BINARY_DIR}/email-viewer.edj
-		DEPENDS ${PROJECT_EDC_DIR}/viewer/email-viewer.edc
+		${PROJECT_EDJE_DIR}/email-viewer.edc ${CMAKE_CURRENT_BINARY_DIR}/email-viewer.edj
+		DEPENDS ${PROJECT_EDJE_DIR}/email-viewer.edc
 				${PROJECT_EDC_DIR}/viewer/email-viewer-common.edc
 				${PROJECT_EDC_DIR}/viewer/email-viewer-base-layout.edc
 				${PROJECT_EDC_DIR}/viewer/email-viewer-subject-layout.edc
