@@ -38,8 +38,8 @@ ENDIF(${BUILD_SHARED_LIBS})
 ADD_CUSTOM_COMMAND(
 		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/email-composer-view.edj
 		COMMAND edje_cc -no-save -id ${PROJECT_EDC_IMAGES_DIR} ${EDJE_CC_DEFINITIONS}
-		${PROJECT_EDC_DIR}/composer/email-composer-view.edc ${CMAKE_CURRENT_BINARY_DIR}/email-composer-view.edj
-		DEPENDS ${PROJECT_EDC_DIR}/composer/email-composer-view.edc
+		${PROJECT_EDJE_DIR}/email-composer-view.edc ${CMAKE_CURRENT_BINARY_DIR}/email-composer-view.edj
+		DEPENDS ${PROJECT_EDJE_DIR}/email-composer-view.edc
 				${PROJECT_EDC_DIR}/composer/email-composer-edc-common.edc
 				${PROJECT_EDC_DIR}/composer/email-composer-layouts.edc
 				${PROJECT_EDC_DIR}/composer/email-composer-attachment.edc

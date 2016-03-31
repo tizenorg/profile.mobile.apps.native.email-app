@@ -24,8 +24,8 @@ ENDIF(${BUILD_SHARED_LIBS})
 ADD_CUSTOM_COMMAND(
 		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/email-account.edj
 		COMMAND edje_cc -no-save -id ${PROJECT_EDC_IMAGES_DIR} ${EDJE_CC_DEFINITIONS}
-		${PROJECT_EDC_DIR}/account/email-account.edc ${CMAKE_CURRENT_BINARY_DIR}/email-account.edj
-		DEPENDS ${PROJECT_EDC_DIR}/account/email-account.edc
+		${PROJECT_EDJE_DIR}/email-account.edc ${CMAKE_CURRENT_BINARY_DIR}/email-account.edj
+		DEPENDS ${PROJECT_EDJE_DIR}/email-account.edc
 				${PROJECT_EDC_DIR}/account/email-account-base-layout.edc
 				${PROJECT_EDC_DIR}/common/email-parts.edc
 				${PROJECT_EDC_DIR}/common/email-templates.edc

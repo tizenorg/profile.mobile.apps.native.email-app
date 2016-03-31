@@ -1,0 +1,93 @@
+
+# Project Name
+APPNAME = email
+
+# Project Type
+type = app
+
+# Project Profile
+profile = mobile-3.0
+
+# C Sources
+USER_SRCS = \
+	main/email-main.c \
+	common/src/*.c \
+	modules/account/src/*.c \
+	modules/composer/src/*.c \
+	modules/filter/src/*.c \
+	modules/mailbox/src/*.c \
+	modules/setting/src/*.c \
+	modules/viewer/src/*.c
+
+# EDC Sources
+USER_EDCS = \
+	res/edje/email-account.edc \
+	res/edje/email-common-theme.edc \
+	res/edje/email-composer-view.edc \
+	res/edje/email-filter.edc \
+	res/edje/email-mailbox.edc \
+	res/edje/email-setting-theme.edc \
+	res/edje/email-viewer.edc
+
+# PO Sources
+USER_POS = res/po/*.po
+
+# User Defines
+USER_DEFS = _EWK_LOAD_NONEMPTY_LAYOUT_FINISHED_CB_UNAVAILABLE_
+USER_CPP_DEFS =
+
+# User Undefines
+USER_UNDEFS =
+USER_CPP_UNDEFS =
+
+# User Libraries
+USER_LIBS =
+
+# User Objects
+USER_OBJS =
+USER_OBJS_ABS =
+
+# User Includes
+## C Compiler
+USER_INC_DIRS = \
+	common/inc \
+	modules/account/inc \
+	modules/composer/inc \
+	modules/filter/inc \
+	modules/mailbox/inc \
+	modules/setting/inc \
+	modules/viewer/inc
+
+USER_INC_DIRS_ABS =
+USER_INC_FILES =
+USER_INC_FILES_ABS =
+## C++ Compiler
+USER_CPP_INC_DIRS =
+USER_CPP_INC_DIRS_ABS =
+USER_CPP_INC_FILES =
+USER_CPP_INC_FILES_ABS =
+
+# User Library Path
+USER_LIB_DIRS =
+USER_LIB_DIRS_ABS =
+
+# EDC Resource Path
+USER_EDCS_IMAGE_DIRS = \
+	edc/images \
+	edc/images/composer_icon \
+	edc/images/viewer_icon \
+	edc/images/list_icon \
+	res/images/list_icon
+
+USER_EDCS_IMAGE_DIRS_ABS =
+USER_EDCS_SOUND_DIRS =
+USER_EDCS_SOUND_DIRS_ABS =
+USER_EDCS_FONT_DIRS =
+USER_EDCS_FONT_DIRS_ABS =
+
+# EDC Flags
+USER_EXT_EDC_KEYS =
+
+# Resource Filter
+USER_RES_INCLUDE =
+USER_RES_EXCLUDE =

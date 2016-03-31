@@ -104,10 +104,10 @@ export CXXFLAGS="${CXXFLAGS} -DTIZEN_DEBUG_ENABLE"
 export FFLAGS="${FFLAGS} -DTIZEN_DEBUG_ENABLE"
 %endif
 
-%define _tmp_buld_dir TEMP_BUILD_DIR/%{_project}-%{_arch}
+%define _gbs_buld_dir GBS_BUILD_DIR/%{_project}-%{_arch}
 
-mkdir -p %{_tmp_buld_dir}
-cd %{_tmp_buld_dir}
+mkdir -p %{_gbs_buld_dir}
+cd %{_gbs_buld_dir}
 
 cmake ../../CMake -DCMAKE_INSTALL_PREFIX=%{_pkg_dir} \
 	-DBUILD_SHARED_LIBS=%{_build_shared_libs} \
@@ -130,7 +130,7 @@ mkdir -p %{buildroot}/%{_opt_pkg_dir}/data
 mkdir -p %{buildroot}/%{_opt_pkg_dir}/cache
 mkdir -p %{buildroot}/%{_opt_pkg_dir}/shared/data
 %endif
-cd %{_tmp_buld_dir}
+cd %{_gbs_buld_dir}
 
 %make_install
 
@@ -153,7 +153,7 @@ chown -R 5000:5000 %{_opt_pkg_dir}/shared/data
 
 %files
 %defattr(-,root,root,-)
-%manifest %{_tmp_buld_dir}/%{name}.manifest
+%manifest %{_gbs_buld_dir}/%{name}.manifest
 
 %if 0%{?_tizen_2_4}
 %dir %{_opt_pkg_dir}/data

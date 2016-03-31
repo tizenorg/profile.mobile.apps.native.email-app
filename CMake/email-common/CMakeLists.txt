@@ -36,8 +36,8 @@ ADD_CUSTOM_COMMAND(
 		-id ${PROJECT_IMAGES_DIR}/composer_icon
 		-id ${PROJECT_IMAGES_DIR}/list_icon
 		${EDJE_CC_DEFINITIONS}
-		${PROJECT_EDC_DIR}/common/email-common-theme.edc ${CMAKE_CURRENT_BINARY_DIR}/email-common-theme.edj
-		DEPENDS ${PROJECT_EDC_DIR}/common/email-common-theme.edc
+		${PROJECT_EDJE_DIR}/email-common-theme.edc ${CMAKE_CURRENT_BINARY_DIR}/email-common-theme.edj
+		DEPENDS ${PROJECT_EDJE_DIR}/email-common-theme.edc
 				${PROJECT_EDC_DIR}/common/email-title-search.edc
 				${PROJECT_EDC_DIR}/common/email-colors.edc
 				${PROJECT_COMMON_INCLUDE}/email-images.h
