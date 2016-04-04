@@ -449,7 +449,6 @@ void _viewer_hide(email_view_t *self)
 
 	EmailViewerView *view = (EmailViewerView *)self;
 
-	viewer_hide_webview(view);
 	elm_object_focus_allow_set(view->en_subject, EINA_FALSE);
 
 	debug_leave();
@@ -462,7 +461,6 @@ void _viewer_show(email_view_t *self)
 
 	EmailViewerView *view = (EmailViewerView *)self;
 
-	viewer_show_webview(view);
 	elm_object_focus_allow_set(view->en_subject, EINA_TRUE);
 
 	debug_leave();
@@ -1489,7 +1487,7 @@ void _move_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_UN
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_EDIT_MODE, 0) &&
 		email_params_add_str_array(params, EMAIL_BUNDLE_KEY_ARRAY_SELECTED_MAIL_IDS, &sa_mail_id, 1)) {
 
-		view->loaded_module = viewer_create_module(view, EMAIL_MODULE_ACCOUNT, params, false);
+		view->loaded_module = viewer_create_module(view, EMAIL_MODULE_ACCOUNT, params);
 	}
 
 	email_params_free(&params);

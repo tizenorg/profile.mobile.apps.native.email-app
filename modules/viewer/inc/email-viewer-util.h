@@ -122,11 +122,10 @@ int viewer_delete_email(EmailViewerView *view);
  * @param[in]	data			User data (Email viewer data)
  * @param[in]	module_type		Email Module type
  * @param[in]	params			Emal params handle to create child module
- * @param[in]	hide			If set hide webview
  *
  * @return Handler with suitable Email module, otherwise NULL
  */
-email_module_h viewer_create_module(void *data, email_module_type_e module_type, email_params_h params, bool hide);
+email_module_h viewer_create_module(void *data, email_module_type_e module_type, email_params_h params);
 
 /**
  * @brief Create Composer module

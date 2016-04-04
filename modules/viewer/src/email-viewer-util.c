@@ -556,8 +556,6 @@ static void _module_destroy_request_cb(void *data, email_module_h module)
 
 	EmailViewerView *view = (EmailViewerView *)data;
 
-	viewer_show_webview(view);
-
 	if (view->base.content) {
 		elm_object_tree_focus_allow_set(view->base.content, EINA_TRUE);
 	}
@@ -589,8 +587,6 @@ static void _scheduled_composer_destroy_request_cb(void *data, email_module_h mo
 
 	EmailViewerView *view = (EmailViewerView *)data;
 
-	viewer_show_webview(view);
-
 	if (view->base.content) {
 		elm_object_tree_focus_allow_set(view->base.content, EINA_TRUE);
 	}
@@ -615,8 +611,6 @@ static void _account_destroy_request_cb(void *data, email_module_h module)
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 
 	EmailViewerView *view = (EmailViewerView *)data;
-
-	viewer_show_webview(view);
 
 	if (view->base.content) {
 		elm_object_tree_focus_allow_set(view->base.content, EINA_TRUE);
@@ -667,7 +661,7 @@ static void _account_result_cb(void *data, email_module_h module, email_params_h
 	}
 }
 
-email_module_h viewer_create_module(void *data, email_module_type_e module_type, email_params_h params, bool hide)
+email_module_h viewer_create_module(void *data, email_module_type_e module_type, email_params_h params)
 {
 	debug_enter();
 	retvm_if(data == NULL, NULL, "Invalid parameter: data[NULL]");
@@ -687,8 +681,6 @@ email_module_h viewer_create_module(void *data, email_module_type_e module_type,
 		view->is_composer_module_launched = TRUE;
 	}
 
-	if (hide) viewer_hide_webview(view);
-
 	email_module_h module = email_module_create_child(view->base.module, module_type, params, &listener);
 	if (view->base.content)
 		elm_object_tree_focus_allow_set(view->base.content, EINA_FALSE);
@@ -706,8 +698,6 @@ email_module_h viewer_create_scheduled_composer_module(void *data, email_params_
 	email_module_listener_t listener = { 0 };
 	listener.cb_data = view;
 	listener.destroy_request_cb = _scheduled_composer_destroy_request_cb;
-
-	viewer_hide_webview(view);
 
 	email_module_h module = email_module_create_child(view->base.module,
 			EMAIL_MODULE_COMPOSER, params, &listener);
@@ -777,7 +767,7 @@ void viewer_create_email(EmailViewerView *view, const char *email_address)
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_RUN_TYPE, RUN_COMPOSER_EXTERNAL) &&
 		email_params_add_str(params, EMAIL_BUNDLE_KEY_TO, &email_address[scheme_length])) {
 
-		view->loaded_module = viewer_create_module(view, EMAIL_MODULE_COMPOSER, params, view);
+		view->loaded_module = viewer_create_module(view, EMAIL_MODULE_COMPOSER, params);
 	}
 
 	email_params_free(&params);
@@ -1070,7 +1060,7 @@ void viewer_send_email(void *data, char *email_address)
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_RUN_TYPE, RUN_COMPOSER_EXTERNAL) &&
 		email_params_add_str(params, EMAIL_BUNDLE_KEY_TO, email_address)) {
 
-		view->loaded_module = viewer_create_module(view, EMAIL_MODULE_COMPOSER, params, true);
+		view->loaded_module = viewer_create_module(view, EMAIL_MODULE_COMPOSER, params);
 	}
 
 	email_params_free(&params);
@@ -1122,7 +1112,7 @@ void viewer_launch_composer(void *data, int type)
 		((type != RUN_EML_REPLY && type != RUN_EML_REPLY_ALL && type != RUN_EML_FORWARD) ||
 		email_params_add_str(params, EMAIL_BUNDLE_KEY_MYFILE_PATH, view->eml_file_path))) {
 
-		view->loaded_module = viewer_create_module(view, EMAIL_MODULE_COMPOSER, params, true);
+		view->loaded_module = viewer_create_module(view, EMAIL_MODULE_COMPOSER, params);
 	}
 
 	email_params_free(&params);

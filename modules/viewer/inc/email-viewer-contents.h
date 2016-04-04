@@ -62,22 +62,6 @@ void viewer_set_webview_content(EmailViewerView *view);
 void viewer_set_initial_webview_height(void *data);
 
 /**
- * @brief Hides webview
- *
- * @param[in]	data			User data (Email viewer data)
- *
- */
-void viewer_hide_webview(void *data);
-
-/**
- * @brief Shows webview
- *
- * @param[in]	data			User data (Email viewer data)
- *
- */
-void viewer_show_webview(void *data);
-
-/**
  * @brief Provides memory warning notification
  *
  * @param[in]	view			Email viewer data

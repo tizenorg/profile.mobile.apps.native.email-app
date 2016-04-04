@@ -357,7 +357,7 @@ void viewer_edit_email_cb(void *data, Evas_Object *obj, void *event_info)
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, view->mailbox_id) &&
 		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAIL_ID, view->mail_id)) {
 
-		view->loaded_module = viewer_create_module(view, EMAIL_MODULE_COMPOSER, params, true);
+		view->loaded_module = viewer_create_module(view, EMAIL_MODULE_COMPOSER, params);
 	}
 
 	email_params_free(&params);

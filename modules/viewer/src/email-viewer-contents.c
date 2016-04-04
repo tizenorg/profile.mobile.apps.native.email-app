@@ -1308,36 +1308,6 @@ static char *_viewer_convert_plain_text_body(EmailViewerWebview *wvd)
 	return html;
 }
 
-void viewer_hide_webview(void *data)
-{
-	debug_enter();
-	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerView *view = (EmailViewerView *)data;
-
-	if (view->webview) {
-		if (!ewk_view_visibility_set(view->webview, EINA_FALSE)) {
-			debug_error("set visibility as FALSE failed");
-			return;
-		}
-		debug_log("set visibility as FALSE");
-	}
-}
-
-void viewer_show_webview(void *data)
-{
-	debug_enter();
-	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerView *view = (EmailViewerView *)data;
-
-	if (view->webview) {
-		if (!ewk_view_visibility_set(view->webview, EINA_TRUE)) {
-			debug_error("set visibility as TRUE failed");
-			return;
-		}
-		debug_log("set visibility as TRUE");
-	}
-}
-
 void viewer_webview_handle_mem_warning(EmailViewerView *view, bool hard)
 {
 	debug_enter();
