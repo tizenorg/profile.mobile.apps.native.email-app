@@ -111,7 +111,7 @@ void viewer_ctxpopup_detail_contact_cb(void *data, Evas_Object *obj, void *event
 	EmailViewerView *view = _g_md;
 
 	DELETE_EVAS_OBJECT(view->con_popup);
-	debug_secure("data(%s)", data);
+	debug_secure("data(%d)", (int)(intptr_t)data);
 	viewer_view_contact_detail(view, (intptr_t)data);
 	debug_leave();
 }

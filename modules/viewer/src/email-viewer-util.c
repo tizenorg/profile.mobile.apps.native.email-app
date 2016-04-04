@@ -1072,7 +1072,7 @@ void viewer_view_contact_detail(void *data, int index)
 {
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	debug_secure("index (%s)", index);
+	debug_secure("index (%d)", index);
 
 	EmailViewerView *view = (EmailViewerView *)data;
 	email_params_h params = NULL;
