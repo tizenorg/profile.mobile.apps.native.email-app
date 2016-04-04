@@ -141,6 +141,7 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.432546674" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_DEBUG"/>
+									<listOptionValue builtIn="false" value="_EWK_LOAD_NONEMPTY_LAYOUT_FINISHED_CB_UNAVAILABLE_"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1843090427" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
@@ -263,6 +264,7 @@
 								</option>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1554526139" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_DEBUG"/>
+									<listOptionValue builtIn="false" value="_EWK_LOAD_NONEMPTY_LAYOUT_FINISHED_CB_UNAVAILABLE_"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.44126" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
@@ -287,7 +289,7 @@
 								</inputType>
 							</tool>
 							<tool command="arm-linux-gnueabi-as" id="org.tizen.nativeapp.tool.sbi.gnu.assembler.base.255202399" name="Assembler" superClass="org.tizen.nativeapp.tool.sbi.gnu.assembler.base">
-								<option id="gnu.both.asm.option.include.paths.2019209207" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath"/>
+								<option id="gnu.both.asm.option.include.paths.2019209207" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths"/>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1471696576" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 							<tool id="org.tizen.nativecore.tool.fnmapgen.1838668002" name="C FN-Map Generator" superClass="org.tizen.nativecore.tool.fnmapgen"/>
@@ -304,8 +306,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/edc/images/list_icon}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/res/images/list_icon}&quot;"/>
 								</option>
-								<option id="sbi.gnu.edc.compiler.option.misc.sd.382941295" name="Sound Path (-sd)" superClass="sbi.gnu.edc.compiler.option.misc.sd" valueType="stringList"/>
-								<option id="sbi.gnu.edc.compiler.option.misc.fd.577523541" name="Font Path (-fd)" superClass="sbi.gnu.edc.compiler.option.misc.fd" valueType="stringList"/>
+								<option id="sbi.gnu.edc.compiler.option.misc.sd.382941295" name="Sound Path (-sd)" superClass="sbi.gnu.edc.compiler.option.misc.sd"/>
+								<option id="sbi.gnu.edc.compiler.option.misc.fd.577523541" name="Font Path (-fd)" superClass="sbi.gnu.edc.compiler.option.misc.fd"/>
 							</tool>
 						</toolChain>
 					</folderInfo>
@@ -457,6 +459,9 @@
 								<option id="sbi.gnu.cpp.compiler.option.frameworks.core.1916055289" name="Tizen-Frameworks" superClass="sbi.gnu.cpp.compiler.option.frameworks.core" valueType="userObjs">
 									<listOptionValue builtIn="false" value="Native_API"/>
 								</option>
+								<option id="gnu.cpp.compiler.option.preprocessor.def.1963942929" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="_EWK_LOAD_NONEMPTY_LAYOUT_FINISHED_CB_UNAVAILABLE_"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1515661350" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool command="clang" id="org.tizen.nativecore.tool.sbi.gnu.c.compiler.710766812" name="C Compiler" superClass="org.tizen.nativecore.tool.sbi.gnu.c.compiler">
@@ -576,7 +581,9 @@
 								<option id="sbi.gnu.c.compiler.option.frameworks.core.803921275" name="Tizen-Frameworks" superClass="sbi.gnu.c.compiler.option.frameworks.core" valueType="userObjs">
 									<listOptionValue builtIn="false" value="Native_API"/>
 								</option>
-								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1190372213" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols"/>
+								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1190372213" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="_EWK_LOAD_NONEMPTY_LAYOUT_FINISHED_CB_UNAVAILABLE_"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1854434488" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="org.tizen.nativeide.tool.sbi.gnu.c.linker.base.1786708381" name="C Linker" superClass="org.tizen.nativeide.tool.sbi.gnu.c.linker.base"/>
@@ -600,7 +607,7 @@
 								</inputType>
 							</tool>
 							<tool command="arm-linux-gnueabi-as" id="org.tizen.nativeapp.tool.sbi.gnu.assembler.base.281148942" name="Assembler" superClass="org.tizen.nativeapp.tool.sbi.gnu.assembler.base">
-								<option id="gnu.both.asm.option.include.paths.1659301768" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath"/>
+								<option id="gnu.both.asm.option.include.paths.1659301768" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths"/>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.988328688" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 							<tool id="org.tizen.nativecore.tool.fnmapgen.611839479" name="C FN-Map Generator" superClass="org.tizen.nativecore.tool.fnmapgen"/>
@@ -617,8 +624,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/edc/images/list_icon}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/res/images/list_icon}&quot;"/>
 								</option>
-								<option id="sbi.gnu.edc.compiler.option.misc.sd.1234125863" name="Sound Path (-sd)" superClass="sbi.gnu.edc.compiler.option.misc.sd" valueType="stringList"/>
-								<option id="sbi.gnu.edc.compiler.option.misc.fd.2126410015" name="Font Path (-fd)" superClass="sbi.gnu.edc.compiler.option.misc.fd" valueType="stringList"/>
+								<option id="sbi.gnu.edc.compiler.option.misc.sd.1234125863" name="Sound Path (-sd)" superClass="sbi.gnu.edc.compiler.option.misc.sd"/>
+								<option id="sbi.gnu.edc.compiler.option.misc.fd.2126410015" name="Font Path (-fd)" superClass="sbi.gnu.edc.compiler.option.misc.fd"/>
 							</tool>
 						</toolChain>
 					</folderInfo>
