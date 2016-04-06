@@ -286,11 +286,6 @@ struct _ComposerAttachmentItemData {
 #define _EDJ(o) elm_layout_edje_get(o)
 #define COMPOSER_STRDUP(src) (((src)) ? g_strdup((src)) : NULL)
 
-#define COMPOSER_NAVI_HEIGHT 72
-#define COMPOSER_NAVI_LAND_HEIGHT 72
-#define COMPOSER_MESSAGEBAR_HEIGHT 69
-#define COMPOSER_DEFAULT_WEBVIEW_MARGIN 24 // top padding: 12px, bottom padding: 12px
-
 typedef unsigned char		BYTE;
 typedef unsigned short		WORD;
 typedef unsigned long		DWORD;

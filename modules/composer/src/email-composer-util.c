@@ -1002,46 +1002,6 @@ void composer_util_resize_webview_height(EmailComposerView *view)
 	debug_leave();
 }
 
-void composer_util_resize_min_height_for_new_message(EmailComposerView *view, int ime_height)
-{
-	debug_enter();
-
-	if (view->with_original_message) {
-		int min_size = 0;
-		char buf[BUF_LEN_L] = {'\0'};
-
-		Evas_Coord nWidth = 0, nHeight = 0;
-		elm_win_screen_size_get(view->base.module->win, NULL, NULL, &nWidth, &nHeight);
-		int rot = elm_win_rotation_get(view->base.module->win);
-		double ewk_scale = ewk_view_scale_get(view->ewk_view);
-
-		/*debug_log("==> window [w, h, rot] = [%d, %d, %d]", nWidth, nHeight, rot);*/
-		if ((rot == 0) || (rot == 180)) {
-			min_size = (double)(nHeight - COMPOSER_NAVI_HEIGHT - COMPOSER_MESSAGEBAR_HEIGHT - COMPOSER_DEFAULT_WEBVIEW_MARGIN - ime_height) / ewk_scale;
-		} else {
-			min_size = (double)(nWidth - COMPOSER_NAVI_LAND_HEIGHT - COMPOSER_MESSAGEBAR_HEIGHT - COMPOSER_DEFAULT_WEBVIEW_MARGIN - ime_height) / ewk_scale;
-		}
-
-		if (view->is_checkbox_clicked) {
-			/* When original message area is visible, the area should have min height. */
-			snprintf(buf, sizeof(buf), EC_JS_UPDATE_MIN_HEIGHT_OF_ORG_MESSAGE, min_size);
-			if (!ewk_view_script_execute(view->ewk_view, buf, NULL, NULL)) {
-				debug_error("EC_JS_UPDATE_MIN_HEIGHT_OF_ORG_MESSAGE failed!");
-			}
-
-			min_size = 0; /* No need to have min height for new message area in this case. */
-		}
-
-		/* Update min height for new message area */
-		snprintf(buf, sizeof(buf), EC_JS_UPDATE_MIN_HEIGHT_OF_NEW_MESSAGE, min_size);
-		if (!ewk_view_script_execute(view->ewk_view, buf, NULL, NULL)) {
-			debug_error("EC_JS_UPDATE_MIN_HEIGHT_OF_NEW_MESSAGE failed!");
-		}
-	}
-
-	debug_leave();
-}
-
 void composer_util_display_position(void *data)
 {
 	debug_enter();

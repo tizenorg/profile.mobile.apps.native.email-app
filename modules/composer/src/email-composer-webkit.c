@@ -586,13 +586,6 @@ static void _ewk_view_policy_navigation_decide_cb(void *data, Evas_Object *obj, 
 						debug_error("EC_JS_SET_FOCUS_NEW_MESSAGE is failed!");
 					}
 				}
-				Evas_Coord x = 0, y = 0, w = 0, h = 0;
-				Ecore_IMF_Context *ctx = ecore_imf_context_add(ecore_imf_context_default_id_get());
-				ecore_imf_context_input_panel_geometry_get(ctx, &x, &y, &w, &h);
-				ecore_imf_context_del(ctx);
-
-				debug_log("imf size ==> (x:%d,y:%d,w:%d,h:%d)", x, y, w, h);
-				composer_util_resize_min_height_for_new_message(view, h);
 				edje_object_signal_emit(_EDJ(view->composer_layout), "ec,action,clicked,layout", "");
 			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_GET_FOCUS_NEW)) {
 				view->is_focus_on_new_message_div = EINA_TRUE;
