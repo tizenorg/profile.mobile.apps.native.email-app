@@ -597,15 +597,6 @@ Eina_Bool composer_util_is_mail_modified(void *data);
 void composer_util_resize_webview_height(EmailComposerView *view);
 
 /**
- * @brief Calculate min height for composer webview accordingly to image
- *
- * @param[in]	view				Email composer data
- * @param[in]	ime_height		Image height
- *
- */
-void composer_util_resize_min_height_for_new_message(EmailComposerView *view, int ime_height);
-
-/**
  * @brief Display geometry for all elements in composer
  *
  * @param[in]	data»			User data (Email composer data)

@@ -53,7 +53,7 @@ html {
 	padding-bottom:8px;
 	padding-left:10px;
 	padding-right:10px;
-	overflow-x: scroll;
+	overflow-x: auto;
 	overflow-y: hidden;
 	outline:none;
 	position:relative;
@@ -65,7 +65,7 @@ html {
 	padding-bottom:8px;
 	padding-left:10px;
 	padding-right:10px;
-	overflow-x: scroll;
+	overflow-x: auto;
 	overflow-y: hidden;
 	outline:none;
 	position:relative;
@@ -85,14 +85,12 @@ html {
 .css-originalMessageBar-checked {
 	display:table;
 	width: 100%;
-	min-height:46px;
 	-webkit-tap-highlight-color:rgba(0, 0, 0, 0);
 }
 
 .css-originalMessageBar-unchecked {
 	display:table;
 	width: 100%;
-	height:auto;
 	-webkit-tap-highlight-color:rgba(0, 0, 0, 0);
 }
 

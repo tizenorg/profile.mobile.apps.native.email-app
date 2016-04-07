@@ -1445,11 +1445,6 @@ static void _composer_virtualkeypad_size_changed_cb(void *data, Evas_Object *obj
 	debug_enter();
 
 	EmailComposerView *view = (EmailComposerView *)data;
-	Evas_Coord_Rectangle *rect = (Evas_Coord_Rectangle *)event_info;
-
-	debug_log("[x,y = %d,%d] - [w,h = %d,%d]", rect->x, rect->y, rect->w, rect->h);
-
-	composer_util_resize_min_height_for_new_message(view, rect->h);
 
 	if (view->ps_box) {
 		composer_ps_change_layout_size(view);
