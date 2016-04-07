@@ -736,7 +736,7 @@ static void _composer_attach_panel_reply_cb(void *data, const char **path_array,
 	EmailComposerView *view = data;
 
 	composer_attachment_process_attachments_with_array(view,
-			path_array, array_len, ATTACH_BY_USE_ORG_FILE, EINA_FALSE);
+			path_array, array_len, ATTACH_BY_COPY_FILE, EINA_FALSE);
 
 	debug_leave();
 }
