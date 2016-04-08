@@ -836,9 +836,6 @@ group { name: "elm/button/base/body_button";
 			}
 		}
 		E_PART_PADDING_BOTTOM(DOWNLOAD_BUTTON_TEXTBLOCK_PADDING_BOTTOM_HEIGHT);
-		part {
-			name: "button_image";
-		}
 		part { name: "elm.text";
 			type: TEXTBLOCK;
 			scale: 1;
