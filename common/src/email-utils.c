@@ -2916,9 +2916,12 @@ EMAIL_API int email_preview_attachment_file(email_module_t *module, const char *
 	int ret = 0;
 	email_params_h params = NULL;
 
+	char tmp[MAX_PATH_LEN] = { 0 };
+	snprintf(tmp, MAX_PATH_LEN, "file://%s", path);
+
 	if (email_params_create(&params) &&
 		email_params_set_operation(params, APP_CONTROL_OPERATION_VIEW) &&
-		email_params_set_uri(params, path) &&
+		email_params_set_uri(params, tmp) &&
 		email_params_add_str(params,
 				EMAIL_PREVIEW_VIEW_MODE_PARAM_NAME,
 				EMAIL_PREVIEW_VIEW_MODE_PARAM_STR_VALUE) &&
