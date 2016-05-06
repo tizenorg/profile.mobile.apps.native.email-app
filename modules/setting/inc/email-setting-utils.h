@@ -377,13 +377,6 @@ int setting_close_icu_pattern_generator(void);
 char *setting_get_datetime_format_text(const char *skeleton, void *time);
 
 /**
- * @brief Get provider name.
- * @param[in]	module	Email settings data
- * @return The provider formated string on success, otherwise NULL. It should be freed.
- */
-char *setting_get_provider_name(EmailSettingModule *module);
-
-/**
  * @brief The function attempts to translate a text string into the user's native language, by looking up the translation in a message catalog.
  * @param[in]	t		Email string setting data
  * @return The translated text string on success, otherwise NULL. It should be freed.
