@@ -134,6 +134,12 @@ void viewer_ctxpopup_add_vip_rule_cb(void *data, Evas_Object *obj, void *event_i
 
 	/* add filtering rule */
 	rule = MEM_ALLOC(rule, 1);
+	if (!rule) {
+		debug_error("Memory allocation failed!");
+		notification_status_message_post(_("IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"));
+		return;
+	}
+
 	rule->account_id = 0;
 	rule->type = EMAIL_PRIORITY_SENDER;
 	rule->value2 = g_strdup(addr);
@@ -152,8 +158,8 @@ void viewer_ctxpopup_add_vip_rule_cb(void *data, Evas_Object *obj, void *event_i
 			debug_warning("email_engine_apply_rule failed");
 		else
 			debug_log("email_engine_apply_rule success");
-		email_engine_free_rule_list(&rule, 1);
 	}
+	email_engine_free_rule_list(&rule, 1);
 
 	if (!add_ok || !apply_ok) {
 		notification_status_message_post(_("IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"));

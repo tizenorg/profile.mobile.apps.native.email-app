@@ -664,6 +664,8 @@ void account_color_list_add(EmailAccountView *view, int account_id, int account_
 	debug_log("account_color : %d", account_color);
 
 	EmailAccountColor *account_color_data = MEM_ALLOC(account_color_data, 1);
+	retm_if(!account_color_data, "Internal error! Failed to allocate memory!");
+
 	account_color_data->account_id = account_id;
 	account_color_data->account_color = account_color;
 	view->account_color_list = g_list_append(view->account_color_list, account_color_data);

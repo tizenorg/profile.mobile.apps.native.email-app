@@ -297,10 +297,10 @@ static void _update_view(EmailSettingView *view)
 	retm_if(!view, "view data is null");
 
 	EmailSettingModule *module = (EmailSettingModule *)view->base.module;
-	account_user_data_t *user_data = account_data->user_data;
 
 	/* read account info again. */
 	if (account_data) {
+		account_user_data_t *user_data = account_data->user_data;
 		genlist_item_updated[SHOW_IMAGE_LIST_ITEM-1] = user_data->show_images;
 		genlist_item_updated[WIFI_AUTODOWNLOAD_LIST_ITEM-1] = user_data->wifi_auto_download;
 		genlist_item_updated[SYNC_ONOFF_LIST_ITEM-1] = !account_data->sync_disabled;
@@ -387,9 +387,12 @@ static void _push_naviframe(EmailSettingView *view)
 	email_module_view_push(&view->base, EMAIL_SETTING_STRING_EMAIL.id, 0);
 	elm_object_item_domain_text_translatable_set(view->base.navi_item, EMAIL_SETTING_STRING_EMAIL.domain, EINA_TRUE);
 
-	if (account_data->sync_status & SYNC_STATUS_SYNCING) {
-		view->syncing = EINA_TRUE;
+	if (account_data) {
+		if (account_data->sync_status & SYNC_STATUS_SYNCING) {
+			view->syncing = EINA_TRUE;
+		}
 	}
+
 	evas_object_show(view->base.module->navi);
 }
 

@@ -171,6 +171,10 @@ static void _recipient_mbe_selected_cb(void *data, Evas_Object *obj, void *event
 	Item_Data *item_data = NULL;
 	for (index = 0; index < item_cnt; index++) {
 		item_data = MEM_ALLOC(item_data, 1);
+		if (!item_data) {
+			continue;
+		}
+
 		item_data->index = index;
 		gen_item[index] = elm_genlist_item_append(recipient_popup_genlist, &recipient_popup_itc, (void *)item_data, NULL, ELM_GENLIST_ITEM_NONE, _recipient_popup_genlist_sel, (void *)view);
 		elm_object_item_data_set(gen_item[index], item_data);

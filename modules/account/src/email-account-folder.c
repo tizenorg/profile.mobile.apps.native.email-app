@@ -1587,8 +1587,8 @@ static char *_gl_label_get_for_all_acc_box(void *data, Evas_Object *obj, const c
 				debug_log("invalid box type :%d", i_boxtype);
 				return NULL;
 			}
+			return _create_gl_item_text(tree_item_data, tmp);
 		}
-		return _create_gl_item_text(tree_item_data, tmp);
 	}
 	return NULL;
 }
