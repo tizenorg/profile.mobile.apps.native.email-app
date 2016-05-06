@@ -68,7 +68,7 @@ static void _subject_set_entry_guide_text(Evas_Object *entry)
 {
 	debug_enter();
 
-	char guide_text[BUF_LEN_S] = { 0, };
+	char guide_text[EMAIL_BUFF_SIZE_BIG] = { 0, };
 	snprintf(guide_text, sizeof(guide_text), TEXT_STYLE_SUBJECT_GUIDE, FONT_SIZE_ENTRY, ENTRY_GUIDE_TEXT_FONT_COLOR , email_get_email_string("IDS_EMAIL_HEADER_SUBJECT"));
 	elm_object_part_text_set(entry, "elm.guide", guide_text);
 
@@ -130,7 +130,7 @@ static void _subject_entry_maxlength_reached_cb(void *data, Evas_Object *obj, vo
 {
 	debug_enter();
 
-	char buf[BUF_LEN_M] = { 0, };
+	char buf[EMAIL_BUFF_SIZE_HUG] = { 0, };
 	snprintf(buf, sizeof(buf), email_get_email_string(EMAIL_COMPOSER_STRING_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED.id), EMAIL_LIMIT_COMPOSER_SUBJECT_LENGTH);
 
 	int noti_ret = notification_status_message_post(buf);

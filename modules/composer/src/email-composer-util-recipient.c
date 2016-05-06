@@ -77,8 +77,8 @@ gchar *composer_util_get_ellipsised_entry_name(EmailComposerView *view, Evas_Obj
 
 	debug_secure("width %d, allowed_entry_width %d, entry_string %s", width, allowed_entry_width, entry_string);
 	if (width > allowed_entry_width) {
-		gchar buff[BUF_LEN_L] = { 0 };
-		gchar tmp[BUF_LEN_L] = { 0 };
+		gchar buff[EMAIL_BUFF_SIZE_1K] = { 0 };
+		gchar tmp[EMAIL_BUFF_SIZE_1K] = { 0 };
 		gchar *first_half = NULL;
 		gchar *second_half = NULL;
 		int dots_width = 0;
@@ -90,7 +90,7 @@ gchar *composer_util_get_ellipsised_entry_name(EmailComposerView *view, Evas_Obj
 		 */
 		int j = g_utf8_strlen(entry_string, -1);
 
-		snprintf(buff, BUF_LEN_L, "...");
+		snprintf(buff, EMAIL_BUFF_SIZE_1K, "...");
 		elm_entry_entry_set(entry, buff);
 		evas_object_textblock_size_native_get(text_block, &dots_width, &height);
 
@@ -110,8 +110,8 @@ gchar *composer_util_get_ellipsised_entry_name(EmailComposerView *view, Evas_Obj
 				evas_object_textblock_size_native_get(text_block, &second_width, &height);
 			}
 
-			n = snprintf(tmp, BUF_LEN_L, "%s...%s", (first_half ? first_half : ""), (second_half ? second_half : ""));
-			if (n >= BUF_LEN_L) {
+			n = snprintf(tmp, EMAIL_BUFF_SIZE_1K, "%s...%s", (first_half ? first_half : ""), (second_half ? second_half : ""));
+			if (n >= EMAIL_BUFF_SIZE_1K) {
 				break;
 			}
 
@@ -334,7 +334,7 @@ COMPOSER_ERROR_TYPE_E composer_util_recp_retrieve_recp_string(EmailComposerView 
 	const Eina_List *items = elm_multibuttonentry_items_get(obj);
 	retv_if(!items, COMPOSER_ERROR_NONE);
 
-	char *result = (char *)calloc(eina_list_count(items), BUF_LEN_L);
+	char *result = (char *)calloc(eina_list_count(items), EMAIL_BUFF_SIZE_1K);
 	retvm_if(!result, COMPOSER_ERROR_OUT_OF_MEMORY, "Memory allocation failed!");
 
 	const Eina_List *l = NULL;
@@ -359,13 +359,13 @@ COMPOSER_ERROR_TYPE_E composer_util_recp_retrieve_recp_string(EmailComposerView 
 		if (ri->display_name) {
 			char *processed_name = _util_recp_escaping_email_display_name(ri->display_name, strlen(ri->display_name));
 			if (processed_name) {
-				snprintf(result + strlen(result), BUF_LEN_L, "\"%s\" <%s>;", processed_name, ai->address);
+				snprintf(result + strlen(result), EMAIL_BUFF_SIZE_1K, "\"%s\" <%s>;", processed_name, ai->address);
 				g_free(processed_name);
 			} else {
-				snprintf(result + strlen(result), BUF_LEN_L, "\"%s\" <%s>;", ri->display_name, ai->address);
+				snprintf(result + strlen(result), EMAIL_BUFF_SIZE_1K, "\"%s\" <%s>;", ri->display_name, ai->address);
 			}
 		} else {
-			snprintf(result + strlen(result), BUF_LEN_L, "<%s>;", ai->address);
+			snprintf(result + strlen(result), EMAIL_BUFF_SIZE_1K, "<%s>;", ai->address);
 		}
 	}
 

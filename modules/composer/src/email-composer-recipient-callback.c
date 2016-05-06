@@ -480,7 +480,7 @@ void _recipient_contact_button_clicked_cb(void *data, Evas_Object *obj, void *ev
 	if (((view->selected_entry == view->recp_to_entry.entry) && (view->to_recipients_cnt >= MAX_RECIPIENT_COUNT)) ||
 		((view->selected_entry == view->recp_cc_entry.entry) && (view->cc_recipients_cnt >= MAX_RECIPIENT_COUNT)) ||
 		((view->selected_entry == view->recp_bcc_entry.entry) && (view->bcc_recipients_cnt >= MAX_RECIPIENT_COUNT))) {
-		char buf[BUF_LEN_L] = { 0, };
+		char buf[EMAIL_BUFF_SIZE_1K] = { 0, };
 		snprintf(buf, sizeof(buf), email_get_email_string("IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_RECIPIENTS_HPD_REACHED"), MAX_RECIPIENT_COUNT);
 
 		int noti_ret = notification_status_message_post(buf);

@@ -49,6 +49,7 @@
 #define EMAIL_BUFF_SIZE_MID 64
 #define EMAIL_BUFF_SIZE_BIG 128
 #define EMAIL_BUFF_SIZE_HUG 256
+#define EMAIL_BUFF_SIZE_1K 1024
 #define EMAIL_BUFF_SIZE_4K 4096
 
 /* define bundle key */

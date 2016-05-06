@@ -570,7 +570,7 @@ void viewer_make_hard_link_for_inline_images(void *data, const char *path)
 	retm_if(attach_count <= 0, "Invalid parameter: attach_count <= 0");
 
 	int i = 0;
-	char dest[BUF_LEN_L] = { 0, };
+	char dest[EMAIL_BUFF_SIZE_1K] = { 0, };
 	char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
 	int result = -1;
 
@@ -608,7 +608,7 @@ void viewer_remove_hard_link_for_inline_images(void *data)
 	int attach_count = view->attachment_count;
 
 	int i = 0;
-	char dest[BUF_LEN_L] = { 0, };
+	char dest[EMAIL_BUFF_SIZE_1K] = { 0, };
 	char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
 	int result = -1;
 

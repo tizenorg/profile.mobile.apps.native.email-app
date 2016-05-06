@@ -134,7 +134,7 @@ static void _recipient_notify_invalid_recipient(EmailComposerView *view, MBE_VAL
 				break;
 			case MBE_VALIDATION_ERROR_MAX_NUMBER_REACHED:
 			{
-				char buf[BUF_LEN_L] = { 0, };
+				char buf[EMAIL_BUFF_SIZE_1K] = { 0, };
 				snprintf(buf, sizeof(buf), email_get_email_string("IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_RECIPIENTS_HPD_REACHED"), MAX_RECIPIENT_COUNT);
 
 				noti_ret = notification_status_message_post(buf);
@@ -218,7 +218,7 @@ static void _recipient_from_button_update_text(EmailComposerView *view, email_ac
 	retm_if(!view, "Invalid parameter: data is NULL!");
 	retm_if(!account, "account is NULL!");
 
-	char from_display_name[BUF_LEN_L] = { 0, };
+	char from_display_name[EMAIL_BUFF_SIZE_1K] = { 0, };
 	if (account->account_name && (g_strcmp0(account->account_name, account->user_email_address) != 0)) {
 		snprintf(from_display_name, sizeof(from_display_name), "%s <%s>", account->account_name, account->user_email_address);
 	} else {
@@ -953,8 +953,8 @@ void composer_recipient_update_display_string(EmailComposerView *view, Evas_Obje
 {
 	debug_enter();
 
-	char recp_string[BUF_LEN_L] = { 0, };
-	char final_string[BUF_LEN_L] = { 0, };
+	char recp_string[EMAIL_BUFF_SIZE_1K] = { 0, };
+	char final_string[EMAIL_BUFF_SIZE_1K] = { 0, };
 	char *recp_suffix = NULL;
 	char *entry_ellipsised_string = NULL;
 
@@ -1337,7 +1337,7 @@ void composer_recipient_remove_myaddress(Evas_Object *mbe, const char *myaddress
 
 void composer_recipient_label_text_set(Evas_Object *obj, COMPOSER_RECIPIENT_TYPE_E recp_type) {
 
-	char recp_string[BUF_LEN_M] = { 0, };
+	char recp_string[EMAIL_BUFF_SIZE_HUG] = { 0, };
 	_recipient_get_header_string(recp_type, recp_string, sizeof(recp_string));
 	elm_object_text_set(obj, recp_string);
 }

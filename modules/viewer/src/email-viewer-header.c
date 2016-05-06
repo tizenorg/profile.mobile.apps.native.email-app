@@ -277,8 +277,8 @@ static void _header_show_hide_details_text_set(void *data, Eina_Bool is_opened)
 		btn_text = email_get_email_string("IDS_EMAIL_BUTTON_SHOW_ABB");
 	}
 
-	char buff[BUF_LEN_M] = { 0 };
-	snprintf(buff, BUF_LEN_M, "<font_size=%d>%s</font_size>", EXPAND_BUTTON_TEXT_SIZE, btn_text);
+	char buff[EMAIL_BUFF_SIZE_HUG] = { 0 };
+	snprintf(buff, EMAIL_BUFF_SIZE_HUG, "<font_size=%d>%s</font_size>", EXPAND_BUTTON_TEXT_SIZE, btn_text);
 	elm_object_text_set(view->details_button, buff);
 	debug_leave();
 }
@@ -542,7 +542,7 @@ void header_update_attachment_summary_info(EmailViewerView *view)
 	debug_enter();
 
 	/*set file count*/
-	char file_count[BUF_LEN_S];
+	char file_count[EMAIL_BUFF_SIZE_BIG];
 	if (view->normal_att_count == 1) {
 		snprintf(file_count, sizeof(file_count), "%s", email_get_email_string("IDS_EMAIL_BODY_1_FILE_ABB"));
 	} else {

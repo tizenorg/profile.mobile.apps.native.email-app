@@ -630,7 +630,7 @@ static void _initial_data_set_mail_subject(EmailComposerView *view)
 {
 	debug_enter();
 
-	char temp_subject[BUF_LEN_L] = { 0, };
+	char temp_subject[EMAIL_BUFF_SIZE_1K] = { 0, };
 	char *to_be_added_subject = NULL;
 
 	if (view->org_mail_info->mail_data) {
@@ -796,7 +796,7 @@ static void _initial_data_set_mail_attachment(EmailComposerView *view)
 				}
 
 				if (att_data->save_status) {
-					char dest[BUF_LEN_L] = { 0, };
+					char dest[EMAIL_BUFF_SIZE_1K] = { 0, };
 					snprintf(dest, sizeof(dest), "%s/%s", composer_util_file_get_temp_dirname(), att_data->attachment_name);
 
 					debug_secure("inline_attach_path: [%s]", att_data->attachment_path);
@@ -961,14 +961,14 @@ char *composer_initial_data_body_make_parent_mail_info(EmailComposerView *view)
 	debug_enter();
 
 	char *text_for_original_info = NULL;
-	char sent_time[BUF_LEN_S] = { 0, };
+	char sent_time[EMAIL_BUFF_SIZE_BIG] = { 0, };
 	char *sent_time_format = NULL;
 	struct tm sent_tm;
 
-	char buf[BUF_LEN_S] = { 0, };
-	char text_for_orig[BUF_LEN_S] = { 0, };
-	char text_for_from[BUF_LEN_L] = { 0, };
-	char text_for_sent[BUF_LEN_L] = { 0, };
+	char buf[EMAIL_BUFF_SIZE_BIG] = { 0, };
+	char text_for_orig[EMAIL_BUFF_SIZE_BIG] = { 0, };
+	char text_for_from[EMAIL_BUFF_SIZE_1K] = { 0, };
+	char text_for_sent[EMAIL_BUFF_SIZE_1K] = { 0, };
 	char *text_for_to = NULL;
 	char *text_for_cc = NULL;
 	char *text_for_subject = NULL;
