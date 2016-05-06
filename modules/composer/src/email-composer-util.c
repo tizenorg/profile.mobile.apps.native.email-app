@@ -111,12 +111,12 @@ char *composer_util_get_datetime_format()
 	debug_enter();
 
 	bool is_24hour = false;
-	char format_buf[BUF_LEN_S] = {'\0'};
+	char format_buf[EMAIL_BUFF_SIZE_BIG] = {'\0'};
 	char *format_date = NULL;
 	char *format_time = NULL;
 	char *country = NULL;
 
-	char result[BUF_LEN_S] = {'\0'};
+	char result[EMAIL_BUFF_SIZE_BIG] = {'\0'};
 	int res = 0;
 
 	res = system_settings_get_value_string(SYSTEM_SETTINGS_KEY_LOCALE_COUNTRY, &country);
@@ -126,7 +126,7 @@ char *composer_util_get_datetime_format()
 		return NULL;
 	}
 
-	res = email_generate_pattern_for_local(country, "yy-MM-dd", result, BUF_LEN_S);
+	res = email_generate_pattern_for_local(country, "yy-MM-dd", result, EMAIL_BUFF_SIZE_BIG);
 	FREE(country);
 	if (res != 0) {
 		debug_error("failed to generate pattern for local");
@@ -166,7 +166,7 @@ char *composer_util_get_error_string(int type)
 	debug_enter();
 
 	char *ret = NULL;
-	char str[BUF_LEN_L] = {'\0'};
+	char str[EMAIL_BUFF_SIZE_1K] = {'\0'};
 
 	switch (type) {
 		case EMAIL_ERROR_NETWORK_TOO_BUSY:
@@ -553,7 +553,7 @@ static const char *_composer_util_file_get_unique_dirname(const char *root_dir, 
 		pid_t pid = getpid();
 		char random[RANDOM_BUFF_SIZE] = {'\0'};
 		_util_generate_random_string32(random, RANDOM_BUFF_SIZE);
-		snprintf(ec_dirname, BUF_LEN_L, "%s/%d_%s", root_dir, pid, random);
+		snprintf(ec_dirname, EMAIL_BUFF_SIZE_1K, "%s/%d_%s", root_dir, pid, random);
 	}
 
 	debug_leave();
@@ -563,7 +563,7 @@ static const char *_composer_util_file_get_unique_dirname(const char *root_dir, 
 const char *composer_util_file_get_temp_dirname()
 {
 	debug_enter();
-	static char ec_dirname[BUF_LEN_L] = {'\0'};
+	static char ec_dirname[EMAIL_BUFF_SIZE_1K] = {'\0'};
 	return _composer_util_file_get_unique_dirname(email_get_composer_tmp_dir(), ec_dirname);
 }
 
@@ -1143,7 +1143,7 @@ char *composer_util_strip_quotation_marks_in_email_address(const char *email_add
 	 *  Case 2. <abc@def.com>         ==> abc@def.com
 	 */
 
-	char buf[BUF_LEN_L] = { 0, };
+	char buf[EMAIL_BUFF_SIZE_1K] = { 0, };
 	char *nick = NULL;
 	char *addr = NULL;
 
@@ -1209,9 +1209,9 @@ void composer_util_update_attach_panel_bundles(EmailComposerView *view)
 
 	bundle *b = NULL;
 	int r = 0;
-	char buff[BUF_LEN_T] = { 0 };
+	char buff[EMAIL_BUFF_SIZE_SML] = { 0 };
 
-	snprintf(buff, BUF_LEN_T, "%d", (int)view->account_info->max_sending_size);
+	snprintf(buff, EMAIL_BUFF_SIZE_SML, "%d", (int)view->account_info->max_sending_size);
 
 	b = bundle_create();
 	retm_if(!b, "bundle_create() failed!");
@@ -1234,7 +1234,7 @@ void composer_util_update_attach_panel_bundles(EmailComposerView *view)
 void composer_util_set_entry_text_style(Evas_Object *entry)
 {
 	debug_enter();
-	char text_style[BUF_LEN_S] = { 0, };
+	char text_style[EMAIL_BUFF_SIZE_BIG] = { 0, };
 	snprintf(text_style, sizeof(text_style), TEXT_STYLE_ENTRY_STRING, FONT_SIZE_ENTRY, COLOR_BLACK);
 	elm_entry_text_style_user_push(entry, text_style);
 	debug_leave();

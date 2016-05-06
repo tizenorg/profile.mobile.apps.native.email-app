@@ -224,7 +224,7 @@ void composer_util_popup_translate_do(void *data)
 
 	EmailComposerView *view = (EmailComposerView *)data;
 
-	char buf[BUF_LEN_H * 10] = { 0, };
+	char buf[EMAIL_BUFF_SIZE_4K * 10] = { 0, };
 	char *(*func_get_string)(const char *);
 
 	if (view->pt_package_type == PACKAGE_TYPE_SYS_STRING) {

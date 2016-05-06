@@ -401,7 +401,7 @@ static void _attachment_ui_item_update_fileinfo(email_attachment_data_t *attachm
 {
 	debug_enter();
 
-	char file_size_info[BUF_LEN_T] = { 0, };
+	char file_size_info[EMAIL_BUFF_SIZE_SML] = { 0, };
 	char *file_size = (char *)email_get_file_size_string((guint64)attachment_data->attachment_size);
 	snprintf(file_size_info, sizeof(file_size_info), "(%s)", file_size);
 
@@ -596,7 +596,7 @@ void composer_attachment_ui_group_update_text(EmailComposerView *view)
 {
 	debug_enter();
 
-	char summary_string[BUF_LEN_S] = { 0, };
+	char summary_string[EMAIL_BUFF_SIZE_BIG] = { 0, };
 	int size = composer_util_get_total_attachments_size(view, EINA_FALSE);
 	char *file_size = (char *)email_get_file_size_string((guint64)size);
 

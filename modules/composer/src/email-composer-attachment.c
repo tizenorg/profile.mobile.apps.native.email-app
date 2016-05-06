@@ -607,17 +607,17 @@ void composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_TYPE_E err
 	if (error_type == COMPOSER_ERROR_ATTACHMENT_MAX_NUMBER_EXCEEDED) {
 		composer_util_popup_translate_set_variables(view, POPUP_ELEMENT_TYPE_CONTENT, PACKAGE_TYPE_PACKAGE, NULL, EMAIL_COMPOSER_STRING_POP_UNABLE_TO_ATTACH_MAXIMUM_NUMBER_OF_FILES_IS_PD.id, NULL, MAX_ATTACHMENT_ITEM);
 
-		char buf[BUF_LEN_L] = { 0, };
+		char buf[EMAIL_BUFF_SIZE_1K] = { 0, };
 		snprintf(buf, sizeof(buf), email_get_email_string(EMAIL_COMPOSER_STRING_POP_UNABLE_TO_ATTACH_MAXIMUM_NUMBER_OF_FILES_IS_PD.id), MAX_ATTACHMENT_ITEM);
 		email_string_t EMAIL_COMPOSER_NO_TRANSITION = { NULL, buf };
 		view->composer_popup = composer_util_popup_create(view, EMAIL_COMPOSER_STRING_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB, EMAIL_COMPOSER_NO_TRANSITION,
 		                                                response_cb, EMAIL_COMPOSER_STRING_BUTTON_OK, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
 	} else if (error_type == COMPOSER_ERROR_ATTACHMENT_MAX_SIZE_EXCEEDED) {
-		char str[BUF_LEN_T] = { 0, };
+		char str[EMAIL_BUFF_SIZE_SML] = { 0, };
 		snprintf(str, sizeof(str), "%.1f", view->account_info->max_sending_size / (float)(1024 * 1024));
 		composer_util_popup_translate_set_variables(view, POPUP_ELEMENT_TYPE_CONTENT, PACKAGE_TYPE_PACKAGE, NULL, EMAIL_COMPOSER_STRING_POP_THE_MAXIMUM_TOTAL_SIZE_OF_ATTACHMENTS_HPS_MB_HAS_BEEN_EXCEEDED_REMOVE_SOME_FILES_AND_TRY_AGAIN.id, str, 0);
 
-		char buf[BUF_LEN_L] = { 0, };
+		char buf[EMAIL_BUFF_SIZE_1K] = { 0, };
 		snprintf(buf, sizeof(buf), email_get_email_string(EMAIL_COMPOSER_STRING_POP_THE_MAXIMUM_TOTAL_SIZE_OF_ATTACHMENTS_HPS_MB_HAS_BEEN_EXCEEDED_REMOVE_SOME_FILES_AND_TRY_AGAIN.id), str);
 		email_string_t EMAIL_COMPOSER_NO_TRANSITION = { NULL, buf };
 		view->composer_popup = composer_util_popup_create(view, EMAIL_COMPOSER_STRING_HEADER_UNABLE_TO_SEND_EMAIL_ABB, EMAIL_COMPOSER_NO_TRANSITION,

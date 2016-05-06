@@ -90,12 +90,6 @@
 
 #define EMAIL_COMPOSER_TMP_FOLDER_PERMISSION 0775
 
-#define BUF_LEN_T				32		/* Tiny buferr */
-#define BUF_LEN_S				128		/* Small buffer */
-#define BUF_LEN_M				256		/* Medium buffer */
-#define BUF_LEN_L				1024	/* Large buffer */
-#define BUF_LEN_H				4096	/* Huge buffer */
-
 #define MAX_MESSAGE_SIZE		100
 #define MAX_RECIPIENT_COUNT		100
 #define MAX_ATTACHMENT_ITEM		30
