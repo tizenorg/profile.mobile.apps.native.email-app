@@ -219,8 +219,6 @@ static void _set_default_setting_to_account(email_view_t *view, email_account_t 
 	retm_if(!view, "view is NULL");
 	retm_if(!account, "account is NULL");
 
-	EmailSettingModule *module = (EmailSettingModule *)view->module;
-
 	FREE(account->incoming_server_user_name);
 	account->incoming_server_user_name = g_strdup(account->user_email_address);
 	_set_display_name_with_email_addr(account->user_email_address, &(account->user_display_name));
@@ -271,9 +269,7 @@ static void _set_default_setting_to_account(email_view_t *view, email_account_t 
 	account_user_data_t data;
 	memset(&data, 0x00, sizeof(account_user_data_t));
 	data.show_images = 0;
-	data.send_read_report = 0;
 	data.pop3_deleting_option = 0;
-	snprintf(data.service_provider_name, 128, "%s", setting_get_provider_name(module));
 
 	int data_len = sizeof(account_user_data_t);
 	account->user_data = calloc(1, data_len);

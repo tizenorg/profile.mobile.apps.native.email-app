@@ -216,10 +216,7 @@ typedef struct {
 
 typedef struct {
 	int show_images;
-	int wifi_auto_download;
-	int send_read_report;
 	int pop3_deleting_option;
-	char service_provider_name[128];
 } account_user_data_t;
 
 typedef struct {
