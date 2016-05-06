@@ -302,7 +302,7 @@ static void _update_view(EmailSettingView *view)
 	if (account_data) {
 		account_user_data_t *user_data = account_data->user_data;
 		genlist_item_updated[SHOW_IMAGE_LIST_ITEM-1] = user_data->show_images;
-		genlist_item_updated[WIFI_AUTODOWNLOAD_LIST_ITEM-1] = user_data->wifi_auto_download;
+		genlist_item_updated[WIFI_AUTODOWNLOAD_LIST_ITEM-1] = account_data->wifi_auto_download;
 		genlist_item_updated[SYNC_ONOFF_LIST_ITEM-1] = !account_data->sync_disabled;
 		email_engine_free_account_list(&account_data, 1);
 		account_data = NULL;
@@ -533,7 +533,7 @@ static void _create_list(EmailSettingView *view)
 	retm_if(!li, "memory allocation failed");
 
 	li->index = WIFI_AUTODOWNLOAD_LIST_ITEM;
-	li->is_checked = user_data->wifi_auto_download ? EINA_TRUE : EINA_FALSE;
+	li->is_checked = account_data->wifi_auto_download ? EINA_TRUE : EINA_FALSE;
 	li->view = view;
 	li->gl_it = elm_genlist_item_append(view->genlist, view->itc_wifi_autodownload_onoff, li,
 			NULL, ELM_GENLIST_ITEM_NONE, _gl_sel_cb, li);
@@ -878,9 +878,8 @@ static void _onoff_cb(void *data, Evas_Object *obj, void *event_info)
 		user_data->show_images = state;
 		debug_secure("show images %d", user_data->show_images);
 	} else if (li->index == WIFI_AUTODOWNLOAD_LIST_ITEM) {
-		account_user_data_t *user_data = account_data->user_data;
-		user_data->wifi_auto_download = state;
-		debug_secure("wifi_auto_download %d", user_data->wifi_auto_download);
+		account_data->wifi_auto_download = state ? 1 : 0;
+		debug_secure("wifi_auto_download %d", account_data->wifi_auto_download);
 	}
 	_update_account_info(view);
 }
