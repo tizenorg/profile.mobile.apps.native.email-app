@@ -119,7 +119,7 @@ static Eina_Bool _initial_data_mbe_append_recipients(EmailComposerView *view, Ev
 		gchar **recipients_list = g_strsplit(to_be_added_recipients, ";", -1);
 		int count;
 		for (count = 0; count < g_strv_length(recipients_list); count++) {
-			if (recipients_list[count] && (strlen(recipients_list[count]) == 0))
+			if (!recipients_list[count] || strlen(recipients_list[count]) == 0)
 				continue;
 
 			/* In the case of reply all, don't include my address in recipient fields. */
@@ -755,6 +755,7 @@ static char *_initial_data_get_mail_body(EmailComposerView *view)
 	g_free(body_document);
 	g_free(current_content);
 	g_free(parent_content);
+	g_free(original_message_bar);
 
 	debug_leave();
 	return html_document;

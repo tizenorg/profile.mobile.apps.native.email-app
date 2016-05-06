@@ -585,7 +585,8 @@ static void _send_outgoing_messages_clicked_cb(void *data, Evas_Object *obj, voi
 	retm_if(!data, "data is NULL");
 
 	EmailMailboxView *view = (EmailMailboxView *)data;
-	MailOutgoingListData *send_thread_data = MEM_ALLOC(send_thread_data,  1);
+	MailOutgoingListData *send_thread_data = MEM_ALLOC(send_thread_data, 1);
+	retm_if(!send_thread_data, "Memory allocation failed");
 
 	Eina_Bool is_disabled = elm_object_disabled_get(view->outbox_send_all_btn);
 	if (!is_disabled) {
