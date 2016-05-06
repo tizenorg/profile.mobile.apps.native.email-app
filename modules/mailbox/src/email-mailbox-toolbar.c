@@ -169,6 +169,11 @@ static void _popup_response_delete_ok_cb(void *data, Evas_Object *obj, void *eve
 	MailItemData *ld = NULL;
 	EINA_LIST_FOREACH(view->selected_mail_list, cur, ld) {
 		DeleteRequestedMail *requested_mail = MEM_ALLOC(requested_mail, 1);
+		if (!requested_mail) {
+			debug_error("Memory allocation failed!");
+			continue;
+		}
+
 		requested_mail->account_id = ld->account_id;
 		requested_mail->mail_id = ld->mail_id;
 		requested_mail->thread_id = ld->thread_id;

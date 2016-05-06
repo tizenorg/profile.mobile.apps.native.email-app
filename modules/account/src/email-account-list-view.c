@@ -304,7 +304,7 @@ static void _create_account_single_accout_list(EmailAccountView *view, int accou
 
 		debug_log("it : %p", item_data->it);
 
-		if (email_account) email_engine_free_account_list(&email_account, 1);
+		email_engine_free_account_list(&email_account, 1);
 		return;
 	}
 

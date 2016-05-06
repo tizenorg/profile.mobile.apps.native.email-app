@@ -151,10 +151,14 @@ static void __composer_ps_gl_sel(void *data, Evas_Object *obj, void *event_info)
 	EmailRecpInfo *ri = NULL;
 	if(contact_info->contact_origin == EMAIL_SEARCH_CONTACT_ORIGIN_CONTACTS) {
 		ri = composer_util_recp_make_recipient_info_with_display_name(contact_info->email_address, contact_info->display_name);
-		ri->email_id = contact_info->email_id;
+		if (ri) {
+			ri->email_id = contact_info->email_id;
+		}
 	} else {
 		ri = composer_util_recp_make_recipient_info(contact_info->email_address);
-		ri->email_id = 0;
+		if (ri) {
+			ri->email_id = 0;
+		}
 	}
 
 	if (ri) {

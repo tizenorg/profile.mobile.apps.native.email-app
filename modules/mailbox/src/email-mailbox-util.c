@@ -387,6 +387,8 @@ void mailbox_account_color_list_add(EmailMailboxView *view, int account_id, int 
 	debug_log("account_color : %d", account_color);
 
 	MailboxAccountColor *account_color_data = MEM_ALLOC(account_color_data, 1);
+	retm_if(!account_color_data, "Memory allocation failed!");
+
 	account_color_data->account_id = account_id;
 	account_color_data->account_color = account_color;
 	view->account_color_list = g_list_append(view->account_color_list, account_color_data);
