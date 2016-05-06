@@ -1230,7 +1230,7 @@ EMAIL_API int email_generate_pattern_for_local(const char *local, const char *pa
 	i18n_error_code_e status = I18N_ERROR_NONE;
 	i18n_udatepg_h udatepg = NULL;
 	i18n_uchar format[EMAIL_BUFF_SIZE_MID] = {'\0'};
-	i18n_uchar best_pattern[EMAIL_BUFF_SIZE_MID] = {'\0'};
+	i18n_uchar best_pattern[EMAIL_BUFF_SIZE_BIG] = {'\0'};
 	int pattern_len = 0;
 
 	status = i18n_udatepg_create(local, &udatepg);
@@ -1242,17 +1242,20 @@ EMAIL_API int email_generate_pattern_for_local(const char *local, const char *pa
 	i18n_ustring_copy_ua_n(format, pattern_format, EMAIL_BUFF_SIZE_MID);
 
 	status = i18n_udatepg_get_best_pattern(udatepg, format, EMAIL_BUFF_SIZE_MID,
-			best_pattern, EMAIL_BUFF_SIZE_MID, &pattern_len);
+			best_pattern, EMAIL_BUFF_SIZE_BIG, &pattern_len);
+
+	int result = -1;
 	if (status != I18N_ERROR_NONE) {
 		debug_critical("i18n_udatepg_get_best_pattern() failed: %d", status);
-		i18n_udatepg_destroy(udatepg);
-		return -1;
+	} else if (pattern_len > gen_pattern_size) {
+		debug_critical("Buffer overflow error! Generated pattern length: %d, output pattern capacity: %d", pattern_len, gen_pattern_size);
+	} else {
+		i18n_ustring_copy_au_n(gen_pattern, best_pattern, gen_pattern_size);
+		result = 0;
 	}
 
-	i18n_ustring_copy_au_n(gen_pattern, best_pattern, gen_pattern_size);
 	i18n_udatepg_destroy(udatepg);
-
-	return 0;
+	return result;
 }
 
 static int _open_pattern_n_formatter(const char *locale, char *skeleton, i18n_udate_format_h *formatter)

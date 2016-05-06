@@ -837,7 +837,7 @@ static char *_gl_attachment_group_text_get(void *data, Evas_Object *obj, const c
 
 	if ((strcmp(part, "elm.text")) == 0) {
 		int n = 0;
-		char total_file_info[BUF_LEN_S];
+		char total_file_info[EMAIL_BUFF_SIZE_BIG];
 		if (view->normal_att_count == 1) {
 			n = snprintf(total_file_info, sizeof(total_file_info), "%s", email_get_email_string("IDS_EMAIL_BODY_1_FILE_ABB"));
 		} else {
@@ -846,7 +846,7 @@ static char *_gl_attachment_group_text_get(void *data, Evas_Object *obj, const c
 
 		gchar *total_file_size = email_get_file_size_string(view->total_att_size);
 
-		snprintf(total_file_info + n, BUF_LEN_S - n, " (%s)", total_file_size);
+		snprintf(total_file_info + n, EMAIL_BUFF_SIZE_BIG - n, " (%s)", total_file_size);
 
 		g_free(total_file_size);
 

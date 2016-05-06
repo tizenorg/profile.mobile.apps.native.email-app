@@ -24,12 +24,6 @@
 
 #define _EDJ(o) elm_layout_edje_get(o)
 
-#define BUF_LEN_T	32		/* Tiny buffer */
-#define BUF_LEN_S	128		/* Small buffer */
-#define BUF_LEN_M	256		/* Medium buffer */
-#define BUF_LEN_L	1024	/* Large buffer */
-#define BUF_LEN_H	4096	/* Huge buffer */
-
 #define SHARE_TEXT_MAX_LEN	16 * 1024	/* AUL buffer limit size */
 
 #define URI_SCHEME_HTTP "http://"

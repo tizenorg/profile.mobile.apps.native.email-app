@@ -329,7 +329,7 @@ static void _webview_load_error_cb(void *data, Evas_Object *obj, void *event_inf
 		int error_code = ewk_error_code_get(error);
 		const char *description = ewk_error_description_get(error);
 
-		char buf[BUF_LEN_H] = { 0, };
+		char buf[EMAIL_BUFF_SIZE_4K] = { 0, };
 		snprintf(buf, sizeof(buf), "Error occured!<br>Url: (%s)<br>Code: (%d)<br>Description: (%s)<br><br>Please report us", url, error_code, description);
 
 		debug_secure_error("%s", buf);
@@ -748,7 +748,7 @@ static void _viewer_share_text(EmailViewerView *view, char *share_text)
 	debug_log("size of share_text: %d", text_len);
 	if (text_len > SHARE_TEXT_MAX_LEN) {
 		selected_text = g_strndup(share_text, SHARE_TEXT_MAX_LEN);
-		char str[BUF_LEN_L] = { 0, };
+		char str[EMAIL_BUFF_SIZE_1K] = { 0, };
 		snprintf(str, sizeof(str), email_get_email_string("IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"), SHARE_TEXT_MAX_LEN / 1024);
 		notification_status_message_post(str);
 	} else {

@@ -644,7 +644,7 @@ static void _account_result_cb(void *data, email_module_h module, email_params_h
 		email_params_get_int_opt(result, EMAIL_BUNDLE_KEY_MAILBOX_MOVE_STATUS, &move_status);
 
 		if (move_status == EMAIL_ERROR_NONE) {
-			char str[BUF_LEN_L] = { 0, };
+			char str[EMAIL_BUFF_SIZE_1K] = { 0, };
 			const char *mailbox_name = NULL;
 			if (email_params_get_str(result, EMAIL_BUNDLE_KEY_MAILBOX_MOVED_MAILBOX_NAME, &mailbox_name)) {
 				snprintf(str, sizeof(str), email_get_email_string("IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_PS"), mailbox_name);

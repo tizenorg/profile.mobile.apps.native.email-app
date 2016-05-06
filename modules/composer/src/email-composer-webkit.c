@@ -140,7 +140,7 @@ static void _webkit_js_execute_insert_signature_cb(Evas_Object *obj, const char 
 
 		char *to_be_inserted_mail_info = g_strdup_printf(EC_JS_INSERT_ORIGINAL_MAIL_INFO, jo_info);
 
-		char to_be_inserted_original_message_bar[BUF_LEN_L] = { 0, };
+		char to_be_inserted_original_message_bar[EMAIL_BUFF_SIZE_1K] = { 0, };
 
 		snprintf(to_be_inserted_original_message_bar, sizeof(to_be_inserted_original_message_bar), EC_JS_INSERT_TEXT_TO_ORIGINAL_MESSAGE_BAR, COLOR_BLACK, email_get_email_string("IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"));
 
@@ -194,7 +194,7 @@ static void _webkit_js_execute_init_composer_body_cb(Evas_Object *obj, const cha
 
 	composer_util_resize_webview_height(view);
 
-	char set_image_src[BUF_LEN_L] = { 0, };
+	char set_image_src[EMAIL_BUFF_SIZE_1K] = { 0, };
 	snprintf(set_image_src, sizeof(set_image_src), EC_JS_UPDATE_IMAGE_SOURCES, composer_util_file_get_temp_dirname());
 
 	/* TODO: is this needed? the symbolic links for inline image were made on tmp_folder. */
@@ -251,7 +251,7 @@ static void _webkit_js_execute_check_body_layout_cb(Evas_Object *obj, const char
 			debug_error("EC_JS_IS_CHECKBOX_CHECKED failed.");
 		}
 
-		char buf[BUF_LEN_L] = { 0, };
+		char buf[EMAIL_BUFF_SIZE_1K] = { 0, };
 		snprintf(buf, sizeof(buf), EC_JS_UPDATE_COLOR_OF_ORG_MESSAGE_BAR, COLOR_GRAY);
 		if (!ewk_view_script_execute(view->ewk_view, buf, NULL, (void *)view)) {
 			debug_error("EC_JS_UPDATE_COLOR_OF_ORG_MESSAGE_BAR failed.");
@@ -450,7 +450,7 @@ static void _ewk_view_load_error_cb(void *data, Evas_Object *obj, void *event_in
 		int error_code = ewk_error_code_get(error);
 		const char *description = ewk_error_description_get(error);
 
-		char buf[BUF_LEN_H] = { 0, };
+		char buf[EMAIL_BUFF_SIZE_4K] = { 0, };
 		snprintf(buf, sizeof(buf), "Error occured!<br>Url: (%s)<br>Code: (%d)<br>Description: (%s)<br><br>Please report us", url, error_code, description);
 
 		debug_secure_error("%s", buf);
@@ -566,7 +566,7 @@ static void _ewk_view_policy_navigation_decide_cb(void *data, Evas_Object *obj, 
 				Ewk_Settings *ewkSetting = ewk_view_settings_get(ewk_view);
 				ewk_settings_uses_keypad_without_user_action_set(ewkSetting, EINA_TRUE);
 			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_CLICK_CHECKBOX)) {
-				char buf[BUF_LEN_L] = { 0, };
+				char buf[EMAIL_BUFF_SIZE_1K] = { 0, };
 				snprintf(buf, sizeof(buf), "%s", url + strlen(COMPOSER_SCHEME_CLICK_CHECKBOX));
 				debug_log("click status: (%s)", buf);
 
@@ -592,7 +592,7 @@ static void _ewk_view_policy_navigation_decide_cb(void *data, Evas_Object *obj, 
 			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_GET_FOCUS_ORG)) {
 				view->is_focus_on_new_message_div = EINA_FALSE;
 			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_EXCEENDED_MAX)) {
-				char buf[BUF_LEN_L] = { 0, };
+				char buf[EMAIL_BUFF_SIZE_1K] = { 0, };
 				snprintf(buf, sizeof(buf), email_get_email_string("IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"), MAX_MESSAGE_SIZE);
 				int noti_ret = notification_status_message_post(buf);
 				debug_warning_if(noti_ret != NOTIFICATION_ERROR_NONE, "notification_status_message_post() failed! ret:(%d)", noti_ret);
