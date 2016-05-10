@@ -208,6 +208,10 @@ void mailbox_composer_module_destroy(void *priv, email_module_h module)
 	if (view->run_type == RUN_VIEWER_FROM_NOTIFICATION) {
 		view->run_type = RUN_TYPE_UNKNOWN;
 		mailbox_open_email_viewer(view, view->account_id, view->mailbox_id, view->start_mail_id);
+	} else if (view->run_type == RUN_COMPOSER_EXTERNAL) {
+		view->run_type = RUN_TYPE_UNKNOWN;
+		view->composer = mailbox_composer_module_create(view, EMAIL_MODULE_COMPOSER, view->run_params);
+		email_params_free(&view->run_params);
 	}
 }
 

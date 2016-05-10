@@ -105,6 +105,7 @@ struct _view_data {
 	email_view_t base;
 
 	email_run_type_e run_type;
+	email_params_h run_params;
 	int start_mail_id;
 	bool initialized;
 	bool started;

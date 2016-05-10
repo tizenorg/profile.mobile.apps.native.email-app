@@ -84,6 +84,7 @@ static int _mailbox_params_get_mail_id(email_params_h params);
 
 static int _mailbox_handle_launch_mailbox_bundle_val(EmailMailboxView *view, email_params_h msg);
 static int _mailbox_handle_launch_viewer_bundle_val(EmailMailboxView *view, email_params_h msg);
+static int _mailbox_handle_launch_composer_bundle_val(EmailMailboxView *view, email_params_h msg);
 
 static void _mailbox_create_view(EmailMailboxView *view);
 static void _mailbox_delete_evas_object(EmailMailboxView *view);
@@ -106,6 +107,11 @@ static int _mailbox_module_create(email_module_t *self, email_params_h params)
 	retvm_if(!self, -1, "self is NULL");
 
 	EmailMailboxModule *module = (EmailMailboxModule *)self;
+
+	if (!email_params_clone(&module->view.run_params, params)) {
+		debug_error("email_params_clone () failed!");
+		return -1;
+	}
 
 	module->view.run_type = _mailbox_params_get_run_type(params);
 
@@ -158,6 +164,8 @@ static void _mailbox_module_destroy(email_module_t *self)
 	retm_if(!self, "self is NULL");
 
 	EmailMailboxModule *module = (EmailMailboxModule *)self;
+
+	email_params_free(&module->view.run_params);
 
 	if (module->start_thread) {
 		ecore_thread_cancel(module->start_thread);
@@ -276,19 +284,12 @@ static email_run_type_e _mailbox_params_get_run_type(email_params_h params)
 	email_run_type_e result = RUN_TYPE_UNKNOWN;
 
 	const char *operation = NULL;
-	bool is_operation_default = false;
 
 	if (!email_params_get_operation(params, &operation)) {
 		return result;
 	}
 
 	if (strcmp(operation, APP_CONTROL_OPERATION_DEFAULT) == 0) {
-		is_operation_default = true;
-	} else {
-		debug_warning("Operation is not supported: %s", operation);
-	}
-
-	if (is_operation_default) {
 		if (email_params_get_int_opt(params, EMAIL_BUNDLE_KEY_RUN_TYPE, &result)) {
 			if ((result != RUN_TYPE_UNKNOWN) && (result != RUN_VIEWER_FROM_NOTIFICATION) &&
 				(result != RUN_MAILBOX_FROM_NOTIFICATION)) {
@@ -298,6 +299,10 @@ static email_run_type_e _mailbox_params_get_run_type(email_params_h params)
 		} else {
 			debug_error("email_params_get_int_opt() failed!");
 		}
+	} else if (strcmp(operation, APP_CONTROL_OPERATION_COMPOSE) == 0) {
+		result = RUN_COMPOSER_EXTERNAL;
+	} else {
+		debug_warning("Operation is not supported: %s", operation);
 	}
 
 	debug_leave();
@@ -370,6 +375,9 @@ static int _mailbox_create(email_view_t *self)
 		view->account_id = mail->account_id;
 		view->mailbox_id = mail->mailbox_id;
 		return mailbox_open_email_viewer(view, mail->account_id, mail->mailbox_id, view->start_mail_id);
+	} else if (run_type == RUN_COMPOSER_EXTERNAL) {
+		view->composer = mailbox_composer_module_create(view, EMAIL_MODULE_COMPOSER, view->run_params);
+		return (view->composer ? 0 : -1);
 	}
 
 	debug_leave();
@@ -676,8 +684,10 @@ static void _mailbox_on_message(email_module_t *self, email_params_h msg)
 		_mailbox_handle_launch_mailbox_bundle_val(view, msg);
 	} else if (run_type == RUN_VIEWER_FROM_NOTIFICATION) {
 		_mailbox_handle_launch_viewer_bundle_val(view, msg);
+	} else if (run_type == RUN_COMPOSER_EXTERNAL) {
+		_mailbox_handle_launch_composer_bundle_val(view, msg);
 	} else {
-		debug_log("Unknown msg type");
+		debug_log("Unknown msg type: %d", run_type);
 	}
 
 	debug_leave();
@@ -828,7 +838,7 @@ static int _mailbox_destroy_child_modules(EmailMailboxView *view, bool keep_view
 
 		if (email_params_create(&params) &&
 			email_params_add_str(params, EMAIL_BUNDLE_KEY_MSG, EMAIL_BUNDLE_VAL_EMAIL_COMPOSER_SAVE_DRAFT)) {
-			ret = email_module_send_message(view->viewer, params);
+			ret = email_module_send_message(view->composer, params);
 		}
 
 		if (ret != 0) {
@@ -975,6 +985,31 @@ static int _mailbox_handle_launch_viewer_bundle_val(EmailMailboxView *view, emai
 	} else {
 		view->run_type = RUN_VIEWER_FROM_NOTIFICATION;
 		view->start_mail_id = mail_id;
+	}
+
+	debug_leave();
+	return 0;
+}
+
+int _mailbox_handle_launch_composer_bundle_val(EmailMailboxView *view, email_params_h msg)
+{
+	debug_enter();
+	retvm_if(!view, -1, "Error: view is NULL");
+
+	int ret = -1;
+
+	ret = _mailbox_destroy_child_modules(view, false);
+	retvm_if(ret != 0, -1,  "_mailbox_update_mailbox() failed!");
+
+	if (!view->composer) {
+		view->composer = mailbox_composer_module_create(view, EMAIL_MODULE_COMPOSER, msg);
+	} else {
+		email_params_free(&view->run_params);
+		if (!email_params_clone(&view->run_params, msg)) {
+			debug_error("email_params_clone () failed!");
+			return -1;
+		}
+		view->run_type = RUN_COMPOSER_EXTERNAL;
 	}
 
 	debug_leave();
