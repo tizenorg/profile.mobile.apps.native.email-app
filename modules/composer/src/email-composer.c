@@ -18,7 +18,7 @@
 #include <notification.h>
 #include <sys/vfs.h>
 #include <malloc.h>
-#include <storage.h>
+#include <storage/storage.h>
 #include <app.h>
 #include <app_common.h>
 

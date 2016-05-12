@@ -32,7 +32,7 @@
 #include <mime_type.h>
 #include <sys/sendfile.h>
 #include <app.h>
-#include <storage.h>
+#include <storage/storage.h>
 #include <app_preference.h>
 #include <vconf.h>
 #include <feedback.h>
