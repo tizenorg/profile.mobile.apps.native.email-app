@@ -1,6 +1,6 @@
 Name:       org.tizen.email
-#VCS_FROM:   profile/mobile/apps/native/email-app#ee12437dd993fc0439699f1980909ebabaf11be0
-#RS_Ver:    20160428_3 
+#VCS_FROM:   profile/mobile/apps/native/email-app#9ed028554b67a9e28dcffdcce75fd8e9733a6afa
+#RS_Ver:    20160512_2 
 Summary:    Native email application
 Version:    0.9.34
 Release:    1
@@ -11,6 +11,7 @@ Source0:    %{name}-%{version}.tar.gz
 BuildRequires:  pkgconfig(libtzplatform-config)
 Requires(post):  /usr/bin/tpk-backend
 
+%define internal_name org.tizen.email
 %define preload_tpk_path %{TZ_SYS_RO_APP}/.preload-tpk 
 
 %ifarch i386 i486 i586 i686 x86_64
@@ -24,6 +25,7 @@ Requires(post):  /usr/bin/tpk-backend
 %endif
 
 %description
+profile/mobile/apps/native/email-app#9ed028554b67a9e28dcffdcce75fd8e9733a6afa
 This is a container package which have preload TPK files
 
 %prep
@@ -34,7 +36,7 @@ This is a container package which have preload TPK files
 %install
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/%{preload_tpk_path}
-install %{name}-%{version}-%{target}.tpk %{buildroot}/%{preload_tpk_path}/
+install %{internal_name}-%{version}-%{target}.tpk %{buildroot}/%{preload_tpk_path}/
 
 %post
 
