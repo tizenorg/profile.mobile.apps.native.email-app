@@ -295,7 +295,7 @@ static void _push_naviframe(EmailSettingView *view)
 	email_module_view_push(&view->base, EMAIL_SETTING_STRING_EMAIL.id, 0);
 	elm_object_item_domain_text_translatable_set(view->base.navi_item, EMAIL_SETTING_STRING_EMAIL.domain, EINA_TRUE);
 
-	if (account_data->sync_status & SYNC_STATUS_SYNCING) {
+	if (account_data && (account_data->sync_status & SYNC_STATUS_SYNCING)) {
 		view->syncing = 1;
 	}
 	evas_object_show(view->base.module->navi);
