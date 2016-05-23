@@ -160,5 +160,6 @@
         <privilege>http://tizen.org/privilege/network.get</privilege>
         <privilege>http://tizen.org/privilege/notification</privilege>
         <privilege>http://tizen.org/privilege/recorder</privilege>
+        <privilege>http://tizen.org/privilege/content.write</privilege>
     </privileges>
 </manifest>
