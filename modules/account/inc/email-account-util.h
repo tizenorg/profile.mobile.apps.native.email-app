@@ -48,6 +48,9 @@ void account_color_list_free(EmailAccountView *view);
 void account_color_list_add(EmailAccountView *view, int account_id, int account_color);
 void account_color_list_update(EmailAccountView *view, int account_id, int update_color);
 
+char *account_get_folder_icon_name_by_mailbox_type(int mailbox_type);
+Evas_Object *account_create_folder_icon(Evas_Object *parent, const char *folder_image_name);
+
 const char *email_get_account_theme_path();
 
 #endif	/* __EMAIL_ACCOUNT_UTIL_H__ */

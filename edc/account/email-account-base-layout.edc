@@ -15,24 +15,156 @@
  *
  */
 
-#define ITEM_ACCOUNT_HEIGHT 120
-#define ITEM_ACCOUNT_LEFT_ICON_WIDTH 8
-#define ITEM_ACCOUNT_LEFT_PADDING_WIDTH 24
+#define ITEM_ACCOUNT_LEFT_PADDING_WIDTH 32
 #define ITEM_ACCOUNT_RIGHT_PADDING_WIDTH 32
-#define ITEM_ACCOUNT_TOP_PADDING 23
-#define ITEM_ACCOUNT_BOTTOM_PADDING 23
+
+#define ITEM_ACCOUNT_COLORBAR_WIDTH 8
+#define ITEM_ACCOUNT_TOP_PADDING 28
+#define ITEM_ACCOUNT_BOTTOM_PADDING 28
+#define ITEM_ACCOUNT_TEXT_PADDING 32
 
 /*
-	   ----------------------------------------------------------------
-	   |                 |     |                                 |     |
-	   |elm.swallow.icon | pad |          elm.text               | pad |
-	   |                 |     |                                 |     |
-	   ------------------|-----|---------------------------------|     |
+	----------------------------------------------------------------------------------------------
+	|                           |     |                  |     |                           |     |
+	| elm.swallow.color_label   | pad | elm.swallow.icon | pad |          elm.text         | pad |
+	|                           |     |                  |     |                           |     |
+	----------------------------------------------------------------------------------------------
 */
 
-SINGLE_LINE_ACCOUNT_FOLDER_ITEM(gl_accounts_1line_item, ITEM_ACCOUNT_HEIGHT, ITEM_ACCOUNT_LEFT_ICON_WIDTH, ITEM_ACCOUNT_LEFT_PADDING_WIDTH, ITEM_ACCOUNT_RIGHT_PADDING_WIDTH, ITEM_ACCOUNT_TOP_PADDING, ITEM_ACCOUNT_BOTTOM_PADDING)
+group { name: "gl_accounts_1line_item";
 
+	styles {
+		style { name: "account_text_style";
+			base: "color=#000000FF font=Tizen:style=Regular font_size=40 text_class=list_item ellipsis=1.0";
+		}
+	}
 
-
-
-
+	parts {
+		part { name: "top_padding";
+			type: SPACER;
+			scale: 1;
+			description { state: "default" 0.0;
+				align: 0.5 0.0;
+				fixed: 0 1;
+				min: 0 ITEM_ACCOUNT_TOP_PADDING;
+				rel2 {
+					relative: 1.0 0.0;
+				}
+			}
+		}
+		part { name: "bottom_padding";
+			type: SPACER;
+			scale: 1;
+			description { state: "default" 0.0;
+				align: 0.5 1.0;
+				fixed: 0 1;
+				min: 0 ITEM_ACCOUNT_BOTTOM_PADDING;
+				rel1 {
+					relative: 0.0 1.0;
+				}
+			}
+		}
+		part { name: "left_padding";
+			type: SPACER;
+			scale: 1;
+			description { state: "default" 0.0;
+				align: 0.0 0.5;
+				fixed: 1 0;
+				min: ITEM_ACCOUNT_RIGHT_PADDING_WIDTH 0;
+				rel1 {
+					relative: 0.0 1.0;
+					to_y: "top_padding";
+				}
+				rel2 {
+					relative: 0.0 0.0;
+					to_y: "bottom_padding";
+				}
+			}
+		}
+		part { name: "right_padding";
+			type: SPACER;
+			scale: 1;
+			description { state: "default" 0.0;
+				align: 1.0 0.5;
+				fixed: 1 0;
+				min: ITEM_ACCOUNT_LEFT_PADDING_WIDTH 0;
+				rel1 {
+					relative: 1.0 1.0;
+					to_y: "top_padding";
+				}
+				rel2 {
+					relative: 1.0 0.0;
+					to_y: "bottom_padding";
+				}
+			}
+		}
+		part { name: "elm.swallow.color_label";
+			type: SWALLOW;
+			scale: 1;
+			description { state: "default" 0.0;
+				align: 0.0 0.5;
+				fixed: 1 0;
+				min: ITEM_ACCOUNT_COLORBAR_WIDTH 0;
+				max: ITEM_ACCOUNT_COLORBAR_WIDTH -1;
+				rel2.relative: 0.0 1.0;
+			}
+		}
+		part { name: "elm.swallow.icon";
+			type: SWALLOW;
+			description { state: "default" 0.0;
+				align: 0.0 0.5;
+				fixed: 1 0;
+				rel1 {
+					relative: 1.0 1.0;
+					to_x: "left_padding";
+					to_y: "top_padding";
+				}
+				rel2 {
+					relative: 1.0 0.0;
+					to_x: "left_padding";
+					to_y: "bottom_padding";
+				}
+			}
+		}
+		part { name: "text_padding";
+			type: SPACER;
+			scale: 1;
+			description { state: "default" 0.0;
+				align: 0.0 0.5;
+				fixed: 1 0;
+				min: ITEM_ACCOUNT_TEXT_PADDING 0;
+				rel1 {
+					relative: 1.0 0.0;
+					to_x: "elm.swallow.icon";
+					to_y: "left_padding";
+				}
+				rel2 {
+					to_x: "elm.swallow.icon";
+					to_y: "left_padding";
+				}
+			}
+		}
+		part { name: "elm.text";
+			type: TEXTBLOCK;
+			mouse_events: 0;
+			scale: 1;
+			description { state: "default" 0.0;
+				rel1 {
+					relative: 1.0 1.0;
+					to_x: "text_padding";
+					to_y: "top_padding";
+				}
+				rel2 {
+					relative: 0.0 0.0;
+					to_x: "right_padding";
+					to_y: "bottom_padding";
+				}
+				text {
+					style: "account_text_style";
+					min: 0 1;
+					max: 0 1;
+				}
+			}
+		}
+	}
+}

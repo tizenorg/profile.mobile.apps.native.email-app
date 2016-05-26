@@ -21,6 +21,8 @@
 
 static char *_gl_label_get(void *data, Evas_Object *obj, const char *part);
 static char *_gl_label_get_for_subitem(void *data, Evas_Object *obj, const char *part);
+static Evas_Object *_gl_folder_icon_get_for_subitem(void *data, Evas_Object *obj, const char *part);
+
 static void _gl_group_sel(void *data, Evas_Object *obj, void *event_info);
 static void _gl_group_del(void *data, Evas_Object *obj);
 
@@ -230,7 +232,7 @@ void account_init_genlist_item_class_for_mail_move(EmailAccountView *view)
 	}
 	itc_move->item_style = "type1";
 	itc_move->func.text_get = _gl_label_get_for_subitem;
-	itc_move->func.content_get = NULL;
+	itc_move->func.content_get = _gl_folder_icon_get_for_subitem;
 	itc_move->func.state_get = NULL;
 	itc_move->func.del = NULL;
 	view->itc_move = itc_move;
@@ -262,16 +264,16 @@ static char *_gl_label_get(void *data, Evas_Object *obj, const char *part)
 
 static char *_gl_label_get_for_subitem(void *data, Evas_Object *obj, const char *part)
 {
-	List_Item_Data *tree_item_data = (List_Item_Data *)data;
-
-	if (!tree_item_data) {
-		debug_log("tree_item_data is NULL");
-		return NULL;
-	}
-
-	EmailAccountView *view = tree_item_data->view;
-
 	if (!strcmp(part, "elm.text")) {
+
+		List_Item_Data *tree_item_data = (List_Item_Data *)data;
+
+		if (!tree_item_data) {
+			debug_log("tree_item_data is NULL");
+			return NULL;
+		}
+		EmailAccountView *view = tree_item_data->view;
+
 		char *mailbox_alias = NULL;
 		switch (tree_item_data->mailbox_type) {
 		case EMAIL_MAILBOX_TYPE_INBOX:
@@ -306,6 +308,24 @@ static char *_gl_label_get_for_subitem(void *data, Evas_Object *obj, const char 
 		}
 		return elm_entry_utf8_to_markup(mailbox_alias);
 	}
+	return NULL;
+}
+
+Evas_Object *_gl_folder_icon_get_for_subitem(void *data, Evas_Object *obj, const char *part)
+{
+	if (!strcmp(part, "elm.swallow.icon")) {
+		List_Item_Data *tree_item_data = (List_Item_Data *)data;
+
+		if (!tree_item_data) {
+			debug_log("tree_item_data is NULL");
+			return NULL;
+		}
+
+		int mailbox_type = tree_item_data->mailbox_type;
+		char *folder_icon_name = account_get_folder_icon_name_by_mailbox_type(mailbox_type);
+		return account_create_folder_icon(obj, folder_icon_name);
+	}
+
 	return NULL;
 }
 
