@@ -25,7 +25,5 @@ collections {
 	}
 	base_scale: 2.6;		// multi scale for WVGA
 
-	#include "../../edc/common/email-parts.edc"
-	#include "../../edc/common/email-templates.edc"
 	#include "../../edc/account/email-account-base-layout.edc"
 }

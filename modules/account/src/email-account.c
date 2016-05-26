@@ -567,10 +567,8 @@ int account_create_list(EmailAccountView *view)
 	}
 
 	gl = elm_genlist_add(view->base.module->navi);
-	elm_scroller_policy_set(gl, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_AUTO);
 	elm_genlist_homogeneous_set(gl, EINA_TRUE);
 	elm_genlist_mode_set(gl, ELM_LIST_COMPRESS);
-	elm_genlist_block_count_set(gl, EMAIL_GENLIST_MAX_BLOCK_ITEMS_COUNT);
 	view->gl = gl;
 
 	/* If one account only. Set as the account. */

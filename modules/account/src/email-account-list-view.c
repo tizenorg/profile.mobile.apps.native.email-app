@@ -83,6 +83,7 @@ static void _check_account_list_zoom_state(EmailAccountView *view);
 static int _convert_account_list_item_type(EmailAccountView *view, int account_id, int mailbox_type);
 static char *_create_account_list_item_text(Account_Item_Data *item_data, const char *text);
 static Evas_Object *_create_account_subitem_color_bar(Evas_Object *parent, unsigned int color);
+static Evas_Object *_create_account_subitem_folder_icon(Evas_Object *parent, account_list_item_type item_type);
 
 int account_create_account_list_view(EmailAccountView *view)
 {
@@ -493,9 +494,13 @@ static Evas_Object *_gl_account_content_get_for_single_subitem(void *data, Evas_
 
 		int account_color = account_color_list_get_account_color(item_data->view, item_data->account_id);
 		Evas_Object *color_bar = _create_account_subitem_color_bar(full_item_ly, account_color);
-		elm_object_part_content_set(full_item_ly, "elm.swallow.icon", color_bar);
+		Evas_Object *folder_icon = _create_account_subitem_folder_icon(full_item_ly, item_data->item_type);
+
+		elm_object_part_content_set(full_item_ly, "elm.swallow.color_label", color_bar);
+		elm_object_part_content_set(full_item_ly, "elm.swallow.icon", folder_icon);
 
 		elm_object_part_text_set(full_item_ly, "elm.text", _get_account_item_text_for_single_subitem(item_data));
+		evas_object_smart_calculate(folder_icon);
 
 		return full_item_ly;
 	}
@@ -565,9 +570,49 @@ static Evas_Object *_create_account_subitem_color_bar(Evas_Object *parent, unsig
 	int b = B_MASKING(color);
 	int a = A_MASKING(color);
 
-	evas_object_size_hint_fill_set(color_bar, EVAS_HINT_FILL, EVAS_HINT_FILL);
 	evas_object_color_set(color_bar, r, g, b, a);
 	return color_bar;
+}
+
+static Evas_Object *_create_account_subitem_folder_icon(Evas_Object *parent, account_list_item_type item_type)
+{
+	char *folder_image_name = NULL;
+
+	switch (item_type) {
+	case ACCOUNT_LIST_COMBINED_INBOX:
+		folder_image_name = EMAIL_IMAGE_ACCOUNT_COMBINED_INBOX_FOLDER_ICON;
+		break;
+	case ACCOUNT_LIST_SINGLE_INBOX:
+		folder_image_name = EMAIL_IMAGE_ACCOUNT_INBOX_FOLDER_ICON;
+		break;
+	case ACCOUNT_LIST_PRIORITY_INBOX:
+		folder_image_name = EMAIL_IMAGE_ACCOUNT_PRIO_SENDER_FOLDER_ICON;
+		break;
+	case ACCOUNT_LIST_STARRED:
+		folder_image_name = EMAIL_IMAGE_ACCOUNT_STARRED_FOLDER_ICON;
+		break;
+	case ACCOUNT_LIST_COMBINED_DRAFTS:
+	case ACCOUNT_LIST_SINGLE_DRAFTS:
+		folder_image_name = EMAIL_IMAGE_ACCOUNT_DRAFT_FOLDER_ICON;
+		break;
+	case ACCOUNT_LIST_COMBINED_OUTBOX:
+	case ACCOUNT_LIST_SINGLE_OUTBOX:
+		folder_image_name = EMAIL_IMAGE_ACCOUNT_OUTBOX_FOLDER_ICON;
+		break;
+	case ACCOUNT_LIST_COMBINED_SENT:
+	case ACCOUNT_LIST_SINGLE_SENT:
+		folder_image_name = EMAIL_IMAGE_ACCOUNT_SENT_FOLDER_ICON;
+		break;
+	case ACCOUNT_LIST_COMBINED_SHOW_ALL_FOLDERS:
+	case ACCOUNT_LIST_SINGLE_SHOW_ALL_FOLDERS:
+		folder_image_name = EMAIL_IMAGE_ACCOUNT_SHOW_ALL_FOLDERS_ICON;
+		break;
+	default:
+		debug_error("Item type is not supported!");
+		return NULL;
+	}
+
+	return account_create_folder_icon(parent, folder_image_name);
 }
 
 static char *_create_account_list_item_text(Account_Item_Data *item_data, const char *text)

@@ -119,7 +119,6 @@ struct _Item_Data {
 	EmailAccountView *view;
 	Elm_Object_Item *it; // Genlist Item pointer
 	int i_boxtype; //for all account view
-	int b_scheduled_outbox; //If scheduled outbox, assign account id.
 
 	char *mailbox_name;
 	int mailbox_type;

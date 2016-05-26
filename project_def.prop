@@ -74,6 +74,7 @@ USER_LIB_DIRS_ABS =
 # EDC Resource Path
 USER_EDCS_IMAGE_DIRS = \
 	edc/images \
+	edc/images/account_icon \
 	edc/images/composer_icon \
 	edc/images/viewer_icon \
 	edc/images/list_icon \
