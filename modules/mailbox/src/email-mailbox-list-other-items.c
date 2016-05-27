@@ -41,14 +41,6 @@
 #define TIME_OUT	7.0
 #define GROUP_INDEX_LIST_ITEM_HEIGHT 52 /* 51 + 1 (margin) */
 
-static Elm_Genlist_Item_Class itc_last_updated_time;
-static Elm_Genlist_Item_Class itc_get_more_progress;
-static Elm_Genlist_Item_Class itc_load_more_messages;
-static Elm_Genlist_Item_Class itc_no_more_emails;
-static Elm_Genlist_Item_Class itc_sending_messages;
-static Elm_Genlist_Item_Class itc_select_all;
-
-
 /*
  * Declaration for static functions
  */
@@ -76,15 +68,85 @@ static void _mailbox_send_outgoing_messages_thread_finish(void *data, Ecore_Thre
 static GList *_mailbox_make_send_all_data_list(EmailMailboxView *view);
 static void _mailbox_free_send_all_data_list(GList *send_all_list);
 
+static const Elm_Genlist_Item_Class itc_last_updated_time = {
+	ELM_GEN_ITEM_CLASS_HEADER,					/*version, refcount, delete_me*/
+	"group_index",								/*item_style*/
+	NULL,										/*decorat_item_style*/
+	NULL,										/*decorate_all_item_style*/
+	{
+		_last_updated_time_gl_text_get,			/*text_get*/
+		NULL,									/*contect_get*/
+		NULL,									/*state_get*/
+		NULL,									/*del*/
+		NULL									/*filter_get*/
+	}
+};
+
+static const Elm_Genlist_Item_Class itc_get_more_progress = {
+	ELM_GEN_ITEM_CLASS_HEADER,					/*version, refcount, delete_me*/
+	"type1",									/*item_style*/
+	NULL,										/*decorat_item_style*/
+	NULL,										/*decorate_all_item_style*/
+	{
+		_get_more_progress_gl_text_get,			/*text_get*/
+		_get_more_progress_gl_content_get,		/*contect_get*/
+		NULL,									/*state_get*/
+		NULL,									/*del*/
+		NULL									/*filter_get*/
+	}
+};
+
+static const Elm_Genlist_Item_Class itc_load_more_messages = {
+	ELM_GEN_ITEM_CLASS_HEADER,					/*version, refcount, delete_me*/
+	"type1",									/*item_style*/
+	NULL,										/*decorat_item_style*/
+	NULL,										/*decorate_all_item_style*/
+	{
+		_load_more_messages_gl_text_get,		/*text_get*/
+		NULL,									/*contect_get*/
+		NULL,									/*state_get*/
+		NULL,									/*del*/
+		NULL									/*filter_get*/
+	}
+};
+
+static const Elm_Genlist_Item_Class itc_no_more_emails = {
+	ELM_GEN_ITEM_CLASS_HEADER,					/*version, refcount, delete_me*/
+	"type1",									/*item_style*/
+	NULL,										/*decorat_item_style*/
+	NULL,										/*decorate_all_item_style*/
+	{
+		_no_more_emails_gl_text_get,			/*text_get*/
+		NULL,									/*contect_get*/
+		NULL,									/*state_get*/
+		NULL,									/*del*/
+		NULL									/*filter_get*/
+	}
+};
+
+static const Elm_Genlist_Item_Class itc_select_all = {
+	ELM_GEN_ITEM_CLASS_HEADER,					/*version, refcount, delete_me*/
+	"group_index",								/*item_style*/
+	NULL,										/*decorat_item_style*/
+	NULL,										/*decorate_all_item_style*/
+	{
+		_select_all_item_gl_text_get,			/*text_get*/
+		_select_all_item_gl_content_get,		/*contect_get*/
+		NULL,									/*state_get*/
+		NULL,									/*del*/
+		NULL									/*filter_get*/
+	}
+};
+
 /*
  * Definition for static functions
  */
 
 static char *_last_updated_time_gl_text_get(void *data, Evas_Object *obj, const char *part)
 {
-	EmailMailboxView *view = (EmailMailboxView *)data;
-	if(view->last_updated_time && !strcmp(part, "elm.text")) {
-		return strdup(view->last_updated_time);
+	UpdateTimeItemData *item_data = (UpdateTimeItemData *)data;
+	if(item_data->time && !strcmp(part, "elm.text")) {
+		return strdup(item_data->time);
 	} else
 		return NULL;
 }
@@ -147,8 +209,7 @@ static char *_load_more_messages_gl_text_get(void *data, Evas_Object *obj, const
 
 static char *_select_all_item_gl_text_get(void *data, Evas_Object *obj, const char *part)
 {
-	EmailMailboxView *view = (EmailMailboxView *)data;
-	if (!strcmp(part, "elm.text") && view->b_editmode) {
+	if (!strcmp(part, "elm.text")) {
 		return strdup(_("IDS_EMAIL_HEADER_SELECT_ALL_ABB"));
 	} else
 		return NULL;
@@ -161,16 +222,13 @@ static Evas_Object *_select_all_item_gl_content_get(void *data, Evas_Object *obj
 		return NULL;
 	}
 
-	EmailMailboxView *view = (EmailMailboxView *)data;
-	debug_log("view->b_editmode = %d", view->b_editmode);
-	if (view->b_editmode) {
-		if (!strcmp(source, "elm.swallow.end")) {
-			view->selectAll_check = elm_check_add(obj);
-			evas_object_propagate_events_set(view->selectAll_check, EINA_FALSE);
-			elm_check_state_pointer_set(view->selectAll_check, (Eina_Bool *)&view->selectAll_chksel);
-			evas_object_smart_callback_add(view->selectAll_check, "changed", _select_all_item_check_changed_cb, data);
-			return view->selectAll_check;
-		}
+	SelectAllItemData *item_data = (SelectAllItemData *)data;
+	if (!strcmp(source, "elm.swallow.end")) {
+		item_data->checkbox = elm_check_add(obj);
+		evas_object_propagate_events_set(item_data->checkbox, EINA_FALSE);
+		elm_check_state_pointer_set(item_data->checkbox, (Eina_Bool *)&item_data->is_checked);
+		evas_object_smart_callback_add(item_data->checkbox, "changed", _select_all_item_check_changed_cb, item_data->view);
+		return item_data->checkbox;
 	}
 
 	return NULL;
@@ -186,10 +244,10 @@ static void _select_all_item_check_changed_cb(void *data, Evas_Object *obj, void
 	MailItemData *child_ld;
 
 	if (obj == NULL) {
-		group_checked = view->selectAll_chksel;
+		group_checked = view->select_all_item_data.is_checked;
 	} else {
 		group_checked = elm_check_state_get(obj);
-		view->selectAll_chksel = group_checked;
+		view->select_all_item_data.is_checked = group_checked;
 	}
 	debug_log("group_checked = %d", group_checked);
 
@@ -208,8 +266,8 @@ static void _select_all_item_check_changed_cb(void *data, Evas_Object *obj, void
 			if (child_ld->mail_status == EMAIL_MAIL_STATUS_SENDING || child_ld->mail_status == EMAIL_MAIL_STATUS_SEND_WAIT) {
 				debug_log("email being sent selected - unselect it(%d)", child_ld->mail_status);
 				child_ld->checked = EINA_FALSE;
-				view->selectAll_chksel = EINA_FALSE;
-				elm_check_state_set(view->selectAll_check, view->selectAll_chksel);
+				view->select_all_item_data.is_checked = EINA_FALSE;
+				elm_check_state_set(view->select_all_item_data.checkbox, view->select_all_item_data.is_checked);
 				int ret = notification_status_message_post(email_get_email_string("IDS_EMAIL_TPOP_SENDING_EMAIL_ING"));
 				if (ret != NOTIFICATION_ERROR_NONE) {
 					debug_warning("notification_status_message_post() failed: %d", ret);
@@ -223,13 +281,13 @@ static void _select_all_item_check_changed_cb(void *data, Evas_Object *obj, void
 				view->selected_mail_list = eina_list_remove(view->selected_mail_list, child_ld);
 			}
 		}
-		elm_check_state_set(view->selectAll_check, view->selectAll_chksel);
+		elm_check_state_set(view->select_all_item_data.checkbox, view->select_all_item_data.is_checked);
 		next_item = elm_genlist_item_next_get(next_item);
 
 		/* ETC genlist items should be removed before entering edit mode. If normal case, below error case is not occurred. */
 		if ((next_item == view->load_more_messages_item) || (next_item == view->no_more_emails_item)
 				|| (next_item == view->get_more_progress_item)
-				|| (next_item == view->last_updated_time_item)) {
+				|| (next_item == view->update_time_item_data.base.item)) {
 			debug_error("ETC genlist item is inserted. It should not be included!!!!");
 			break;
 		}
@@ -249,78 +307,24 @@ static void _select_all_item_check_changed_cb(void *data, Evas_Object *obj, void
  * Definition for exported functions
  */
 
-void mailbox_free_other_item_class_data()
-{
-	itc_last_updated_time.item_style = NULL;
-	itc_last_updated_time.func.text_get = NULL;
-	itc_last_updated_time.func.content_get = NULL;
-	itc_last_updated_time.func.state_get = NULL;
-	itc_last_updated_time.func.del = NULL;
-	elm_genlist_item_class_free(&itc_last_updated_time);
-
-	itc_get_more_progress.item_style = NULL;
-	itc_get_more_progress.func.text_get = NULL;
-	itc_get_more_progress.func.content_get = NULL;
-	itc_get_more_progress.func.state_get = NULL;
-	itc_get_more_progress.func.del = NULL;
-	elm_genlist_item_class_free(&itc_get_more_progress);
-
-	itc_load_more_messages.item_style = NULL;
-	itc_load_more_messages.func.text_get = NULL;
-	itc_load_more_messages.func.content_get = NULL;
-	itc_load_more_messages.func.state_get = NULL;
-	itc_load_more_messages.func.del = NULL;
-	elm_genlist_item_class_free(&itc_load_more_messages);
-
-	itc_no_more_emails.item_style = NULL;
-	itc_no_more_emails.func.text_get = NULL;
-	itc_no_more_emails.func.content_get = NULL;
-	itc_no_more_emails.func.state_get = NULL;
-	itc_no_more_emails.func.del = NULL;
-	elm_genlist_item_class_free(&itc_no_more_emails);
-
-	itc_sending_messages.item_style = NULL;
-	itc_sending_messages.func.text_get = NULL;
-	itc_sending_messages.func.content_get = NULL;
-	itc_sending_messages.func.state_get = NULL;
-	itc_sending_messages.func.del = NULL;
-	elm_genlist_item_class_free(&itc_sending_messages);
-
-	itc_select_all.item_style = NULL;
-	itc_select_all.func.text_get = NULL;
-	itc_select_all.func.content_get = NULL;
-	itc_select_all.func.state_get = NULL;
-	itc_select_all.func.del = NULL;
-	elm_genlist_item_class_free(&itc_select_all);
-}
-
 void mailbox_last_updated_time_item_add(EmailMailboxView *view, bool show_directly)
 {
 	debug_enter();
 
 	mailbox_last_updated_time_item_remove(view);
+	Elm_Object_Item *item = elm_genlist_item_prepend(view->gl,
+													&itc_last_updated_time,
+													&view->update_time_item_data,
+													NULL,
+													ELM_GENLIST_ITEM_NONE,
+													NULL,
+													NULL);
+	view->update_time_item_data.base.item = item;
+	elm_genlist_item_select_mode_set(item, ELM_OBJECT_SELECT_MODE_DISPLAY_ONLY);
 
-	itc_last_updated_time.item_style = "group_index";
-	itc_last_updated_time.func.text_get = _last_updated_time_gl_text_get;
-	itc_last_updated_time.func.content_get = NULL;
-	itc_last_updated_time.func.state_get = NULL;
-	itc_last_updated_time.func.del = NULL;
-	itc_last_updated_time.decorate_all_item_style = NULL;
-
-	elm_genlist_select_mode_set(view->gl, ELM_OBJECT_SELECT_MODE_DISPLAY_ONLY);
-	view->last_updated_time_item = elm_genlist_item_insert_before(view->gl,
-																&itc_last_updated_time,
-																view,
-																NULL,
-																elm_genlist_first_item_get(view->gl),
-																ELM_GENLIST_ITEM_NONE,
-																NULL,
-																NULL);
-	elm_genlist_item_select_mode_set(view->last_updated_time_item, ELM_OBJECT_SELECT_MODE_DISPLAY_ONLY);
-	elm_genlist_select_mode_set(view->gl, ELM_OBJECT_SELECT_MODE_DEFAULT);
-
-	if (show_directly)
-		elm_genlist_item_show(view->last_updated_time_item, ELM_GENLIST_ITEM_SCROLLTO_TOP);
+	if (show_directly) {
+		elm_genlist_item_show(item, ELM_GENLIST_ITEM_SCROLLTO_TOP);
+	}
 
 	debug_leave();
 }
@@ -336,8 +340,8 @@ void mailbox_last_updated_time_item_update(int mailbox_id, EmailMailboxView *vie
 		email_engine_free_mailbox_list(&mailbox, 1);
 	}
 
-	if (view->last_updated_time_item)
-		elm_genlist_item_update(view->last_updated_time_item);
+	if (view->update_time_item_data.base.item)
+		elm_genlist_item_update(view->update_time_item_data.base.item);
 	else {
 		mailbox_last_updated_time_item_add(view, true);
 	}
@@ -349,9 +353,9 @@ void mailbox_last_updated_time_item_remove(EmailMailboxView *view)
 {
 	debug_enter();
 
-	if (view && view->last_updated_time_item) {
-		elm_object_item_del(view->last_updated_time_item);
-		view->last_updated_time_item = NULL;
+	if (view && view->update_time_item_data.base.item) {
+		elm_object_item_del(view->update_time_item_data.base.item);
+		view->update_time_item_data.base.item = NULL;
 	}
 }
 
@@ -502,19 +506,13 @@ void mailbox_get_more_progress_item_add(EmailMailboxView *view)
 	view->total_mail_count = total_mail_count;
 	view->unread_mail_count = unread_mail_count;
 
-	itc_get_more_progress.item_style = "type1";
-	itc_get_more_progress.func.text_get = _get_more_progress_gl_text_get;
-	itc_get_more_progress.func.content_get = _get_more_progress_gl_content_get;
-	itc_get_more_progress.func.state_get = NULL;
-	itc_get_more_progress.func.del = NULL;
-	itc_get_more_progress.decorate_all_item_style = NULL;
-
 	view->get_more_progress_item = elm_genlist_item_append(view->gl,
 									&itc_get_more_progress,
-									view,
+									NULL,
 									NULL,
 									ELM_GENLIST_ITEM_NONE,
-									NULL, NULL);
+									NULL,
+									NULL);
 
 	elm_genlist_item_select_mode_set(view->get_more_progress_item, ELM_OBJECT_SELECT_MODE_DISPLAY_ONLY);
 	elm_genlist_item_bring_in(view->get_more_progress_item, ELM_GENLIST_ITEM_SCROLLTO_IN);
@@ -548,19 +546,13 @@ void mailbox_load_more_messages_item_add(EmailMailboxView *view)
 		return;
 	}
 
-	itc_load_more_messages.item_style = "type1";
-	itc_load_more_messages.func.text_get = _load_more_messages_gl_text_get;
-	itc_load_more_messages.func.content_get = NULL;
-	itc_load_more_messages.func.state_get = NULL;
-	itc_load_more_messages.func.del = NULL;
-	itc_load_more_messages.decorate_all_item_style = NULL;
-
 	view->load_more_messages_item = elm_genlist_item_append(view->gl,
 									&itc_load_more_messages,
-									view,
+									NULL,
 									NULL,
 									ELM_GENLIST_ITEM_NONE,
-									NULL, view);
+									NULL,
+									NULL);
 
 	elm_genlist_item_select_mode_set(view->load_more_messages_item, ELM_OBJECT_SELECT_MODE_NONE);
 	view->b_edge_bottom = false;
@@ -773,7 +765,7 @@ static void _select_all_item_clicked_cb(void *data, Evas_Object *obj, void *even
 {
 	debug_enter();
 
-	EmailMailboxView *view = (EmailMailboxView *)data;
+	SelectAllItemData *item_data = (SelectAllItemData *)data;
 	Elm_Object_Item *it = (Elm_Object_Item *)event_info;
 
 	if (!event_info) {
@@ -782,12 +774,12 @@ static void _select_all_item_clicked_cb(void *data, Evas_Object *obj, void *even
 	}
 	elm_genlist_item_selected_set((Elm_Object_Item *)it, EINA_FALSE);
 
-	if (view->selectAll_chksel) {
-		view->selectAll_chksel = EINA_FALSE;
+	if (item_data->is_checked) {
+		item_data->is_checked = EINA_FALSE;
 	} else {
-		view->selectAll_chksel = EINA_TRUE;
+		item_data->is_checked = EINA_TRUE;
 	}
-	_select_all_item_check_changed_cb(data, NULL, event_info);
+	_select_all_item_check_changed_cb(item_data->view, NULL, event_info);
 }
 
 void mailbox_select_all_item_add(EmailMailboxView *view)
@@ -796,29 +788,22 @@ void mailbox_select_all_item_add(EmailMailboxView *view)
 
 	mailbox_select_all_item_remove(view);
 
-	itc_select_all.item_style = "group_index";
-	itc_select_all.func.text_get = _select_all_item_gl_text_get;
-	itc_select_all.func.content_get = _select_all_item_gl_content_get;
-	itc_select_all.func.state_get = NULL;
-	itc_select_all.func.del = NULL;
-	itc_select_all.decorate_all_item_style = NULL;
-
 	Evas_Coord scroll_x = 0, scroll_y = 0, scroll_w = 0, scroll_h = 0;
 	elm_scroller_region_get(view->gl, &scroll_x, &scroll_y, &scroll_w, &scroll_h);
 	debug_log("scroll_x : %d scroll_y : %d scroll_w : %d scroll_h : %d", scroll_x, scroll_y, scroll_w, scroll_h);
 
-	view->select_all_item = elm_genlist_item_insert_before(view->gl,
-																&itc_select_all,
-																view,
-																NULL,
-																elm_genlist_first_item_get(view->gl),
-																ELM_GENLIST_ITEM_NONE,
-																_select_all_item_clicked_cb,
-																view);
+	view->select_all_item_data.base.item = elm_genlist_item_prepend(view->gl,
+															&itc_select_all,
+															&view->select_all_item_data,
+															NULL,
+															ELM_GENLIST_ITEM_NONE,
+															_select_all_item_clicked_cb,
+															&view->select_all_item_data);
 
-	if (scroll_y <= 0 || (view->last_updated_time_item && scroll_y <= GROUP_INDEX_LIST_ITEM_HEIGHT)) {
-		elm_genlist_item_show(view->select_all_item, ELM_GENLIST_ITEM_SCROLLTO_TOP);
+	if (scroll_y <= 0 || (view->update_time_item_data.base.item && scroll_y <= GROUP_INDEX_LIST_ITEM_HEIGHT)) {
+			elm_genlist_item_show(view->select_all_item_data.base.item, ELM_GENLIST_ITEM_SCROLLTO_TOP);
 	}
+
 	debug_leave();
 }
 
@@ -826,9 +811,9 @@ void mailbox_select_all_item_remove(EmailMailboxView *view)
 {
 	debug_enter();
 
-	if (view && view->select_all_item) {
-		elm_object_item_del(view->select_all_item);
-		view->select_all_item = NULL;
+	if (view && view->select_all_item_data.base.item) {
+		elm_object_item_del(view->select_all_item_data.base.item);
+		view->select_all_item_data.base.item = NULL;
 		debug_log("select_all_item is removed");
 	}
 }
@@ -857,19 +842,13 @@ void mailbox_no_more_emails_item_add(EmailMailboxView *view)
 		return;
 	}
 
-	itc_no_more_emails.item_style = "type1";
-	itc_no_more_emails.func.text_get = _no_more_emails_gl_text_get;
-	itc_no_more_emails.func.content_get = NULL;
-	itc_no_more_emails.func.state_get = NULL;
-	itc_no_more_emails.func.del = NULL;
-	itc_no_more_emails.decorate_all_item_style = NULL;
-
 	view->no_more_emails_item = elm_genlist_item_append(view->gl,
 									&itc_no_more_emails,
-									view,
+									NULL,
 									NULL,
 									ELM_GENLIST_ITEM_NONE,
-									NULL, view);
+									NULL,
+									NULL);
 
 	elm_genlist_item_select_mode_set(view->no_more_emails_item, ELM_OBJECT_SELECT_MODE_DISPLAY_ONLY);
 
