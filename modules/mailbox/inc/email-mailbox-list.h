@@ -110,12 +110,6 @@ void mailbox_list_free_mail_item_data(MailItemData *ld);
 void mailbox_list_free_all_item_data(EmailMailboxView *view);
 
 /**
- * @brief Remove an item class in a given Email Mailbox data.
- * @param[in]	view		Email Mailbox data
- */
-void mailbox_list_free_all_item_class_data(EmailMailboxView *view);
-
-/**
  * @brief Provides selection functionality for content of Mailbox
  * @param[in]	view		Email Mailbox data
  */

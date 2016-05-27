@@ -405,6 +405,18 @@ static int _mailbox_initialize(EmailMailboxView *view)
 	view->account_type = EMAIL_SERVER_TYPE_NONE;
 	view->b_format_24hour = false;
 
+	/*SelectAll Item*/
+	view->select_all_item_data.base.item_type = MAILBOX_LIST_ITEM_SELECT_ALL;
+	view->select_all_item_data.base.item = NULL;
+	view->select_all_item_data.checkbox = NULL;
+	view->select_all_item_data.is_checked = EINA_FALSE;
+	view->select_all_item_data.view = view;
+
+	/*Last Update Time Item*/
+	view->update_time_item_data.base.item_type = MAILBOX_LIST_ITEM_UPDATE_TIME;
+	view->update_time_item_data.base.item = NULL;
+	view->update_time_item_data.time = NULL;
+
 	/* DBUS */
 	mailbox_setup_dbus_receiver(view);
 
@@ -629,8 +641,6 @@ static void _mailbox_finalize(EmailMailboxView *view)
 
 	_mailbox_delete_evas_object(view);
 
-	mailbox_list_free_all_item_class_data(view);
-
 	if (view->request_queue) {
 		email_request_queue_destroy(view->request_queue);
 		view->request_queue = NULL;
@@ -644,7 +654,7 @@ static void _mailbox_finalize(EmailMailboxView *view)
 
 	G_FREE(view->mailbox_alias);
 	G_FREE(view->account_name);
-	FREE(view->last_updated_time);
+	FREE(view->update_time_item_data.time);
 	G_FREE(view->moved_mailbox_name);
 
 	email_unregister_timezone_changed_callback(_mailbox_timezone_change_cb);
@@ -1130,8 +1140,9 @@ static void _mailbox_timezone_change_cb(system_settings_key_e key, void *data)
 
 	mailbox_exit_edit_mode(view);
 
-	if (view->last_updated_time_item)
+	if (view->update_time_item_data.base.item) {
 		mailbox_last_updated_time_item_update(view->mailbox_id, view);
+	}
 
 	mailbox_list_refresh(view, NULL);
 }
@@ -1150,8 +1161,9 @@ static void _mailbox_sys_settings_datetime_format_changed_cb(system_settings_key
 			SYSTEM_SETTINGS_KEY_LOCALE_TIMEFORMAT_24HOUR,
 			&view->b_format_24hour);
 
-	if (view->last_updated_time_item)
+	if (view->update_time_item_data.base.item) {
 		mailbox_last_updated_time_item_update(view->mailbox_id, view);
+	}
 
 	FREE(dt_fmt);
 

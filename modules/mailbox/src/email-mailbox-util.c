@@ -204,10 +204,10 @@ void mailbox_set_last_updated_time(time_t last_update_time, EmailMailboxView *vi
 	debug_secure("date&time: %d [%s]", last_update_time, updatetime);
 
 	FREE(formatted_text);
-	FREE(view->last_updated_time);
-	view->last_updated_time = calloc(1, LAST_UPDATED_TIME);
-	retm_if(!view->last_updated_time, "view->last_updated_time is NULL!");
-	memcpy(view->last_updated_time, updatetime, LAST_UPDATED_TIME);
+	FREE(view->update_time_item_data.time);
+	view->update_time_item_data.time = calloc(1, LAST_UPDATED_TIME);
+	retm_if(!view->update_time_item_data.time, "view->update_time_item_data.time is NULL!");
+	memcpy(view->update_time_item_data.time, updatetime, LAST_UPDATED_TIME);
 
 }
 
