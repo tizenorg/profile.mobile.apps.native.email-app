@@ -2811,6 +2811,75 @@ EMAIL_API Eina_Bool email_file_recursive_rm(const char *dir)
 	return result;
 }
 
+EMAIL_API bool email_file_optimize_path(char *in_out_path)
+{
+	char *iter = NULL;
+	char *end = in_out_path + strlen(in_out_path);
+
+	if (in_out_path == end) {
+		return false;
+	}
+
+	iter = in_out_path;
+	while ((iter = strstr(iter, "//")) != NULL) {
+		memmove(iter + 1, iter + 2, end - iter - 1);
+		end -= 1;
+	}
+
+	iter = in_out_path;
+	while ((iter = strstr(iter, "/./")) != NULL) {
+		memmove(iter + 1, iter + 3, end - iter - 2);
+		end -= 2;
+	}
+
+	iter = end - 2;
+	if ((iter >= in_out_path) && (strcmp(iter, "/.") == 0)) {
+		end -= ((iter == in_out_path) ? 1 : 2);
+		end[0] = '\0';
+	}
+
+	if (strncmp(in_out_path, "./", 2) == 0) {
+		memmove(in_out_path, in_out_path + 2, end - in_out_path - 1);
+		end -= 2;
+	}
+
+	iter = in_out_path;
+	while ((iter = strstr(iter, "/..")) != NULL) {
+		if ((iter[3] != '/') && (iter[3] != '\0')) {
+			iter += 4;
+			continue;
+		}
+		if (iter == in_out_path) {
+			return false;
+		}
+		char *iter2 = iter - 2;
+		while ((iter2 >= in_out_path) && (*iter2 != '/')) {
+			--iter2;
+		}
+		if (strncmp(iter2 + 1, "../", 3) == 0) {
+			iter += 4;
+			continue;
+		}
+		if (iter[3] == '\0') {
+			end -= (iter - iter2 + 2);
+			end[0] = '\0';
+			break;
+		}
+		memmove(iter2 + 1, iter + 4, end - iter - 3);
+		end -= (iter - iter2 + 3);
+		iter = iter2;
+	}
+
+	if (in_out_path == end) {
+		in_out_path[0] = '.';
+		in_out_path[1] = '\0';
+	} else if ((end[-1] == '/') && (end - 1 != in_out_path)) {
+		end[-1] = '\0';
+	}
+
+	return true;
+}
+
 int email_update_vip_rule_value()
 {
 	debug_enter();

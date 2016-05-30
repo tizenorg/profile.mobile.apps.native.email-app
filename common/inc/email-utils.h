@@ -434,6 +434,7 @@ EMAIL_API Eina_Bool email_file_remove(const char *file);
 EMAIL_API Eina_Bool email_file_unlink(const char *file);
 EMAIL_API char *email_file_strip_ext(const char *file);
 EMAIL_API Eina_Bool email_file_recursive_rm (const char *dir);
+EMAIL_API bool email_file_optimize_path(char *in_out_path);
 
 EMAIL_API int email_update_vip_rule_value();
 EMAIL_API int email_get_vip_rule_value(double *value);

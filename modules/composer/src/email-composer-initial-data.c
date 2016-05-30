@@ -796,7 +796,12 @@ static void _initial_data_set_mail_attachment(EmailComposerView *view)
 				}
 
 				if (att_data->save_status) {
-					char dest[EMAIL_BUFF_SIZE_1K] = { 0, };
+					char src[PATH_MAX] = { 0, };
+					if (realpath(att_data->attachment_path, src)){
+						free(att_data->attachment_path);
+						att_data->attachment_path = strdup(src);
+
+						char dest[PATH_MAX] = { 0, };
 					snprintf(dest, sizeof(dest), "%s/%s", composer_util_file_get_temp_dirname(), att_data->attachment_name);
 
 					debug_secure("inline_attach_path: [%s]", att_data->attachment_path);
@@ -806,8 +811,11 @@ static void _initial_data_set_mail_attachment(EmailComposerView *view)
 					if (result == -1) {
 						debug_log("symlink() failed! (%d): %s", result, strerror_r(errno, err_buff, sizeof(err_buff)));
 					}
+					} else {
+						debug_log("realpath() failed!: %s", strerror_r(errno, err_buff, sizeof(err_buff)));
 				}
 			}
+		}
 		}
 
 		if (view->composer_type == RUN_COMPOSER_EDIT || (view->composer_type == RUN_COMPOSER_FORWARD && account_info->original_account->options.forward_with_files)) {
