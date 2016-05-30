@@ -395,14 +395,13 @@ Eina_Bool composer_util_is_max_sending_size_exceeded(void *data);
 void composer_util_modify_send_button(EmailComposerView *view);
 
 /**
- * @brief Callback to get image list
+ * @brief Function to update inline image list
  *
- * @param[in]	o			Unused
- * @param[in]	result		Inline attachment list from webkit
- * @param[in]	data		User data (Email composer data)
+ * @param[in]	view		Email composer data
+ * @param[in]	img_srcs	Inline attachment list from webkit
  *
  */
-void composer_util_get_image_list_cb(Evas_Object *o, const char *result, void *data);
+void composer_util_update_inline_image_list(EmailComposerView *view, const char *img_srcs);
 
 /**
  * @brief Composer create layout with noindicator

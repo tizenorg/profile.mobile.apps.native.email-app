@@ -167,7 +167,7 @@ static void _get_image_list_before_leaving_composer_cb(Evas_Object *obj, const c
 
 	EmailComposerView *view = (EmailComposerView *)data;
 
-	composer_util_get_image_list_cb(obj, result, view);
+	composer_util_update_inline_image_list(view, result);
 
 	/* This ewk call invokes some successive ewk calls to get html contents. */
 	if (!ewk_view_plain_text_get(view->ewk_view, _get_final_plain_text_cb, (void *)view)) {
