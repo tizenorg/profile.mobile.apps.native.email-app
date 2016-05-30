@@ -91,11 +91,14 @@ static COMPOSER_ERROR_TYPE_E _attachment_check_errors_of_file_in_list(EmailCompo
 
 	char *p = NULL;
 	Eina_List *l = NULL;
+	Eina_List *l_next = NULL;
 
-	EINA_LIST_FOREACH(list, l, p) {
+	EINA_LIST_FOREACH_SAFE(list, l, l_next, p) {
 		Eina_Bool remove = check_max_attach;
-		if (!p || (strlen(p) == 0)) {
-			continue;
+
+		/* 0. Check if path is empty. */
+		if (!remove && (!p || !p[0])) {
+			remove = EINA_TRUE;
 		}
 
 		/* 1. Check the count of attachments. */
@@ -121,14 +124,14 @@ static COMPOSER_ERROR_TYPE_E _attachment_check_errors_of_file_in_list(EmailCompo
 					} else if (to_be_moved_or_copied == ATTACH_BY_COPY_FILE && email_file_cp(p, tmp_file_path)) {
 						l->data = g_strdup(tmp_file_path);
 						g_free(p);
-					} else {
+					} else if (to_be_moved_or_copied != ATTACH_BY_USE_ORG_FILE) {
 						debug_warning("email_file_mv() / email_file_cp() failed!");
 					}
 				}
 			}
 			total_attachment_count++;
 		} else {
-			list = eina_list_remove(list, p);
+			list = eina_list_remove_list(list, l);
 			g_free(p);
 		}
 	}
