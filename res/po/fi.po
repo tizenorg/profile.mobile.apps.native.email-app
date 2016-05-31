@@ -22,6 +22,9 @@ msgstr "PERUUTA"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "POISTA"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Ei näytettäviä kohteita."
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Wi-Fi-yhteys vaaditaan. Muodosta Wi-Fi-verkkoyhteys ja yritä uudelleen."
 
@@ -33,9 +36,6 @@ msgstr "Lataus peruutettu."
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "Tänään"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "Ei näytettäviä kohteita."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "Voit ladata vain http- tai https-muotoisista URL-osoitteista."
@@ -103,17 +103,11 @@ msgstr "Vastaanottajien enimmäismäärä (%d) on saavutettu."
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "Merkkien enimmäismäärä on saavutettu."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "Merkkien enimmäismäärä (%d) on saavutettu."
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "Viestin enimmäiskoko (%d kt) on saavutettu."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "Viestin enimmäiskoko on ylitetty. Vain ensimmäiset %d kt jaetaan."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "Ladataan..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "Annettu virheellinen sähköpostiosoite."
@@ -214,9 +208,6 @@ msgstr "Salasanassa on välilyöntejä. Monet palvelimet eivät tue salasanoja, 
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "Sähköpostiviestejä ei voi siirtää usealta tililtä kerrallaan."
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "Yhteyttä palvelimeen ei saada."
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "Luo sähköpostitili sähköpostiviestin luontia varten."
 
@@ -304,29 +295,14 @@ msgstr "Liitteen lataaminen epäonnistui. Tarkista verkkoyhteys ja yritä uudell
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "Sähköpostiviesti on poistettu palvelimelta."
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Lataus epäonnistui."
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "Ladataan..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
 msgstr "Jos tili poistetaan, laitteesta poistetaan myös kaikki tilillä olevat viestit, yhteystiedot ja muut tiedot. Jatka napauttamalla Poista."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "Luodaan vCardia..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "Yhdistäminen epäonnistui."
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "Tämänniminen tiedosto on jo liitetty."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "Todennus epäonnistui."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "Tuntematon virhe."
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "Kaikki tässä sähköpostiviestissä olevat liitteet ladataan ennen viestin lähettämistä edelleen."
@@ -337,26 +313,11 @@ msgstr "Näytä yhteystiedot"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "Päivitä yhteystieto"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "Jaa"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "Asetukset"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "Lähetä itselle"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "Lähetä"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "Valitse kaikki"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "Valitse"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "Hae"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "Tallenna Luonnoksiin"
@@ -372,18 +333,6 @@ msgstr "Poista roskapostista"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "Poista Ensisijaisista lähettäjistä"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "Poista"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "Päivitä"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "Liitä"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "Alkuperäinen"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "Siirry päävastaanott. (V.ottaja)"
@@ -409,17 +358,11 @@ msgstr "Merkitse luetuksi"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "Pieni"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "Lähetä edelleen"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "Muokkaa"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "Poista kansio"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "Poista"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "Poimi"
@@ -429,9 +372,6 @@ msgstr "Luo kansio"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "Luo yhteystieto"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "Kopioi"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "Luo sähköpostiviesti"
@@ -453,9 +393,6 @@ msgstr "Lisää kopio/piilokopio"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "Lisää liite"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "Lisää tili"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "Lisää"
@@ -487,9 +424,6 @@ msgstr "Ilmoitusääni"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "Uudet sähköpostiviestit"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "Sähköposti-ilmoitukset"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "Muokkaa allekirjoitusta"
 
@@ -520,9 +454,6 @@ msgstr "Sähköpostiviestiä ei voi luoda"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "Liitettä ei voi lisätä"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "Aihe"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "Lopeta sähköpostiv. luominen"
 
@@ -534,9 +465,6 @@ msgstr "Roskapostilaatikko"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Näytä kaikki kansiot"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "Asetukset"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Lähetetty"
@@ -565,17 +493,11 @@ msgstr "Roskakori"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "Ensisij. lähettäjät"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "%d valittu"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "Lähtevät"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "Avaa sähköposti"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "Ilmoitukset"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "Postilaatikko"
@@ -588,9 +510,6 @@ msgstr "Kuvanlaatu"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(oletus)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "Yleiset"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "Tämän tilin kansiot"
@@ -619,9 +538,6 @@ msgstr "Lataa liite"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "Lataa liitteet"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "Poista"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "Luo vCard"
 
@@ -637,17 +553,11 @@ msgstr "Yhdistetyt tilit"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "Liitteet"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "Tilit"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "Videot"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "Ota kuva"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "Asetukset"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Lähetä kaikki"
@@ -658,9 +568,6 @@ msgstr "Tall."
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "Tall. video"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "OK"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "Muistio"
 
@@ -669,12 +576,6 @@ msgstr "Kuvat"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Lataa koko sähköpostiviesti"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "Lataa kaikki"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "Valmis"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "Hylkää"
@@ -685,23 +586,14 @@ msgstr "Poista"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "Luo"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "Jatka"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "Yhteystiedot"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "Peruuta"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "Tallenna äänitied."
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "Kalenteri"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "Eilen"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "Palvelinyhteyttä ei voi avata. Suojausvirhe."
@@ -748,9 +640,6 @@ msgstr "Kartat"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "Ladataan lisää..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "Viimeinen päivitys"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "Sisällytä alkuperäinen viesti"
 
@@ -763,14 +652,8 @@ msgstr "Vl:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Lähettäjä"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "Kansion nimi"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "Lataa lisää pyyhk. ylösp."
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "Sähköpostiosoite"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Kopio/piilokopio"
@@ -886,12 +769,6 @@ msgstr "Palveluviestit"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "Ei rajoitusta"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "Ei mitään"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "Manuaalinen"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "Säilytä ei-verkkov. aset."
 
@@ -903,12 +780,6 @@ msgstr "%d minuutin välein"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "Tunnin välein"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "Päivittäin"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "Oletus"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "Synkronoi sähköposti"
@@ -930,9 +801,6 @@ msgstr "Muu"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "Sähköp. synkr.aikataulu"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "Varoitus"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "Tiliä ei voi vahvistaa"
@@ -958,17 +826,8 @@ msgstr "Rajoita noutokokoa"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "Saapuvan palvelimen asetukset"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "Sähköposti"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "Seuraava"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "Man. asennus"
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "Äänetön"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "Portti"
@@ -976,14 +835,137 @@ msgstr "Portti"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "LÄHETÄ"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "Kirjasinkoko"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Merkkien enimmäismäärä (%d) on saavutettu."
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "Kirjasimen väri"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Ladataan..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Yhteyttä palvelimeen ei saada."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Lataus epäonnistui."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Ladataan..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Yhdistäminen epäonnistui."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Todennus epäonnistui."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Tuntematon virhe."
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Jaa"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Asetukset"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Valitse kaikki"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Valitse"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Hae"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Poista"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Päivitä"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Liitä"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Alkuperäinen"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Lähetä edelleen"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Poista"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Kopioi"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Lisää tili"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Sähköposti-ilmoitukset"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Aihe"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Asetukset"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d valittu"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Ilmoitukset"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Yleiset"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Poista"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Tilit"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Asetukset"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Lataa kaikki"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Valmis"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Jatka"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Peruuta"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Eilen"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Viimeinen päivitys"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Kansion nimi"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "Sähköpostiosoite"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Ei mitään"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Manuaalinen"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Päivittäin"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "Nimeä kansio uudelleen"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Oletus"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "Siirrä roskapostilaatikkoon"
@@ -1009,14 +991,23 @@ msgstr "Synkronointi epäonnistui. Yritä myöhemmin uudelleen."
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "Tekstin taustaväri"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Varoitus"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "Ladattu"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Lataa liitteet automaattisesti Wi-Fi-verkkoyhteyden muodostamisen jälkeen"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "Tallennettu."
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "Sähköposti"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Seuraava"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Äänetön"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "Ota RTF-teksti käyttöön"
@@ -1035,9 +1026,6 @@ msgstr "Kun olet tallentanut sähköpostiviestit Luonnokset-kansioon, ne näytet
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "Tallenna kaikki"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "Poisto epäonnistui."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "Kansio nimetty uudelleen."
@@ -1059,4 +1047,16 @@ msgstr "Verkko ei ole käytettävissä. Viesti lähetetään, kun olet yhteydess
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "Lentotila otettu käyttöön. Viesti lähetetään, kun olet yhteydessä verkkoon."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Kirjasinkoko"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Kirjasimen väri"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Tallennettu."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Poisto epäonnistui."
 

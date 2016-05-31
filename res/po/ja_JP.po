@@ -22,6 +22,9 @@ msgstr "キャンセル"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "削除"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "表示するアイテムがありません"
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Wi-Fi接続が必要です。Wi-Fiに接続し、再度お試しください。"
 
@@ -33,9 +36,6 @@ msgstr "ダウンロードを中止しました。"
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "今日"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "表示するメールはありません。"
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "httpやhttpsのURLからのみダウンロードできます。"
@@ -103,17 +103,11 @@ msgstr "宛先が最大数(%d件)に達しました。"
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "最大文字数に達しました。"
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "最大文字数(%d文字)に達しました。"
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "最大メッセージサイズ(%dKB)に達しました。"
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "メッセージの最大サイズを超えました。最初の%dKBのみが共有されます。"
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "読み込み中..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "入力したEメールアドレスが正しくありません。"
@@ -191,7 +185,7 @@ msgid "IDS_EMAIL_SBODY_SENT_FROM_MY_SAMSUNG_DEVICE"
 msgstr "Samsung端末から送信"
 
 msgid "IDS_EMAIL_SBODY_RECEIVE_STATUS_BAR_NOTIFICATIONS_WHEN_EMAILS_ARRIVE"
-msgstr "Eメールを受信すると、ステータスバーに通知を表示"
+msgstr "Eメールを受信すると、ステータスバーに通知を表示します。"
 
 msgid "IDS_EMAIL_SBODY_NO_SUBJECT_M_NOUN"
 msgstr "件名なし"
@@ -214,9 +208,6 @@ msgstr "パスワードにスペースが含まれています。多くのサー
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "複数のアカウントからEメールを同時に移動できません。"
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "サーバーに接続できません。"
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "Eメールを作成するには、Eメールアカウントを作成してください。"
 
@@ -224,7 +215,7 @@ msgid "IDS_EMAIL_POP_THIS_FILE_TYPE_IS_NOT_SUPPORTED_BY_ANY_APPLICATION_ON_YOUR_
 msgstr "このファイル形式は、端末のどのアプリケーションにも対応していません。"
 
 msgid "IDS_EMAIL_POP_THIS_EMAIL_WILL_BE_DELETED"
-msgstr "このEメールが削除されます。"
+msgstr "このEメールを削除します。"
 
 msgid "IDS_EMAIL_POP_THIS_EMAIL_HAS_BEEN_DELETED_FROM_THE_SERVER"
 msgstr "このメールはサーバーから削除されています。"
@@ -236,7 +227,7 @@ msgid "IDS_EMAIL_POP_THE_SELECTED_DATA_COULD_NOT_BE_FOUND"
 msgstr "選択したデータが見つかりません。"
 
 msgid "IDS_EMAIL_POP_THE_MAXIMUM_TOTAL_SIZE_OF_ATTACHMENTS_HPS_MB_HAS_BEEN_EXCEEDED_REMOVE_SOME_FILES_AND_TRY_AGAIN"
-msgstr "添付ファイルの最大サイズ(%sMB)を超えています。いくつかのファイルを削除してから再度送信してください。"
+msgstr "添付ファイルの最大サイズ(%sMB)を超えています。いくつかのファイルを削除し、再度実行してください。"
 
 msgid "IDS_EMAIL_POP_THE_MAXIMUM_NUMBER_OF_ATTACHMENTS_HPD_HAS_BEEN_REACHED"
 msgstr "添付ファイルの最大数(%d件)に達しました。"
@@ -304,29 +295,14 @@ msgstr "添付ファイルのダウンロードに失敗しました。ネット
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "Eメールはサーバーから削除されました。"
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "ダウンロードに失敗しました。"
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "ダウンロード中..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
 msgstr "このアカウントを削除すると、そこに含まれる全てのメッセージ、連絡先、その他のデータが端末から削除されます。続行するには、[削除]をタップしてください。"
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "vCardを作成中..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "接続に失敗しました。"
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "この名前のファイルは既に添付されています。"
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "認証に失敗しました。"
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "不明なエラーが発生しました。"
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "Eメールの全ての添付ファイルを転送する前にダウンロードします。"
@@ -337,26 +313,11 @@ msgstr "連絡先の詳細を表示"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "連絡先を更新"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "共有"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "設定"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "宛先に自分を追加"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "送信"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "全て選択"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "選択"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "検索"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "下書きに保存"
@@ -372,18 +333,6 @@ msgstr "迷惑メール設定を解除"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "優先送信元から削除"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "削除"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "更新"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "貼り付け"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "オリジナル"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "メインの受信者(To)に移動"
@@ -409,17 +358,11 @@ msgstr "既読にする"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "低"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "転送"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "編集"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "フォルダを削除"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "削除"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "切り取り"
@@ -429,9 +372,6 @@ msgstr "フォルダを作成"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "連絡先を登録"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "コピー"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "Eメールを作成"
@@ -453,9 +393,6 @@ msgstr "Cc/Bccを追加"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "添付ファイルを追加"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "アカウント追加"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "追加"
@@ -487,9 +424,6 @@ msgstr "通知音"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "新着Eメール"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "Eメール通知"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "署名を編集"
 
@@ -520,9 +454,6 @@ msgstr "Eメールの作成不可"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "添付ファイルの追加不可"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "件名"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "Eメールの作成を中止"
 
@@ -534,9 +465,6 @@ msgstr "スパムボックス"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "全てのフォルダを表示"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "設定"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "送信済み"
@@ -565,17 +493,11 @@ msgstr "ごみ箱"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "優先送信元"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "%d件選択"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "送信トレイ"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "Eメールを開く"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "お知らせ"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "メールボックス"
@@ -588,9 +510,6 @@ msgstr "画質"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(標準)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "一般"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "このアカウントのフォルダ"
@@ -619,9 +538,6 @@ msgstr "添付ファイルをダウンロード"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "添付ファイルをダウンロード"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "削除"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "vCardを作成"
 
@@ -637,17 +553,11 @@ msgstr "統合アカウント"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "添付ファイル"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "アカウント"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "動画"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "写真を撮影"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "設定"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "全て送信"
@@ -658,9 +568,6 @@ msgstr "保存"
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "動画を撮影"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "OK"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "メモ"
 
@@ -669,12 +576,6 @@ msgstr "画像"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Eメール全体をダウンロード"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "全てダウンロード"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "完了"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "破棄"
@@ -685,23 +586,14 @@ msgstr "削除"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "作成"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "続行"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "連絡先"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "キャンセル"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "録音ファイル"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "カレンダー"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "昨日"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "サーバーへの接続を開始できません。セキュリティエラーが発生しました。"
@@ -748,9 +640,6 @@ msgstr "マップ"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "さらに読み込み中..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "最終更新日"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "オリジナルメッセージを含める"
 
@@ -763,14 +652,8 @@ msgstr "FW:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "送信元"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "フォルダ名"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "上にﾌﾘｯｸしてさらに読み込む"
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "Eメールアドレス"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Cc/Bcc"
@@ -886,12 +769,6 @@ msgstr "プッシュ"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "制限なし"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "なし"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "手動"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "ローミングなしの設定を保持"
 
@@ -903,12 +780,6 @@ msgstr "%d分ごと"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "毎時"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "毎日"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "標準"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "Eメールを同期"
@@ -930,9 +801,6 @@ msgstr "その他"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "Eメールの同期スケジュール"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "警告"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "アカウントの認証不可"
@@ -958,17 +826,8 @@ msgstr "受信サイズの制限"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "受信サーバー設定"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "Eメール"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "次へ"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "手動設定"
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "サイレント"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "ポート"
@@ -976,14 +835,137 @@ msgstr "ポート"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "送信"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "文字サイズ"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "最大文字数(%d文字)に達しました。"
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "文字色"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "読み込み中..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "サーバーに接続できません。"
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "ダウンロードに失敗しました。"
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "ダウンロード中..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "接続に失敗しました。"
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "認証に失敗しました。"
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "不明なエラーが発生しました。"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "共有"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "設定"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "全て選択"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "選択"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "検索"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "削除"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "更新"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "貼り付け"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "オリジナル"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "転送"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "削除"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "コピー"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "アカウント追加"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Eメール通知"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "件名"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "設定"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d件選択"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "お知らせ"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "一般"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "削除"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "アカウント"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "設定"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "全てダウンロード"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "完了"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "続行"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "キャンセル"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "昨日"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "最終更新日"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "フォルダ名"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "Eメールアドレス"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "なし"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "手動"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "毎日"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "フォルダ名を変更"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "標準"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "迷惑メールトレイに移動"
@@ -1009,14 +991,23 @@ msgstr "同期に失敗しました。後ほどお試しください。"
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "テキストの背景色"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "警告"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "ﾀﾞｳﾝﾛｰﾄﾞ済み"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Wi-Fi接続時、添付ファイルを自動でダウンロード"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "保存しました。"
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "Eメール"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "次へ"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "サイレント"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "リッチテキストメニューを表示"
@@ -1035,9 +1026,6 @@ msgstr "[下書き]でEメールを保存すると、ここに表示されます
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "全て保存"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "削除に失敗しました。"
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "フォルダ名を変更しました。"
@@ -1059,4 +1047,16 @@ msgstr "ネットワークが利用できません。ネットワークに接続
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "機内モードが有効になりました。ネットワークに接続すると、このメッセージは送信されます。"
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "文字サイズ"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "文字色"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "保存しました。"
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "削除に失敗しました。"
 

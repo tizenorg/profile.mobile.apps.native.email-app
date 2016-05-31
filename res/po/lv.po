@@ -22,6 +22,9 @@ msgstr "ATCELT"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "DZĒST"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Nav objektu, ko parādīt."
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Nepieciešams Wi-Fi savienojums. Izveidojiet savienojumu ar Wi-Fi tīklu un mēģiniet vēlreiz"
 
@@ -33,9 +36,6 @@ msgstr "Lejupielāde atcelta."
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "Šodien"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "Nav objektu, ko parādīt."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "Var lejupielādēt tikai http vai https vietrāžus URL."
@@ -103,17 +103,11 @@ msgstr "Sasniegts maksimālais adresātu skaits (%d)."
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "Sasniegts maksimālais rakstzīmju skaits."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "Sasniegts maksimālais rakstzīmju skaits (%d)"
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "Sasniegts maksimālais ziņas lielums (%d KB)."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "Pārsniegts maksimālais ziņas lielums. Tiks kopīgoti tikai pirmie %d KB."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "Ielādē..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "Ievadīta nepareiza e-pasta adrese."
@@ -214,9 +208,6 @@ msgstr "Jūsu parolē ir atstarpes. Daudzi serveri neatbalsta paroles ar atstarp
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "Nevar vienlaikus pārvietot e-pasta ziņas no vairākiem kontiem."
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "Nevar savienoties ar serveri."
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "Lai sastādītu e-pasta ziņu, izveidojiet e-pasta kontu."
 
@@ -304,29 +295,14 @@ msgstr "Neizdevās lejupielādēt pielikumu. Pārbaudiet tīkla savienojumu un m
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "E-pasts izdzēsts no servera."
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Lejupielāde neizdevās."
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "Ielādē..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
 msgstr "Ja izdzēsīsit šo kontu, no ierīces tiks izdzēstas arī visas konta ziņas, kontakti un citi dati. Pieskarieties pie Dzēst, lai turpinātu."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "Veido vCard..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "Savienojums neizdevās."
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "Fails ar šo nosaukumu jau ir pievienots."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "Autentifikācija neizdevās."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "Radās nezināma kļūda"
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "Pirms e-pasta ziņas pārsūtīšanas tiks lejupielādēti visi tās pielikumi."
@@ -337,26 +313,11 @@ msgstr "Skatīt kontakta datus"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "Atjaunināt kontaktu"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "Koplietot"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "Iestatījumi"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "Sūtīt sev"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "Sūtīt"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "Izv. visu"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "Izvēlēties"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "Meklēt"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "Sagl.mapē Melnraksti"
@@ -372,18 +333,6 @@ msgstr "Noņemt no nevēlamo saraksta"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "Noņemt no Prioritārajiem sūtītājiem"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "Noņemt"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "Atsvaidzināt"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "Ielīmēt"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "Sākotnējais"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "Pārv. uz galv.adr. lauku (Kam)"
@@ -409,17 +358,11 @@ msgstr "Atzīmēt kā izlasītu"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "Zems"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "Pārsūtīt"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "Rediģēt"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "Dzēst mapi"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "Dzēst"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "Izgriezt"
@@ -429,9 +372,6 @@ msgstr "Izveidot mapi"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "Izveidot kontaktu"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "Kopēt"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "Rakstīt e-pasta ziņu"
@@ -453,9 +393,6 @@ msgstr "Pievienot kopiju/diskrēto kopiju"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "Pievienot pielikumu"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "Konta pievienošana"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "Pievienot"
@@ -487,9 +424,6 @@ msgstr "Paziņojuma skaņa"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "Jaunas e-pasta ziņas"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "E-pasta paziņojumi"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "Rediģēt parakstu"
 
@@ -520,9 +454,6 @@ msgstr "Nevar izveidot e-pasta ziņu"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "Nevar pievienot pielikumu"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "Tēma"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "Beigt e-pasta ziņas izveidi"
 
@@ -534,9 +465,6 @@ msgstr "Surogātpasts"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Parādīt visas mapes"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "Iestatījumi"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Nosūtītie"
@@ -565,17 +493,11 @@ msgstr "Atkritne"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "Prioritārie sūtītāji"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "Izvēlētas %d"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "Izsūtne"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "Atvērt e-pastu"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "Paziņojumi"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "Pastkaste"
@@ -588,9 +510,6 @@ msgstr "Attēla kvalitāte"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(noklus.)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "Vispārīgi"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "Šī konta mapes"
@@ -619,9 +538,6 @@ msgstr "Lejupielādēt pielikumu"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "Lejupielādēt pielikumus"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "Dzēst"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "Izveidot vCard"
 
@@ -637,17 +553,11 @@ msgstr "Apvienoti konti"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "Pielikumi"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "Konti"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "Videoklipi"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "Fotografēt"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "Iestatījumi"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Sūtīt visu"
@@ -658,9 +568,6 @@ msgstr "Sagl."
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "Ier. video"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "Labi"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "Atgādne"
 
@@ -669,12 +576,6 @@ msgstr "Attēli"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Lejupielādēt visu e-pasta ziņu"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "Lejupielādēt visu"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "Gatavs"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "Atmest"
@@ -685,23 +586,14 @@ msgstr "Dzēst"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "Izveidot"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "Turpināt"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "Kontakti"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "Atcelt"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "Ierakstīt\naudio failu"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "Kalendārs"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "Vakar"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "Nevar izveidot savienojumu ar serveri. Radās drošības kļūda."
@@ -748,9 +640,6 @@ msgstr "Kartes"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "Ielādē vairāk..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "Pēdējā atjaunināšana"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "Iekļaut sākotnējo ziņu"
 
@@ -763,14 +652,8 @@ msgstr "Pārs.:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "No"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "Mapes nosaukums"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "Švīkojiet augšup"
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "E-pasta adrese"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Cc/Bcc"
@@ -886,12 +769,6 @@ msgstr "Pašpiegādes"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "Bez ierobežojuma"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "Nav"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "Manuāli"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "Paturēt parastos iestat."
 
@@ -903,12 +780,6 @@ msgstr "Ik pēc %d minūtēm"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "Katru stundu"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "Katru dienu"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "Noklusējums"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "E-pasta sinhronizācija"
@@ -930,9 +801,6 @@ msgstr "Cits"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "E-pasta sinhron. grafiks"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "Brīdinājums"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "Nevar apstiprināt kontu"
@@ -958,17 +826,8 @@ msgstr "Ierobežot izguves apjomu"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "Ienākošā servera iestatījumi"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "E-pasts"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "Nākamais"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "Manuāla iest."
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "Klusums"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "Ports"
@@ -976,14 +835,137 @@ msgstr "Ports"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "SŪTĪT"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "Fonta lielums"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Sasniegts maksimālais rakstzīmju skaits (%d)"
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "Fonta krāsa"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Ielādē..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Nevar savienoties ar serveri."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Lejupielāde neizdevās."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Ielādē..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Savienojums neizdevās."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Autentifikācija neizdevās."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Radās nezināma kļūda"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Koplietot"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Iestatījumi"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Izv. visu"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Izvēlēties"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Meklēt"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Noņemt"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Atsvaidzināt"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Ielīmēt"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Sākotnējais"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Pārsūtīt"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Dzēst"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Kopēt"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Konta pievienošana"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "E-pasta paziņojumi"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Tēma"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Iestatījumi"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "Izvēlētas %d"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Paziņojumi"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Vispārīgi"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Dzēst"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Konti"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Iestatījumi"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "Labi"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Lejupielādēt visu"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Gatavs"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Turpināt"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Atcelt"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Vakar"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Pēdējā atjaunināšana"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Mapes nosaukums"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "E-pasta adrese"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Nav"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Manuāli"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Katru dienu"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "Pārdēvēt mapi"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Noklusējums"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "Pārvietot uz surogātpastu"
@@ -1009,14 +991,23 @@ msgstr "Sinhronizācija neizdevās. Mēģiniet vēlāk."
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "Teksta fona krāsa"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Brīdinājums"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "Lejupielādēts"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Automātiski lejupielādēt pielikumus, kad izveidots savienojums ar Wi-Fi tīklu"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "Saglabāts."
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "E-pasts"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Nākamais"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Klusums"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "Aktivizēt bagātināto tekstu"
@@ -1035,9 +1026,6 @@ msgstr "Kad saglabāsit e-pasta ziņas mapē Melnraksti, tās tiks parādītas �
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "Saglabāt visu"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "Neizdevās izdzēst."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "Mape ir pārdēvēta."
@@ -1059,4 +1047,16 @@ msgstr "Tīkls nav pieejams. Šī ziņa tiks nosūtīta, kad tiks izveidots savi
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "Aktivizēts lidojuma režīms. Šī ziņa tiks nosūtīta, kad tiks izveidots savienojums ar tīklu."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Fonta lielums"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Fonta krāsa"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Saglabāts."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Neizdevās izdzēst."
 

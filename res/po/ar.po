@@ -22,6 +22,9 @@ msgstr "إلغاء"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "حذف"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "لا توجد أي عناصر لعرضها."
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "‏‫يلزم توفر اتصال Wi-Fi‬. اتصل بشبكة Wi-Fi وحاول مرة أخرى."
 
@@ -33,9 +36,6 @@ msgstr "تم إلغاء التنزيل."
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "اليوم"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "لا توجد أي عناصر لعرضها."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "يمكن تنزيل عناوين URL التي تبدأ بالمقطع http أو https فقط."
@@ -103,17 +103,11 @@ msgstr "تم بلوغ الحد الأقصى لعدد المستلمين (%d)."
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "تم بلوغ الحد الأقصى لعدد الأحرف."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "تم بلوغ أقصى عدد من الأحرف (%d)"
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "تم بلوغ الحد الأقصى لحجم الرسالة (%d كيلوبايت)."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "تم تجاوز الحد الأقصى لحجم الرسالة. ستتم مشاركة أوّل %d كيلوبايت فقط."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "جاري التحميل..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "تم إدخال عنوان بريد إلكتروني غير صالح."
@@ -214,9 +208,6 @@ msgstr "تحتوي كلمة المرور على مسافات. كثير من ال
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "يتعذر نقل رسائل البريد الإلكتروني من حسابات متعددة مرة واحدة‬."
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "يتعذر التوصيل بالخادم."
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "لإنشاء بريد إلكتروني، أنشئ حساب بريد إلكتروني."
 
@@ -304,29 +295,14 @@ msgstr "فشل تنزيل المرفق. تحقق من اتصال الشبكة ث
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "تم حذف رسالة البريد الإلكتروني من الخادم."
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "التنزيل غير متوفر."
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "جاري التنزيل..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
-msgstr "يؤدي حذف هذا الحساب إلى حذف كافة رسائل الحساب، بالإضافة إلى جهات الاتصال وبيانات أخرى من الجهاز. انقر فوق حذف للمتابعة."
+msgstr "يؤدي حذف هذا الحساب إلى حذف كافة رسائل الحساب، بالإضافة إلى جهات الاتصال وبيانات أخرى من الجهاز. انقر فوق ”حذف“ للمتابعة."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "جارٍ إنشاء vCard..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "فشل التوصيل."
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "تم مسبقاً إرفاق ملف يحمل هذا الاسم."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "فشل التوثيق."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "حدث خطأ غير معروف"
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "سيتم تنزيل كل المرفقات في هذا البريد الإلكتروني قبل إعادة توجيهه."
@@ -337,26 +313,11 @@ msgstr "عرض تفاصيل جهة الاتصال"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "تحديث جهة الاتصال"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "مشاركة"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "الضبط"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "إرسال إلي"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "إرسال"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "اختيار الكل"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "اختيار"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "البحث"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "حفظ بالمسودات"
@@ -372,18 +333,6 @@ msgstr "إزالة من البريد العشوائي"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "إزالة من المرسلين ذوي الأولوية"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "حذف"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "تحديث"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "لصق"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "أصلي"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "نقل إلى المستلم الرئيسي (إلى)"
@@ -409,17 +358,11 @@ msgstr "وضع علامة مقروء"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "منخفضة"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "تحويل"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "تعديل"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "حذف مجلد"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "حذف"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "قص"
@@ -429,9 +372,6 @@ msgstr "إنشاء مجلد"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "إنشاء جهة اتصال"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "نسخ"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "إنشاء بريد إلكتروني"
@@ -453,9 +393,6 @@ msgstr "إضافة Cc/Bcc"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "إضافة مرفق"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "إضافة حساب"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "إضافة"
@@ -487,9 +424,6 @@ msgstr "صوت الإشعار"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "رسائل بريد إلكتروني جديدة"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "إخطارات البريد الإلكتروني"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "تعديل التوقيع"
 
@@ -520,9 +454,6 @@ msgstr "يتعذر إنشاء بريد إلكتروني"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "تتعذر إضافة المرفق"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "الموضوع"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "التوقف عن إنشاء البريد الإلكتروني"
 
@@ -534,9 +465,6 @@ msgstr "البريد العشوائي"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "عرض كل المجلدات"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "الضبط"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "المرسَلة"
@@ -565,17 +493,11 @@ msgstr "سلة المحذوفات"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "مرسلون ذوو أولوية"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "تم تحديد %d"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "الصادرة"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "فتح البريد الإلكتروني"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "إشعارات"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "صندوق البريد"
@@ -588,9 +510,6 @@ msgstr "جودة الصورة"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(الضبط الافتراضي)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "عام"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "مجلدات لهذا الحساب"
@@ -619,9 +538,6 @@ msgstr "تنزيل المرفق"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "تنزيل المرفقات"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "مسح"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "إنشاء vCard"
 
@@ -637,17 +553,11 @@ msgstr "الحسابات المدمجة"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "المرفقات"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "حسابات"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "مقاطع الفيديو"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "التقاط صورة"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "الضبط"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "إرسال الكل"
@@ -658,9 +568,6 @@ msgstr "حفظ"
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "تسجيل فيديو"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "موافق"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "المذكرة"
 
@@ -669,12 +576,6 @@ msgstr "الصور"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "تنزيل البريد الإلكتروني كاملا"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "تنزيل الكل"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "تم"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "تجاهل"
@@ -685,23 +586,14 @@ msgstr "حذف"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "إنشاء"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "متابعة"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "جهات الاتصال"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "إلغاء"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "تسجيل ملف الصوت"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "التقويم"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "أمس"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "يتعذر فتح اتصال بالخادم. حدث خطأ في الأمان."
@@ -748,9 +640,6 @@ msgstr "الخرائط"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "جار تحميل المزيد..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "آخر تحديث"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "تضمين الرسالة الأصلية"
 
@@ -763,14 +652,8 @@ msgstr "تحويل:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "من"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "اسم المجلد"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "مرر إصبعك نحو الأعلى لتحميل المزيد"
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "عنوان البريد الإلكتروني"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "نسخة/نسخة مخفية"
@@ -886,12 +769,6 @@ msgstr "دفع"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "لا يوجد حد"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "لاشيء"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "يدوي"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "إبقاء ضبط عدم التجوال"
 
@@ -903,12 +780,6 @@ msgstr "كل %d من الدقائق"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "كل ساعة"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "كل يوم"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "إفتراضي"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "مزامنة رسائل البريد الإلكتروني"
@@ -930,9 +801,6 @@ msgstr "غير ذلك"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "جدول مزامنة البريد الإلكتروني"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "تحذير"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "يتعذّر التحقق من الحساب"
@@ -958,17 +826,8 @@ msgstr "الحد من حجم الاسترداد"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "ضبط الخادم للرسائل الواردة"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "البريد الإلكتروني"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "التالي"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "إعداد يدوي"
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "صامت"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "المنفذ"
@@ -976,14 +835,137 @@ msgstr "المنفذ"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "إرسال"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "حجم الخط"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "تم بلوغ أقصى عدد من الأحرف (%d)"
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "لون الخط"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "جاري التحميل..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "يتعذر التوصيل بالخادم."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "فشل في التنزيل."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "جاري التنزيل..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "فشل التوصيل."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "فشل التوثيق."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "حدث خطأ غير معروف."
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "مشاركة"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "الضبط"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "اختيار الكل"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "اختيار"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "البحث"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "حذف"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "تحديث"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "لصق"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "أصلي"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "تحويل"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "حذف"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "نسخ"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "إضافة حساب"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "إخطارات البريد الإلكتروني"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "الموضوع"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "الضبط"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "تم تحديد %d"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "إشعارات"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "عام"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "حذف"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "حسابات"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "الضبط"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "موافق"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "تنزيل الكل"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "تم"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "متابعة"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "إلغاء"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "أمس"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "آخر تحديث"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "اسم المجلد"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "عنوان البريد الإلكتروني"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "لاشيء"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "يدوي"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "كل يوم"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "تغيير اسم المجلد"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "إفتراضي"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "نقل إلى علبة البريد العشوائي"
@@ -1009,14 +991,23 @@ msgstr "فشلت المزامنة. حاول لاحقا."
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "لون خلفية النص"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "تحذير"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "تم التنزيل"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "تنزيل المرفقات تلقائيا عند الاتصال بشبكة Wi-Fi"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "تم الحفظ."
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "البريد الإلكتروني"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "التالي"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "صامت"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "تفعيل النص المنسق"
@@ -1035,9 +1026,6 @@ msgstr "ستظهر رسائل البريد الإلكتروني هنا بعد ح
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "حفظ الكل"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "فشل في الحذف."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "تمت إعادة تسمية المجلد."
@@ -1059,4 +1047,16 @@ msgstr "الشبكة غير متاحة. سيتم إرسال هذه الرسال�
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "تم تفعيل وضع الطيران. سيتم إرسال هذه الرسالة عند الاتصال بالشبكة."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "حجم الخط"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "لون الخط"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "تم الحفظ."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "فشل في الحذف."
 

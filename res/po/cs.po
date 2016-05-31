@@ -22,6 +22,9 @@ msgstr "ZRUŠIT"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "ODSTRANIT"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Žádné položky k zobrazení."
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Je vyžadováno připojení k síti Wi-Fi. Připojte se k síti Wi-Fi a opakujte akci."
 
@@ -33,9 +36,6 @@ msgstr "Stahování zrušeno."
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "Dnes"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "Žádné položky k zobrazení."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "Stahovat lze pouze z adres URL http nebo https."
@@ -103,17 +103,11 @@ msgstr "Bylo dosaženo maximálního počtu příjemců (%d)."
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "Bylo dosaženo maximálního počtu znaků."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "Bylo dosaženo maximálního počtu znaků (%d)."
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "Bylo dosaženo maximální velikosti zprávy (%d kB)."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "Byla překročena maximální velikost zprávy. Bude sdíleno pouze prvních %d kB."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "Načítání..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "Byla zadána neplatná e-mailová adresa."
@@ -214,9 +208,6 @@ msgstr "Heslo obsahuje mezery. Mnohé servery nepodporují hesla obsahující me
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "Není možné přesunout e-maily z více účtů najednou."
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "Nelze se připojit k serveru."
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "Abyste mohli vytvořit e-mail, vytvořte e-mailový účet."
 
@@ -304,29 +295,14 @@ msgstr "Přílohu se nepodařilo stáhnout. Zkontrolujte připojení k síti a o
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "E-mail byl odstraněn ze serveru."
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Stažení se nezdařilo."
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "Stahování..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
 msgstr "Odstraněním tohoto účtu odstraníte ze zařízení veškeré zprávy, kontakty a ostatní data účtu. Pokračujte klepnutím na tlačítko Odstranit."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "Vytváření vCard..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "Připojení se nezdařilo."
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "Soubor s tímto názvem již byl připojen."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "Ověření se nezdařilo."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "Došlo k neznámé chybě"
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "Všechny přílohy tohoto e-mailu budou staženy před předáním dál."
@@ -337,26 +313,11 @@ msgstr "Zobrazit detaily kontaktu"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "Aktualizovat kontakt"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "Sdílet"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "Nastavení"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "Odeslat sám sobě"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "Odeslat"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "Vybrat vše"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "Vybrat"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "Hledat"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "Uložit do Konceptů"
@@ -372,18 +333,6 @@ msgstr "Odebrat z Nevyžádané pošty"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "Odebrat z Prioritních odesílatelů"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "Odstranit"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "Aktualizovat"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "Vložit"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "Původní"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "Přesunout na hl. příj. (Komu)"
@@ -409,17 +358,11 @@ msgstr "Označit jako přečtený"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "Nízká"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "Předat"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "Upravit"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "Odstranit složku"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "Odstranit"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "Vyjmout"
@@ -429,9 +372,6 @@ msgstr "Vytvořit složku"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "Vytvořit kontakt"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "Kopírovat"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "Vytvořit e-mail"
@@ -453,9 +393,6 @@ msgstr "Přidat příjemce Kopie/Skrytá"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "Přidat přílohu"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "Přidat účet"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "Přidat"
@@ -487,9 +424,6 @@ msgstr "Zvuk upozornění"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "Nové e-maily"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "Upozornění e-mailem"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "Upravit podpis"
 
@@ -520,9 +454,6 @@ msgstr "E-mail nelze vytvořit"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "Přílohu se nepodařilo přidat"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "Předmět"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "Zastavit vytváření e-mailu"
 
@@ -534,9 +465,6 @@ msgstr "Nevyžádaná pošta"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Zobrazit všechny složky"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "Nastavení"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Odeslané"
@@ -565,17 +493,11 @@ msgstr "Koš"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "Prioritní odesílatelé"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "Vybráno %d"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "Odchozí"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "Otevřít e-mail"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "Oznámení"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "Schránka"
@@ -588,9 +510,6 @@ msgstr "Kvalita obrázku"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(výchozí)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "Obecné"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "Složky pro tento účet"
@@ -619,9 +538,6 @@ msgstr "Stáhnout přílohu"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "Stáhnout přílohy"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "Odstranit"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "Vytvořit vCard"
 
@@ -637,17 +553,11 @@ msgstr "Kombinované účty"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "Přílohy"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "Účty"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "Videa"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "Vyfotit"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "Nastavení"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Odeslat vše"
@@ -658,9 +568,6 @@ msgstr "Uložit"
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "Nahrát video"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "OK"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "Poznámka"
 
@@ -669,12 +576,6 @@ msgstr "Obrázky"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Stáhnout celý e-mail"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "Stáhnout vše"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "Hot."
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "Zrušit"
@@ -685,23 +586,14 @@ msgstr "Odstranit"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "Vytvořit"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "Pokr."
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "Kontakty"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "Storno"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "Nahrát zv. soubor"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "Kalendář"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "Včera"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "Nelze otevřít připojení k serveru. Došlo k chybě zabezpečení."
@@ -748,9 +640,6 @@ msgstr "Mapy"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "Načítání dalších..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "Poslední aktualizace"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "Zahrnout původní zprávu"
 
@@ -763,14 +652,8 @@ msgstr "Fw:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Od"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "Název složky"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "Přej. nahoru načtete další"
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "E-mailová adresa"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Kopie/Skrytá"
@@ -886,12 +769,6 @@ msgstr "Nabízet"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "Bez omezení"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "Žádná"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "Ručně"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "Zachovat nast. bez roam."
 
@@ -903,12 +780,6 @@ msgstr "Každých %d minut"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "Každou hodinu"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "Každý den"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "Výchozí"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "Synchronizace e-mailů"
@@ -930,9 +801,6 @@ msgstr "Jiné"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "Plán synch. e-mailů"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "Upozornění"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "Účet nelze ověřit"
@@ -958,17 +826,8 @@ msgstr "Omezit velikost načítání"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "Nastavení serveru příchozí pošty"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "E-mail"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "Další"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "Ruční nast."
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "Tichý"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "Port"
@@ -976,14 +835,137 @@ msgstr "Port"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "ODESLAT"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "Velikost písma"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Bylo dosaženo maximálního počtu znaků (%d)."
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "Barva písma"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Načítání..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Nelze se připojit k serveru."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Stažení se nezdařilo."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Stahování..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Připojení se nezdařilo."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Ověření se nezdařilo."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Došlo k neznámé chybě"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Sdílet"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Nastavení"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Vybrat vše"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Vybrat"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Hledat"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Odstranit"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Aktualizovat"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Vložit"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Původní"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Předat"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Odstranit"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Kopírovat"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Přidat účet"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Upozornění e-mailem"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Předmět"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Nastavení"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "Vybráno %d"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Oznámení"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Obecné"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Odstranit"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Účty"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Nastavení"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Stáhnout vše"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Hot."
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Pokr."
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Storno"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Včera"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Poslední aktualizace"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Název složky"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "E-mailová adresa"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Žádná"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Ručně"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Každý den"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "Přejmenovat složku"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Výchozí"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "Přesunout do Nevyžádané pošty"
@@ -1009,14 +991,23 @@ msgstr "Synchronizace se nezdařila. Opakujte akci později."
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "Barva pozadí textu"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Upozornění"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "Stažené"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Automaticky stahovat přílohy při připojení k síti Wi-Fi"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "Uloženo."
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "E-mail"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Další"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Tichý"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "Zapnout Formátovaný text"
@@ -1035,9 +1026,6 @@ msgstr "Až uložíte e-maily do Konceptů, zobrazí se zde."
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "Uložit vše"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "Při odstraňování došlo k chybě."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "Složka byla přejmenována."
@@ -1059,4 +1047,16 @@ msgstr "Síť je nedostupná. Zpráva bude odeslána po připojení k síti."
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "Režim Letadlo je zapnutý. Zpráva bude odeslána po připojení k síti."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Velikost písma"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Barva písma"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Uloženo."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Při odstraňování došlo k chybě."
 

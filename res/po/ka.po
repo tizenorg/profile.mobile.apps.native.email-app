@@ -22,6 +22,9 @@ msgstr "გაუქმება"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "წაშლა"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "საჩვენებელი ელემენტები არ არის."
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "საჭიროა Wi-Fi კავშირი. დაუკავშირდით Wi-Fi ქსელს და ისევ ცადეთ"
 
@@ -33,9 +36,6 @@ msgstr "ჩამოტვირთვა შეწყდა."
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "დღეს"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "საჩვენებელი ელემენტები არ არის."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "მხოლოდ http ან https URL-ების ჩამოტვირთვაა შესაძლებელი."
@@ -103,17 +103,11 @@ msgstr "მიღწეულია მიმღებთა მაქსიმ�
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "მიღწეულია სიმბოლოების მაქსიმალური რაოდენობა."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "მიღწეულია სიმბოლოების მაქსიმალური რაოდენობა (%d)"
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "მიღწეულია შეტყობინების მაქსიმალური ზომა (%d კბ)."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "წერილის ზომა მაქსიმალურზე მეტია. გაზიარდება მხოლოდ პირველი %d კბ."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "იტვირთება..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "შეყვანილი ელფოსტის მისამართი არასწორია."
@@ -214,9 +208,6 @@ msgstr "თქვენი პაროლი შეიცავს ინტე
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "ელ.წერილებს ვერ გადააადგილებთ ერთდროულად რამდენიმე ანგარიშიდან."
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "სერვერი ვერ დაკავშირდა."
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "ელწერილის შესადგენად, შექმენით ელფოსტის ანგარიში."
 
@@ -304,29 +295,14 @@ msgstr "დანართი ვერ ჩამოიტვირთა. შ�
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "ელ.წერილი წაიშალა სერვერიდან."
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "ვერ ჩამოიტვირთა."
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "ჩამოტვირთვა..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
-msgstr "თუ ამ ანგარიშს წაშლით, აპარატში ასევე წაიშლება ანგარიშის ყველა შეტყობინება, კონტაქტები და სხვა მონაცემები. დააჭირეთ „წაშლა“-ზე, რომ განაგრძოთ."
+msgstr "თუ ამ ანგარიშს წაშლით, მოწყობილობაში ასევე წაიშლება ანგარიშის ყველა შეტყობინება, კონტაქტები და სხვა მონაცემები. დააჭირეთ „წაშლა“-ზე, რომ განაგრძოთ."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "იქმნება vCard..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "ვერ დაუკავშირდა."
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "ამ სახელის მქონე ფაილი უკვე მიმაგრებულია."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "ავტორიზაცია ვერ შესრულდა."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "მოხდა უცნობი შეცდომა"
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "ამ ელწერილის ყველა დანართი ჩამოიტვირთება, სანამ იგი გადაიგზავნება."
@@ -337,26 +313,11 @@ msgstr "იხილეთ საკონტაქტო მონაცემ�
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "კონტაქტის განახლება"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "გაზიარება"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "პარამეტრები"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "გაგზავნე ჩემთან"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "გაგზავნა"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "ყველას არჩევა"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "არჩევა"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "ძებნა"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "მონახაზებში შენახვა"
@@ -372,18 +333,6 @@ msgstr "სპამებიდან ამოღება"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "პრიორიტეტულებიდან ამოშლა"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "წაშლა"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "განახლება"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "ჩასმა"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "თავდაპირველი"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "მთავარ მიმღებში გადატანა (ვის)"
@@ -409,17 +358,11 @@ msgstr "აღნიშვნა წაკითხულად"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "დაბალი"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "გადამისამართება"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "რედაქტირება"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "საქაღალდის წაშლა"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "წაშლა"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "მოჭრა"
@@ -429,9 +372,6 @@ msgstr "საქაღალდის შექმნა"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "კონტაქტის შექმნა"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "ასლი"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "ელწერილის შედგენა"
@@ -453,9 +393,6 @@ msgstr "დაამატეთ ასლი/ბრმა ასლი"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "დანართის დამატება"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "ანგარიშის დამატება"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "დამატება"
@@ -487,9 +424,6 @@ msgstr "შეტყობინების ხმა"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "ახალი ელ. წერილები"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "ელ.ფოსტის შეტყობინებები"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "ხელმოწერის შესწორება"
 
@@ -520,9 +454,6 @@ msgstr "ელწერილს ვერ შეადგენთ"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "დანართის დამატება შეუძლებელია"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "თემა"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "ელწერილის შედგენის შეჩერება"
 
@@ -534,9 +465,6 @@ msgstr "სპამების ყუთი"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "ყველა საქაღალდის ჩვენება"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "პარამეტრები"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "გაიგზავნა"
@@ -565,17 +493,11 @@ msgstr "სანაგვე ურნა"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "პრიორიტეტულები"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "%d არჩეულია"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "გასული"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "ელფოსტის გახსნა"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "შეტყობინებები"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "საფოსტო ყუთი"
@@ -588,9 +510,6 @@ msgstr "სურათის ხარისხი"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(საწყისი)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "საერთო"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "ამ ანგარიშის საქაღალდეები"
@@ -619,9 +538,6 @@ msgstr "დანართის ჩამოტვირთვა"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "დანართების ჩამოტვირთვა"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "წაშლა"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "შექმენით vCard"
 
@@ -637,17 +553,11 @@ msgstr "გაერთიანებული ანგარიშები"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "დანართები"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "ანგარიშები"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "ვიდეოები"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "გადაღება"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "პარამეტრები"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "ყველასთვის გაგზავნა"
@@ -658,9 +568,6 @@ msgstr "შენახ."
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "ჩაწერე ვიდეო"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "კი"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "შეხსენება"
 
@@ -669,12 +576,6 @@ msgstr "სურათები"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "სრული ელწერილის ჩამოტვირთვა"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "ყველას ჩამოტვირთვა"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "შესრულდა"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "წაშლა"
@@ -685,23 +586,14 @@ msgstr "წაშლა"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "შექმნა"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "გაგრძელ."
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "კონტაქტები"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "გაუქმება"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "აუდიოფაილის ჩაწერა"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "კალენდარი"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "გუშინ"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "სერვერთან დაკავშირება ვერ შესრულდა. მოხდა უსაფრთხოების შეცდომა."
@@ -719,16 +611,16 @@ msgid "IDS_EMAIL_BODY_SENT_C_M_DATE"
 msgstr "გაიგზავნა:"
 
 msgid "IDS_EMAIL_BODY_PS_MB"
-msgstr "%s მბ"
+msgstr "%s MB"
 
 msgid "IDS_EMAIL_BODY_PS_KB"
-msgstr "%s კბ"
+msgstr "%s KB"
 
 msgid "IDS_EMAIL_BODY_PS_GB"
-msgstr "%s გბ"
+msgstr "%s GB"
 
 msgid "IDS_EMAIL_BODY_PS_B"
-msgstr "%s ბიტი"
+msgstr "%s B"
 
 msgid "IDS_EMAIL_BODY_PD_FILES_ABB"
 msgstr "%d ფაილი"
@@ -748,9 +640,6 @@ msgstr "რუკები"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "კიდევ იტვირთება..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "ბოლოს განახლდა"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "დაერთოს მიღებული წერილი"
 
@@ -763,14 +652,8 @@ msgstr "გადაგზავნა:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "საიდან"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "საქაღალდის სახელი"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "აუსვი ზემოთ, ჩატვირთე მეტი"
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "ელ. ფოსტის მისამართი"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "ასლი/ბრმა ასლი"
@@ -886,12 +769,6 @@ msgstr "ჩართეთ:"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "შეზღუდვა არ არის"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "არც ერთი"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "მექანიკური"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "შეინახე არა-როუმინგის პარ."
 
@@ -903,12 +780,6 @@ msgstr "ყოველ %d წუთში"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "ყოველ საათში"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "ყოველდღე"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "ნაგულისხმევი"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "ელწერილების სინქრონიზაცია"
@@ -930,9 +801,6 @@ msgstr "სხვა"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "ელფოსტის სინქრონიზაცია"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "გაფრთხილება"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "ანგარიში ვერ მოწმდება"
@@ -958,17 +826,8 @@ msgstr "მიღების ზომის ლიმიტი"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "შემომავალი სერვერის პარამეტრები"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "ელ-ფოსტა"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "შემდეგი"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "ხელით დაყენება"
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "ჩუმი"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "პორტი"
@@ -976,14 +835,137 @@ msgstr "პორტი"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "გაგზავნა"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "შრიფტის ზომა"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "მიღწეულია სიმბოლოების მაქსიმალური რაოდენობა (%d)"
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "შრიფტის ფერი"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "იტვირთება..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "სერვერი ვერ დაკავშირდა."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "ვერ ჩამოიტვირთა."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "ჩამოტვირთვა..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "ვერ დაუკავშირდა."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "ავტორიზაცია ვერ შესრულდა."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "მოხდა უცნობი შეცდომა"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "გაზიარება"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "პარამეტრები"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "ყველას არჩევა"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "არჩევა"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "ძებნა"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "წაშლა"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "განახლება"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "ჩასმა"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "თავდაპირველი"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "გადამისამართება"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "წაშლა"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "ასლი"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "ანგარიშის დამატება"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "ელ.ფოსტის შეტყობინებები"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "თემა"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "პარამეტრები"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d არჩეულია"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "შეტყობინებები"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "საერთო"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "წაშლა"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "ანგარიშები"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "პარამეტრები"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "კი"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "ყველას ჩამოტვირთვა"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "შესრულდა"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "გაგრძელ."
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "გაუქმება"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "გუშინ"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "ბოლოს განახლდა"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "საქაღალდის სახელი"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "ელ. ფოსტის მისამართი"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "არც ერთი"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "მექანიკური"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "ყოველდღე"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "საქაღალდის სახელის შეცვლა"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "ნაგულისხმევი"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "სპამების ყუთში გადატანა"
@@ -1009,14 +991,23 @@ msgstr "სინქრონიზაცია ვერ შესრულდ�
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "ტექსტის ფონის ფერი"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "გაფრთხილება"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "ჩამოტვირთული"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "ავტომატურად ჩამოიტვირთოს დანართები, როდესაც დაკავშირებულია Wi-Fi ქსელი"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "შენახულია."
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "ელ-ფოსტა"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "შემდეგი"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "ჩუმი"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "მდიდარი ტექსტის ჩართვა"
@@ -1035,9 +1026,6 @@ msgstr "როდესაც ელწერილებს შეინახ�
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "ყველაფრის შენახვა"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "ვერ წაიშალა."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "საქაღალდის სახელი შეიცვალა."
@@ -1059,4 +1047,16 @@ msgstr "ქსელი მიუწვდომელია. ეს წერ�
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "გააქტიურებულია ფრენის რეჟიმი. ეს წერილი გაიგზავნება, როდესაც დაუკავშირდებით ქსელს."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "შრიფტის ზომა"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "შრიფტის ფერი"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "შენახულია."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "ვერ წაიშალა."
 

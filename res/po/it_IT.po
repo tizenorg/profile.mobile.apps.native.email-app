@@ -22,6 +22,9 @@ msgstr "ANNULLA"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "ELIMINA"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Nessun elemento da visualizzare."
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Connessione Wi-Fi disattiva. Connettetevi ad una rete Wi-Fi e riprovate."
 
@@ -33,9 +36,6 @@ msgstr "Download annullato."
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "Oggi"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "Nessun elemento da visualizzare."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "Potete scaricare solo URL http o https."
@@ -103,17 +103,11 @@ msgstr "Raggiunto numero massimo di destinatari (%d)."
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "Il numero massimo di caratteri è stato raggiunto."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "Il numero massimo di caratteri (%d) è stato raggiunto."
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "La dimensione massima del messaggio (%d KB) è stata raggiunta."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "La dimensione massima del messaggio è stata superata. Verranno condivisi soltanto i primi %d KB."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "Caricamento in corso..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "Indirizzo e-mail inserito non valido."
@@ -214,9 +208,6 @@ msgstr "La password contiene spazi. Molti server non supportano password contene
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "Impossibile spostare le e-mail da più account contemporaneamente."
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "Impossibile connettersi al server."
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "Per scrivere un'e-mail, create un account e-mail."
 
@@ -304,29 +295,14 @@ msgstr "Impossibile scaricare l'allegato. Controllate la connessione di rete e r
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "E-mail eliminata dal server."
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Download non riuscito."
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "Download..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
 msgstr "L'eliminazione di questo account dal dispositivo comporta l'eliminazione di tutti i relativi messaggi e contatti e di altri dati. Toccate Elimina per continuare."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "Creazione vCard in corso..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "Errore connessione."
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "Un file con questo nome è già stato allegato."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "Autenticazione non eseguita."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "Si è verificato un errore sconosciuto"
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "Tutti gli allegati dell'e-mail verranno scaricati prima dell'inoltro."
@@ -337,26 +313,11 @@ msgstr "Visualizza dettagli contatto"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "Aggiorna contatto"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "Condividi"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "Impostaz."
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "Invia a me stesso"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "Invia"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "Seleziona tutto"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "Seleziona"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "Cerca"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "Salva in bozze"
@@ -372,18 +333,6 @@ msgstr "Rimuovi da Spam"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "Rimuovi dai Mittenti prioritari"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "Rimuovi"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "Aggiorna"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "Incolla"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "Originale"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "Sposta a destinat. princ. (A)"
@@ -409,17 +358,11 @@ msgstr "Contrassegna come letto"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "Bassa"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "Inoltra"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "Modifica"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "Elimina cartella"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "Elimina"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "Taglia"
@@ -429,9 +372,6 @@ msgstr "Crea cartella"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "Aggiungi"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "Copia"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "Scrivi e-mail"
@@ -453,9 +393,6 @@ msgstr "Aggiungi Cc/Ccn"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "Aggiungi allegato"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "Aggiungi account"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "Aggiungi"
@@ -487,9 +424,6 @@ msgstr "Suono di notifica"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "Nuove e-mail"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "Notifiche e-mail"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "Modifica firma"
 
@@ -520,9 +454,6 @@ msgstr "Impossibile creare l'e-mail"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "Impossibile aggiungere allegato"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "Oggetto"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "Interrompi composizione e-mail"
 
@@ -534,9 +465,6 @@ msgstr "Cartella spam"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Mostra tutte le cartelle"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "Impostaz."
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Inviati"
@@ -565,17 +493,11 @@ msgstr "Cestino"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "Mittenti prioritari"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "%d selezionate"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "In uscita"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "Apri e-mail"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "Notifiche"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "Casella posta"
@@ -588,9 +510,6 @@ msgstr "Qualità delle immagini"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(predef.)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "Generale"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "Cartelle per questo account"
@@ -619,9 +538,6 @@ msgstr "Scarica allegato"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "Scarica allegati"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "Elimina"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "Crea vCard"
 
@@ -637,17 +553,11 @@ msgstr "Account combinati"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "Allegati"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "Account"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "Video"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "Scatta foto"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "Impostazioni"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Invia tutti"
@@ -658,9 +568,6 @@ msgstr "Salva"
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "Regis. video"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "OK"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "Memo"
 
@@ -669,12 +576,6 @@ msgstr "Immagini"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Scarica e-mail completa"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "Scarica tutto"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "Fatto"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "Scarta"
@@ -685,23 +586,14 @@ msgstr "Elimina"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "Crea"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "Continua"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "Rubrica"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "Annulla"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "Registra file audio"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "Calendario"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "Ieri"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "Impossibile aprire la connessione al server. Errore di protezione."
@@ -748,9 +640,6 @@ msgstr "Mappe"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "Caricamento altri elementi..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "Ultimo aggiornamento"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "Includi messaggio originale"
 
@@ -763,14 +652,8 @@ msgstr "I:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Da"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "Nome cartella"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "Tras. in alto per car. altro"
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "Indirizzo e-mail"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Cc/Ccn"
@@ -886,12 +769,6 @@ msgstr "Push"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "Nessun limite"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "Nessuno"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "Manuale"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "Mant. impost. non roaming"
 
@@ -903,12 +780,6 @@ msgstr "Ogni %d minuti"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "Ogni ora"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "Ogni giorno"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "Predefinito"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "Sincronizza e-mail"
@@ -930,9 +801,6 @@ msgstr "Altro"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "Pianificaz. sincr. e-mail"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "Avviso"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "Impos. convalidare l'account"
@@ -958,17 +826,8 @@ msgstr "Limita dimensioni recupero"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "Impostazioni server in entrata"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "E-mail"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "Avanti"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "Config. manuale"
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "Silenzioso"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "Porta"
@@ -976,14 +835,137 @@ msgstr "Porta"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "INVIA"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "Dimensioni carattere"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Il numero massimo di caratteri (%d) è stato raggiunto."
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "Colore carattere"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Caricamento in corso..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Impossibile connettersi al server."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Download non riuscito."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Download..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Errore connessione."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Autenticazione non eseguita."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Si è verificato un errore sconosciuto"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Condividi"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Impostaz."
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Seleziona tutto"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Seleziona"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Cerca"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Rimuovi"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Aggiorna"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Incolla"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Originale"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Inoltra"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Elimina"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Copia"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Aggiungi account"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Notifiche e-mail"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Oggetto"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Impostaz."
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d selezionate"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Notifiche"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Generale"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Elimina"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Account"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Impostazioni"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Scarica tutto"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Fatto"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Continua"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Annulla"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Ieri"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Ultimo aggiornamento"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Nome cartella"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "Indirizzo e-mail"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Nessuno"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Manuale"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Ogni giorno"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "Rinomina cartella"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Predefinito"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "Sposta in Cartella spam"
@@ -1009,14 +991,23 @@ msgstr "Sincronizzazione non riuscita. Riprovare più tardi."
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "Colore sfondo testo"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Avviso"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "Scaricati"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Scarica automaticamente gli allegati quando connesso a una rete Wi-Fi"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "Salvato."
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "E-mail"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Avanti"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Silenzioso"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "Abilita Rich text"
@@ -1035,9 +1026,6 @@ msgstr "Le e-mail verranno visualizzate qui dopo essere state salvate in Bozze."
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "Salva tutti"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "Impossibile eliminare."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "Cartella rinominata."
@@ -1059,4 +1047,16 @@ msgstr "Rete non disponibile. Questo messaggio verrà inviato una volta connessi
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "Modalità offline attivata. Questo messaggio verrà inviato una volta connessi alla rete."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Dimensioni carattere"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Colore carattere"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Salvato."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Impossibile eliminare."
 

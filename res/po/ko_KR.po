@@ -22,6 +22,9 @@ msgstr "취소"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "삭제"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "표시할 항목이 없습니다."
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Wi-Fi 연결이 필요합니다. Wi-Fi 네트워크에 연결한 후 다시 시도하세요."
 
@@ -33,9 +36,6 @@ msgstr "다운로드를 취소하였습니다."
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "오늘"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "표시할 항목이 없습니다."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "http 또는 https URL만 다운로드할 수 있습니다."
@@ -74,7 +74,7 @@ msgid "IDS_EMAIL_TPOP_RECIPIENT_ALREADY_EXISTS"
 msgstr "이미 입력한 수신인입니다."
 
 msgid "IDS_EMAIL_TPOP_PD_EMAIL_ADDRESSES_REMOVED_FROM_PRIORITY_SENDERS"
-msgstr "이메일 주소 %d개를 [중요발신인]에서 제거하였습니다."
+msgstr "이메일 주소 %d개를 [중요발신인]에서 삭제하였습니다."
 
 msgid "IDS_EMAIL_TPOP_PD_EMAILS_MOVED_TO_SELECTED_FOLDER"
 msgstr "이메일 %d개를 선택한 폴더로 이동하였습니다."
@@ -103,17 +103,11 @@ msgstr "최대 받는 사람 수(%d)에 도달하였습니다."
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "최대 글자 수에 도달하였습니다."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "%d자까지 입력할 수 있습니다."
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "최대 메시지 크기(%dKB)에 도달하였습니다."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "최대 메시지 크기를 초과하였습니다. 처음 %dKB만 공유합니다."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "불러오는 중..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "입력한 이메일 주소가 바르지 않습니다."
@@ -146,13 +140,13 @@ msgid "IDS_EMAIL_TPOP_EMAIL_SENT"
 msgstr "이메일을 보냈습니다."
 
 msgid "IDS_EMAIL_TPOP_EMAIL_SAVED_IN_DRAFTS"
-msgstr "이메일을 [임시 보관함]에 저장하였습니다."
+msgstr "이메일을 임시 보관함에 저장하였습니다."
 
 msgid "IDS_EMAIL_TPOP_EMAIL_MARKED_AS_UNREAD"
 msgstr "이메일을 읽지 않음으로 표시하였습니다."
 
 msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"
-msgstr "이메일 주소를 [중요발신인]에서 제거하였습니다."
+msgstr "이메일 주소를 [중요발신인]에서 삭제하였습니다."
 
 msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ALREADY_ADDED_TO_PRIORITY_SENDERS"
 msgstr "[중요발신인]에 이미 추가된 이메일 주소입니다."
@@ -179,7 +173,7 @@ msgid "IDS_EMAIL_TPOP_1_EMAIL_MARKED_AS_READ"
 msgstr "이메일 1개를 읽음으로 표시하였습니다."
 
 msgid "IDS_EMAIL_TPOP_1_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"
-msgstr "이메일 주소 1개를 [중요발신인]에서 제거하였습니다."
+msgstr "이메일 주소 1개를 [중요발신인]에서 삭제하였습니다."
 
 msgid "IDS_EMAIL_TMBODY_SYNC_SETTINGS"
 msgstr "동기화 설정"
@@ -214,9 +208,6 @@ msgstr "비밀번호에 공백이 포함되어 있습니다. 대부분의 서버
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "여러 계정의 이메일을 한 번에 이동할 수 없습니다."
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "서버에 연결할 수 없습니다."
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "이메일을 작성하려면, 이메일 계정을 생성하세요."
 
@@ -236,7 +227,7 @@ msgid "IDS_EMAIL_POP_THE_SELECTED_DATA_COULD_NOT_BE_FOUND"
 msgstr "선택한 데이터를 찾을 수 없습니다."
 
 msgid "IDS_EMAIL_POP_THE_MAXIMUM_TOTAL_SIZE_OF_ATTACHMENTS_HPS_MB_HAS_BEEN_EXCEEDED_REMOVE_SOME_FILES_AND_TRY_AGAIN"
-msgstr "첨부 가능한 최대 파일 크기(%sMB)를 초과하였습니다. 일부 파일을 제거한 후 다시 시도하세요."
+msgstr "첨부 가능한 최대 파일 크기(%sMB)를 초과하였습니다. 일부 파일을 삭제한 후 다시 시도하세요."
 
 msgid "IDS_EMAIL_POP_THE_MAXIMUM_NUMBER_OF_ATTACHMENTS_HPD_HAS_BEEN_REACHED"
 msgstr "최대 첨부파일 수(%d)에 도달하였습니다."
@@ -248,7 +239,7 @@ msgid "IDS_EMAIL_POP_THE_CURRENT_EXCHANGE_SERVER_POLICY_PREVENTS_ATTACHMENTS_FRO
 msgstr "Exchange 서버 정책에 따라 모바일 디바이스에서 첨부파일을 다운로드할 수 없습니다."
 
 msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE_GO_TO_SETTINGS_POWER_AND_STORAGE_STORAGE_THEN_DELETE_SOME_FILES_AND_TRY_AGAIN"
-msgstr "디바이스에 저장공간이 부족합니다. [설정] > [전원 및 저장공간] > [저장공간]에서 일부 파일을 삭제한 후 다시 시도하세요."
+msgstr "디바이스에 저장공간이 부족합니다. [설정 > 전원 및 저장공간 > 저장공간]에서 일부 파일을 삭제한 후 다시 시도하세요."
 
 msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE"
 msgstr "디바이스에 저장공간이 부족합니다."
@@ -293,7 +284,7 @@ msgid "IDS_EMAIL_POP_HOST_NOT_FOUND"
 msgstr "호스트를 찾을 수 없습니다."
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_OR_NETWORK_NOT_AVAILABLE"
-msgstr "[비행기 탑승 모드]를 실행 중이거나 사용 가능한 네트워크가 없습니다."
+msgstr "비행기 탑승 모드를 실행 중이거나 사용 가능한 네트워크가 없습니다."
 
 msgid "IDS_EMAIL_POP_FAILED_TO_START_EMAIL_APPLICATION"
 msgstr "이메일 앱을 실행하지 못하였습니다."
@@ -304,29 +295,14 @@ msgstr "첨부파일을 다운로드하지 못하였습니다. 네트워크 연�
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "이메일을 서버에서 삭제하였습니다."
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "다운로드하지 못하였습니다."
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "다운로드 중..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
-msgstr "계정을 영구 삭제하면 계정의 모든 메시지, 연락처, 기타 데이터도 디바이스에서 삭제됩니다. 계속하려면 [삭제]를 누르세요."
+msgstr "계정을 영구 삭제하면 계정의 모든 메시지, 연락처, 기타 데이터도 디바이스에서 삭제됩니다. 계속하려면 삭제 버튼을 누르세요."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "새 연락처 파일 추가 중..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "연결하지 못하였습니다."
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "동일한 이름의 파일을 이미 첨부하였습니다."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "인증하지 못하였습니다."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "알 수 없는 오류가 발생하였습니다."
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "이메일을 전달하기 전에 모든 첨부파일을 다운로드합니다."
@@ -337,26 +313,11 @@ msgstr "연락처 상세 보기"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "연락처 업데이트"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "공유"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "설정"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "나에게 보내기"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "보내기"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "모두 선택"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "선택"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "검색"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "임시 보관함에 저장"
@@ -368,22 +329,10 @@ msgid "IDS_EMAIL_OPT_REPLY"
 msgstr "답장"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_SPAM_ABB"
-msgstr "스팸에서 제거"
+msgstr "스팸에서 삭제"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
-msgstr "중요발신인에서 제거"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "제거"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "새로고침"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "붙여넣기"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "원본"
+msgstr "중요발신인에서 삭제"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "메인 수신인으로 이동"
@@ -409,17 +358,11 @@ msgstr "읽음으로 표시"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "낮음"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "전달"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "편집"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "폴더 삭제"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "삭제"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "잘라내기"
@@ -429,9 +372,6 @@ msgstr "새 폴더 추가"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "새 연락처 추가"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "복사"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "이메일 작성"
@@ -453,9 +393,6 @@ msgstr "참조/숨은참조 추가"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "파일 첨부"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "계정 추가"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "추가"
@@ -482,13 +419,10 @@ msgid "IDS_EMAIL_MBODY_NO_EMAIL_ADDRESS_OR_NAME"
 msgstr "이메일 주소 또는 이름 없음"
 
 msgid "IDS_EMAIL_MBODY_NOTIFICATION_SOUND"
-msgstr "알림음"
+msgstr "알림 소리"
 
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "새 이메일"
-
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "이메일 도착 알림"
 
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "서명 편집"
@@ -520,9 +454,6 @@ msgstr "이메일을 작성할 수 없음"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "첨부파일을 추가할 수 없음"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "제목"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "이메일 작성 중지"
 
@@ -534,9 +465,6 @@ msgstr "스팸함"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "모든 폴더 표시"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "설정"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "보낸 메일함"
@@ -565,17 +493,11 @@ msgstr "휴지통"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "중요발신인"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "%d개 선택"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "발신대기함"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "이메일 열기"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "알림"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "메일함"
@@ -588,9 +510,6 @@ msgstr "화질"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(기본)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "일반"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "이 계정의 폴더"
@@ -619,9 +538,6 @@ msgstr "첨부파일 다운로드"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "첨부파일 다운로드"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "삭제"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "새 연락처 파일 추가"
 
@@ -637,17 +553,11 @@ msgstr "통합 계정"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "첨부파일"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "계정"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "동영상"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "사진 촬영"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "설정"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "모두 보내기"
@@ -658,9 +568,6 @@ msgstr "저장"
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "동영상 촬영"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "확인"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "메모"
 
@@ -669,12 +576,6 @@ msgstr "이미지"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "전체 이메일 다운로드"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "모두 다운로드"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "완료"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "저장 안 함"
@@ -685,23 +586,14 @@ msgstr "삭제"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "추가"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "계속"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "연락처"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "취소"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "오디오 녹음"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "캘린더"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "어제"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "보안 오류가 발생하여 서버에 연결할 수 없습니다."
@@ -748,9 +640,6 @@ msgstr "지도"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "더 불러오는 중..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "마지막 업데이트"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "원본 메시지 포함"
 
@@ -763,14 +652,8 @@ msgstr "전달:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "보낸 사람"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "폴더 이름"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "위로 밀어 더 불러오기"
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "이메일 주소"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "참조/숨은참조"
@@ -878,19 +761,13 @@ msgid "IDS_ST_POP_ALL_DATA_RELATED_TO_THIS_ACCOUNT_WILL_BE_DELETED_FROM_THE_DEVI
 msgstr "이 계정과 관련된 모든 데이터를 디바이스에서 삭제합니다."
 
 msgid "IDS_ST_OPT_REMOVE"
-msgstr "제거"
+msgstr "삭제"
 
 msgid "IDS_ST_OPT_PUSH"
 msgstr "푸시"
 
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "제한이 없습니다"
-
-msgid "IDS_ST_OPT_NONE"
-msgstr "설정 안 함"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "수동"
 
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "로밍 설정 적용 안 함"
@@ -903,12 +780,6 @@ msgstr "%d분 간격"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "매시간"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "매일"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "기본"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "이메일 동기화"
@@ -930,9 +801,6 @@ msgstr "기타"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "이메일 동기화 일정"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "경고"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "계정을 인증할 수 없음"
@@ -958,17 +826,8 @@ msgstr "이메일 크기 제한"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "받는 서버 설정"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "이메일"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "다음"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "수동 설정"
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "무음"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "포트"
@@ -976,20 +835,143 @@ msgstr "포트"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "보내기"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "글자 크기"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "%d자까지 입력할 수 있습니다."
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "글자 색상"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "불러오는 중..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "서버에 연결할 수 없습니다."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "다운로드하지 못하였습니다."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "다운로드 중..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "연결하지 못하였습니다."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "인증하지 못하였습니다."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "알 수 없는 오류가 발생하였습니다."
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "공유"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "설정"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "모두 선택"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "선택"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "검색"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "삭제"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "새로고침"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "붙여넣기"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "원본"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "전달"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "삭제"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "복사"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "계정 추가"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "이메일 알림"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "제목"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "설정"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d개 선택"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "알림"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "일반"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "삭제"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "계정"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "설정"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "확인"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "모두 다운로드"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "완료"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "계속"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "취소"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "어제"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "마지막 업데이트"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "폴더 이름"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "이메일 주소"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "설정 안 함"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "수동"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "매일"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "폴더 이름 변경"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "기본"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "스팸함으로 이동"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_SPAMBOX_ABB"
-msgstr "스팸함에서 제거"
+msgstr "스팸함에서 삭제"
 
 msgid "IDS_EMAIL_OPT_SHOW_TEXT_TOOLS"
 msgstr "텍스트 도구 표시"
@@ -1009,14 +991,23 @@ msgstr "동기화하지 못하였습니다. 나중에 시도하세요."
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "텍스트 배경 색상"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "경고"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "다운로드 완료"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Wi-Fi 네트워크 연결 시 첨부파일 자동 다운로드"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "저장하였습니다."
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "이메일"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "다음"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "무음"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "텍스트 꾸미기 실행"
@@ -1031,13 +1022,10 @@ msgid "IDS_EMAIL_BUTTON_HIDE_ABB3"
 msgstr "숨기기"
 
 msgid "IDS_EMAIL_BODY_AFTER_YOU_SAVE_EMAILS_IN_DRAFTS_THEY_WILL_BE_SHOWN_HERE"
-msgstr "[임시 보관함]에 이메일을 저장하면 여기에 표시됩니다."
+msgstr "임시 보관함에 이메일을 저장하면 여기에 표시됩니다."
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "모두 저장"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "삭제하지 못하였습니다."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "폴더 이름을 변경하였습니다."
@@ -1058,5 +1046,17 @@ msgid "IDS_EMAIL_POP_NETWORK_NOT_AVAILABLE_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_AR
 msgstr "네트워크에 연결할 수 없습니다. 네트워크에 연결되면 메시지를 보냅니다."
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
-msgstr "[비행기 탑승 모드]가 실행된 상태입니다. 네트워크에 연결되면 메시지를 보냅니다."
+msgstr "비행기 탑승 모드가 실행된 상태입니다. 네트워크에 연결되면 메시지를 보냅니다."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "글자 크기"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "글자 색상"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "저장하였습니다."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "삭제하지 못하였습니다."
 

@@ -22,6 +22,9 @@ msgstr "AVBRYT"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "TA BORT"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Inga objekt att visa."
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Wi-Fi-anslutning krävs. Anslut till Wi-Fi-nätverk och försök igen."
 
@@ -33,9 +36,6 @@ msgstr "Nedladdning avbruten."
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "Idag"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "Inga objekt att visa."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "Endast http- eller https-URL:er kan hämtas."
@@ -103,17 +103,11 @@ msgstr "Högsta antal mottagare (%d), har uppnåtts."
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "Högsta antal tecken har uppnåtts."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "Högsta antal tecken (%d) har uppnåtts."
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "Den största meddelandestorleken (%d kB) har uppnåtts."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "Maximal meddelandestorlek har överskridits. Endast de första %d kB delas."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "Laddar..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "En ogiltig e-postadress har angetts."
@@ -214,9 +208,6 @@ msgstr "Ditt lösenord innehåller blanksteg. Med många servrar stöds inte lö
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "Det går inte att flytta e-postmeddelanden från flera konton samtidigt."
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "Det går inte att ansluta till servern."
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "Skapa ett e-postkonto om du vill skriva ett e-postmeddelande."
 
@@ -304,29 +295,14 @@ msgstr "Det gick inte att hämta bilagan. Kontrollera nätverksanslutningen och 
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "E-post borttaget från servern."
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Hämtning misslyckades."
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "Laddar ned..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
 msgstr "Om du tar bort det här kontot tas även alla kontots meddelanden, kontakter och andra data bort från enheten. Tryck på Ta bort om du vill fortsätta."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "Skapar vCard-kort ..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "Anslutningsfel."
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "En fil med det här namnet har redan bifogats."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "Autentiseringen misslyckades."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "Ett okänt fel har inträffat."
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "Alla bilagor till e-postmeddelandet hämtas innan det vidarebefordras."
@@ -337,26 +313,11 @@ msgstr "Visa kontaktinformation"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "Uppdatera kontakt"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "Dela"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "Inställningar"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "Skicka till mig"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "Skicka"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "Välj alla"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "Välj"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "Sök"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "Spara i Utkast"
@@ -372,18 +333,6 @@ msgstr "Ta bort från Skräppost"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "Ta bort från Prioriterade avsändare"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "Ta bort"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "Uppdatera"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "Klistra in"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "Ursprunglig"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "Flytta till huvudmott. (Till)"
@@ -409,17 +358,11 @@ msgstr "Markera som läst"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "Låg"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "Vidarebefordra"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "Redigera"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "Ta bort mapp"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "Ta bort"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "Klipp ut"
@@ -429,9 +372,6 @@ msgstr "Skapa mapp"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "Skapa kontakt"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "Kopiera"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "Skriv e-post"
@@ -453,9 +393,6 @@ msgstr "Lägg till kopia/hemlig kopia"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "Lägg till bilaga"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "Lägg till konto"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "Lägg till"
@@ -487,9 +424,6 @@ msgstr "Aviseringsljud"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "Ny e-post"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "Meddelanden om ny e-post"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "Redigera signatur"
 
@@ -520,9 +454,6 @@ msgstr "Kan inte skriva e-postmeddelande"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "Kan inte lägga till bilagan"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "Rubrik"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "Sluta skriva e-postmeddelande"
 
@@ -534,9 +465,6 @@ msgstr "Skräppost"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Visa alla mappar"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "Inställningar"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Skickat"
@@ -565,17 +493,11 @@ msgstr "Papperskorgen"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "Prioriterade avsändare"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "%d valda"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "Utgående"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "Öppna e-post"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "Aviseringar"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "Brevlåda"
@@ -588,9 +510,6 @@ msgstr "Bildkvalitet"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(std)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "Allmänt"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "Mappar för kontot"
@@ -619,9 +538,6 @@ msgstr "Hämta bilaga"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "Hämta bilagor"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "Ta bort"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "Skapa vCard-kort"
 
@@ -637,17 +553,11 @@ msgstr "Kombinerade konton"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "Bilagor"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "Konton"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "Videor"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "Ta foto"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "Inställningar"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Skicka alla"
@@ -658,9 +568,6 @@ msgstr "Spara"
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "Sp. in video"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "OK"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "Memo"
 
@@ -669,12 +576,6 @@ msgstr "Bilder"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Hämta hela e-postmeddelandet"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "Hämta allt"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "Klar"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "Ta bort"
@@ -685,23 +586,14 @@ msgstr "Ta bort"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "Skapa"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "Fortsätt"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "Kontakter"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "Avbryt"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "Spela in ljudfil"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "Kalender"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "Igår"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "Det går inte att öppna anslutningen till servern. Ett säkerhetsfel inträffade."
@@ -748,9 +640,6 @@ msgstr "Kartor"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "Läser in fler ..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "Senast uppdaterad"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "Ta med originalmeddelandet"
 
@@ -763,14 +652,8 @@ msgstr "Vb:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Från"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "Mappnamn"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "Läs in mer gm uppåtsnärt"
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "E-postadress"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Kopia/hemlig kopia"
@@ -886,12 +769,6 @@ msgstr "Push"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "Ingen gräns"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "Ingen"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "Manuellt"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "Beh. inställn. inte roam."
 
@@ -903,12 +780,6 @@ msgstr "Var %d minut"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "Varje timme"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "Varje dag"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "Standard"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "Synka e-post"
@@ -930,9 +801,6 @@ msgstr "Annat"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "Schema för e-postsynk."
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "Varning"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "Kontot kan ej valideras"
@@ -958,17 +826,8 @@ msgstr "Begränsa hämtningsstorleken"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "Inställningar för inkommande server"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "E-post"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "Nästa"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "Manuell inst."
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "Tyst"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "Port"
@@ -976,14 +835,137 @@ msgstr "Port"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "SKICKA"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "Teckenstorlek"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Högsta antal tecken (%d) har uppnåtts."
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "Teckenfärg"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Laddar..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Det går inte att ansluta till servern."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Hämtning misslyckades."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Laddar ned..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Anslutningsfel."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Autentiseringen misslyckades."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Ett okänt fel har inträffat."
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Dela"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Inställningar"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Välj alla"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Välj"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Sök"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Ta bort"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Uppdatera"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Klistra in"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Ursprunglig"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Vidarebefordra"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Ta bort"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Kopiera"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Lägg till konto"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Meddelanden om ny e-post"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Rubrik"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Inställningar"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d valda"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Aviseringar"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Allmänt"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Ta bort"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Konton"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Inställningar"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Hämta allt"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Klar"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Fortsätt"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Avbryt"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Igår"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Senast uppdaterad"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Mappnamn"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "E-postadress"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Ingen"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Manuellt"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Varje dag"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "Byt mappnamn"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Standard"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "Flytta till skräppost"
@@ -1009,14 +991,23 @@ msgstr "Synkroniseringen misslyckades. Försök senare."
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "Textbakgrundsfärg"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Varning"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "Hämtat"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Hämta bilagor automatiskt medan du är ansluten till ett Wi-Fi-nätverk"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "Sparad."
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "E-post"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Nästa"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Tyst"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "Aktivera RTF"
@@ -1035,9 +1026,6 @@ msgstr "När du har sparat e-postmeddelanden i Utkast visas de här."
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "Spara alla"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "Det gick inte att radera."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "Mappen har bytt namn."
@@ -1059,4 +1047,16 @@ msgstr "Nätverket är inte tillgängligt. Detta meddelande skickas när du ansl
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "Flygläget är aktiverat. Detta meddelande skickas när du ansluter till nätverket."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Teckenstorlek"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Teckenfärg"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Sparad."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Det gick inte att radera."
 

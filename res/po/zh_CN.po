@@ -11,7 +11,7 @@ msgid "IDS_ST_OPT_EVERY_PD_HOURS_ABB2"
 msgstr "每 %d 个小时"
 
 msgid "IDS_ST_OPT_EVERY_1_HOUR"
-msgstr "每 1 个小时"
+msgstr "每 1 小时"
 
 msgid "IDS_TPLATFORM_ACBUTTON_DONE_ABB"
 msgstr "完成"
@@ -21,6 +21,9 @@ msgstr "取消"
 
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "删除"
+
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "没有可显示的内容。"
 
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "需要 Wi-Fi 连接。连接至 Wi-Fi 网络并重试。"
@@ -33,9 +36,6 @@ msgstr "已取消下载"
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "今天"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "无可显示的条目。"
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "仅可下载http或https URL。"
@@ -50,7 +50,7 @@ msgid "IDS_ASEML_HEADER_UNABLE_TO_USE_FUNCTION_ABB"
 msgstr "无法使用功能"
 
 msgid "IDS_EMAIL_TPOP_SYNC_EMAIL_DISABLED_FOR_PS"
-msgstr "同步禁用了 %s 的电子邮件"
+msgstr "同步禁用了%s的电子邮件"
 
 msgid "IDS_EMAIL_TPOP_SIGNATURE_SAVED"
 msgstr "签名已保存"
@@ -95,7 +95,7 @@ msgid "IDS_EMAIL_TPOP_NETWORK_NOT_AVAILABLE_EMAIL_WILL_BE_SENT_WHEN_CONNECTED_TO
 msgstr "网络不可用。电子邮件将在连接至网络时发送。"
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_REGISTERED_DEVICES_REACHED_FOR_THIS_ACCOUNT_DEREGISTER_SOME_DEVICES_AND_TRY_AGAIN"
-msgstr "已达到该账户可注册设备的最大数量。请取消注册部分设备并重试。"
+msgstr "已达到该帐户可注册设备的最大数量。请取消注册部分设备并重试。"
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_RECIPIENTS_HPD_REACHED"
 msgstr "已达到最大收件人数 (%d)。"
@@ -103,17 +103,11 @@ msgstr "已达到最大收件人数 (%d)。"
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "已达到最大字符数"
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "已达最大字符数（%d）"
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "已达到最大信息大小 (%d KB)"
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
-msgstr "已超过最大信息大小。将仅共享前 %d KB。"
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "正在载入..."
+msgstr "已超过最大信息大小。将仅分享前 %d KB。"
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "已输入无效电子邮件地址"
@@ -131,7 +125,7 @@ msgid "IDS_EMAIL_TPOP_FILE_SAVED_TO_DOWNLOADS"
 msgstr "文件已保存至下载"
 
 msgid "IDS_EMAIL_TPOP_FAILED_TO_SIGN_IN_TO_PS"
-msgstr "登录至 %s 失败"
+msgstr "登录%s失败。"
 
 msgid "IDS_EMAIL_TPOP_FAILED_TO_SAVE_EMAIL"
 msgstr "保存电子邮件失败"
@@ -146,7 +140,7 @@ msgid "IDS_EMAIL_TPOP_EMAIL_SENT"
 msgstr "电子邮件已发送"
 
 msgid "IDS_EMAIL_TPOP_EMAIL_SAVED_IN_DRAFTS"
-msgstr "电子邮件已保存到草稿中"
+msgstr "电子邮件已保存到草稿箱中"
 
 msgid "IDS_EMAIL_TPOP_EMAIL_MARKED_AS_UNREAD"
 msgstr "电子邮件已标记为未读"
@@ -170,7 +164,7 @@ msgid "IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_SELECTED_FOLDER"
 msgstr "1 封电子邮件已移至选中文件夹"
 
 msgid "IDS_EMAIL_TPOP_1_EMAIL_MOVED_TO_PS"
-msgstr "1 封电子邮件已移动至 %s"
+msgstr "1 封电子邮件已移动至%s"
 
 msgid "IDS_EMAIL_TPOP_1_EMAIL_MARKED_AS_UNREAD"
 msgstr "1 封电子邮件已标记为未读"
@@ -182,10 +176,10 @@ msgid "IDS_EMAIL_TPOP_1_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"
 msgstr "1 个电子邮件地址已从优先发件人中移除"
 
 msgid "IDS_EMAIL_TMBODY_SYNC_SETTINGS"
-msgstr "同步设定"
+msgstr "同步设置"
 
 msgid "IDS_EMAIL_TMBODY_DEFAULT_SENDING_ACCOUNT"
-msgstr "默认发送账户"
+msgstr "默认发送帐户"
 
 msgid "IDS_EMAIL_SBODY_SENT_FROM_MY_SAMSUNG_DEVICE"
 msgstr "发送自我的三星设备。"
@@ -194,7 +188,7 @@ msgid "IDS_EMAIL_SBODY_RECEIVE_STATUS_BAR_NOTIFICATIONS_WHEN_EMAILS_ARRIVE"
 msgstr "收到电子邮件时，接收通知栏的通知。"
 
 msgid "IDS_EMAIL_SBODY_NO_SUBJECT_M_NOUN"
-msgstr "无主题"
+msgstr "没有主题"
 
 msgid "IDS_EMAIL_SBODY_NO_RECIPIENTS_M_NOUN"
 msgstr "无收件人"
@@ -203,22 +197,19 @@ msgid "IDS_EMAIL_POP_YOU_MUST_DOWNLOAD_THE_MESSAGE_BEFORE_YOU_CAN_DOWNLOAD_THE_A
 msgstr "必须先下载信息才能下载附件。"
 
 msgid "IDS_EMAIL_POP_YOU_HAVE_NOT_YET_CREATED_AN_EMAIL_ACCOUNT_CREATE_AN_EMAIL_ACCOUNT_AND_TRY_AGAIN"
-msgstr "您尚未创建电子邮件账户。请创建一个电子邮件账户并重试。"
+msgstr "您尚未创建电子邮件帐户。请创建一个电子邮件帐户并重试。"
 
 msgid "IDS_EMAIL_POP_YOU_CAN_ONLY_LOG_IN_ONCE_EVERY_15_MINUTES"
-msgstr "每 15 分钟您仅可登录一次。"
+msgstr "每 15 分钟您只能登录一次。"
 
 msgid "IDS_EMAIL_POP_YOUR_PASSWORD_CONTAINS_SPACES_MANY_SERVERS_DO_NOT_SUPPORT_PASSWORDS_WITH_SPACES"
 msgstr "您的密码包含空格。许多服务器不支持含有空格的密码。"
 
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
-msgstr "无法一次从多个账户移动电子邮件。"
-
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "无法连接到服务器"
+msgstr "无法一次从多个帐户移动电子邮件。"
 
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
-msgstr "若要编写电子邮件，请创建电子邮件账户。"
+msgstr "若要编写电子邮件，请创建电子邮件帐户。"
 
 msgid "IDS_EMAIL_POP_THIS_FILE_TYPE_IS_NOT_SUPPORTED_BY_ANY_APPLICATION_ON_YOUR_DEVICE"
 msgstr "您设备上的任何应用程序均不支持该文件类型。"
@@ -248,7 +239,7 @@ msgid "IDS_EMAIL_POP_THE_CURRENT_EXCHANGE_SERVER_POLICY_PREVENTS_ATTACHMENTS_FRO
 msgstr "当前 Exchange 服务器政策可防止将附件下载至移动设备。"
 
 msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE_GO_TO_SETTINGS_POWER_AND_STORAGE_STORAGE_THEN_DELETE_SOME_FILES_AND_TRY_AGAIN"
-msgstr "您的设备存储空间不足。请进入设定 > 电源和存储 > 存储，然后删除部分文件并重试。"
+msgstr "您的设备存储空间不足。请进入【设置】>【电源和存储】>【存储】，然后删除部分文件并重试。"
 
 msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE"
 msgstr "您的设备存储空间不足。"
@@ -266,10 +257,10 @@ msgid "IDS_EMAIL_POP_SAVING_EMAIL_ING"
 msgstr "正在保存电子邮件..."
 
 msgid "IDS_EMAIL_POP_SAVE_YOUR_CHANGES_OR_DISCARD_THEM_Q"
-msgstr "是否放弃您所做的更改？"
+msgstr "保存更改？"
 
 msgid "IDS_EMAIL_POP_REMOVING_ACCOUNT_ING"
-msgstr "正在移除账户…"
+msgstr "正在移除帐户…"
 
 msgid "IDS_EMAIL_POP_PLEASE_FILL_ALL_THE_MANDATORY_FIELDS"
 msgstr "请填写所有必填字段。"
@@ -304,29 +295,14 @@ msgstr "下载附件失败。检查您的网络连接并重试。"
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "电子邮件已从服务器删除。"
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "下载失败"
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "下载中..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
-msgstr "删除该账户也将删除所有账户消息、联系人和来自设备的其他数据。点击删除以继续。"
+msgstr "删除该帐户也将删除所有帐户消息、联系人和来自设备的其他数据。点击【删除】继续。"
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "正在创建 vCard..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "连接失败"
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "一个同名文件已附加。"
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "鉴定失败"
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "不支持的视频格式"
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "转发前将会下载该电子邮件中的所有附件。"
@@ -337,29 +313,14 @@ msgstr "查看联系人详情"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "更新联系人"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "分享"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "设定"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "发送至我自己"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "发送"
 
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "全选"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "选择"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "搜索"
-
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
-msgstr "保存在草稿中"
+msgstr "保存在草稿箱中"
 
 msgid "IDS_EMAIL_OPT_REPLY_ALL"
 msgstr "回复全部"
@@ -368,22 +329,10 @@ msgid "IDS_EMAIL_OPT_REPLY"
 msgstr "回复"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_SPAM_ABB"
-msgstr "从垃圾邮件移除"
+msgstr "从垃圾邮件中移除"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "从优先发件人移除"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "移除"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "刷新"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "粘贴"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "原图"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "移动至主要收件人 (收件人)"
@@ -392,7 +341,7 @@ msgid "IDS_EMAIL_OPT_MOVE_TO_CC"
 msgstr "移到抄送"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_BCC_ABB"
-msgstr "移至密送"
+msgstr "移到密送"
 
 msgid "IDS_EMAIL_OPT_MOVE"
 msgstr "移动"
@@ -409,29 +358,20 @@ msgstr "标记为已读"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "低"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "转发"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "编辑"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "删除文件夹"
 
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "删除"
-
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "剪切"
 
 msgid "IDS_EMAIL_OPT_CREATE_FOLDER_ABB2"
-msgstr "创建文件夹"
+msgstr "新建文件夹"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "新建联系人"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "复制"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "写邮件"
@@ -449,13 +389,10 @@ msgid "IDS_EMAIL_OPT_ADD_TO_CONTACTS_ABB2"
 msgstr "添加至联系人"
 
 msgid "IDS_EMAIL_OPT_ADD_CC_BCC"
-msgstr "添加抄送/暗送"
+msgstr "添加抄送/密送"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "添加附件"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "添加账户"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "添加"
@@ -479,16 +416,13 @@ msgid "IDS_EMAIL_MBODY_PRIORITY_SENDERS"
 msgstr "优先发件人"
 
 msgid "IDS_EMAIL_MBODY_NO_EMAIL_ADDRESS_OR_NAME"
-msgstr "无电子邮件地址或名称"
+msgstr "没有电子邮件地址或名称"
 
 msgid "IDS_EMAIL_MBODY_NOTIFICATION_SOUND"
 msgstr "通知声音"
 
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "新电子邮件"
-
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "电子邮件通知"
 
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "编辑签名"
@@ -497,7 +431,7 @@ msgid "IDS_EMAIL_MBODY_DISPLAY_SIGNATURE"
 msgstr "显示签名"
 
 msgid "IDS_EMAIL_MBODY_DISPLAY_IMAGES"
-msgstr "显示图像"
+msgstr "显示图片"
 
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_SEND_EMAIL_ABB"
 msgstr "无法发送电子邮件"
@@ -520,23 +454,17 @@ msgstr "无法编写电子邮件"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "无法添加附件"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "主题"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "停止写邮件"
 
 msgid "IDS_EMAIL_HEADER_STARRED_EMAILS_ABB"
-msgstr "已加星标的电子邮件"
+msgstr "已标星邮件"
 
 msgid "IDS_EMAIL_HEADER_SPAMBOX"
 msgstr "垃圾箱"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "显示全部文件夹"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "设定"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "已发送"
@@ -557,7 +485,7 @@ msgid "IDS_EMAIL_HEADER_RE_C_M_READ_REPORT"
 msgstr "回复："
 
 msgid "IDS_EMAIL_HEADER_REMOVE_ACCOUNT_ABB"
-msgstr "移除账户"
+msgstr "移除帐户"
 
 msgid "IDS_EMAIL_HEADER_RECYCLE_BIN_ABB"
 msgstr "回收站"
@@ -565,17 +493,11 @@ msgstr "回收站"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "优先发件人"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "%d 已选中"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "发件箱"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "打开电子邮件"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "通知"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "邮箱"
@@ -584,22 +506,19 @@ msgid "IDS_EMAIL_HEADER_INBOX"
 msgstr "收件箱"
 
 msgid "IDS_EMAIL_HEADER_IMAGE_QUALITY_ABB"
-msgstr "图像质量"
+msgstr "图片质量"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(默认)"
 
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "一般"
-
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
-msgstr "该账户的文件夹"
+msgstr "该帐户的文件夹"
 
 msgid "IDS_EMAIL_HEADER_FAILED_TO_SAVE_ATTACHMENT_ABB"
 msgstr "保存附件失败"
 
 msgid "IDS_EMAIL_HEADER_FAILED_TO_DELETE_ACCOUNT_ABB"
-msgstr "删除账户失败"
+msgstr "删除帐户失败"
 
 msgid "IDS_EMAIL_HEADER_FAILED_TO_CONNECT_TO_SERVER_ABB"
 msgstr "连接至服务器失败"
@@ -608,7 +527,7 @@ msgid "IDS_EMAIL_HEADER_ENTER_NEW_PASSWORD_ABB"
 msgstr "输入新密码"
 
 msgid "IDS_EMAIL_HEADER_DRAFTS"
-msgstr "草稿"
+msgstr "草稿箱"
 
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ENTIRE_EMAIL_ABB"
 msgstr "下载整封电子邮件"
@@ -618,9 +537,6 @@ msgstr "下载附件"
 
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "下载附件"
-
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "删除"
 
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "创建 vCard"
@@ -632,22 +548,16 @@ msgid "IDS_EMAIL_HEADER_COMBINED_INBOX_ABB"
 msgstr "组合收件箱"
 
 msgid "IDS_EMAIL_HEADER_COMBINED_ACCOUNTS_ABB"
-msgstr "合并的账户"
+msgstr "合并的帐户"
 
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "附件"
-
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "账户"
 
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "视频"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "拍照"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "设定"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "全部发送"
@@ -658,23 +568,14 @@ msgstr "保存"
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "录制视频"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "确定"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "备忘录"
 
 msgid "IDS_EMAIL_BUTTON_IMAGES_ABB"
-msgstr "图像"
+msgstr "图片"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "下载完整电子邮件"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "下载全部"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "完成"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "放弃"
@@ -685,23 +586,14 @@ msgstr "删除"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "创建"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "继续"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "联系人"
 
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "取消"
-
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
-msgstr "录制音频文件"
+msgstr "录音文件"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "日历"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "昨天"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "无法打开与服务器的连接。出现安全错误。"
@@ -748,9 +640,6 @@ msgstr "地图"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "正在载入更多..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "最新更新"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "包括原始消息"
 
@@ -763,23 +652,17 @@ msgstr "转发："
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "发件人"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "文件夹名称"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "向上轻拂以载入更多。"
 
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "邮件地址"
-
 msgid "IDS_EMAIL_BODY_CC_BCC"
-msgstr "抄送/暗送"
+msgstr "抄送/密送"
 
 msgid "IDS_EMAIL_BODY_CC"
 msgstr "抄送"
 
 msgid "IDS_EMAIL_BODY_BCC"
-msgstr "暗送"
+msgstr "密送"
 
 msgid "IDS_EMAIL_BODY_AUDIO_FILES_ABB"
 msgstr "音频文件"
@@ -806,7 +689,7 @@ msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_PRIORITY_SENDERS_EMAILS_FROM_THEM_WILL_BE_SH
 msgstr "添加优先发件人后，将在此处显示来自他们的电子邮件。"
 
 msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_FAVOURITE_EMAILS_BY_TAPPING_THE_STAR_ICON_THEY_WILL_BE_SHOWN_HERE"
-msgstr "在通过点击星标图标添加收藏电子邮件后，其将显示在此处。"
+msgstr "点击星形图标添加收藏电子邮件后，其将显示在此处。"
 
 msgid "IDS_EMAIL_BODY_1_FILE_ABB"
 msgstr "1 个文件"
@@ -818,7 +701,7 @@ msgid "IDS_MF_HEADER_UNABLE_TO_SAVE_DATA_ABB"
 msgstr "无法保存数据"
 
 msgid "IDS_ST_TPOP_VALIDATING_ACCOUNT_ING_ABB"
-msgstr "正在验证账户..."
+msgstr "正在验证帐户..."
 
 msgid "IDS_ST_TMBODY_USERNAME"
 msgstr "用户名"
@@ -839,7 +722,7 @@ msgid "IDS_ST_TMBODY_PASSWORD"
 msgstr "密码"
 
 msgid "IDS_ST_TMBODY_ACCOUNT_NAME"
-msgstr "账户名称"
+msgstr "帐户名称"
 
 msgid "IDS_ST_SBODY_TLS"
 msgstr "TLS"
@@ -851,7 +734,7 @@ msgid "IDS_ST_SBODY_SHOW_PASSWORD_ABB"
 msgstr "显示密码"
 
 msgid "IDS_ST_SBODY_SET_AS_DEFAULT_ACCOUNT_ABB"
-msgstr "设置为默认账户"
+msgstr "设置为默认帐户"
 
 msgid "IDS_ST_SBODY_PROCESSING_PLEASE_WAIT_ING_ABB"
 msgstr "正在处理。请稍候..."
@@ -866,16 +749,16 @@ msgid "IDS_ST_SBODY_IMAP"
 msgstr "IMAP"
 
 msgid "IDS_ST_POP_THIS_ACCOUNT_HAS_ALREADY_BEEN_ADDED"
-msgstr "该账户已添加。"
+msgstr "该帐户已添加。"
 
 msgid "IDS_ST_POP_THE_MAXIMUM_NUMBER_OF_EMAIL_ACCOUNTS_HPD_HAS_BEEN_REACHED"
-msgstr "已达到电子邮件账户的最大数量 (%d)。"
+msgstr "已达到电子邮件帐号数量上限 (%d)。"
 
 msgid "IDS_ST_POP_CHECK_THE_EMAIL_ADDRESS_AND_PASSWORD_YOU_HAVE_ENTERED"
 msgstr "检查您输入的电子邮件地址和密码。"
 
 msgid "IDS_ST_POP_ALL_DATA_RELATED_TO_THIS_ACCOUNT_WILL_BE_DELETED_FROM_THE_DEVICE"
-msgstr "所有与此账户相关的数据将自设备删除。"
+msgstr "所有与此帐户相关的数据将自设备删除。"
 
 msgid "IDS_ST_OPT_REMOVE"
 msgstr "移除"
@@ -886,14 +769,8 @@ msgstr "推送"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "无限制"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "无"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "手动"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
-msgstr "保持非漫游设定"
+msgstr "保持非漫游设置"
 
 msgid "IDS_ST_OPT_HEADER_ONLY"
 msgstr "仅邮件头"
@@ -904,12 +781,6 @@ msgstr "每%d分钟"
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "每小时"
 
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "每天"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "默认"
-
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "同步电子邮件"
 
@@ -917,7 +788,7 @@ msgid "IDS_ST_MBODY_SMTP_AUTHENTICATION"
 msgstr "SMTP 验证"
 
 msgid "IDS_ST_MBODY_SERVER_SETTINGS"
-msgstr "服务器设定"
+msgstr "服务器设置"
 
 msgid "IDS_ST_MBODY_SAME_AS_POP3_IMAP4"
 msgstr "与 POP3/IMAP4 相同"
@@ -931,44 +802,32 @@ msgstr "其他"
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "电子邮件同步日程"
 
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "警告"
-
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
-msgstr "无法验证账户"
+msgstr "无法验证帐户"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_ADD_ACCOUNT_ABB"
-msgstr "无法添加账户"
+msgstr "无法添加帐户"
 
 msgid "IDS_ST_HEADER_SERVER_TYPE_ABB"
 msgstr "服务器类型"
 
 msgid "IDS_ST_HEADER_SELECT_ACCOUNT_TYPE_ABB"
-msgstr "选择账户类型"
+msgstr "选择帐户类型"
 
 msgid "IDS_ST_HEADER_SECURITY_TYPE_ABB"
 msgstr "安全类型"
 
 msgid "IDS_ST_HEADER_OUTGOING_SERVER_SETTINGS_ABB"
-msgstr "传出服务器设定"
+msgstr "传出服务器设置"
 
 msgid "IDS_ST_HEADER_LIMIT_RETRIEVAL_SIZE"
 msgstr "限制获取大小"
 
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
-msgstr "传入服务器设定"
-
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "电子邮件"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "下一步"
+msgstr "传入服务器设置"
 
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "手动设置"
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "静音"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "端口"
@@ -976,20 +835,143 @@ msgstr "端口"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "发送"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "字体大小"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "已达最大字符数（%d）"
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "字体颜色"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "正在载入..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "无法连接到服务器"
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "下载失败"
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "下载中..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "连接失败"
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "鉴定失败"
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "发生未知错误"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "分享"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "设置"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "全选"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "选择"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "搜索"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "移除"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "刷新"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "粘贴"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "原图"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "转发"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "删除"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "复制"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "添加帐户"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "电子邮件通知"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "主题"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "设置"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "已选择 %d"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "通知"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "一般"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "删除"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "帐户"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "设置"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "确定"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "下载全部"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "完成"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "继续"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "取消"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "昨天"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "最新更新"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "文件夹名称"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "邮件地址"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "无"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "手动"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "每天"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "重命名文件夹"
 
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "默认"
+
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
-msgstr "移动到垃圾箱"
+msgstr "移至垃圾箱"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_SPAMBOX_ABB"
-msgstr "从垃圾信箱中移除"
+msgstr "从垃圾箱中移除"
 
 msgid "IDS_EMAIL_OPT_SHOW_TEXT_TOOLS"
 msgstr "显示文本工具"
@@ -1009,14 +991,23 @@ msgstr "同步失败。稍后重试。"
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "文字背景颜色"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "警告"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "已下载"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "当连接至 Wi-Fi 网络时自动下载附件"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "已保存"
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "电子邮件"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "下一步"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "静音"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "启用格式文本"
@@ -1036,9 +1027,6 @@ msgstr "保存电子邮件至草稿箱后，其将显示在此处。"
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "全部保存"
 
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "删除失败。"
-
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "文件夹已重命名"
 
@@ -1046,7 +1034,7 @@ msgid "IDS_EMAIL_HEADER_SELECT_EMAILS"
 msgstr "选择电子邮件"
 
 msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_EMAILS_TO_SPAM_THEY_WILL_BE_SHOWN_HERE"
-msgstr "在您添加电子邮件至垃圾邮件后，其将显示在此处。"
+msgstr "将电子邮件添加至垃圾邮件后，其将显示在此处。"
 
 msgid "IDS_EMAIL_BUTTON_RENAME_ABB"
 msgstr "重命名"
@@ -1059,4 +1047,16 @@ msgstr "网络不可用。当您连接至网络时将发送本邮件。"
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "飞行模式已启用。当您连接至网络时将发送本邮件。"
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "字体大小"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "字体颜色"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "已保存"
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "删除失败。"
 

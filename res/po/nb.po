@@ -22,6 +22,9 @@ msgstr "AVBRYT"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "SLETT"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Ingen elementer å vise."
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Wi-Fi-tilkobling nødvendig. Koble til Wi-Fi-nettverk og prøv på nytt."
 
@@ -33,9 +36,6 @@ msgstr "Nedlasting avbrutt."
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "I dag"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "Ingen elementer å vise."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "Bare http- eller https-URL-er kan lastes ned."
@@ -103,17 +103,11 @@ msgstr "Maksimalt antall mottakere (%d) er nådd."
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "Maksimalt antall tegn er nådd."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "Maksimalt antall tegn (%d) er nådd."
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "Maksimal meldingsstørrelse (%d kB) er nådd."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "Maksimal meldingsstørrelse er oversteget. Bare de første %d KB blir delt."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "Åpner..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "Ugyldig e-postadresse er angitt."
@@ -214,9 +208,6 @@ msgstr "Passordet ditt inneholder mellomrom. Mange servere støtter ikke passord
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "Kan ikke flytte e-poster fra flere kontoer samtidig."
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "Kan ikke koble til server."
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "Opprett en e-postkonto for å skrive en e-post."
 
@@ -304,29 +295,14 @@ msgstr "Kunne ikke laste ned vedlegg. Kontroller nettverkstilkoblingen, og prøv
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "E-post er slettet fra serveren."
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Nedlasting mislyktes."
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "Laster ned..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
 msgstr "Hvis du sletter denne kontoen, slettes også alle kontomeldinger, kontakter og andre data fra enheten. Trykk på Slett for å gå videre."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "Oppretter vKort..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "Kunne ikke koble til."
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "Det er allerede lagt til en fil med dette navnet."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "Godkjenning mislyktes."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "Det har oppstått en ukjent feil."
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "Alle vedlegg i denne e-posten blir lastet ned før den videresendes."
@@ -337,26 +313,11 @@ msgstr "Vis kontaktdetaljer"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "Oppdater kontakt"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "Del"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "Innstillinger"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "Send til meg selv"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "Send"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "Merk alt"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "Velg"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "Søk"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "Lagre i Utkast"
@@ -372,18 +333,6 @@ msgstr "Fjern fra Søppelpost"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "Fjern fra Prioriterte avsendere"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "Fjern"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "Oppdater"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "Lim inn"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "Original"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "Gå til hovedmottaker (til)"
@@ -409,17 +358,11 @@ msgstr "Marker som lest"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "Lav"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "Videresend"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "Rediger"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "Slett mappe"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "Slett"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "Klipp ut"
@@ -429,9 +372,6 @@ msgstr "Opprett mappe"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "Opprett kontakt"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "Kopier"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "Skriv e-post"
@@ -453,9 +393,6 @@ msgstr "Legg til Kopi/Blindkopi"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "Legg til vedlegg"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "Legg til konto"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "Legg til"
@@ -487,9 +424,6 @@ msgstr "Varselslyd"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "Nye e-poster"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "E-postvarsler"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "Rediger signatur"
 
@@ -520,9 +454,6 @@ msgstr "Kan ikke skrive e-post"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "Kan ikke legge ved vedlegg"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "Emne"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "Slutt å skrive ny e-post"
 
@@ -534,9 +465,6 @@ msgstr "Søppelpost"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Vis alle mapper"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "Innstillinger"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Sendt"
@@ -565,17 +493,11 @@ msgstr "Papirkurv"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "Prioriterte avsendere"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "%d valgt"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "Utboks"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "Åpne e-post"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "Varsler"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "Postkasse"
@@ -588,9 +510,6 @@ msgstr "Bildekvalitet"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(stand.)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "Generelt"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "Mapper for denne kontoen"
@@ -619,9 +538,6 @@ msgstr "Last ned vedlegg"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "Last ned vedlegg"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "Slett"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "Opprett vKort"
 
@@ -637,17 +553,11 @@ msgstr "Kombinerte kontoer"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "Vedlegg"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "Kontoer"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "Videoer"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "Ta et bilde"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "Innstillinger"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Send alle"
@@ -658,9 +568,6 @@ msgstr "Lagre"
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "Ta opp video"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "OK"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "Notat"
 
@@ -669,12 +576,6 @@ msgstr "Bilder"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Last ned hele e-posten"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "Last ned alle"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "OK"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "Forkast"
@@ -685,23 +586,14 @@ msgstr "Slett"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "Opprett"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "Fortsett"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "Kontakter"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "Avbryt"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "Ta opp lydfil"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "Kalender"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "I går"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "Kan ikke åpne tilkobling til server. Det oppstod en sikkerhetsfeil."
@@ -748,9 +640,6 @@ msgstr "Kart"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "Laster flere..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "Sist oppdatert"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "Inkluder opprinnelig melding"
 
@@ -763,14 +652,8 @@ msgstr "Vs:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Fra"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "Mappenavn"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "Dra raskt opp og last mer"
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "E-postadresse"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Kopi/Blindkopi"
@@ -886,12 +769,6 @@ msgstr "Push"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "Ingen grense"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "Ingen"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "Manuelt"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "Behold ikke-roaminginnst."
 
@@ -903,12 +780,6 @@ msgstr "Hvert %d. minutt"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "Hver time"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "Hver dag"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "Standard"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "Synkroniser e-poster"
@@ -930,9 +801,6 @@ msgstr "Annet"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "E-postsynkroniseringsplan"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "Advarsel"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "Kan ikke validere konto"
@@ -958,17 +826,8 @@ msgstr "Begrens hentestørrelse"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "Innst. for innkommende server"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "E-post"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "Neste"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "Man. oppsett"
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "Stille"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "Port"
@@ -976,14 +835,137 @@ msgstr "Port"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "SEND"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "Skriftstørrelse"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Maksimalt antall tegn (%d) er nådd."
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "Skriftfarge"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Åpner..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Kan ikke koble til server."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Nedlasting mislyktes."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Laster ned..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Kunne ikke koble til."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Godkjenning mislyktes."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Det har oppstått en ukjent feil."
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Del"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Innstillinger"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Merk alt"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Velg"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Søk"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Fjern"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Oppdater"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Lim inn"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Original"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Videresend"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Slett"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Kopier"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Legg til konto"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "E-postvarsler"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Emne"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Innstillinger"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d valgt"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Varsler"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Generelt"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Slett"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Kontoer"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Innstillinger"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Last ned alle"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Fortsett"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Avbryt"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "I går"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Sist oppdatert"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Mappenavn"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "E-postadresse"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Ingen"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Manuelt"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Hver dag"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "Endre mappenavn"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Standard"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "Flytt til Søppelpost"
@@ -1009,14 +991,23 @@ msgstr "Synkronisering mislyktes. Prøv igjen senere."
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "Tekstbakgrunnsfarge"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Advarsel"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "Lastet ned"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Last automatisk ned vedlegg når du er koblet til et Wi-Fi-nettverk"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "Lagret."
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "E-post"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Neste"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Stille"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "Aktiver Rik tekst"
@@ -1035,9 +1026,6 @@ msgstr "Når du har lagret e-poster i Utkast, vises de her."
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "Lagre alle"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "Kunne ikke slette."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "Endret navn på mappe."
@@ -1059,4 +1047,16 @@ msgstr "Nettverk ikke tilgjengelig. Denne meldingen sendes når du er koblet til
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "Flymodus aktivert. Denne meldingen sendes når du er koblet til nettverket."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Skriftstørrelse"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Skriftfarge"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Lagret."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Kunne ikke slette."
 

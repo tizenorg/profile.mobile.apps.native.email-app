@@ -22,6 +22,9 @@ msgstr "CUIR AR CEAL"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "SCRIOS"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Níl aon mhíreanna le taispeáint."
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Nasc Wi-Fi de dhíth. Nasc le líonra Wi-Fi agus triail arís."
 
@@ -33,9 +36,6 @@ msgstr "Íoslódáil curtha ar ceal."
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "Inniu"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "Níl aon mhíreanna le taispeáint."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "Ní féidir ach URL http nó https a íoslódáil"
@@ -103,17 +103,11 @@ msgstr "Uaslíon na bhfaighteoirí (%d) bainte amach."
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "Uaslíon na gcarachtar bainte amach."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "Uaslíon na gcarachtar (%d) bainte amach."
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "Uasmhéid na teachtaireachta (%d KB) bainte amach."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "Uasmhéid na teachtaireachta sáraithe. Ní chomhroinnfear ach an chéad %d KB."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "Lódáil..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "Seoladh r-phoist neamhbhailí iontráilte."
@@ -214,9 +208,6 @@ msgstr "Tá spásanna i do phasfhocal. Níl tacú ann i gcuid mhór freastalaith
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "Ní féidir r-phoist a bhogadh ó ilchuntais ag aon uair amháin."
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "Ní féidir nascadh le freastalaí."
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "Le r-phost a chumadh, cruthaigh cuntas r-phoist."
 
@@ -304,29 +295,14 @@ msgstr "Theip ar íoslódáil an cheangaltáin. Seiceáil do nasc líonra agus t
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "Scriosadh r-phost ón bhfreastalaí."
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Theip ar íoslódáil."
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "Ag íoslódáil..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
 msgstr "Scriosfar gach teachtaireacht, teagmhálaí, agus sonra eile cuntais ón ngléas má scriostar an cuntas seo. Tapáil Scrios le leanúint leis."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "vCard á chruthú..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "Theip ar nascadh."
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "Tá comhad leis an ainm seo i gceangal cheana féin."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "Theip ar fhíordheimhniú."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "Tharla earráid anaithnid"
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "Íoslódálfar gach ceangaltán sa r-phost seo sula gcuirfear ar aghaidh é."
@@ -337,26 +313,11 @@ msgstr "Amharc ar shonraí teagmhála"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "Nuashonraigh teagmhálaí"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "Comhroinn"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "Socruithe"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "Seol chugam féin"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "Seol"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "Roghnaigh gach"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "Roghnaigh"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "Cuardaigh"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "Sábháil i nDréachtaí"
@@ -372,18 +333,6 @@ msgstr "Bain ó Thurscar"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "Bain ó sheoltóirí tosaíochta"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "Bain"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "Athnuaigh"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "Greamaigh"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "Bunúsach"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "Bog go p.fhaighteoir (Chuig)"
@@ -409,17 +358,11 @@ msgstr "Marcáil mar léite"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "Íseal"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "Seol ar aghaidh"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "Cuir in eagar"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "Scrios fillteán"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "Scrios"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "Gearr"
@@ -429,9 +372,6 @@ msgstr "Cruthaigh fillteán"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "Déan teagmhálaí"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "Cóipeáil"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "Cum r-phost"
@@ -453,9 +393,6 @@ msgstr "Cuir Cc/Bcc leis"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "Cuir ceangaltán leis"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "Cuir cuntas leis"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "Cuir leis"
@@ -487,9 +424,6 @@ msgstr "Fuaim fhógra"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "R-phoist nua"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "Fógraí r-phoist"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "Cuir síniú in eagar"
 
@@ -520,9 +454,6 @@ msgstr "Ní féidir r-phost a chumadh"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "Ní féidir ceangaltán a chur leis"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "Ábhar"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "Stop cumadh r-phoist"
 
@@ -534,9 +465,6 @@ msgstr "Bosca Turscair"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Taispeáin gach fillteán"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "Socruithe"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Seolta"
@@ -565,17 +493,11 @@ msgstr "Bosca athchúrsála"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "Seoltóirí tosaíochta"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "%d roghnaithe"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "Bosca amach"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "Oscail r-phost"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "Fógraí"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "Bosca poist"
@@ -588,9 +510,6 @@ msgstr "Cáilíocht íomhá"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(r.shocú)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "Ginearálta"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "Fillteáin don chuntas seo"
@@ -619,9 +538,6 @@ msgstr "Íoslódáil ceangaltán"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "Íoslódáil ceangaltáin"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "Scrios"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "Cruthaigh vCard"
 
@@ -637,17 +553,11 @@ msgstr "Comhchuntais"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "Ceangaltáin"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "Cuntais"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "Físeáin"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "Glac pictiúr"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "Socruithe"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Seol gach"
@@ -658,9 +568,6 @@ msgstr "Sábhl."
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "Taif. físeán"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "OK"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "Meabhrán"
 
@@ -669,12 +576,6 @@ msgstr "Íomhánna"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Íoslódáil r-phost iomlán"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "Íoslódáil gach"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "Déanta"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "Cuileáil"
@@ -685,23 +586,14 @@ msgstr "Scrios"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "Cruthaigh"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "Ar agh"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "Teagmhál."
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "Cealaigh"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "Taifead comhad fua."
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "Féilire"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "Inné"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "Ní féidir an nasc leis an bhfreastalaí a oscailt. Tharla earráid slándála."
@@ -748,9 +640,6 @@ msgstr "Léarscáil"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "Tuilleadh á lódáil..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "Nuashonraithe go deireanach"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "Áirigh an teachtaireacht bhunaidh"
 
@@ -763,14 +652,8 @@ msgstr "Seol ar aghd:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Ó"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "Ainm an fhillteáin"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "Smeach suas le tuill. a lódáil"
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "Seoladh r-phoist"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Cc/Bcc"
@@ -886,12 +769,6 @@ msgstr "Brúigh"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "Níl teorainn ann"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "Dada"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "Láimhe"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "Coinnigh soc. neamhfhán."
 
@@ -903,12 +780,6 @@ msgstr "Gach %d nóiméad"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "Gach uair an chloig"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "Gach lá"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "Réamhshocrú"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "Sioncronú r-phost"
@@ -930,9 +801,6 @@ msgstr "Eile"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "Sceideal sionc. r-phost"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "Rabhadh"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "Ní féidir cuntas a bhailíochtú"
@@ -958,17 +826,8 @@ msgstr "Cuir teorainn le méid aisghabhála"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "Socruithe an fhreastalaí isteach"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "R-phost"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "Ar aghaidh"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "Socrú de láimh"
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "Tostach"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "Port"
@@ -976,14 +835,137 @@ msgstr "Port"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "SEOL"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "Méid an chló"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Uaslíon na gcarachtar (%d) bainte amach."
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "Dath cló"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Lódáil..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Ní féidir nascadh le freastalaí."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Theip ar íoslódáil."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Ag íoslódáil..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Theip ar nascadh."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Theip ar fhíordheimhniú."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Tharla earráid anaithnid"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Comhroinn"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Socruithe"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Roghnaigh gach"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Roghnaigh"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Cuardaigh"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Bain"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Athnuaigh"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Greamaigh"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Bunúsach"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Seol ar aghaidh"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Scrios"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Cóipeáil"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Cuir cuntas leis"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Fógraí r-phoist"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Ábhar"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Socruithe"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d roghnaithe"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Fógraí"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Ginearálta"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Scrios"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Cuntais"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Socruithe"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Íoslódáil gach"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Déanta"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Ar agh"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Cealaigh"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Inné"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Nuashonraithe go deireanach"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Ainm an fhillteáin"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "Seoladh r-phoist"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Dada"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Láimhe"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Gach lá"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "Athainmnigh fillteán"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Réamhshocrú"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "Bog chuig Bosca Turscair"
@@ -1009,14 +991,23 @@ msgstr "Theip ar sioncronú. Triail arís ar ball."
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "Dath chúlra an téacs"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Rabhadh"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "Íoslódáilte"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Íoslódáil ceangaltáin go huathoibríoch agus é nasctha le líonra Wi-Fi"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "Sábháilte."
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "R-phost"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Ar aghaidh"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Tostach"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "Cumasaigh Méith-théacs"
@@ -1035,9 +1026,6 @@ msgstr "Tar éis duit r-phoist a shábháil i nDréachtaí, taispeánfar anseo i
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "Sábháil gach"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "Theip ar scriosadh."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "Fillteán athainmnithe."
@@ -1059,4 +1047,16 @@ msgstr "Níl an líonra ar fáil. Seolfar an teachtaireacht seo nuair a bheidh t
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "Mód eitilte cumasaithe. Seolfar an teachtaireacht seo nuair atá tú nasctha leis an líonra."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Méid an chló"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Dath cló"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Sábháilte."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Theip ar scriosadh."
 

@@ -22,6 +22,9 @@ msgstr "ΑΚΥΡΟ"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "ΔΙΑΓΡΑΦΗ"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Δεν υπάρχουν στοιχεία προς προβολή."
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Απαιτείται σύνδεση Wi-Fi. Συνδεθείτε σε δίκτυο Wi-Fi και δοκιμάστε ξανά"
 
@@ -33,9 +36,6 @@ msgstr "Ακύρωση λήψης."
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "Σήμερα"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "Δεν υπάρχουν στοιχεία προς προβολή."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "Είναι δυνατή η λήψη μόνο διευθύνσεων URL http ή https."
@@ -103,17 +103,11 @@ msgstr "Συμπληρώθηκε ο μέγιστος αριθμός παραλη
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "Συμπληρώθηκε ο μέγιστος αριθμός χαρακτήρων."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "Συμπληρώθηκε ο μέγιστος αριθμός χαρακτήρων (%d)."
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "Συμπληρώθηκε το μέγιστο μέγεθος μηνύματος (%d KB)."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "Έγινε υπέρβαση του μέγιστου μεγέθους μηνύματος. Θα γίνει κοινή χρήση μόνο των πρώτων %d KB."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "Φόρτωση..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "Καταχωρήθηκε μη έγκυρη διεύθυνση email."
@@ -214,9 +208,6 @@ msgstr "Ο κωδικός πρόσβασης περιέχει κενά. Πολλ
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "Δεν είναι δυνατή η ταυτόχρονη μετακίνηση email από πολλαπλούς λογαριασμούς."
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "Δεν είναι δυνατή η σύνδεση με διακομιστή."
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "Για τη σύνθεση ενός email, δημιουργήστε ένα λογαριασμό email."
 
@@ -304,29 +295,14 @@ msgstr "Απέτυχε η λήψη του συνημμένου. Ελέγξτε �
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "Το email διαγράφηκε από το διακομιστή."
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Αποτυχία λήψης."
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "Λήψη..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
 msgstr "Με τη διαγραφή αυτού του λογαριασμού θα διαγραφούν όλα τα μηνύματα του λογαριασμού, οι επαφές και τα υπόλοιπα δεδομένα από τη συσκευή. Πατήστε “Διαγραφή”, για να συνεχίσετε."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "Δημιουργία vCard..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "Αποτυχία σύνδεσης. Επανάληψη;"
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "Έχει ήδη γίνει επισύναψη ενός αρχείου με αυτό το όνομα."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "Αποτυχία ελέγχου ταυτότητας."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "Προέκυψε άγνωστο σφάλμα"
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "Θα γίνει λήψη όλων των συνημμένων σε αυτό το email, πριν από την προώθησή του."
@@ -337,26 +313,11 @@ msgstr "Προβολή επαφής"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "Ενημέρωση επαφής"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "Κοινή χρήση"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "Ρυθμίσεις"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "Αποστολή σε εμένα"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "Αποστολή"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "Επιλογή όλων"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "Επιλογή"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "Αναζήτηση"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "Αποθ. στο Πρόχειρο"
@@ -372,18 +333,6 @@ msgstr "Κατάργηση από τα ανεπιθύμητα"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "Κατάργηση από τους Αποστολείς Προτεραιότητας"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "Κατάργηση"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "Ανανέωση"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "Επικόλληση"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "Αρχικό"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "Μετακ. σε κύριο παραλ. (Προς)"
@@ -409,17 +358,11 @@ msgstr "Σήμανση ως αναγνωσμένου"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "Χαμηλή"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "Προώθηση"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "Επεξεργασία"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "Διαγραφή φακέλου"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "Διαγραφή"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "Αποκοπή"
@@ -429,9 +372,6 @@ msgstr "Δημιουργία φακέλου"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "Δημ/ργία επαφής"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "Αντιγραφή"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "Σύνθεση email"
@@ -453,9 +393,6 @@ msgstr "Προσθήκη Κοιν./Ιδιαιτ. κοιν."
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "Προσθήκη συνημμένου"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "Προσθήκη λογαριασμού"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "Προσθήκη"
@@ -487,9 +424,6 @@ msgstr "Ήχος ειδοποίησης"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "Νέα email"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "Ειδοποιήσεις email"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "Επεξεργασία υπογραφής"
 
@@ -520,9 +454,6 @@ msgstr "Αδύνατη η σύνταξη email"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "Αδυναμία προσθήκης συνημμένου"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "Θέμα"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "Διακοπή σύνταξης email"
 
@@ -534,9 +465,6 @@ msgstr "Φάκελος ανεπιθύμητης αλληλογραφίας"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Προβολή όλων των φακέλων"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "Ρυθμίσεις"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Απεσταλμένα"
@@ -565,17 +493,11 @@ msgstr "Κάδος ανακύκλωσης"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "Αποστολείς προτεραιότ."
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "Επιλέχθ. %d"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "Εξερχόμενα"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "Άνοιγμα email"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "Ειδοποιήσ."
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "Γραμματοκιβ."
@@ -588,9 +510,6 @@ msgstr "Ποιότητα εικόνας"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(προεπ.)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "Γενικά"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "Φάκελοι του λογαριασμού"
@@ -619,9 +538,6 @@ msgstr "Λήψη συνημμένου"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "Λήψη συνημμένων"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "Διαγραφή"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "Δημιουργία vCard"
 
@@ -637,17 +553,11 @@ msgstr "Συνολικοί λογαριασμοί"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "Συνημμένα"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "Λογαριασμοί"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "Βίντεο"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "Λήψη φωτογρ."
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "Ρυθμίσεις"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Αποστολή όλων"
@@ -658,9 +568,6 @@ msgstr "Αποθ."
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "Εγγρ. βίντεο"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "OK"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "Σημείωση"
 
@@ -669,12 +576,6 @@ msgstr "Εικόνες"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Λήψη πλήρους email"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "Λήψη όλων"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "Τέλος"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "Απόρριψη"
@@ -685,23 +586,14 @@ msgstr "Διαγραφή"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "Δημιουργία"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "Συνέχεια"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "Επαφές"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "Ακύρωση"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "Αρχείο\nηχογράφησης"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "Ημερολόγιο"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "Xθές"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "Δεν ήταν δυνατό το άνοιγμα σύνδεσης με το διακομιστή. Παρουσιάστηκε σφάλμα ασφαλείας."
@@ -748,9 +640,6 @@ msgstr "Χάρτες"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "Φόρτωση περισσότερων..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "Τελευταία ενημέρωση"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "Συμπερίληψη του κειμένου του αρχικού μηνύματος"
 
@@ -763,14 +652,8 @@ msgstr "Προωθ.:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Από"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "Όνομα φακέλου"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "Σύρετε επάνω για άλλα"
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "Διεύθυνση Email"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Κ./Ιδ.κ."
@@ -886,12 +769,6 @@ msgstr "Push"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "Δεν υπάρχει όριο"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "Κανένα"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "Χειροκίνητα"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "Διατήρ. ρυθ. μη περιαγωγής"
 
@@ -903,12 +780,6 @@ msgstr "Κάθε %d λεπτά"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "Κάθε ώρα"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "Κάθε μέρα"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "Προεπιλογή"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "Συγχρονισμός email"
@@ -930,9 +801,6 @@ msgstr "Άλλες"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "Πρόγρ. συγχρονισμού email"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "Προειδοποίηση"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "Αδύνατη η επικύρωση του λογαρ."
@@ -958,17 +826,8 @@ msgstr "Περιορισμός μεγέθους ανάκτησης"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "Ρυθμίσεις διακομιστή εισερχομένων"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "Email"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "Επόμενο"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "Μη αυτ. ρύθμ."
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "Αθόρυβο"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "Θύρα"
@@ -976,14 +835,137 @@ msgstr "Θύρα"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "ΑΠΟΣΤΟΛΗ"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "Μέγεθος γραμματοσειράς"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Συμπληρώθηκε ο μέγιστος αριθμός χαρακτήρων (%d)."
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "Χρώμα γραμματοσειράς"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Φόρτωση..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Δεν είναι δυνατή η σύνδεση με διακομιστή."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Αποτυχία λήψης."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Λήψη..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Αποτυχία σύνδεσης. Επανάληψη;"
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Αποτυχία ελέγχου ταυτότητας."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Προέκυψε άγνωστο σφάλμα"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Κοινή χρήση"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Ρυθμίσεις"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Επιλογή όλων"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Επιλογή"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Αναζήτηση"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Κατάργηση"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Ανανέωση"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Επικόλληση"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Αρχικό"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Προώθηση"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Διαγραφή"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Αντιγραφή"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Προσθήκη λογαριασμού"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Ειδοποιήσεις email"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Θέμα"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Ρυθμίσεις"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "Επιλέχθ. %d"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Ειδοποιήσ."
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Γενικά"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Διαγραφή"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Λογαριασμοί"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Ρυθμίσεις"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Λήψη όλων"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Τέλος"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Συνέχεια"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Ακύρωση"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Xθές"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Τελευταία ενημέρωση"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Όνομα φακέλου"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "Διεύθυνση Email"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Κανένα"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Χειροκίνητα"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Κάθε μέρα"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "Μετονομασία φακέλου"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Προεπιλογή"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "Μετακίνηση στο φάκελο ανεπιθύμητης αλληλογραφίας"
@@ -1009,14 +991,23 @@ msgstr "Ο συγχρονισμός απέτυχε. Δοκιμάστε αργό�
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "Χρώμα φόντου κειμένου"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Προειδοποίηση"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "Έγινε λήψη"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Αυτόματη λήψη συνημμένων κατά τη σύνδεση σε δίκτυο Wi-Fi"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "Αποθηκεύτηκε."
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "Email"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Επόμενο"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Αθόρυβο"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "Ενεργοπ. εμπλουτ. κειμένου"
@@ -1035,9 +1026,6 @@ msgstr "Μετά την αποθήκευσή τους στα Πρόχειρα, �
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "Αποθήκευση όλων"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "Αποτυχία διαγραφής."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "Το όνομα του φακέλου άλλαξε."
@@ -1059,4 +1047,16 @@ msgstr "Το δίκτυο δεν είναι διαθέσιμο. Αυτό το μ
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "Η λειτουργία πτήσης είναι ενεργοποιημένη. Αυτό το μήνυμα θα σταλεί μόλις συνδεθείτε στο δίκτυο."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Μέγεθος γραμματοσειράς"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Χρώμα γραμματοσειράς"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Αποθηκεύτηκε."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Αποτυχία διαγραφής."
 

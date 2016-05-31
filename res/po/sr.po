@@ -22,6 +22,9 @@ msgstr "OTKAŽI"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "IZBRIŠI"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Nema stavki za prikaz."
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Neophodna je Wi-Fi veza. Poveži se na Wi-Fi mrežu i pokušaj ponovo"
 
@@ -33,9 +36,6 @@ msgstr "Preuzimanje prekinuto."
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "Danas"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "Nema stavki za prikaz."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "Isključivo http ili https URL adrese mogu biti preuzete."
@@ -103,17 +103,11 @@ msgstr "Dostignut je maksimalan broj primalaca (%d)."
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "Dostignut je maksimalan broj karaktera."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "Dostignut je maksimalan broj karaktera (%d)."
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "Dostignuta je maksimalna veličina poruke (%d KB)."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "Prekoračena je maksimalna veličina poruke. Deliće se samo prvih %d KB."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "Učitavanje..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "Uneo/la si neispravnu e-adresu."
@@ -214,9 +208,6 @@ msgstr "Lozinka sadrži razmake. Mnogi serveri ne podržavaju lozinke sa razmaci
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "Nije moguće premestiti e-poruke sa više naloga odjednom."
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "Nemoguće povezivanje na server."
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "Da bi sastavio/la e-poruku, kreiraj nalog e-pošte."
 
@@ -304,29 +295,14 @@ msgstr "Neuspešno preuzimanje priloga. Proveri mrežnu vezu i pokušaj ponovo."
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "E-pošta je izbrisana sa servera."
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Preuzimanje neuspešno."
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "Preuzimanje..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
 msgstr "Pri brisanju naloga biće obrisane sve njegove poruke, kontakti i drugi podaci iz uređaja. Kucni na Izbriši za nastavak."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "Kreira se vCard..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "Neuspešno povezivanje."
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "Već je priložen fajl sa ovim nazivom."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "Autentikacija neuspešna."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "Došlo je do nepoznate greške"
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "Svi prilozi u ovoj e-poruci će se preuzeti pre nego što se ona prosledi."
@@ -337,26 +313,11 @@ msgstr "Podaci o kontaktu"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "Ažuriraj kontakt"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "Podeli"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "Podešavanja"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "Pošalji meni"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "Pošalji"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "Izaberi sve"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "Izaberi"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "Pretraga"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "Sačuvaj u Skice"
@@ -372,18 +333,6 @@ msgstr "Ukloni iz foldera Nepoželjno"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "Ukloni iz Prioritetnih pošiljalaca"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "Ukloni"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "Osveži"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "Zalepi"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "Original"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "Prem. u polje gl. primaoca (Za)"
@@ -409,17 +358,11 @@ msgstr "Označi kao pročitano"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "Slabo"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "Prosledi"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "Izmeni"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "Izbrisati folder"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "Izbriši"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "Iseci"
@@ -429,9 +372,6 @@ msgstr "Kreiraj folder"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "Kreiraj kontakt"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "Kopiraj"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "Sastavi e-poruku"
@@ -453,9 +393,6 @@ msgstr "Dodaj Cc/Bcc"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "Dodaj prilog"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "Dodaj nalog"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "Dodaj"
@@ -487,9 +424,6 @@ msgstr "Zvuk obaveštenja"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "Nove e-poruke"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "Obaveštenja e-poštom"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "Izmeni potpis"
 
@@ -520,9 +454,6 @@ msgstr "Nije moguće sastaviti e-poruku"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "Nije moguće dodati prilog"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "Naslov"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "Prekini sastavljanje e-poruke"
 
@@ -534,9 +465,6 @@ msgstr "Sanduče za spam"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Prikaži sve foldere"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "Podešavanja"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Poslato"
@@ -565,17 +493,11 @@ msgstr "Kanta za đubre"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "Prioritetni pošiljaoci"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "%d je izabrano"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "Otpremno sanduče"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "Otvori e-poruku"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "Obaveštenja"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "Sanduče"
@@ -588,9 +510,6 @@ msgstr "Kvalitet slike"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(podraz.)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "Opšte"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "Folderi za ovaj nalog"
@@ -619,9 +538,6 @@ msgstr "Preuzmi prilog"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "Preuzmi priloge"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "Izbriši"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "Kreiraj vCard"
 
@@ -637,17 +553,11 @@ msgstr "Kombinovani nalozi"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "Prilozi"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "Nalozi"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "Video zapisi"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "Slikaj"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "Podešavanja"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Pošalji sve"
@@ -658,9 +568,6 @@ msgstr "Sač."
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "Snimi video"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "OK"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "Beleška"
 
@@ -669,12 +576,6 @@ msgstr "Slike"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Preuzmi kompletnu e-poruku"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "Preuzmi sve"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "Gotovo"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "Odbaci"
@@ -685,23 +586,14 @@ msgstr "Izbriši"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "Kreiraj"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "Nastavi"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "Kontakti"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "Otkaži"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "Snimi audio fajl"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "Kalendar"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "Juče"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "Nije moguće uspostaviti vezu sa serverom. Došlo je do bezbednosne greške."
@@ -748,9 +640,6 @@ msgstr "Mape"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "Učitavanje još..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "Poslednja obnova"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "Obuhvati originalnu poruku"
 
@@ -763,14 +652,8 @@ msgstr "Prosl:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Od"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "Naziv foldera"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "Brzo prev. nagore za učit."
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "Adresa e-pošte"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Cc/Bcc"
@@ -886,12 +769,6 @@ msgstr "Pritisni"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "Nema ograničenja"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "Nema"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "Ručno"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "Zadr. podeš. zabr. rominga"
 
@@ -903,12 +780,6 @@ msgstr "Svakih %d min"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "Svakog sata"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "Svaki dan"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "Podrazumevano"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "Sinhronizuj e-poruke"
@@ -930,9 +801,6 @@ msgstr "Drugo"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "Učestalost sinh. E-pošte"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "Upozorenje"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "Nije moguće potvrditi nalog"
@@ -958,17 +826,8 @@ msgstr "Ograniči veličinu za preuzimanje"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "Podešavanja servera dolazne pošte"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "E-pošta"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "Naredno"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "Ručna konfig."
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "Nečujno"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "Port"
@@ -976,14 +835,137 @@ msgstr "Port"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "POŠALJI"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "Veličina slova"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Dostignut je maksimalan broj karaktera (%d)."
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "Boja fonta"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Učitavanje..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Nemoguće povezivanje na server."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Preuzimanje neuspešno."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Preuzimanje..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Neuspešno povezivanje."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Autentikacija neuspešna."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Došlo je do nepoznate greške"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Podeli"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Podešavanja"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Izaberi sve"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Izaberi"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Pretraga"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Ukloni"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Osveži"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Zalepi"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Original"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Prosledi"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Izbriši"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Kopiraj"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Dodaj nalog"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Obaveštenja e-poštom"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Naslov"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Podešavanja"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d je izabrano"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Obaveštenja"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Opšte"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Izbriši"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Nalozi"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Podešavanja"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Preuzmi sve"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Gotovo"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Nastavi"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Otkaži"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Juče"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Poslednja obnova"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Naziv foldera"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "Adresa e-pošte"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Nema"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Ručno"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Svaki dan"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "Preimenuj folder"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Podrazumevano"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "Premesti u sanduče za spam"
@@ -1009,14 +991,23 @@ msgstr "Neuspešna sinhronizacija. Pokušaj kasnije."
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "Boja tekstualne pozadine"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Upozorenje"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "Preuzeto"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Automatski preuzmi priloge kada se povežeš na Wi-Fi mrežu"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "Sačuvano."
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "E-pošta"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Naredno"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Nečujno"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "Omogući Obogaćeni tekst"
@@ -1035,9 +1026,6 @@ msgstr "Nakon što sačuvaš e-poruke u folderu Skice, one će se prikazati ovde
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "Sačuvaj sve"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "Neuspešno brisanje."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "Folder je preimenovan."
@@ -1059,4 +1047,16 @@ msgstr "Mreža nije dostupna. Ova poruka biće poslata kada se uspostavi veza sa
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "Omogućen je režim letenja. Ova poruka biće poslata kada se uspostavi veza sa mrežom."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Veličina slova"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Boja fonta"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Sačuvano."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Neuspešno brisanje."
 

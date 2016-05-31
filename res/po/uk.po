@@ -22,6 +22,9 @@ msgstr "СКАСУВАТИ"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "ВИДАЛИТИ"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Немає об’єктів для відбраження."
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Потрібне підключення до мережі Wi-Fi. Підключіться до мережі Wi-Fi та спробуйте ще раз"
 
@@ -33,9 +36,6 @@ msgstr "Завантаження скасовано."
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "Сьогодні"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "Немає об’єктів для відбраження."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "Можна завантажити лише URL-адреси протоколу http або https."
@@ -103,17 +103,11 @@ msgstr "Досягнуто максимальної кількості одер�
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "Досягнуто максимальної кількості символів."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "Досягнуто максимальної кількості символів (%d)"
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "Досягнуто максимального розміру повідомлення (%d КБ)."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "Перевищено максимальний розмір повідомлення. Спільний доступ буде надано лише до перших %d кБ."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "Завантаження..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "Введено хибну адресу Email."
@@ -214,9 +208,6 @@ msgstr "Ваш пароль містить пробіли. Пароль із п�
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "Наможливо одночасно переміщувати повідомлення Email із декількох облікових записів."
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "Неможливо з'єднатися з сервером."
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "Для створення повідомлення Еmail потрібно створити обліковий запис Еmail."
 
@@ -304,29 +295,14 @@ msgstr "Не вдалося завантажити вкладення. Пере�
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "Повідомлення Email видалено із сервера."
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Збій завантаження"
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "Завантаження..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
 msgstr "Видалення цього облікового запису також призведе до видалення усіх повідомлень облікових записів, контактів та інших даних із пристрою. Торкніться «Видалити», щоб продовжити."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "Створення vCard..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "Збій з'єднання."
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "Файл із такою назвою вже вкладено."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "Збій аутентифікації."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "Сталася невідома помилка"
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "Усі вкладення, які містяться у цьому повідомленні Еmail, буде завантажено перед його переадресацією."
@@ -337,26 +313,11 @@ msgstr "Переглянути контактні дані"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "Оновити контакт"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "Поділитися"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "Налаштування"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "Надіслати собі"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "Надіслати"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "Вибрати всі"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "Вибрати"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "Пошук"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "Зберегти в чернетках"
@@ -372,18 +333,6 @@ msgstr "Видалити з небажаних"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "Видалити зі списку пріоритетних контактів"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "Видалити"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "Оновити"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "Вставити"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "Оригінал"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "Пер.до голов.одержувача (Кому)"
@@ -409,17 +358,11 @@ msgstr "Позначити як прочитане"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "Мінімальне"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "Переслати"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "Редагувати"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "Видалити папку"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "Видалити"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "Вирізати"
@@ -429,9 +372,6 @@ msgstr "Створити папку"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "Створити контакт"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "Копіювати"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "Створити повідомлення Email"
@@ -453,9 +393,6 @@ msgstr "Копія/Прих.к."
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "Додати вкладення"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "Додати обліковий запис"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "Додати"
@@ -487,9 +424,6 @@ msgstr "Звук сповіщення"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "Нові повідомлення Email"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "Сповіщення Email"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "Редагувати підпис"
 
@@ -520,9 +454,6 @@ msgstr "Неможливо створити повідом.Email"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "Неможливо додати вкладення"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "Тема"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "Зупин.створення повідомл.Еmail"
 
@@ -534,9 +465,6 @@ msgstr "Скринька Спам"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Показати всі папки"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "Налаштування"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Надіслано"
@@ -565,17 +493,11 @@ msgstr "Кошик"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "Пріоритетні контакти"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "Вибрано: %d"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "Вихідні"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "Відкриття електронного повідомлення"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "Сповіщення"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "Пошт. скринька"
@@ -588,9 +510,6 @@ msgstr "Якість зображення"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(замовч.)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "Загальні"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "Папки для цього облікового запису"
@@ -619,9 +538,6 @@ msgstr "Завантажити вкладення"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "Завантаження вкладень"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "Видалити"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "Створити vCard"
 
@@ -637,17 +553,11 @@ msgstr "Об’єднані облікові записи"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "Вкладення"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "Облікові записи"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "Відео"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "Зроб. знімок"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "Налаштування"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Надіслати всі"
@@ -658,9 +568,6 @@ msgstr "Збер."
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "Відеозйомка"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "OK"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "Нотатка"
 
@@ -669,12 +576,6 @@ msgstr "Зображення"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Завантажити повідомлення повністю"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "Завантажити всі"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "Готово"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "Відхил."
@@ -685,23 +586,14 @@ msgstr "Видалити"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "Створити"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "Продовж."
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "Контакти"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "Скасувати"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "Записати\nаудіофайл"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "Календар"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "Вчора"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "Неможливо підключитися до сервера. Сталася помилка служби безпеки."
@@ -748,9 +640,6 @@ msgstr "Мапи"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "Завантаження інших..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "Останнє оновлення"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "Додати оригінальне повідомлення"
 
@@ -763,14 +652,8 @@ msgstr "Fwd:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Від"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "Ім'я папки"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "Пров. вгору для заван.інш."
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "Електронна адреса"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Копія/Прихована копія"
@@ -886,12 +769,6 @@ msgstr "Примусово"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "Немає обмеження"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "Немає"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "Вручну"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "Збер.налашт.(без роум.)"
 
@@ -903,12 +780,6 @@ msgstr "Кожні %d хвилин(-и)"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "Щогодини"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "Щодня"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "Стандартний"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "Синхроніз. повідом. Еmail"
@@ -930,9 +801,6 @@ msgstr "Інші"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "Розкл.синхронізації Email"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "Попередження"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "Неможливо перевірити обл.запис"
@@ -958,17 +826,8 @@ msgstr "Обмеження розміру отриманого повідомл�
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "Налаштування сервера вхідної пошти"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "Email"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "Далі"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "Настр. вручну"
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "Без звуку"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "Порт"
@@ -976,14 +835,137 @@ msgstr "Порт"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "НАДІСЛАТИ"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "Розмір шрифту"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Досягнуто максимальної кількості символів (%d)"
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "Колір шрифту"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Завантаження..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Неможливо з'єднатися з сервером."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Збій завантаження"
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Завантаження..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Збій з'єднання."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Збій аутентифікації."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Сталася невідома помилка"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Поділитися"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Налаштування"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Вибрати всі"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Вибрати"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Пошук"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Видалити"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Оновити"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Вставити"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Оригінал"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Переслати"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Видалити"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Копіювати"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Додати обліковий запис"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Сповіщення Email"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Тема"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Налаштування"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "Вибрано: %d"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Сповіщення"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Загальні"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Видалити"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Облікові записи"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Налаштування"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Завантажити всі"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Готово"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Продовж."
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Скасувати"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Вчора"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Останнє оновлення"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Ім'я папки"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "Електронна адреса"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Немає"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Вручну"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Щодня"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "Перейменувати папку"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Стандартний"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "Перемістити у скриньку Спам"
@@ -1009,14 +991,23 @@ msgstr "Збій синхронізації. Спробуйте пізніше."
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "Колір фону тексту"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Попередження"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "Завантажені"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Автозавантаження вкладень під час підключення до мережі Wi-Fi"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "Збережено."
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "Email"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Далі"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Без звуку"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "Увімкнути форматування тексту"
@@ -1035,9 +1026,6 @@ msgstr "Після збереження електронних листів до
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "Зберегти все"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "Не вдалося видалити."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "Папку перейменовано."
@@ -1059,4 +1047,16 @@ msgstr "Мережа недоступна. Це повідомлення буд�
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "Увімкнено режим без зв’язку. Це повідомлення буде надіслано при підключенні до мережі."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Розмір шрифту"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Колір шрифту"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Збережено."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Не вдалося видалити."
 

@@ -22,6 +22,9 @@ msgstr "MÉGSE"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "TÖRLÉS"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Nincs megjeleníthető tétel."
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Wi-Fi kapcsolat szükséges. Kapcsolódjon a Wi-Fi hálózathoz, és próbálja újra"
 
@@ -33,9 +36,6 @@ msgstr "Letöltés megszakítva."
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "Ma"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "Nincs megjeleníthető tétel."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "Csak http vagy https webcímek tölthetők le."
@@ -103,17 +103,11 @@ msgstr "Elérte a címzettek maximális számát (%d)."
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "Elérte a karakterek maximális számát."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "Elérte a karakterek maximális számát (%d)."
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "Elérte a maximális üzenetméretet (%d KB)."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "Túllépte a maximális üzenetméretet. Az eszköz csak az első %d kB-ot osztja meg."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "Betöltés..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "Érvénytelen a megadott e-mail cím."
@@ -214,9 +208,6 @@ msgstr "A jelszó szóközt tartalmaz. Sok szerver nem támogatja a szóközt ta
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "Nem lehet egyszerre több fiókból e-maileket áthelyezni."
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "Nem lehet a szerverhez csatlakozni."
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "E-mail írásához hozzon létre e-mail fiókot."
 
@@ -304,29 +295,14 @@ msgstr "Nem sikerült letölteni a mellékletet. Ellenőrizze a hálózati kapcs
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "E-mail törölve a szerverről."
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Sikertelen letöltés"
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "Letöltés..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
 msgstr "A fiók eltávolításával annak minden üzenetét, névjegyét és egyéb adatát törli az eszközről. A folytatáshoz érintse meg a Törlés gombot."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "vCard létrehozása..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "Kapcsolódás sikertelen."
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "Ilyen nevű fájlt már csatolt."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "A hitelesítés sikertelen."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "Ismeretlen hiba történt."
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "A továbbküldés előtt az eszköz az e-mail valamennyi mellékletét letölti."
@@ -337,26 +313,11 @@ msgstr "Névadatok megtekintése"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "Névjegy frissítése"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "Megosztás"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "Beállítások"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "Küldés magamnak"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "Küldés"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "Összes kijelölése"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "Választ"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "Keresés"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "Piszkozatokba menti"
@@ -372,18 +333,6 @@ msgstr "Nem levélszemét"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "Fontos feladó eltávolítása"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "Eltávolít"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "Frissítés"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "Beilleszt"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "Eredeti"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "Áth. a fő címzetthez (Címzett)"
@@ -409,17 +358,11 @@ msgstr "Megjelölés olvasottként"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "Alacsony"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "Továbbküldés"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "Szerkesztés"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "Mappa törlése"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "Törlés"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "Kivág"
@@ -429,9 +372,6 @@ msgstr "Mappa létrehozása"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "Új névjegy"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "Másol"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "E-mail írása"
@@ -453,9 +393,6 @@ msgstr "Másolat/Titkos másolat hozzáadása"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "Melléklet hozzáadása"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "Fiók hozzáadása"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "Hozzáadás"
@@ -487,9 +424,6 @@ msgstr "Értesítési hang"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "Új e-mailek"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "E-mail értesítések"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "Aláírás szerkesztése"
 
@@ -520,9 +454,6 @@ msgstr "Nem lehet e-mailt írni"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "Nem lehet csatolni a fájlt"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "Tárgy"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "E-mail írásának befejezése"
 
@@ -534,9 +465,6 @@ msgstr "Levélszemét"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Összes mappa megjelenítése"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "Beállítások"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Elküldött"
@@ -565,17 +493,11 @@ msgstr "Lomtár"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "Fontos feladók"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "%d kijelölve"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "Kimenő posta"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "E-mail megnyitása"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "Értesítések"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "Postafiók"
@@ -588,9 +510,6 @@ msgstr "Képminőség"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(alapért.)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "Általános"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "A fiók mappái"
@@ -619,9 +538,6 @@ msgstr "Melléklet letöltése"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "Mellékletek letöltése"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "Töröl"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "vCard törlése"
 
@@ -637,17 +553,11 @@ msgstr "Egyesített fiókok"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "Mellékletek"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "Fiókok"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "Videók"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "Fényképezés"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "Beállítások"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Összes küldése"
@@ -658,9 +568,6 @@ msgstr "Mentés"
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "Vid.rögzítés"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "OK"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "Jegyzet"
 
@@ -669,12 +576,6 @@ msgstr "Képek"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Teljes e-mail letöltése"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "Összes letöltése"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "Kész"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "Elvetés"
@@ -685,23 +586,14 @@ msgstr "Törlés"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "Létrehozás"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "Folytat"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "Névjegyek"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "Mégse"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "Hangfájl rögzítése"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "Naptár"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "Tegnap"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "Nem létesíthető kapcsolat a szerverrel. Biztonsági hiba történt."
@@ -748,9 +640,6 @@ msgstr "Térkép"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "Továbbiak betöltése..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "Legutóbbi frissítés"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "Eredeti üzenet tartalmazása"
 
@@ -763,14 +652,8 @@ msgstr "Továbbított:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Feladó"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "Mappa neve"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "Továbbiakért pöcc. felfelé"
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "E-mail cím"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Másolat/Titkos másolat"
@@ -886,12 +769,6 @@ msgstr "Leküldés"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "Nincs korlát"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "Nincs"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "Kézi"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "Maradnak a nem roam. beá."
 
@@ -903,12 +780,6 @@ msgstr "%d percenként"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "Óránként"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "Minden nap"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "Alapértelmezett"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "E-mailek szinkronizálása"
@@ -930,9 +801,6 @@ msgstr "Egyéb"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "E-mail szinkr. ütemezése"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "Figyelmeztetés"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "A fiók nem ellenőrizhető"
@@ -958,17 +826,8 @@ msgstr "Letöltési méret korlátja"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "Bejövő szerver beállításai"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "E-mail"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "Következő"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "Kézi beállítás"
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "Csendes"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "Port"
@@ -976,14 +835,137 @@ msgstr "Port"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "KÜLDÉS"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "Betűméret"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Elérte a karakterek maximális számát (%d)."
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "Betűszín"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Betöltés..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Nem lehet a szerverhez csatlakozni."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Sikertelen letöltés"
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Letöltés..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Kapcsolódás sikertelen."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "A hitelesítés sikertelen."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Ismeretlen hiba történt."
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Megosztás"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Beállítások"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Összes kijelölése"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Választ"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Keresés"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Eltávolít"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Frissítés"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Beilleszt"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Eredeti"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Továbbküldés"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Törlés"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Másol"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Fiók hozzáadása"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "E-mail értesítések"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Tárgy"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Beállítások"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d kijelölve"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Értesítések"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Általános"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Töröl"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Fiókok"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Beállítások"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Összes letöltése"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Kész"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Folytat"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Mégse"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Tegnap"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Legutóbbi frissítés"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Mappa neve"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "E-mail cím"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Nincs"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Kézi"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Minden nap"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "Mappa átnevezése"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Alapértelmezett"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "Áthelyezés a levélszemét-tárolóba"
@@ -1009,14 +991,23 @@ msgstr "A szinkronizálás sikertelen. Próbálja meg később."
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "Szöveg háttérszíne"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Figyelmeztetés"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "Letöltve"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Mellékletek automatikus letöltése Wi-Fi hálózati kapcsolat létesítésekor"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "Mentve."
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "E-mail"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Következő"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Csendes"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "Rich Text bekapcsolása"
@@ -1035,9 +1026,6 @@ msgstr "Itt jelennek majd meg a Piszkozatokba mentett e-mailek."
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "Összes mentése"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "Nem sikerült törölni."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "Átnevezte a mappát."
@@ -1059,4 +1047,16 @@ msgstr "A hálózat nem elérhető. Az üzenet a hálózati kapcsolat létrehoz�
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "Repülő üzemmód bekapcsolva. Az üzenet a hálózati kapcsolat létrehozása után lesz elküldve."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Betűméret"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Betűszín"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Mentve."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Nem sikerült törölni."
 
