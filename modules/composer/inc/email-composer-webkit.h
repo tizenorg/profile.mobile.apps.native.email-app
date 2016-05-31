@@ -70,4 +70,12 @@ void composer_webkit_handle_mem_warning(void *data, Eina_Bool is_hard);
  */
 void composer_webkit_set_focus_to_webview_with_js(void *data);
 
+/**
+ * @brief Updates orientation of the webview
+ *
+ * @param[in]	view			Email composer view data
+ *
+ */
+void composer_webkit_update_orientation(EmailComposerView *view);
+
 #endif /* __EMAIL_COMPOSER_WEBKIT_H__ */
