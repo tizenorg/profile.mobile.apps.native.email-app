@@ -2,7 +2,7 @@
 <manifest xmlns="http://tizen.org/ns/packages" api-version="3.0" package="org.tizen.email" version="0.9.34">
     <profile name="mobile"/>
     <description>Email Application</description>
-    <ui-application appid="org.tizen.email" exec="/usr/apps/org.tizen.email/bin/email" hw-acceleration="on" launch_mode="caller" multiple="false" nodisplay="false" taskmanage="true" type="capp">
+    <ui-application appid="org.tizen.email" exec="/usr/apps/org.tizen.email/bin/email" process-pool="true" hw-acceleration="on" launch_mode="caller" multiple="false" nodisplay="false" taskmanage="true" type="capp">
         <icon>org.tizen.email.png</icon>
         <label>Email</label>
         <label xml:lang="ar-ae">البريد الإلكتروني</label>
