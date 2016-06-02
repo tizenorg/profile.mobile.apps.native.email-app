@@ -32,8 +32,11 @@ static char *_gl_account_item_text_get(void *data, Evas_Object *obj, const char 
 static void _gl_account_item_del(void *data, Evas_Object *obj);
 
 static char *_gl_label_get_for_all_acc_box(void *data, Evas_Object *obj, const char *part);
+static Evas_Object *_gl_icon_get_for_all_acc_box(void *data, Evas_Object *obj, const char *part);
+
 static void _gl_sel_single(void *data, Evas_Object *obj, void *event_info);
 static char *_gl_label_get_for_single_subitem(void *data, Evas_Object *obj, const char *part);
+static Evas_Object *_gl_icon_get_for_single_subitem(void *data, Evas_Object *obj, const char *part);
 
 static char *_gl_group_text_get(void *data, Evas_Object *obj, const char *part);
 static void _gl_grouptitle_del(void *data, Evas_Object *obj);
@@ -79,7 +82,7 @@ void account_init_genlist_item_class_for_combined_folder_list(EmailAccountView *
 	retm_if(itc_combined == NULL, "itc_combined is NULL!");
 	itc_combined->item_style = "type1";
 	itc_combined->func.text_get = _gl_label_get_for_all_acc_box;
-	itc_combined->func.content_get = NULL;
+	itc_combined->func.content_get = _gl_icon_get_for_all_acc_box;
 	itc_combined->func.state_get = NULL;
 	itc_combined->func.del = _gl_del;
 	view->itc_combined = itc_combined;
@@ -108,7 +111,7 @@ void account_init_genlist_item_class_for_single_folder_list(EmailAccountView *vi
 	}
 	itc_single->item_style = "type1";
 	itc_single->func.text_get = _gl_label_get_for_single_subitem;
-	itc_single->func.content_get = NULL;
+	itc_single->func.content_get = _gl_icon_get_for_single_subitem;
 	itc_single->func.state_get = NULL;
 	itc_single->func.del = _gl_del;
 	view->itc_single = itc_single;
@@ -267,10 +270,7 @@ static void _gl_sel_single(void *data, Evas_Object *obj, void *event_info)
 		int mailbox_id = tree_item_data->mailbox_id;
 		int mailbox_type = tree_item_data->mailbox_type;
 
-		if (tree_item_data->b_scheduled_outbox > 0) {
-			account_type = EMAIL_BUNDLE_VAL_SCHEDULED_OUTBOX;
-			debug_log("scheduled outbox is selected");
-		} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED) {
+		if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED) {
 			account_type = EMAIL_BUNDLE_VAL_ALL_ACCOUNT;
 			mailbox_id = 0;
 		} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_PRIORITY_SENDERS) {
@@ -285,9 +285,8 @@ static void _gl_sel_single(void *data, Evas_Object *obj, void *event_info)
 			email_params_add_int(params, EMAIL_BUNDLE_KEY_IS_MAILBOX_MOVE_MODE, 0) &&
 			email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, view->account_id) &&
 			email_params_add_str(params, EMAIL_BUNDLE_KEY_ACCOUNT_TYPE, account_type) &&
-			((tree_item_data->b_scheduled_outbox > 0) || (
 			email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, mailbox_id) &&
-			email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX_TYPE, mailbox_type)))) {
+			email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX_TYPE, mailbox_type)) {
 
 			email_module_send_result(view->base.module, params);
 		}
@@ -441,13 +440,6 @@ static int _add_default_folders_to_list(EmailAccountView *view,
 			tree_item_data->unread_count = mailbox_list[j].unread_count;
 			tree_item_data->total_mail_count_on_local = mailbox_list[j].total_mail_count_on_local;
 			tree_item_data->mailbox_id = mailbox_list[j].mailbox_id;
-
-			if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX
-					&& (email_get_scheduled_outbox_mail_count_by_account_id(mailbox_list[j].account_id, false) > 0)) {
-				tree_item_data->b_scheduled_outbox = 1;
-			} else {
-				tree_item_data->b_scheduled_outbox = 0;
-			}
 			tree_item_data->alias_name = strdup(mailbox_list[j].alias);
 
 			tree_item_data->it = elm_genlist_item_append(view->gl, view->itc_single,
@@ -491,7 +483,6 @@ static void _add_user_defined_folders_to_list(EmailAccountView *view,
 				tree_item_data->mailbox_id = mailbox_list[j].mailbox_id;
 				tree_item_data->mailbox_list = mailbox_list;
 				inserted_mailbox_id[j] = mailbox_list[j].mailbox_id;
-				tree_item_data->b_scheduled_outbox = 0;
 				tree_item_data->alias_name = strdup(mailbox_list[j].alias);
 
 				tree_item_data->it = elm_genlist_item_append(view->gl, view->itc_single, tree_item_data, tree_item_data->view->group_title_item, ELM_GENLIST_ITEM_NONE, _gl_sel_single, tree_item_data);
@@ -953,103 +944,109 @@ static char *_gl_label_get_for_single_subitem(void *data, Evas_Object *obj, cons
 	Item_Data *tree_item_data = (Item_Data *)data;
 	EmailAccountView *view = tree_item_data->view;
 	char tmp[MAX_STR_LEN] = { 0 };
-	int mail_count = 0;
 	char *converted_name = NULL;
 	char *filename = NULL;
 
 	if (strcmp(part, "elm.text")) {
 		return NULL;
 	}
-	if (tree_item_data->b_scheduled_outbox > 0) {
-		mail_count = email_get_scheduled_outbox_mail_count_by_account_id(tree_item_data->b_scheduled_outbox, false);
-		if (mail_count == 0) {
-			return strdup(_("IDS_EMAIL_MBODY_SCHEDULED_OUTBOX"));
-		} else {
-			snprintf(tmp, sizeof(tmp), "%s (%d)", _("IDS_EMAIL_MBODY_SCHEDULED_OUTBOX"), mail_count);
-			return _create_gl_item_text(tree_item_data, tmp);
-		}
-	} else {
-		if (tree_item_data->alias_name != NULL) {
-			if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
-				int scheduled_mail_total = email_get_scheduled_outbox_mail_count_by_account_id(tree_item_data->view->account_id, false);
-				if (tree_item_data->total_mail_count_on_local - scheduled_mail_total == 0)
-					snprintf(tmp, sizeof(tmp), "%s", _("IDS_EMAIL_HEADER_OUTBOX"));
-				else
-					snprintf(tmp, sizeof(tmp), "%s (%d)", _("IDS_EMAIL_HEADER_OUTBOX"), (tree_item_data->total_mail_count_on_local - scheduled_mail_total));
-			} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_DRAFT) {
-				if (tree_item_data->total_mail_count_on_local == 0)
-					snprintf(tmp, sizeof(tmp), "%s", _("IDS_EMAIL_HEADER_DRAFTS"));
-				else
-					snprintf(tmp, sizeof(tmp), "%s (%d)", _("IDS_EMAIL_HEADER_DRAFTS"), tree_item_data->total_mail_count_on_local);
-			} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX) {
-				if (tree_item_data->unread_count == 0)
-					snprintf(tmp, sizeof(tmp), "%s", _("IDS_EMAIL_HEADER_INBOX"));
-				else
-					snprintf(tmp, sizeof(tmp), "%s (%d)", _("IDS_EMAIL_HEADER_INBOX"), tree_item_data->unread_count);
-			} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_SENTBOX) {
-				if (tree_item_data->unread_count == 0)
-					snprintf(tmp, sizeof(tmp), "%s", _("IDS_EMAIL_HEADER_SENT_M_EMAIL"));
-				else
-					snprintf(tmp, sizeof(tmp), "%s (%d)", _("IDS_EMAIL_HEADER_SENT_M_EMAIL"), tree_item_data->unread_count);
-			} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_SPAMBOX) {
-				if (tree_item_data->unread_count == 0)
-					snprintf(tmp, sizeof(tmp), "%s", _("IDS_EMAIL_HEADER_SPAMBOX"));
-				else
-					snprintf(tmp, sizeof(tmp), "%s (%d)", _("IDS_EMAIL_HEADER_SPAMBOX"), tree_item_data->unread_count);
-			} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_TRASH) {
-				if (tree_item_data->unread_count == 0)
-					snprintf(tmp, sizeof(tmp), "%s", _("IDS_EMAIL_HEADER_RECYCLE_BIN_ABB"));
-				else
-					snprintf(tmp, sizeof(tmp), "%s (%d)", _("IDS_EMAIL_HEADER_RECYCLE_BIN_ABB"), tree_item_data->unread_count);
-#ifndef _FEATURE_PRIORITY_SENDER_DISABLE_
-			} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_PRIORITY_SENDERS) {
-				if (tree_item_data->unread_count == 0)
-					snprintf(tmp, sizeof(tmp), "%s", _("IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"));
-				else
-					snprintf(tmp, sizeof(tmp), "%s (%d)", _("IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"), tree_item_data->unread_count);
-#endif
-			} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED) {
-				if (tree_item_data->unread_count == 0)
-					snprintf(tmp, sizeof(tmp), "%s", _("IDS_EMAIL_HEADER_STARRED_EMAILS_ABB"));
-				else
-					snprintf(tmp, sizeof(tmp), "%s (%d)", _("IDS_EMAIL_HEADER_STARRED_EMAILS_ABB"), tree_item_data->unread_count);
-			} else {
-				if (tree_item_data->unread_count == 0)
-					snprintf(tmp, sizeof(tmp), "%s", tree_item_data->mailbox_name);
-				else
-					snprintf(tmp, sizeof(tmp), "%s (%d)", tree_item_data->mailbox_name, tree_item_data->unread_count);
-				if (EMAIL_SERVER_TYPE_ACTIVE_SYNC == GET_ACCOUNT_SERVER_TYPE(view->account_id)) {
-					filename = account_get_ellipsised_folder_name(view, tmp);
-				} else {
-					converted_name = account_util_convert_mutf7_to_utf8(tmp);
-					filename = account_get_ellipsised_folder_name(view, converted_name);
-				}
-				debug_secure("tmp(%s) converted_name(%s) filename(%s) mailbox_name(%s) alias_name(%s)",
-					tmp, converted_name, filename, tree_item_data->mailbox_name, tree_item_data->alias_name);
 
-				free(converted_name);
-				return _create_gl_item_text(tree_item_data, filename);;
-			}
-			return _create_gl_item_text(tree_item_data, tmp);
+	if (tree_item_data->alias_name != NULL) {
+		if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
+			int scheduled_mail_total = email_get_scheduled_outbox_mail_count_by_account_id(tree_item_data->view->account_id, false);
+			if (tree_item_data->total_mail_count_on_local - scheduled_mail_total == 0)
+				snprintf(tmp, sizeof(tmp), "%s", _("IDS_EMAIL_HEADER_OUTBOX"));
+			else
+				snprintf(tmp, sizeof(tmp), "%s (%d)", _("IDS_EMAIL_HEADER_OUTBOX"), (tree_item_data->total_mail_count_on_local - scheduled_mail_total));
+		} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_DRAFT) {
+			if (tree_item_data->total_mail_count_on_local == 0)
+				snprintf(tmp, sizeof(tmp), "%s", _("IDS_EMAIL_HEADER_DRAFTS"));
+			else
+				snprintf(tmp, sizeof(tmp), "%s (%d)", _("IDS_EMAIL_HEADER_DRAFTS"), tree_item_data->total_mail_count_on_local);
+		} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX) {
+			if (tree_item_data->unread_count == 0)
+				snprintf(tmp, sizeof(tmp), "%s", _("IDS_EMAIL_HEADER_INBOX"));
+			else
+				snprintf(tmp, sizeof(tmp), "%s (%d)", _("IDS_EMAIL_HEADER_INBOX"), tree_item_data->unread_count);
+		} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_SENTBOX) {
+			if (tree_item_data->unread_count == 0)
+				snprintf(tmp, sizeof(tmp), "%s", _("IDS_EMAIL_HEADER_SENT_M_EMAIL"));
+			else
+				snprintf(tmp, sizeof(tmp), "%s (%d)", _("IDS_EMAIL_HEADER_SENT_M_EMAIL"), tree_item_data->unread_count);
+		} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_SPAMBOX) {
+			if (tree_item_data->unread_count == 0)
+				snprintf(tmp, sizeof(tmp), "%s", _("IDS_EMAIL_HEADER_SPAMBOX"));
+			else
+				snprintf(tmp, sizeof(tmp), "%s (%d)", _("IDS_EMAIL_HEADER_SPAMBOX"), tree_item_data->unread_count);
+		} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_TRASH) {
+			if (tree_item_data->unread_count == 0)
+				snprintf(tmp, sizeof(tmp), "%s", _("IDS_EMAIL_HEADER_RECYCLE_BIN_ABB"));
+			else
+				snprintf(tmp, sizeof(tmp), "%s (%d)", _("IDS_EMAIL_HEADER_RECYCLE_BIN_ABB"), tree_item_data->unread_count);
+#ifndef _FEATURE_PRIORITY_SENDER_DISABLE_
+		} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_PRIORITY_SENDERS) {
+			if (tree_item_data->unread_count == 0)
+				snprintf(tmp, sizeof(tmp), "%s", _("IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"));
+			else
+				snprintf(tmp, sizeof(tmp), "%s (%d)", _("IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"), tree_item_data->unread_count);
+#endif
+		} else if (tree_item_data->mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED) {
+			if (tree_item_data->unread_count == 0)
+				snprintf(tmp, sizeof(tmp), "%s", _("IDS_EMAIL_HEADER_STARRED_EMAILS_ABB"));
+			else
+				snprintf(tmp, sizeof(tmp), "%s (%d)", _("IDS_EMAIL_HEADER_STARRED_EMAILS_ABB"), tree_item_data->unread_count);
 		} else {
 			if (tree_item_data->unread_count == 0)
 				snprintf(tmp, sizeof(tmp), "%s", tree_item_data->mailbox_name);
 			else
 				snprintf(tmp, sizeof(tmp), "%s (%d)", tree_item_data->mailbox_name, tree_item_data->unread_count);
-
 			if (EMAIL_SERVER_TYPE_ACTIVE_SYNC == GET_ACCOUNT_SERVER_TYPE(view->account_id)) {
 				filename = account_get_ellipsised_folder_name(view, tmp);
 			} else {
 				converted_name = account_util_convert_mutf7_to_utf8(tmp);
 				filename = account_get_ellipsised_folder_name(view, converted_name);
 			}
-
 			debug_secure("tmp(%s) converted_name(%s) filename(%s) mailbox_name(%s) alias_name(%s)",
 				tmp, converted_name, filename, tree_item_data->mailbox_name, tree_item_data->alias_name);
 
 			free(converted_name);
 			return _create_gl_item_text(tree_item_data, filename);;
 		}
+		return _create_gl_item_text(tree_item_data, tmp);
+	} else {
+		if (tree_item_data->unread_count == 0)
+			snprintf(tmp, sizeof(tmp), "%s", tree_item_data->mailbox_name);
+		else
+			snprintf(tmp, sizeof(tmp), "%s (%d)", tree_item_data->mailbox_name, tree_item_data->unread_count);
+
+		if (EMAIL_SERVER_TYPE_ACTIVE_SYNC == GET_ACCOUNT_SERVER_TYPE(view->account_id)) {
+			filename = account_get_ellipsised_folder_name(view, tmp);
+		} else {
+			converted_name = account_util_convert_mutf7_to_utf8(tmp);
+			filename = account_get_ellipsised_folder_name(view, converted_name);
+		}
+
+		debug_secure("tmp(%s) converted_name(%s) filename(%s) mailbox_name(%s) alias_name(%s)",
+			tmp, converted_name, filename, tree_item_data->mailbox_name, tree_item_data->alias_name);
+
+		free(converted_name);
+		return _create_gl_item_text(tree_item_data, filename);;
+	}
+
+	return NULL;
+}
+
+static Evas_Object *_gl_icon_get_for_single_subitem(void *data, Evas_Object *obj, const char *part)
+{
+	if (!strcmp(part, "elm.swallow.icon")) {
+		Item_Data *tree_item_data = (Item_Data *) data;
+		int mailbox_type = tree_item_data->mailbox_type;
+
+
+		char *folder_icon_name = NULL;
+		folder_icon_name = account_get_folder_icon_name_by_mailbox_type(mailbox_type);
+
+		return account_create_folder_icon(obj, folder_icon_name);
 	}
 
 	return NULL;
@@ -1265,8 +1262,6 @@ static void _update_folder_list_after_folder_create_action(void *data, int mailb
 	if (selected_mailbox->alias) {
 		tree_item_data->alias_name = strdup(selected_mailbox->alias);
 	}
-
-	tree_item_data->b_scheduled_outbox = 0;
 
 	while (it) {
 		it = elm_genlist_item_next_get(it);
@@ -1590,6 +1585,31 @@ static char *_gl_label_get_for_all_acc_box(void *data, Evas_Object *obj, const c
 			return _create_gl_item_text(tree_item_data, tmp);
 		}
 	}
+	return NULL;
+}
+
+static Evas_Object *_gl_icon_get_for_all_acc_box(void *data, Evas_Object *obj, const char *part)
+{
+	if (!strcmp(part, "elm.swallow.icon")) {
+		if (!data) {
+			debug_log("data is NULL");
+			return NULL;
+		}
+
+		Item_Data *tree_item_data = (Item_Data *) data;
+		int i_boxtype = tree_item_data->i_boxtype;
+
+		char *folder_icon_name = NULL;
+		if(i_boxtype == ACC_MAILBOX_TYPE_INBOX) {
+			folder_icon_name = EMAIL_IMAGE_ACCOUNT_COMBINED_INBOX_FOLDER_ICON;
+		} else {
+			int mailbox_type = _convert_acc_boxtype_to_email_boxtype(i_boxtype);
+			folder_icon_name = account_get_folder_icon_name_by_mailbox_type(mailbox_type);
+		}
+
+		return account_create_folder_icon(obj, folder_icon_name);
+	}
+
 	return NULL;
 }
 

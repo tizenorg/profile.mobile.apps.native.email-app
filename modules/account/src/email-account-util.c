@@ -226,6 +226,60 @@ char *account_convert_folder_alias_by_mailbox_type(email_mailbox_type_e mailbox_
 		return NULL;
 }
 
+char *account_get_folder_icon_name_by_mailbox_type(int mailbox_type)
+{
+	char *folder_image_name = NULL;
+
+		switch (mailbox_type) {
+		case EMAIL_MAILBOX_TYPE_INBOX:
+			folder_image_name = EMAIL_IMAGE_ACCOUNT_INBOX_FOLDER_ICON;
+			break;
+		case EMAIL_MAILBOX_TYPE_FLAGGED:
+			folder_image_name = EMAIL_IMAGE_ACCOUNT_STARRED_FOLDER_ICON;
+			break;
+		case EMAIL_MAILBOX_TYPE_DRAFT:
+			folder_image_name = EMAIL_IMAGE_ACCOUNT_DRAFT_FOLDER_ICON;
+			break;
+		case EMAIL_MAILBOX_TYPE_OUTBOX:
+			folder_image_name = EMAIL_IMAGE_ACCOUNT_OUTBOX_FOLDER_ICON;
+			break;
+		case EMAIL_MAILBOX_TYPE_SENTBOX:
+			folder_image_name = EMAIL_IMAGE_ACCOUNT_SENT_FOLDER_ICON;
+			break;
+		case EMAIL_MAILBOX_TYPE_SPAMBOX:
+			folder_image_name = EMAIL_IMAGE_ACCOUNT_SPAM_FOLDER_ICON;
+			break;
+		case EMAIL_MAILBOX_TYPE_TRASH:
+			folder_image_name = EMAIL_IMAGE_ACCOUNT_TRASH_FOLDER_ICON;
+			break;
+		case EMAIL_MAILBOX_TYPE_USER_DEFINED:
+			folder_image_name = EMAIL_IMAGE_ACCOUNT_CUSTOM_FOLDER_ICON;
+			break;
+		/* This mailbox type is extension of email_mailbox_type_e. It is defined in Email to handle Priority senders folder */
+		case EMAIL_MAILBOX_TYPE_PRIORITY_SENDERS:
+			folder_image_name = EMAIL_IMAGE_ACCOUNT_PRIO_SENDER_FOLDER_ICON;
+			break;
+		default:
+			debug_error("Item type is not supported!");
+			return NULL;
+		}
+
+		return folder_image_name;
+}
+
+Evas_Object *account_create_folder_icon(Evas_Object *parent, const char *folder_image_name)
+{
+	if (!parent || !folder_image_name) {
+		debug_error("Invalid arguments!");
+		return NULL;
+	}
+
+	Evas_Object *folder_icon =  elm_layout_add(parent);
+	elm_layout_file_set(folder_icon, email_get_common_theme_path(), folder_image_name);
+	evas_object_show(folder_icon);
+	return folder_icon;
+}
+
 void account_update_folder_item_dim_state(EmailAccountView *view)
 {
 	debug_enter();

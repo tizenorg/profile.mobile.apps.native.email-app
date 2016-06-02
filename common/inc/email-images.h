@@ -18,6 +18,19 @@
 #ifndef _EMAIL_IMAGES_H_
 #define _EMAIL_IMAGES_H_
 
+/* account_icon */
+#define EMAIL_IMAGE_ACCOUNT_COMBINED_INBOX_FOLDER_ICON "email_ic_combined_inbox.png"
+#define EMAIL_IMAGE_ACCOUNT_INBOX_FOLDER_ICON "email_ic_inbox.png"
+#define EMAIL_IMAGE_ACCOUNT_DRAFT_FOLDER_ICON "email_ic_draft.png"
+#define EMAIL_IMAGE_ACCOUNT_STARRED_FOLDER_ICON "email_ic_starred.png"
+#define EMAIL_IMAGE_ACCOUNT_PRIO_SENDER_FOLDER_ICON "email_ic_priority_senders.png"
+#define EMAIL_IMAGE_ACCOUNT_OUTBOX_FOLDER_ICON "email_ic_outbox.png"
+#define EMAIL_IMAGE_ACCOUNT_SENT_FOLDER_ICON "email_ic_sent.png"
+#define EMAIL_IMAGE_ACCOUNT_SPAM_FOLDER_ICON "email_ic_spam.png"
+#define EMAIL_IMAGE_ACCOUNT_TRASH_FOLDER_ICON "email_ic_trash.png"
+#define EMAIL_IMAGE_ACCOUNT_SHOW_ALL_FOLDERS_ICON "email_ic_show_all_folders.png"
+#define EMAIL_IMAGE_ACCOUNT_CUSTOM_FOLDER_ICON "email_ic_folder.png"
+
 /* composer_icon */
 #define EMAIL_IMAGE_COMPOSER_EXPAND_CLOSE "email_composer_icon_expand_close.png"
 #define EMAIL_IMAGE_COMPOSER_EXPAND_OPEN "email_composer_icon_expand_open.png"
