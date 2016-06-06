@@ -295,7 +295,12 @@ static Evas_Object *_mail_item_gl_status_icons_add(Evas_Object *parent, MailItem
 		elm_box_pack_end(box, icon);
 	}
 
-	if (ld->reply_flag) {
+	if(ld->reply_flag && ld->forward_flag) {
+		icon = elm_layout_add(box);
+		elm_layout_file_set(icon, email_get_common_theme_path(), EMAIL_IMAGE_ICON_LIST_REPLY_FORWARD);
+		evas_object_show(icon);
+		elm_box_pack_end(box, icon);
+	} else if (ld->reply_flag) {
 		icon = elm_layout_add(box);
 		elm_layout_file_set(icon, email_get_common_theme_path(), EMAIL_IMAGE_ICON_LIST_REPLY);
 		evas_object_show(icon);
