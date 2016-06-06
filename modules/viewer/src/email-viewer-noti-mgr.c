@@ -514,23 +514,6 @@ static void _noti_mgr_on_gdbus_event_receive(GDBusConnection *connection,
 					}
 					break;
 
-				case EMAIL_MAIL_ATTRIBUTE_FLAGS_FORWARDED_FIELD:
-					debug_log("EMAIL_MAIL_ATTRIBUTE_FLAGS_FORWARDED_FIELD");
-					/* no break */
-				case EMAIL_MAIL_ATTRIBUTE_FLAGS_ANSWERED_FIELD:
-					debug_log("EMAIL_MAIL_ATTRIBUTE_FLAGS_ANSWERED_FIELD");
-					if (view->mail_id == *idx) {
-						email_mail_data_t *mail_data = NULL;
-						if (email_engine_get_mail_data(view->mail_id, &mail_data)) {
-							if (view->subject_ly) {
-								header_update_response_icon(view, mail_data);
-							}
-						}
-
-						email_engine_free_mail_data_list(&mail_data, 1);
-					}
-					break;
-
 				case EMAIL_MAIL_ATTRIBUTE_FLAGS_DELETED_FIELD:
 					debug_log("EMAIL_MAIL_ATTRIBUTE_FLAGS_DELETED_FIELD");
 					if (view->mail_id == *idx) {

@@ -59,15 +59,6 @@ void header_update_view(void *data);
 void header_update_date(EmailViewerView *view);
 
 /**
- * @brief Update viewer header response icon REPLY/FORWARD
- *
- * @param[in]	view			Email viewer data
- * @param[in]	mail_info		Email mail data
- *
- */
-void header_update_response_icon(EmailViewerView *view, email_mail_data_t *mail_info);
-
-/**
  * @brief Update viewer header favorite icon
  *
  * @param[in]	view		Email viewer data

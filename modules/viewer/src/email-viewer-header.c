@@ -50,7 +50,7 @@ static Elm_Genlist_Item_Class reply_popup_itc;
 
 /*header layouts*/
 static void _header_create_subject(EmailViewerView *view);
-static void _header_update_subject(EmailViewerView *view, email_mail_data_t *mail_info);
+static void _header_update_subject(EmailViewerView *view);
 static void _header_create_sender(EmailViewerView *view);
 static void _header_create_divider(EmailViewerView *view);
 static void _header_update_sender(EmailViewerView *view);
@@ -98,31 +98,20 @@ static void _header_back_key_cb_clicked(void *data, Evas_Object *obj, void *even
 	debug_leave();
 }
 
-static void _header_update_subject(EmailViewerView *view, email_mail_data_t *mail_info)
+static void _header_update_subject(EmailViewerView *view)
 {
 	debug_enter();
 	retm_if(view == NULL, "Invalid parameter: view[NULL]");
-	retm_if(!mail_info, "invalid data");
 
 	char *subject_txt = elm_entry_utf8_to_markup(view->subject);
 	if (!g_strcmp0(subject_txt, "")) {
 		g_free(subject_txt);
 		subject_txt = g_strdup(email_get_email_string("IDS_EMAIL_SBODY_NO_SUBJECT_M_NOUN"));
 	}
-	char *appended_text = NULL;
-	if (mail_info->flags_answered_field || mail_info->flags_forwarded_field) {
-		const char *icon = mail_info->flags_answered_field ?
-			EMAIL_IMAGE_ICON_LIST_REPLY : EMAIL_IMAGE_ICON_LIST_FORWARD;
-		appended_text = g_strdup_printf(HEAD_SUBJ_TEXT_WITH_ICON_STYLE, HEAD_SUBJ_ICON_WIDTH, HEAD_SUBJ_ICON_HEIGHT,
-				email_get_img_dir(), icon,
-				HEAD_SUBJ_FONT_SIZE, VIEWER_SUBJECT_FONT_COLOR, subject_txt);
-		elm_object_text_set(view->en_subject, appended_text);
 
-	} else {
-		appended_text = g_strdup_printf(HEAD_SUBJ_TEXT_STYLE,
+	char *appended_text = g_strdup_printf(HEAD_SUBJ_TEXT_STYLE,
 				HEAD_SUBJ_FONT_SIZE, VIEWER_SUBJECT_FONT_COLOR, subject_txt);
 		elm_object_text_set(view->en_subject, appended_text);
-	}
 
 	evas_object_show(view->subject_ly);
 	g_free(appended_text);
@@ -523,20 +512,6 @@ static void _header_attachment_clicked_edje_cb(void *data, Evas_Object *obj, con
 	debug_leave();
 }
 
-void header_update_response_icon(EmailViewerView *view, email_mail_data_t *mail_info)
-{
-	debug_enter();
-	retm_if(view == NULL, "Invalid parameter: view[NULL]");
-	retm_if(mail_info == NULL, "Invalid parameter: mail_info[NULL]");
-	retm_if(view->viewer_type != EMAIL_VIEWER, "Not needed in this view");
-
-	if (mail_info->flags_answered_field || mail_info->flags_forwarded_field) {
-		_header_update_subject(view, mail_info);
-	}
-
-	debug_leave();
-}
-
 void header_update_attachment_summary_info(EmailViewerView *view)
 {
 	debug_enter();
@@ -645,7 +620,7 @@ void header_update_view(void *data)
 	EmailViewerView *view = (EmailViewerView *)data;
 	retm_if(view->eViewerErrorType != VIEWER_ERROR_NONE, "Some Error occurred");
 
-	_header_update_subject(view, view->mail_info);
+	_header_update_subject(view);
 	_header_update_sender(view);
 	header_update_date(view);
 
