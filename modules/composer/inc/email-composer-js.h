@@ -107,7 +107,6 @@
 #define EC_JS_EMIT_SIGNAL_RESIZE_END "EmitSignal_ResizeEnd();"
 
 #define EC_JS_INITIALIZE_COMPOSER "InitializeEmailComposer();"
-#define EC_JS_UPDATE_IMAGE_SOURCES "UpdateImageSource(\"%s\");"
 #define EC_JS_CONNECT_EVENT_LISTENER "ConnectEventListenerFor(\"%s\");"
 
 #define EC_JS_IS_CHECKBOX_CHECKED "IsCheckboxChecked();"
@@ -129,9 +128,8 @@
 #define EC_JS_GET_IMAGE_LIST "GetImageSources();"
 #define EC_JS_GET_IMAGE_LIST_FROM_NEW_MESSAGE "GetImageSourcesFrom(\""EC_NAME_NEW_MESSAGE"\");"
 
-#define EC_JS_GET_CONTENTS_FROM_BODY "GetHtmlContents();"
-#define EC_JS_GET_CONTENTS_FROM_NEW_MESSAGE "GetHtmlContentsFrom(\""EC_NAME_NEW_MESSAGE"\");"
-#define EC_JS_GET_CONTENTS_FROM_ORG_MESSAGE "GetHtmlContentsFrom(\""EC_NAME_ORG_MESSAGE"\");"
+#define EC_JS_GET_INITIAL_CONTENTS "GetComposedHtmlContents('0');"
+#define EC_JS_GET_COMPOSED_CONTENTS "GetComposedHtmlContents('%s');"
 
 #define EC_JS_NOTIFY_CARET_POS_CHANGE "NotifyCaretPosChange();"
 

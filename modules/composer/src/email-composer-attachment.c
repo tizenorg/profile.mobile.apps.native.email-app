@@ -594,6 +594,9 @@ void composer_attachment_reset_attachment(EmailComposerView *view)
 	DELETE_LIST_OBJECT(view->attachment_item_list);
 	DELETE_LIST_OBJECT(view->attachment_inline_item_list);
 
+	g_free(view->attachment_inline_img_js_map);
+	view->attachment_inline_img_js_map = NULL;
+
 	debug_leave();
 }
 

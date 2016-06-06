@@ -1126,10 +1126,6 @@ void composer_initial_data_set_mail_info(EmailComposerView *view, bool is_draft_
 	snprintf(file_path, sizeof(file_path), "file://%s", view->saved_html_path);
 	debug_secure("file_path: (%s)", file_path);
 
-	ewk_view_contents_set(view->ewk_view, "", 1, NULL, NULL, (char *)email_get_phone_storage_url());
-	ewk_view_contents_set(view->ewk_view, "", 1, NULL, NULL, (char *)email_get_mmc_storage_url());
-	ewk_view_contents_set(view->ewk_view, "", 1, NULL, NULL, (char *)email_get_res_url());
-
 	/* If encoding(5th parameter) is missing, "UTF-8" is used to display contents. */
 	ewk_view_contents_set(view->ewk_view, html_body, strlen(html_body), NULL, view->original_charset, file_path);
 
