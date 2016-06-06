@@ -97,6 +97,8 @@ var g_curEventIsGroup = false
 var g_lastRange = null;
 var g_lastRangeIsForward = false;
 
+var g_removeInvalidImages = false;
+
 function CaretPos(x, top, bottom, isCollapsed) {
 	this.x = Math.round(x);
 	this.top = Math.round(top);
@@ -1027,18 +1029,6 @@ function GetCurrentFontStyle() {
 	}
 }
 
-function UpdateImageSource(prefix) {
-	console.log(arguments.callee.name + "()");
-	var images = document.getElementsByTagName("img");
-	var regexp = new RegExp("file://");
-
-	for (var i = 0; i < images.length; i++) {
-		if (regexp.test(imgs[i].src) == true) {
-			images[i].setAttribute("src", prefix + "/" + images[i].getAttribute("src"));
-		}
-	}
-}
-
 function CreateImageHandler(inImageId) {
 	console.log(arguments.callee.name + "()");
 
@@ -1072,7 +1062,9 @@ function ConnectEventListenerFor(image_id) {
 function IsCheckboxChecked() {
 	console.log(arguments.callee.name + "()");
 
-	if (document.getElementById(G_NAME_ORG_MESSAGE_BAR_CHECKBOX).className == G_NAME_CSS_ORG_MESSAGE_BAR_CHECKBOX_CHECKED) {
+	var orgMsgBarCheckbox = document.getElementById(G_NAME_ORG_MESSAGE_BAR_CHECKBOX);
+
+	if (orgMsgBarCheckbox && (orgMsgBarCheckbox.className == G_NAME_CSS_ORG_MESSAGE_BAR_CHECKBOX_CHECKED)) {
 		return 'true';
 	} else {
 		return 'false';
@@ -1141,26 +1133,29 @@ function UpdateBGColorTo(div_id, r, g, b, a) {
 	targetDiv.style.opacity = a / 255.0;
 }
 
-function GetImageSources() {
+function GetImageSourcesFromElement(element) {
 	console.log(arguments.callee.name + "()");
-	var srcs = "";
-	var images = document.getElementsByTagName("img");
-	for (var i = 0; i < images.length; i++) {
-		srcs += images[i].getAttribute("src") + ";";
+	var images = element.getElementsByTagName("img");
+	var imagesMax = images.length - 1;
+	var curImg, curImgSrc, srcs = "", idCounter = 0;
+	for (var i = 0; i <= imagesMax; i++) {
+		curImg = images[i];
+		curImgSrc = curImg.src;
+		if (curImgSrc.startsWith("file://")) {
+			curImg.dataset["id"] = ++idCounter;
+			srcs += curImgSrc + ((i < imagesMax) ? ";" : "");
+	}
 	}
 	return srcs;
 }
 
-function GetImageSourcesFrom(div_id) {
-	console.log(arguments.callee.name + "()");
-	var element = document.getElementById(div_id);
-	var srcs = "";
-	var images = element.getElementsByTagName("img");
-	for (var i = 0; i < images.length; i++) {
-		srcs += images[i].getAttribute("src") + ";";
-	}
-	return srcs;
+function GetImageSources() {
+	return GetImageSourcesFromElement(document.body);
 }
+
+function GetImageSourcesFrom(div_id) {
+	return GetImageSourcesFromElement(document.getElementById(div_id));
+	}
 
 function GetHtmlContents() {
 	console.log(arguments.callee.name + "()");
@@ -1171,6 +1166,86 @@ function GetHtmlContents() {
 function GetHtmlContentsFrom(div_id) {
 	console.log(arguments.callee.name + "()");
 	return document.getElementById(div_id).innerHTML;
+}
+
+function GetComposedHtmlContents(inlineImageSrcs) {
+	console.log(arguments.callee.name + "()");
+
+	var srcNewMsg, srcOrgMsg, dstContent, dstBody, tmp;
+	var	images, imagesLength, i, curImg, newImgSrc;
+
+	srcNewMsg = document.getElementById(G_NAME_NEW_MESSAGE);
+	srcOrgMsg = srcNewMsg && document.getElementById(G_NAME_ORG_MESSAGE);
+
+	dstContent = document.createElement("html");
+
+	if (!srcOrgMsg || (IsCheckboxChecked() != "true")) {
+		if (!srcNewMsg) {
+			dstBody = document.body.cloneNode(true);
+		} else {
+			dstBody = srcNewMsg.cloneNode(true);
+			dstBody.removeAttribute("id");
+			dstBody.removeAttribute("class");
+		}
+		dstBody.removeAttribute("contenteditable");
+	} else {
+		dstBody = document.createElement("body");
+
+		tmp = srcNewMsg.cloneNode(true);
+		tmp.removeAttribute("id");
+		tmp.removeAttribute("class");
+		tmp.removeAttribute("contenteditable");
+		dstBody.appendChild(tmp);
+
+		tmp = document.createElement("br");
+		dstBody.appendChild(tmp);
+		dstBody.appendChild(tmp.cloneNode(false));
+
+		tmp = srcOrgMsg.cloneNode(true);
+		tmp.removeAttribute("id");
+		tmp.removeAttribute("class");
+		tmp.removeAttribute("contenteditable");
+		dstBody.appendChild(tmp);
+	}
+
+	dstContent.appendChild(dstBody);
+
+	if (typeof inlineImageSrcs === "string") {
+		try {
+			inlineImageSrcs = JSON.parse(inlineImageSrcs);
+			if (typeof inlineImageSrcs !== "object") {
+				inlineImageSrcs = null;
+			}
+		} catch (error) {
+			console.log(arguments.callee.name + "() " + error);
+			inlineImageSrcs = null;
+		}
+	} else {
+		inlineImageSrcs = null;
+	}
+
+	images = dstBody.getElementsByTagName("img");
+	imagesLength = images.length;
+		i = 0;
+		while (i < imagesLength) {
+			curImg = images[i];
+			if (curImg.src.startsWith("file://")) {
+			if (inlineImageSrcs) {
+				newImgSrc = inlineImageSrcs[curImg.dataset["id"]];
+				if (newImgSrc) {
+					curImg.src = newImgSrc;
+				} else if (g_removeInvalidImages) {
+					curImg.parentNode.removeChild(curImg);
+					--imagesLength;
+			continue;
+				}
+				}
+				curImg.removeAttribute("data-id");
+		}
+			++i;
+	}
+
+	return dstContent.outerHTML;
 }
 
 function GetCaretPosition() {

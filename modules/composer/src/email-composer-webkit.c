@@ -53,9 +53,7 @@ static void _webkit_js_execute_insert_original_mail_info_cb(Evas_Object *obj, co
 static void _webkit_js_execute_init_composer_body_cb(Evas_Object *obj, const char *result, void *data);
 static void _webkit_js_execute_is_checkbox_clicked_cb(Evas_Object *obj, const char *result, void *data);
 static void _webkit_js_execute_check_body_layout_cb(Evas_Object *obj, const char *result, void *data);
-static void _webkit_js_execute_get_initial_parent_content_cb(Evas_Object *obj, const char *result, void *data);
-static void _webkit_js_execute_get_initial_new_message_content_cb(Evas_Object *obj, const char *result, void *data);
-static void _webkit_js_execute_get_initial_body_content_cb(Evas_Object *o, const char *result, void *data);
+static void _webkit_js_execute_get_initial_html_content_cb(Evas_Object *obj, const char *result, void *data);
 
 static void _ewk_view_load_progress_cb(void *data, Evas_Object *obj, void *event_info);
 static void _ewk_view_load_error_cb(void *data, Evas_Object *obj, void *event_info);
@@ -194,24 +192,8 @@ static void _webkit_js_execute_init_composer_body_cb(Evas_Object *obj, const cha
 
 	composer_util_resize_webview_height(view);
 
-	char set_image_src[EMAIL_BUFF_SIZE_1K] = { 0, };
-	snprintf(set_image_src, sizeof(set_image_src), EC_JS_UPDATE_IMAGE_SOURCES, composer_util_file_get_temp_dirname());
-
-	/* TODO: is this needed? the symbolic links for inline image were made on tmp_folder. */
-	if (view->composer_type == RUN_COMPOSER_EDIT || view->composer_type == RUN_COMPOSER_REPLY ||
-		view->composer_type == RUN_COMPOSER_REPLY_ALL || view->composer_type == RUN_COMPOSER_FORWARD) {
-		if (!ewk_view_script_execute(ewk_view, set_image_src, NULL, NULL))
-			debug_error("EC_JS_UPDATE_IMAGE_SOURCES failed.");
-	}
-
-	if (view->with_original_message) {
-		if (!ewk_view_script_execute(ewk_view, EC_JS_GET_CONTENTS_FROM_ORG_MESSAGE, _webkit_js_execute_get_initial_parent_content_cb, (void *)view)) {
-			debug_error("EC_JS_GET_CONTENTS_FROM_ORG_MESSAGE failed.");
-		}
-	} else {
-		if (!ewk_view_script_execute(ewk_view, EC_JS_GET_CONTENTS_FROM_BODY, _webkit_js_execute_get_initial_body_content_cb, (void *)view)) {
-			debug_error("EC_JS_GET_CONTENTS_FROM_BODY failed.");
-		}
+	if (!ewk_view_script_execute(ewk_view, EC_JS_GET_INITIAL_CONTENTS, _webkit_js_execute_get_initial_html_content_cb, (void *)view)) {
+		debug_error("EC_JS_GET_INITIAL_CONTENTS failed.");
 	}
 
 	debug_leave();
@@ -275,7 +257,7 @@ static void _webkit_js_execute_check_body_layout_cb(Evas_Object *obj, const char
 	debug_leave();
 }
 
-static void _webkit_js_execute_get_initial_parent_content_cb(Evas_Object *obj, const char *result, void *data)
+static void _webkit_js_execute_get_initial_html_content_cb(Evas_Object *obj, const char *result, void *data)
 {
 	debug_enter();
 
@@ -285,47 +267,7 @@ static void _webkit_js_execute_get_initial_parent_content_cb(Evas_Object *obj, c
 	Evas_Object *ewk_view = (Evas_Object *)obj;
 
 	if (result) {
-		view->initial_parent_content = g_strdup(result);
-	}
-
-	if (!ewk_view_script_execute(ewk_view, EC_JS_GET_CONTENTS_FROM_NEW_MESSAGE, _webkit_js_execute_get_initial_new_message_content_cb, (void *)view)) {
-		debug_error("EC_JS_GET_CONTENTS_FROM_NEW_MESSAGE failed.");
-	}
-
-	debug_leave();
-}
-
-static void _webkit_js_execute_get_initial_new_message_content_cb(Evas_Object *obj, const char *result, void *data)
-{
-	debug_enter();
-
-	retm_if(!data, "Invalid parameter: data is NULL!");
-
-	EmailComposerView *view = (EmailComposerView *)data;
-	Evas_Object *ewk_view = (Evas_Object *)obj;
-
-	if (result) {
-		view->initial_new_message_content = g_strdup(result);
-	}
-
-	if (!ewk_view_script_execute(ewk_view, EC_JS_GET_CONTENTS_FROM_BODY, _webkit_js_execute_get_initial_body_content_cb, (void *)view)) {
-		debug_error("EC_JS_GET_CONTENTS_FROM_BODY failed.");
-	}
-
-	debug_leave();
-}
-
-static void _webkit_js_execute_get_initial_body_content_cb(Evas_Object *obj, const char *result, void *data)
-{
-	debug_enter();
-
-	retm_if(!data, "Invalid parameter: data is NULL!");
-
-	EmailComposerView *view = (EmailComposerView *)data;
-	Evas_Object *ewk_view = (Evas_Object *)obj;
-
-	if (result) {
-		view->initial_body_content = g_strdup(result);
+		view->initial_html_content = g_strdup(result);
 	}
 
 	/* Incase of forward/reply a mail, we don't make body contenteditable to keep original message bar non editable state. */

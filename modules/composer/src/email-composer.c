@@ -951,12 +951,8 @@ static void _composer_destroy_composer(void *data)
 	FREE(view->saved_text_path);
 	FREE(view->saved_html_path);
 	FREE(view->plain_content);
-	FREE(view->final_body_content);
-	FREE(view->final_parent_content);
-	FREE(view->final_new_message_content);
-	FREE(view->initial_body_content);
-	FREE(view->initial_parent_content);
-	FREE(view->initial_new_message_content);
+	FREE(view->final_html_content);
+	FREE(view->initial_html_content);
 
 	FREE(view->eml_file_path);
 	FREE(view->vcard_file_path);

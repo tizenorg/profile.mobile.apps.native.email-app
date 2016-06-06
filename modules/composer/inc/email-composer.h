@@ -201,6 +201,7 @@ struct _view_data {
 	Eina_List *attachment_item_list;
 	Eina_List *attachment_inline_item_list;
 	Eina_List *attachment_list_to_be_processed;
+	gchar *attachment_inline_img_js_map;
 
 	Eina_Bool is_attachment_list_expanded;
 
@@ -318,17 +319,13 @@ struct _view_data {
 	Eina_List *initial_contents_bcc_list;
 	Eina_List *initial_contents_attachment_list;
 	char *initial_contents_subject;
-	char *initial_body_content;
-	char *initial_parent_content;
-	char *initial_new_message_content;
+	char *initial_html_content;
 
 	/* Related to sending/saving mail */
 	Ecore_Thread *thread_saving_email;
 	Eina_Bool need_download;
 	char *plain_content;
-	char *final_body_content;
-	char *final_parent_content;
-	char *final_new_message_content;
+	char *final_html_content;
 
 	/* For priority option */
 	int priority_option;

@@ -45,9 +45,7 @@ static MBE_VALIDATION_ERROR _check_vaildify_of_recipient_field(EmailComposerView
 static void _delete_image_control_layer_cb(Evas_Object *obj, const char *result, void *data);
 static void _get_image_list_before_leaving_composer_cb(Evas_Object *obj, const char *result, void *data);
 static void _get_final_plain_text_cb(Evas_Object *obj, const char *result, void *data);
-static void _get_final_parent_content_cb(Evas_Object *obj, const char *result, void *data);
-static void _get_final_new_message_content_cb(Evas_Object *obj, const char *result, void *data);
-static void _get_final_body_content_cb(Evas_Object *obj, const char *result, void *data);
+static void _get_final_html_content_cb(Evas_Object *obj, const char *result, void *data);
 
 static void _save_in_drafts_thread_worker(void *data, Ecore_Thread *th);
 static void _save_in_drafts_thread_notify(void *data, Ecore_Thread *th, void *msg_data);
@@ -76,8 +74,6 @@ static COMPOSER_ERROR_TYPE_E _make_mail_set_from_address(EmailComposerView *view
 static COMPOSER_ERROR_TYPE_E _make_mail_set_mailbox_info(EmailComposerView *view, email_mailbox_type_e mailbox_type);
 static void _make_mail_set_reference_id(EmailComposerView *view);
 
-static void _make_mail_make_draft_html_content(EmailComposerView *view, char **html_content, email_mailbox_type_e mailbox_type);
-static Eina_Bool _make_mail_change_image_paths_to_relative(char *src_html_content, char **dest_buffer, email_mailbox_type_e dest_mailbox);
 static void _make_mail_make_attachment_list(EmailComposerView *view);
 static void _check_forwarding_attachment_download(void *data);
 static void _send_mail_failed_popup_cb(void *data, Evas_Object *obj, void *event_info);
@@ -190,21 +186,20 @@ static void _get_final_plain_text_cb(Evas_Object *obj, const char *result, void 
 		view->plain_content = g_strdup(result);
 	}
 
-	if (view->with_original_message) {
-		if (!ewk_view_script_execute(view->ewk_view, EC_JS_GET_CONTENTS_FROM_ORG_MESSAGE, _get_final_parent_content_cb, (void *)view)) {
-			debug_error("EC_JS_GET_CONTENTS_FROM_ORG_MESSAGE failed!.");
-		}
+	gchar *script = g_strdup_printf(EC_JS_GET_COMPOSED_CONTENTS, view->attachment_inline_img_js_map);
+	if (!script) {
+		debug_error("g_strdup_printf() failed!");
 	} else {
-		if (!ewk_view_script_execute(view->ewk_view, EC_JS_GET_CONTENTS_FROM_BODY, _get_final_body_content_cb, (void *)view)) {
-			debug_error("EC_JS_GET_CONTENTS_FROM_BODY failed.");
+		if (!ewk_view_script_execute(view->ewk_view, script, _get_final_html_content_cb, (void *)view)) {
+			debug_error("EC_JS_GET_COMPOSED_CONTENTS failed!.");
 		}
+		g_free(script);
 	}
 
 	debug_leave();
 }
 
-/* DO NOT use this function alone. this function is successively called when you call _get_final_plain_text_cb(). */
-static void _get_final_parent_content_cb(Evas_Object *obj, const char *result, void *data)
+static void _get_final_html_content_cb(Evas_Object *obj, const char *result, void *data)
 {
 	debug_enter();
 
@@ -212,51 +207,9 @@ static void _get_final_parent_content_cb(Evas_Object *obj, const char *result, v
 
 	EmailComposerView *view = (EmailComposerView *)data;
 
-	FREE(view->final_parent_content);
+	FREE(view->final_html_content);
 	if (result) {
-		view->final_parent_content = g_strdup(result);
-		/*debug_secure("FINAL PARENT CONTENT: (%s)", view->final_parent_content);*/
-	}
-
-	if (!ewk_view_script_execute(view->ewk_view, EC_JS_GET_CONTENTS_FROM_NEW_MESSAGE, _get_final_new_message_content_cb, (void *)view)) {
-		debug_error("EC_JS_GET_CONTENTS_FROM_NEW_MESSAGE failed!.");
-	}
-
-	debug_leave();
-}
-
-/* DO NOT use this function alone. this function is successively called when you call _get_final_plain_text_cb(). */
-static void _get_final_new_message_content_cb(Evas_Object *obj, const char *result, void *data)
-{
-	debug_enter();
-
-	retm_if(!data, "Invalid parameter: data is NULL!");
-
-	EmailComposerView *view = (EmailComposerView *)data;
-
-	FREE(view->final_new_message_content);
-	if (result) {
-		view->final_new_message_content = g_strdup(result);
-	}
-
-	if (!ewk_view_script_execute(view->ewk_view, EC_JS_GET_CONTENTS_FROM_BODY, _get_final_body_content_cb, (void *)view)) {
-		debug_error("EC_JS_GET_CONTENTS_FROM_BODY failed!.");
-	}
-
-	debug_leave();
-}
-
-static void _get_final_body_content_cb(Evas_Object *obj, const char *result, void *data)
-{
-	debug_enter();
-
-	retm_if(!data, "Invalid parameter: data is NULL!");
-
-	EmailComposerView *view = (EmailComposerView *)data;
-
-	FREE(view->final_body_content);
-	if (result) {
-		view->final_body_content = g_strdup(result);
+		view->final_html_content = g_strdup(result);
 	}
 
 	_exit_composer_cb(NULL, NULL, view);
@@ -525,54 +478,22 @@ static COMPOSER_ERROR_TYPE_E _make_mail(EmailComposerView *view, email_mailbox_t
 	err = _remove_old_body_file(view);
 	retv_if(err != COMPOSER_ERROR_NONE, err);
 
-	char *html_content = NULL;
-	char *html_content_processed = NULL;
-	char *plain_text_content = NULL;
-
-	_make_mail_make_draft_html_content(view, &html_content, mailbox_type);
-	retvm_if(!html_content, COMPOSER_ERROR_MAKE_MAIL_FAIL, "html_content is NULL!");
-
-	/*debug_secure("html_content: (%s)", html_content);*/
 	/* <-- Make body html */
 
 	/* --> Save html body as file */
-	if (view->attachment_inline_item_list == NULL) {
-		debug_log("No images found or ERROR");
-		html_content_processed = html_content;
-		html_content = NULL;
-	} else {
-		if (!_make_mail_change_image_paths_to_relative(html_content, &html_content_processed, mailbox_type)) {
-			debug_error("email_composer_change_image_paths_to_relative() failed!");
-			FREE(html_content);
-			return COMPOSER_ERROR_MAKE_MAIL_FAIL;
-		}
-		debug_secure("html_source_processed: {%s}", html_content_processed);
-
-		FREE(html_content);
-	}
-
-	if (!email_save_file(view->saved_html_path, html_content_processed, STR_LEN(html_content_processed))) {
+	const char *const html_content = ((view->final_html_content && view->final_html_content[0]) ? view->final_html_content : "\n");
+	if (!email_save_file(view->saved_html_path, html_content, STR_LEN(html_content))) {
 		debug_secure("email_save_file() failed! for (%s)", view->saved_html_path);
-		FREE(html_content_processed);
 		return COMPOSER_ERROR_MAKE_MAIL_FAIL;
 	}
-	FREE(html_content_processed);
 	/* <-- Save html body as file */
 
 	/* --> Save plain text body as file */
-	if (!view->plain_content || (view->plain_content && STR_LEN(view->plain_content) == 0)) {
-		plain_text_content = STR_DUP("\n");
-	} else {
-		plain_text_content = STR_DUP(view->plain_content);
-	}
-	retvm_if(!plain_text_content, COMPOSER_ERROR_MAKE_MAIL_FAIL, "plain_text_content is NULL!");
-
+	const char *const plain_text_content = ((view->plain_content && view->plain_content[0]) ? view->plain_content : "\n");
 	if (!email_save_file(view->saved_text_path, plain_text_content, strlen(plain_text_content))) {
 		debug_secure("email_save_file() failed! for (%s)", view->saved_text_path);
-		FREE(plain_text_content);
 		return COMPOSER_ERROR_MAKE_MAIL_FAIL;
 	}
-	FREE(plain_text_content);
 	/* <-- Save plain text body as file */
 
 	view->new_mail_info->mail_data->file_path_html = STR_DUP(view->saved_html_path);
@@ -874,113 +795,6 @@ static void _make_mail_set_reference_id(EmailComposerView *view)
 	debug_log("new mail - reference_mail_id:[%d]", view->new_mail_info->mail_data->reference_mail_id);
 
 	debug_leave();
-}
-
-static void _make_mail_make_draft_html_content(EmailComposerView *view, char **html_content, email_mailbox_type_e mailbox_type)
-{
-	debug_enter();
-
-	retm_if(!view, "Invalid parameter: view is NULL!");
-	retm_if(!html_content, "Invalid parameter: html_content is NULL!");
-
-	if (view->is_send_btn_clicked) {
-		if (view->with_original_message) {
-			if (view->is_checkbox_clicked) {
-				*html_content = g_strconcat(EC_TAG_HTML_START, EC_TAG_BODY_START, view->final_new_message_content, EC_TAG_DIV_DIR""EC_TAG_DIV_DIR, view->final_parent_content, EC_TAG_BODY_END, EC_TAG_HTML_END, NULL);
-			} else {
-				*html_content = g_strconcat(EC_TAG_HTML_START, EC_TAG_BODY_START, view->final_new_message_content, EC_TAG_BODY_END, EC_TAG_HTML_END, NULL);
-			}
-		} else {
-			*html_content = g_strconcat(EC_TAG_HTML_START, EC_TAG_BODY_START, view->final_body_content, EC_TAG_BODY_END, EC_TAG_HTML_END, NULL);
-		}
-	} else {
-		if (view->with_original_message) {
-			*html_content = g_strconcat(EC_TAG_HTML_START, EC_TAG_BODY_ORIGINAL_MESSAGE_START, view->final_body_content, EC_TAG_BODY_END, EC_TAG_HTML_END, NULL);
-		} else {
-			*html_content = g_strconcat(EC_TAG_HTML_START, EC_TAG_BODY_CSS_START, view->final_body_content, EC_TAG_BODY_END, EC_TAG_HTML_END, NULL);
-		}
-	}
-
-	debug_leave();
-}
-
-static Eina_Bool _make_mail_change_image_paths_to_relative(char *src_html_content, char **dest_buffer, email_mailbox_type_e dest_mailbox)
-{
-	debug_enter();
-
-	retvm_if(!src_html_content, EINA_FALSE, "Invalid parameter: src_html_content is NULL!");
-	retvm_if(!dest_buffer, EINA_FALSE, "Invalid parameter: dest_buffer is NULL!");
-
-	*dest_buffer = NULL;
-
-	char *src_str = src_html_content;
-	char *buf = (char *)calloc(1, strlen(src_str) + 1);
-	retvm_if(!buf, EINA_FALSE, "Failed to allocate memory for buf!");
-
-	char *point1 = NULL;
-	char *point2 = NULL;
-	char *temp = NULL;
-	Eina_Bool success_flag = EINA_TRUE;
-
-	/* Ex. <img src="/opt/media/Images/image5.jpg" width=342 height="192" id="/opt/media/Images/image5.jpg"> */
-	while ((point1 = strcasestr(src_str, "<img"))) {
-		temp = strcasestr(point1, "src=");
-		if (!temp) {
-			debug_warning("1. No src=");
-			success_flag = EINA_FALSE;
-			break;
-		}
-
-		point1 = temp + 5;
-		strncat(buf, src_str, point1 - src_str);
-
-		debug_log("point1[0] = %c", point1[0]);
-
-		if (point1[0] == '/') {
-			point2 = strstr(point1, "\"");
-			if (!point2) {
-				debug_warning("2. No end quotation");
-				success_flag = EINA_FALSE;
-				break;
-			}
-
-			/* Allocate img src uri */
-			char *image_path = g_strndup(point1, point2 - point1);
-			char *file_path = NULL;
-
-			debug_secure("image_path : (%s)", image_path);
-
-			if (dest_mailbox == EMAIL_MAILBOX_TYPE_OUTBOX) {
-				file_path = g_uri_unescape_string(email_file_file_get(image_path), NULL);
-			} else {
-				file_path = g_strdup(email_file_file_get(image_path));
-			}
-			free(image_path);
-
-			debug_secure("file_path: (%s)", file_path);
-			if (!file_path) {
-				debug_warning("3. Could not parse inline image path");
-				success_flag = EINA_FALSE;
-				break;
-			}
-
-			strncat(buf, file_path, strlen(file_path));
-			free(file_path);
-
-			point1 = point2;
-		}
-		src_str = point1;
-	}
-
-	if (success_flag == EINA_FALSE) {
-		free(buf);
-		return EINA_FALSE;
-	}
-
-	strncat(buf, src_str, strlen(src_str));
-	*dest_buffer = buf;
-
-	return EINA_TRUE;
 }
 
 static void _make_mail_make_attachment_list(EmailComposerView *view)

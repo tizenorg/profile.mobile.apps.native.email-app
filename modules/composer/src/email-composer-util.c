@@ -66,8 +66,9 @@ static email_string_t EMAIL_COMPOSER_STRING_CREATING_VCARD = { PACKAGE, "IDS_EMA
 static void _composer_util_clear_inline_image_list(EmailComposerView *view);
 static void _composer_util_create_inline_image_list(EmailComposerView *view, const gchar **src_list);
 static bool _composer_util_parse_local_img_src(const char *src, const char **out_file_path, const char **out_file_name, char *out_buff, int buff_size);
-static bool _composer_util_is_inline_image_duplicated(EmailComposerView *view, const gchar *abs_file_path);
+static const email_attachment_data_t *_composer_util_find_inline_image(EmailComposerView *view, const char *file_path);
 static const email_attachment_data_t *_composer_util_find_org_inline_image(EmailComposerView *view, const char *file_path, const char *file_name);
+static void _composer_util_make_inline_img_js_map_item(int id, const char *name, char *out_buff, int buff_size);
 
 static char *_composer_util_convert_dayformat(const char *format_str)
 {
@@ -349,6 +350,9 @@ static void _composer_util_clear_inline_image_list(EmailComposerView *view)
 	}
 	eina_list_free(view->attachment_inline_item_list);
 	view->attachment_inline_item_list = NULL;
+
+	g_free(view->attachment_inline_img_js_map);
+	view->attachment_inline_img_js_map = NULL;
 }
 
 static void _composer_util_create_inline_image_list(EmailComposerView *view, const gchar **src_list)
@@ -356,141 +360,202 @@ static void _composer_util_create_inline_image_list(EmailComposerView *view, con
 	retm_if(!view->account_info || !view->account_info->selected_account,
 		"Failed to get selected_account_id");
 
-	char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0 };
-
-	if (chdir(composer_util_file_get_temp_dirname()) == -1) {
-		debug_error("Failed to change working dir: %s", strerror_r(errno, err_buff, sizeof(err_buff)));
+	view->attachment_inline_img_js_map = g_strdup("{");
+	if (!view->attachment_inline_img_js_map) {
+		debug_error("memory allocation failed!");
 		return;
 	}
+
+	srand((int)time(NULL));
+
+	const char *const work_dir = composer_util_file_get_temp_dirname();
+	const int work_dir_size = (strlen(work_dir) + 1);
+	const int selected_account_id = view->account_info->selected_account->account_id;
 
 	int i = 0;
 	char tmp_buff1[PATH_MAX] = { 0 };
 	char tmp_buff2[PATH_MAX] = { 0 };
-	const int selected_account_id = view->account_info->selected_account->account_id;
+	char att_name_buff[EMAIL_BUFF_SIZE_BIG] = { 0 };
+	char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0 };
 
-	for (i = 0; src_list[i] && src_list[i][0]; ++i) {
-
+	for (i = 0; src_list[i]; ++i) {
 		const gchar *const cur_src = src_list[i];
 		debug_secure("cur_src: %s", cur_src);
 
 		const char *file_path = NULL;
 		const char *file_name = NULL;
-		if (!_composer_util_parse_local_img_src(cur_src, &file_path, &file_name, tmp_buff1, PATH_MAX)) {
+		if (!_composer_util_parse_local_img_src(cur_src, &file_path, &file_name, tmp_buff1, sizeof(tmp_buff1))) {
 			debug_log("Can't parse source as a local file path (skipping...)");
 			continue;
 		}
 
-		const char *real_path = realpath(file_path, tmp_buff2);
+		const bool is_in_work_dir = (g_str_has_prefix(file_path, work_dir) &&
+				((file_path + work_dir_size) == file_name));
+
+		const email_attachment_data_t *dup_att = NULL;
+		const email_attachment_data_t *org_att = NULL;
+		bool is_valid = false;
+
+		const char *const real_path = realpath(file_path, tmp_buff2);
 		debug_secure("real_path: %s", real_path);
 
-		if (real_path && _composer_util_is_inline_image_duplicated(view, real_path)) {
-			debug_log("Current source is a duplicate (skipping...)");
-			continue;
-		}
-
-		const email_attachment_data_t *const org_att = ((real_path || (file_name == file_path)) ?
-				_composer_util_find_org_inline_image(view, real_path, file_name) : NULL);
-
-		if (!real_path) {
-			if (org_att) {
-				if (_composer_util_is_inline_image_duplicated(view, org_att->attachment_path)) {
-					debug_log("Original attachment is a duplicate (skipping...)");
-					continue;
-				}
-				real_path = org_att->attachment_path;
+		if (real_path) {
+			is_valid = true;
+			dup_att = _composer_util_find_inline_image(view, real_path);
+			if (!dup_att) {
+				org_att = _composer_util_find_org_inline_image(view, real_path, NULL);
 			} else {
-				debug_warning("No real path to attachment (skipping...)");
-				continue;
+				debug_log("Current source is a duplicate.");
+			}
+		} else if (is_in_work_dir) {
+			org_att = _composer_util_find_org_inline_image(view, NULL, file_path);
+			if (org_att) {
+				is_valid = true;
+				dup_att = _composer_util_find_inline_image(view, org_att->attachment_path);
+				if (dup_att) {
+					debug_log("Original attachment is a duplicate");
+				}
 			}
 		}
 
-		struct stat file_stat;
-		if (!org_att && (stat(real_path, &file_stat) == -1)) {
-			debug_error("stat() failed! (skipping...): %s", strerror_r(errno, err_buff, sizeof(err_buff)));
+		if (!is_valid) {
+			debug_warning("Invalid attachment (skipping...)");
 			continue;
 		}
 
-		email_attachment_data_t *new_att = calloc(1, sizeof(email_attachment_data_t));
-		if (!new_att) {
-			debug_error("email_attachment_data_t allocation failed! (aborting...)");
-			break;
-		}
+		email_attachment_data_t *new_att = NULL;
+		const char *att_name = NULL;
 
-		new_att->inline_content_status = 1;
-
-		if (org_att) {
-			new_att->attachment_id = org_att->attachment_id;
-			new_att->mail_id = org_att->mail_id;
-			new_att->mailbox_id = org_att->mailbox_id;
-			new_att->account_id = org_att->account_id;
-			new_att->attachment_size = org_att->attachment_size;
-			new_att->save_status = org_att->save_status;
-			new_att->attachment_name = strdup(org_att->attachment_name);
-			new_att->attachment_path = strdup(org_att->attachment_path);
-			new_att->attachment_mime_type = strdup(org_att->attachment_mime_type);
+		if (dup_att) {
+			att_name = dup_att->attachment_name;
 		} else {
-			char unique_file_name[PATH_MAX] = { 0 };
-			snprintf(unique_file_name, PATH_MAX, "%d_%s", i + 1, file_name);
-			debug_secure("unique_file_name: %s", unique_file_name);
-			new_att->account_id = selected_account_id;
-			new_att->attachment_size = file_stat.st_size;
-			new_att->save_status = 1;
-			new_att->attachment_name = strdup(unique_file_name);
-			new_att->attachment_path = strdup(real_path);
-			new_att->attachment_mime_type = email_get_mime_type_from_file(file_name);
+			struct stat file_stat;
+			if (!org_att && (stat(real_path, &file_stat) == -1)) {
+				debug_error("stat() failed! (skipping...): %s", strerror_r(errno, err_buff, sizeof(err_buff)));
+				continue;
+			}
+
+			new_att = calloc(1, sizeof(email_attachment_data_t));
+			if (!new_att) {
+				debug_error("email_attachment_data_t allocation failed! (aborting...)");
+				break;
+			}
+
+			if (is_in_work_dir) {
+				att_name = file_name;
+			} else {
+				att_name = att_name_buff;
+				const char *ext = strrchr(file_name, '.');
+				if (!ext || !ext[1]) {
+					ext = "";
+				}
+				snprintf(att_name_buff, sizeof(att_name_buff), "%d-[%d]-(%d)-{%d}%s", i + 1,
+						(int)file_stat.st_size, (int)file_stat.st_mtime, (int)rand(), ext);
+			}
+
+			new_att->inline_content_status = 1;
+
+			if (org_att) {
+				new_att->attachment_id = org_att->attachment_id;
+				new_att->mail_id = org_att->mail_id;
+				new_att->mailbox_id = org_att->mailbox_id;
+				new_att->account_id = org_att->account_id;
+				new_att->attachment_size = org_att->attachment_size;
+				new_att->save_status = org_att->save_status;
+				new_att->attachment_name = strdup(org_att->attachment_name);
+				new_att->attachment_path = strdup(org_att->attachment_path);
+				new_att->attachment_mime_type = strdup(org_att->attachment_mime_type);
+			} else {
+				new_att->account_id = selected_account_id;
+				new_att->attachment_size = file_stat.st_size;
+				new_att->save_status = 1;
+				new_att->attachment_name = strdup(att_name);
+				new_att->attachment_path = strdup(real_path);
+				new_att->attachment_mime_type = email_get_mime_type_from_file(file_name);
+			}
+
+			if (!new_att->attachment_name || !new_att->attachment_path) {
+				debug_error("Failed to init attachemnt data! (aborting...)");
+				email_engine_free_attachment_data_list(&new_att, 1);
+				break;
+			}
 		}
 
-		if (!new_att->attachment_name || !new_att->attachment_path) {
-			debug_error("Failed to init attachemnt data! (aborting...)");
+		debug_secure("att_name: %s", att_name);
+
+		_composer_util_make_inline_img_js_map_item(i + 1, att_name, tmp_buff2, sizeof(tmp_buff2));
+		gchar *new_img_js_map = g_strconcat(view->attachment_inline_img_js_map,
+				(view->attachment_inline_item_list ? "," : ""), tmp_buff2, NULL);
+		if (!new_img_js_map) {
+			debug_error("Failed to append js map item! (aborting...)");
 			email_engine_free_attachment_data_list(&new_att, 1);
 			break;
 		}
 
-		view->attachment_inline_item_list = eina_list_append(view->attachment_inline_item_list, new_att);
+		if (new_att) {
+			Eina_List *new_list = eina_list_append(view->attachment_inline_item_list, new_att);
+			if (!new_list) {
+				debug_error("Failed to append item to the list! (aborting...)");
+				email_engine_free_attachment_data_list(&new_att, 1);
+				g_free(new_img_js_map);
+				break;
+			}
 
-		debug_log("Inline attachment was added.");
+			view->attachment_inline_item_list = new_list;
+
+			debug_log("Inline attachment was added.");
+		}
+
+		g_free(view->attachment_inline_img_js_map);
+		view->attachment_inline_img_js_map = new_img_js_map;
 	}
+
+	gchar *new_img_js_map = g_strconcat(view->attachment_inline_img_js_map, "}", NULL);
+	if (!new_img_js_map) {
+		debug_error("Failed to finish js map! (cleanup...)");
+		_composer_util_clear_inline_image_list(view);
+		return;
+	}
+
+	g_free(view->attachment_inline_img_js_map);
+	view->attachment_inline_img_js_map = new_img_js_map;
+
+	debug_secure("Inline image js map: [%s]", view->attachment_inline_img_js_map);
 }
 
-static bool _composer_util_parse_local_img_src(const char *src, const char **out_file_path, const char **out_file_name, char *out_buff, int buff_size)
+static bool _composer_util_parse_local_img_src(const char *src, const char **out_file_path, const char **out_file_name,
+		char *out_buff, int buff_size)
 {
 	if (!src || !src[0]) {
 		return false;
 	}
 
-	gchar *const unescaped_src = g_uri_unescape_string(src, NULL);
+	char *unescaped_src = g_uri_unescape_string(src, NULL);
 	if (!unescaped_src) {
 		debug_error("URI unescape failed");
 		return false;
 	}
+	snprintf(out_buff, buff_size, "%s", unescaped_src);
+	g_free(unescaped_src);
+	unescaped_src = out_buff;
 	debug_secure("unescaped_src: %s", unescaped_src);
 
-	const char *raw_file_path = NULL;
-	if (g_str_has_prefix(src, "file://")) {
-		raw_file_path = strchr(unescaped_src + strlen("file://"), '/');
-	} else if (strstr(src, "://") == NULL) {
-		raw_file_path = unescaped_src;
+	const char *file_path = NULL;
+	if (g_str_has_prefix(unescaped_src, "file://")) {
+		file_path = strchr(unescaped_src + strlen("file://"), '/');
 	}
-	if (!raw_file_path) {
+	if (!file_path) {
 		debug_log("Source is not a local path");
-		g_free(unescaped_src);
 		return false;
 	}
-	debug_secure("raw_file_path: %s", raw_file_path);
-
-	snprintf(out_buff, buff_size, "%s", raw_file_path);
-	if (!email_file_optimize_path(out_buff)) {
-		debug_error("File path is not exist (skipping...)");
-		g_free(unescaped_src);
-		return false;
-	}
-	const char *const file_path = out_buff;
 	debug_secure("file_path: %s", file_path);
 
 	const char *const file_name = email_file_file_get(file_path);
+	if (!file_name || !file_name[0]) {
+		debug_error("File name is empty!");
+		return false;
+	}
 	debug_secure("file_name: %s", file_name);
-
-	g_free(unescaped_src);
 
 	*out_file_path = file_path;
 	*out_file_name = file_name;
@@ -498,16 +563,16 @@ static bool _composer_util_parse_local_img_src(const char *src, const char **out
 	return true;
 }
 
-static bool _composer_util_is_inline_image_duplicated(EmailComposerView *view, const char *file_path)
+static const email_attachment_data_t *_composer_util_find_inline_image(EmailComposerView *view, const char *file_path)
 {
 	Eina_List *l = NULL;
 	email_attachment_data_t *cur_att = NULL;
 	EINA_LIST_FOREACH(view->attachment_inline_item_list, l, cur_att) {
 		if (g_strcmp0(cur_att->attachment_path, file_path) == 0) {
-			return true;
+			return cur_att;
 		}
 	}
-	return false;
+	return NULL;
 }
 
 static const email_attachment_data_t *_composer_util_find_org_inline_image(EmailComposerView *view, const char *file_path, const char *file_name)
@@ -523,14 +588,44 @@ static const email_attachment_data_t *_composer_util_find_org_inline_image(Email
 	for (i = 0; i < org_mail_info->total_attachment_count; ++i) {
 		const email_attachment_data_t *const cur_att = &org_mail_info->attachment_list[i];
 		if (cur_att->inline_content_status &&
-			(( file_path && (g_strcmp0(cur_att->attachment_path, file_path) == 0)) ||
-			 (!file_path && (g_strcmp0(cur_att->attachment_name, file_name) == 0)))) {
+			((file_path && (g_strcmp0(cur_att->attachment_path, file_path) == 0)) ||
+			 (file_name && (g_strcmp0(cur_att->attachment_name, file_name) == 0)))) {
 			debug_log("Original attachment found");
 			return cur_att;
 		}
 	}
 
 	return NULL;
+}
+
+static void _composer_util_make_inline_img_js_map_item(int id, const char *name, char *out_buff, int buff_size)
+{
+	char *const last = (out_buff + buff_size - 4);
+
+	snprintf(out_buff, last - out_buff + 1, "\"%d\":\"", id);
+	char *iter = out_buff + strlen(out_buff);
+
+	snprintf(iter, last - iter + 1, "%s", name);
+	char *end = iter + strlen(iter);
+
+	while ((end < last) && (iter = strpbrk(iter, "'\"\\")) != NULL) {
+		if (iter[0] == '\'') {
+			memmove(iter + 1, iter, end - iter + 1);
+			iter[0] = '\\';
+			iter += 2;
+			end += 1;
+		} else {
+			memmove(iter + 3, iter, end - iter + 1);
+			iter[0] = '\\';
+			iter[1] = '\\';
+			iter[2] = '\\';
+			iter += 4;
+			end += 3;
+		}
+	}
+
+	end[0] = '\"';
+	end[1] = '\0';
 }
 
 Evas_Object *composer_util_create_layout_with_noindicator(Evas_Object *parent)
@@ -1073,21 +1168,9 @@ Eina_Bool composer_util_is_mail_modified(void *data)
 		}
 	}
 
-	if (view->with_original_message) {
-		if (g_strcmp0(view->initial_parent_content, view->final_parent_content) != 0) {
-			debug_log("final_parent_content is differ from initial_parent_content!");
-			goto FINISH_OFF;
-		}
-
-		if (g_strcmp0(view->initial_new_message_content, view->final_new_message_content) != 0) {
-			debug_log("final_new_message_content is differ from initial_new_message_content!");
-			goto FINISH_OFF;
-		}
-	} else {
-		if (g_strcmp0(view->initial_body_content, view->final_body_content) != 0) {
-			debug_log("final_new_message_content is differ from initial_new_message_content!");
-			goto FINISH_OFF;
-		}
+	if (g_strcmp0(view->initial_html_content, view->final_html_content) != 0) {
+		debug_log("final_html_content is differ from initial_html_content!");
+		goto FINISH_OFF;
 	}
 
 	is_modified = EINA_FALSE;
