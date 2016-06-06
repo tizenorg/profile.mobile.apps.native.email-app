@@ -44,6 +44,7 @@
 #define EMAIL_IMAGE_ICON_LIST_ATTACH "index_icon_attachment.png"
 #define EMAIL_IMAGE_ICON_LIST_FORWARD "index_icon_forward.png"
 #define EMAIL_IMAGE_ICON_LIST_REPLY "index_icon_reply.png"
+#define EMAIL_IMAGE_ICON_LIST_REPLY_FORWARD "index_icon_replyforward.png"
 #define EMAIL_IMAGE_COMPOSE_BUTTON "email_floating_btn_ic.png"
 #define EMAIL_IMAGE_SEARCH_BACK_BUTTON "email_search_back_ic.png"
 

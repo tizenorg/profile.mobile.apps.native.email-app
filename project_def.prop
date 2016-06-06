@@ -77,8 +77,7 @@ USER_EDCS_IMAGE_DIRS = \
 	edc/images/account_icon \
 	edc/images/composer_icon \
 	edc/images/viewer_icon \
-	edc/images/list_icon \
-	res/images/list_icon
+	edc/images/list_icon
 
 USER_EDCS_IMAGE_DIRS_ABS =
 USER_EDCS_SOUND_DIRS =
