@@ -14,6 +14,7 @@ SET(SRCS
 	${CURRENT_SOURCE_DIR}/src/email-viewer-more-menu-callback.c
 	${CURRENT_SOURCE_DIR}/src/email-viewer-recipient.c
 	${CURRENT_SOURCE_DIR}/src/email-viewer-header.c
+	${CURRENT_SOURCE_DIR}/src/email-viewer-reply-toolbar.c
 	${CURRENT_SOURCE_DIR}/src/email-viewer-util.c
 	${CURRENT_SOURCE_DIR}/src/email-viewer-initial-data.c
 	${CURRENT_SOURCE_DIR}/src/email-viewer-eml.c
@@ -42,6 +43,7 @@ ADD_CUSTOM_COMMAND(
 				${PROJECT_EDC_DIR}/viewer/email-viewer-scroller.edc
 				${PROJECT_EDC_DIR}/common/email-colors.edc
 				${PROJECT_EDC_DIR}/common/email-parts.edc
+				${PROJECT_EDC_DIR}/common/email-two-bottom-btn-toolbar-theme.edc
 )
 ADD_CUSTOM_TARGET(email-viewer.edj ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/email-viewer.edj)
 

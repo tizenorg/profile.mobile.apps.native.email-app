@@ -206,13 +206,15 @@ struct _view_data {
 	int move_status;
 
 	/*Header Evas Object */
-	Evas_Object *en_subject;
-	Evas_Object *subject_ly;
-	Evas_Object *sender_ly;
+	Evas_Object *header_ly;
+	Evas_Object *subject_entry;
+	Evas_Object *favourite_btn;
 	Evas_Object *attachment_ly;
 	Evas_Object *header_divider;
-	Evas_Object *priority_sender_image;
 	Evas_Object *details_button;
+
+	/*Reply toolbar*/
+	Evas_Object *reply_toolbar_ly;
 
 	Evas_Object *webview_ly;
 	Evas_Object *webview_button;
@@ -416,36 +418,6 @@ void _reset_view(EmailViewerView *view, Eina_Bool update_body);
  *
  */
 void _hide_view(EmailViewerView *view);
-
-/**
- * @brief Callback to reply
- *
- * @param[in]	data			User data (Email viewer data)
- * @param[in]	obj				Unused
- * @param[in]	event_info		Unused
- *
- */
-void _reply_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_UNUSED);
-
-/**
- * @brief Callback to reply all
- *
- * @param[in]	data			User data (Email viewer data)
- * @param[in]	obj				Unused
- * @param[in]	event_info		Unused
- *
- */
-void _reply_all_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_UNUSED);
-
-/**
- * @brief Callback to forward
- *
- * @param[in]	data			User data (Email viewer data)
- * @param[in]	obj				Unused
- * @param[in]	event_info		Unused
- *
- */
-void _forward_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_UNUSED);
 
 /**
  * @brief Callback to delete

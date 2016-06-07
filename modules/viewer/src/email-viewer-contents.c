@@ -123,8 +123,6 @@ static Eina_Bool _webview_show_page(void *data)
 
 	debug_log("scale:%f", ewk_view_scale_get(view->webview));
 
-	elm_object_focus_allow_set(view->en_subject, EINA_TRUE);
-
 	debug_leave();
 	return ECORE_CALLBACK_CANCEL;
 }
@@ -356,7 +354,7 @@ static void _webview_load_noemptylayout_finished_cb(void *data, Evas_Object *obj
 	}
 	if (view->list_progressbar != NULL) {
 		debug_log("destroy list_progressbar");
-		elm_object_part_content_unset(view->base.content, "ev.swallow.progress");
+		elm_object_part_content_unset(view->base_ly, "ev.swallow.progress");
 		DELETE_EVAS_OBJECT(view->list_progressbar);
 	}
 
@@ -849,17 +847,14 @@ static Eina_Bool _webview_scroll_region_bringin_idler(void *data)
 	retvm_if(data == NULL, ECORE_CALLBACK_CANCEL, "Invalid parameter: data[NULL]");
 	EmailViewerView *view = (EmailViewerView *)data;
 	Evas_Coord sc_width = 0, sc_height = 0;
-	Evas_Coord subject_y = 0, web_y = 0;
+	Evas_Coord web_y = 0;
 
 	view->idler_regionbringin = NULL;
-
-	evas_object_geometry_get(view->subject_ly, NULL, &subject_y, NULL, NULL);
 	evas_object_geometry_get(view->webview_ly, NULL, &web_y, NULL, NULL);
 
-	Evas_Coord size_to_be_scrolled = web_y - subject_y;
 	elm_scroller_region_get(view->scroller, 0, NULL, &sc_width, &sc_height);
-	elm_scroller_region_bring_in(view->scroller, 0, size_to_be_scrolled, sc_width, sc_height);
-	debug_log("size_to_be_scrolled :%d", size_to_be_scrolled);
+	elm_scroller_region_bring_in(view->scroller, 0, web_y, sc_width, sc_height);
+	debug_log("size_to_be_scrolled :%d", web_y);
 
 	debug_leave();
 	return ECORE_CALLBACK_CANCEL;

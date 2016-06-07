@@ -46,10 +46,6 @@
 
 #define EMAIL_VIEWER_TMP_HTML_FILE "tmp_email.html"
 
-#define HEAD_SUBJ_FONT_SIZE 32
-
-#define HEAD_SUBJ_TEXT_MAX_HEIGHT ELM_SCALE_SIZE(88)
-#define HEAD_SUBJ_TEXT_STYLE "<font_size=%d><color=#%02x%02x%02x%02x>%s</color></font_size>"
 #define HEAD_TEXT_STYLE_ELLIPSISED_FONT_COLOR "<ellipsis=%f><font_size=%d><color=#%02x%02x%02x%02x>%s (%s)</color></font_size></ellipsis>"
 
 #define EMAIL_BODY_DOWNLOAD_STATUS_IMAGES_DOWNLOADED	32
