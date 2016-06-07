@@ -14,6 +14,7 @@ SET(SRCS
 	${CURRENT_SOURCE_DIR}/src/email-viewer-more-menu-callback.c
 	${CURRENT_SOURCE_DIR}/src/email-viewer-recipient.c
 	${CURRENT_SOURCE_DIR}/src/email-viewer-header.c
+	${CURRENT_SOURCE_DIR}/src/email-viewer-reply-toolbar.c
 	${CURRENT_SOURCE_DIR}/src/email-viewer-util.c
 	${CURRENT_SOURCE_DIR}/src/email-viewer-initial-data.c
 	${CURRENT_SOURCE_DIR}/src/email-viewer-eml.c

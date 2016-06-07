@@ -302,7 +302,7 @@ static void _push_naviframe(EmailSettingView *view)
 
 	Evas_Object *btn_ly = NULL;
 	btn_ly = elm_layout_add(view->base.content);
-	elm_layout_file_set(btn_ly, email_get_setting_theme_path(), "two_bottom_btn");
+	elm_layout_file_set(btn_ly, email_get_common_theme_path(), "two_bottom_btn");
 
 	cancel_btn = elm_button_add(view->base.module->navi);
 	elm_object_style_set(cancel_btn, "bottom");
