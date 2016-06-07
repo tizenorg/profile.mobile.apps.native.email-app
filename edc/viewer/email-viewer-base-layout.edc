@@ -25,29 +25,20 @@
 #define BOX_SNGL_BUTTON_HEIGHT_PADDING 21
 #define TOOLBAR_SNGL_BUTTON_HEIGHT 104
 #define TOOLBAR_SNGL_BUTTON_HEIGHT_PADDING 24
-#define OPEN_EMAIL_PROGRESS_TOP_PADDING 461
+#define OPEN_EMAIL_PROGRESS_TOP_PADDING 34
 #define OPEN_EMAIL_PROGRESS_SIZE 102 102
 
 group {
 	name: "ev/viewer/base";
 	parts {
 		E_PART_BASE
-		E_PART_PADDING_TOP(OPEN_EMAIL_PROGRESS_TOP_PADDING);
-		E_PART_SWALLOW("ev.swallow.subject",
-			mouse_events: 1;
-			description {
-				state: "default" 0.0;
-				align: 0.5 0.0;
-				fixed: 1 1;
-				rel2.relative: 1.0 0.0;
-			}
-		)
+
 		E_PART_RECT("ev.content.bg",
 			mouse_events: 1;
 			description {
 				state: "default" 0.0;
-				rel1 {relative: 0 1; to_y: "ev.swallow.subject"; }
-				rel2 {relative: 1 1; }
+				rel1 {relative: 0 0; to: "base"; }
+				rel2 {relative: 1 1; to: "base"; }
 				color: 255 255 255 255;
 			}
 		)
@@ -57,17 +48,6 @@ group {
 				align: 0.5 0.0;
 				rel1 {relative: 0 0; to: "ev.content.bg"; }
 				rel2 {relative: 1 1; to: "ev.content.bg"; }
-			}
-		)
-		E_PART_SWALLOW("ev.swallow.progress",
-			mouse_events: 1;
-			repeat_events: 1;
-			description {
-				state: "default" 0.0;
-				min: OPEN_EMAIL_PROGRESS_SIZE;
-				max: OPEN_EMAIL_PROGRESS_SIZE;
-				rel1 {relative: 0 1; to_y: "padding.top"; }
-				align: 0.5 0.0;
 			}
 		)
 		E_PART_SWALLOW("ev.swallow.scroller",
@@ -107,6 +87,40 @@ group {
 				rel1 { relative: 0.0 1.0; to: "ev.swallow.box"; }
 				rel2 { relative: 1.0 1.0; to: "base"; }
 				align: 0.5 0;
+			}
+		)
+		E_PART_SPACER("progress.padding.top",
+			description { state: "default" 0.0;
+				fixed: 0 1;
+				align: 0.5 0.0;
+				rel1 {
+					relative: 0 0;
+					to_y: "ev.swallow.webview";
+				}
+				rel2 {
+					relative: 1 0;
+					to_y: "ev.swallow.webview";
+				}
+				min: 0 OPEN_EMAIL_PROGRESS_TOP_PADDING;
+			}
+		)
+		E_PART_SWALLOW("ev.swallow.progress",
+			mouse_events: 1;
+			repeat_events: 1;
+			description {
+				state: "default" 0.0;
+				align: 0.5 0.0;
+				fixed: 0 1;
+				rel1 {
+					relative: 0 1;
+					to_y: "progress.padding.top";
+				}
+				rel2 {
+					relative: 1 1;
+					to_y: "progress.padding.top";
+				}
+				min: OPEN_EMAIL_PROGRESS_SIZE;
+				max: OPEN_EMAIL_PROGRESS_SIZE;
 			}
 		)
 	}

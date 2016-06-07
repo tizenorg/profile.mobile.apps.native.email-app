@@ -34,7 +34,6 @@ ADD_CUSTOM_COMMAND(
 		COMMAND edje_cc -no-save ${EDJE_CC_DEFINITIONS}
 		${PROJECT_EDJE_DIR}/email-setting-theme.edc ${CMAKE_CURRENT_BINARY_DIR}/email-setting-theme.edj
 		DEPENDS ${PROJECT_EDJE_DIR}/email-setting-theme.edc
-				${PROJECT_EDC_DIR}/setting/email-setting-two-bottom-btn-theme.edc
 				${PROJECT_EDC_DIR}/setting/email-setting-genlist-item-custom-theme.edc
 				${PROJECT_EDC_DIR}/common/email-colors.edc
 				${PROJECT_EDC_DIR}/common/email-parts.edc
