@@ -1526,7 +1526,7 @@ static void _create_toolbar_more_btn(EmailSettingView *view)
 	Evas_Object *remove_btn = NULL;
 	Evas_Object *btn_ly = NULL;
 	btn_ly = elm_layout_add(view->base.content);
-	elm_layout_file_set(btn_ly, email_get_setting_theme_path(), "two_bottom_btn");
+	elm_layout_file_set(btn_ly, email_get_common_theme_path(), "two_bottom_btn");
 
 	sync_btn = elm_button_add(btn_ly);
 	elm_object_style_set(sync_btn, "bottom");

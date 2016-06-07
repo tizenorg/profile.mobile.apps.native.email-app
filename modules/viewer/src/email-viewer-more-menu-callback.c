@@ -20,6 +20,7 @@
 #include "email-debug.h"
 #include "email-engine.h"
 #include "email-viewer.h"
+#include "email-viewer-header.h"
 #include "email-viewer-js.h"
 #include "email-viewer-util.h"
 #include "email-viewer-recipient.h"
@@ -172,16 +173,7 @@ void viewer_ctxpopup_add_vip_rule_cb(void *data, Evas_Object *obj, void *event_i
 			notification_status_message_post(_("IDS_EMAIL_TPOP_EMAIL_ADDRESS_ADDED_TO_PRIORITY_SENDERS"));
 
 			if (g_strcmp0(view->sender_address, addr) == 0) {
-				if (view->priority_sender_image) {
-					elm_object_part_content_unset(view->sender_ly, "sender.priority.icon");
-					DELETE_EVAS_OBJECT(view->priority_sender_image);
-				}
-				Evas_Object *priority_image = elm_layout_add(view->sender_ly);
-				elm_layout_file_set(priority_image, email_get_common_theme_path(), EMAIL_IMAGE_ICON_PRIO_SENDER);
-				elm_object_part_content_set(view->sender_ly, "sender.priority.icon", priority_image);
-				elm_layout_signal_emit(view->sender_ly, "set.priority.sender", "elm");
-				evas_object_show(priority_image);
-				view->priority_sender_image = priority_image;
+				header_update_sender_name_and_prio_status(view);
 			}
 		}
 	}
@@ -236,9 +228,7 @@ void viewer_ctxpopup_remove_vip_rule_cb(void *data, Evas_Object *obj, void *even
 			notification_status_message_post(_("IDS_EMAIL_TPOP_EMAIL_ADDRESS_REMOVED_FROM_PRIORITY_SENDERS"));
 
 			if (g_strcmp0(view->sender_address, addr) == 0) {
-				elm_layout_signal_emit(view->sender_ly, "remove.priority.sender", "elm");
-				elm_object_part_content_unset(view->sender_ly, "sender.priority.icon");
-				DELETE_EVAS_OBJECT(view->priority_sender_image);
+				header_update_sender_name_and_prio_status(view);
 			}
 		}
 	}
