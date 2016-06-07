@@ -15,19 +15,15 @@
  *
  */
 
-// layout theme
-collections {
-	plugins {
-		plugin {
-			name: "touch_sound"; // Name run by RUN_PLUGIN
-			source: "feedback"; // External edje plugin name
-			param: "FEEDBACK_TYPE_SOUND FEEDBACK_PATTERN_TAP";
-		}
-	}
+#ifndef __EMAIL_VIEWER_REPLY_TOOLBAR_H__
+#define __EMAIL_VIEWER_REPLY_TOOLBAR_H__
 
-	base_scale: 2.6;		// multi scale for HD resolution
-	#include "../../edc/common/email-colors.edc"
-	#include "../../edc/common/email-templates.edc"
-	#include "../../edc/common/email-parts.edc"
-	#include "../../edc/setting/email-setting-genlist-item-custom-theme.edc"
-}
+/**
+ * @brief Create toolbar with reply/forward buttons
+ *
+ * @param[in]	view		Email viewer data
+ *
+ */
+void reply_toolbar_create_view(EmailViewerView *view);
+
+#endif /* __EMAIL_VIEWER_REPLY_TOOLBAR_H__ */

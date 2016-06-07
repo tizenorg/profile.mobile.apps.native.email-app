@@ -33,21 +33,13 @@ group {
 	parts {
 		E_PART_BASE
 		E_PART_PADDING_TOP(OPEN_EMAIL_PROGRESS_TOP_PADDING);
-		E_PART_SWALLOW("ev.swallow.subject",
-			mouse_events: 1;
-			description {
-				state: "default" 0.0;
-				align: 0.5 0.0;
-				fixed: 1 1;
-				rel2.relative: 1.0 0.0;
-			}
-		)
+
 		E_PART_RECT("ev.content.bg",
 			mouse_events: 1;
 			description {
 				state: "default" 0.0;
-				rel1 {relative: 0 1; to_y: "ev.swallow.subject"; }
-				rel2 {relative: 1 1; }
+				rel1 {relative: 0 0; to: "base"; }
+				rel2 {relative: 1 1; to: "base"; }
 				color: 255 255 255 255;
 			}
 		)
