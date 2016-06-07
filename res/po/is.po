@@ -22,6 +22,9 @@ msgstr "HÆTTA VIÐ"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "EYÐA"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Engin atriði til birtingar."
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Wi-Fi tenging nauðsynleg. Tengdu við Wi-Fi netkerfi og reyndu aftur."
 
@@ -33,9 +36,6 @@ msgstr "Það var hætt við niðurhal."
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "Í dag"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "Engin atriði til birtingar."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "Aðeins er hægt að sækja http- og https-vefslóðir."
@@ -103,17 +103,11 @@ msgstr "Hámarksfjölda viðtakenda (%d) hefur verið náð."
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "Hámarksfjölda stafa hefur verið náð."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "Hámarksfjölda stafa (%d) hefur verið náð."
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "Hámarksstærð skeytis (%d KB) hefur verið náð."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "Hámarksstærð skilaboða hefur verið náð. Aðeins fyrstu %d KB verður deilt."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "Hleð..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "Ógilt netfang fært inn."
@@ -214,9 +208,6 @@ msgstr "Lykilorðið þitt inniheldur bil. Margir netþjónar styðja ekki lykil
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "Ekki er hægt að færa skeyti úr mörgum pósthólfum í einu."
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "Ekki tókst að tengjast netþjóni."
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "Stofnaðu tölvupóstreikning til að skrifa tölvupóst."
 
@@ -304,29 +295,14 @@ msgstr "Mistókst að sækja viðhengi. Athugaðu nettenginguna og reyndu aftur.
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "Pósti eytt af þjóni."
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Það er ekki hægt að hlaða niður."
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "Verið er að hala niður..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
 msgstr "Ef þú eyðir þessum reikningi er öllum skeytum, tengiliðum og öðrum gögnum reikningsins einnig eytt úr tækinu. Pikkaðu á „Eyða“ til að halda áfram."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "Býr til vCard..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "Tenging brást."
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "Skrá með þetta heiti hefur þegar verið hengd við."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "Sannprófun mistókst."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "Óþekkt villa kom upp"
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "Öll viðhengi í þessum tölvupósti verða sótt áður en hann er framsendur."
@@ -337,26 +313,11 @@ msgstr "Skoða samskiptaupplýsingar"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "Uppfæra tengilið"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "Samnýta"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "Stillingar"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "Senda mér"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "Senda"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "Velja allt"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "Velja"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "Leita"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "Vista í drögum"
@@ -372,18 +333,6 @@ msgstr "Fjarlægja úr ruslefni"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "Fjarlægja úr „Forgangssendendur“"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "Fjarlægja"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "Endurnýja"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "Líma"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "Tökustærð"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "Færa í aðalviðtakanda (Til)"
@@ -409,17 +358,11 @@ msgstr "Merkja sem lesið"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "Lágur"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "Framsenda"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "Breyta"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "Eyða möppu"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "Eyða"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "Klippa"
@@ -429,9 +372,6 @@ msgstr "Búa til möppu"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "Nýr tengiliður"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "Afrita"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "Skrifa tölvupóst"
@@ -453,9 +393,6 @@ msgstr "Bæta við afriti/földu afriti"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "Setja inn viðhengi"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "Bæta við reikningi"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "Bæta við"
@@ -487,9 +424,6 @@ msgstr "Tilkynningahljóð"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "Nýr tölvupóstur"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "Tilkynningar í tölvupósti"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "Breyta undirskrift"
 
@@ -520,9 +454,6 @@ msgstr "Ekki er hægt að skrifa tölvupóst"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "Ekki hægt að bæta við viðhengi"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "Efni"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "Hætta að skrifa tölvupóst"
 
@@ -534,9 +465,6 @@ msgstr "Ruslpóstur"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Sýna allar möppur"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "Stillingar"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Sent"
@@ -565,17 +493,11 @@ msgstr "Ruslakarfa"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "Forgangssendendur"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "%d valið"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "Úthólf"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "Opna tölvupóst"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "Tilkynningar"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "Pósthólf"
@@ -588,9 +510,6 @@ msgstr "Myndgæði"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(sjálfg.)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "Almennt"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "Möppur þessa reiknings"
@@ -619,9 +538,6 @@ msgstr "Sækja viðhengi"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "Sækja viðhengi"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "Eyða"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "Búa til vCard"
 
@@ -637,17 +553,11 @@ msgstr "Sameinaðir reikningar"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "Viðhengi"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "Reikningar"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "Myndskeið"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "Taka mynd"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "Stillingar"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Senda allt"
@@ -658,9 +568,6 @@ msgstr "Vista"
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "Taka upp"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "Í lagi"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "Minnismiði"
 
@@ -669,12 +576,6 @@ msgstr "Myndir"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Sækja allan tölvupóstinn"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "Sækja allt"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "Lokið"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "Fleygja"
@@ -685,23 +586,14 @@ msgstr "Eyða"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "Búa til"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "Áfram"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "Tengiliðir"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "Hætta v."
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "Taka upp hljóðskrá"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "Dagatal"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "Í gær"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "Mistókst að tengjast við netþjón. Öryggisvilla kom upp."
@@ -748,9 +640,6 @@ msgstr "Kort"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "Hleð meira..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "Síðast uppfært"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "Láta upphafleg skilaboð fylgja með"
 
@@ -763,14 +652,8 @@ msgstr "FRS:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Frá"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "Heiti möppu"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "Strjúktu upp fyrir meira"
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "Netfang"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Af./Fal."
@@ -886,12 +769,6 @@ msgstr "Vöktun"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "Án takmarkana"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "Ekkert"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "Handvirkt"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "Halda stillingum án reikis"
 
@@ -903,12 +780,6 @@ msgstr "Á %d mínútna fresti"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "Á hverri klukkustund"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "Á hverjum degi"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "Sjálfgefið"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "Samstilla tölvupóst"
@@ -930,9 +801,6 @@ msgstr "Annað"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "Áætlun tölvupóstsamstill."
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "Viðvörun"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "Ekki hægt að votta reikning"
@@ -958,17 +826,8 @@ msgstr "Takmarka niðurhalsstærð"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "Stillingar móttökuþjóns"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "Tölvupóstur"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "Næsta"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "Handvirk upps."
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "Án hljóðs"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "Tengi"
@@ -976,14 +835,137 @@ msgstr "Tengi"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "SENDA"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "Leturstærð"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Hámarksfjölda stafa (%d) hefur verið náð."
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "Leturlitur"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Hleð..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Ekki tókst að tengjast netþjóni."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Það er ekki hægt að hlaða niður."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Verið er að hala niður..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Tenging brást."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Sannprófun mistókst."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Óþekkt villa kom upp"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Samnýta"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Stillingar"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Velja allt"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Velja"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Leita"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Fjarlægja"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Endurnýja"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Líma"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Tökustærð"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Framsenda"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Eyða"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Afrita"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Bæta við reikningi"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Tilkynningar í tölvupósti"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Efni"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Stillingar"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d valið"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Tilkynningar"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Almennt"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Eyða"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Reikningar"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Stillingar"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "Í lagi"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Sækja allt"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Lokið"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Áfram"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Hætta v."
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Í gær"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Síðast uppfært"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Heiti möppu"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "Netfang"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Ekkert"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Handvirkt"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Á hverjum degi"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "Endurnefna möppu"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Sjálfgefið"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "Færa í Ruslpóst"
@@ -1009,14 +991,23 @@ msgstr "Samstilling mistókst. Reyndu aftur síðar."
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "Litur bakgrunnstexta"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Viðvörun"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "Sótt"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Sækja viðhengi sjálfkrafa þegar tenging við Wi-Fi net er til staðar"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "Vistað."
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "Tölvupóstur"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Næsta"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Án hljóðs"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "Kveikja á RTF-sniði"
@@ -1035,9 +1026,6 @@ msgstr "Þegar tölvupóstur er vistaður í drögum er hann birtur hér."
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "Vista allt"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "Mistókst að eyða."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "Möppuheiti breytt."
@@ -1059,4 +1047,16 @@ msgstr "Net ekki til staðar. Þetta skeyti verður sent þegar þú tengist net
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "Kveikt á flugstillingu. Þetta skeyti verður sent þegar þú tengist neti."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Leturstærð"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Leturlitur"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Vistað."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Mistókst að eyða."
 

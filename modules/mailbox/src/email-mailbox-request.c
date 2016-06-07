@@ -630,8 +630,6 @@ static void _mailbox_add_mail_req_cb(email_request_h request)
 		goto CLEANUP;
 	}
 
-	ld->view = view;
-
 	CHECK_THREAD_BUSY();
 
 	email_request_send_feedback(request, ld);

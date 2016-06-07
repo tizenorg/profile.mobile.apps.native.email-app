@@ -19,11 +19,6 @@
 #define __DEF_EMAIL_MAILBOX_LIST_OTHER_ITEMS_H_
 
 /**
- * @brief Free all Elm_Genlist_Item_Class processed in the module
- */
-void mailbox_free_other_item_class_data();
-
-/**
  * @brief Provides adding the last updated time item to Mailbox viewer
  * @param[in]	view			Email mailbox data
  * @param[in]	show_directly»		If TRUE immediately bring scroller to the item

@@ -22,6 +22,9 @@ msgstr "CANCEL·LAR"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "ESBORRAR"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "No hi ha elements per mostrar"
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Cal una connexió Wi-Fi. Connecti a la xarxa Wi-Fi i torni-ho a intentar."
 
@@ -33,9 +36,6 @@ msgstr "Descàrrega cancel·lada"
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "Avui"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "No hi ha elements per mostrar"
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "Només es poden descarregar URL http o https"
@@ -103,17 +103,11 @@ msgstr "S'ha assolit el nombre màxim de destinataris (%d)."
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "S'ha assolit el nombre màxim de caràcters."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "S'ha assolit el nombre màxim de caràcters (%d)."
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "S'ha assolit la mida de missatge màxima de missatge (%d KB)."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "S'ha superat la mida màxima del missatge. Només es compartiran els primers %d KB."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "Carregant..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "S'ha introduït una adreça de correu electrònic no vàlida."
@@ -214,9 +208,6 @@ msgstr "La contrasenya conté espais. Molts servidors no admeten contrasenyes am
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "No es poden moure correus electrònics de diversos comptes a la vegada"
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "No es pot connectar al servidor"
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "Per redactar un correu electrònic, creï un compte de correu electrònic."
 
@@ -304,29 +295,14 @@ msgstr "Error en descarregar el fitxer adjunt. Comprovi la connexió de xarxa i 
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "Correu electrònic esborrat del servidor"
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Descàrrega no disponible"
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "Descarregant..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
 msgstr "Si esborra aquest compte, també s'esborraran tots els seus missatges, contactes i altres dades del dispositiu. Toqui Esborrar per continuar."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "Creant vCard..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "Error de connexió"
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "Ja s'ha adjuntant un fitxer amb aquest nom."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "Error en autenticar."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "S'ha produït un error desconegut"
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "Es descarregaran tots els fitxers adjunts d'aquest correu electrònic abans de reenviar-lo."
@@ -337,26 +313,11 @@ msgstr "Veure detalls contacte"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "Actualitzar contacte"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "Compartir"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "Ajustaments"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "Autoenviar-m'ho"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "Enviar"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "Seleccioni-ho tot"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "Seleccionar"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "Cercar"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "Desar a Esborranys"
@@ -372,18 +333,6 @@ msgstr "Eliminar de correu brossa"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "Eliminar de Remitents prioritaris"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "Elimina"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "Actualitzar"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "Enganxar"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "Original"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "Moure a destinatari pral (A)"
@@ -409,17 +358,11 @@ msgstr "Marcar com a llegit"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "Baix"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "Endavant"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "Editar"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "Esborrar carpeta"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "Esborrar"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "Tallar"
@@ -429,9 +372,6 @@ msgstr "Crear carpeta"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "Crea contacte"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "Copia"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "Redactar correu elec"
@@ -453,9 +393,6 @@ msgstr "Afegir a/c o c/o"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "Afegir element adjunt"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "Afegir compte"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "Afegir"
@@ -487,9 +424,6 @@ msgstr "So de notificació"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "Nous correus elec"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "Notificacions correu elec"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "Editar signatura"
 
@@ -520,9 +454,6 @@ msgstr "No es pot redactar correu elec"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "No es pot afegir fitxer adjunt"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "Assumpte"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "Deixar de redactar correu elec"
 
@@ -534,9 +465,6 @@ msgstr "Safata de correu brossa"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Mostrar totes les carpetes"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "Ajustaments"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Enviat"
@@ -565,17 +493,11 @@ msgstr "Paperera de reciclatge"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "Remitents prioritaris"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "%d seleccionat"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "Bústia de sortida"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "Obrir correu electrònic"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "Notificació"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "Bústia"
@@ -588,9 +510,6 @@ msgstr "Qualitat d'imatge"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(predet)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "General"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "Carpetes d'aquest compte"
@@ -619,9 +538,6 @@ msgstr "Descarregar fitxer adjunt"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "Descarregar fitxers adjunts"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "Esborrar"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "Crear vCard"
 
@@ -637,17 +553,11 @@ msgstr "Comptes combinats"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "Fitxers adjunts"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "Comptes"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "Vídeos"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "Fer foto"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "Ajustaments"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Enviar tot"
@@ -658,9 +568,6 @@ msgstr "Desar"
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "Gravar vídeo"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "Acceptar"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "Nota"
 
@@ -669,12 +576,6 @@ msgstr "Imatges"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Descarregar correu elec complet"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "Descarregar-ho tot"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "Fet"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "Descart"
@@ -685,23 +586,14 @@ msgstr "Esborrar"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "Crear"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "Cont."
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "Contactes"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "Cancel"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "Gravar fit-\nxer d'àudio"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "Calendari"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "Ahir"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "No es pot obrir la connexió al servidor. S'ha produït un error de seguretat."
@@ -748,9 +640,6 @@ msgstr "Mapes"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "Carregant més..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "Última actualització"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "Incloure el missatge original"
 
@@ -763,14 +652,8 @@ msgstr "Reenv.:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "De"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "Nom carpeta"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "Sacsegi amunt carreg més"
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "Adreça de correu electrònic"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "A/c - C/o"
@@ -886,12 +769,6 @@ msgstr "Push"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "No hi ha límit"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "Cap"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "Manual"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "Mantenir ajust no itiner"
 
@@ -903,12 +780,6 @@ msgstr "Cada %d minuts"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "Cada hora"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "Cada dia"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "Predeterminat"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "Sinc correus electrònics"
@@ -930,9 +801,6 @@ msgstr "Altres"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "Programació sincro correu"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "Advertiment"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "No es pot validar el compte"
@@ -958,17 +826,8 @@ msgstr "Mida de recuperació límit"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "Ajustaments del servidor d'entrada"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "Correu electrònic"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "Seg"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "Config manual"
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "Silenci"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "Port"
@@ -976,14 +835,137 @@ msgstr "Port"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "ENVIAR"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "Mida de font"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "S'ha assolit el nombre màxim de caràcters (%d)."
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "Color de font"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Carregant..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "No es pot connectar al servidor"
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Descàrrega no disponible"
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Descarregant..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Error de connexió"
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Error en autenticar."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "S'ha produït un error desconegut"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Compartir"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Ajustaments"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Seleccioni-ho tot"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Seleccionar"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Cercar"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Elimina"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Actualitzar"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Enganxar"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Original"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Endavant"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Esborrar"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Copia"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Afegir compte"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Notificacions correu elec"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Assumpte"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Ajustaments"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d seleccionat"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Notificació"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "General"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Esborrar"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Comptes"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Ajustaments"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "Acceptar"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Descarregar-ho tot"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Fet"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Cont."
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Cancel·lar"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Ahir"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Última actualització"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Nom carpeta"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "Adreça de correu electrònic"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Cap"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Manual"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Cada dia"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "Canviar nom de carpeta"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Predeterminat"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "Moure a la safata de correu brossa"
@@ -1009,14 +991,23 @@ msgstr "Error de sincronització. Intenti-ho més tard."
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "Color de fons del text"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Advertiment"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "Descarregat"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Descarregar fitxers adjunts automàticament quan estigui connectat a una xarxa Wi-Fi"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "Desat"
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "Correu electrònic"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Seg"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Silenci"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "Activ text enriquit"
@@ -1035,9 +1026,6 @@ msgstr "Després de desar els correus electrònics a Esborranys, es mostraran aq
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "Desar-ho tot"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "Error en eliminar"
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "Nom de carpeta canviat."
@@ -1059,4 +1047,16 @@ msgstr "Xarxa no disponible. Aquest missatge s'enviarà quan estigui connectat a
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "Mode Vol habilitat. Aquest missatge s'enviarà quan estigui connectat a la xarxa."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Mida de font"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Color de font"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Desat"
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Error en eliminar"
 

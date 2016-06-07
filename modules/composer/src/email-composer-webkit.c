@@ -685,10 +685,6 @@ static Evas_Object *_webkit_create_ewk_view(Evas_Object *parent, EmailComposerVi
 	/*evas_object_propagate_events_set(ewkview, EINA_FALSE);*/
 	ewk_view_split_scroll_overflow_enabled_set(ewk_view, EINA_TRUE);
 
-#ifdef _TIZEN_2_4_BUILD_
-	ewk_view_orientation_send(ewk_view, 90);
-#endif
-
 	/* To modify background color of webkit, following parts should be modified as well.
 	 * 1. here / 2. background-color in css / 3. color_class of webview_bg part in edc file
 	 */
@@ -757,6 +753,8 @@ void composer_webkit_create_body_field(Evas_Object *parent, EmailComposerView *v
 	view->ewk_btn = ewk_btn;
 
 	evas_object_smart_callback_add(view->ewk_btn, "focused", _webkit_button_focused_cb, view);
+
+	composer_webkit_update_orientation(view);
 
 	debug_leave();
 	email_profiling_end(composer_webkit_create_body_field);
@@ -917,4 +915,26 @@ void composer_webkit_set_focus_to_webview_with_js(void *data)
 	}
 
 	debug_leave();
+}
+
+void composer_webkit_update_orientation(EmailComposerView *view)
+{
+	switch (view->base.orientation) {
+	case APP_DEVICE_ORIENTATION_0:
+		view->is_horizontal = EINA_FALSE;
+		ewk_view_orientation_send(view->ewk_view, 0);
+		break;
+	case APP_DEVICE_ORIENTATION_90:
+		view->is_horizontal = EINA_TRUE;
+		ewk_view_orientation_send(view->ewk_view, -90);
+		break;
+	case APP_DEVICE_ORIENTATION_180:
+		view->is_horizontal = EINA_FALSE;
+		ewk_view_orientation_send(view->ewk_view, 180);
+		break;
+	case APP_DEVICE_ORIENTATION_270:
+		view->is_horizontal = EINA_TRUE;
+		ewk_view_orientation_send(view->ewk_view, 90);
+		break;
+	}
 }

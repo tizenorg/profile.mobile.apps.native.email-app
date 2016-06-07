@@ -22,6 +22,9 @@ msgstr "LƏĞV ET"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "SİL"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Göstərmək üçün element yoxdur."
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Wi-Fi bağlantısı tələb olunur. Wi-Fi şəbəkəsinə qoşul və yenidən cəhd et."
 
@@ -33,9 +36,6 @@ msgstr "Yükləmədən imtina edildi."
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "Bu gün"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "Göstərmək üçün element yoxdur."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "Yalnız http və ya https URL-ları yüklənə bilər."
@@ -103,17 +103,11 @@ msgstr "Qəbul edənlərin sayı maksimuma (%d) çatıb."
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "Simvolların sayı maksimuma çatıb."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "Simvolların sayı maksimuma (%d) çatıb"
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "Mesaj ölçüsü maksimuma (%d KB) çatmışdır."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "Mesajın maksimum ölçüsünə çatıldı. Yalnız ilk %d KB paylaşılacaq."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "Yüklənir..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "Yalnış epoçt ünvanı daxil edilmişdir."
@@ -214,9 +208,6 @@ msgstr "Parolunuzda boşluqlar var. Serverlərin çoxu boşluqlar olan parollar�
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "Bir dəfəyə bütün e-poçtları çoxsaylı hesablardan aparmaq mümkün deyil."
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "Serverə qoşulmaq mümkün deyil."
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "E-poçt yaratmaq üçün e-poçt hesabı açın."
 
@@ -304,29 +295,14 @@ msgstr "Qoşmanı yükləmək olmadı. Şəbəkə bağlantınızı yoxlayın və
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "E-poçt serverdən silindi."
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Yükləmə mümkün olmadı."
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "Yüklənmə..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
 msgstr "Bu hesabın silinməsi həmçinin hesabın bütün mesajlarını, kontaktları və digər məlumatları cihazdan silir. Davam etmək üçün Sil vurun."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "vCard yaradılır..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "Əlaqə mümkün olmadı."
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "Bu adda fayl artıq qoşulmuşdur."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "Həqiqiliyin yoxlanması alınmadı."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "Naməlum xəta baş verdi"
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "Bu e-poçtun bütün qoşlamarı yönləndirmədən öncə yüklənəcək."
@@ -337,26 +313,11 @@ msgstr "Kontakt təfərrüatlarına bax"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "Kontaktı yenilə"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "Paylaş"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "Parametrlər"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "Özümə göndər"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "Göndər"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "Hamısını seç"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "Seç"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "Axtar"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "Qaralamalarda saxla"
@@ -372,18 +333,6 @@ msgstr "Spamdan sil"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "Priority senders-dən sil"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "Sil"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "Yenilə"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "Yapışdır"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "Original"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "Əsas qəbuledənə keç (Kimə)"
@@ -409,17 +358,11 @@ msgstr "Oxunmuş kimi qeyd et"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "Zəif"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "Ötürün"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "Redaktə et"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "Qovluğu sil"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "Sil"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "Kəs"
@@ -429,9 +372,6 @@ msgstr "Qovluq yarat"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "Ad yaz"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "Köçür"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "Email yaz"
@@ -453,9 +393,6 @@ msgstr "Kk (Bkk) əlavə edin"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "Qoşma əlavə et"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "Hesab əlavə edin"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "Əlavə edin"
@@ -487,9 +424,6 @@ msgstr "Bildiriş səsi"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "Yeni e-poçtlar"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "Epoçt bildirişləri"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "İmzanı redaktə et"
 
@@ -520,9 +454,6 @@ msgstr "E-poçt məktubu yazmaq olmadı"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "Qoşma əlavə etmək mümkün deyil"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "Mövzu"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "Epoçt yazmağı dayandır"
 
@@ -534,9 +465,6 @@ msgstr "Spam qutusu"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Bütün qovluqları göstər"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "Parametrlər"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Göndərildi"
@@ -565,17 +493,11 @@ msgstr "Tullantı qutusu"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "Üstün göndəricilər"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "%d seçilmişdir"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "Göndərilənlər qutusu"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "E-poçtu aç"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "Bildirişlər"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "Poçt qutusu"
@@ -588,9 +510,6 @@ msgstr "Şəklin keyfiyyəti"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(defolt)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "Ümumi"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "Bu hesab üçün qovluqlar"
@@ -619,9 +538,6 @@ msgstr "Qoşmanı yüklə"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "Qoşmaları yüklə"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "Sil"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "vCard yarat"
 
@@ -637,17 +553,11 @@ msgstr "Birgə hesablar"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "Əlavələr"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "Hesablar"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "Videolar"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "Şəkil çək"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "Parametrlər"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Hamısını göndər"
@@ -658,9 +568,6 @@ msgstr "Saxla"
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "Video yaz"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "OK"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "Yaddaş"
 
@@ -669,12 +576,6 @@ msgstr "Şəkillər"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Tam e-poçtu yüklə"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "Hamısını yüklə"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "Tamam"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "Ləğv et"
@@ -685,23 +586,14 @@ msgstr "Sil"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "Yarat"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "Davam et"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "Kontaktlar"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "Ləğv et"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "Audio faylı yaz"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "Təqvim"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "Dünən"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "Serverlə bağlantını açmaq mümkün deyil. Təhlükəsizlik səhvi baş verdi."
@@ -748,9 +640,6 @@ msgstr "Xəritələr"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "Digərləri yüklənir..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "Son yenilənmiş"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "Orijinal mesajı daxil et"
 
@@ -763,14 +652,8 @@ msgstr "FWD:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Kimdən"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "Qovluğun adı"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "Çox yükl üçün yux sürüşd"
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "Elektron poçtu ünvanı"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Kk/Bkk"
@@ -886,12 +769,6 @@ msgstr "İtələ"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "Hədd yoxdur"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "Yoxdur"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "Ələ işlət"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "Qeyri-rouminq param saxla"
 
@@ -903,12 +780,6 @@ msgstr "Hər %d dəqiqədən"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "Hər saat"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "Hər gün"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "İlkin təyin olunan"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "E-poçtları sinxronlaşdır"
@@ -930,9 +801,6 @@ msgstr "Digər"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "E-poçt sinxronlş cədvəli"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "Xəbərdarlıq"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "Hesabı təsdiq et.mümkün deyil"
@@ -958,17 +826,8 @@ msgstr "Bərpa ölç məhdudl"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "Daxil olan server parametrləri"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "Elektron poçtlar"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "Növbəti"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "Əl ilə quraşd"
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "Səssiz"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "Port"
@@ -976,14 +835,137 @@ msgstr "Port"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "GÖNDƏR"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "Şriftin ölçüsü"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Simvolların sayı maksimuma (%d) çatıb"
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "Şriftin rəngi"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Yüklənir..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Serverə qoşulmaq mümkün deyil."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Yükləmə mümkün olmadı."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Yüklənmə..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Əlaqə mümkün olmadı."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Həqiqiliyin yoxlanması alınmadı."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Naməlum xəta baş verdi"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Paylaş"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Parametrlər"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Hamısını seç"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Seç"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Axtar"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Sil"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Yenilə"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Yapışdır"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Original"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Ötürün"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Sil"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Köçür"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Hesab əlavə edin"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Epoçt bildirişləri"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Mövzu"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Parametrlər"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d seçilmişdir"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Bildirişlər"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Ümumi"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Sil"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Hesablar"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Parametrlər"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Hamısını yüklə"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Tamam"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Davam et"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Ləğv et"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Dünən"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Son yenilənmiş"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Qovluğun adı"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "Elektron poçtu ünvanı"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Yoxdur"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Ələ işlət"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Hər gün"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "Qovluğun adını dəyişdir"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "İlkin təyin olunan"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "Spam qutusuna köçürün"
@@ -1009,14 +991,23 @@ msgstr "Sinxronlaşma uğursuz oldu. Daha sonra cəhd edin."
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "Mətnin fon rəngi"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Xəbərdarlıq"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "Yüklənmişdir"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Wi-Fi şəbəkəsinə qoşulduqda qoşmaları avtomatik yüklə"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "Yaddaşa yazıldı."
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "Elektron poçtlar"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Növbəti"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Səssiz"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "Zəngin mətni yandır"
@@ -1035,9 +1026,6 @@ msgstr "E-poçtları Qaralamada saxladıqdan sonra onlar burada görünəcək."
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "Hamısını saxla"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "Silmək mümkün olmadı."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "Qovluğun adı dəyişdirildi."
@@ -1059,4 +1047,16 @@ msgstr "Şəbəkədən istifadə etmək mümkün deyil. Bu mesaj şəbəkəyə q
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "Uçuş rejimi aktivdir. Bu mesaj şəbəkəyə qoşulanda göndəriləcək."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Şriftin ölçüsü"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Şriftin rəngi"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Yaddaşa yazıldı."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Silmək mümkün olmadı."
 

@@ -98,6 +98,33 @@ typedef struct {
 
 typedef struct _view_data EmailMailboxView;
 
+typedef enum {
+	MAILBOX_LIST_ITEM_UPDATE_TIME,
+	MAILBOX_LIST_ITEM_SELECT_ALL,
+	MAILBOX_LIST_ITEM_MAIL_BRIEF,
+	MAILBOX_LIST_ITEM_LOADING_PROCESS,
+	MAILBOX_LIST_ITEM_LOAD_MORE_MESSAGE,
+	MAILBOX_LIST_ITEM_NO_MORE_MAILS,
+} MailboxListItemType;
+
+
+typedef struct {
+	MailboxListItemType item_type;
+	Elm_Object_Item *item;
+} MailboxBaseItemData;
+
+typedef struct {
+	MailboxBaseItemData base;
+	char *time;
+} UpdateTimeItemData;
+
+typedef struct {
+	MailboxBaseItemData base;
+	Eina_Bool is_checked;
+	Evas_Object *checkbox;
+	EmailMailboxView *view;
+} SelectAllItemData;
+
 /**
  * @brief Email mailbox data
  */
@@ -125,10 +152,8 @@ struct _view_data {
 	Evas_Object *save_btn;
 
 	/* list */
-	Elm_Genlist_Item_Class itc;
 	Evas_Object *gl;
 	Evas_Object *no_content_thread;
-	Elm_Object_Item *last_updated_time_item;
 	Elm_Object_Item *get_more_progress_item;
 	Elm_Object_Item *load_more_messages_item;
 	Elm_Object_Item *no_more_emails_item;
@@ -139,12 +164,13 @@ struct _view_data {
 	/*Main layout*/
 	Evas_Object *content_layout;
 
-	/*Sellect ALL*/
-	Elm_Object_Item *select_all_item;
-	Eina_Bool selectAll_chksel;
-	Evas_Object *selectAll_check;
-	gboolean is_send_all_run;
+	/*Update Time Item*/
+	UpdateTimeItemData update_time_item_data;
 
+	/*Sellect ALL*/
+	SelectAllItemData select_all_item_data;
+
+	gboolean is_send_all_run;
 	/* toolbar */
 	Evas_Object *toolbar;
 	Evas_Object *controlbar_more_btn;
@@ -202,7 +228,6 @@ struct _view_data {
 	email_mailbox_type_e mailbox_type;
 	gchar *mailbox_alias;
 	bool only_local;
-	char *last_updated_time;
 	int total_mail_count;
 	int unread_mail_count;
 
@@ -249,23 +274,10 @@ typedef struct {
 } EmailMailboxModule;
 
 /**
- * @brief Email group item data
- */
-typedef struct {
-	EmailMailboxView *view;
-
-	gchar *group_title;
-	int mail_count;
-	Eina_Bool group_chksel;
-	Evas_Object *group_check;
-	Elm_Object_Item *group_item;
-	Eina_Bool hidden;
-} GroupItemData;
-
-/**
  * @brief Email mailbox mail item data
  */
 typedef struct {
+	MailboxBaseItemData base;
 	EmailMailboxView *view;
 
 	gchar *alias;
@@ -304,8 +316,6 @@ typedef struct {
 	Evas_Object *flag_btn;
 	Evas_Object *check_favorite_btn;
 	Eina_Bool is_highlited;
-
-	Elm_Object_Item *item;
 } MailItemData;
 
 /**

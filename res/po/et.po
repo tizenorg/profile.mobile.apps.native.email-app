@@ -22,6 +22,9 @@ msgstr "TÜHISTA"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "KUSTUTA"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Pole üksusi, mida kuvada."
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Wi-Fi ühendus on nõutud. Looge ühendus Wi-Fi võrguga ja proovige uuesti"
 
@@ -33,9 +36,6 @@ msgstr "Allalaadimine tühistatud."
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "Täna"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "Pole üksusi, mida kuvada."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "Alla saab laadida ainult http- voi https-algusega URL-e."
@@ -103,17 +103,11 @@ msgstr "Adressaatide maksimaalne arv (%d) on saavutatud."
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "Tähemärkide maksimaalne arv on saavutatud."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "Maksimaalne tähemärkide arv (%d) on saavutatud"
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "Sõnumi maksimaalne suurus (%d kB) on saavutatud."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "Sõnumi maksimaalne suurus on ületatud. Jagatakse ainult esimest %d kB."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "Laadimine..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "Sisestati vale e-posti aadress."
@@ -214,9 +208,6 @@ msgstr "Teie parool sisaldab tühikuid. Paljud serverid ei toeta tühikutega par
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "E-kirju ei saa mitmelt kontolt korraga teisaldada."
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "Ühenduse loomine serveriga pole võimalik."
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "E-kirja koostamiseks looge e-posti konto."
 
@@ -304,29 +295,14 @@ msgstr "Manuse allalaadimine nurjus. Kontrollige oma võrguühendust ja proovige
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "E-kiri on serverist kustutatud."
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Allalaadimine nurjus."
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "Allalaadimine..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
 msgstr "Selle konto kustutamisel kustutatakse seadmest kõik selle sõnumid, kontaktid ja teised andmed. Jätkamiseks toksake käsku Kustuta."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "vCardi loomine..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "Ühendamine nurjus."
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "Sellenimeline fail on juba lisatud manusena."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "Autentimine nurjus."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "Ilmnes tundmatu tõrge"
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "Kõik selle e-kirja manused laaditakse enne selle suunamist alla."
@@ -337,26 +313,11 @@ msgstr "Kuva kontakti üksikasjad"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "Värskenda kontakti"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "Jaga"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "Seaded"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "Saada endale"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "Saada"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "Vali kõik"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "Vali"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "Otsi"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "Salv. mustanditesse"
@@ -372,18 +333,6 @@ msgstr "Eemalda rämpspostist"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "Eemalda Prioriteediga saatjate hulgast"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "Eemalda"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "Värskenda"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "Kleebi"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "Originaal"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "Liigu peam. adr.-ni (Saaja)"
@@ -409,17 +358,11 @@ msgstr "Märgi loetuks"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "Madal"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "Edasta"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "Redigeeri"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "Kustuta kaust"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "Kustuta"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "Lõika"
@@ -429,9 +372,6 @@ msgstr "Loo kaust"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "Loo kontakt"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "Kopeeri"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "Koosta e-kiri"
@@ -453,9 +393,6 @@ msgstr "Lisa koopia/pimekoopia"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "Lisa manus"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "Lisa konto"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "Lisa"
@@ -487,9 +424,6 @@ msgstr "Teavituse heli"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "Uued e-kirjad"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "E-kirja teavitused"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "Redigeeri allkirja"
 
@@ -520,9 +454,6 @@ msgstr "E-kirja ei saa koostada"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "Manust ei saa lisada"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "Teema"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "Lõpeta e-kirja koostamine"
 
@@ -534,9 +465,6 @@ msgstr "Rämpspost"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Näita kõiki kaustu"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "Seaded"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Saadetud"
@@ -565,17 +493,11 @@ msgstr "Prügikast"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "Prioriteediga saatjad"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "%d on valitud"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "Väljundkaust"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "E-kirja avamine"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "Teavitused"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "Postkast"
@@ -588,9 +510,6 @@ msgstr "Pildi kvaliteet"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(vaikim.)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "Üldine"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "Kaustad selle konto jaoks"
@@ -619,9 +538,6 @@ msgstr "Laadi manus alla"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "Manuste allalaadimine"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "Kustuta"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "vCardi loomine"
 
@@ -637,17 +553,11 @@ msgstr "Ühendatud kontod"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "Manused"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "Kontod"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "Videod"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "Pildista"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "Seaded"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Saada kõik"
@@ -658,9 +568,6 @@ msgstr "Salv."
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "Salv. video"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "OK"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "Memo"
 
@@ -669,12 +576,6 @@ msgstr "Pildid"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Lae terve e-kiri alla"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "Lae kõik alla"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "Valmis"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "Loobu"
@@ -685,23 +586,14 @@ msgstr "Kustuta"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "Loo"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "Jätka"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "Kontaktid"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "Tühista"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "Salvesta\nhelifail"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "Kalender"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "Eile"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "Ei saa avada uhendust serveriga. Ilmnes turvalisuse torge."
@@ -748,9 +640,6 @@ msgstr "Kaardid"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "Laaditakse veel..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "Viimati värskendatud"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "Kaasa algne sõnum"
 
@@ -763,14 +652,8 @@ msgstr "Edasta:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Saatja"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "Kausta nimi"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "Nipsake laadimiseks üles"
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "E-posti aadress"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Koopia/pimekoopia"
@@ -886,12 +769,6 @@ msgstr "Tõuge"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "Piirangut pole"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "Puudub"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "Käsitsi"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "Säilita mitte-ränd. seaded"
 
@@ -903,12 +780,6 @@ msgstr "Iga %d minuti järel"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "Iga tund"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "Iga päev"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "Vaikimisi"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "Sünkrooni e-kirjad"
@@ -930,9 +801,6 @@ msgstr "Muu"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "E-posti sünkr. ajakava"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "Hoiatus"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "Kontot ei saa valideerida"
@@ -958,17 +826,8 @@ msgstr "Laadimise suuruse piiramine"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "Sissetuleva serveri seaded"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "E-post"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "Järgmine"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "Käs. seadist."
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "Vaikne"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "Port"
@@ -976,14 +835,137 @@ msgstr "Port"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "SAADA"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "Suurus"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Maksimaalne tähemärkide arv (%d) on saavutatud"
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "Fondi värv"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Laadimine..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Ühenduse loomine serveriga pole võimalik."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Allalaadimine nurjus."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Allalaadimine..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Ühendamine nurjus."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Autentimine nurjus."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Ilmnes tundmatu tõrge"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Jaga"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Seaded"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Vali kõik"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Vali"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Otsi"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Eemalda"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Värskenda"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Kleebi"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Originaal"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Edasta"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Kustuta"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Kopeeri"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Lisa konto"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "E-kirja teavitused"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Teema"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Seaded"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d on valitud"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Teavitused"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Üldine"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Kustuta"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Kontod"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Seaded"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Lae kõik alla"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Valmis"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Jätka"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Tühista"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Eile"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Viimati värskendatud"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Kausta nimi"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "E-posti aadress"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Puudub"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Käsitsi"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Iga päev"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "Nimeta kaust ümber"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Vaikimisi"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "Teisalda rämpsposti"
@@ -1009,14 +991,23 @@ msgstr "Sünkroonimine nurjus. Proovige hiljem."
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "Teksti taustavärv"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Hoiatus"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "Allalaetud"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Laadi manused Wi-Fi-võrguga ühenduse loomisel automaatselt alla"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "Salvestatud."
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "E-post"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Järgmine"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Vaikne"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "Aktiveeri rikastekst"
@@ -1035,9 +1026,6 @@ msgstr "E-kirjad kuvatakse siin pärast nende salvestamist mustanditesse."
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "Salvesta kõik"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "Kustutamine nurjus."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "Kaust on ümber nimetatud."
@@ -1059,4 +1047,16 @@ msgstr "Võrk pole saadaval. See sõnum saadetakse siis, kui teil on võrguühen
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "Lennurežiim on aktiveeritud. See sõnum saadetakse siis, kui teil on võrguühendus."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Suurus"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Fondi värv"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Salvestatud."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Kustutamine nurjus."
 

@@ -1,5 +1,5 @@
 msgid "IDS_EMAIL_POP_FAILED_TO_MOVE"
-msgstr "Mutare nereuşită"
+msgstr "Mutare nereușită"
 
 msgid "IDS_ST_OPT_DEFAULT_RINGTONE"
 msgstr "Sonerie de apel implicită"
@@ -20,22 +20,22 @@ msgid "IDS_TPLATFORM_ACBUTTON_CANCEL_ABB"
 msgstr "ANULARE"
 
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
-msgstr "ŞTERGERE"
+msgstr "ȘTERGERE"
+
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Nu sunt elemente de afișat."
 
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
-msgstr "Este necesară o conexiune Wi-Fi. Conectaţi-vă la reţeaua Wi-Fi şi încercaţi din nou"
+msgstr "Este necesară o conexiune Wi-Fi. Conectați-vă la rețeaua Wi-Fi și încercați din nou"
 
 msgid "IDS_EMAIL_POP_MOBILE_DATA_IS_DISABLED_CONNECT_TO_WI_FI_NETWORK_INSTEAD_OR_ENABLE_MOBILE_DATA_AND_TRY_AGAIN"
-msgstr "Date mobile dezactivate. Conectaţi-vă utilizând reţeaua Wi-Fi sau activaţi datele mobile şi încercaţi din nou"
+msgstr "Date mobile dezactivate. Conectați-vă utilizând rețeaua Wi-Fi sau activați datele mobile și încercați din nou"
 
 msgid "IDS_EMAIL_POP_DOWNLOAD_CANCELLED"
 msgstr "Descărcare anulată"
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "Azi"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "Nu sunt elemente de afişat."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "Pot fi descărcate numai adrese URL http sau https."
@@ -44,10 +44,10 @@ msgid "IDS_BR_OPT_WEB_SEARCH"
 msgstr "Căutare Web"
 
 msgid "IDS_ASEML_POP_THE_SECURITY_POLICY_PREVENTS_THE_USE_OF_POP_AND_IMAP_EMAIL_PROTOCOLS"
-msgstr "Politica de securitate nu permite utilizarea protocoalelor de e-mail POP şi IMAP."
+msgstr "Politica de securitate nu permite utilizarea protocoalelor de e-mail POP și IMAP."
 
 msgid "IDS_ASEML_HEADER_UNABLE_TO_USE_FUNCTION_ABB"
-msgstr "Funcţia nu poate fi utilizată"
+msgstr "Funcția nu poate fi utilizată"
 
 msgid "IDS_EMAIL_TPOP_SYNC_EMAIL_DISABLED_FOR_PS"
 msgstr "Sincronizarea e-mailului este dezactivată pentru %s."
@@ -59,7 +59,7 @@ msgid "IDS_EMAIL_TPOP_SERVER_ERROR_OCCURRED_ABB"
 msgstr "A apărut o eroare de server."
 
 msgid "IDS_EMAIL_TPOP_SENDING_FAILED"
-msgstr "Trimiterea nu a reuşit."
+msgstr "Trimiterea nu a reușit."
 
 msgid "IDS_EMAIL_TPOP_SENDING_EMAIL_ING"
 msgstr "Se trimite e-mailul..."
@@ -68,7 +68,7 @@ msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Se trimit e-mailurile..."
 
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
-msgstr "Se redimensionează fişierele..."
+msgstr "Se redimensionează fișierele..."
 
 msgid "IDS_EMAIL_TPOP_RECIPIENT_ALREADY_EXISTS"
 msgstr "Destinatarul există deja."
@@ -89,13 +89,13 @@ msgid "IDS_EMAIL_TPOP_P1SD_EMAILS_MOVED_TO_P2SS"
 msgstr "%1$d e-mailuri au fost mutate în %2$s."
 
 msgid "IDS_EMAIL_TPOP_NEW_EMAIL_RECEIVED_ABB"
-msgstr "Aţi primit un e-mail nou."
+msgstr "Ați primit un e-mail nou."
 
 msgid "IDS_EMAIL_TPOP_NETWORK_NOT_AVAILABLE_EMAIL_WILL_BE_SENT_WHEN_CONNECTED_TO_NETWORK"
-msgstr "Reţeaua nu este disponibilă. Mesajele de e-mail vor fi trimise când sunteţi conectat la reţea."
+msgstr "Rețeaua nu este disponibilă. Mesajele de e-mail vor fi trimise când sunteți conectat la rețea."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_REGISTERED_DEVICES_REACHED_FOR_THIS_ACCOUNT_DEREGISTER_SOME_DEVICES_AND_TRY_AGAIN"
-msgstr "A fost atins numărul maxim de dispozitive înregistrate pentru acest cont. Anulaţi înregistrarea unor dispozitive şi încercaţi din nou."
+msgstr "A fost atins numărul maxim de dispozitive înregistrate pentru acest cont. Anulați înregistrarea unor dispozitive și încercați din nou."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_RECIPIENTS_HPD_REACHED"
 msgstr "A fost atins numărul maxim de destinatari (%d)."
@@ -103,44 +103,38 @@ msgstr "A fost atins numărul maxim de destinatari (%d)."
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "A fost atins numărul maxim de caractere."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "A fost atins numărul maxim de caractere (%d)."
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "A fost atinsă dimensiunea maximă a mesajului (%d KB)."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
-msgstr "A fost depăşită dimensiunea maximă a mesajului. Vor fi partajaţi numai primii %d KB."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "Se încarcă..."
+msgstr "A fost depășită dimensiunea maximă a mesajului. Vor fi partajați numai primii %d KB."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
-msgstr "Aţi introdus o adresă de e-mail nevalidă."
+msgstr "Ați introdus o adresă de e-mail nevalidă."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_NAME_ALREADY_IN_USE_ABB"
 msgstr "Nume de folder deja utilizat."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_DELETED_ABB"
-msgstr "Folderul a fost şters."
+msgstr "Folderul a fost șters."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_CREATED"
 msgstr "Folderul a fost creat."
 
 msgid "IDS_EMAIL_TPOP_FILE_SAVED_TO_DOWNLOADS"
-msgstr "Fişierele au fost salvate în Descărcări."
+msgstr "Fișierele au fost salvate în Descărcări."
 
 msgid "IDS_EMAIL_TPOP_FAILED_TO_SIGN_IN_TO_PS"
-msgstr "Conectarea la %s nu a reuşit."
+msgstr "Conectarea la %s nu a reușit."
 
 msgid "IDS_EMAIL_TPOP_FAILED_TO_SAVE_EMAIL"
 msgstr "E-mailul nu a putut fi salvat."
 
 msgid "IDS_EMAIL_TPOP_FAILED_TO_CONNECT_TO_NETWORK"
-msgstr "Conectarea la reţea nu a reuşit."
+msgstr "Conectarea la rețea nu a reușit."
 
 msgid "IDS_EMAIL_TPOP_ENTER_AT_LEAST_ONE_VALID_RECIPIENT"
-msgstr "Introduceţi cel puţin un destinatar valid."
+msgstr "Introduceți cel puțin un destinatar valid."
 
 msgid "IDS_EMAIL_TPOP_EMAIL_SENT"
 msgstr "E-mailul a fost trimis."
@@ -161,7 +155,7 @@ msgid "IDS_EMAIL_TPOP_EMAIL_ADDRESS_ADDED_TO_PRIORITY_SENDERS"
 msgstr "Adresa de e-mail a fost adăugată la Expeditorii prioritari."
 
 msgid "IDS_EMAIL_TPOP_DELETING_FOLDER_ING"
-msgstr "Se şterge folderul..."
+msgstr "Se șterge folderul..."
 
 msgid "IDS_EMAIL_TPOP_CREATING_FOLDER_ING"
 msgstr "Se creează folderul..."
@@ -191,7 +185,7 @@ msgid "IDS_EMAIL_SBODY_SENT_FROM_MY_SAMSUNG_DEVICE"
 msgstr "Trimis de pe dispozitivul meu Samsung."
 
 msgid "IDS_EMAIL_SBODY_RECEIVE_STATUS_BAR_NOTIFICATIONS_WHEN_EMAILS_ARRIVE"
-msgstr "Primiţi notificări în bara de stare la primirea e-mailurilor."
+msgstr "Primiți notificări în bara de stare la primirea e-mailurilor."
 
 msgid "IDS_EMAIL_SBODY_NO_SUBJECT_M_NOUN"
 msgstr "Niciun subiect"
@@ -200,34 +194,31 @@ msgid "IDS_EMAIL_SBODY_NO_RECIPIENTS_M_NOUN"
 msgstr "Niciun destinatar"
 
 msgid "IDS_EMAIL_POP_YOU_MUST_DOWNLOAD_THE_MESSAGE_BEFORE_YOU_CAN_DOWNLOAD_THE_ATTACHMENT"
-msgstr "Pentru a descărca ataşarea, trebuie mai întâi să descărcaţi mesajul."
+msgstr "Pentru a descărca atașarea, trebuie mai întâi să descărcați mesajul."
 
 msgid "IDS_EMAIL_POP_YOU_HAVE_NOT_YET_CREATED_AN_EMAIL_ACCOUNT_CREATE_AN_EMAIL_ACCOUNT_AND_TRY_AGAIN"
-msgstr "Nu aţi creat încă un cont de e-mail. Creaţi un cont de e-mail şi încercaţi din nou."
+msgstr "Nu ați creat încă un cont de e-mail. Creați un cont de e-mail și încercați din nou."
 
 msgid "IDS_EMAIL_POP_YOU_CAN_ONLY_LOG_IN_ONCE_EVERY_15_MINUTES"
-msgstr "Vă puteţi conecta numai o dată la 15 minute."
+msgstr "Vă puteți conecta numai o dată la 15 minute."
 
 msgid "IDS_EMAIL_POP_YOUR_PASSWORD_CONTAINS_SPACES_MANY_SERVERS_DO_NOT_SUPPORT_PASSWORDS_WITH_SPACES"
-msgstr "Parola dvs. conţine spaţii. Multe servere nu acceptă parole cu spaţii."
+msgstr "Parola dvs. conține spații. Multe servere nu acceptă parole cu spații."
 
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
-msgstr "Imposibil de mutat e-mailurile din mai multe conturi în acelaşi timp"
-
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "Imposibil de conectat la server"
+msgstr "Imposibil de mutat e-mailurile din mai multe conturi în același timp"
 
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
-msgstr "Pentru a compune un e-mail, creaţi un cont de e-mail."
+msgstr "Pentru a compune un e-mail, creați un cont de e-mail."
 
 msgid "IDS_EMAIL_POP_THIS_FILE_TYPE_IS_NOT_SUPPORTED_BY_ANY_APPLICATION_ON_YOUR_DEVICE"
-msgstr "Acest tip de fişier nu este acceptat de nicio aplicaţie de pe dispozitiv."
+msgstr "Acest tip de fișier nu este acceptat de nicio aplicație de pe dispozitiv."
 
 msgid "IDS_EMAIL_POP_THIS_EMAIL_WILL_BE_DELETED"
-msgstr "Acest e-mail va fi şters."
+msgstr "Acest e-mail va fi șters."
 
 msgid "IDS_EMAIL_POP_THIS_EMAIL_HAS_BEEN_DELETED_FROM_THE_SERVER"
-msgstr "Acest e-mail a fost şters de pe server."
+msgstr "Acest e-mail a fost șters de pe server."
 
 msgid "IDS_EMAIL_POP_THE_VCARD_HAS_NOT_BEEN_CREATED_AN_UNKNOWN_ERROR_HAS_OCCURRED"
 msgstr "vCard nu a fost creat. A apărut o eroare necunoscută."
@@ -236,100 +227,85 @@ msgid "IDS_EMAIL_POP_THE_SELECTED_DATA_COULD_NOT_BE_FOUND"
 msgstr "Datele selectate nu au putut fi găsite."
 
 msgid "IDS_EMAIL_POP_THE_MAXIMUM_TOTAL_SIZE_OF_ATTACHMENTS_HPS_MB_HAS_BEEN_EXCEEDED_REMOVE_SOME_FILES_AND_TRY_AGAIN"
-msgstr "A fost depăşită dimensiunea maximă totală a ataşărilor (%s MB). Eliminaţi câteva fişiere şi încercaţi din nou."
+msgstr "A fost depășită dimensiunea maximă totală a atașărilor (%s MB). Eliminați câteva fișiere și încercați din nou."
 
 msgid "IDS_EMAIL_POP_THE_MAXIMUM_NUMBER_OF_ATTACHMENTS_HPD_HAS_BEEN_REACHED"
-msgstr "S-a atins numărul maxim de ataşări (%d)."
+msgstr "S-a atins numărul maxim de atașări (%d)."
 
 msgid "IDS_EMAIL_POP_THE_MAXIMUM_ATTACHMENT_SIZE_ALLOWED_BY_THE_CURRENT_EXCHANGE_SERVER_POLICY_HAS_BEEN_EXCEEDED"
-msgstr "S-a depăşit dimensiunea maximă a ataşării permisă de politica actuală a serverului Exchange."
+msgstr "S-a depășit dimensiunea maximă a atașării permisă de politica actuală a serverului Exchange."
 
 msgid "IDS_EMAIL_POP_THE_CURRENT_EXCHANGE_SERVER_POLICY_PREVENTS_ATTACHMENTS_FROM_BEING_DOWNLOADED_TO_MOBILE_DEVICES"
-msgstr "Politica actuală a serverului Exchange nu permite descărcarea ataşărilor pe dispozitivul mobil."
+msgstr "Politica actuală a serverului Exchange nu permite descărcarea atașărilor pe dispozitivul mobil."
 
 msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE_GO_TO_SETTINGS_POWER_AND_STORAGE_STORAGE_THEN_DELETE_SOME_FILES_AND_TRY_AGAIN"
-msgstr "Spaţiul din memoria dispozitivului este insuficient. Deschideţi meniul Setări > Energie şi stocare > Stocare, apoi ştergeţi câteva fişiere şi încercaţi din nou."
+msgstr "Spațiul din memoria dispozitivului este insuficient. Deschideți meniul Setări > Energie și stocare > Stocare, apoi ștergeți câteva fișiere și încercați din nou."
 
 msgid "IDS_EMAIL_POP_THERE_IS_NOT_ENOUGH_SPACE_IN_YOUR_DEVICE_STORAGE"
-msgstr "Nu există spaţiu suficient în memoria dispozitivului."
+msgstr "Nu există spațiu suficient în memoria dispozitivului."
 
 msgid "IDS_EMAIL_POP_SERVER_NOT_AVAILABLE"
 msgstr "Server indisponibil"
 
 msgid "IDS_EMAIL_POP_SERVER_INFORMATION_QUERY_FAILED_ENTER_SERVER_INFORMATION_MANUALLY"
-msgstr "Solicitarea de informaţii de la server nu a reuşit. Introduceţi manual informaţiile despre server."
+msgstr "Solicitarea de informații de la server nu a reușit. Introduceți manual informațiile despre server."
 
 msgid "IDS_EMAIL_POP_SECURITY_POLICY_RESTRICTS_USE_OF_THIS_ACCOUNT"
-msgstr "Politica de securitate restricţionează utilizarea acestui cont."
+msgstr "Politica de securitate restricționează utilizarea acestui cont."
 
 msgid "IDS_EMAIL_POP_SAVING_EMAIL_ING"
 msgstr "Se salvează e-mailul..."
 
 msgid "IDS_EMAIL_POP_SAVE_YOUR_CHANGES_OR_DISCARD_THEM_Q"
-msgstr "Salvaţi modificările sau renunţaţi la acestea?"
+msgstr "Salvați modificările sau renunțați la acestea?"
 
 msgid "IDS_EMAIL_POP_REMOVING_ACCOUNT_ING"
 msgstr "Se elimină contul..."
 
 msgid "IDS_EMAIL_POP_PLEASE_FILL_ALL_THE_MANDATORY_FIELDS"
-msgstr "Completaţi toate câmpurile obligatorii."
+msgstr "Completați toate câmpurile obligatorii."
 
 msgid "IDS_EMAIL_POP_ONLY_PART_OF_THE_MESSAGE_HAS_BEEN_DOWNLOADED_IF_YOU_CONTINUE_THE_REST_OF_THE_MESSAGE_MAY_BE_LOST"
-msgstr "A fost descărcată numai o parte a mesajului. În cazul în care continuaţi, restul mesajului se poate pierde."
+msgstr "A fost descărcată numai o parte a mesajului. În cazul în care continuați, restul mesajului se poate pierde."
 
 msgid "IDS_EMAIL_POP_NO_RESPONSE_HAS_BEEN_RECEIVED_FROM_THE_SERVER_TRY_AGAIN_LATER"
-msgstr "Nu s-a primit niciun răspuns de la server. Încercaţi din nou mai târziu."
+msgstr "Nu s-a primit niciun răspuns de la server. Încercați din nou mai târziu."
 
 msgid "IDS_EMAIL_POP_NETWORK_BUSY"
-msgstr "Reţea ocupată"
+msgstr "Rețea ocupată"
 
 msgid "IDS_EMAIL_POP_INVALID_OR_INACCESSIBLE_CERTIFICATE"
 msgstr "Certificat invalid sau inaccesibil"
 
 msgid "IDS_EMAIL_POP_INITIALISING_APPLICATION_ING"
-msgstr "Iniţializare aplicaţie..."
+msgstr "Inițializare aplicație..."
 
 msgid "IDS_EMAIL_POP_HOST_NOT_FOUND"
 msgstr "Gazdă negăsită"
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_OR_NETWORK_NOT_AVAILABLE"
-msgstr "Modul Avion este activat sau reţeaua nu este disponibilă."
+msgstr "Modul Avion este activat sau rețeaua nu este disponibilă."
 
 msgid "IDS_EMAIL_POP_FAILED_TO_START_EMAIL_APPLICATION"
-msgstr "Pornirea aplicaţiei de e-mail nu a reuşit."
+msgstr "Pornirea aplicației de e-mail nu a reușit."
 
 msgid "IDS_EMAIL_POP_FAILED_TO_DOWNLOAD_ATTACHMENT_CHECK_YOUR_NETWORK_CONNECTION_AND_TRY_AGAIN"
-msgstr "Ataşarea nu a putut fi descărcată. Verificaţi conexiunea la reţea şi încercaţi din nou."
+msgstr "Atașarea nu a putut fi descărcată. Verificați conexiunea la rețea și încercați din nou."
 
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
-msgstr "E-mail şters de pe server"
-
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Descărcare eşuată"
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "Se descarcă..."
+msgstr "E-mail șters de pe server"
 
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
-msgstr "Ştergerea acestui cont va duce şi la ştergerea tuturor mesajelor aferente, a contactelor şi a altor date din dispozitiv. Pentru a continua, atingeţi Ştergere."
+msgstr "Ștergerea acestui cont va duce și la ștergerea tuturor mesajelor aferente, a contactelor și a altor date din dispozitiv. Pentru a continua, atingeți Ștergere."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "Se creează vCard..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "Conexiune nereuşită"
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
-msgstr "A fost deja ataşat un fişier cu acest nume."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "Autentificarea a eşuat."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "A apărut o eroare necunoscută"
+msgstr "A fost deja atașat un fișier cu acest nume."
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
-msgstr "Toate ataşările din acest e-mail vor fi descărcate înainte de redirecţionare."
+msgstr "Toate atașările din acest e-mail vor fi descărcate înainte de redirecționare."
 
 msgid "IDS_EMAIL_OPT_VIEW_CONTACT_DETAILS_ABB"
 msgstr "Vizualizare detalii contact"
@@ -337,32 +313,17 @@ msgstr "Vizualizare detalii contact"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "Actualizare contact"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "Partajare"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "Setări"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "Trim. către mine"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "Trimitere"
 
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "Selectare toate"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "Selectare"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "Căutare"
-
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "Salvare în Ciorne"
 
 msgid "IDS_EMAIL_OPT_REPLY_ALL"
-msgstr "Răspundeţi tuturor"
+msgstr "Răspundeți tuturor"
 
 msgid "IDS_EMAIL_OPT_REPLY"
 msgstr "Răspuns"
@@ -372,18 +333,6 @@ msgstr "Eliminare din Spam"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "Eliminare din expeditorii Prioritari"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "Eliminare"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "Reîmprospătare"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "Lipire"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "Original"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "Mutare la dest. princ. (Către)"
@@ -409,17 +358,11 @@ msgstr "Marcare citit"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "Redusă"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "Transfer"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "Editare"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
-msgstr "Ştergere folder"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "Ştergere"
+msgstr "Ștergere folder"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "Tăiere"
@@ -429,9 +372,6 @@ msgstr "Creare folder"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "Creare contact"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "Copiere"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "Scriere e-mail"
@@ -452,10 +392,7 @@ msgid "IDS_EMAIL_OPT_ADD_CC_BCC"
 msgstr "Adăugare Cc/Bcc"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
-msgstr "Adăugare ataşare"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "Adăugare cont"
+msgstr "Adăugare atașare"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "Adăugare"
@@ -470,7 +407,7 @@ msgid "IDS_EMAIL_NPBODY_NO_EMAILS"
 msgstr "Niciun e-mail"
 
 msgid "IDS_EMAIL_MBODY_VIBRATION"
-msgstr "Vibraţie"
+msgstr "Vibrație"
 
 msgid "IDS_EMAIL_MBODY_SIGNATURE"
 msgstr "Semnătură"
@@ -479,7 +416,7 @@ msgid "IDS_EMAIL_MBODY_PRIORITY_SENDERS"
 msgstr "Expeditori prioritari"
 
 msgid "IDS_EMAIL_MBODY_NO_EMAIL_ADDRESS_OR_NAME"
-msgstr "Lipseşte e-mailul/numele"
+msgstr "Lipsește e-mailul/numele"
 
 msgid "IDS_EMAIL_MBODY_NOTIFICATION_SOUND"
 msgstr "Sunet notificare"
@@ -487,44 +424,38 @@ msgstr "Sunet notificare"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "E-mailuri noi"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "Notificări prin e-mail"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
-msgstr "Editaţi semnătura"
+msgstr "Editați semnătura"
 
 msgid "IDS_EMAIL_MBODY_DISPLAY_SIGNATURE"
-msgstr "Afişare semnătură"
+msgstr "Afișare semnătură"
 
 msgid "IDS_EMAIL_MBODY_DISPLAY_IMAGES"
-msgstr "Afişare imagini"
+msgstr "Afișare imagini"
 
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_SEND_EMAIL_ABB"
 msgstr "Nu se poate trimite e-mailul"
 
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"
-msgstr "Acţiunea nu poate fi efectuată"
+msgstr "Acțiunea nu poate fi efectuată"
 
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_OPEN_FILE_ABB"
-msgstr "Fişierul nu poate fi deschis"
+msgstr "Fișierul nu poate fi deschis"
 
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_MOVE_EMAILS_ABB"
 msgstr "E-mailurile nu pot fi mutate"
 
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_DOWNLOAD_ATTACHMENT_ABB"
-msgstr "Nu se poate descărca ataşarea"
+msgstr "Nu se poate descărca atașarea"
 
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_COMPOSE_EMAIL_ABB"
 msgstr "E-mailul nu poate fi compus"
 
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
-msgstr "Ataşarea nu poate fi adăugată"
-
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "Subiect"
+msgstr "Atașarea nu poate fi adăugată"
 
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
-msgstr "Opriţi compunerea e-mailului"
+msgstr "Opriți compunerea e-mailului"
 
 msgid "IDS_EMAIL_HEADER_STARRED_EMAILS_ABB"
 msgstr "E-mailuri cu stea"
@@ -533,10 +464,7 @@ msgid "IDS_EMAIL_HEADER_SPAMBOX"
 msgstr "Casetă cu mesaje nedorite"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
-msgstr "Afişare integrală foldere"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "Setări"
+msgstr "Afișare integrală foldere"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Trimise"
@@ -551,7 +479,7 @@ msgid "IDS_EMAIL_HEADER_SELECT_ALL_ABB"
 msgstr "Selectare totală"
 
 msgid "IDS_EMAIL_HEADER_SELECT_ACTION_ABB"
-msgstr "Selectare acţiune"
+msgstr "Selectare acțiune"
 
 msgid "IDS_EMAIL_HEADER_RE_C_M_READ_REPORT"
 msgstr "Citit:"
@@ -560,13 +488,10 @@ msgid "IDS_EMAIL_HEADER_REMOVE_ACCOUNT_ABB"
 msgstr "Eliminare cont"
 
 msgid "IDS_EMAIL_HEADER_RECYCLE_BIN_ABB"
-msgstr "Coş de reciclare"
+msgstr "Coș de reciclare"
 
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "Expeditori prioritari"
-
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "%d selectate"
 
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "În curs de trimitere"
@@ -574,11 +499,8 @@ msgstr "În curs de trimitere"
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "Deschidere e-mail"
 
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "Notificări"
-
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
-msgstr "Căsuţă poştală"
+msgstr "Căsuță poștală"
 
 msgid "IDS_EMAIL_HEADER_INBOX"
 msgstr "Mesaje primite"
@@ -589,44 +511,38 @@ msgstr "Calitate imagine"
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(implic.)"
 
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "General"
-
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "Foldere pentru acest cont"
 
 msgid "IDS_EMAIL_HEADER_FAILED_TO_SAVE_ATTACHMENT_ABB"
-msgstr "Ataşarea nu poate fi salvată"
+msgstr "Atașarea nu poate fi salvată"
 
 msgid "IDS_EMAIL_HEADER_FAILED_TO_DELETE_ACCOUNT_ABB"
-msgstr "Ştergerea contului nu a reuşit"
+msgstr "Ștergerea contului nu a reușit"
 
 msgid "IDS_EMAIL_HEADER_FAILED_TO_CONNECT_TO_SERVER_ABB"
-msgstr "Conexiune la server nereuşită"
+msgstr "Conexiune la server nereușită"
 
 msgid "IDS_EMAIL_HEADER_ENTER_NEW_PASSWORD_ABB"
-msgstr "Introduceţi parola nouă"
+msgstr "Introduceți parola nouă"
 
 msgid "IDS_EMAIL_HEADER_DRAFTS"
-msgstr "Schiţe"
+msgstr "Schițe"
 
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ENTIRE_EMAIL_ABB"
-msgstr "Descărcaţi tot e-mailul"
+msgstr "Descărcați tot e-mailul"
 
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENT_HEADER"
-msgstr "Descărcare ataşare"
+msgstr "Descărcare atașare"
 
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
-msgstr "Descărcare ataşări"
-
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "Ştergere"
+msgstr "Descărcare atașări"
 
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "Creare vCard"
 
 msgid "IDS_EMAIL_HEADER_COMPOSE_ABB"
-msgstr "Compuneţi"
+msgstr "Compuneți"
 
 msgid "IDS_EMAIL_HEADER_COMBINED_INBOX_ABB"
 msgstr "Mes. primite combinate"
@@ -635,19 +551,13 @@ msgid "IDS_EMAIL_HEADER_COMBINED_ACCOUNTS_ABB"
 msgstr "Conturi combinate"
 
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
-msgstr "Ataşări"
-
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "Conturi"
+msgstr "Atașări"
 
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "Videoclipuri"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "Fotografiere"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "Setări"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Trimitere toate"
@@ -658,9 +568,6 @@ msgstr "Salv."
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "Înreg. video"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "OK"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "Notă"
 
@@ -670,38 +577,23 @@ msgstr "Imagini"
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Descărcare e-mail complet"
 
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "Descărcare integrală"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "Efectuat"
-
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "Renunţ."
 
 msgid "IDS_EMAIL_BUTTON_DELETE_ABB4"
-msgstr "Ştergere"
+msgstr "Ștergere"
 
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "Creare"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "Contin."
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "Contacte"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "Anulare"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "Înregistr. audio"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "Calendar"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "Ieri"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "Imposibil de deschis conexiunea la server. A apărut o eroare de securitate."
@@ -710,7 +602,7 @@ msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "Către"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
-msgstr "Acest folder şi tot conţinutul său vor fi şterse."
+msgstr "Acest folder și tot conținutul său vor fi șterse."
 
 msgid "IDS_EMAIL_BODY_SERVER_DOES_NOT_SUPPORT_TLS"
 msgstr "Serverul nu acceptă TLS."
@@ -731,25 +623,22 @@ msgid "IDS_EMAIL_BODY_PS_B"
 msgstr "%s B"
 
 msgid "IDS_EMAIL_BODY_PD_FILES_ABB"
-msgstr "%d fiş."
+msgstr "%d fiș."
 
 msgid "IDS_EMAIL_BODY_ORIGINAL_MESSAGE"
 msgstr "Mesaj original"
 
 msgid "IDS_EMAIL_BODY_NO_MORE_EMAILS_M_STATUS"
-msgstr "Nu aveţi alte e-mailuri"
+msgstr "Nu aveți alte e-mailuri"
 
 msgid "IDS_EMAIL_BODY_MY_FILES_M_APPLICATION"
-msgstr "Fişierele mele"
+msgstr "Fișierele mele"
 
 msgid "IDS_EMAIL_BODY_MAPS_ABB"
-msgstr "Hărţi"
+msgstr "Hărți"
 
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "Se încarcă mai multe..."
-
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "Ultima actualizare"
 
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "Includere mesaj original"
@@ -763,14 +652,8 @@ msgstr "Fw:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "De la"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "Nume director"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "Glis. în sus pt. mai multe"
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "Adresă de email"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Cc/Bcc"
@@ -782,37 +665,37 @@ msgid "IDS_EMAIL_BODY_BCC"
 msgstr "Bcc"
 
 msgid "IDS_EMAIL_BODY_AUDIO_FILES_ABB"
-msgstr "Fiş. audio"
+msgstr "Fiș. audio"
 
 msgid "IDS_EMAIL_BODY_AFTER_YOU_SEND_EMAILS_THEY_WILL_BE_SHOWN_HERE"
-msgstr "După ce trimiteţi e-mailuri, acestea vor fi afişate aici."
+msgstr "După ce trimiteți e-mailuri, acestea vor fi afișate aici."
 
 msgid "IDS_EMAIL_BODY_AFTER_YOU_RECEIVE_EMAILS_THEY_WILL_BE_SHOWN_HERE"
-msgstr "După ce primiţi e-mailuri, acestea vor fi afişate aici."
+msgstr "După ce primiți e-mailuri, acestea vor fi afișate aici."
 
 msgid "IDS_EMAIL_BODY_AFTER_YOU_MOVE_EMAILS_TO_THIS_FOLDER_THEY_WILL_BE_SHOWN_HERE"
-msgstr "După ce mutaţi e-mailuri în acest folder, acestea vor fi afişate aici."
+msgstr "După ce mutați e-mailuri în acest folder, acestea vor fi afișate aici."
 
 msgid "IDS_EMAIL_BODY_AFTER_YOU_HAVE_TRIED_TO_SEND_EMAILS_BUT_THEY_FAILED_TO_BE_SENT_THEY_WILL_BE_SHOWN_HERE"
-msgstr "După ce încercaţi să trimiteţi e-mailuri, dar trimiterea nu reuşeşte, acestea vor fi afişate aici."
+msgstr "După ce încercați să trimiteți e-mailuri, dar trimiterea nu reușește, acestea vor fi afișate aici."
 
 msgid "IDS_EMAIL_BODY_AFTER_YOU_DELETE_EMAILS_THEY_WILL_BE_SHOWN_HERE"
-msgstr "După ce ştergeţi e-mailuri, acestea vor fi afişate aici."
+msgstr "După ce ștergeți e-mailuri, acestea vor fi afișate aici."
 
 msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_PRIORITY_SENDERS_THEY_WILL_BE_SHOWN_HERE"
-msgstr "După ce adăugaţi expeditori prioritari, aceştia vor fi afişaţi aici."
+msgstr "După ce adăugați expeditori prioritari, aceștia vor fi afișați aici."
 
 msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_PRIORITY_SENDERS_EMAILS_FROM_THEM_WILL_BE_SHOWN_HERE"
-msgstr "După ce adăugaţi expeditori prioritari, mesajele de e-mail de la aceştia vor fi afişate aici."
+msgstr "După ce adăugați expeditori prioritari, mesajele de e-mail de la aceștia vor fi afișate aici."
 
 msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_FAVOURITE_EMAILS_BY_TAPPING_THE_STAR_ICON_THEY_WILL_BE_SHOWN_HERE"
-msgstr "După ce adăugaţi e-mailuri preferate atingând pictograma stea, acestea vor fi afişate aici."
+msgstr "După ce adăugați e-mailuri preferate atingând pictograma stea, acestea vor fi afișate aici."
 
 msgid "IDS_EMAIL_BODY_1_FILE_ABB"
-msgstr "1 fiş."
+msgstr "1 fiș."
 
 msgid "IDS_EMAIL_ACBUTTON_MAILBOX_ABB"
-msgstr "CĂSUŢĂ POŞTALĂ"
+msgstr "CĂSUȚĂ POȘTALĂ"
 
 msgid "IDS_MF_HEADER_UNABLE_TO_SAVE_DATA_ABB"
 msgstr "Datele nu pot fi salvate"
@@ -848,13 +731,13 @@ msgid "IDS_ST_SBODY_SSL"
 msgstr "SSL"
 
 msgid "IDS_ST_SBODY_SHOW_PASSWORD_ABB"
-msgstr "Afişare parolă"
+msgstr "Afișare parolă"
 
 msgid "IDS_ST_SBODY_SET_AS_DEFAULT_ACCOUNT_ABB"
 msgstr "Setare cont implicit"
 
 msgid "IDS_ST_SBODY_PROCESSING_PLEASE_WAIT_ING_ABB"
-msgstr "Se procesează. Aşteptaţi..."
+msgstr "Se procesează. Așteptați..."
 
 msgid "IDS_ST_SBODY_POP3"
 msgstr "POP3"
@@ -872,10 +755,10 @@ msgid "IDS_ST_POP_THE_MAXIMUM_NUMBER_OF_EMAIL_ACCOUNTS_HPD_HAS_BEEN_REACHED"
 msgstr "S-a atins numărul maxim de conturi de e-mail (%d)."
 
 msgid "IDS_ST_POP_CHECK_THE_EMAIL_ADDRESS_AND_PASSWORD_YOU_HAVE_ENTERED"
-msgstr "Verificaţi adresa de e-mail şi parola introdusă."
+msgstr "Verificați adresa de e-mail și parola introdusă."
 
 msgid "IDS_ST_POP_ALL_DATA_RELATED_TO_THIS_ACCOUNT_WILL_BE_DELETED_FROM_THE_DEVICE"
-msgstr "Toate datele asociate acestui cont vor fi şterse de pe dispozitiv."
+msgstr "Toate datele asociate acestui cont vor fi șterse de pe dispozitiv."
 
 msgid "IDS_ST_OPT_REMOVE"
 msgstr "Eliminare"
@@ -885,12 +768,6 @@ msgstr "Împingere"
 
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "Nicio limită"
-
-msgid "IDS_ST_OPT_NONE"
-msgstr "Niciuna"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "Manual"
 
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "Păstrare set. non-roaming"
@@ -903,12 +780,6 @@ msgstr "La fiecare %d min."
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "La fiecare oră"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "În fiecare zi"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "Implicit"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "Sincronizare e-mailuri"
@@ -931,9 +802,6 @@ msgstr "Altele"
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "Progr. sincron. e-mailuri"
 
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "Avertisment"
-
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "Contul nu poate fi validat"
 
@@ -944,13 +812,13 @@ msgid "IDS_ST_HEADER_SERVER_TYPE_ABB"
 msgstr "Tip de server"
 
 msgid "IDS_ST_HEADER_SELECT_ACCOUNT_TYPE_ABB"
-msgstr "Selectaţi tipul de cont"
+msgstr "Selectați tipul de cont"
 
 msgid "IDS_ST_HEADER_SECURITY_TYPE_ABB"
 msgstr "Tip de securitate"
 
 msgid "IDS_ST_HEADER_OUTGOING_SERVER_SETTINGS_ABB"
-msgstr "Setări server de ieşire"
+msgstr "Setări server de ieșire"
 
 msgid "IDS_ST_HEADER_LIMIT_RETRIEVAL_SIZE"
 msgstr "Limitare dimensiune preluare"
@@ -958,17 +826,8 @@ msgstr "Limitare dimensiune preluare"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "Setări server de intrare"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "Email"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "Înainte"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "Config. man."
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "Silenţios"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "Port"
@@ -976,14 +835,137 @@ msgstr "Port"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "TRIMITERE"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "Dimensiune font"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "A fost atins numărul maxim de caractere (%d)."
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "Culoare font"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Se încarcă..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Imposibil de conectat la server"
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Descărcare eșuată"
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Se descarcă..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Conexiune nereușită"
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Autentificarea a eșuat."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "A apărut o eroare necunoscută"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Partajare"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Setări"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Selectare toate"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Selectare"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Căutare"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Eliminare"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Reîmprospătare"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Lipire"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Original"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Transfer"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Ștergere"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Copiere"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Adăugare cont"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Notificări prin e-mail"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Subiect"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Setări"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d selectate"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Notificări"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "General"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Ștergere"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Conturi"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Setări"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Descărcare integrală"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Efectuat"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Contin."
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Anulare"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Ieri"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Ultima actualizare"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Nume director"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "Adresă de email"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Niciuna"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Manual"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "În fiecare zi"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "Redenumire director"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Implicit"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "Mutare în caseta cu mesaje nedorite"
@@ -992,7 +974,7 @@ msgid "IDS_EMAIL_OPT_REMOVE_FROM_SPAMBOX_ABB"
 msgstr "Eliminare din folderul Spam"
 
 msgid "IDS_EMAIL_OPT_SHOW_TEXT_TOOLS"
-msgstr "Afişare instrumente text"
+msgstr "Afișare instrumente text"
 
 msgid "IDS_EMAIL_OPT_HIDE_TEXT_TOOLS"
 msgstr "Ascundere instrumente text"
@@ -1004,40 +986,46 @@ msgid "IDS_EMAIL_BODY_SYNCING_ING"
 msgstr "Se sincronizează..."
 
 msgid "IDS_EMAIL_BODY_SYNC_FAILED_TRY_LATER"
-msgstr "Sincronizare nereuşită. Încercaţi mai târziu."
+msgstr "Sincronizare nereușită. Încercați mai târziu."
 
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "Culoare de fundal text"
+
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Avertisment"
 
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "Descărcate"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
-msgstr "Descărcaţi automat ataşările când vă conectaţi la o reţea Wi-Fi"
+msgstr "Descărcați automat atașările când vă conectați la o rețea Wi-Fi"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "Salvat"
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "Email"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Înainte"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Silențios"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
-msgstr "Activare text îmbogăţit"
+msgstr "Activare text îmbogățit"
 
 msgid "IDS_EMAIL_OPT_DISABLE_RICH_TEXT_ABB2"
-msgstr "Dezactivare Text îmbogăţit"
+msgstr "Dezactivare Text îmbogățit"
 
 msgid "IDS_EMAIL_BUTTON_SHOW_ABB"
-msgstr "Afişare"
+msgstr "Afișare"
 
 msgid "IDS_EMAIL_BUTTON_HIDE_ABB3"
 msgstr "Ascundere"
 
 msgid "IDS_EMAIL_BODY_AFTER_YOU_SAVE_EMAILS_IN_DRAFTS_THEY_WILL_BE_SHOWN_HERE"
-msgstr "După ce salvaţi e-mailuri în Schiţe, acestea vor fi afişate aici."
+msgstr "După ce salvați e-mailuri în Schițe, acestea vor fi afișate aici."
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "Salvare totală"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "Ştergere nereuşită"
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "Folder redenumit."
@@ -1046,17 +1034,29 @@ msgid "IDS_EMAIL_HEADER_SELECT_EMAILS"
 msgstr "Selectare mesaje de e-mail"
 
 msgid "IDS_EMAIL_BODY_AFTER_YOU_ADD_EMAILS_TO_SPAM_THEY_WILL_BE_SHOWN_HERE"
-msgstr "După ce adăugaţi e-mailuri la spam, acestea vor fi afişate aici."
+msgstr "După ce adăugați e-mailuri la spam, acestea vor fi afișate aici."
 
 msgid "IDS_EMAIL_BUTTON_RENAME_ABB"
 msgstr "Redenumire"
 
 msgid "IDS_EMAIL_POP_RENAMING_FOLDER_ING"
-msgstr "Se redenumeşte folderul..."
+msgstr "Se redenumește folderul..."
 
 msgid "IDS_EMAIL_POP_NETWORK_NOT_AVAILABLE_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
-msgstr "Reţeaua nu este disponibilă. Acest mesaj va fi trimis când sunteţi conectat la reţea."
+msgstr "Rețeaua nu este disponibilă. Acest mesaj va fi trimis când sunteți conectat la rețea."
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
-msgstr "Modul Avion este activat. Acest mesaj va fi trimis când sunteţi conectat la reţea."
+msgstr "Modul Avion este activat. Acest mesaj va fi trimis când sunteți conectat la rețea."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Dimensiune font"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Culoare font"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Salvat"
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Ștergere nereușită"
 

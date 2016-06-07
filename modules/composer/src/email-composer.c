@@ -18,7 +18,7 @@
 #include <notification.h>
 #include <sys/vfs.h>
 #include <malloc.h>
-#include <storage/storage.h>
+#include <storage.h>
 #include <app.h>
 #include <app_common.h>
 
@@ -1351,20 +1351,7 @@ static void _composer_orientation_change_update(EmailComposerView *view)
 	debug_enter();
 	retm_if(!view, "Invalid parameter: self is NULL!");
 
-	switch (view->base.orientation) {
-	case APP_DEVICE_ORIENTATION_0:
-		view->is_horizontal = EINA_FALSE;
-		break;
-	case APP_DEVICE_ORIENTATION_90:
-		view->is_horizontal = EINA_TRUE;
-		break;
-	case APP_DEVICE_ORIENTATION_180:
-		view->is_horizontal = EINA_FALSE;
-		break;
-	case APP_DEVICE_ORIENTATION_270:
-		view->is_horizontal = EINA_TRUE;
-		break;
-	}
+	composer_webkit_update_orientation(view);
 
 	if (view->recp_from_ctxpopup) {
 		DELETE_EVAS_OBJECT(view->recp_from_ctxpopup);

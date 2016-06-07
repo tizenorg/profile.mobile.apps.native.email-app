@@ -22,6 +22,9 @@ msgstr "ԴԱԴԱՐԵՑՆԵԼ"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "ՎԵՐԱՑՆԵԼ"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Ցուցադրելու տարրեր չկան:"
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Wi-Fi միացում է պահանջվում: Միացեք Wi-Fi ցանցին և նորից փորձեք:"
 
@@ -33,9 +36,6 @@ msgstr "Ներբեռնումը չեղարկված է:"
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "Այսօր"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "Ցուցադրելու տարրեր չկան:"
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "Միայն http կամ https URL-ները կարող են ներբեռնվել:"
@@ -103,17 +103,11 @@ msgstr "Հասել է հասցեատերերի առավելագույն քանա
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "Հասել է նիշերի առավելագույն քանակին:"
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "Հասել է նիշերի առավելագույն քանակին (%d)"
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "Հասել է հաղորդագրության առավելագույն չափին (%d ԿԲ):"
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "Հաղորդագրության առավելագույն չափը գերազանցվել է: Կհամօգտագործվի միայն առաջին %d ԿԲ-ը:"
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "Բեռնվում է..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "Մուտքագրվել է անվավեր էլ. հասցե:"
@@ -214,9 +208,6 @@ msgstr "Ձեր գաղտնաբառը բացատներ է պարունակում: 
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "Անհնար է էլ-նամակներ տեղափոխել միանգամից մի քանի հաշվից:"
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "Անհնար է միանալ սերվերին:"
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "Էլ-նամակ գրելու համար ստեղծեք էլփոստի հաշիվ:"
 
@@ -304,29 +295,14 @@ msgstr "Չհաջողվեց ներբեռնել կցուրդը: Ստուգեք Ձ�
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "Էլ-նամակը վերացվեց սերվերից:"
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Բեռնումն անհասանելի է:"
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "Բեռնում..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
 msgstr "Այս հաշիվը վերացնելը սարքից կվերացնի նաև հաշվի բոլոր հաղորդագրությունները, կոնտակտները և այլ տվյալներ: Շարունակելու համար թակեք «Վերացնել»:"
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "Ստեղծվում է vCard..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "Միացումը ձախողվեց:"
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "Այս անունով ֆայլ արդեն կցվել է:"
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "Վավերականացումը ձախողվեց:"
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "Անհայտ սխալ է տեղի ունեցել"
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "Այս նամակի բոլոր կցուրդները կներբեռնվեն նախքան նամակը փոխանցելը:"
@@ -337,26 +313,11 @@ msgstr "Դիտել կոնտակտի տվյալները"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "Թարմացնել կոնտակտը"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "Համատեղ օգտագործում"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "Պարամետրեր"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "Ուղարկել ինքս ինձ"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "Ուղարկել"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "Ընտրել բոլորը"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "Ընտրել"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "Որոնել"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "Պահպանել Սևագրերում"
@@ -372,18 +333,6 @@ msgstr "Հեռացնել Սպամից"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "Հեռացնել Առաջնահերթ Ուղարկողներից"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "Հեռացնել"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "Նորացնել"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "Տեղադրել"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "Սկզբնական"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "Տղփխլ դեպ գլխ. հասցեատեր (Ում)"
@@ -409,17 +358,11 @@ msgstr "Նշել «ընթերցված»"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "Ցածր"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "Վերահասցեավորել"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "Խմբագրել"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "Ջնջել պանակը"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "Վերացնել"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "Կտրել"
@@ -429,9 +372,6 @@ msgstr "Ստեղծել պանակ"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "Ստեղծել կոնտակտ"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "Պատճենել"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "Կազմել էլ. փոստ"
@@ -453,9 +393,6 @@ msgstr "Ավելացնել Պճ/Ծպճ"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "Հավելել կցուրդ"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "Հաշվի ավելացում"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "Ավելացնել"
@@ -487,9 +424,6 @@ msgstr "Ծանուցման ձայն"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "Նոր էլ-նամակներ"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "Էլփոստի ծանուցումներ"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "Խմբագրել ստորագրությունը"
 
@@ -520,9 +454,6 @@ msgstr "Անհնար է գրել էլ-նամակ"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "Անհնար է կցուրդ ավելացնել"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "Թեմա"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "Կանգնեցնել էլ. նամակի գրումը"
 
@@ -534,9 +465,6 @@ msgstr "Սպամի արկղ"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Ցույց տալ բոլոր թղթապանակները"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "Պարամետրեր"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Ուղարկած"
@@ -565,17 +493,11 @@ msgstr "Աղբաման"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "Առաջնահերթ ուղարկողներ"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "%d ընտրված"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "Ելքային փոստարկղ"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "Բացել էլփոստը"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "Ծանուցումներ"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "Փոստարկղ"
@@ -588,9 +510,6 @@ msgstr "Պատկերի որակ"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(կնխդրվծ)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "Ընդհանուր"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "Պանակներ՝ այս հաշվի համար"
@@ -619,9 +538,6 @@ msgstr "Ներբեռնել կցորդ:"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "Ներբեռնել կցուրդներ"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "Ջնջել"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "Ստեղծել vCard"
 
@@ -637,17 +553,11 @@ msgstr "Համակցված հաշիվներ"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "Կցուրդներ"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "Հաշիվներ"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "Տեսանյութեր"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "Լուսանկարել"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "Դրվածքներ"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Ուղարկել բոլորը"
@@ -658,9 +568,6 @@ msgstr "Պհպնել"
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "Տեսագրել"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "OK"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "Հուշակ"
 
@@ -669,12 +576,6 @@ msgstr "Պատկերներ"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Ներբեռնել ամբողջ էլ-նամակը"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "Ներբեռնել բոլորը"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "Արված է"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "Գցել"
@@ -685,23 +586,14 @@ msgstr "Ջնջել"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "Ստեղծել"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "Շրնկել"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "Կոնտակտներ"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "Չեղարկել"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "Գրանցել\nձայնաֆայլ"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "Օրացույց"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "Երեկ"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "Անհնար է բացել սերվերի հետ կապը. անվտանգության սխալ է տեղի ունեցել:"
@@ -748,9 +640,6 @@ msgstr "Քարտեզներ"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "Բեռնվում է ավելին..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "Վերջին անգամ թարմացված"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "Ներառել սկզբնական հաղորդագրությունը"
 
@@ -763,14 +652,8 @@ msgstr "Փխնց."
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Ումից"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "Թղթապանակի անունը"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "Զարկ. վեր՝ ավելին բեռնելու"
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "Էլ. փոստի հասցե"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Պճ/Ծպճ"
@@ -886,12 +769,6 @@ msgstr "Ներհրում"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "Սահմանափակում չկա"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "Չկա"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "Ձեռքով"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "Պահել ոչռոումինգ. դրվծքներ"
 
@@ -903,12 +780,6 @@ msgstr "Ամեն %d րոպե"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "Ամեն ժամ"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "Ամեն օր"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "Լռելյայն"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "Համաժամացնել էլփոստերը"
@@ -930,9 +801,6 @@ msgstr "Այլ"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "Էլփոստի հմժմ. ժմնկցույց"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "Զգուշացում"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "Անհնար է վավերացնել հաշիվը"
@@ -958,17 +826,8 @@ msgstr "Սահմանափակել առբերման չափը"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "Մուտքի սերվերի դրվածքներ"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "Էլ.փոստ"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "Հաջորդ"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "Ձեռքով նխդրում"
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "Անձայն"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "Պորտ"
@@ -976,14 +835,137 @@ msgstr "Պորտ"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "ՈՒՂԱՐԿԵԼ"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "Տառաչափ"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Հասել է նիշերի առավելագույն քանակին (%d)"
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "Տառատեսակի գույն"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Բեռնվում է..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Անհնար է միանալ սերվերին:"
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Բեռնումն անհասանելի է:"
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Բեռնում..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Միացումը ձախողվեց:"
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Վավերականացումը ձախողվեց:"
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Անհայտ սխալ է տեղի ունեցել"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Համատեղ օգտագործում"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Պարամետրեր"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Ընտրել բոլորը"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Ընտրել"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Որոնել"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Հեռացնել"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Նորացնել"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Տեղադրել"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Սկզբնական"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Վերահասցեավորել"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Վերացնել"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Պատճենել"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Հաշվի ավելացում"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Էլփոստի ծանուցումներ"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Թեմա"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Պարամետրեր"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d ընտրված"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Ծանուցումներ"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Ընդհանուր"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Ջնջել"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Հաշիվներ"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Դրվածքներ"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "Ընդունել"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Ներբեռնել բոլորը"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Արված է"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Շրնկել"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Չեղարկել"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Երեկ"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Վերջին անգամ թարմացված"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Թղթապանակի անունը"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "Էլ. փոստի հասցե"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Չկա"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Ձեռքով"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Ամեն օր"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "Վերանվանել թղթապանակը"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Լռելյայն"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "Տեղափոխել դեպի Սպամի արկղ"
@@ -1009,14 +991,23 @@ msgstr "Համաժամացումը ձախողվեց: Փորձեք ավելի ո�
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "Տեքստի ֆոնային գույն"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Զգուշացում"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "Ներբեռնված"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Wi-Fi ցանցին միացված ժամանակ ինքնաբերաբար ներբեռնել կցուրդները"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "Պահպանվեց:"
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "Էլ.փոստ"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Հաջորդ"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Անձայն"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "Ընձեռել Հարուստ տեքստը"
@@ -1035,9 +1026,6 @@ msgstr "Սևագրերում նամակներ պահպանելուց հետո դ
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "Պահպանել բոլորը"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "Չհաջողվեց ջնջել:"
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "Պանակը վերանվանվեց:"
@@ -1059,4 +1047,16 @@ msgstr "Ցանցը մատչելի չէ: Այս հաղորդագրություն�
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "Թռիչքային ռեժիմն ընձեռված է: Այս հաղորդագրությունը կուղարկվի, երբ միանաք ցանցին:"
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Տառաչափ"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Տառատեսակի գույն"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Պահպանվեց:"
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Չհաջողվեց ջնջել:"
 

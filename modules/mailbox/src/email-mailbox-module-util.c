@@ -192,8 +192,8 @@ void mailbox_composer_module_destroy(void *priv, email_module_h module)
 	if (opened_mail) {
 		MailItemData *ld = (MailItemData *)g_list_nth_data(opened_mail, 0);
 		if (ld) {
-			if (elm_genlist_item_selected_get(ld->item) == EINA_TRUE)
-				elm_genlist_item_selected_set(ld->item, EINA_FALSE);
+			if (elm_genlist_item_selected_get(ld->base.item) == EINA_TRUE)
+				elm_genlist_item_selected_set(ld->base.item, EINA_FALSE);
 		}
 	}
 	if (view->content_layout)

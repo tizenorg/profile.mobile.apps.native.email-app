@@ -22,6 +22,9 @@ msgstr "БАС ТАРТУ"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "ЖОЮ"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Көрсетілетін элементтер жоқ."
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Wi-Fi желісіне қосылу қажет етіледі. Wi-Fi желісіне қосылып, қайталап көріңіз"
 
@@ -33,9 +36,6 @@ msgstr "Жазу тоқтатылды"
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "Бүгін"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "Көрсетілетін элементтер жоқ."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "Тек http немесе https URL мекенжайларын жүктеуге болады."
@@ -103,17 +103,11 @@ msgstr "Алушылар саны (%d) шегіне жетті."
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "Ең көп таңбалар санына жетті."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "Ең көп таңбалар санына (%d) жетті"
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "Ең үлкен хабар өлшемінен (%d КБ) асып кетті."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "Ең көп хабар өлшемі асып кетті. Тек алғашқы %d КБ бөлісіледі."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "Жүктелуде..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "Жарамсыз электрондық пошта мекенжайы енгізілді."
@@ -214,9 +208,6 @@ msgstr "Құпиясөзіңізде бос орындар бар. Көп сер
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "Бірнеше есептік жазбадан электрондық пошта хабарларының орнын бірден ауыстыру мүмкін емес."
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "Серверге қосылудың реті келмеді."
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "Электрондық пошта хабарын жазу үшін, есептік жазбаны жасаңыз."
 
@@ -304,29 +295,14 @@ msgstr "Тіркемені жүктеу сәтсіз болды. Желілік 
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "Электрондық пошта хабары серверден жойылды."
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Көшіру сәтсіз."
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "Жазылуда..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
 msgstr "Бұл есептік жазбаны жою құрылғыдан барлық хабарлардың, контактілердің және басқа деректердің жойылуына себеп болады. Жалғастыру үшін Жою түймесін түртіңіз."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "vCard жасауда..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "Қосылу үзіліп кетті"
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "Осы атауы бар файл тіркелген."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "Анықтай алмады."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "Белгісіз қате орын алды"
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "Осы электрондық хабардағы барлық тіркемелердің бағыты өзгертілгенше жүктеледі."
@@ -337,26 +313,11 @@ msgstr "Контакт мәліметтерін көрсету"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "Контактіні жаңарту"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "Байланысқа жол"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "Қондырғылар"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "Өзіме жіберу"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "Жіберу"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "Бәрін бөлектеу"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "Таңдау"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "Іздеу"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "Жобаларға сақтау"
@@ -372,18 +333,6 @@ msgstr "Спам тізімінен жою"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "Басымдықты жіберушілерден жою"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "Жоғалту"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "Жаңарту"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "Қою"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "Түпнұсқа"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "Негізгі алушыға жылж-у (Кімге)"
@@ -409,17 +358,11 @@ msgstr "Оқылған деп белгілеу"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "Төмен"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "Қайта жіберу"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "Өңдеу"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "Қалтаны жою"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "Жою"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "Кесу"
@@ -429,9 +372,6 @@ msgstr "Қалта жасау"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "Байланыс кітапшасын құру"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "Көшіру"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "Электрондық пошта хатын жазу"
@@ -453,9 +393,6 @@ msgstr "Көшірме/жасырын көшірме қосу"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "Тіркеме қосу"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "Тіркелгі қосу"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "Қосу"
@@ -487,9 +424,6 @@ msgstr "Хабарландыру дыбысы"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "Жаңа эл. пошта хабар-ры"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "Элек. пошта ескертулері"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "Қолтаңбаны өзгерту"
 
@@ -520,9 +454,6 @@ msgstr "Электрон-қ хаб. жазу мүмкін емес"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "Тіркемені қосу мүмкін емес"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "Нысан"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "Электрондық хабар жасауды тоқ."
 
@@ -534,9 +465,6 @@ msgstr "Спам қалтасы"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Барлық қалтаны көрсету"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "Қондырғылар"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Жіберілген"
@@ -565,17 +493,11 @@ msgstr "Себет"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "Басымдықты жіберушілер"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "%d таңдалды"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "Жіберілген"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "Электрондық поштаны ашу"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "Хабарландырулар"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "Пошта жәшігі"
@@ -588,9 +510,6 @@ msgstr "Кескін сапасы"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(әдепкі)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "Жалпы"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "Осы есептік жазба үшін қалталар"
@@ -619,9 +538,6 @@ msgstr "Тіркемені жүктеу"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "Тіркемелерді жүктеу"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "Жою"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "vCard жасау"
 
@@ -637,17 +553,11 @@ msgstr "Біріктірілген ес. жазба-р"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "Тіркемелер"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "Есептік жазбалар"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "Бейнелер"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "Сур-ке түс-у"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "Параметрлер"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Барлығын жіберу"
@@ -658,9 +568,6 @@ msgstr "Сақтау"
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "Бейнені жазу"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "OK"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "Жазба"
 
@@ -669,12 +576,6 @@ msgstr "Суреттер"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Толық эл-қ пошта мекенжайын жүктеу"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "Барлығын жүктеу"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "Дайын"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "Алып тас"
@@ -685,23 +586,14 @@ msgstr "Жою"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "Жасау"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "Жалғ-ру"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "Контакт-р"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "Тоқтату"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "Аудио файл жазу"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "Күнтізбе"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "Кеше"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "Сервер байланысын ашу мүмкін емес. Қауіпсіздік қатесі пайда болды."
@@ -748,9 +640,6 @@ msgstr "Карталар"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "Қосымша жүктелуде..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "Соңғы жаңартылғандар"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "Түпнұсқа хабарын қосу"
 
@@ -763,14 +652,8 @@ msgstr "Қайта жіберу:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Кімнен"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "Папка аты"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "Тағы жүктеу үшін, жоғ.сип."
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "Эл.пошта адресі"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Көшірме/Жасырын көш."
@@ -886,12 +769,6 @@ msgstr "Басу"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "Шектелген емес"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "Жоқ"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "Қолмен"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "Роум-к емес парам-ді сақ-у"
 
@@ -903,12 +780,6 @@ msgstr "%d минут сайын"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "Сағат сайын"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "Күн сайын"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "Өздігінен"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "Эл. пошталарды синхрондау"
@@ -930,9 +801,6 @@ msgstr "Басқа"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "Эл. пош. синх-у кестесі"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "Ескерту"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "Ес. жазб. тексеру мүмкін емес"
@@ -958,17 +826,8 @@ msgstr "Алудың шекті өлшемі"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "Кіріс сервері параметрлері"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "Эл. пошта"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "Келесі"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "Қолмен орнату"
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "Дыбыссыз"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "Порт"
@@ -976,14 +835,137 @@ msgstr "Порт"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "ЖІБЕРУ"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "Шрифт өлшемі"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Ең көп таңбалар санына (%d) жетті"
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "Шрифт түсі"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Жүктелуде..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Серверге қосылудың реті келмеді."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Көшіру сәтсіз."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Жазылуда..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Қосылу үзіліп кетті"
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Анықтай алмады."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Белгісіз қате орын алды"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Байланысқа жол"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Қондырғылар"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Бәрін бөлектеу"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Таңдау"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Іздеу"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Жоғалту"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Жаңарту"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Қою"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Түпнұсқа"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Қайта жіберу"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Жою"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Көшіру"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Тіркелгі қосу"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "Элек. пошта ескертулері"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Нысан"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Қондырғылар"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d таңдалды"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Хабарландырулар"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Жалпы"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Жою"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Есептік жазбалар"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Параметрлер"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "OK"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Барлығын жүктеу"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Дайын"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Жалғ-ру"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Тоқтату"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Кеше"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Соңғы жаңартылғандар"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Папка аты"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "Эл.пошта адресі"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Жоқ"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Қолмен"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Күн сайын"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "Папканың атын өзгерту"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Өздігінен"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "Спам қалтасына жылжыту"
@@ -1009,14 +991,23 @@ msgstr "Синхрондалмады. Кейінірек қайталап көр
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "Мәтіндік фондық түс"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Ескерту"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "Жүктелген"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Wi-Fi желісіне қосылғанда тіркемелерді автоматты түрде жүктеңіз"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "Сақталған"
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "Эл. пошта"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Келесі"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Дыбыссыз"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "Жетілдірілген мәтінді қосу"
@@ -1035,9 +1026,6 @@ msgstr "Электрондық пошта хабарларын “Жобалар
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "Барлығын сақтау"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "Жою сәтсіз болды."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "Қалта атауы өзгертілді."
@@ -1059,4 +1047,16 @@ msgstr "Желі қол жеткізгісіз. Хабар сіз желіге �
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "Ұшу режимі қосылды. Хабар сіз желіге қосылғанда жіберіледі."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Шрифт өлшемі"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Шрифт түсі"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Сақталған"
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Жою сәтсіз болды."
 

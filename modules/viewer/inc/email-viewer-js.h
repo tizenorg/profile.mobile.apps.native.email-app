@@ -24,9 +24,9 @@
 	"function getImgs() { " \
 		"var images = document.images;" \
 		"if (images.length > 0) {" \
-			"return true;" \
+			"return 'true';" \
 		"} else {" \
-			"return false;" \
+			"return 'false';" \
 		"}" \
 	"};" \
 	"getImgs();"

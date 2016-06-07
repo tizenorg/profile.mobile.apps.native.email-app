@@ -535,7 +535,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 						STR_NCPY(ld->title, _subject, title_len + TAG_LEN);
 						FREE(_subject);
 					}
-					MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
+					MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->base.item);
 					FREE(mail_info);
 				}
 			} else if (type == UPDATE_EXTRA_FLAG) {
@@ -550,7 +550,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 							mailbox_view_title_update_mail_count(view);
 						} else {
 							ld->mail_status = mail_info->save_status;
-							MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
+							MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->base.item);
 						}
 						FREE(mail_info);
 					}
@@ -630,12 +630,12 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 						if (ld->is_seen != mail_info->flags_seen_field) {
 							debug_log("read status has been changed.(%d, %d)", ld->is_seen, mail_info->flags_seen_field);
 							ld->is_seen = mail_info->flags_seen_field;
-							MAILBOX_UPDATE_GENLIST_ITEM_READ_STATE(view->gl, ld->item, ld->is_seen);
+							MAILBOX_UPDATE_GENLIST_ITEM_READ_STATE(view->gl, ld->base.item, ld->is_seen);
 						}
 						ld->flag_type = mail_info->flags_flagged_field;
 						ld->reply_flag = mail_info->flags_answered_field;
 						ld->forward_flag = mail_info->flags_forwarded_field;
-						MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
+						MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->base.item);
 						FREE(mail_info);
 					}
 				} else {
@@ -748,7 +748,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 							}
 						} else {
 							ld->is_seen = value;
-							MAILBOX_UPDATE_GENLIST_ITEM_READ_STATE(view->gl, ld->item, ld->is_seen);
+							MAILBOX_UPDATE_GENLIST_ITEM_READ_STATE(view->gl, ld->base.item, ld->is_seen);
 						}
 					}
 				}
@@ -788,7 +788,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 
 						} else {
 							ld->flag_type = value;
-							MAILBOX_UPDATE_GENLIST_ITEM_FLAG_STATE(view->gl, ld->item, ld->flag_type);
+							MAILBOX_UPDATE_GENLIST_ITEM_FLAG_STATE(view->gl, ld->base.item, ld->flag_type);
 						}
 
 						if (true == view->b_editmode) {
@@ -821,7 +821,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 					MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, view->mail_list);
 					if (ld) {
 						ld->reply_flag = value;
-						MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
+						MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->base.item);
 					}
 				}
 				break;
@@ -831,7 +831,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 					MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, view->mail_list);
 					if (ld) {
 						ld->forward_flag = value;
-						MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
+						MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->base.item);
 					}
 				}
 				break;
@@ -844,7 +844,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 						debug_log("view->mailbox_type: [%d], ld->mailbox_type : %d", view->mailbox_type, ld->mailbox_type);
 						{
 							ld->mail_status = value;
-							MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
+							MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->base.item);
 						}
 					}
 				}
@@ -886,7 +886,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 				MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, view->mail_list);
 				if (ld) {
 					ld->is_priority_sender_mail = true;
-					MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
+					MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->base.item);
 				}
 			}
 
@@ -918,7 +918,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 				MailItemData *ld = mailbox_list_get_mail_item_data_by_mailid(*idx, view->mail_list);
 				if (ld) {
 					ld->is_priority_sender_mail = false;
-					MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
+					MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->base.item);
 				}
 			}
 
@@ -969,7 +969,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 								ld->is_priority_sender_mail = false;
 							}
 						}
-						MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
+						MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->base.item);
 					}
 				}
 				email_engine_free_rule_list(&rule_list, count);
@@ -1125,7 +1125,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 				mail_info = email_engine_get_mail_by_mailid(mail_id);
 				if (!mail_info) break;
 				ld->is_attachment = mail_info->attachment_count;
-				MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->item);
+				MAILBOX_UPDATE_GENLIST_ITEM(view->gl, ld->base.item);
 				FREE(mail_info);
 			}
 			break;

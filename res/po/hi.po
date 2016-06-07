@@ -22,6 +22,9 @@ msgstr "रद्द करें"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "हटाएँ"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "दर्शानें के लिए मदें नहीं।"
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Wi-Fi कनेक्‍शन आवश्‍यक है। Wi-Fi नेटवर्क से कनेक्ट करें और फिर से प्रयास करें।"
 
@@ -33,9 +36,6 @@ msgstr "डाउनलोड रद्द।"
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "आज"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "दर्शानें के लिए मदें नहीं।"
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "केवल http या https URL डाउनलोड किए जा सकते हैं।"
@@ -103,17 +103,11 @@ msgstr "प्राप्तकर्ताओं की अधिकतम स
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "वर्णों की अधिकतम संख्या पूरी हो गई।"
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "वर्णों की अधिकतम संख्या (%d) पहुँच गई है।"
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "अधिकतम सन्देश आकार (%d KB) तक पहुँच गया है।"
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "अधिकतम सन्देश आकार पूरा हो चुका है। केवल पहले %d KB साझा किए जाएँगे।"
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "लोड हो रहा है..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "अमान्य ईमेल पता प्रविष्‍ट किया गया।"
@@ -212,10 +206,7 @@ msgid "IDS_EMAIL_POP_YOUR_PASSWORD_CONTAINS_SPACES_MANY_SERVERS_DO_NOT_SUPPORT_P
 msgstr "आपके पासवर्ड में रिक्त स्थान शामिल हैं। कई सर्वर रिक्त स्थान वाले पासवर्ड का समर्थन नहीं करते हैं।"
 
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
-msgstr "एक बार में एकाधिक खातों से ईमेल्‍स ले जाने में अक्षम।"
-
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "सर्वर से जोड़ने में असमर्थ।"
+msgstr "एक बार में एकाधिक खातों से ईमेल्‍स ले जाने में असमर्थ।"
 
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "ईमेल लिखने के लिए एक ईमेल खाता बनाएँ।"
@@ -304,29 +295,14 @@ msgstr "संलग्नक डाउनलोड करने में व�
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "सर्वर से ईमेल हटाया गया।"
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "डाउनलोड विफल।"
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "डाउनलोड हो रहा है..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
-msgstr "इस खाते को हटाना, सभी खाता सन्देशों, संपर्कों और अन्य डाटा को भी डिवाइस से हटाता है। जारी रखने के लिए हटाएँ टैप करें।"
+msgstr "इस खाते को हटाना, सभी खाता सन्देशों, संपर्कों और अन्य डाटा को भी डिवाइस से हटाता है। जारी रखने के लिए “हटाएँ” पर टैप करें।"
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "vCard बना रहा है..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "कनेक्शन विफल।"
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "इस नाम वाली एक फाइल पहले से संलग्न है।"
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "प्रमाणीकरण विफल।"
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "कोई अज्ञात त्रुटि उत्पन्न हुई है"
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "यह ईमेल अग्रेषित करने से पहले इसके सभी संलग्नक डाउनलोड किए जाएँगे।"
@@ -337,26 +313,11 @@ msgstr "संपर्क विवरण देखें"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "संपर्क अपडेट करें"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "साझा करें"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "सेटिंग्स"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "स्‍वयं को भेजें"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "भेजें"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "सभी चुनें"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "चुनें"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "खोजें"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "ड्राफ़्ट्‍स में सुरक्षित करें"
@@ -372,18 +333,6 @@ msgstr "स्‍पैम से निकालें"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "प्राथमिक प्रेषक से हटाएँ"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "हटायें"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "रीफ्रेश करें"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "पेस्ट करें"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "मूल"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "मुख्य प्राप्तकर्ता (को) पर जाएँ"
@@ -409,17 +358,11 @@ msgstr "पठित के रूप में चिह्नित करे�
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "निम्न"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "आगे भेजें"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "संपादन"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "फोल्डर हटाएँ"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "हटाएँ"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "काटें"
@@ -429,9 +372,6 @@ msgstr "फोल्डर बनाएँ"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "संपर्क बनाएं"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "कॉपी करें"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "ईमेल लिखें"
@@ -453,9 +393,6 @@ msgstr "Cc/Bcc जोड़ें"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "संलग्नक जोड़ें"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "खाता जोड़ें"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "जोड़ें"
@@ -487,9 +424,6 @@ msgstr "अधिसूचना ध्वनि"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "नए ईमेल"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "ईमेल अधिसूचनाएँ"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "हस्ताक्षर संपादित करें"
 
@@ -520,9 +454,6 @@ msgstr "ईमेल लिखने में असमर्थ"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "संलग्नक को जोड़ने में असमर्थ"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "विषय"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "ईमेल लिखना बंद करें"
 
@@ -534,9 +465,6 @@ msgstr "स्‍पैमबॉक्‍स"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "सभी फोल्‍डर दिखाएँ"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "सेटिंग्स"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "भेजा गया"
@@ -565,17 +493,11 @@ msgstr "रीसायकल बिन"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "प्राथमिक प्रेषक"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "%d चयनित"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "आउटबॉक्स"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "ईमेल खोलें"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "अधिसूचनाएँ"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "मेलबॉक्स"
@@ -588,9 +510,6 @@ msgstr "छवि की गुणवत्ता"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(डिफॉल्ट)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "सामान्य"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "इस खाते के लिए फोल्डर्स"
@@ -619,9 +538,6 @@ msgstr "संलग्नक डाउनलोड करें"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "संलग्नक डाउनलोड करें"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "हटाएँ"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "vCard बनाएँ"
 
@@ -637,17 +553,11 @@ msgstr "संयुक्त खाते"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "संलग्नक"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "खातें"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "वीडियोज"
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "तस्वीर लें"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "सेटिंग्स"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "सभी को भेजें"
@@ -658,9 +568,6 @@ msgstr "सेव"
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "वीडियो रिकॉर्ड"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "ओके"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "मेमो"
 
@@ -669,12 +576,6 @@ msgstr "छवियाँ"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "पूर्ण ईमेल डाउनलोड करें"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "सभी डाउनलोड करें"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "पूर्ण"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "निरस्त"
@@ -685,23 +586,14 @@ msgstr "हटाएँ"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "बनाएँ"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "जारी"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "संपर्क"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "रद्द"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "ऑडियो फाइल रिकॉर्ड करे"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "कैलेंडर"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "बीता हुआ कल"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "सर्वर से कनेक्‍शन खोलने में असमर्थ। सुरक्षा त्रुटि पाई गई।"
@@ -748,9 +640,6 @@ msgstr "मैप्स"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "अधिक लोड हो रहा है..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "अंतिम अपडेट किया हुआ"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "मूल सन्देश शामिल"
 
@@ -763,14 +652,8 @@ msgstr "FWD:"
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "से"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "फोल्डर का नाम"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "अधिक लोड करने हेतु ऊपर फ्लिक करें"
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "ईमेल पता"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Cc/Bcc"
@@ -886,12 +769,6 @@ msgstr "पुश"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "कोई सीमा नहीं"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "कुछ नहीं"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "मैनुअल"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "नॉन-रोमिंग सेटिंग्स रखें"
 
@@ -903,12 +780,6 @@ msgstr "प्रत्‍येक %d मिनट"
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "प्रत्‍येक घंटे"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "प्रतिदिन"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "डिफॉल्ट"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "ईमेल्स सिंक करें"
@@ -930,9 +801,6 @@ msgstr "अन्य"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "ईमेल सिंक निर्धारण"
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "चेतावनी"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "खाते को सत्‍यापित करने में अक्षम"
@@ -958,17 +826,8 @@ msgstr "पुनः प्राप्ति आकार सीमा"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "इनकमिंग सर्वर सेटिंग्स"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "ईमेल"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "अगला"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "मैनुअल सेटअप"
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "शांत"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "पोर्ट"
@@ -976,14 +835,137 @@ msgstr "पोर्ट"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "भेजें"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "फॉन्ट आकार"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "वर्णों की अधिकतम संख्या (%d) पहुँच गई है।"
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "फॉन्ट रंग"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "लोड हो रहा है..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "सर्वर से जोड़ने में असमर्थ।"
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "डाउनलोड विफल।"
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "डाउनलोड हो रहा है..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "कनेक्शन विफल।"
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "प्रमाणीकरण विफल।"
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "कोई अज्ञात त्रुटि उत्पन्न हुई है"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "साझा करें"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "सेटिंग्स"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "सभी चुनें"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "चुनें"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "खोजें"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "हटायें"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "रीफ्रेश करें"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "पेस्ट करें"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "मूल"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "आगे भेजें"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "हटाएँ"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "कॉपी करें"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "खाता जोड़ें"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "ईमेल अधिसूचनाएँ"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "विषय"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "सेटिंग्स"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "%d चयनित"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "अधिसूचनाएँ"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "सामान्य"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "हटाएँ"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "खातें"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "सेटिंग्स"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "ओके"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "सभी डाउनलोड करें"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "पूर्ण"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "जारी"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "रद्द"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "बीता हुआ कल"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "अंतिम अपडेट किया हुआ"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "फोल्डर का नाम"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "ईमेल पता"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "कुछ नहीं"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "मैनुअल"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "प्रतिदिन"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "फोल्डर का नाम बदलें"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "डिफॉल्ट"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "स्‍पैम बॉक्‍स में ले जाएं"
@@ -1009,14 +991,23 @@ msgstr "सिंक विफल। बाद में प्रयास क�
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "टेक्‍स्‍ट बैकग्राउंड रंग"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "चेतावनी"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "डाउनलोड हुआ"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "किसी Wi-Fi नेटवर्क से कनेक्ट किए जाने पर स्वचालित रूप से संलग्नक डाउनलोड करें"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "सुरक्षित किया।"
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "ईमेल"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "अगला"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "शांत"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "रिच टेक्स्ट सक्षम करें"
@@ -1035,9 +1026,6 @@ msgstr "आपके द्वारा ईमेल्स को ड्रा�
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "सभी सुरक्षित करें"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "हटाने में विफल।"
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "फोल्डर का नाम बदला गया।"
@@ -1059,4 +1047,16 @@ msgstr "नेटवर्क उपलब्ध नहीं। यह सन�
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "फ्लाइट मोड सक्षम किया गया। यह सन्देश तभी भेजा जाएगा जब आप नेटवर्क से कनेक्ट होंगे।"
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "फॉन्ट आकार"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "फॉन्ट रंग"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "सुरक्षित किया।"
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "हटाने में विफल।"
 

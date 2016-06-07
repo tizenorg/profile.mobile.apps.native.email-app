@@ -22,6 +22,9 @@ msgstr "ATŠAUKTI"
 msgid "IDS_TPLATFORM_ACBUTTON_DELETE_ABB"
 msgstr "IŠTRINTI"
 
+msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
+msgstr "Nėra rodytinų elementų."
+
 msgid "IDS_EMAIL_POP_WI_FI_CONNECTION_REQUIRED_CONNECT_TO_WI_FI_NETWORK_AND_TRY_AGAIN"
 msgstr "Reikia „Wi-Fi“ ryšio. Prisijunkite prie „ Wi-Fi“ ryšio ir pabandykite dar kartą"
 
@@ -33,9 +36,6 @@ msgstr "Atsisiuntimas atšauktas."
 
 msgid "IDS_EMAIL_BODY_TODAY"
 msgstr "Šiandien"
-
-msgid "IDS_EMAIL_BODY_NO_ITEMS_TO_DISPLAY"
-msgstr "Nėra rodytinų elementų."
 
 msgid "IDS_BR_POP_ONLY_HTTP_OR_HTTPS_URLS_CAN_BE_DOWNLOADED"
 msgstr "Atsisiųsti galima tik naudojant http arba https URL."
@@ -103,17 +103,11 @@ msgstr "Pasiektas didžiausias gavėjų skaičius (%d)."
 msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_REACHED"
 msgstr "Pasiektas didžiausias simbolių skaičius."
 
-msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
-msgstr "Pasiektas didžiausias simbolių skaičius (%d)"
-
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"
 msgstr "Pasiektas didžiausias žinutės dydis (%d KB)."
 
 msgid "IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_EXCEEDED_ONLY_FIRST_PD_KB_WILL_BE_SHARED"
 msgstr "Viršytas didžiausias žinutės dydis. Bus bendrinami tik pirmieji %d KB."
-
-msgid "IDS_EMAIL_TPOP_LOADING_ING"
-msgstr "Įkeliama..."
 
 msgid "IDS_EMAIL_TPOP_INVALID_EMAIL_ADDRESS_ENTERED"
 msgstr "Įvestas neteisingas el. pašto adresas."
@@ -214,9 +208,6 @@ msgstr "Jūsų slaptažodyje yra tarpų. Daugelis serverių nepalaiko slaptažod
 msgid "IDS_EMAIL_POP_UNABLE_TO_MOVE_EMAILS_FROM_MULTIPLE_ACCOUNTS_AT_ONCE"
 msgstr "Neįmanoma vienu metu perkelti el. laiškų iš kelių paskyrų."
 
-msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
-msgstr "Neįmanoma prisijungti prie serverio."
-
 msgid "IDS_EMAIL_POP_TO_COMPOSE_AN_EMAIL_CREATE_AN_EMAIL_ACCOUNT"
 msgstr "Jei norite sukurti el. laišką, pirmiausia sukurkite el. pašto paskyrą."
 
@@ -304,29 +295,14 @@ msgstr "Nepavyko atsisiųsti priedo. Patikrinkite tinklo ryšį ir bandykite dar
 msgid "IDS_EMAIL_POP_EMAIL_DELETED_FROM_SERVER"
 msgstr "El. laiškas ištrintas iš serverio."
 
-msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Atsisiųsti nepavyko."
-
-msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
-msgstr "Atsisiunčiama..."
-
 msgid "IDS_EMAIL_POP_DELETING_THIS_ACCOUNT_ALSO_DELETES_ALL_ACCOUNT_MESSAGES_CONTACTS_AND_OTHER_DATA_FROM_THE_DEVICE_TAP_DELETE_TO_CONTINUE"
 msgstr "Ištrynus šią paskyrą bus ištrintos visos joje esančios žinutės, adresatai ir kiti įrenginyje esantys duomenys. Bakstelėkite „Ištrinti“ ir tęskite."
 
 msgid "IDS_EMAIL_POP_CREATING_VCARD_ING"
 msgstr "Kuriama „vCard“..."
 
-msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
-msgstr "Prisijungti nepavyko."
-
 msgid "IDS_EMAIL_POP_A_FILE_WITH_THIS_NAME_HAS_ALREADY_BEEN_ATTACHED"
 msgstr "Failas tokiu pavadinimu jau pridėtas."
-
-msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
-msgstr "Autentifikavimas nepavyko."
-
-msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
-msgstr "Įvyko nežinoma klaida"
 
 msgid "IDS_EMAIL_POP_ALL_ATTACHMENTS_IN_THIS_EMAIL_WILL_BE_DOWNLOADED_BEFORE_IT_IS_FORWARDED"
 msgstr "Prieš persiunčiant, visi šio el. laiško priedai bus atsisiųsti."
@@ -337,26 +313,11 @@ msgstr "Peržiūrėt adresato informaciją"
 msgid "IDS_EMAIL_OPT_UPDATE_CONTACT"
 msgstr "Atnaujinti adresatą"
 
-msgid "IDS_EMAIL_OPT_SHARE"
-msgstr "Dalytis"
-
-msgid "IDS_EMAIL_OPT_SETTINGS"
-msgstr "Nustatymai"
-
 msgid "IDS_EMAIL_OPT_SEND_TO_MYSELF_ABB"
 msgstr "Siųsti sau"
 
 msgid "IDS_EMAIL_OPT_SEND"
 msgstr "Siųsti"
-
-msgid "IDS_EMAIL_OPT_SELECT_ALL"
-msgstr "Pasirinkti visus"
-
-msgid "IDS_EMAIL_OPT_SELECT"
-msgstr "Rinktis"
-
-msgid "IDS_EMAIL_OPT_SEARCH"
-msgstr "Paieška"
 
 msgid "IDS_EMAIL_OPT_SAVE_IN_DRAFTS_ABB"
 msgstr "Saugot juodraščiuose"
@@ -372,18 +333,6 @@ msgstr "Šalinti iš šlamšto"
 
 msgid "IDS_EMAIL_OPT_REMOVE_FROM_PRIORITY_SENDERS"
 msgstr "Šalinti iš Prioritetinių siuntėjų"
-
-msgid "IDS_EMAIL_OPT_REMOVE"
-msgstr "Šalinti"
-
-msgid "IDS_EMAIL_OPT_REFRESH"
-msgstr "Atnaujinti"
-
-msgid "IDS_EMAIL_OPT_PASTE"
-msgstr "Įklijuoti"
-
-msgid "IDS_EMAIL_OPT_ORIGINAL"
-msgstr "Originalas"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_MAIN_RECIPIENT_HTO_ABB"
 msgstr "Perkelt į pagr.gav.lauk. (kam)"
@@ -409,17 +358,11 @@ msgstr "Žymėti kaip perskaitytą"
 msgid "IDS_EMAIL_OPT_LOW_M_IMAGE_SIZE"
 msgstr "Žemas"
 
-msgid "IDS_EMAIL_OPT_FORWARD"
-msgstr "Persiųsti"
-
 msgid "IDS_EMAIL_OPT_EDIT"
 msgstr "Redaguoti"
 
 msgid "IDS_EMAIL_OPT_DELETE_FOLDER_ABB"
 msgstr "Trinti aplanką"
-
-msgid "IDS_EMAIL_OPT_DELETE"
-msgstr "Trinti"
 
 msgid "IDS_EMAIL_OPT_CUT"
 msgstr "Iškirpti"
@@ -429,9 +372,6 @@ msgstr "Kurti aplanką"
 
 msgid "IDS_EMAIL_OPT_CREATE_CONTACT"
 msgstr "Kurti adresatą"
-
-msgid "IDS_EMAIL_OPT_COPY"
-msgstr "Kopijuoti"
 
 msgid "IDS_EMAIL_OPT_COMPOSE_EMAIL_ABB"
 msgstr "Kurti el. laišką"
@@ -453,9 +393,6 @@ msgstr "Pridėti Cc /Bcc"
 
 msgid "IDS_EMAIL_OPT_ADD_ATTACHMENT_ABB"
 msgstr "Pridėti priedą"
-
-msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
-msgstr "Pridėti paskyrą"
 
 msgid "IDS_EMAIL_OPT_ADD"
 msgstr "Pridėti"
@@ -487,9 +424,6 @@ msgstr "Pranešimo garsas"
 msgid "IDS_EMAIL_MBODY_NEW_EMAILS_ABB"
 msgstr "Nauji el. laiškai"
 
-msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
-msgstr "El. pašto pranešimai"
-
 msgid "IDS_EMAIL_MBODY_EDIT_SIGNATURE"
 msgstr "Redaguoti parašą"
 
@@ -520,9 +454,6 @@ msgstr "Neįmanoma sukurti el. laiško"
 msgid "IDS_EMAIL_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB"
 msgstr "Neįmanoma pridėti priedo"
 
-msgid "IDS_EMAIL_HEADER_SUBJECT"
-msgstr "Tema"
-
 msgid "IDS_EMAIL_HEADER_STOP_COMPOSING_EMAIL_HEADER_ABB"
 msgstr "Stabdyti el. laiško kūrimą"
 
@@ -534,9 +465,6 @@ msgstr "Nepageidaujamų žinučių dėžutė"
 
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Rodyti visus aplankus"
-
-msgid "IDS_EMAIL_HEADER_SETTINGS"
-msgstr "Nustatymai"
 
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Išsiųsta"
@@ -565,17 +493,11 @@ msgstr "Šiukšlinė"
 msgid "IDS_EMAIL_HEADER_PRIORITY_SENDERS_ABB"
 msgstr "Pirmenybin. siuntėjai"
 
-msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
-msgstr "Pasirinkta: %d"
-
 msgid "IDS_EMAIL_HEADER_OUTBOX"
 msgstr "Siunčiamos žinutės"
 
 msgid "IDS_EMAIL_HEADER_OPEN_EMAIL"
 msgstr "Atidaryti el. paštą"
-
-msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
-msgstr "Pranešimai"
 
 msgid "IDS_EMAIL_HEADER_MAILBOX_ABB"
 msgstr "Pašto dėžutė"
@@ -588,9 +510,6 @@ msgstr "Vaizdo kokybė"
 
 msgid "IDS_EMAIL_HEADER_HDEFAULT_LC_ABB"
 msgstr "(numat.)"
-
-msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "Bendras"
 
 msgid "IDS_EMAIL_HEADER_FOLDERS_FOR_THIS_ACCOUNT_ABB2"
 msgstr "Šios paskyros aplankai"
@@ -619,9 +538,6 @@ msgstr "Atsisiųsti priedą"
 msgid "IDS_EMAIL_HEADER_DOWNLOAD_ATTACHMENTS_ABB"
 msgstr "Atsisiųsti priedus"
 
-msgid "IDS_EMAIL_HEADER_DELETE"
-msgstr "Trinti"
-
 msgid "IDS_EMAIL_HEADER_CREATE_VCARD_ABB"
 msgstr "Kurti „vCard“"
 
@@ -637,17 +553,11 @@ msgstr "Suderintos paskyros"
 msgid "IDS_EMAIL_HEADER_ATTACHMENTS_ABB"
 msgstr "Priedai"
 
-msgid "IDS_EMAIL_HEADER_ACCOUNTS"
-msgstr "Paskyros"
-
 msgid "IDS_EMAIL_BUTTON_VIDEOS_ABB"
 msgstr "Vaizdo įr."
 
 msgid "IDS_EMAIL_BUTTON_TAKE_PICTURE_ABB"
 msgstr "Fotografuoti"
-
-msgid "IDS_EMAIL_BUTTON_SETTINGS"
-msgstr "Nustatymai"
 
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Siųsti visiems"
@@ -658,9 +568,6 @@ msgstr "Saug."
 msgid "IDS_EMAIL_BUTTON_RECORD_VIDEO_ABB"
 msgstr "Įraš. vaizdą"
 
-msgid "IDS_EMAIL_BUTTON_OK"
-msgstr "Gerai"
-
 msgid "IDS_EMAIL_BUTTON_MEMO"
 msgstr "Įrašas"
 
@@ -669,12 +576,6 @@ msgstr "Vaizdai"
 
 msgid "IDS_EMAIL_BUTTON_DOWNLOAD_FULL_EMAIL_ABB"
 msgstr "Atsisiųsti visą el. pašto adresą"
-
-msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
-msgstr "Atsisiųsti viską"
-
-msgid "IDS_EMAIL_BUTTON_DONE"
-msgstr "Atlikta"
 
 msgid "IDS_EMAIL_BUTTON_DISCARD_ABB2"
 msgstr "Naikinti"
@@ -685,23 +586,14 @@ msgstr "Trinti"
 msgid "IDS_EMAIL_BUTTON_CREATE_ABB2"
 msgstr "Kurti"
 
-msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
-msgstr "Tęsti"
-
 msgid "IDS_EMAIL_BUTTON_CONTACTS_ABB2"
 msgstr "Adresatai"
-
-msgid "IDS_EMAIL_BUTTON_CANCEL"
-msgstr "Atšaukti"
 
 msgid "IDS_EMAIL_BUTTON2_RECORD_AUDIO_FILE_ABB"
 msgstr "Įrašyti\ngarso failą"
 
 msgid "IDS_EMAIL_BUTTON2_CALENDAR"
 msgstr "Kalendorius"
-
-msgid "IDS_EMAIL_BODY_YESTERDAY"
-msgstr "Vakar"
 
 msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRED"
 msgstr "Neįmanoma užmegzti ryšio su serveriu. Įvyko saugos klaida."
@@ -748,9 +640,6 @@ msgstr "Žemėlapiai"
 msgid "IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"
 msgstr "Įkeliama daugiau..."
 
-msgid "IDS_EMAIL_BODY_LAST_UPDATED"
-msgstr "Paskutinį kartą atnaujinta"
-
 msgid "IDS_EMAIL_BODY_INCLUDE_ORIGINAL_MESSAGE"
 msgstr "Pridėti pradinę žinutę"
 
@@ -763,14 +652,8 @@ msgstr "Pers."
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Nuo"
 
-msgid "IDS_EMAIL_BODY_FOLDER_NAME"
-msgstr "Aplanko pavadinimas"
-
 msgid "IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"
 msgstr "Brūkš.aukš.ir įkelk.daug."
-
-msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
-msgstr "El. pašto adresas"
 
 msgid "IDS_EMAIL_BODY_CC_BCC"
 msgstr "Cc/Bcc"
@@ -886,12 +769,6 @@ msgstr "Naujienos"
 msgid "IDS_ST_OPT_NO_LIMIT"
 msgstr "Nėra limito"
 
-msgid "IDS_ST_OPT_NONE"
-msgstr "Nėra"
-
-msgid "IDS_ST_OPT_MANUAL"
-msgstr "Rankinis"
-
 msgid "IDS_ST_OPT_KEEP_NON_ROAMING_SETTINGS_ABB"
 msgstr "Palikti ne tarp. ryš.nust."
 
@@ -903,12 +780,6 @@ msgstr "Kas %d min."
 
 msgid "IDS_ST_OPT_EVERY_HOUR_ABB"
 msgstr "Kas valandą"
-
-msgid "IDS_ST_OPT_EVERY_DAY"
-msgstr "Kiekvieną dieną"
-
-msgid "IDS_ST_OPT_DEFAULT"
-msgstr "Numatytoji"
 
 msgid "IDS_ST_MBODY_SYNC_EMAILS"
 msgstr "Sinch. el. laiškus"
@@ -930,9 +801,6 @@ msgstr "Kita"
 
 msgid "IDS_ST_MBODY_EMAIL_SYNC_SCHEDULE"
 msgstr "El. pšt. sinch.tvarkaraš."
-
-msgid "IDS_ST_HEADER_WARNING"
-msgstr "Perspėjimas"
 
 msgid "IDS_ST_HEADER_UNABLE_TO_VALIDATE_ACCOUNT_ABB"
 msgstr "Neįmanoma patvirtinti paskyros"
@@ -958,17 +826,8 @@ msgstr "Riboti gavimo dydį"
 msgid "IDS_ST_HEADER_INCOMING_SERVER_SETTINGS_ABB"
 msgstr "Gaunamo pašto serverio nustatymai"
 
-msgid "IDS_ST_HEADER_EMAIL"
-msgstr "El. paštas"
-
-msgid "IDS_ST_BUTTON_NEXT"
-msgstr "Kitas"
-
 msgid "IDS_ST_BUTTON_MANUAL_SETUP_ABB"
 msgstr "Rankinis nust."
-
-msgid "IDS_ST_BODY_SILENT"
-msgstr "Tylusis"
 
 msgid "IDS_ST_BODY_PORT"
 msgstr "Prievadas"
@@ -976,14 +835,137 @@ msgstr "Prievadas"
 msgid "IDS_TPLATFORM_ACBUTTON_SEND_ABB"
 msgstr "SIŲSTI"
 
-msgid "IDS_EMAIL_BODY_FONT_SIZE"
-msgstr "Šrifto dydis"
+msgid "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED"
+msgstr "Pasiektas didžiausias simbolių skaičius (%d)"
 
-msgid "IDS_EMAIL_BODY_FONT_COLOUR"
-msgstr "Šrifto spalva"
+msgid "IDS_EMAIL_TPOP_LOADING_ING"
+msgstr "Įkeliama..."
+
+msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
+msgstr "Neįmanoma prisijungti prie serverio."
+
+msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
+msgstr "Atsisiųsti nepavyko."
+
+msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
+msgstr "Atsisiunčiama..."
+
+msgid "IDS_EMAIL_POP_CONNECTION_FAILED"
+msgstr "Prisijungti nepavyko."
+
+msgid "IDS_EMAIL_POP_AUTHENTICATION_FAILED"
+msgstr "Autentifikavimas nepavyko."
+
+msgid "IDS_EMAIL_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED"
+msgstr "Įvyko nežinoma klaida"
+
+msgid "IDS_EMAIL_OPT_SHARE"
+msgstr "Dalytis"
+
+msgid "IDS_EMAIL_OPT_SETTINGS"
+msgstr "Nustatymai"
+
+msgid "IDS_EMAIL_OPT_SELECT_ALL"
+msgstr "Pasirinkti visus"
+
+msgid "IDS_EMAIL_OPT_SELECT"
+msgstr "Rinktis"
+
+msgid "IDS_EMAIL_OPT_SEARCH"
+msgstr "Paieška"
+
+msgid "IDS_EMAIL_OPT_REMOVE"
+msgstr "Šalinti"
+
+msgid "IDS_EMAIL_OPT_REFRESH"
+msgstr "Atnaujinti"
+
+msgid "IDS_EMAIL_OPT_PASTE"
+msgstr "Įklijuoti"
+
+msgid "IDS_EMAIL_OPT_ORIGINAL"
+msgstr "Originalas"
+
+msgid "IDS_EMAIL_OPT_FORWARD"
+msgstr "Persiųsti"
+
+msgid "IDS_EMAIL_OPT_DELETE"
+msgstr "Trinti"
+
+msgid "IDS_EMAIL_OPT_COPY"
+msgstr "Kopijuoti"
+
+msgid "IDS_EMAIL_OPT_ADD_ACCOUNT"
+msgstr "Pridėti paskyrą"
+
+msgid "IDS_EMAIL_MBODY_EMAIL_NOTIFICATIONS"
+msgstr "El. pašto pranešimai"
+
+msgid "IDS_EMAIL_HEADER_SUBJECT"
+msgstr "Tema"
+
+msgid "IDS_EMAIL_HEADER_SETTINGS"
+msgstr "Nustatymai"
+
+msgid "IDS_EMAIL_HEADER_PD_SELECTED_ABB2"
+msgstr "Pasirinkta: %d"
+
+msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
+msgstr "Pranešimai"
+
+msgid "IDS_EMAIL_HEADER_GENERAL"
+msgstr "Bendras"
+
+msgid "IDS_EMAIL_HEADER_DELETE"
+msgstr "Trinti"
+
+msgid "IDS_EMAIL_HEADER_ACCOUNTS"
+msgstr "Paskyros"
+
+msgid "IDS_EMAIL_BUTTON_SETTINGS"
+msgstr "Nustatymai"
+
+msgid "IDS_EMAIL_BUTTON_OK"
+msgstr "Gerai"
+
+msgid "IDS_EMAIL_BUTTON_DOWNLOAD_ALL"
+msgstr "Atsisiųsti viską"
+
+msgid "IDS_EMAIL_BUTTON_DONE"
+msgstr "Atlikta"
+
+msgid "IDS_EMAIL_BUTTON_CONTINUE_ABB"
+msgstr "Tęsti"
+
+msgid "IDS_EMAIL_BUTTON_CANCEL"
+msgstr "Atšaukti"
+
+msgid "IDS_EMAIL_BODY_YESTERDAY"
+msgstr "Vakar"
+
+msgid "IDS_EMAIL_BODY_LAST_UPDATED"
+msgstr "Paskutinį kartą atnaujinta"
+
+msgid "IDS_EMAIL_BODY_FOLDER_NAME"
+msgstr "Aplanko pavadinimas"
+
+msgid "IDS_EMAIL_BODY_EMAIL_ADDRESS"
+msgstr "El. pašto adresas"
+
+msgid "IDS_ST_OPT_NONE"
+msgstr "Nėra"
+
+msgid "IDS_ST_OPT_MANUAL"
+msgstr "Rankinis"
+
+msgid "IDS_ST_OPT_EVERY_DAY"
+msgstr "Kiekvieną dieną"
 
 msgid "IDS_EMAIL_OPT_RENAME_FOLDER"
 msgstr "Pervardyti aplanką"
+
+msgid "IDS_ST_OPT_DEFAULT"
+msgstr "Numatytoji"
 
 msgid "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX"
 msgstr "Perkelti į nepageidaujamų žinučių dėžutę"
@@ -1009,14 +991,23 @@ msgstr "Sinchroniz. nepavyko. Bandykite vėliau."
 msgid "IDS_EMAIL_HEADER_TEXT_BACKGROUND_COLOUR"
 msgstr "Teksto fono spalva"
 
+msgid "IDS_ST_HEADER_WARNING"
+msgstr "Perspėjimas"
+
 msgid "IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"
 msgstr "Atsisiųsta"
 
 msgid "IDS_EMAIL_OPT_AUTOMATICALLY_DOWNLOAD_ATTACHMENTS_WHEN_CONNECTED_TO_A_WI_FI_NETWORK"
 msgstr "Automatiškai atsisiųskite priedus, kai prisijungiate prie „Wi-Fi“ tinklo"
 
-msgid "IDS_EMAIL_POP_SAVED"
-msgstr "Išsaugota."
+msgid "IDS_ST_HEADER_EMAIL"
+msgstr "El. paštas"
+
+msgid "IDS_ST_BUTTON_NEXT"
+msgstr "Kitas"
+
+msgid "IDS_ST_BODY_SILENT"
+msgstr "Tylusis"
 
 msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "Įjungti raiškųjį tekstą"
@@ -1035,9 +1026,6 @@ msgstr "Kai išsaugosite el. laiškus juodraščių aplanke, jie bus rodomi čia
 
 msgid "IDS_EMAIL_BUTTON_SAVE_ALL_ABB"
 msgstr "Išsaugoti viską"
-
-msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
-msgstr "Nepavyko ištrinti."
 
 msgid "IDS_EMAIL_TPOP_FOLDER_RENAMED"
 msgstr "Aplankas pervardytas."
@@ -1059,4 +1047,16 @@ msgstr "Tinklas nepasiekiamas. Ši žinutė bus nusiųsta, kai prisijungsite pri
 
 msgid "IDS_EMAIL_POP_FLIGHT_MODE_ENABLED_THIS_MESSAGE_WILL_BE_SENT_WHEN_YOU_ARE_CONNECTED_TO_THE_NETWORK"
 msgstr "Įjungtas skrydžio režimas. Ši žinutė bus nusiųsta, kai prisijungsite prie tinklo."
+
+msgid "IDS_EMAIL_BODY_FONT_SIZE"
+msgstr "Šrifto dydis"
+
+msgid "IDS_EMAIL_BODY_FONT_COLOUR"
+msgstr "Šrifto spalva"
+
+msgid "IDS_EMAIL_POP_SAVED"
+msgstr "Išsaugota."
+
+msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
+msgstr "Nepavyko ištrinti."
 
