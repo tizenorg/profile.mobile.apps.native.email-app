@@ -68,7 +68,6 @@ static void _viewer_set_vertical_scroller_view_sizes(EmailViewerView *view)
 	retm_if(view->webview == NULL, "view->webview is NULL.");
 
 	int scroll_pos_y = 0;
-	int subject_y = 0;
 	int w_h = 0;
 	int w_y = 0;
 	int navi_h = 0;
@@ -77,7 +76,6 @@ static void _viewer_set_vertical_scroller_view_sizes(EmailViewerView *view)
 	ewk_view_scroll_pos_get(view->webview, NULL, &scroll_pos_y);
 	view->webkit_scroll_y = scroll_pos_y;
 
-	evas_object_geometry_get(view->subject_ly, NULL, &subject_y, NULL, NULL);
 	evas_object_geometry_get(view->webview_ly, NULL, &w_y, NULL, &w_h);
 	evas_object_geometry_get(view->base.module->navi, NULL, &navi_y, NULL, &navi_h);
 

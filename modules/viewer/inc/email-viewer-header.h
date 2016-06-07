@@ -27,14 +27,6 @@
 void header_update_attachment_summary_info(EmailViewerView *view);
 
 /**
- * @brief Delete viewer header attachment preview
- *
- * @param[in]	data		User data (Email viewer data)
- *
- */
-void _header_delete_attachment_preview(void *data);
-
-/**
  * @brief Create viewer header view
  *
  * @param[in]	data		User data (Email viewer data)
@@ -67,20 +59,28 @@ void header_update_date(EmailViewerView *view);
 void header_update_favorite_icon(EmailViewerView *view);
 
 /**
- * @brief Set viewer header favorite icon
+ * @brief Update viewer header sender name and priority status
  *
  * @param[in]	view		Email viewer data
  *
  */
-void header_set_favorite_icon(EmailViewerView *view);
+void header_update_sender_name_and_prio_status(EmailViewerView *view);
 
 /**
- * @brief Set viewer header sender name
+ * @brief Update viewer header sender email address
  *
  * @param[in]	view		Email viewer data
  *
  */
-void header_set_sender_name(EmailViewerView *view);
+void header_update_sender_address(EmailViewerView *view);
+
+/**
+ * @brief Update viewer header subject text
+ *
+ * @param[in]	view		Email viewer data
+ *
+ */
+void header_update_subject_text(EmailViewerView *view);
 
 /**
  * @brief Unpack header layout from box
@@ -111,4 +111,5 @@ int viewer_open_pattern_generator(void);
  * @return 0 on success, otherwise a negative error value
  */
 int viewer_close_pattern_generator(void);
+
 #endif /* __EMAIL_VIEWER_HEADER_H__ */
