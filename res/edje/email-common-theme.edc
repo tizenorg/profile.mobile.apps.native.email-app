@@ -61,6 +61,7 @@ collections {
 	base_scale: 2.6;		// multi scale for HD resolution
 
 	#include "../../edc/common/email-title-search.edc"
+	#include "../../edc/common/email-two-bottom-btn-toolbar-theme.edc"
 
 /* account_icon */
 	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_ACCOUNT_COMBINED_INBOX_FOLDER_ICON, 64, AO012 );
