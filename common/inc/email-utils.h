@@ -395,6 +395,11 @@ EMAIL_API char *email_util_strrtrim(char *s);
 EMAIL_API char *email_util_strltrim(char *s);
 EMAIL_API char *email_util_strtrim(char *s);
 
+EMAIL_API int email_util_escape_string(const char *const src, char *const dst,
+		const int dst_buff_size, const char *const escape_chars);
+EMAIL_API char *email_util_escape_string_alloc(const char *const src,
+		const char *const escape_chars);
+
 EMAIL_API char *email_get_mime_type_from_file(const char *path);
 EMAIL_API bool email_is_smime_cert_attachment(const char *mime_type);
 
@@ -426,13 +431,15 @@ EMAIL_API char *email_util_get_login_failure_string(int account_id);
 EMAIL_API gboolean email_get_is_pattern_matched(const char *pattern, const char *str);
 EMAIL_API Eina_Bool email_file_cp(const char* source, const char* destination);
 EMAIL_API char *email_file_dir_get(const char *path);
-EMAIL_API const char *email_file_file_get(const char *path);
+EMAIL_API const char *email_file_file_get(const char *file_path);
+EMAIL_API const char *email_file_name_ext_get(const char *file_name);
+EMAIL_API const char *email_file_path_ext_get(const char *file_path);
 EMAIL_API Eina_Bool email_file_exists(const char *file);
 EMAIL_API Eina_Bool email_file_is_dir(const char *file);
 EMAIL_API Eina_Bool email_file_mv(const char *src, const char *dst);
 EMAIL_API Eina_Bool email_file_remove(const char *file);
 EMAIL_API Eina_Bool email_file_unlink(const char *file);
-EMAIL_API char *email_file_strip_ext(const char *file);
+EMAIL_API char *email_file_strip_ext(const char *file_path, const char **out_ext);
 EMAIL_API Eina_Bool email_file_recursive_rm (const char *dir);
 EMAIL_API bool email_file_optimize_path(char *in_out_path);
 

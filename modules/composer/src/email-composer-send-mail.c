@@ -741,9 +741,7 @@ static COMPOSER_ERROR_TYPE_E _make_mail_set_from_address(EmailComposerView *view
 	if (account_info->selected_account->user_display_name && g_strstr_len(account_info->selected_account->user_display_name, strlen(account_info->selected_account->user_display_name), "\"")) {
 		debug_secure("double quotation mark is there!");
 
-		char **sp_name = g_strsplit(account_info->selected_account->user_display_name, "\"", -1);
-		processed_display_name = g_strjoinv("\\\"", sp_name);
-		g_strfreev(sp_name);
+		processed_display_name = email_util_escape_string_alloc(account_info->selected_account->user_display_name, "\"");
 	}
 
 	view->new_mail_info->mail_data->full_address_from = g_strdup_printf("\"%s\" <%s>", processed_display_name ? processed_display_name : account_info->selected_account->user_display_name, view->account_info->selected_account->user_email_address);

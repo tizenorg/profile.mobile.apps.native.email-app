@@ -1049,12 +1049,8 @@ char *composer_initial_data_body_make_signature_markup(EmailComposerView *view)
 	char *signature = NULL;
 
 	if ((view->account_info->original_account->options).add_signature && (view->account_info->original_account->options).signature) {
-		char **sp_signature = g_strsplit(email_get_email_string((view->account_info->original_account->options).signature), "\"", -1);
-		char *jo_signature = g_strjoinv("\\\"", sp_signature);
-		char *markup_signature = elm_entry_utf8_to_markup(jo_signature);
+		char *markup_signature = elm_entry_utf8_to_markup((view->account_info->original_account->options).signature);
 		signature = g_strdup_printf(EC_TAG_SIGNATURE_TEXT, ATO014, markup_signature);
-		g_strfreev(sp_signature);
-		g_free(jo_signature);
 		g_free(markup_signature);
 	} else {
 		signature = g_strdup(EC_TAG_SIGNATURE_DEFAULT);

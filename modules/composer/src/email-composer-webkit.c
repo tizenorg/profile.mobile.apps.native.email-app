@@ -133,8 +133,7 @@ static void _webkit_js_execute_insert_signature_cb(Evas_Object *obj, const char 
 		(view->composer_type == RUN_COMPOSER_FORWARD)) {
 		char *original_mail_info = composer_initial_data_body_make_parent_mail_info(view);
 
-		char **sp_info = g_strsplit(original_mail_info, "\"", -1);
-		char *jo_info = g_strjoinv("\\\"", sp_info);
+		char *jo_info = email_util_escape_string_alloc(original_mail_info, "\"\\");
 
 		char *to_be_inserted_mail_info = g_strdup_printf(EC_JS_INSERT_ORIGINAL_MAIL_INFO, jo_info);
 
@@ -151,9 +150,8 @@ static void _webkit_js_execute_insert_signature_cb(Evas_Object *obj, const char 
 		}
 
 		g_free(to_be_inserted_mail_info);
+		free(jo_info);
 		g_free(original_mail_info);
-		g_free(jo_info);
-		g_strfreev(sp_info);
 	} else {
 		if (!ewk_view_script_execute(obj, EC_JS_HAS_ORIGINAL_MESSAGE_BAR, _webkit_js_execute_check_body_layout_cb, (void *)view)) {
 			debug_error("EC_JS_HAS_ORIGINAL_MESSAGE_BAR failed.");

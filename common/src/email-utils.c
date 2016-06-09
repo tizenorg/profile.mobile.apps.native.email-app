@@ -1518,6 +1518,88 @@ EMAIL_API char *email_util_strtrim(char *s)
 	return email_util_strrtrim(email_util_strltrim(s));
 }
 
+EMAIL_API int email_util_escape_string(const char *const src, char *const dst,
+		const int dst_buff_size, const char *const escape_chars)
+{
+	int result = 0;
+
+	const bool dst_valid = (dst && (dst_buff_size > 0));
+	char *const dst_end = (dst + dst_buff_size);
+
+	const char *src_iter = src;
+	char *dst_iter = dst;
+	bool dst_full = !dst_valid;
+	bool end_reached = false;
+
+	while (!dst_full) {
+		const char *const ptr = strpbrk(src_iter, escape_chars);
+		if (!ptr) {
+			end_reached = true;
+			break;
+		}
+		const int write_size = (ptr - src_iter + 2);
+		result += write_size;
+
+		char *new_dst_iter = (dst_iter + write_size);
+		if (new_dst_iter >= dst_end) {
+			new_dst_iter -= 2;
+			if (new_dst_iter >= dst_end) {
+				new_dst_iter = (dst_end - 1);
+			}
+			memcpy(dst_iter, src_iter, new_dst_iter - dst_iter);
+			dst_full = true;
+		} else {
+			memcpy(dst_iter, src_iter, write_size - 2);
+			dst_iter[write_size - 2] = '\\';
+			dst_iter[write_size - 1] = ptr[0];
+		}
+
+		src_iter = (ptr + 1);
+		dst_iter = new_dst_iter;
+	}
+
+	while (!end_reached) {
+		const char *const ptr = strpbrk(src_iter, escape_chars);
+		if (!ptr) {
+			end_reached = true;
+			break;
+		}
+		const int write_size = (ptr - src_iter + 2);
+		result += write_size;
+		src_iter = (ptr + 1);
+	}
+
+	{
+		const int write_size = strlen(src_iter);
+		result += write_size;
+		if (!dst_full) {
+			char *new_dst_iter = (dst_iter + write_size);
+			if (new_dst_iter >= dst_end) {
+				new_dst_iter = (dst_end - 1);
+			}
+			memcpy(dst_iter, src_iter, new_dst_iter - dst_iter);
+			dst_iter = new_dst_iter;
+		}
+	}
+
+	if (dst_valid) {
+		dst_iter[0] = '\0';
+	}
+
+	return result;
+}
+
+EMAIL_API char *email_util_escape_string_alloc(const char *const src,
+		const char *const escape_chars)
+{
+	const int buff_size = (email_util_escape_string(src, NULL, 0, escape_chars) + 1);
+	char *const buff = malloc(buff_size);
+	if (buff) {
+		email_util_escape_string(src, buff, buff_size, escape_chars);
+	}
+	return buff;
+}
+
 static EmailSystemSettingsKeyEntry *_email_system_settings_key_entry_get(system_settings_key_e key)
 {
 	Eina_List *keys_list = _system_settings_key_list;
@@ -1769,8 +1851,8 @@ EMAIL_API char *email_get_mime_type_from_file(const char *path)
 
 	retvm_if(!path, NULL, "path is NULL!");
 
-	char *extension = strrchr(path, '.');
-	extension = (extension && (extension + 1)) ? extension + 1 : NULL;
+	const char *extension = email_file_name_ext_get(path);
+	extension = (extension ? (extension + 1) : NULL);
 
 	char *mime_type = NULL;
 	int ret = mime_type_get_mime_type(extension, &mime_type);
@@ -2682,19 +2764,27 @@ EMAIL_API Eina_Bool email_file_exists(const char *file)
 	return EINA_TRUE;
 }
 
-EMAIL_API const char *email_file_file_get(const char *path)
+EMAIL_API const char *email_file_file_get(const char *file_path)
 {
-	if (NULL == path) {
+	if (!file_path) {
 		return NULL;
 	}
-	char *file = NULL;
-	file = strrchr(path, '/');
-	if (NULL != file) {
-		file++;
-	} else {
-		file = (char *)path;
+	const char *file_name = strrchr(file_path, '/');
+	return (file_name ? (file_name + 1) : file_path);
+}
+
+EMAIL_API const char *email_file_name_ext_get(const char *file_name)
+{
+	if (!file_name) {
+		return NULL;
 	}
-	return file;
+	const char *ext = strrchr(file_name, '.');
+	return ((ext && ext[1]) ? ext : NULL);
+}
+
+EMAIL_API const char *email_file_path_ext_get(const char *file_path)
+{
+	return email_file_name_ext_get(email_file_file_get(file_path));
 }
 
 EMAIL_API Eina_Bool email_file_is_dir(const char *file)
@@ -2741,27 +2831,19 @@ EMAIL_API Eina_Bool email_file_unlink(const char *file)
 	return EINA_TRUE;
 }
 
-EMAIL_API char *email_file_strip_ext(const char *file)
+EMAIL_API char *email_file_strip_ext(const char *file_path, const char **out_ext)
 {
-	char dot = '.';
-	char slash = '/';
-	char *dot_found_pos = strrchr(file, dot);
-	char *slash_found_pos = strrchr(file, slash);
-	if (NULL == dot_found_pos) {
+	if (!file_path) {
 		return NULL;
 	}
-	if (NULL != slash_found_pos && slash_found_pos > dot_found_pos) {
-		return NULL;
+	const char *ext = email_file_path_ext_get(file_path);
+	if (out_ext) {
+		*out_ext = ext;
 	}
-
-	int result_length = dot_found_pos - file + 1;
-	char *file_dup = (char *)malloc(result_length * sizeof(char));
-	if (NULL == file_dup) {
-		return NULL;
+	if (ext) {
+		return strndup(file_path, ext - file_path);
 	}
-	strncpy(file_dup, file, result_length);
-	file_dup[result_length - 1] = '\0';
-	return file_dup;
+	return strdup(file_path);
 }
 
 EMAIL_API Eina_Bool email_file_recursive_rm(const char *dir)

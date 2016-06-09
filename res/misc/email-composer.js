@@ -70,6 +70,9 @@ var G_VAL_TEXT_NODE_TYPE = 3;
 var G_VAL_ORG_MESSAGE_BAR_TEXT_ALIGN = "display:table-cell; vertical-align: middle; padding-left:10px; padding-top:10px; padding-bottom:10px; width:auto;";
 var G_VAL_ORG_MESSAGE_BAR_TEXT_SIZE = 18;
 
+var G_VAL_EDITOR_MARGIN_SIZE = 8;
+var G_VAL_IMG_STYLE_MARGIN = "8px 0px";
+
 var g_whileResizing = false;
 var g_dragData = null;
 var g_selectedImg = null;
@@ -206,10 +209,6 @@ function OnNodeInserted(obj, event) {
 	//console.log(arguments.callee.name + "()");
 	if (event.target.tagName === "DIV") {
 		event.target.setAttribute('dir', 'auto');
-	} else if (event.target.tagName === "IMG") {
-		// Calculated image size is set on OnLoad_InsertedImage() because the size of image is determined after loading the image.
-		event.target.setAttribute("id", window.performance.now());
-		event.target.onload = function() { OnLoad_InsertedImage(event.target); }
 	}
 }
 
@@ -277,40 +276,19 @@ function OnPaste(obj, ev) {
 	}
 }
 
-function OnLoad_InsertedImage(obj) {
-	console.log(arguments.callee.name + "()");
-	console.log("obj.naturalWidth: " + obj.naturalWidth);
-
-	if (obj.naturalWidth > (screen.width / G_VAL_PIXEL_RATIO * G_VAL_IMAGE_RESIZE_RATIO)) {
-		var n_image_resize_ratio = (screen.width / G_VAL_PIXEL_RATIO) * G_VAL_IMAGE_RESIZE_RATIO / obj.naturalWidth;
-		obj.width = obj.naturalWidth * n_image_resize_ratio;
-		obj.height = obj.naturalHeight * n_image_resize_ratio;
-	} else {
-		obj.width = obj.naturalWidth;
-		obj.height = obj.naturalHeight;
-	}
-
-	/*obj.addEventListener('touchstart', function() { OnTouchStart_OnImage(this, event); }, false);
-	obj.addEventListener('touchmove', function() { OnTouchMove_OnImage(event); }, false);
-	obj.addEventListener('touchend', function() { OnTouchEnd_OnImage(this, event); }, false);*/
-}
-
 function InsertNodeAtCursor(node) {
 	console.log(arguments.callee.name + "()");
+	var sel, range, html;
 
-	var range, html;
-	if (window.getSelection && window.getSelection().getRangeAt) {
-		range = window.getSelection().getRangeAt(0);
+	sel = window.getSelection();
+
+	if (sel.rangeCount > 0) {
+		range = sel.getRangeAt(0);
 		range.deleteContents();
 		range.insertNode(node);
 		range.collapse(false);
-		sel = window.getSelection();
 		sel.removeAllRanges();
 		sel.addRange(range);
-	} else if (document.selection && document.selection.createRange) {
-		range = document.selection.createRange();
-		html = (node.nodeType == 3) ? node.data : node.outerHTML;
-		range.pasteHTML(html);
 	}
 }
 
@@ -1133,17 +1111,47 @@ function UpdateBGColorTo(div_id, r, g, b, a) {
 	targetDiv.style.opacity = a / 255.0;
 }
 
+function InsertImage(fileUri) {
+	console.log(arguments.callee.name + "()");
+	var div, img;
+
+	div = document.createElement("div");
+	InsertNodeAtCursor(div);
+
+	img = document.createElement("img")
+	img.onload = function() {
+		var w, h, maxWidth;
+
+		w = img.width;
+		h = img.height;
+		maxWidth = document.documentElement.clientWidth - 2 * G_VAL_EDITOR_MARGIN_SIZE;
+
+		if (w > maxWidth) {
+			h *= maxWidth / w;
+			w = maxWidth;
+		}
+
+		img.width = w;
+		img.height = h;
+
+		div.appendChild(img);
+		div.appendChild(document.createElement("br"));
+	}
+	img.src = fileUri;
+	img.style.margin = G_VAL_IMG_STYLE_MARGIN;
+}
+
 function GetImageSourcesFromElement(element) {
 	console.log(arguments.callee.name + "()");
 	var images = element.getElementsByTagName("img");
 	var imagesMax = images.length - 1;
-	var curImg, curImgSrc, srcs = "", idCounter = 0;
+	var curImg, curImgSrc, srcs = "", idCounter = 0, re = /;/g;
 	for (var i = 0; i <= imagesMax; i++) {
 		curImg = images[i];
 		curImgSrc = curImg.src;
 		if (curImgSrc.startsWith("file://")) {
 			curImg.dataset["id"] = ++idCounter;
-			srcs += curImgSrc + ((i < imagesMax) ? ";" : "");
+			srcs += curImgSrc.replace(re, "%3B") + ((i < imagesMax) ? ";" : "");
 		}
 	}
 	return srcs;

@@ -31,8 +31,10 @@ html {
 	font-weight: 400 !important;
 	text-align: initial !important; /* initial: For LTR, left. For RTL, right */
 	background-color:#ffffff !important;
-	overflow: hidden;
+	overflow-x: auto;
+	overflow-y: hidden;
 }
+
 .css-body-IncludeOriginalMessage {
 	margin-top:0px !important;
 	margin-bottom:0px !important;

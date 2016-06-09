@@ -109,6 +109,8 @@
 #define COMPOSER_VCARD_SAVE_POPUP_SHOW_MIN_TIME_SEC 1.0
 #define COMPOSER_VCARD_SAVE_STATUS_CHECK_INTERVAL_SEC 0.1
 
+#define COMPOSER_URI_ALLOWED_JS_SAFE_CHARS "!$&()*+,;=:@/"
+
 /**
  * @brief Email popup element type enum
  */

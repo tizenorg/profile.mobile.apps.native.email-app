@@ -25,7 +25,7 @@
 #define EC_HTML_META_INFO_FMT \
 	"<html>" \
 	"<head>" \
-	"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi\" />" \
+	"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no\" />" \
 	"<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/email-composer.css\">" \
 	"<script src=\"%s/email-composer.js\"></script>" \
 	"</head>\n"
@@ -78,7 +78,6 @@
 	"<div id='"EC_NAME_ORIGINAL_MESSAGE_BAR_CHECKBOX_ICON"' class='checkicon'>" \
 	EC_TAG_DIV_F""EC_TAG_DIV_F""EC_TAG_DIV_F""EC_TAG_DIV_F""EC_TAG_DIV_F
 
-#define EC_EWK_COMMAND_INSERT_HTML	"InsertHTML"
 #define EC_EWK_COMMAND_INSERT_TEXT	"InsertText"
 #define EC_EWK_COMMAND_UNSELECT		"Unselect"
 #define EC_EWK_COMMAND_SELECT_ALL	"SelectAll"
@@ -132,5 +131,7 @@
 #define EC_JS_GET_COMPOSED_CONTENTS "GetComposedHtmlContents('%s');"
 
 #define EC_JS_NOTIFY_CARET_POS_CHANGE "NotifyCaretPosChange();"
+
+#define EC_JS_INSERT_IMAGE "InsertImage(\"%s\");"
 
 #endif /* __EMAIL_COMPOSER_JS_H__ */

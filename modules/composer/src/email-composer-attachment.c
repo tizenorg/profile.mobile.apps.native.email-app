@@ -38,7 +38,7 @@ static void _attachment_process_attachments_list(EmailComposerView *view, Eina_L
 static void _attachment_process_inline_attachments(void *data, Evas_Object *obj, void *event_info);
 static void _attachment_process_normal_attachments(void *data, Evas_Object *obj, void *event_info);
 
-static void _attachment_insert_inline_image_to_webkit(EmailComposerView *view, const char *pszImgPath);
+static void _attachment_insert_inline_image_to_webkit(EmailComposerView *view, const char *file_path);
 static void _attachment_insert_inline_image(EmailComposerView *view, const char *path);
 
 static email_string_t EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
@@ -267,64 +267,25 @@ static void _attachment_process_normal_attachments(void *data, Evas_Object *obj,
 	debug_leave();
 }
 
-static void _attachment_insert_inline_image_to_webkit(EmailComposerView *view, const char *pszImgPath)
+static void _attachment_insert_inline_image_to_webkit(EmailComposerView *view, const char *file_path)
 {
 	debug_enter();
 
-	int org_width = 0, org_height = 0, new_width = 0, new_height = 0;
-	float nImgResizeRatio = 0.0;
-	int limit = 0;
-	double scale = 0.0;
-	gchar *pszHtmlTag = NULL;
-	Evas_Coord x = 0, y = 0, w = 0, h = 0;
-
-	if (!composer_util_image_get_size(view, pszImgPath, &org_width, &org_height)) {
-		debug_error("composer_image_get_size() failed!");
+	gchar *const escaped_path = g_uri_escape_string(file_path, COMPOSER_URI_ALLOWED_JS_SAFE_CHARS, TRUE);
+	gchar *const script = (escaped_path ? g_strdup_printf(EC_JS_INSERT_IMAGE, escaped_path) : NULL);
+	g_free(escaped_path);
+	if (!script) {
+		debug_error("Script generation failed!");
 		return;
 	}
-	scale = ewk_view_scale_get(view->ewk_view);
-	retm_if(scale <= 0.0, "ewk_view_scale_get() failed!");
 
-	evas_object_geometry_get(view->base.module->win, &x, &y, &w, &h);
-	if (view->is_horizontal) {
-		limit = h / scale;
-	} else {
-		limit = w / scale;
+	if (!ewk_view_script_execute(view->ewk_view, script, NULL, NULL)) {
+		debug_error("EC_JS_INSERT_IMAGE is failed!");
 	}
 
-	if (org_width > limit * IMAGE_RESIZE_RATIO) {
-		nImgResizeRatio = (double)limit * IMAGE_RESIZE_RATIO / (double)org_width;
-	} else {
-		nImgResizeRatio = 1.0;
-	}
+	// TODO check EC_JS_CONNECT_EVENT_LISTENER
 
-	new_width = org_width * nImgResizeRatio;
-	new_height = org_height * nImgResizeRatio;
-
-	debug_secure("Original image: [%4dx%4d], limit:[%d], ratio:[%f]", org_width, org_height, limit, nImgResizeRatio);
-	debug_secure("Resized image: [%4dx%4d]", new_width, new_height);
-
-	gchar *escaped_string = g_uri_escape_string(pszImgPath, G_URI_RESERVED_CHARS_ALLOWED_IN_PATH, true);
-	debug_secure("image path is %s and escaped string is %s", pszImgPath, escaped_string);
-	gchar *pszId = g_strdup_printf("%s%d", pszImgPath, eina_list_count(view->attachment_inline_item_list));
-	pszHtmlTag = g_strdup_printf(EC_TAG_IMG_WITH_SIZE, escaped_string, new_width, new_height, pszId);
-
-	debug_secure("pszHtmlTag : %s", pszHtmlTag);
-
-	if (!ewk_view_command_execute(view->ewk_view, EC_EWK_COMMAND_INSERT_HTML, pszHtmlTag)) {
-		debug_error("ewk_view_command_execute(%s) failed!", EC_EWK_COMMAND_INSERT_HTML);
-	}
-
-	/* XXX; Need to check the behaviour with OnNodeInserted() in email-composer.js if insert image feature is enabled. */
-	gchar *handler = g_strdup_printf(EC_JS_CONNECT_EVENT_LISTENER, pszId);
-	if (!ewk_view_script_execute(view->ewk_view, handler, NULL, NULL)) {
-		debug_error("EC_JS_CONNECT_EVENT_LISTENER is failed!");
-	}
-
-	FREE(escaped_string);
-	FREE(handler);
-	FREE(pszId);
-	FREE(pszHtmlTag);
+	g_free(script);
 
 	debug_leave();
 }

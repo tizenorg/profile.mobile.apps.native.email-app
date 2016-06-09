@@ -68,7 +68,6 @@ static void _composer_util_create_inline_image_list(EmailComposerView *view, con
 static bool _composer_util_parse_local_img_src(const char *src, const char **out_file_path, const char **out_file_name, char *out_buff, int buff_size);
 static const email_attachment_data_t *_composer_util_find_inline_image(EmailComposerView *view, const char *file_path);
 static const email_attachment_data_t *_composer_util_find_org_inline_image(EmailComposerView *view, const char *file_path, const char *file_name);
-static void _composer_util_make_inline_img_js_map_item(int id, const char *name, char *out_buff, int buff_size);
 
 static char *_composer_util_convert_dayformat(const char *format_str)
 {
@@ -445,12 +444,10 @@ static void _composer_util_create_inline_image_list(EmailComposerView *view, con
 				att_name = file_name;
 			} else {
 				att_name = att_name_buff;
-				const char *ext = strrchr(file_name, '.');
-				if (!ext || !ext[1]) {
-					ext = "";
-				}
+				const char *const ext = email_file_name_ext_get(file_name);
 				snprintf(att_name_buff, sizeof(att_name_buff), "%d-%d-%d-%d%s", i + 1,
-						(int)file_stat.st_size, (int)file_stat.st_mtime, (int)rand(), ext);
+						(int)file_stat.st_size, (int)file_stat.st_mtime, (int)rand(),
+						(ext ? ext : ""));
 			}
 
 			new_att->inline_content_status = 1;
@@ -483,9 +480,11 @@ static void _composer_util_create_inline_image_list(EmailComposerView *view, con
 
 		debug_secure("att_name: %s", att_name);
 
-		_composer_util_make_inline_img_js_map_item(i + 1, att_name, tmp_buff2, sizeof(tmp_buff2));
-		gchar *new_img_js_map = g_strconcat(view->attachment_inline_img_js_map,
-				(view->attachment_inline_item_list ? "," : ""), tmp_buff2, NULL);
+		gchar *const escaped_name = g_uri_escape_string(att_name, COMPOSER_URI_ALLOWED_JS_SAFE_CHARS, TRUE);
+		gchar *const new_img_js_map = (escaped_name ? g_strdup_printf("%s%s\"%d\":\"%s\"",
+				view->attachment_inline_img_js_map, (view->attachment_inline_item_list ? "," : ""),
+				(i + 1), escaped_name) : NULL);
+		g_free(escaped_name);
 		if (!new_img_js_map) {
 			debug_error("Failed to append js map item! (aborting...)");
 			email_engine_free_attachment_data_list(&new_att, 1);
@@ -598,36 +597,6 @@ static const email_attachment_data_t *_composer_util_find_org_inline_image(Email
 	return NULL;
 }
 
-static void _composer_util_make_inline_img_js_map_item(int id, const char *name, char *out_buff, int buff_size)
-{
-	char *const last = (out_buff + buff_size - 4);
-
-	snprintf(out_buff, last - out_buff + 1, "\"%d\":\"", id);
-	char *iter = out_buff + strlen(out_buff);
-
-	snprintf(iter, last - iter + 1, "%s", name);
-	char *end = iter + strlen(iter);
-
-	while ((end < last) && (iter = strpbrk(iter, "'\"\\")) != NULL) {
-		if (iter[0] == '\'') {
-			memmove(iter + 1, iter, end - iter + 1);
-			iter[0] = '\\';
-			iter += 2;
-			end += 1;
-		} else {
-			memmove(iter + 3, iter, end - iter + 1);
-			iter[0] = '\\';
-			iter[1] = '\\';
-			iter[2] = '\\';
-			iter += 4;
-			end += 3;
-		}
-	}
-
-	end[0] = '\"';
-	end[1] = '\0';
-}
-
 Evas_Object *composer_util_create_layout_with_noindicator(Evas_Object *parent)
 {
 	debug_enter();
@@ -728,23 +697,14 @@ static void _composer_util_file_get_filename_and_ext_from_path(const char *src_f
 
 	retm_if(!src_file_path, "src_file_path is NULL!");
 
-	char *name = NULL, *ext = NULL;
-
 	const char *file = email_file_file_get(src_file_path);
 	retm_if(!file, "email_file_file_get() failed!");
 
 	debug_secure("file: (%s)", file);
 
-	name = email_file_strip_ext(file);
-	if (g_strcmp0(file, name) != 0) {
-		char *p = strrchr(file, '.');
-		if (p) {
-			ext = g_strdup(p);
-		}
-	}
-
-	*filename = name;
-	*file_ext = ext;
+	const char *out_ext = NULL;
+	*filename = email_file_strip_ext(file, &out_ext);
+	*file_ext = g_strdup(out_ext);
 
 	debug_leave();
 }
