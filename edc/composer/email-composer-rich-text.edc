@@ -17,17 +17,14 @@
 
 #define RICHTEXT_TOOLBAR_HEIGHT 96
 
-#define RTTB_BUTTON_LAYOUT_MIN_SIZE 92 92
-
-#define BTN_IMAGE_MIN_MAX_WIDTH  48
-#define BTN_IMAGE_MIN_MAX_HEIGHT 48
+#define RTTB_BUTTON_LAYOUT_MIN_SIZE 48 48
 
 #define COLOR_BAR_SIZE 50 10
 #define COLOR_BAR_BOTTOM_PADDING_HEIGHT 3
 
 #define TRANSPARENT_COLOR_VALUE 0 0 0 0
 
-#define BUTTON_TOOGLE_STYLES(style_name, button_image, sizeMinMaxWidth, sizeMinMaxHeight) \
+#define BUTTON_TOOGLE_STYLES(style_name, button_image) \
 group { name: "elm/button/base/"style_name; \
 	images { \
 		image: button_image COMP; \
@@ -45,9 +42,7 @@ group { name: "elm/button/base/"style_name; \
 			type: IMAGE; \
 			scale: 1; \
 			description { state: "default" 0.0; \
-				min: sizeMinMaxWidth sizeMinMaxHeight; \
-				max: sizeMinMaxWidth sizeMinMaxHeight; \
-				aspect: sizeMinMaxWidth/sizeMinMaxHeight sizeMinMaxWidth/sizeMinMaxHeight; \
+				aspect: 1 1; \
 				aspect_preference: BOTH; \
 				fixed : 1.0 1.0; \
 				image.normal: button_image; \
@@ -137,7 +132,7 @@ group { name: "elm/button/base/"style_name; \
 	} \
 }
 
-#define BUTTON_STYLES(style_name, button_image, sizeMinMaxWidth, sizeMinMaxHeight) \
+#define BUTTON_STYLES(style_name, button_image) \
 group { name: "elm/button/base/"style_name; \
 	images { \
 		image: button_image COMP; \
@@ -150,14 +145,12 @@ group { name: "elm/button/base/"style_name; \
 				state: "default" 0.0; \
 				min: RTTB_BUTTON_LAYOUT_MIN_SIZE; \
 			} \
-	     } \
+	    } \
 		part { name: "button_image"; \
 			type: IMAGE; \
 			scale: 1; \
 			description { state: "default" 0.0; \
-				min: sizeMinMaxWidth sizeMinMaxHeight; \
-				max: sizeMinMaxWidth sizeMinMaxHeight; \
-				aspect: sizeMinMaxWidth/sizeMinMaxHeight sizeMinMaxWidth/sizeMinMaxHeight; \
+				aspect: 1 1; \
 				aspect_preference: BOTH; \
 			   	fixed : 1.0 1.0; \
 				image.normal: button_image; \
@@ -256,7 +249,7 @@ group { name: "elm/button/base/"style_name; \
 	} \
 }
 
-#define BUTTON_FONTCOLOR_STYLES(style_name, button_image, sizeMinMaxWidth, sizeMinMaxHeight) \
+#define BUTTON_FONTCOLOR_STYLES(style_name, button_image) \
 group { name: "elm/button/base/"style_name; \
 	images { \
 		image: button_image COMP; \
@@ -274,9 +267,7 @@ group { name: "elm/button/base/"style_name; \
 			type: IMAGE; \
 			scale: 1; \
 			description { state: "default" 0.0; \
-				min: sizeMinMaxWidth sizeMinMaxHeight; \
-				max: sizeMinMaxWidth sizeMinMaxHeight; \
-				aspect: sizeMinMaxWidth/sizeMinMaxHeight sizeMinMaxWidth/sizeMinMaxHeight; \
+				aspect: 1 1; \
 				aspect_preference: BOTH; \
 				fixed : 1.0 1.0; \
 				image.normal: button_image; \
@@ -418,8 +409,7 @@ group
 		part { name : "bg";
 			type : RECT;
 			scale: 1;
-			description { 
-				state : "default" 0.0;
+			description { state: "default" 0.0;
 				min: 0 RICHTEXT_TOOLBAR_HEIGHT;
 				color: AO008;
 			}
@@ -427,20 +417,32 @@ group
 		part { name : "ec/rt/layout/base/toolbar_box";
 			type : SWALLOW;
 			scale: 1;
+			description { state: "default" 0.0;
+				rel1 {
+					relative: 0.0 0.0;
+					to: "bg";
+				}
+				rel2 {
+					relative: 1.0 1.0;
+					to: "bg";
+					offset: 0 1;
+				}
+			}
 		}
 		part { name : "line_top";
 			type : RECT;
 			scale: 1;
-			description {
-				state : "default" 0.0;
+			description { state : "default" 0.0;
 				align : 0.0 0.0;
 				max : -1 1;
 				fixed : 0 1;
-				rel1 {
+				rel1 { 
 					relative: 0.0 0.0;
+					to: "bg";
 				}
 				rel2 {
 					relative: 1.0 0.0;
+					to: "bg";
 					offset: 0 1;
 				}
 				color: AO005;
@@ -449,17 +451,18 @@ group
 		part { name : "line_bottom";
 			type : RECT;
 			scale: 1;
-			description {
-				state : "default" 0.0;
+			description { state : "default" 0.0;
 				align : 0.0 0.0;
 				max : -1 1;
 				fixed : 0 1;
 				rel1 {
 					relative: 0.0 1.0;
+					to: "bg";
 					offset: 0 -1;
 				}
 				rel2 {
 					relative: 1.0 1.0;
+					to:"bg";
 				}
 				color: AO005;
 			}
@@ -467,9 +470,11 @@ group
 	}
 }
 
-BUTTON_STYLES("ec/toolbar/button/fontsize", EC_IMAGE_TOOLBAR_FONTSIZE, BTN_IMAGE_MIN_MAX_WIDTH, BTN_IMAGE_MIN_MAX_HEIGHT);
-BUTTON_TOOGLE_STYLES("ec/toolbar/button/bold", EC_IMAGE_TOOLBAR_BOLD, BTN_IMAGE_MIN_MAX_WIDTH, BTN_IMAGE_MIN_MAX_HEIGHT);
-BUTTON_TOOGLE_STYLES("ec/toolbar/button/italic", EC_IMAGE_TOOLBAR_ITALIC, BTN_IMAGE_MIN_MAX_WIDTH, BTN_IMAGE_MIN_MAX_HEIGHT);
-BUTTON_TOOGLE_STYLES("ec/toolbar/button/underline", EC_IMAGE_TOOLBAR_UNDERLINE, BTN_IMAGE_MIN_MAX_WIDTH, BTN_IMAGE_MIN_MAX_HEIGHT);
-BUTTON_FONTCOLOR_STYLES("ec/toolbar/button/fontcolor", EC_IMAGE_TOOLBAR_FONTCOLOR, BTN_IMAGE_MIN_MAX_WIDTH, BTN_IMAGE_MIN_MAX_HEIGHT);
-BUTTON_FONTCOLOR_STYLES("ec/toolbar/button/fontbgcolor", EC_IMAGE_TOOLBAR_FONTBGCOLOR, BTN_IMAGE_MIN_MAX_WIDTH, BTN_IMAGE_MIN_MAX_HEIGHT);
+BUTTON_STYLES("ec/toolbar/button/fontsize", EC_IMAGE_TOOLBAR_FONTSIZE);
+BUTTON_TOOGLE_STYLES("ec/toolbar/button/bold", EC_IMAGE_TOOLBAR_BOLD);
+BUTTON_TOOGLE_STYLES("ec/toolbar/button/italic", EC_IMAGE_TOOLBAR_ITALIC);
+BUTTON_TOOGLE_STYLES("ec/toolbar/button/underline", EC_IMAGE_TOOLBAR_UNDERLINE);
+BUTTON_FONTCOLOR_STYLES("ec/toolbar/button/fontcolor", EC_IMAGE_TOOLBAR_FONTCOLOR);
+BUTTON_FONTCOLOR_STYLES("ec/toolbar/button/fontbgcolor", EC_IMAGE_TOOLBAR_FONTBGCOLOR);
+BUTTON_TOOGLE_STYLES("ec/toolbar/button/ordered_list", EC_IMAGE_TOOLBAR_NUMBERING);
+BUTTON_TOOGLE_STYLES("ec/toolbar/button/unordered_list", EC_IMAGE_TOOLBAR_ALEADSYMBOL);
