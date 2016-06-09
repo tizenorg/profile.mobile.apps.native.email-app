@@ -61,7 +61,9 @@ static char *_rich_text_button_list[RICH_TEXT_TYPE_COUNT] = {
 		"ec/toolbar/button/italic",
 		"ec/toolbar/button/underline",
 		"ec/toolbar/button/fontcolor",
-		"ec/toolbar/button/fontbgcolor"
+		"ec/toolbar/button/fontbgcolor",
+		"ec/toolbar/button/ordered_list",
+		"ec/toolbar/button/unordered_list"
 };
 
 static email_rgba_t _default_font_colors[] = {
@@ -83,6 +85,8 @@ const char *_get_font_properties	= TO_STR(GetCurrentFontStyle(););
 const char *_set_bold_state			= TO_STR(ExecCommand("bold", null););
 const char *_set_italic_state		= TO_STR(ExecCommand("italic", null););
 const char *_set_underline_state	= TO_STR(ExecCommand("underline", null););
+const char *_set_ordered_list_state	= TO_STR(ExecCommand("orderedList", null););
+const char *_set_unordered_list_state = TO_STR(ExecCommand("unorderedList", null););
 
 typedef void (*button_click_cb) (void *data, Evas_Object *obj, void *event_info);
 
@@ -419,6 +423,12 @@ static void _update_button_state(EmailComposerView *view, RichTextTypes type)
 	case RICH_TEXT_TYPE_UNDERLINE:
 		command = _set_underline_state;
 		break;
+	case RICH_TEXT_TYPE_ORDERED_LIST:
+		command = _set_ordered_list_state;
+		break;
+	case RICH_TEXT_TYPE_UNORDERED_LIST:
+		command = _set_unordered_list_state;
+		break;
 	default:
 		debug_error("unsupported button type");
 		return;
@@ -565,6 +575,8 @@ static void _button_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 	case RICH_TEXT_TYPE_UNDERLINE:
 	case RICH_TEXT_TYPE_BOLD:
 	case RICH_TEXT_TYPE_ITALIC:
+	case RICH_TEXT_TYPE_ORDERED_LIST:
+	case RICH_TEXT_TYPE_UNORDERED_LIST:
 		_update_button_state(view, type);
 		break;
 	default:
@@ -857,6 +869,8 @@ EMAIL_API void composer_rich_text_font_style_params_set(EmailComposerView *view,
 	view->richtext_button_list[RICH_TEXT_TYPE_BOLD].state = params->is_bold;
 	view->richtext_button_list[RICH_TEXT_TYPE_UNDERLINE].state = params->is_underline;
 	view->richtext_button_list[RICH_TEXT_TYPE_ITALIC].state = params->is_italic;
+	view->richtext_button_list[RICH_TEXT_TYPE_ORDERED_LIST].state = params->is_ordered_list;
+	view->richtext_button_list[RICH_TEXT_TYPE_UNORDERED_LIST].state = params->is_unordered_list;
 
 	view->richtext_font_color = params->font_color;
 	view->richtext_bg_color = params->bg_color;
