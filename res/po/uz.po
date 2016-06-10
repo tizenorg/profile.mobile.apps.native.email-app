@@ -1060,3 +1060,15 @@ msgstr "Saqlandi."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "O'chirib bo‘lmadi."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Biriktirmalarni qamrab ol"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Avv. kontaktlarni qamrab ol"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Faqat yangi oluvchilar"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "E-pochtani boshqaga yuborish"
+

@@ -262,16 +262,6 @@ void viewer_send_email(void *data, char *email_address);
 void viewer_view_contact_detail(void *data, int index);
 
 /**
- * @brief Run Composer, called from mbe selection
- *
- * @param[in]	data		User data (Email viewer data)
- * @param[in]	type		Run type key
- *
- */
-void viewer_launch_composer(void *data, int type);
-
-
-/**
  * @brief Recursively remove folder
  *
  * @param[in]	path		Folder path that should be removed

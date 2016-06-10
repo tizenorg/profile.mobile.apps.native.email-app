@@ -1060,3 +1060,15 @@ msgstr "Išsaugota."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Nepavyko ištrinti."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Įtraukti priedus"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Įtraukt ankstesnius gavėjus"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Tik nauji gavėjai"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Persiųsti el. laišką"
+
