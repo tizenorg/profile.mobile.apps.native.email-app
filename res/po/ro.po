@@ -1060,3 +1060,15 @@ msgstr "Salvat"
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Ștergere nereușită"
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Includere atașări"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Incl. destinatari anteriori"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Doar destinatari noi"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Redirecționare e-mail"
+

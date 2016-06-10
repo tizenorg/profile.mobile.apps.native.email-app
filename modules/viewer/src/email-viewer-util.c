@@ -90,6 +90,7 @@ Evas_Object *util_notify_genlist_add(Evas_Object *parent)
 	elm_scroller_policy_set(genlist, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_AUTO);
 	evas_object_show(genlist);
 
+	debug_leave();
 	return genlist;
 }
 
@@ -1091,31 +1092,6 @@ void viewer_view_contact_detail(void *data, int index)
 	if (ret != 0) {
 		notification_status_message_post(_("IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"));
 	}
-
-	debug_leave();
-}
-
-void viewer_launch_composer(void *data, int type)
-{
-	debug_enter();
-	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerView *view = (EmailViewerView *)data;
-	retm_if(view->mail_info == NULL, "Invalid parameter: mail_info[NULL]");
-
-	email_params_h params = NULL;
-
-	if (email_params_create(&params) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_RUN_TYPE, type) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_ACCOUNT_ID, view->account_id) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAILBOX, view->mailbox_id) &&
-		email_params_add_int(params, EMAIL_BUNDLE_KEY_MAIL_ID, view->mail_id) &&
-		((type != RUN_EML_REPLY && type != RUN_EML_REPLY_ALL && type != RUN_EML_FORWARD) ||
-		email_params_add_str(params, EMAIL_BUNDLE_KEY_MYFILE_PATH, view->eml_file_path))) {
-
-		view->loaded_module = viewer_create_module(view, EMAIL_MODULE_COMPOSER, params);
-	}
-
-	email_params_free(&params);
 
 	debug_leave();
 }

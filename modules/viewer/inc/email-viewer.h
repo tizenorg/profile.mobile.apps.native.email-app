@@ -94,9 +94,11 @@ typedef struct _ev_attachment_data_tag EV_attachment_data;
 
 typedef struct _view_data EmailViewerView;
 
+typedef struct _fwd_option_popup_data FwdOptionPopupData;
 /**
  * @brief Email viewer data
  */
+
 struct _view_data {
 	email_view_t base;
 
@@ -215,6 +217,11 @@ struct _view_data {
 
 	/*Reply toolbar*/
 	Evas_Object *reply_toolbar_ly;
+	Evas_Object *reply_option_popup;
+	Evas_Object *fwd_option_popup;
+	FwdOptionPopupData *fwd_popup_data;
+	ViewerReplyType selected_reply_type;
+
 
 	Evas_Object *webview_ly;
 	Evas_Object *webview_button;
@@ -315,16 +322,6 @@ typedef struct {
 } EmailViewerModule;
 
 /**
- * @brief Font size item data
- */
-typedef struct {
-	int index;
-	char *font_text;
-	Evas_Object *radio;
-	EmailViewerView *view;
-} FontsizeItem;
-
-/**
  * @brief Email viewer attachment state enum
  */
 typedef enum {
@@ -388,6 +385,13 @@ enum {
 	POPUP_ELEMENT_TYPE_BTN1,
 	POPUP_ELEMENT_TYPE_BTN2,
 	POPUP_ELEMENT_TYPE_BTN3,
+};
+
+struct _fwd_option_popup_data {
+	Evas_Object *radio_group;
+	Eina_Bool is_add_attach_checked;
+	Evas_Object *add_attach_checkbox;
+	ViewerFwdType selectedType;
 };
 
 enum {
