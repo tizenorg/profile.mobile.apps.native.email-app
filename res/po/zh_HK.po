@@ -1060,3 +1060,15 @@ msgstr "已儲存。"
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "刪除失敗。"
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "包括附件"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "包括之前的收件人"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "僅限新收件人"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "轉寄電子郵件"
+

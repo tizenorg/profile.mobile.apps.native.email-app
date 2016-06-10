@@ -322,7 +322,8 @@ static COMPOSER_ERROR_TYPE_E _composer_initialize_mail_info(void *data)
 	EmailComposerView *view = (EmailComposerView *)data;
 
 	/* Get mail data */
-	if (view->composer_type == RUN_COMPOSER_EDIT || view->composer_type == RUN_COMPOSER_REPLY || view->composer_type == RUN_COMPOSER_REPLY_ALL || view->composer_type == RUN_COMPOSER_FORWARD) {
+	if (view->composer_type == RUN_COMPOSER_EDIT || view->composer_type == RUN_COMPOSER_REPLY || view->composer_type == RUN_COMPOSER_REPLY_ALL
+			|| view->composer_type == RUN_COMPOSER_FORWARD || view->composer_type == RUN_COMPOSER_FORWARD_ALL) {
 		retvm_if(!email_engine_get_mail_data(view->original_mail_id, &view->org_mail_info->mail_data),
 				COMPOSER_ERROR_SERVICE_INIT_FAIL, "email_engine_get_mail_data() failed!");
 

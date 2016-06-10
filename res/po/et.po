@@ -1060,3 +1060,15 @@ msgstr "Salvestatud."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Kustutamine nurjus."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Kaasa manused"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Kaasa eelmised adressaadid"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Ainult uued adressaadid"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "E-kirja edasisaatmine"
+

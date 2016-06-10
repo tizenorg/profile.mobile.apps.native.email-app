@@ -1060,3 +1060,15 @@ msgstr "Saved."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Failed to delete."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Include attachments"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Include previous recipients"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "New recipients only"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Forward Email"
+
