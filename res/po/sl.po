@@ -1060,3 +1060,15 @@ msgstr "Shranjeno."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Brisanje ni uspelo."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Vključi priloge"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Vključi prejšnje prejemnike"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Samo novi prejemniki"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Posredujte e-pošto"
+

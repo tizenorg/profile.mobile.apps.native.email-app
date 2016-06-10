@@ -132,7 +132,7 @@ static void _webkit_js_execute_insert_signature_cb(Evas_Object *obj, const char 
 	EmailComposerView *view = (EmailComposerView *)data;
 
 	if (((view->composer_type == RUN_COMPOSER_REPLY || view->composer_type == RUN_COMPOSER_REPLY_ALL) && view->account_info->original_account->options.reply_with_body) ||
-		(view->composer_type == RUN_COMPOSER_FORWARD)) {
+		(view->composer_type == RUN_COMPOSER_FORWARD) || (view->composer_type == RUN_COMPOSER_FORWARD_ALL)) {
 		char *original_mail_info = composer_initial_data_body_make_parent_mail_info(view);
 
 		char **sp_info = g_strsplit(original_mail_info, "\"", -1);
@@ -199,7 +199,7 @@ static void _webkit_js_execute_init_composer_body_cb(Evas_Object *obj, const cha
 
 	/* TODO: is this needed? the symbolic links for inline image were made on tmp_folder. */
 	if (view->composer_type == RUN_COMPOSER_EDIT || view->composer_type == RUN_COMPOSER_REPLY ||
-		view->composer_type == RUN_COMPOSER_REPLY_ALL || view->composer_type == RUN_COMPOSER_FORWARD) {
+		view->composer_type == RUN_COMPOSER_REPLY_ALL || view->composer_type == RUN_COMPOSER_FORWARD || view->composer_type == RUN_COMPOSER_FORWARD_ALL) {
 		if (!ewk_view_script_execute(ewk_view, set_image_src, NULL, NULL))
 			debug_error("EC_JS_UPDATE_IMAGE_SOURCES failed.");
 	}
@@ -479,7 +479,7 @@ static void _ewk_view_load_nonemptylayout_finished_cb(void *data, Evas_Object *o
 		char *signature = composer_initial_data_body_make_signature_markup(view);
 
 		if (((view->composer_type == RUN_COMPOSER_REPLY || view->composer_type == RUN_COMPOSER_REPLY_ALL) && view->account_info->original_account->options.reply_with_body) ||
-			(view->composer_type == RUN_COMPOSER_FORWARD)) {
+			(view->composer_type == RUN_COMPOSER_FORWARD) || (view->composer_type == RUN_COMPOSER_FORWARD_ALL)) {
 			to_be_inserted_signature = g_strdup_printf(EC_JS_INSERT_SIGNATURE_TO_NEW_MESSAGE, signature);
 		} else {
 			to_be_inserted_signature = g_strdup_printf(EC_JS_INSERT_SIGNATURE, signature);

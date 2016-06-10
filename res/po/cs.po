@@ -1060,3 +1060,15 @@ msgstr "Uloženo."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Při odstraňování došlo k chybě."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Zahrnout přílohy"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Zahrnout předchozí příjemce"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Pouze noví příjemci"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Předat e-mail dál"
+
