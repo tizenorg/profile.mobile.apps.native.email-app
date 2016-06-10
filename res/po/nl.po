@@ -1060,3 +1060,15 @@ msgstr "Opgeslagen."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Kan niet verwijderen."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Inclusief bijlagen"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Vorige ontvangers opnemen"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Alleen nieuwe ontvangers"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "E-mail doorsturen"
+

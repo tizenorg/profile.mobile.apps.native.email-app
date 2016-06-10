@@ -123,7 +123,8 @@ static Eina_Bool _initial_data_mbe_append_recipients(EmailComposerView *view, Ev
 				continue;
 
 			/* In the case of reply all, don't include my address in recipient fields. */
-			if ((view->composer_type == RUN_COMPOSER_REPLY_ALL) && (g_strstr_len(recipients_list[count], strlen(recipients_list[count]), view->account_info->selected_account->user_email_address)))
+			if ((view->composer_type == RUN_COMPOSER_REPLY_ALL)
+					&& (g_strstr_len(recipients_list[count], strlen(recipients_list[count]), view->account_info->selected_account->user_email_address)))
 				continue;
 
 			EmailRecpInfo *ri = composer_util_recp_make_recipient_info(recipients_list[count]);
@@ -222,6 +223,12 @@ static void _initial_data_parse_params_by_internal(email_params_h params, const 
 			"email_params_get_str(%s) failed!", EMAIL_BUNDLE_KEY_MAIL_ID);
 
 	debug_log("mail_id: (%s)", argv[1]);
+
+	if ((run_type == RUN_COMPOSER_FORWARD) || (run_type == RUN_COMPOSER_FORWARD_ALL)) {
+		debug_warning_if(!email_params_get_str(params, EMAIL_BUNDLE_KEY_IS_ATTACHMENT_INCLUDE_TO_FORWARD, &argv[2]),
+						"email_params_get_str(%s) failed!", EMAIL_BUNDLE_KEY_IS_ATTACHMENT_INCLUDE_TO_FORWARD);
+		debug_log("Is attachment included: (%s)", argv[2]);
+	}
 
 	if ((run_type == RUN_EML_FORWARD) || (run_type == RUN_EML_REPLY) || (run_type == RUN_EML_REPLY_ALL)) {
 		debug_warning_if(!email_params_get_str(params, EMAIL_BUNDLE_KEY_MYFILE_PATH, &argv[3]),
@@ -484,6 +491,7 @@ static COMPOSER_ERROR_TYPE_E _initial_data_process_params_by_internal(EmailCompo
 		case RUN_COMPOSER_REPLY_ALL:
 		case RUN_COMPOSER_EDIT:
 		case RUN_COMPOSER_FORWARD:
+		case RUN_COMPOSER_FORWARD_ALL:
 			if (argv[1]) {
 				view->original_mail_id = atoi(argv[1]);
 			}
@@ -492,6 +500,10 @@ static COMPOSER_ERROR_TYPE_E _initial_data_process_params_by_internal(EmailCompo
 		default:
 			debug_error("MUST NOT reach here!! type:[%d]", view->composer_type);
 			return COMPOSER_ERROR_UNKOWN_TYPE;
+	}
+
+	if (argv[2] && (view->composer_type == RUN_COMPOSER_FORWARD || view->composer_type == RUN_COMPOSER_FORWARD_ALL)) {
+		view->is_original_attach_included = atoi(argv[2]);
 	}
 
 	debug_leave();
@@ -562,7 +574,8 @@ static void _initial_data_set_mail_to_recipients(EmailComposerView *view)
 		}
 	}
 
-	if ((view->composer_type == RUN_COMPOSER_REPLY_ALL) || (view->composer_type == RUN_COMPOSER_EDIT) || (view->composer_type == RUN_EML_REPLY_ALL)) {
+	if ((view->composer_type == RUN_COMPOSER_REPLY_ALL) || (view->composer_type == RUN_COMPOSER_EDIT) || (view->composer_type == RUN_EML_REPLY_ALL)
+			|| (view->composer_type == RUN_COMPOSER_FORWARD_ALL)) {
 		if (view->org_mail_info && view->org_mail_info->mail_data && view->org_mail_info->mail_data->full_address_to) {
 			debug_secure("view->org_mail_info->mail_data->full_address_to: (%s)", view->org_mail_info->mail_data->full_address_to);
 			to_be_added_recipients = view->org_mail_info->mail_data->full_address_to;
@@ -584,7 +597,8 @@ static void _initial_data_set_mail_cc_recipients(EmailComposerView *view)
 
 	char *to_be_added_recipients = NULL;
 
-	if ((view->composer_type == RUN_COMPOSER_REPLY_ALL) || (view->composer_type == RUN_COMPOSER_EDIT) || (view->composer_type == RUN_EML_REPLY_ALL)) {
+	if ((view->composer_type == RUN_COMPOSER_REPLY_ALL) || (view->composer_type == RUN_COMPOSER_EDIT) || (view->composer_type == RUN_EML_REPLY_ALL)
+			|| (view->composer_type == RUN_COMPOSER_FORWARD_ALL)) {
 		debug_secure("view->org_mail_info->mail_data->full_address_cc: (%s)", view->org_mail_info->mail_data->full_address_cc);
 		to_be_added_recipients = view->org_mail_info->mail_data->full_address_cc;
 	} else if (view->composer_type == RUN_COMPOSER_EXTERNAL) {
@@ -608,7 +622,8 @@ static void _initial_data_set_mail_bcc_recipients(EmailComposerView *view)
 
 	char *to_be_added_recipients = NULL;
 
-	if ((view->composer_type == RUN_COMPOSER_REPLY_ALL) || (view->composer_type == RUN_COMPOSER_EDIT) || (view->composer_type == RUN_EML_REPLY_ALL)) {
+	if ((view->composer_type == RUN_COMPOSER_REPLY_ALL) || (view->composer_type == RUN_COMPOSER_EDIT) || (view->composer_type == RUN_EML_REPLY_ALL)
+			|| (view->composer_type == RUN_COMPOSER_FORWARD_ALL)) {
 		debug_secure("view->org_mail_info->mail_data->full_address_bcc: (%s)", view->org_mail_info->mail_data->full_address_bcc);
 		to_be_added_recipients = view->org_mail_info->mail_data->full_address_bcc;
 	} else if (view->composer_type == RUN_COMPOSER_EXTERNAL) {
@@ -638,7 +653,7 @@ static void _initial_data_set_mail_subject(EmailComposerView *view)
 			if (view->org_mail_info->mail_data->subject) {
 				to_be_added_subject = view->org_mail_info->mail_data->subject;
 			}
-		} else if ((view->composer_type == RUN_COMPOSER_FORWARD) || (view->composer_type == RUN_EML_FORWARD)) {
+		} else if ((view->composer_type == RUN_COMPOSER_FORWARD) || (view->composer_type == RUN_COMPOSER_FORWARD_ALL) || (view->composer_type == RUN_EML_FORWARD)) {
 			if (view->org_mail_info->mail_data->subject) {
 				if ((strncasecmp(view->org_mail_info->mail_data->subject, "fw:", 3) == 0) ||
 					(strncasecmp(view->org_mail_info->mail_data->subject, "fwd:", 4) == 0)) {
@@ -731,7 +746,7 @@ static char *_initial_data_get_mail_body(EmailComposerView *view)
 				view->new_mail_info->mail_data->file_path_plain = NULL;
 			}
 		} else if (((view->composer_type == RUN_COMPOSER_REPLY || view->composer_type == RUN_COMPOSER_REPLY_ALL) && view->account_info->original_account->options.reply_with_body) ||
-			(view->composer_type == RUN_COMPOSER_FORWARD)) {
+			(view->composer_type == RUN_COMPOSER_FORWARD) || (view->composer_type == RUN_COMPOSER_FORWARD_ALL)) {
 			parent_content = _initial_data_body_get_parent_content(view);
 			original_message_bar = _initial_data_body_get_original_message_bar_tags(view);
 
@@ -776,7 +791,8 @@ static void _initial_data_set_mail_attachment(EmailComposerView *view)
 
 	char err_buff[EMAIL_BUFF_SIZE_HUG] = { 0, };
 
-	if (view->composer_type == RUN_COMPOSER_EDIT || view->composer_type == RUN_COMPOSER_REPLY || view->composer_type == RUN_COMPOSER_REPLY_ALL || view->composer_type == RUN_COMPOSER_FORWARD) {
+	if (view->composer_type == RUN_COMPOSER_EDIT || view->composer_type == RUN_COMPOSER_REPLY || view->composer_type == RUN_COMPOSER_REPLY_ALL
+			|| view->composer_type == RUN_COMPOSER_FORWARD || view->composer_type == RUN_COMPOSER_FORWARD_ALL) {
 		/* Check the size of the inline images first */
 		for (i = 0; i < view->org_mail_info->total_attachment_count; i++) {
 			email_attachment_data_t *att_data = view->org_mail_info->attachment_list + i;
@@ -818,7 +834,8 @@ static void _initial_data_set_mail_attachment(EmailComposerView *view)
 			}
 		}
 
-		if (view->composer_type == RUN_COMPOSER_EDIT || (view->composer_type == RUN_COMPOSER_FORWARD && account_info->original_account->options.forward_with_files)) {
+		if (view->composer_type == RUN_COMPOSER_EDIT ||
+				((view->composer_type == RUN_COMPOSER_FORWARD || view->composer_type == RUN_COMPOSER_FORWARD_ALL) && view->is_original_attach_included)) {
 			if (view->org_mail_info->mail_data->attachment_count > 0) {
 				int reference_attachment_count = 0;
 				email_attachment_data_t *reference_attachment_list = NULL;

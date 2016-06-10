@@ -1060,3 +1060,15 @@ msgstr "Αποθηκεύτηκε."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Αποτυχία διαγραφής."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Συμπερίληψη συνημμένων"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Συμπερίλ. προηγ. παραληπτών"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Μόνο νέοι παραλήπτες"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Προώθηση email"
+

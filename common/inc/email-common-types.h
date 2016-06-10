@@ -68,16 +68,17 @@
 #define EMAIL_BUNDLE_KEY_RUN_TYPE				"RUN_TYPE"
 #define EMAIL_BUNDLE_KEY_MAIL_ID				"MAIL_ID"
 //TODO This bundle gets in Viewer module but nobody set it. Can be removed after Viewer module refactoring
-#define EMAIL_BUNDLE_KEY_FIRST_LANDSCAPE		"bFirstLandscape"
-#define EMAIL_BUNDLE_KEY_MSG					"MSG"
-#define EMAIL_BUNDLE_KEY_TO						"TO"
-#define EMAIL_BUNDLE_KEY_CC						"CC"
-#define EMAIL_BUNDLE_KEY_BCC					"BCC"
-#define EMAIL_BUNDLE_KEY_SUBJECT				"SUBJECT"
-#define EMAIL_BUNDLE_KEY_BODY					"BODY"
-#define EMAIL_BUNDLE_KEY_ATTACHMENT				"ATTACHMENT"
-#define EMAIL_BUNDLE_KEY_MAILBOX_TYPE			"MAILBOX_TYPE"
-#define EMAIL_BUNDLE_KEY_MAIL_INDEX				"MAIL_INDEX"
+#define EMAIL_BUNDLE_KEY_FIRST_LANDSCAPE							"bFirstLandscape"
+#define EMAIL_BUNDLE_KEY_MSG										"MSG"
+#define EMAIL_BUNDLE_KEY_TO											"TO"
+#define EMAIL_BUNDLE_KEY_CC											"CC"
+#define EMAIL_BUNDLE_KEY_BCC										"BCC"
+#define EMAIL_BUNDLE_KEY_SUBJECT									"SUBJECT"
+#define EMAIL_BUNDLE_KEY_BODY										"BODY"
+#define EMAIL_BUNDLE_KEY_ATTACHMENT									"ATTACHMENT"
+#define EMAIL_BUNDLE_KEY_IS_ATTACHMENT_INCLUDE_TO_FORWARD				"IS_ATTACHMENT_INCLUDE_TO_REPLY"
+#define EMAIL_BUNDLE_KEY_MAILBOX_TYPE								"MAILBOX_TYPE"
+#define EMAIL_BUNDLE_KEY_MAIL_INDEX									"MAIL_INDEX"
 
 #define EMAIL_BUNDLE_KEY_MYFILE_PATH			"path"
 
@@ -157,6 +158,7 @@ typedef enum {
 	RUN_EML_REPLY = 14,
 	RUN_EML_FORWARD = 15,
 	RUN_EML_REPLY_ALL = 16,
+	RUN_COMPOSER_FORWARD_ALL = 17,
 	RUN_TYPE_MAX
 } email_run_type_e;
 

@@ -1060,3 +1060,15 @@ msgstr "Tallennettu."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Poisto epäonnistui."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Sisällytä liitteet"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Sisällytä aik. vastaanott."
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Vain uudet vastaanottajat"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Lähetä sähköposti eteenpäin"
+
