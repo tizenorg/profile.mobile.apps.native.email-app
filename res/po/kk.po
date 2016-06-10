@@ -1060,3 +1060,15 @@ msgstr "Сақталған"
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Жою сәтсіз болды."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Тіркемелерді қосу"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Алдыңғы алушыларды қосу"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Тек жаңа алушылар"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Элек. пошта бағытын өзгерту"
+

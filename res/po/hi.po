@@ -1060,3 +1060,15 @@ msgstr "सुरक्षित किया।"
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "हटाने में विफल।"
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "संलग्नक शामिल करें"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "पिछले प्राप्तकर्ता शामिल करें"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "केवल नए प्राप्तकर्ता"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "ईमेल अग्रेषित करें"
+

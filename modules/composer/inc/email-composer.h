@@ -307,6 +307,7 @@ struct _view_data {
 	int composer_type;
 	int draft_sync_handle;
 	int original_mail_id;
+	int is_original_attach_included;
 	char *original_charset;
 	char *saved_text_path;
 	char *saved_html_path;

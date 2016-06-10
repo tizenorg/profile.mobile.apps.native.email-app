@@ -1060,3 +1060,15 @@ msgstr "Gespeichert"
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Fehler beim Löschen"
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Anhänge einbeziehen"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Vorherige Empfänger einschl."
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Nur neue Empfänger"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Weiterleiten einer E-Mail"
+
