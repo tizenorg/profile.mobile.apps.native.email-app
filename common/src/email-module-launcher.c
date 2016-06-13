@@ -222,17 +222,20 @@ int email_module_launch_app(email_module_t *module, email_launch_app_type_e app_
 	return -1;
 }
 
-int email_module_launch_attach_panel(email_module_t *module)
+int email_module_launch_attach_panel(email_module_t *module,
+		email_attach_panel_mode_type_e mode)
 {
 	debug_enter();
 	/* Check state and input arguments */
 	retvm_if(!module, -1, "module is NULL");
+	retvm_if((mode < 0 || mode >= EMAIL_APMT_COUNT), -1, "Invalid mode: %d", mode);
 	retvm_if(module->is_attach_panel_launched, -1, "Attach panel is running");
 	retvm_if(module->is_launcher_busy, -1, "Launcher is busy");
 
 	/* We should create attach panel if not created.
 	 * Or recreate if bundles changes */
-	if (!module->_attach_panel || module->_attach_panel_bundles_changed) {
+	if (!module->_attach_panel || module->_attach_panel_bundles_changed ||
+		(mode != module->_attach_panel_mode)) {
 		int r = 0;
 
 		/* Free attach panel in case of recreate */
@@ -240,6 +243,8 @@ int email_module_launch_attach_panel(email_module_t *module)
 			debug_log("Freeing attach panel...");
 			_email_module_free_attach_panel(module);
 		}
+		/* Assign attach panel mode */
+		module->_attach_panel_mode = mode;
 		/* Reset changed state of bundles */
 		module->_attach_panel_bundles_changed = false;
 
@@ -562,33 +567,35 @@ int _email_module_create_attach_panel(email_module_t *module)
 			ATTACH_PANEL_CONTENT_CATEGORY_CAMERA,
 			module->_attach_panel_bundles[EMAIL_APCT_CAMERA]);
 
-	attach_panel_add_content_category(module->_attach_panel,
-			ATTACH_PANEL_CONTENT_CATEGORY_VOICE,
-			module->_attach_panel_bundles[EMAIL_APCT_VOICE]);
+	if (module->_attach_panel_mode == EMAIL_APMT_GENERAL) {
+		attach_panel_add_content_category(module->_attach_panel,
+				ATTACH_PANEL_CONTENT_CATEGORY_VOICE,
+				module->_attach_panel_bundles[EMAIL_APCT_VOICE]);
 
-	attach_panel_add_content_category(module->_attach_panel,
-			ATTACH_PANEL_CONTENT_CATEGORY_VIDEO,
-			module->_attach_panel_bundles[EMAIL_APCT_VIDEO]);
+		attach_panel_add_content_category(module->_attach_panel,
+				ATTACH_PANEL_CONTENT_CATEGORY_VIDEO,
+				module->_attach_panel_bundles[EMAIL_APCT_VIDEO]);
 
-	attach_panel_add_content_category(module->_attach_panel,
-			ATTACH_PANEL_CONTENT_CATEGORY_AUDIO,
-			module->_attach_panel_bundles[EMAIL_APCT_AUDIO]);
+		attach_panel_add_content_category(module->_attach_panel,
+				ATTACH_PANEL_CONTENT_CATEGORY_AUDIO,
+				module->_attach_panel_bundles[EMAIL_APCT_AUDIO]);
 
-	attach_panel_add_content_category(module->_attach_panel,
-			ATTACH_PANEL_CONTENT_CATEGORY_CALENDAR,
-			module->_attach_panel_bundles[EMAIL_APCT_CALENDAR]);
+		attach_panel_add_content_category(module->_attach_panel,
+				ATTACH_PANEL_CONTENT_CATEGORY_CALENDAR,
+				module->_attach_panel_bundles[EMAIL_APCT_CALENDAR]);
 
-	attach_panel_add_content_category(module->_attach_panel,
-			ATTACH_PANEL_CONTENT_CATEGORY_CONTACT,
-			module->_attach_panel_bundles[EMAIL_APCT_CONTACT]);
+		attach_panel_add_content_category(module->_attach_panel,
+				ATTACH_PANEL_CONTENT_CATEGORY_CONTACT,
+				module->_attach_panel_bundles[EMAIL_APCT_CONTACT]);
 
-	attach_panel_add_content_category(module->_attach_panel,
-			ATTACH_PANEL_CONTENT_CATEGORY_MYFILES,
-			module->_attach_panel_bundles[EMAIL_APCT_MYFILES]);
+		attach_panel_add_content_category(module->_attach_panel,
+				ATTACH_PANEL_CONTENT_CATEGORY_MYFILES,
+				module->_attach_panel_bundles[EMAIL_APCT_MYFILES]);
 
-	attach_panel_add_content_category(module->_attach_panel,
-			ATTACH_PANEL_CONTENT_CATEGORY_VIDEO_RECORDER,
-			module->_attach_panel_bundles[EMAIL_APCT_VIDEO_RECORDER]);
+		attach_panel_add_content_category(module->_attach_panel,
+				ATTACH_PANEL_CONTENT_CATEGORY_VIDEO_RECORDER,
+				module->_attach_panel_bundles[EMAIL_APCT_VIDEO_RECORDER]);
+	}
 
 	/* Registering necessary attach panel callbacks */
 
@@ -663,8 +670,8 @@ void _email_module_attach_panel_result_cb(attach_panel_h attach_panel,
 			ecore_thread_main_loop_begin();
 
 			/* Invoke reply callback */
-			module->_attach_panel_listener.reply_cb(
-					module->_attach_panel_listener.cb_data, (const char **)path_array, array_len);
+			module->_attach_panel_listener.reply_cb(module->_attach_panel_listener.cb_data,
+					module->_attach_panel_mode, (const char **)path_array, array_len);
 
 			/* We must unlock GUI thread */
 			ecore_thread_main_loop_end();

@@ -163,6 +163,7 @@ struct _email_module
 	app_control_h _launched_app;
 	/* Handle of the attach panel if created, or NULL */
 	attach_panel_h _attach_panel;
+	email_attach_panel_mode_type_e _attach_panel_mode;
 	/* Timer used to reset transparent application state */
 	Ecore_Timer *_app_timer;
 	/* Application launch listener */

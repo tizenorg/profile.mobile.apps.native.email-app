@@ -63,7 +63,7 @@ static COMPOSER_ERROR_TYPE_E _composer_initialize_services(void *data);
 static COMPOSER_ERROR_TYPE_E _composer_initialize_themes(void *data);
 static COMPOSER_ERROR_TYPE_E _composer_construct_composer_data(void *data);
 
-static void _composer_attach_panel_reply_cb(void *data, const char **path_array, int array_len);
+static void _composer_attach_panel_reply_cb(void *data, email_attach_panel_mode_type_e mode, const char **path_array, int array_len);
 
 static void *_composer_vcard_save_worker(void *data);
 static Eina_Bool _composer_vcard_save_timer_cb(void *data);
@@ -730,13 +730,13 @@ CATCH:
 	return ret;
 }
 
-static void _composer_attach_panel_reply_cb(void *data, const char **path_array, int array_len)
+static void _composer_attach_panel_reply_cb(void *data, email_attach_panel_mode_type_e mode, const char **path_array, int array_len)
 {
 	debug_enter();
 	EmailComposerView *view = data;
 
 	composer_attachment_process_attachments_with_array(view,
-			path_array, array_len, ATTACH_BY_COPY_FILE, EINA_FALSE);
+			path_array, array_len, ATTACH_BY_COPY_FILE, (mode == EMAIL_APMT_IMAGES));
 
 	debug_leave();
 }

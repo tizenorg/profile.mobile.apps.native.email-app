@@ -196,7 +196,7 @@ static void _show_attach_panel(EmailComposerView *view)
 {
 	debug_enter();
 
-	if (email_module_launch_attach_panel(view->base.module) == 0) {
+	if (email_module_launch_attach_panel(view->base.module, EMAIL_APMT_GENERAL) == 0) {
 		// To update inline image list to calculate total attachment size
 		if (ewk_view_script_execute(view->ewk_view, EC_JS_GET_IMAGE_LIST,
 				_get_image_list_cb, (void *)view) == EINA_FALSE) {

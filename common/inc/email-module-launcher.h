@@ -65,6 +65,20 @@ typedef struct _email_launch_app_listener
 } email_launched_app_listener_t;
 
 /**
+ * Enumeration of the attach panel mode type
+ */
+typedef enum _email_attach_panel_mode_type
+{
+	/* General attach panal mode to use when attaching files */
+	EMAIL_APMT_GENERAL,
+	/* Attach panel mode to attach only image files or taking pictures */
+	EMAIL_APMT_IMAGES,
+
+	/* Count of enumeration values */
+	EMAIL_APMT_COUNT
+} email_attach_panel_mode_type_e;
+
+/**
  * Enumeration of the attach panel category type
  */
 typedef enum _email_attach_panel_category_type
@@ -107,7 +121,8 @@ typedef struct _email_attach_panel_listener
 	 * @param[in]	path_array		array with file paths
 	 * @param[in]	array_len		length of the array
 	 */
-	void (*reply_cb) (void *data, const char **path_array, int array_len);
+	void (*reply_cb) (void *data, email_attach_panel_mode_type_e mode,
+			const char **path_array, int array_len);
 	void (*close_cb) (void *data);
 
 } email_attach_panel_listener_t;
@@ -137,12 +152,13 @@ EMAIL_API int email_module_launch_app(email_module_t *module, email_launch_app_t
  * Attach panel can't be launched if an application is already was launched
  *
  * @param[in]	module		pointer to the module
- * @param[in]	listener	attach panel listener
+ * @param[in]	mode		attach panel mode
  *
  * @return 0 - on success,
  * 		negative value - on error
  */
-EMAIL_API int email_module_launch_attach_panel(email_module_t *module);
+EMAIL_API int email_module_launch_attach_panel(email_module_t *module,
+		email_attach_panel_mode_type_e mode);
 
 /**
  * @brief Registers the attach panel listener
