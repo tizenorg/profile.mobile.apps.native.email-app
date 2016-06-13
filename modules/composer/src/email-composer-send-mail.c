@@ -367,21 +367,15 @@ static COMPOSER_ERROR_TYPE_E _send_mail(EmailComposerView *view)
 		sending_time.datetime_type_value = time(NULL);
 
 		if (view->composer_type == RUN_COMPOSER_REPLY || view->composer_type == RUN_COMPOSER_REPLY_ALL) {
-			if (view->org_mail_info->mail_data->flags_forwarded_field) {
-				email_engine_set_flags_field(view->account_info->original_account->account_id, &view->original_mail_id, 1, EMAIL_FLAGS_FORWARDED_FIELD, 0, 1);
-			}
-
-			email_engine_update_mail_attribute(view->org_mail_info->mail_data->account_id, &view->org_mail_info->mail_data->mail_id, 1, EMAIL_MAIL_ATTRIBUTE_REPLIED_TIME, sending_time);
-
-			email_engine_set_flags_field(view->account_info->original_account->account_id, &view->original_mail_id, 1, EMAIL_FLAGS_ANSWERED_FIELD, 1, 1);
+			email_engine_update_mail_attribute(view->org_mail_info->mail_data->account_id,
+					&view->org_mail_info->mail_data->mail_id, 1, EMAIL_MAIL_ATTRIBUTE_REPLIED_TIME, sending_time);
+			email_engine_set_flags_field(view->account_info->original_account->account_id,
+					&view->original_mail_id, 1, EMAIL_FLAGS_ANSWERED_FIELD, 1, 1);
 		} else if (view->composer_type == RUN_COMPOSER_FORWARD) {
-			if (view->org_mail_info->mail_data->flags_answered_field) {
-				email_engine_set_flags_field(view->account_info->original_account->account_id, &view->original_mail_id, 1, EMAIL_FLAGS_ANSWERED_FIELD, 0, 1);
-			}
-
-			email_engine_update_mail_attribute(view->org_mail_info->mail_data->account_id, &view->org_mail_info->mail_data->mail_id, 1, EMAIL_MAIL_ATTRIBUTE_FORWARDED_TIME, sending_time);
-
-			email_engine_set_flags_field(view->account_info->original_account->account_id, &view->original_mail_id, 1, EMAIL_FLAGS_FORWARDED_FIELD, 1, 1);
+			email_engine_update_mail_attribute(view->org_mail_info->mail_data->account_id,
+					&view->org_mail_info->mail_data->mail_id, 1, EMAIL_MAIL_ATTRIBUTE_FORWARDED_TIME, sending_time);
+			email_engine_set_flags_field(view->account_info->original_account->account_id,
+					&view->original_mail_id, 1, EMAIL_FLAGS_FORWARDED_FIELD, 1, 1);
 		}
 	} else {
 		debug_error("Sending email failed");

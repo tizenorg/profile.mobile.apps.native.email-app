@@ -443,6 +443,8 @@ static Eina_Bool _webkit_parse_text_style_changed_data(const char *res_string, F
 	int is_bold = 0;
 	int is_italic = 0;
 	int is_underline = 0;
+	int is_ordered_list = 0;
+	int is_unordered_list = 0;
 
 	int res = sscanf(res_string, COMPOSER_TEXT_STYLE_CHANGE_MESSAGE,
 			&params->font_size,
@@ -450,13 +452,16 @@ static Eina_Bool _webkit_parse_text_style_changed_data(const char *res_string, F
 			&is_underline,
 			&is_italic,
 			&params->font_color.red, &params->font_color.green, &params->font_color.blue,
-			&params->bg_color.red, &params->bg_color.green, &params->bg_color.blue);
+			&params->bg_color.red, &params->bg_color.green, &params->bg_color.blue,
+			&is_ordered_list, &is_unordered_list);
 
 	retvm_if(res < 0, EINA_FALSE, "sscanf failed!");
 
 	params->is_bold = is_bold;
 	params->is_underline = is_underline;
 	params->is_italic = is_italic;
+	params->is_ordered_list = is_ordered_list;
+	params->is_unordered_list = is_unordered_list;
 
 	return EINA_TRUE;
 }

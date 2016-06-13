@@ -93,6 +93,8 @@ var g_curUnderline = 0;
 var g_curItalic = 0;
 var g_curFontColor = "";
 var g_curBgColor = "";
+var g_curOrderedList = 0;
+var g_curUnorderedList = 0;
 
 var g_curEventStr = "";
 var g_curEventIsGroup = false
@@ -931,7 +933,8 @@ function GetCurFontParamsString() {
 
 	return "font_size=" + g_curFontSize + "&bold=" + g_curBold +
 	"&underline=" + g_curUnderline + "&italic=" + g_curItalic +
-	"&font_color=" + g_curFontColor + "&bg_color=" + temp;
+	"&font_color=" + g_curFontColor + "&bg_color=" + temp +
+	"&ordered_list=" +  g_curOrderedList + "&unordered_list=" + g_curUnorderedList;
 }
 
 function HexToRgb(hex) {
@@ -980,6 +983,24 @@ function ExecCommand(type, value) {
 		document.execCommand('FontSize', false, value);
 		if (!selectionState) {
 			g_curFontSize = FontSize[value] + "px";
+		}
+		break;
+	case "orderedList":
+		document.execCommand('insertOrderedList', false, null);
+		if (!selectionState) {
+			g_curOrderedList = (g_curOrderedList == 1) ? 0 : 1;
+			if (g_curOrderedList == 1 && g_curUnorderedList == 1) {
+				g_curUnorderedList = 0;
+			}
+		}
+		break;
+	case "unorderedList":
+		document.execCommand('insertUnorderedList', false, null);
+		if (!selectionState) {
+			g_curUnorderedList = (g_curUnorderedList == 1) ? 0 : 1;
+			if (g_curUnorderedList == 1 && g_curOrderedList == 1) {
+				g_curOrderedList = 0;
+			}
 		}
 		break;
 	default:
@@ -1382,7 +1403,7 @@ function GetCurrentFontStyleProperties(force) {
 	}
 
 	var containerEl = null;
-	var newFontSize = "", newBold = 1, newUnderline = 1, newItalic = 1;
+	var newFontSize = "", newBold = 1, newUnderline = 1, newItalic = 1, newOrderedList = 1, newUnorderedList = 1;
 	var newFontColor = "", newBgColor = "";
 
 	if (nodeArray.length == 1 && nodeArray[0].nodeType != G_VAL_TEXT_NODE_TYPE) {
@@ -1390,6 +1411,8 @@ function GetCurrentFontStyleProperties(force) {
 		newBold = document.queryCommandState('bold') ? 1 : 0;
 		newUnderline = document.queryCommandState('underline') ? 1 : 0;
 		newItalic = document.queryCommandState('italic') ? 1 : 0;
+		newOrderedList = document.queryCommandState('insertOrderedList') ? 1 : 0;
+		newUnorderedList = document.queryCommandState('insertUnorderedList') ? 1 : 0;
 		newFontColor = document.queryCommandValue('forecolor');
 		newBgColor = document.queryCommandValue('backcolor');
 
@@ -1406,7 +1429,7 @@ function GetCurrentFontStyleProperties(force) {
 				containerEl = containerEl.parentNode;
 			}
 
-			var iFontSize = "", iBold = 0, iUnderline = 0, iItalic = 0;
+			var iFontSize = "", iBold = 0, iUnderline = 0, iItalic = 0, iOrderedList = 0, iUnorderedList = 0;
 			var iFontColor = "", iBgColor = "";
 
 			var computedStyle = GetComputedStyle(containerEl);
@@ -1425,6 +1448,18 @@ function GetCurrentFontStyleProperties(force) {
 				case "strong":
 					iBold = 1;
 					break;
+				case "ol":
+					if (iOrderedList == 0 && iUnorderedList == 0) {
+						iOrderedList = 1;
+						iUnorderedList = 0;
+					}
+					break;
+				case "ul":
+					if (iOrderedList == 0 && iUnorderedList == 0) {
+						iOrderedList = 0;
+						iUnorderedList = 1;
+					}
+					break;
 				default:
 					break;
 				}
@@ -1441,6 +1476,8 @@ function GetCurrentFontStyleProperties(force) {
 			newBold = newBold & iBold;
 			newUnderline = newUnderline & iUnderline;
 			newItalic = newItalic & iItalic;
+			newOrderedList = newOrderedList & iOrderedList;
+			newUnorderedList = newUnorderedList & iUnorderedList;
 
 			if (newFontSize == "") {
 				newFontSize = iFontSize;
@@ -1465,6 +1502,7 @@ function GetCurrentFontStyleProperties(force) {
 	if ((force == false &&
 		g_curFontSize == newFontSize && g_curBold == newBold &&
 		g_curUnderline == newUnderline && g_curItalic == newItalic &&
+		g_curOrderedList == newOrderedList && g_curUnorderedList == newUnorderedList &&
 		g_curFontColor == newFontColor && g_curBgColor == newBgColor) || newFontSize == 0) {
 		return null;
 	} else {
@@ -1472,6 +1510,8 @@ function GetCurrentFontStyleProperties(force) {
 		g_curBold = newBold;
 		g_curUnderline = newUnderline;
 		g_curItalic = newItalic;
+		g_curOrderedList = newOrderedList;
+		g_curUnorderedList = newUnorderedList;
 		g_curFontColor = newFontColor;
 		g_curBgColor = newBgColor;
 		return GetCurFontParamsString();

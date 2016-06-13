@@ -358,7 +358,7 @@ static void _create_account_single_accout_list(EmailAccountView *view, int accou
 		}
 
 		if (!email_engine_get_mailbox_by_mailbox_type(account_id, mailbox_type, &mailbox)) {
-			if (email_account) email_engine_free_account_list(&email_account, 1);
+			email_engine_free_account_list(&email_account, 1);
 			return;
 		}
 
@@ -403,7 +403,7 @@ static void _create_account_single_accout_list(EmailAccountView *view, int accou
 			ELM_GENLIST_ITEM_NONE, _gl_account_list_item_sel, item_data);
 	group_item_data->sub_items = eina_list_append(group_item_data->sub_items, item_data);
 
-	if (email_account) email_engine_free_account_list(&email_account, 1);
+	email_engine_free_account_list(&email_account, 1);
 }
 
 void account_init_genlist_item_class_for_account_view_list(EmailAccountView *view)

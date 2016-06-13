@@ -38,8 +38,6 @@ INSTALL(FILES ${PROJECT_IMAGES_DIR}/composer_icon/button_delete.png DESTINATION 
 INSTALL(FILES ${PROJECT_IMAGES_DIR}/composer_icon/core_check_bg_stroke.png DESTINATION ${IMGDIR}/composer_icon)
 INSTALL(FILES ${PROJECT_IMAGES_DIR}/composer_icon/core_check_bg.png DESTINATION ${IMGDIR}/composer_icon)
 INSTALL(FILES ${PROJECT_IMAGES_DIR}/composer_icon/core_check_icon.png DESTINATION ${IMGDIR}/composer_icon)
-INSTALL(FILES ${PROJECT_IMAGES_DIR}/list_icon/index_icon_reply.png DESTINATION ${IMGDIR}/list_icon)
-INSTALL(FILES ${PROJECT_IMAGES_DIR}/list_icon/index_icon_forward.png DESTINATION ${IMGDIR}/list_icon)
 INSTALL(FILES ${PROJECT_IMAGES_DIR}/file_type_icon/email_icon_amr.png DESTINATION ${IMGDIR}/file_type_icon)
 INSTALL(FILES ${PROJECT_IMAGES_DIR}/file_type_icon/email_icon_date.png DESTINATION ${IMGDIR}/file_type_icon)
 INSTALL(FILES ${PROJECT_IMAGES_DIR}/file_type_icon/email_icon_eml.png DESTINATION ${IMGDIR}/file_type_icon)

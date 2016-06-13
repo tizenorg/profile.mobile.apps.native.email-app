@@ -86,7 +86,9 @@
 	"underline=%d&" \
 	"italic=%d&" \
 	"font_color=rgb(%d, %d, %d)&" \
-	"bg_color=rgb(%d, %d, %d)"
+	"bg_color=rgb(%d, %d, %d)&" \
+	"ordered_list=%d&" \
+	"unordered_list=%d"
 
 #define EMAIL_COMPOSER_TMP_FOLDER_PERMISSION 0775
 
@@ -326,6 +328,8 @@ typedef enum {
 	RICH_TEXT_TYPE_UNDERLINE,
 	RICH_TEXT_TYPE_FONT_COLOR,
 	RICH_TEXT_TYPE_BACKGROUND_COLOR,
+	RICH_TEXT_TYPE_ORDERED_LIST,
+	RICH_TEXT_TYPE_UNORDERED_LIST,
 	RICH_TEXT_TYPE_COUNT
 } RichTextTypes;
 
