@@ -25,3 +25,4 @@
 #define EC_IMAGE_TOOLBAR_FONTBGCOLOR		DIR_ICON_TOOLBAR"email_icon_toolbar_font_background_color.png"
 #define EC_IMAGE_TOOLBAR_NUMBERING			DIR_ICON_TOOLBAR"email_icon_toolbar_number.png"
 #define EC_IMAGE_TOOLBAR_ALEADSYMBOL		DIR_ICON_TOOLBAR"email_icon_toolbar_contents.png"
+#define EC_IMAGE_TOOLBAR_INSERT_IMAGE		DIR_ICON_TOOLBAR"email_icon_toolbar_image.png"

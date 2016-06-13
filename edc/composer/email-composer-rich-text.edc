@@ -470,6 +470,7 @@ group
 	}
 }
 
+BUTTON_STYLES("ec/toolbar/button/insert_image", EC_IMAGE_TOOLBAR_INSERT_IMAGE);
 BUTTON_STYLES("ec/toolbar/button/fontsize", EC_IMAGE_TOOLBAR_FONTSIZE);
 BUTTON_TOOGLE_STYLES("ec/toolbar/button/bold", EC_IMAGE_TOOLBAR_BOLD);
 BUTTON_TOOGLE_STYLES("ec/toolbar/button/italic", EC_IMAGE_TOOLBAR_ITALIC);
