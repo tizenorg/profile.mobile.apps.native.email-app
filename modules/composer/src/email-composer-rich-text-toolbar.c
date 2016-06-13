@@ -56,6 +56,7 @@ static FonSizesType _rich_text_font_sizes[] = {
 };
 
 static char *_rich_text_button_list[RICH_TEXT_TYPE_COUNT] = {
+		"ec/toolbar/button/insert_image",
 		"ec/toolbar/button/fontsize",
 		"ec/toolbar/button/bold",
 		"ec/toolbar/button/italic",
@@ -119,6 +120,7 @@ static void _create_font_size_popup(EmailComposerView *view);
 static void _update_all_buttons_state(EmailComposerView *view);
 static void _update_property_button_state(EmailComposerView *view, RichTextTypes type);
 static void _update_color_button_state(EmailComposerView *view, RichTextTypes type);
+static void _insert_inline_image(EmailComposerView *view);
 static void _create_option_selection_popup(EmailComposerView *view, RichTextTypes type);
 static void _update_color_button_after_color_pick(EmailComposerView *view, RichTextTypes type);
 static Evas_Object *_create_button(EmailComposerView *view, Evas_Object *parent, RichTextTypes type);
@@ -567,6 +569,9 @@ static void _button_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 	RichTextTypes type = _get_pressed_button_type(view, obj);
 
 	switch (type) {
+	case RICH_TEXT_TYPE_INSERT_IMAGE:
+		_insert_inline_image(view);
+		break;
 	case RICH_TEXT_TYPE_FONT_SIZE:
 	case RICH_TEXT_TYPE_FONT_COLOR:
 	case RICH_TEXT_TYPE_BACKGROUND_COLOR:
@@ -661,7 +666,7 @@ static void _update_color_button_state(EmailComposerView *view, RichTextTypes ty
 
 static void _update_all_buttons_state(EmailComposerView *view)
 {
-	int i = RICH_TEXT_TYPE_FONT_SIZE;
+	int i = RICH_TEXT_TYPE_BOLD;
 	for (; i < RICH_TEXT_TYPE_COUNT; i++) {
 		if (i == RICH_TEXT_TYPE_FONT_COLOR || i == RICH_TEXT_TYPE_BACKGROUND_COLOR) {
 			_update_color_button_state(view, i);
@@ -669,6 +674,12 @@ static void _update_all_buttons_state(EmailComposerView *view)
 			_update_property_button_state(view, i);
 		}
 	}
+}
+
+static void _insert_inline_image(EmailComposerView *view)
+{
+	// TODO: not implemented
+	debug_log("Not implemented");
 }
 
 static void _create_option_selection_popup(EmailComposerView *view, RichTextTypes type)
@@ -794,7 +805,7 @@ EMAIL_API Evas_Object *composer_rich_text_create_toolbar(EmailComposerView *view
 
 	_insert_box_padding_item(container_box, BOX_PADDING_OUTER);
 
-	int i = RICH_TEXT_TYPE_FONT_SIZE;
+	int i = RICH_TEXT_TYPE_INSERT_IMAGE;
 	for (; i < RICH_TEXT_TYPE_COUNT; i++) {
 		Evas_Object *btn = _create_button(view, container_box, i);
 		elm_box_pack_end(container_box, btn);
@@ -837,7 +848,7 @@ EMAIL_API void composer_rich_text_disable_set(EmailComposerView *view, Eina_Bool
 		button_signal = "button_enable";
 	}
 
-	int i = RICH_TEXT_TYPE_FONT_SIZE;
+	int i = RICH_TEXT_TYPE_INSERT_IMAGE;
 	for (; i < RICH_TEXT_TYPE_COUNT; i++) {
 		elm_object_disabled_set(view->richtext_button_list[i].button, is_disable);
 		elm_object_signal_emit(view->richtext_button_list[i].button, button_signal, "");
