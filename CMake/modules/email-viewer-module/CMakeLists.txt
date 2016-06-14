@@ -44,6 +44,7 @@ ADD_CUSTOM_COMMAND(
 				${PROJECT_EDC_DIR}/common/email-colors.edc
 				${PROJECT_EDC_DIR}/common/email-parts.edc
 				${PROJECT_EDC_DIR}/common/email-two-bottom-btn-toolbar-theme.edc
+				${PROJECT_EDC_DIR}/common/email-round-icon-button-style.edc
 )
 ADD_CUSTOM_TARGET(email-viewer.edj ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/email-viewer.edj)
 

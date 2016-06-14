@@ -27,6 +27,7 @@
 
 #define ELLIPSIS_FACTOR 0.5
 #define FONT_TEXT_SIZE 40
+#define FONT_SUBTEXT_SIZE 32
 #define FILE_SIZE_LIMIT (4 * 1024 * 1024)
 #define FILE_RESOLUTION_LIMIT 1000000 /* 3 MP */
 
@@ -45,7 +46,7 @@ static void _on_back_key(email_view_t *self);
 
 static void _popup_response_cb(void *data, Evas_Object *obj, void *event_info);
 static int _create_temp_preview_folder(EmailViewerView *view);
-static char *_get_ellipsised_attachment_filename(EmailViewerView *view, const char *org_filename, const char *file_size);
+static char *_get_ellipsised_attachment_filename(EmailViewerView *view, const char *org_filename);
 
 static VIEWER_ERROR_TYPE_E _download_attachment(EV_attachment_data *aid);
 static VIEWER_ERROR_TYPE_E _save_and_preview_attachment(EV_attachment_data *aid);
@@ -92,9 +93,12 @@ static void _update_attachment_save_cancel_all_buttons(EmailViewerView *view);
 
 static void _unpack_object_from_box(Evas_Object *box, Evas_Object *object);
 static void _pack_object_to_box(Evas_Object *box, Evas_Object *object);
-static Eina_Bool _viewer_gl_attachment_item_pack_progress_info_items(EV_attachment_data *attachment_data);
-static void _viewer_gl_attachment_item_unpack_progress_info_items(EV_attachment_data *attachment_data);
+static Eina_Bool _viewer_gl_attachment_item_pack_progress_bar_item(EV_attachment_data *attachment_data);
+static void _viewer_gl_attachment_item_unpack_progress_bar_item(EV_attachment_data *attachment_data);
 static void _viewer_gl_attachment_update_filename_label_text(EV_attachment_data *attachment_data);
+
+static Evas_Object *_viewer_create_gl_item_progress_text_box(Evas_Object *parent, EV_attachment_data *attachment_item_data);
+static void _viewer_gl_item_progress_label_update_text(Evas_Object *label, const char *label_text);
 
 static void _viewer_update_gl_attachment_item(EV_attachment_data *attachment_data);
 
@@ -131,7 +135,7 @@ static void _create_unable_to_save_attachment_popup(EmailViewerView *view)
 			_popup_response_cb, EMAIL_VIEWER_STRING_NULL, NULL, NULL);
 }
 
-static char *_get_ellipsised_attachment_filename(EmailViewerView *view, const char *org_filename, const char *file_size)
+static char *_get_ellipsised_attachment_filename(EmailViewerView *view, const char *org_filename)
 {
 	debug_enter();
 
@@ -139,7 +143,7 @@ static char *_get_ellipsised_attachment_filename(EmailViewerView *view, const ch
 	retvm_if(!markup_name, NULL, "markup_name is NULL elm_entry_utf8_to_markup() - failed");
 
 	char buff[MAX_STR_LEN] = { 0 };
-	snprintf(buff, MAX_STR_LEN, HEAD_TEXT_STYLE_ELLIPSISED_FONT_COLOR, ELLIPSIS_FACTOR, FONT_TEXT_SIZE, COLOR_BLACK, markup_name, file_size);
+	snprintf(buff, MAX_STR_LEN, HEAD_TEXT_STYLE_ELLIPSISED_FONT_COLOR, ELLIPSIS_FACTOR, FONT_TEXT_SIZE, COLOR_BLACK, markup_name);
 
 	char *filename = strdup(buff);
 	free(markup_name);
@@ -816,13 +820,11 @@ static void _viewer_attachment_save_cb(EV_attachment_data *aid)
 	debug_leave();
 }
 
-static void _viewer_attachment_button_clicked(void *data, Evas_Object *obj, const char *emission, const char *source)
+static void _viewer_attachment_button_clicked(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 	retm_if(!data, "data is NULL!");
 	EV_attachment_data *aid = (EV_attachment_data *)data;
-
-	email_feedback_play_tap_sound();
 
 	if (aid->state != EV_ATT_STATE_IDLE) {
 		_viewer_attachment_cancel_cb(aid);
@@ -914,17 +916,14 @@ static Evas_Object *_gl_attachment_content_get(void *data, Evas_Object *obj, con
 	elm_layout_content_set(ly, "ev.swallow.download_button", att_data->download_button);
 	evas_object_show(att_data->download_button);
 
-	att_data->download_button_icon = elm_layout_add(ly);
-	elm_layout_content_set(ly, "ev.swallow.download_icon", att_data->download_button_icon);
-	evas_object_show(att_data->download_button_icon);
-
 	att_data->progressbar = _viewer_create_gl_item_progress_bar(ly);
-	att_data->progress_info_box = _viewer_create_gl_item_progress_text_box(ly, att_data);
 	att_data->filename_label = _viewer_create_gl_item_label_filename(ly);
 	_viewer_gl_attachment_update_filename_label_text(att_data);
+	_pack_object_to_box(att_data->content_box, att_data->filename_label);
 
-	evas_object_show(att_data->filename_label);
-	elm_box_pack_end (att_data->content_box, att_data->filename_label);
+	att_data->progress_info_box = _viewer_create_gl_item_progress_text_box(ly, att_data);
+	_pack_object_to_box(att_data->content_box, att_data->progress_info_box);
+
 	evas_object_show(att_data->content_box);
 
 	_viewer_update_gl_attachment_item(att_data);
@@ -943,13 +942,12 @@ static void _gl_attachment_content_del(void *data, Evas *e, Evas_Object *obj, vo
 	aid->content_box = NULL;
 	aid->progressbar = NULL;
 	aid->download_button = NULL;
-	aid->download_button_icon = NULL;
 	aid->filename_label = NULL;
 	aid->progress_info_box = NULL;
 	aid->progress_label_right = NULL;
 	aid->progress_label_left = NULL;
 
-	aid->is_progress_info_packed = false;
+	aid->is_progress_packed = false;
 }
 
 static void _gl_attachment_sel(void *data, Evas_Object *obj, void *event_info)
@@ -1072,11 +1070,11 @@ static Evas_Object *_viewer_create_gl_item_icon_file_type(Evas_Object *parent, c
 
 static Evas_Object *_viewer_create_gl_item_download_button(Evas_Object *parent, EV_attachment_data *attachment_data)
 {
-	Evas_Object *obj = viewer_load_edj(parent, email_get_viewer_theme_path(), "ev/layout/attachment_button", EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	evas_object_size_hint_align_set(obj, EVAS_HINT_FILL, EVAS_HINT_FILL);
+	Evas_Object *obj = elm_button_add(parent);
+	elm_object_style_set(obj, "download_button_style");
 	evas_object_propagate_events_set(obj, EINA_FALSE);
 	evas_object_repeat_events_set(obj, EINA_FALSE);
-	edje_object_signal_callback_add(_EDJ(obj), "attachment_button.clicked", "edje", _viewer_attachment_button_clicked, attachment_data);
+	evas_object_smart_callback_add(obj, "clicked", _viewer_attachment_button_clicked, attachment_data);
 	evas_object_show(obj);
 
 	return obj;
@@ -1086,8 +1084,7 @@ static Evas_Object *_viewer_create_gl_item_label_filename(Evas_Object *parent)
 {
 	Evas_Object *obj = elm_label_add(parent);
 	evas_object_size_hint_weight_set(obj, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	evas_object_size_hint_align_set(obj, EVAS_HINT_FILL, 0.5);
-
+	evas_object_size_hint_align_set(obj, EVAS_HINT_FILL, 1.0);
 	return obj;
 }
 
@@ -1103,62 +1100,57 @@ static void _pack_object_to_box(Evas_Object *box, Evas_Object *object)
 	evas_object_show(object);
 }
 
-static Eina_Bool _viewer_gl_attachment_item_pack_progress_info_items(EV_attachment_data *attachment_data)
+static Eina_Bool _viewer_gl_attachment_item_pack_progress_bar_item(EV_attachment_data *attachment_data)
 {
-	if (!attachment_data->is_progress_info_packed) {
-		_pack_object_to_box(attachment_data->content_box, attachment_data->progressbar);
-		_pack_object_to_box(attachment_data->content_box, attachment_data->progress_info_box);
-		attachment_data->is_progress_info_packed = true;
+	if (!attachment_data->is_progress_packed) {
+		elm_box_pack_after(attachment_data->content_box, attachment_data->progressbar, attachment_data->filename_label);
+		evas_object_show(attachment_data->progressbar);
+		attachment_data->is_progress_packed = true;
 		return EINA_TRUE;
 	}
 	return EINA_FALSE;
 }
 
-static void _viewer_gl_attachment_item_unpack_progress_info_items(EV_attachment_data *attachment_data)
+static void _viewer_gl_attachment_item_unpack_progress_bar_item(EV_attachment_data *attachment_data)
 {
-	if (attachment_data->is_progress_info_packed) {
+	if (attachment_data->is_progress_packed) {
 		_unpack_object_from_box(attachment_data->content_box, attachment_data->progressbar);
-		_unpack_object_from_box(attachment_data->content_box, attachment_data->progress_info_box);
-		attachment_data->is_progress_info_packed = false;
+		attachment_data->is_progress_packed = false;
 	}
 }
 
 static void _viewer_gl_attachment_update_filename_label_text(EV_attachment_data *attachment_data)
 {
-	const gint64 size = attachment_data->attachment_info->size;
-	gchar *file_size = email_get_file_size_string(size);
 	char *filename = _get_ellipsised_attachment_filename(attachment_data->view,
-			attachment_data->attachment_info->name, file_size);
+			attachment_data->attachment_info->name);
 	elm_object_text_set(attachment_data->filename_label, filename);
 	free(filename);
-	g_free(file_size);
 }
 
 static void _viewer_update_gl_attachment_item(EV_attachment_data *attachment_data)
 {
 	debug_enter();
+	const gint64 size = attachment_data->attachment_info->size;
+	gchar *file_size = email_get_file_size_string(size);
+	char size_str[EMAIL_BUFF_SIZE_HUG] = { 0 };
 
 	if (attachment_data->state == EV_ATT_STATE_IDLE) {
-		elm_layout_file_set(attachment_data->download_button_icon, email_get_common_theme_path(), EMAIL_IMAGE_ICON_DOWN);
+		elm_object_style_set(attachment_data->download_button, "download_button_style");
+		_viewer_gl_attachment_item_unpack_progress_bar_item(attachment_data);
 
-		if (attachment_data->is_saved) {
-
-			evas_object_size_hint_align_set(attachment_data->filename_label, EVAS_HINT_FILL, 1.0);
-			_viewer_gl_attachment_item_pack_progress_info_items(attachment_data);
-
-			evas_object_hide(attachment_data->progressbar);
-			elm_object_text_set(attachment_data->progress_label_left, email_get_email_string("IDS_EMAIL_POP_SAVED"));
-			elm_object_text_set(attachment_data->progress_label_right, "");
-
+		if (attachment_data->attachment_info->is_downloaded) {
+			char status_str[EMAIL_BUFF_SIZE_1K] = { 0 };
+			snprintf(status_str, sizeof(status_str), "%s %s", file_size, email_get_email_string("IDS_EMAIL_SBODY_DOWNLOADED_ABB_M_STATUS"));
+			_viewer_gl_item_progress_label_update_text(attachment_data->progress_label_left, status_str);
 		} else {
-			evas_object_size_hint_align_set(attachment_data->filename_label, EVAS_HINT_FILL, 0.5);
-			_viewer_gl_attachment_item_unpack_progress_info_items(attachment_data);
+			_viewer_gl_item_progress_label_update_text(attachment_data->progress_label_left, file_size);
 		}
+		_viewer_gl_item_progress_label_update_text(attachment_data->progress_label_right, NULL);
+
 	} else {
-		elm_layout_file_set(attachment_data->download_button_icon, email_get_common_theme_path(), EMAIL_IMAGE_ICON_CANCEL);
+		elm_object_style_set(attachment_data->download_button, "cancel_button_style");
 
 		bool pending = true;
-		char size_str[MAX_STR_LEN] = { 0 };
 		char percent_str[MAX_STR_LEN] = { 0 };
 
 		if (!attachment_data->is_saving || !attachment_data->save_for_preview) {
@@ -1168,15 +1160,19 @@ static void _viewer_update_gl_attachment_item(EV_attachment_data *attachment_dat
 
 			elm_progressbar_value_set(attachment_data->progressbar, progress);
 
-			const gint64 size = attachment_data->attachment_info->size;
-			gchar *file_size = email_get_file_size_string(size);
 			gchar *downloaded_size = email_get_file_size_string(size * progress);
 
 			snprintf(size_str, sizeof(size_str), "%s/%s", downloaded_size, file_size);
 			snprintf(percent_str, sizeof(percent_str), "%d%%", (int)(progress * 100));
 
+			_viewer_gl_item_progress_label_update_text(attachment_data->progress_label_left, size_str);
+			_viewer_gl_item_progress_label_update_text(attachment_data->progress_label_right, percent_str);
+
 			g_free(downloaded_size);
-			g_free(file_size);
+		} else {
+			_viewer_gl_item_progress_label_update_text(attachment_data->progress_label_left, file_size);
+			_viewer_gl_item_progress_label_update_text(attachment_data->progress_label_right, NULL);
+
 		}
 
 		if (pending) {
@@ -1185,17 +1181,28 @@ static void _viewer_update_gl_attachment_item(EV_attachment_data *attachment_dat
 		} else {
 			elm_object_style_set(attachment_data->progressbar, "default");
 		}
-		elm_object_text_set(attachment_data->progress_label_left, size_str);
-		elm_object_text_set(attachment_data->progress_label_right, percent_str);
 
-		evas_object_size_hint_align_set(attachment_data->filename_label, EVAS_HINT_FILL, 1.0);
 
-		if (!_viewer_gl_attachment_item_pack_progress_info_items(attachment_data)) {
+
+		if (!_viewer_gl_attachment_item_pack_progress_bar_item(attachment_data)) {
 			evas_object_show(attachment_data->progressbar);
 		}
 	}
 
+	g_free(file_size);
+
 	debug_leave();
+}
+
+static void _viewer_gl_item_progress_label_update_text(Evas_Object *label, const char *label_text)
+{
+	if (!label_text) {
+		elm_object_text_set(label, NULL);
+	} else {
+		char buff[MAX_STR_LEN] = { 0 };
+		snprintf(buff, MAX_STR_LEN, HEAD_TEXT_STYLE_ELLIPSISED_FONT_COLOR, -1.0, FONT_SUBTEXT_SIZE, T057L1, label_text);
+		elm_object_text_set(label, buff);
+	}
 }
 
 void viewer_update_attachment_item_info(void *data)
@@ -1246,7 +1253,7 @@ static void _viewer_create_attachment_list(void *data)
 			attachment_item_data->progress_val = 0;
 			attachment_item_data->need_update = false;
 			attachment_item_data->is_saved = false;
-			attachment_item_data->is_progress_info_packed = false;
+			attachment_item_data->is_progress_packed = false;
 			debug_log("attachment_item_data->attachment_info :%p", attachment_item_data->attachment_info);
 
 			if (!view->attachment_group_item) {
@@ -1296,6 +1303,9 @@ static Evas_Object *_viewer_create_attachment_view_ly(void *data)
 	evas_object_size_hint_weight_set(ly, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_size_hint_align_set(ly, EVAS_HINT_FILL, EVAS_HINT_FILL);
 	evas_object_show(ly);
+	if (view->theme) {
+		elm_object_theme_set(ly, view->theme);
+	}
 
 	debug_leave();
 	return ly;

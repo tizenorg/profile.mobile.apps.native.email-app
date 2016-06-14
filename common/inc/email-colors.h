@@ -26,6 +26,8 @@
 
 #define B0211_C 0xFA /* Core GUI Item BG gray color */
 
+#define T057L1 115, 115, 115, 255 /* Core GUI Progressbar subtext font color */
+
 #define TRANSPARENT				0, 0, 0, 0
 #define COLOR_BLACK 			0, 0, 0, 255
 #define COLOR_WHITE				255, 255, 255, 255
