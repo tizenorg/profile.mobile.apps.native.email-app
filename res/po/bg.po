@@ -1072,3 +1072,6 @@ msgstr "Само нови получатели"
 msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
 msgstr "Препращане на имейл"
 
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s и %2$d други"
+
