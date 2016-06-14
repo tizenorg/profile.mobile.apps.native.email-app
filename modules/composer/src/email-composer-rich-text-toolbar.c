@@ -678,8 +678,9 @@ static void _update_all_buttons_state(EmailComposerView *view)
 
 static void _insert_inline_image(EmailComposerView *view)
 {
-	// TODO: not implemented
-	debug_log("Not implemented");
+	debug_enter();
+
+	email_module_launch_attach_panel(view->base.module, EMAIL_APMT_IMAGES);
 }
 
 static void _create_option_selection_popup(EmailComposerView *view, RichTextTypes type)

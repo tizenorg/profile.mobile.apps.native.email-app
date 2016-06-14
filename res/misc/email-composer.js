@@ -70,7 +70,7 @@ var G_VAL_TEXT_NODE_TYPE = 3;
 var G_VAL_ORG_MESSAGE_BAR_TEXT_ALIGN = "display:table-cell; vertical-align: middle; padding-left:10px; padding-top:10px; padding-bottom:10px; width:auto;";
 var G_VAL_ORG_MESSAGE_BAR_TEXT_SIZE = 18;
 
-var G_VAL_EDITOR_MARGIN_SIZE = 8;
+var G_VAL_EDITOR_MARGIN_SIZE = 10;
 var G_VAL_IMG_STYLE_MARGIN = "8px 0px";
 
 var g_whileResizing = false;
@@ -1145,7 +1145,7 @@ function InsertImage(fileUri) {
 
 		w = img.width;
 		h = img.height;
-		maxWidth = document.documentElement.clientWidth - 2 * G_VAL_EDITOR_MARGIN_SIZE;
+		maxWidth = Math.max(screen.availWidth, screen.availHeight) - 2 * G_VAL_EDITOR_MARGIN_SIZE;
 
 		if (w > maxWidth) {
 			h *= maxWidth / w;
