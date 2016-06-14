@@ -764,8 +764,9 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 							&& view->mode == EMAIL_MAILBOX_MODE_ALL && view->mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED) {
 							mailbox_list_remove_mail_item(view, ld);
 							mailbox_view_title_update_mail_count(view);
-							if (!g_list_length(view->mail_list))
+							if (!g_list_length(view->mail_list)) {
 								mailbox_show_no_contents_view(view);
+							}
 						} else if (sort_type == EMAIL_SORT_IMPORTANT) {
 							int mailbox_id = ld->mailbox_id;
 							mailbox_list_remove_mail_item(view, ld);

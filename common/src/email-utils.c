@@ -2644,11 +2644,13 @@ EMAIL_API char *email_util_get_login_failure_string(int account_id)
 
 EMAIL_API Eina_Bool email_file_cp(const char *source, const char *destination)
 {
-	int input = 0, output = 0;
-	if ((input = open(source, O_RDONLY)) == -1) {
+	int input = open(source, O_RDONLY);
+	if (input == -1) {
 		return EINA_FALSE;
 	}
-	if ((output = open(destination, O_WRONLY | O_CREAT, 0777)) == -1) {
+
+	int output = open(destination, O_WRONLY | O_CREAT, 0777);
+	if (output == -1) {
 		close(input);
 		return EINA_FALSE;
 	}
