@@ -776,6 +776,8 @@ void mailbox_select_all_item_remove(EmailMailboxView *view)
 	if (view && view->select_all_item_data.base.item) {
 		elm_object_item_del(view->select_all_item_data.base.item);
 		view->select_all_item_data.base.item = NULL;
+		view->select_all_item_data.checkbox = NULL;
+		view->select_all_item_data.is_checked = EINA_FALSE;
 		debug_log("select_all_item is removed");
 	}
 }
