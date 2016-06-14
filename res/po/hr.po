@@ -1072,3 +1072,6 @@ msgstr "Samo novi primatelji"
 msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
 msgstr "Prosljeđivanje e-pošte"
 
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s i još %2$d"
+

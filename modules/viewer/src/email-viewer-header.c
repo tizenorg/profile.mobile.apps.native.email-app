@@ -39,6 +39,10 @@ static i18n_udatepg_h viewer_pattern_generator = NULL;
 #define VIEWER_HEADER_PRIO_SENDER_TITLE_FMT		"<font=BreezeSansFallback><color=#FFB200>&#xF898;</color> %s</font>"
 #define VIEWER_SUBJECT_ENTRY_TEXT_STYLE			"DEFAULT='font_size=40 color=#000000'"
 
+#define VIEWER_ATTACH_INFO_FONT_STYLE		"Tizen:style=Regular"
+#define VIEWER_ATTACH_INFO_FONT_SIZE		36
+#define VIEWER_ATTACH_INFO_TEXT_PADDINGS	122
+
 /*Expand button parameters*/
 #define DEFAULT_BUTTON_H ELM_SCALE_SIZE(78)
 #define EXPAND_BUTTON_H ELM_SCALE_SIZE(50)
@@ -57,6 +61,7 @@ static void _header_create_divider(EmailViewerView *view);
 static void _header_create_attachment_preview(void *data);
 static void _header_delete_attachment_preview(void *data);
 static void _header_update_attachments_preview(void *data);
+static char *_header_format_attachment_summary_text(int total_file_count, const char *first_file_name, guint64 total_size);
 static void _header_pack_attachment_preview(void *data);
 
 /*recipient details button logic*/
@@ -529,28 +534,75 @@ void header_layout_pack(void *data)
 	debug_leave();
 }
 
+static char *_header_format_attachment_summary_text(int total_file_count, const char *first_file_name, guint64 total_size)
+{
+	debug_enter();
+
+	char attach_sum[EMAIL_BUFF_SIZE_HUG] = {0,};
+
+	/*format file size string*/
+	char *_total_file_size = NULL;
+	_total_file_size = email_get_file_size_string(total_size);
+
+	if (total_file_count > 1) {
+		char files_info_text[EMAIL_BUFF_SIZE_BIG] = {0,};
+		const char *files_info_fmt = _("IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE");
+
+		snprintf(files_info_text, sizeof(files_info_text), files_info_fmt, first_file_name, (total_file_count - 1));
+		snprintf(attach_sum, sizeof(attach_sum), "%s (%s)", files_info_text, _total_file_size);
+	} else {
+		snprintf(attach_sum, sizeof(attach_sum), "%s (%s)", first_file_name, _total_file_size);
+	}
+
+	g_free(_total_file_size);
+
+	debug_leave();
+	return strdup(attach_sum);
+}
+
 void header_update_attachment_summary_info(EmailViewerView *view)
 {
 	debug_enter();
 
-	/*set file count*/
-	char file_count[EMAIL_BUFF_SIZE_BIG];
-	if (view->normal_att_count == 1) {
-		snprintf(file_count, sizeof(file_count), "%s", email_get_email_string("IDS_EMAIL_BODY_1_FILE_ABB"));
-	} else {
-		snprintf(file_count, sizeof(file_count), email_get_email_string("IDS_EMAIL_BODY_PD_FILES_ABB"), view->normal_att_count);
+	/*set file name*/
+	char first_attach_file_name[EMAIL_BUFF_SIZE_MID] = {0,};
+
+	int i;
+	for (i = 0; i < view->attachment_count; i++) {
+		if (!view->attachment_info[i].inline_content_status) {
+			snprintf(first_attach_file_name, sizeof(first_attach_file_name), "%s", view->attachment_info[i].attachment_name);
+			break;
+		}
 	}
 
-	/*set file size*/
-	char *_total_file_size = NULL;
-	_total_file_size = email_get_file_size_string(view->total_att_size);
+	Evas_Object *text_obj = evas_object_text_add(evas_object_evas_get(view->attachment_ly));
+	evas_object_text_font_set(text_obj, VIEWER_ATTACH_INFO_FONT_STYLE, VIEWER_ATTACH_INFO_FONT_SIZE);
+	evas_object_text_style_set(text_obj, EVAS_TEXT_STYLE_PLAIN);
 
-	char attachment_info[MAX_STR_LEN];
-	snprintf(attachment_info, sizeof(attachment_info), "%s (%s)", file_count, _total_file_size);
+	char *non_ellipsised_text = _header_format_attachment_summary_text(view->attachment_count, "", view->total_att_size);
+	evas_object_text_text_set(text_obj, non_ellipsised_text);
+	free(non_ellipsised_text);
 
-	elm_object_part_text_set(view->attachment_ly, "attachment.info.text", attachment_info);
+	int layout_width = 0;
+	int win_h = 0, win_w = 0;
+	elm_win_screen_size_get(view->base.module->win, NULL, NULL, &win_w, &win_h);
+	if (view->base.orientation == APP_DEVICE_ORIENTATION_0 || view->base.orientation == APP_DEVICE_ORIENTATION_180) {
+		layout_width = win_w;
+	} else {
+		layout_width = win_h;
+	}
 
-	g_free(_total_file_size);
+	int text_avail_width = layout_width - ELM_SCALE_SIZE(VIEWER_ATTACH_INFO_TEXT_PADDINGS);
+	int max_filename_width = text_avail_width - evas_object_text_horiz_width_without_ellipsis_get(text_obj);
+
+	email_set_ellipsised_text(text_obj, first_attach_file_name, max_filename_width);
+	char *formatted_attach_text = _header_format_attachment_summary_text(view->attachment_count, evas_object_text_text_get(text_obj), view->total_att_size);
+
+	elm_object_part_text_set(view->attachment_ly, "attachment.info.text", formatted_attach_text);
+	evas_object_smart_calculate(view->attachment_ly);
+
+	free(formatted_attach_text);
+	evas_object_del(text_obj);
 
 	debug_leave();
 }

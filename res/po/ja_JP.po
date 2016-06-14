@@ -1072,3 +1072,6 @@ msgstr "新しい宛先のみ"
 msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
 msgstr "Eメールを転送"
 
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$sと他%2$d件"
+
