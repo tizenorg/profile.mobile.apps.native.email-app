@@ -1072,3 +1072,6 @@ msgstr "Solo destinatarios nuevos"
 msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
 msgstr "Reenviar correo"
 
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s y %2$d más"
+

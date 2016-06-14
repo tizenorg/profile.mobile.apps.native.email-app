@@ -1072,3 +1072,6 @@ msgstr "Només destinataris nous"
 msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
 msgstr "Reenviar correu electrònic"
 
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s i %2$d més"
+

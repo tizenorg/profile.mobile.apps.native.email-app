@@ -3046,4 +3046,51 @@ EMAIL_API email_ext_save_err_type_e email_prepare_temp_file_path(const int index
 	return ret_val;
 }
 
+EMAIL_API void email_set_ellipsised_text(Evas_Object *text_obj, const char *text, int max_width)
+{
+	debug_enter();
+
+	char STR_DOTS[] = "...";
+	evas_object_text_text_set(text_obj, STR_DOTS);
+	int dots_width = evas_object_text_horiz_width_without_ellipsis_get(text_obj);
+
+	int text_uncut_width = max_width - dots_width;
+	evas_object_text_text_set(text_obj, text);
+
+	int byte_offset = 0;
+	int char_position = 0;
+	int cut_position = 0;
+	Eina_Bool is_cut_needed = EINA_FALSE;
+
+	while (true) {
+		const char ch = text[char_position];
+		if (ch == '\0') {
+			break;
+		}
+		eina_unicode_utf8_next_get(text, &byte_offset);
+		if (ch != ' ') {
+			int x = 0;
+			int w = 0;
+			evas_object_text_char_pos_get(text_obj, char_position, &x, NULL, &w, NULL);
+			int ww = x + w;
+			if (ww <= text_uncut_width) {
+				cut_position = byte_offset;
+			} else if (ww > max_width) {
+				is_cut_needed = EINA_TRUE;
+				break;
+			}
+		}
+		char_position++;
+	}
+
+	if (is_cut_needed) {
+		char buff[EMAIL_BUFF_SIZE_BIG];
+		memcpy(buff, text, cut_position);
+		memcpy(buff + cut_position, STR_DOTS, sizeof(STR_DOTS));
+		evas_object_text_text_set(text_obj, buff);
+	}
+
+	debug_leave();
+}
+
 /* EOF */

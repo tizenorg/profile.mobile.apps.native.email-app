@@ -1072,3 +1072,6 @@ msgstr "केवल नए प्राप्तकर्ता"
 msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
 msgstr "ईमेल अग्रेषित करें"
 
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s और %2$d अधिक"
+

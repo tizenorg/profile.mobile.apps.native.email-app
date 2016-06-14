@@ -1072,3 +1072,6 @@ msgstr "Nouv. destinataires uniq."
 msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
 msgstr "Transfert de l'e-mail"
 
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s et %2$d autres fich."
+

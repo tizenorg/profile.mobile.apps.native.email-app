@@ -1072,3 +1072,6 @@ msgstr "Sadece yeni alıcılar"
 msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
 msgstr "E-postayı yönlendir"
 
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s ve %2$d tane daha"
+

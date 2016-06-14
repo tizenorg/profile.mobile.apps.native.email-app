@@ -1072,3 +1072,6 @@ msgstr "Tik nauji gavėjai"
 msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
 msgstr "Persiųsti el. laišką"
 
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s ir dar %2$d"
+

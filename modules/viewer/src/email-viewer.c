@@ -630,8 +630,9 @@ static void _viewer_update_on_orientation_change(EmailViewerView *view, bool isL
 	if (content_height) {
 		viewer_resize_webview(view, content_height * scale);
 	}
-
 	debug_log("content_height :%d scale :%f", content_height, scale);
+
+	header_update_attachment_summary_info(view);
 
 	debug_leave();
 }
