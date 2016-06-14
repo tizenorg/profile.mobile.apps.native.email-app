@@ -1,0 +1,324 @@
+/*
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+plugins {
+		plugin {
+			name: "touch_sound"; // Name run by RUN_PLUGIN
+			source: "feedback"; // External edje plugin name
+			param: "FEEDBACK_TYPE_SOUND FEEDBACK_PATTERN_TAP";
+		}
+	}
+
+#define GLIDE_EASE_OUT(duration) CUBIC_BEZIER (duration) 0.25 0.46 0.45 1.0
+
+/**
+ * @brief Macros to generate styles for button with icon inside with support of click VI effect and sound.
+ *
+ */
+#define ROUND_ICON_BUTTON_STYLE(style_name, image_normal, color_normal, color_press, color_dim, min_width, min_height) \
+	group { name: "elm/button/base/"style_name; \
+		data.item: "vector_ux" "no_bg/circle"; \
+		images { \
+			image: image_normal COMP; \
+		} \
+		script { \
+			public mouse_down = 0; \
+			public multi_down = 0; \
+			public disabled = 0; \
+			public animate = 0; \
+			public rel_x = 0; \
+			public rel_y = 0; \
+			public get_circumscription_radius(base_effect, radius_w, radius_h) { \
+				new x, y, w, h, Float:radius; \
+				get_geometry(base_effect, x, y, w, h); \
+				radius = sqrt(pow(w, 2) + pow(h, 2)); \
+				set_float(radius_w, ((radius / w) - 1) / 2); \
+				set_float(radius_h, ((radius / h) - 1) / 2); \
+			} \
+		} \
+		parts { \
+			part { name: "button_bg"; \
+				type: SPACER; \
+				scale: 1; \
+				description { state: "default" 0.0; \
+					min: min_width min_height; \
+					max: min_width min_height; \
+				} \
+			} \
+			part { name: "effect_spacer";\
+				type: SPACER; \
+				scale: 1; \
+				description { state: "default" 0.0; \
+					fixed: 1 1; \
+					rel1.relative: 0.5 0.5; \
+					rel2.relative: 0.5 0.5; \
+				} \
+			} \
+			part { name: "tizen_vg_shape"; \
+				type: SWALLOW; \
+				clip_to: "tizen_vg_shape_clipper"; \
+				scale: 1; \
+				description { state: "default" 0.0; \
+					fixed: 1 1; \
+					rel1.relative: 0.5 0.5; \
+					rel2.relative: 0.5 0.5; \
+				} \
+				description { state: "ready" 0.0; \
+					fixed: 1 1; \
+					rel1.to: "effect_spacer"; \
+					rel2.to: "effect_spacer"; \
+				} \
+				description { state: "pressed" 0.0; \
+					inherit: "ready" 0.0; \
+					rel1.relative: -0.15 -0.15; \
+					rel2.relative: 1.15 1.15; \
+				} \
+			} \
+			part { name: "tizen_vg_shape_clipper"; \
+				type: RECT; \
+				description { state: "default" 0.0; \
+					color: 0 0 0 0; \
+					visible: 0; \
+					fixed: 1 1; \
+					rel1.to: "tizen_vg_shape"; \
+					rel2.to: "tizen_vg_shape"; \
+				} \
+				description { state: "ready" 0.0; \
+					inherit: "default" 0.0; \
+					color: 61 185 204 0; \
+					visible: 1; \
+				} \
+				description { state: "pressed" 0.0; \
+					inherit: "default" 0.0; \
+					color: 61 185 204 77; \
+					visible: 1; \
+				} \
+			} \
+			part { name: "button_center_part"; \
+				mouse_events: 0; \
+				scale: 1; \
+				description { state: "default" 0.0; \
+					rel1.to: "button_bg"; \
+					rel2.to: "button_bg"; \
+					image.normal: image_normal; \
+					color: color_normal; \
+				} \
+				description { state: "pressed" 0.0; \
+					inherit: "default" 0.0; \
+					color: color_press; \
+				} \
+				description { state: "disabled" 0.0; \
+					inherit: "default" 0.0; \
+					color: color_dim; \
+				} \
+			} \
+			part { name: "event"; \
+				type: RECT; \
+				description { state: "default" 0.0; \
+					rel1.to: "button_bg"; \
+					rel2.to: "button_bg"; \
+					color: 0 0 0 0; \
+				} \
+			} \
+		} \
+		programs { \
+			program { name: "pressed_effect"; \
+				action: STATE_SET "ready" 0.0; \
+				target: "tizen_vg_shape_clipper"; \
+				target: "tizen_vg_shape"; \
+				after: "pressed_effect2"; \
+			} \
+			program { name: "pressed_effect2"; \
+				action: STATE_SET "pressed" 0.0; \
+				target: "tizen_vg_shape_clipper"; \
+				target: "tizen_vg_shape"; \
+				target: "button_center_part"; \
+				transition: GLIDE_EASE_OUT(0.15); \
+				after: "pressed_effect3"; \
+			} \
+			program { name: "pressed_effect3"; \
+				script { \
+					set_int(animate, 0); \
+				} \
+			} \
+			program { name: "delay_unpressed_effect"; \
+				in: 0.1 0.0; \
+				after: "unpressed_effect"; \
+			} \
+			program { name: "unpressed_effect"; \
+				script { \
+					if (get_int(disabled) == 0) { \
+						run_program(PROGRAM:"unpressed_effect2"); \
+						run_program(PROGRAM:"unpressed_effect3"); \
+					} \
+					else { \
+						run_program(PROGRAM:"disabled_effect"); \
+						run_program(PROGRAM:"disabled_effect2"); \
+					} \
+				} \
+			} \
+			program { name: "unpressed_effect2"; \
+				action: STATE_SET "default" 0.0; \
+				target: "button_center_part"; \
+				transition: GLIDE_EASE_OUT(0.45); \
+			} \
+			program { name: "unpressed_effect3"; \
+				action: STATE_SET "ready" 0.0; \
+				target: "tizen_vg_shape_clipper"; \
+				transition: GLIDE_EASE_OUT(0.45); \
+				after: "finished_animation"; \
+			} \
+			program { name: "disabled_effect"; \
+				action: STATE_SET "disabled" 0.0; \
+				target: "button_center_part"; \
+				transition: GLIDE_EASE_OUT(0.45); \
+			} \
+			program { name: "disabled_effect2"; \
+				action: STATE_SET "ready" 0.0; \
+				target: "tizen_vg_shape_clipper"; \
+				transition: GLIDE_EASE_OUT(0.45); \
+				after: "finished_animation"; \
+			} \
+			program { name: "finished_animation"; \
+				action: STATE_SET "default" 0.0; \
+				target: "tizen_vg_shape"; \
+				target: "tizen_vg_shape_clipper"; \
+			} \
+			program { name: "pressed"; \
+				signal: "mouse,down,1*"; \
+				source: "event"; \
+				script { \
+					if ((get_int(multi_down) == 0) && (get_int(mouse_down) == 0) && (get_int(disabled) == 0)) { \
+						stop_program(PROGRAM:"delay_unpressed_effect"); \
+						set_int(mouse_down, 1); \
+						set_int(animate, 1); \
+						get_circumscription_radius(PART:"button_bg", rel_x, rel_y); \
+						custom_state(PART:"effect_spacer", "default", 0.0); \
+						set_state(PART:"effect_spacer", "custom",0.0); \
+						set_state_val(PART:"effect_spacer", STATE_REL1, (get_float(rel_x) * -1), (get_float(rel_y) * -1)); \
+						set_state_val(PART:"effect_spacer", STATE_REL2, (get_float(rel_x) + 1), (get_float(rel_y) + 1)); \
+						emit("elm,action,press", ""); \
+						run_program(PROGRAM:"pressed_effect"); \
+					} \
+				} \
+			} \
+			program { name: "unpressed"; \
+				signal: "mouse,up,1"; \
+				source: "event"; \
+				script { \
+					if (get_int(mouse_down) == 1) { \
+						set_int(mouse_down, 0); \
+						if (get_int(disabled) == 0) { \
+							if (get_int(animate) == 0) { \
+								run_program(PROGRAM:"unpressed_effect"); \
+							} else { \
+								set_state(PART:"tizen_vg_shape", "pressed", 0.0); \
+								set_state(PART:"tizen_vg_shape_clipper", "pressed", 0.0); \
+								set_state(PART:"button_center_part", "pressed", 0.0); \
+								set_int(animate, 0); \
+								run_program(PROGRAM:"delay_unpressed_effect"); \
+							} \
+							emit("elm,action,unpress", ""); \
+						} \
+					} \
+				} \
+			} \
+			program { name: "button_click"; \
+				signal: "mouse,clicked,1"; \
+				source: "event"; \
+				script { \
+					if (get_int(multi_down) == 0) \
+					{ \
+						if (get_int(disabled) == 0) \
+						{ \
+							run_program(PROGRAM:"touch_sound"); \
+							run_program(PROGRAM:"button_click2"); \
+						} \
+					} \
+				} \
+			} \
+			program { name: "touch_sound"; \
+				action: RUN_PLUGIN "touch_sound"; \
+			} \
+			program { name: "button_click2"; \
+				in: 0.001 0.0; \
+				action: SIGNAL_EMIT "elm,action,click" ""; \
+			} \
+			program { name: "disable"; \
+				signal: "elm,state,disabled"; \
+				source: "elm"; \
+				script { \
+					set_int(disabled, 1); \
+					if (get_int(animate) == 1) return; \
+					set_state(PART:"button_center_part", "disabled", 0.0); \
+				} \
+			} \
+			program { name: "enable"; \
+				signal: "elm,state,enabled"; \
+				source: "elm"; \
+				action: STATE_SET "default" 0.0; \
+				script { \
+					set_int(disabled, 0); \
+					set_state(PART:"button_center_part", "default", 0.0); \
+				} \
+			} \
+			program { \
+				name: "multi_down"; \
+				signal: "elm,action,multi,down"; \
+				source: "elm"; \
+				script { \
+					set_int(multi_down, 1); \
+				} \
+			} \
+			program { \
+				name: "multi_up"; \
+				signal: "elm,action,multi,up"; \
+				source: "elm"; \
+				script { \
+					set_int(multi_down, 0); \
+				} \
+			} \
+			program { name: "pass_event_enable"; \
+				signal: "elm,event,pass,enabled"; \
+				source: "elm"; \
+				script { \
+					set_mouse_events(PART:"event", 0); \
+				} \
+			} \
+			program { name: "pass_event_disable"; \
+				signal: "elm,event,pass,disabled"; \
+				source:"elm"; \
+				script { \
+					set_mouse_events(PART:"event", 1); \
+				} \
+			} \
+			program { name: "repeat_event_enable"; \
+				signal: "elm,event,repeat,enabled"; \
+				source: "elm"; \
+				script { \
+					set_mouse_events(PART:"event", 1); \
+				} \
+				} \
+			program { name: "repeat_event_disable"; \
+				signal: "elm,event,repeat,disabled"; \
+				source:"elm"; \
+				script { \
+					set_mouse_events(PART:"event", 0); \
+				} \
+			} \
+		} \
+	}

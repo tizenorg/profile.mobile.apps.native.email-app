@@ -46,7 +46,7 @@
 
 #define EMAIL_VIEWER_TMP_HTML_FILE "tmp_email.html"
 
-#define HEAD_TEXT_STYLE_ELLIPSISED_FONT_COLOR "<ellipsis=%f><font_size=%d><color=#%02x%02x%02x%02x>%s (%s)</color></font_size></ellipsis>"
+#define HEAD_TEXT_STYLE_ELLIPSISED_FONT_COLOR "<ellipsis=%f><font_size=%d><color=#%02x%02x%02x%02x>%s</color></font_size></ellipsis>"
 
 #define EMAIL_BODY_DOWNLOAD_STATUS_IMAGES_DOWNLOADED	32
 
