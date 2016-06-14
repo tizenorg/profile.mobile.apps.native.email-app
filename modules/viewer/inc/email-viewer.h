@@ -366,13 +366,12 @@ struct _ev_attachment_data_tag {
 	int progress_val;	/* 1/100 % */
 	bool need_update;
 	bool is_saved;
-	bool is_progress_info_packed;
+	bool is_progress_packed;
 
 	/* GUI objects */
 	Evas_Object *content_box;
 	Evas_Object *progressbar;
 	Evas_Object *download_button;
-	Evas_Object *download_button_icon;
 	Evas_Object *filename_label;
 	Evas_Object *progress_info_box;
 	Evas_Object *progress_label_right;

@@ -48,10 +48,6 @@
 #define EMAIL_IMAGE_COMPOSE_BUTTON "email_floating_btn_ic.png"
 #define EMAIL_IMAGE_SEARCH_BACK_BUTTON "email_search_back_ic.png"
 
-/* viewer_icon */
-#define EMAIL_IMAGE_ICON_DOWN "email_icon_down.png"
-#define EMAIL_IMAGE_ICON_CANCEL "email_icon_cancel.png"
-
 /* folders_icon */
 #define EMAIL_IMAGE_CORE_EXPAND_CLOSED "core_icon_expand_close.png"
 #define EMAIL_IMAGE_CORE_EXPAND_OPENED "core_icon_expand_open.png"
