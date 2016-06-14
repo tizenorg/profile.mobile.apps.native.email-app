@@ -3087,6 +3087,7 @@ EMAIL_API void email_set_ellipsised_text(Evas_Object *text_obj, const char *text
 		char buff[EMAIL_BUFF_SIZE_BIG];
 		memcpy(buff, text, cut_position);
 		memcpy(buff + cut_position, STR_DOTS, sizeof(STR_DOTS));
+
 		evas_object_text_text_set(text_obj, buff);
 	}
 
