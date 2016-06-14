@@ -1072,3 +1072,6 @@ msgstr "Faqat yangi oluvchilar"
 msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
 msgstr "E-pochtani boshqaga yuborish"
 
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s va yana %2$d ta"
+

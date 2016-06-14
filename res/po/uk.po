@@ -1072,3 +1072,6 @@ msgstr "Лише нові одержувачі"
 msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
 msgstr "Пересилання ел. повідомлення"
 
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s та інші %2$d"
+

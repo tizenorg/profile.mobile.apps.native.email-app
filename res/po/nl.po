@@ -1072,3 +1072,6 @@ msgstr "Alleen nieuwe ontvangers"
 msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
 msgstr "E-mail doorsturen"
 
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s en nog %2$d"
+
