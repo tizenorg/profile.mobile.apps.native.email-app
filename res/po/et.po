@@ -1072,3 +1072,6 @@ msgstr "Ainult uued adressaadid"
 msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
 msgstr "E-kirja edasisaatmine"
 
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s ja veel %2$d"
+

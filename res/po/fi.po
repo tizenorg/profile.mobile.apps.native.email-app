@@ -1072,3 +1072,6 @@ msgstr "Vain uudet vastaanottajat"
 msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
 msgstr "Lähetä sähköposti eteenpäin"
 
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s ja %2$d lisää"
+

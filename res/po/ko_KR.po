@@ -1072,3 +1072,6 @@ msgstr "수신인 새로 추가"
 msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
 msgstr "이메일 전달"
 
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s 외 %2$d개"
+
