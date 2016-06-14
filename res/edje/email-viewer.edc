@@ -16,16 +16,11 @@
  */
 
 collections {
-	plugins {
-		plugin {
-			name: "touch_sound"; // Name run by RUN_PLUGIN
-			source: "feedback"; // External edje plugin name
-			param: "FEEDBACK_TYPE_SOUND FEEDBACK_PATTERN_TAP";
-		}
-	}
+
 	base_scale: 2.6;		// multi scale for HD resolution
 
 	#include "../../edc/common/email-colors.edc"
+	#include "../../edc/common/email-round-icon-button-style.edc"
 	#include "../../edc/common/email-parts.edc"
 	#include "../../edc/viewer/email-viewer-common.edc"
 	#include "../../edc/viewer/email-viewer-base-layout.edc"

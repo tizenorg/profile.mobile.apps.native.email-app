@@ -40,6 +40,7 @@ ADD_CUSTOM_COMMAND(
 		DEPENDS ${PROJECT_EDJE_DIR}/email-common-theme.edc
 				${PROJECT_EDC_DIR}/common/email-title-search.edc
 				${PROJECT_EDC_DIR}/common/email-two-bottom-btn-toolbar-theme.edc
+				${PROJECT_EDC_DIR}/common/email-round-icon-button-style.edc
 				${PROJECT_EDC_DIR}/common/email-colors.edc
 				${PROJECT_COMMON_INCLUDE}/email-images.h
 )

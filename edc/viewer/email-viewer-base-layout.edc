@@ -15,12 +15,15 @@
  *
  */
 
-#define ATTACHMENT_MAX_HEIGHT 120
-#define ATTACHMENT_ITEM_MIME_ICON_SIZE 50
-#define ATTACHMENT_ITEM_RIGHT_PADDING_WIDTH 32
-#define ATTACHMENT_ITEM_LEFT_PADDING_WIDTH 32
-#define ATTACHMENT_ITEM_MIME_ICON_RIGHT_PADDING_WIDTH 32
-#define ATTACHMENT_ITEM_DOWNLOAD_ICON_LEFT_PADDING_WIDTH 32
+#define ATTACHMENT_ITEM_TOP_PADDING							32
+#define ATTACHMENT_ITEM_BOTTOM_PADDING						32
+#define ATTACHMENT_ITEM_RIGHT_PADDING_WIDTH					17
+#define ATTACHMENT_ITEM_LEFT_PADDING_WIDTH					32
+#define ATTACHMENT_ITEM_MIME_ICON_SIZE						50
+#define ATTACHMENT_ITEM_DOWNLOAD_BTN_SIZE					80
+#define ATTACHMENT_ITEM_MIME_ICON_RIGHT_PADDING_WIDTH		32
+#define ATTACHMENT_ITEM_DOWNLOAD_ICON_LEFT_PADDING_WIDTH	17
+
 #define BOX_SNGL_BUTTON_HEIGHT 78
 #define BOX_SNGL_BUTTON_HEIGHT_PADDING 21
 #define TOOLBAR_SNGL_BUTTON_HEIGHT 104
@@ -129,62 +132,111 @@ group {
 group {
 	name: "ev/layout/attachment_item";
 	parts {
-		E_PART_BASE_H(ATTACHMENT_MAX_HEIGHT)
+		E_PART_PADDING_TOP(ATTACHMENT_ITEM_TOP_PADDING)
+		E_PART_PADDING_BOTTOM(ATTACHMENT_ITEM_BOTTOM_PADDING)
 		E_PART_PADDING_LEFT(ATTACHMENT_ITEM_LEFT_PADDING_WIDTH)
 		E_PART_PADDING_RIGHT(ATTACHMENT_ITEM_RIGHT_PADDING_WIDTH)
+
 		E_PART_SWALLOW("ev.swallow.mime_icon",
-			mouse_events: 1;
-			description { state: "default" 0.0;
-				fixed: 1 1;
-				max: ATTACHMENT_ITEM_MIME_ICON_SIZE ATTACHMENT_ITEM_MIME_ICON_SIZE;
-				rel1 { relative: 1.0 0.0; to_x: "padding.left"; }
-				align: 0.0 0.5;
-			}
-		)
-		E_PART_SPACER("ev.mime_icon.padding.right",
-			description { state: "default" 0.0;
-				fixed: 1 0;
-				min: ATTACHMENT_ITEM_MIME_ICON_RIGHT_PADDING_WIDTH 0;
-				max: ATTACHMENT_ITEM_MIME_ICON_RIGHT_PADDING_WIDTH -1;
-				rel1 { relative: 1 0; to_x: "ev.swallow.mime_icon"; }
-				rel2 { relative: 1 1; to_x: "ev.swallow.mime_icon"; }
-				align: 0 0.5;
-			}
-		)
-		E_PART_SWALLOW("ev.swallow.download_icon",
 			description {
 				state: "default" 0.0;
-				rel1 { relative: 0.0 0.0; to_x: "padding.right"; }
-				rel2 { relative: 0.0 1.0; to_x: "padding.right"; }
-				align: 1.0 0.5;
+				align: 0.0 0.5;
+				fixed: 1 1;
+				rel1 {
+					relative: 1.0 1.0;
+					to_x: "padding.left";
+					to_y: "padding.top";
+				}
+				rel2 {
+					relative: 1.0 0.0;
+					to_x: "padding.left";
+					to_y: "padding.bottom";
+				}
+				min: ATTACHMENT_ITEM_MIME_ICON_SIZE ATTACHMENT_ITEM_MIME_ICON_SIZE;
+				max: ATTACHMENT_ITEM_MIME_ICON_SIZE ATTACHMENT_ITEM_MIME_ICON_SIZE;
 			}
 		)
-		E_PART_SPACER("ev.download_icon.padding.left",
-			description { state: "default" 0.0;
+
+		E_PART_SPACER("ev.mime_icon.padding.right",
+			description {
+				align: 0.0 0.5;
 				fixed: 1 0;
-				min: ATTACHMENT_ITEM_DOWNLOAD_ICON_LEFT_PADDING_WIDTH 0;
-				max: ATTACHMENT_ITEM_DOWNLOAD_ICON_LEFT_PADDING_WIDTH -1;
-				rel1 { relative: 0 0; to_x: "ev.swallow.download_icon"; }
-				rel2 { relative: 0 1; to_x: "ev.swallow.download_icon"; }
-				align: 1.0 0.5;
+				rel1 {
+					relative: 1.0 0.0;
+					to_x: "ev.swallow.mime_icon";
+					to_y: "padding.left";
+				}
+				rel2 {
+					to_x: "ev.swallow.mime_icon";
+					to_y: "padding.left";
+				}
+				min:  ATTACHMENT_ITEM_MIME_ICON_RIGHT_PADDING_WIDTH 0;
 			}
 		)
+
+		E_PART_SWALLOW("ev.swallow.download_button",
+			description {
+				state: "default" 0.0;
+				align: 1 0.5;
+				fixed: 1 1;
+				rel1 {
+					relative: 0.0 1.0;
+					to_x: "padding.right";
+					to_y: "padding.top";
+				}
+				rel2 {
+					relative: 0.0 0.0;
+					to_x: "padding.right";
+					to_y: "padding.bottom";
+				}
+				min: ATTACHMENT_ITEM_DOWNLOAD_BTN_SIZE ATTACHMENT_ITEM_DOWNLOAD_BTN_SIZE;
+				max: ATTACHMENT_ITEM_DOWNLOAD_BTN_SIZE ATTACHMENT_ITEM_DOWNLOAD_BTN_SIZE;
+			}
+		)
+
+		E_PART_SPACER("ev.download_icon.padding.left",
+			description {
+				state: "default" 0.0;
+				fixed: 1 0;
+				align: 1.0 0.5;
+				rel1 {
+					relative: 0 0;
+					to_x: "ev.swallow.download_button";
+				}
+				rel2 {
+					relative: 0 1;
+					to_x: "ev.swallow.download_button";
+				}
+				min: ATTACHMENT_ITEM_DOWNLOAD_ICON_LEFT_PADDING_WIDTH 0;
+			}
+		)
+
 		E_PART_SWALLOW("ev.swallow.content",
 			mouse_events: 1;
 			description {
 				state: "default" 0.0;
-				rel1 { relative: 1.0 0.0; to_x: "ev.mime_icon.padding.right"; }
-				rel2 { relative: 0.0 1.0; to_x: "ev.download_icon.padding.left"; }
-			}
-		)
-		E_PART_SWALLOW("ev.swallow.download_button",
-			description {
-				state: "default" 0.0;
-				rel1 { relative: 0.0 0.0; to_x: "ev.swallow.download_icon"; }
+				rel1 {
+					relative: 1.0 1.0;
+					to_x: "ev.mime_icon.padding.right";
+					to_y: "padding.top";
+				}
+				rel2 {
+					relative: 0.0 0.0;
+					to_x: "ev.download_icon.padding.left";
+					to_y: "padding.bottom";
+				}
 			}
 		)
 	}
 }
+
+ROUND_ICON_BUTTON_STYLE("cancel_button_style", "viewer_icon/email_icon_cancel.png", \
+	AO006, AO006P, AO006D, \
+	ATTACHMENT_ITEM_DOWNLOAD_BTN_SIZE, ATTACHMENT_ITEM_DOWNLOAD_BTN_SIZE)
+
+ROUND_ICON_BUTTON_STYLE("download_button_style", "viewer_icon/email_icon_download.png", \
+	AO006, AO006P, AO006D, \
+	ATTACHMENT_ITEM_DOWNLOAD_BTN_SIZE, ATTACHMENT_ITEM_DOWNLOAD_BTN_SIZE)
 
 group {
 	name: "ev/layout/attachment_button";
