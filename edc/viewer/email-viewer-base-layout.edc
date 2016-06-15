@@ -256,5 +256,3 @@ group {
 		}
 	}
 }
-
-SINGLE_BUTTON_LAYOUT("ev/layout/toolbar_single_button", "ev.swallow.toolbar_single_button", TRANSPARENT, TOOLBAR_SNGL_BUTTON_HEIGHT, TOOLBAR_SNGL_BUTTON_HEIGHT_PADDING)

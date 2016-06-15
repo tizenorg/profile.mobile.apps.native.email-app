@@ -22,7 +22,6 @@ collections {
 	#include "../../edc/common/email-colors.edc"
 	#include "../../edc/common/email-round-icon-button-style.edc"
 	#include "../../edc/common/email-parts.edc"
-	#include "../../edc/viewer/email-viewer-common.edc"
 	#include "../../edc/viewer/email-viewer-base-layout.edc"
 	#include "../../edc/viewer/email-viewer-subject-layout.edc"
 	#include "../../edc/viewer/email-viewer-popup.edc"

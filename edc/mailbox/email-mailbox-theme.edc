@@ -56,19 +56,6 @@
 				}
 			}
 
-			part {
-				name: "send_all_bar";
-				type: SWALLOW;
-				scale: 1;
-				description {
-					state: "default" 0.0;
-					fixed: 0 1;
-					align: 0.0 0.0;
-					rel1 { relative: 0.0 1.0; to: "top_bar";}
-					rel2 { relative: 1.0 1.0; to: "top_bar";}
-				}
-			}
-
 			part
 			{
 				name: "list";
@@ -79,7 +66,7 @@
 					state: "default" 0.0;
 					align: 0.0 0.0;
 					visible: 1;
-					rel1 { relative: 0.0 1.0; to: "send_all_bar";}
+					rel1 { relative: 0.0 1.0; to: "top_bar";}
 					rel2 { relative: 1.0 1.0;}
 				}
 				description
@@ -147,94 +134,6 @@
 			}
 		}
 	} //end group
-
-	group { name: "email/layout/send_all_bar";
-		parts{
-			part {
-				name: "bg";
-				type: RECT;
-				scale: 1;
-				description {
-					state: "default" 0.0;
-					color: 255 255 255 255;
-				}
-			}
-
-			part {
-				name: "send_all_bar_base";
-				type: SPACER;
-				scale: 1;
-				description {
-					state: "default" 0.0;
-					min: 0 21;
-					align: 0.0 0.0;
-				}
-			}
-
-			part {
-				name: "top_left_padding";
-				type: SPACER;
-				scale: 1;
-				description {
-					state: "default" 0.0;
-					min: 32 21;
-					fixed: 1 1;
-					align: 0.0 0.0;
-					rel1 { relative: 0.0 0.0; to: "send_all_bar_base"; }
-					rel2 { relative: 0.0 0.0; to: "send_all_bar_base"; }
-				}
-			}
-
-			part {
-				name: "bottom_right_padding";
-				type: SPACER;
-				scale: 1;
-				description {
-					state: "default" 0.0;
-					min: 32 21;
-					fixed: 1 1;
-					align: 1.0 1.0;
-					rel1 { relative: 1.0 1.0; to: "send_all_bar_base"; }
-					rel2 { relative: 1.0 1.0; to: "send_all_bar_base"; }
-				}
-			}
-
-			part {
-				name: "send_all_bar_rect";
-				type: RECT;
-				scale: 1;
-				description {
-					state: "default" 0.0;
-					min: 496 78;
-					max: -1 78;
-					align: 0.0 0.5;
-					rel1 { relative: 1.0 1.0; to: "top_left_padding"; }
-					rel2 { relative: 0.0 0.0; to: "bottom_right_padding"; }
-					color: 0 0 0 0;
-				}
-			}
-
-			part {
-				name: "send_all_bar_button";
-				type: SWALLOW;
-				scale: 1;
-				description {
-					state: "default" 0.0;
-					min: 496 78;
-					max: -1 78;
-					rel1 {
-						relative : 0.0 0.0;
-						to: "send_all_bar_rect";
-					}
-					rel2 {
-						relative : 1.0 1.0;
-						to: "send_all_bar_rect";
-					}
-					align: 0.0 0.5;
-				}
-			}
-		}
-	}
 
 	group { name: "email/layout/searchbar";
 		parts {

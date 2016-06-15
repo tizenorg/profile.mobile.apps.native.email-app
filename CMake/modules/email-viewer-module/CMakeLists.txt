@@ -36,7 +36,6 @@ ADD_CUSTOM_COMMAND(
 		COMMAND edje_cc -no-save -id ${PROJECT_EDC_IMAGES_DIR} ${EDJE_CC_DEFINITIONS}
 		${PROJECT_EDJE_DIR}/email-viewer.edc ${CMAKE_CURRENT_BINARY_DIR}/email-viewer.edj
 		DEPENDS ${PROJECT_EDJE_DIR}/email-viewer.edc
-				${PROJECT_EDC_DIR}/viewer/email-viewer-common.edc
 				${PROJECT_EDC_DIR}/viewer/email-viewer-base-layout.edc
 				${PROJECT_EDC_DIR}/viewer/email-viewer-subject-layout.edc
 				${PROJECT_EDC_DIR}/viewer/email-viewer-popup.edc

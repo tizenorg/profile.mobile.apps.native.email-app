@@ -616,7 +616,7 @@ static void _mailbox_send_outgoing_messages_thread_worker(void *data, Ecore_Thre
 	}
 
 	send_thread_data = (MailOutgoingListData *)data;
-	*(send_thread_data->send_all_runned) = false;
+	*(send_thread_data->send_all_runned) = true;
 	/* find the list node having same mailid */
 	GList *cur = g_list_first(send_thread_data->send_all_list);
 	for (; cur; cur = g_list_next(cur)) {
@@ -667,7 +667,7 @@ Evas_Object *mailbox_create_toolbar_btn(Evas_Object *parent, const char *text, c
 	retvm_if(!parent, NULL, "Invalid parameter: parent is NULL!");
 
 	Evas_Object *btn = elm_button_add(parent);
-	elm_object_style_set(btn, "default");
+	elm_object_style_set(btn, "bottom");
 	elm_object_domain_translatable_text_set(btn, domain, text);
 	evas_object_show(btn);
 
@@ -690,20 +690,15 @@ void mailbox_send_all_btn_add(EmailMailboxView *view)
 		return;
 	}
 
-	if (!view->outbox_send_all_bar) {
-		view->outbox_send_all_bar = elm_layout_add(view->base.module->navi);
-		evas_object_show(view->outbox_send_all_bar);
-		view->outbox_send_all_btn = mailbox_create_toolbar_btn(view->outbox_send_all_bar, _("IDS_EMAIL_BUTTON_SEND_ALL"), PACKAGE);
-		evas_object_smart_callback_add(view->outbox_send_all_btn, "clicked", _send_outgoing_messages_clicked_cb, (void *)view);
+	view->outbox_send_all_btn = mailbox_create_toolbar_btn(view->content_layout, _("IDS_EMAIL_BUTTON_SEND_ALL"), PACKAGE);
+	evas_object_smart_callback_add(view->outbox_send_all_btn, "clicked", _send_outgoing_messages_clicked_cb, (void *)view);
 
-		Eina_Bool is_disabled = elm_object_disabled_get(view->outbox_send_all_btn);
-		if (is_disabled)
-			elm_object_disabled_set(view->outbox_send_all_btn, !is_disabled);
-
-		elm_layout_file_set(view->outbox_send_all_bar, email_get_mailbox_theme_path(), "email/layout/send_all_bar");
-		elm_layout_content_set(view->outbox_send_all_bar, "send_all_bar_button", view->outbox_send_all_btn);
-		elm_object_part_content_set(view->content_layout, "send_all_bar", view->outbox_send_all_bar);
+	Eina_Bool is_disabled = elm_object_disabled_get(view->outbox_send_all_btn);
+	if (is_disabled) {
+		elm_object_disabled_set(view->outbox_send_all_btn, !is_disabled);
 	}
+
+	elm_object_item_part_content_set(view->base.navi_item, "toolbar", view->outbox_send_all_btn);
 
 	debug_leave();
 	return;
@@ -712,13 +707,8 @@ void mailbox_send_all_btn_add(EmailMailboxView *view)
 void mailbox_send_all_btn_remove(EmailMailboxView *view)
 {
 	debug_enter();
-	if (view->outbox_send_all_bar) {
-		elm_object_part_content_unset(view->outbox_send_all_bar, "send_all_bar_button");
-		DELETE_EVAS_OBJECT(view->outbox_send_all_btn);
-		elm_object_part_content_unset(view->content_layout, "send_all_bar");
-		DELETE_EVAS_OBJECT(view->outbox_send_all_bar);
-		view->outbox_send_all_bar = NULL;
-	}
+	elm_object_part_content_unset(view->base.navi_item, "toolbar");
+	DELETE_EVAS_OBJECT(view->outbox_send_all_btn);
 
 	debug_leave();
 }

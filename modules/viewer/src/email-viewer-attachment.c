@@ -1413,20 +1413,11 @@ static int _create_view(email_view_t *self)
 	retvm_if(ret == -1, -1, "_create_temp_preview_folder() is failed!");
 
 	if (view->normal_att_count > 1) {
-		Evas_Object *ly = elm_layout_add(view->base.content);
-		retvm_if(!ly, -1, "ly is NULL");
-		elm_layout_file_set(ly, email_get_viewer_theme_path(), "ev/layout/toolbar_single_button");
-		evas_object_size_hint_weight_set(ly, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-		evas_object_size_hint_align_set(ly, EVAS_HINT_FILL, EVAS_HINT_FILL);
-
-		view->save_all_btn = _viewer_attachment_create_save_cancel_toolbar_btn(ly, view);
+		view->save_all_btn = _viewer_attachment_create_save_cancel_toolbar_btn(self->content, view);
 		retvm_if(!view->save_all_btn, -1, "view->save_all_btn is NULL");
 
-		elm_layout_content_set(ly, "ev.swallow.toolbar_single_button", view->save_all_btn);
-
 		evas_object_show(view->save_all_btn);
-		evas_object_show(ly);
-		elm_object_item_part_content_set(attachment_navi_it, "toolbar", ly);
+		elm_object_item_part_content_set(attachment_navi_it, "toolbar", view->save_all_btn);
 		_update_attachment_save_cancel_all_buttons(view);
 	}
 
