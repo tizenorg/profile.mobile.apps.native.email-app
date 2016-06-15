@@ -55,6 +55,8 @@ static void _recipient_ctxpopup_back_cb(void *data, Evas_Object *obj, void *even
 
 static Eina_Bool _recipient_timer_duplicate_toast_cb(void *data);
 static Evas_Object *_recipient_get_mbe_with_entry(void *data, Evas_Object *entry);
+static void _try_pack_to_recp_box(Evas_Object *recp_box, Evas_Object *layout);
+static void _try_unpack_from_recp_box(Evas_Object *recp_box, Evas_Object *layout);
 
 typedef struct _fromListItemData {
 	EmailComposerView *view;
@@ -80,13 +82,13 @@ static void _recipient_entry_layout_clicked_cb(void *data, Evas_Object *obj, con
 	}
 
 	if ((obj == view->recp_to_layout) && (view->selected_entry != view->recp_to_entry.entry)) {
-		composer_recipient_change_entry(EINA_TRUE, view->recp_to_box, &view->recp_to_entry, &view->recp_to_display_entry, view->recp_to_entry_layout, view->recp_to_display_entry_layout);
+		composer_recipient_change_entry(EINA_TRUE, view->recp_to_box, view->recp_to_entry_layout, view->recp_to_display_entry_layout);
 		composer_util_focus_set_focus(view, view->recp_to_entry.entry);
 	} else if ((obj == view->recp_cc_layout) && (view->selected_entry != view->recp_cc_entry.entry)) {
-		composer_recipient_change_entry(EINA_TRUE, view->recp_cc_box, &view->recp_cc_entry, &view->recp_cc_display_entry, view->recp_cc_entry_layout, view->recp_cc_display_entry_layout);
+		composer_recipient_change_entry(EINA_TRUE, view->recp_cc_box,view->recp_cc_entry_layout, view->recp_cc_display_entry_layout);
 		composer_util_focus_set_focus(view, view->recp_cc_entry.entry);
 	} else if ((obj == view->recp_bcc_layout) && (view->selected_entry != view->recp_bcc_entry.entry)) {
-		composer_recipient_change_entry(EINA_TRUE, view->recp_bcc_box, &view->recp_bcc_entry, &view->recp_bcc_display_entry, view->recp_bcc_entry_layout, view->recp_bcc_display_entry_layout);
+		composer_recipient_change_entry(EINA_TRUE, view->recp_bcc_box, view->recp_bcc_entry_layout, view->recp_bcc_display_entry_layout);
 		composer_util_focus_set_focus(view, view->recp_bcc_entry.entry);
 	}
 
@@ -636,6 +638,9 @@ void composer_recipient_update_to_detail(void *data, Evas_Object *parent)
 	view->recp_to_display_entry = dispaly_editfield;
 	view->recp_to_display_entry_layout = display_entry_layout;
 
+	elm_object_part_content_set(view->recp_to_entry_layout, "ec.swallow.content", view->recp_to_entry.layout);
+	elm_object_part_content_set(view->recp_to_display_entry_layout, "ec.swallow.content", view->recp_to_display_entry.layout);
+
 	Evas_Object *mbe_layout = _recipient_create_layout(parent, "ec/recipient/mbe/base");
 	Evas_Object *mbe = _recipient_create_mbe(mbe_layout, COMPOSER_RECIPIENT_TYPE_TO, view);
 	elm_object_part_content_set(mbe_layout, "ec.swallow.content", mbe);
@@ -689,6 +694,9 @@ void composer_recipient_update_cc_detail(void *data, Evas_Object *parent)
 	view->recp_cc_display_entry = dispaly_editfield;
 	view->recp_cc_display_entry_layout = display_entry_layout;
 
+	elm_object_part_content_set(view->recp_cc_entry_layout, "ec.swallow.content", view->recp_cc_entry.layout);
+	elm_object_part_content_set(view->recp_cc_display_entry_layout, "ec.swallow.content", view->recp_cc_display_entry.layout);
+
 	Evas_Object *mbe_layout = _recipient_create_layout(parent, "ec/recipient/mbe/base");
 	Evas_Object *mbe = _recipient_create_mbe(box, COMPOSER_RECIPIENT_TYPE_CC, view);
 	elm_object_part_content_set(mbe_layout, "ec.swallow.content", mbe);
@@ -737,6 +745,9 @@ void composer_recipient_update_bcc_detail(void *data, Evas_Object *parent)
 	view->recp_bcc_btn = btn;
 	view->recp_bcc_display_entry = dispaly_editfield;
 	view->recp_bcc_display_entry_layout = display_entry_layout;
+
+	elm_object_part_content_set(view->recp_bcc_entry_layout, "ec.swallow.content", view->recp_bcc_entry.layout);
+	elm_object_part_content_set(view->recp_bcc_display_entry_layout, "ec.swallow.content", view->recp_bcc_display_entry.layout);
 
 	Evas_Object *mbe_layout = _recipient_create_layout(parent, "ec/recipient/mbe/base");
 	Evas_Object *mbe = _recipient_create_mbe(box, COMPOSER_RECIPIENT_TYPE_BCC, view);
@@ -934,15 +945,15 @@ void composer_recipient_unfocus_entry(void *data, Evas_Object *entry)
 	if (view->recp_to_entry.entry == entry) {
 		composer_recipient_reset_entry_without_mbe(view->composer_box, view->recp_to_mbe_layout, view->recp_to_layout, view->recp_to_box, view->recp_to_label);
 		composer_recipient_update_display_string(view, view->recp_to_mbe, view->recp_to_entry.entry , view->recp_to_display_entry.entry , view->to_recipients_cnt);
-		composer_recipient_change_entry(EINA_FALSE, view->recp_to_box, &view->recp_to_entry, &view->recp_to_display_entry, view->recp_to_entry_layout, view->recp_to_display_entry_layout);
+		composer_recipient_change_entry(EINA_FALSE, view->recp_to_box, view->recp_to_entry_layout, view->recp_to_display_entry_layout);
 	} else if (view->recp_cc_entry.entry == entry) {
 		composer_recipient_reset_entry_without_mbe(view->composer_box, view->recp_cc_mbe_layout, view->recp_cc_layout, view->recp_cc_box, view->bcc_added ? view->recp_cc_label_cc : view->recp_cc_label_cc_bcc);
 		composer_recipient_update_display_string(view, view->recp_cc_mbe, view->recp_cc_entry.entry, view->recp_cc_display_entry.entry, view->cc_recipients_cnt);
-		composer_recipient_change_entry(EINA_FALSE, view->recp_cc_box, &view->recp_cc_entry, &view->recp_cc_display_entry, view->recp_cc_entry_layout, view->recp_cc_display_entry_layout);
+		composer_recipient_change_entry(EINA_FALSE, view->recp_cc_box, view->recp_cc_entry_layout, view->recp_cc_display_entry_layout);
 	} else if (view->recp_bcc_entry.entry == entry) {
 		composer_recipient_reset_entry_without_mbe(view->composer_box, view->recp_bcc_mbe_layout, view->recp_bcc_layout, view->recp_bcc_box, view->recp_bcc_label);
 		composer_recipient_update_display_string(view, view->recp_bcc_mbe, view->recp_bcc_entry.entry , view->recp_bcc_display_entry.entry , view->bcc_recipients_cnt);
-		composer_recipient_change_entry(EINA_FALSE, view->recp_bcc_box, &view->recp_bcc_entry, &view->recp_bcc_display_entry, view->recp_bcc_entry_layout, view->recp_bcc_display_entry_layout);
+		composer_recipient_change_entry(EINA_FALSE, view->recp_bcc_box, view->recp_bcc_entry_layout, view->recp_bcc_display_entry_layout);
 	}
 	composer_recipient_hide_contact_button(view, entry);
 
@@ -1005,37 +1016,35 @@ void composer_recipient_update_display_string(EmailComposerView *view, Evas_Obje
 	debug_leave();
 }
 
-void composer_recipient_change_entry(Eina_Bool to_editable, Evas_Object *recp_box, email_editfield_t *editfield,
-								email_editfield_t *display_editfield, Evas_Object *entry_layout, Evas_Object *display_entry_layout)
+static void _try_pack_to_recp_box(Evas_Object *recp_box, Evas_Object *layout)
+{
+	if (!composer_util_is_object_packed_in(recp_box, layout)) {
+		elm_box_pack_end(recp_box, layout);
+		evas_object_show(layout);
+	}
+}
+
+static void _try_unpack_from_recp_box(Evas_Object *recp_box, Evas_Object *layout)
+{
+	if (composer_util_is_object_packed_in(recp_box, layout)) {
+		elm_box_unpack(recp_box, layout);
+		evas_object_hide(layout);
+	}
+}
+
+void composer_recipient_change_entry(Eina_Bool to_editable,
+		Evas_Object *recp_box,
+		Evas_Object *entry_layout,
+		Evas_Object *display_entry_layout)
 {
 	debug_enter();
 
 	if (to_editable) {
-		if (composer_util_is_object_packed_in(recp_box, display_entry_layout)) {
-			evas_object_hide(display_entry_layout);
-			evas_object_hide(display_editfield->layout);
-			elm_object_part_content_unset(entry_layout, "ec.swallow.content");
-			elm_box_unpack(recp_box, display_entry_layout);
-		}
-		if (!composer_util_is_object_packed_in(recp_box, entry_layout)) {
-			elm_object_part_content_set(entry_layout, "ec.swallow.content", editfield->layout);
-			elm_box_pack_end(recp_box, entry_layout);
-			evas_object_show(editfield->layout);
-			evas_object_show(entry_layout);
-		}
+		_try_unpack_from_recp_box(recp_box, display_entry_layout);
+		_try_pack_to_recp_box(recp_box, entry_layout);
 	} else {
-		if (composer_util_is_object_packed_in(recp_box, entry_layout)) {
-			evas_object_hide(entry_layout);
-			evas_object_hide(editfield->layout);
-			elm_object_part_content_unset(entry_layout, "ec.swallow.content");
-			elm_box_unpack(recp_box, entry_layout);
-		}
-		if (!composer_util_is_object_packed_in(recp_box, display_entry_layout)) {
-			elm_object_part_content_set(display_entry_layout, "ec.swallow.content", display_editfield->layout);
-			elm_box_pack_end(recp_box, display_entry_layout);
-			evas_object_show(display_editfield->layout);
-			evas_object_show(display_entry_layout);
-		}
+		_try_unpack_from_recp_box(recp_box, entry_layout);
+		_try_pack_to_recp_box(recp_box, display_entry_layout);
 	}
 
 	debug_leave();

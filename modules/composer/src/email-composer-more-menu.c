@@ -286,19 +286,19 @@ static void _tomyself_append_myaddress(void *data, int index)
 		if (view->cc_recipients_cnt > 0) {
 			composer_recipient_reset_entry_with_mbe(view->composer_box, view->recp_cc_mbe_layout, view->recp_cc_mbe, view->recp_cc_layout, view->recp_cc_box, view->bcc_added ? view->recp_cc_label_cc : view->recp_cc_label_cc_bcc);
 		}
-		composer_recipient_change_entry(EINA_TRUE, view->recp_cc_box, &view->recp_cc_entry, &view->recp_cc_display_entry, view->recp_cc_entry_layout, view->recp_cc_display_entry_layout);
+		composer_recipient_change_entry(EINA_TRUE, view->recp_cc_box, view->recp_cc_entry_layout, view->recp_cc_display_entry_layout);
 		dest_mbe = view->recp_cc_mbe;
 	} else if (view->selected_entry == view->recp_bcc_entry.entry) {
 		if (view->bcc_recipients_cnt > 0) {
 			composer_recipient_reset_entry_with_mbe(view->composer_box, view->recp_bcc_mbe_layout, view->recp_bcc_mbe, view->recp_bcc_layout, view->recp_bcc_box, view->recp_bcc_label);
 		}
-		composer_recipient_change_entry(EINA_TRUE, view->recp_bcc_box, &view->recp_bcc_entry, &view->recp_bcc_display_entry, view->recp_bcc_entry_layout, view->recp_bcc_display_entry_layout);
+		composer_recipient_change_entry(EINA_TRUE, view->recp_bcc_box, view->recp_bcc_entry_layout, view->recp_bcc_display_entry_layout);
 		dest_mbe = view->recp_bcc_mbe;
 	} else {
 		if (view->to_recipients_cnt > 0) {
 			composer_recipient_reset_entry_with_mbe(view->composer_box, view->recp_to_mbe_layout, view->recp_to_mbe, view->recp_to_layout, view->recp_to_box, view->recp_to_label);
 		}
-		composer_recipient_change_entry(EINA_TRUE, view->recp_to_box, &view->recp_to_entry, &view->recp_to_display_entry, view->recp_to_entry_layout, view->recp_to_display_entry_layout);
+		composer_recipient_change_entry(EINA_TRUE, view->recp_to_box, view->recp_to_entry_layout, view->recp_to_display_entry_layout);
 		dest_mbe = view->recp_to_mbe;
 		view->selected_entry = view->recp_to_entry.entry; /* To set focus to 'to' mbe */
 	}
