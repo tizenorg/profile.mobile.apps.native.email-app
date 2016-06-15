@@ -162,13 +162,11 @@ void composer_recipient_unfocus_entry(void *data, Evas_Object *entry);
  *
  * @param[in]	to_editable			Eina_Bool
  * @param[in]	recp_box			Evas_Object recipient box
- * @param[in]	entry				Email editfield data
- * @param[in]	display_entry		Email editfield data
  * @param[in]	ent_lay				Evas_Object entry layout
  * @param[in]	disp_ent_lay		Evas_Object dispalay entry layout
  *
  */
-void composer_recipient_change_entry(Eina_Bool to_editable, Evas_Object *recp_box, email_editfield_t *entry, email_editfield_t *display_entry, Evas_Object *ent_lay, Evas_Object *disp_ent_lay);
+void composer_recipient_change_entry(Eina_Bool to_editable, Evas_Object *recp_box, Evas_Object *ent_lay, Evas_Object *disp_ent_lay);
 
 /**
  * @brief Reset entry with mbe in recipient contact field

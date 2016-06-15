@@ -288,33 +288,18 @@ static void _recipient_mbe_popup_move_recipient(EmailComposerView *view, Evas_Ob
 	/* To reset recipient layout for the previous selected entry because selected_entry will be changed to dest mbe. */
 	composer_recipient_unfocus_entry(view, view->selected_entry);
 
-	/* To set the focus to destination entry */
-	Evas_Object *entry_box = NULL;
-	Evas_Object *entry_layout = NULL;
-	Evas_Object *display_entry_layout = NULL;
-	email_editfield_t display_entry;
-
 	if (dest_mbe == view->recp_to_mbe) {
 		view->selected_entry = view->recp_to_entry.entry;
-		entry_box = view->recp_to_box;
-		entry_layout = view->recp_to_entry_layout;
-		display_entry = view->recp_to_display_entry;
-		display_entry_layout = view->recp_to_display_entry_layout;
-		composer_recipient_change_entry(EINA_TRUE, entry_box, &view->recp_to_entry, &display_entry, entry_layout, display_entry_layout);
+		composer_recipient_change_entry(EINA_TRUE, view->recp_to_box,
+				view->recp_to_entry_layout, view->recp_to_display_entry_layout);
 	} else if (dest_mbe == view->recp_cc_mbe) {
 		view->selected_entry = view->recp_cc_entry.entry;
-		entry_box = view->recp_cc_box;
-		entry_layout = view->recp_cc_entry_layout;
-		display_entry = view->recp_cc_display_entry;
-		display_entry_layout = view->recp_cc_display_entry_layout;
-		composer_recipient_change_entry(EINA_TRUE, entry_box, &view->recp_cc_entry, &display_entry, entry_layout, display_entry_layout);
+		composer_recipient_change_entry(EINA_TRUE, view->recp_cc_box,
+				view->recp_cc_entry_layout, view->recp_cc_display_entry_layout);
 	} else if (dest_mbe == view->recp_bcc_mbe) {
 		view->selected_entry = view->recp_bcc_entry.entry;
-		entry_box = view->recp_bcc_box;
-		entry_layout = view->recp_bcc_entry_layout;
-		display_entry = view->recp_bcc_display_entry;
-		display_entry_layout = view->recp_bcc_display_entry_layout;
-		composer_recipient_change_entry(EINA_TRUE, entry_box, &view->recp_bcc_entry, &display_entry, entry_layout, display_entry_layout);
+		composer_recipient_change_entry(EINA_TRUE, view->recp_bcc_box,
+				view->recp_bcc_entry_layout, view->recp_bcc_display_entry_layout);
 	}
 
 	/* Destination entry is changed to shown status. But some status values in EFL side aren't updated immediately.
@@ -605,21 +590,21 @@ void _recipient_mbe_added_cb(void *data, Evas_Object *obj, void *event_info)
 		if (view->selected_entry == view->recp_to_entry.entry) {
 			composer_recipient_reset_entry_with_mbe(view->composer_box, view->recp_to_mbe_layout, view->recp_to_mbe, view->recp_to_layout, view->recp_to_box, view->recp_to_label);
 		} else {
-			composer_recipient_change_entry(EINA_FALSE, view->recp_to_box, &view->recp_to_entry, &view->recp_to_display_entry, view->recp_to_entry_layout, view->recp_to_display_entry_layout);
+			composer_recipient_change_entry(EINA_FALSE, view->recp_to_box, view->recp_to_entry_layout, view->recp_to_display_entry_layout);
 			composer_recipient_update_display_string(view, view->recp_to_mbe, view->recp_to_entry.entry, view->recp_to_display_entry.entry, view->to_recipients_cnt);
 		}
 	} else if ((obj == view->recp_cc_mbe) && !composer_util_is_object_packed_in(view->composer_box, view->recp_cc_mbe_layout)) {
 		if (view->selected_entry == view->recp_cc_entry.entry) {
 			composer_recipient_reset_entry_with_mbe(view->composer_box, view->recp_cc_mbe_layout, view->recp_cc_mbe, view->recp_cc_layout, view->recp_cc_box, view->bcc_added ? view->recp_cc_label_cc : view->recp_cc_label_cc_bcc);
 		} else {
-			composer_recipient_change_entry(EINA_FALSE, view->recp_cc_box, &view->recp_cc_entry, &view->recp_cc_display_entry, view->recp_cc_entry_layout, view->recp_cc_display_entry_layout);
+			composer_recipient_change_entry(EINA_FALSE, view->recp_cc_box, view->recp_cc_entry_layout, view->recp_cc_display_entry_layout);
 			composer_recipient_update_display_string(view, view->recp_cc_mbe, view->recp_cc_entry.entry, view->recp_cc_display_entry.entry, view->cc_recipients_cnt);
 		}
 	} else if ((obj == view->recp_bcc_mbe) && !composer_util_is_object_packed_in(view->composer_box, view->recp_bcc_mbe_layout)) {
 		if (view->selected_entry == view->recp_bcc_entry.entry) {
 			composer_recipient_reset_entry_with_mbe(view->composer_box, view->recp_bcc_mbe_layout, view->recp_bcc_mbe, view->recp_bcc_layout, view->recp_bcc_box, view->recp_bcc_label);
 		} else {
-			composer_recipient_change_entry(EINA_FALSE, view->recp_bcc_box, &view->recp_bcc_entry, &view->recp_bcc_display_entry, view->recp_bcc_entry_layout, view->recp_bcc_display_entry_layout);
+			composer_recipient_change_entry(EINA_FALSE, view->recp_bcc_box, view->recp_bcc_entry_layout, view->recp_bcc_display_entry_layout);
 			composer_recipient_update_display_string(view, view->recp_bcc_mbe, view->recp_bcc_entry.entry, view->recp_bcc_display_entry.entry, view->bcc_recipients_cnt);
 		}
 	}
@@ -968,13 +953,13 @@ void _recipient_entry_keyup_cb(void *data, Evas *e, Evas_Object *obj, void *even
 		Evas_Object *next_widget = NULL;
 		if (obj == view->recp_to_entry.entry) {
 			if (view->cc_added) {
-				composer_recipient_change_entry(EINA_TRUE, view->recp_cc_box, &view->recp_cc_entry, &view->recp_cc_display_entry, view->recp_cc_entry_layout, view->recp_cc_display_entry_layout);
+				composer_recipient_change_entry(EINA_TRUE, view->recp_cc_box, view->recp_cc_entry_layout, view->recp_cc_display_entry_layout);
 				next_widget = view->recp_cc_entry.entry;
 			} else {
 				next_widget = view->subject_entry.entry;
 			}
 		} else if (obj == view->recp_cc_entry.entry) {
-			composer_recipient_change_entry(EINA_TRUE, view->recp_bcc_box, &view->recp_bcc_entry, &view->recp_bcc_display_entry, view->recp_bcc_entry_layout, view->recp_bcc_display_entry_layout);
+			composer_recipient_change_entry(EINA_TRUE, view->recp_bcc_box, view->recp_bcc_entry_layout, view->recp_bcc_display_entry_layout);
 			next_widget = view->recp_bcc_entry.entry;
 		} else if (obj == view->recp_bcc_entry.entry) {
 			next_widget = view->subject_entry.entry;
