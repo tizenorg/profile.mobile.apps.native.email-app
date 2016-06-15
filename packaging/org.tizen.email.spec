@@ -1,6 +1,6 @@
 Name:       org.tizen.email
-#VCS_FROM:   profile/mobile/apps/native/email-app#e2ffb72b3dc3a8dc60ecd4e4dd59151a753b73a7
-#RS_Ver:    20160614_3 
+#VCS_FROM:   profile/mobile/apps/native/email-app#7fb4ef4fa6c2a4e14ad9b8f81fb1549efaf8430a
+#RS_Ver:    20160615_2 
 Summary:    Native email application
 Version:    0.9.34
 Release:    1
@@ -26,7 +26,7 @@ Requires(post):  /usr/bin/tpk-backend
 %endif
 
 %description
-#VCS_FROM:   profile/mobile/apps/native/email-app#e2ffb72b3dc3a8dc60ecd4e4dd59151a753b73a7
+#VCS_FROM:   profile/mobile/apps/native/email-app#7fb4ef4fa6c2a4e14ad9b8f81fb1549efaf8430a
 This is a container package which have preload TPK files
 
 %prep
