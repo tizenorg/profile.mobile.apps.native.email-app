@@ -218,7 +218,6 @@ static void _reply_toolbar_reply_options_popup_gl_select_cb(void *data, Evas_Obj
 	retm_if(!view, "Callback data is NULL!");
 
 	int option_index = (int)(ptrdiff_t)data;
-
 	if (option_index == REPLY_SINGLE_OPTION_INDEX) {
 		view->selected_reply_type = EMAIL_VIEWER_REPLY_SINGLE;
 	} else if (option_index == REPLY_ALL_OPTION_INDEX) {
@@ -232,9 +231,9 @@ static void _reply_toolbar_reply_options_popup_gl_select_cb(void *data, Evas_Obj
 		util_create_notify(view, EMAIL_VIEWER_HEADER_DOWNLOAD_ENTIRE_EMAIL, EMAIL_VIEWER_POP_PARTIAL_BODY_DOWNLOADED_REST_LOST, 2,
 				EMAIL_VIEWER_BUTTON_CANCEL, _reply_toolbar_warning_popup_cancel_cb,
 				EMAIL_VIEWER_BUTTON_CONTINUE, _reply_toolbar_warning_popup_continue_reply_cb, NULL);
+	} else {
+		_reply_toolbar_do_reply(view);
 	}
-
-	_reply_toolbar_do_reply(data);
 
 	debug_leave();
 }

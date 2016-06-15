@@ -52,7 +52,7 @@
 
 typedef enum {
 	EMAIL_VIEWER_REPLY_SINGLE = 1,
-	EMAIL_VIEWER_REPLY_ALL = 1,
+	EMAIL_VIEWER_REPLY_ALL,
 } ViewerReplyType;
 
 typedef enum {
