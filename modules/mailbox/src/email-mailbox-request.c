@@ -19,7 +19,7 @@
 #include "email-mailbox.h"
 #include "email-mailbox-request.h"
 #include "email-mailbox-list.h"
-#include "email-mailbox-list-other-items.h"
+#include "email-mailbox-list-extensions.h"
 #include "email-mailbox-noti-mgr.h"
 #include "email-mailbox-search.h"
 #include "email-mailbox-title.h"

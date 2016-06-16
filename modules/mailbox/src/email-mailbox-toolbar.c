@@ -21,7 +21,7 @@
 #include "email-mailbox-toolbar.h"
 #include "email-mailbox-item.h"
 #include "email-mailbox-list.h"
-#include "email-mailbox-list-other-items.h"
+#include "email-mailbox-list-extensions.h"
 #include "email-mailbox-module-util.h"
 #include "email-mailbox-util.h"
 #include "email-mailbox-more-menu.h"

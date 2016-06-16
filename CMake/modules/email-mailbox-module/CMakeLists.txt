@@ -7,7 +7,7 @@ SET(SRCS
 	${CURRENT_SOURCE_DIR}/src/email-mailbox.c
 	${CURRENT_SOURCE_DIR}/src/email-mailbox-item.c
 	${CURRENT_SOURCE_DIR}/src/email-mailbox-list.c
-	${CURRENT_SOURCE_DIR}/src/email-mailbox-list-other-items.c
+	${CURRENT_SOURCE_DIR}/src/email-mailbox-list-extensions.c
 	${CURRENT_SOURCE_DIR}/src/email-mailbox-more-menu.c
 	${CURRENT_SOURCE_DIR}/src/email-mailbox-noti-mgr.c
 	${CURRENT_SOURCE_DIR}/src/email-mailbox-request.c

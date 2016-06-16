@@ -24,7 +24,7 @@
 #include "email-common-types.h"
 #include "email-mailbox.h"
 #include "email-mailbox-list.h"
-#include "email-mailbox-list-other-items.h"
+#include "email-mailbox-list-extensions.h"
 #include "email-mailbox-search.h"
 #include "email-mailbox-sync.h"
 #include "email-mailbox-toolbar.h"
@@ -1777,8 +1777,6 @@ static void _mailbox_make_list(EmailMailboxView *view, const email_search_data_t
 
 			mailbox_hide_no_contents_view(view);
 		}
-		view->b_edge_bottom = false;
-		view->b_enable_get_more = true;
 	} else {
 		debug_log("no email exists.");
 
@@ -1864,6 +1862,7 @@ static void _mailbox_clear_list(EmailMailboxView *view)
 	mailbox_send_all_btn_remove(view);
 	mailbox_select_all_item_remove(view);
 	mailbox_last_updated_time_item_remove(view);
+	mailbox_remove_refresh_progress_bar(view);
 
 	debug_log("view->gl: 0x%x", view->gl);
 	if (view->gl) {
@@ -2645,6 +2644,7 @@ void mailbox_remove_unnecessary_list_item_for_edit_mode(void *data)
 	mailbox_load_more_messages_item_remove(view);
 	mailbox_no_more_emails_item_remove(view);
 	mailbox_get_more_progress_item_remove(view);
+	mailbox_remove_refresh_progress_bar(view);
 }
 
 bool mailbox_check_searched_mail(int mail_id, void *data)
