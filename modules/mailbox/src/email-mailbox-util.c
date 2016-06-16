@@ -170,6 +170,8 @@ void mailbox_clear_prev_mailbox_info(EmailMailboxView *view)
 	view->mode = EMAIL_MAILBOX_MODE_UNKOWN;
 	view->mailbox_type = EMAIL_MAILBOX_TYPE_NONE;
 	view->mailbox_id = 0;
+	view->b_is_refresh_launched = false;
+	view->b_is_load_more_launched = false;
 }
 
 void mailbox_set_last_updated_time(time_t last_update_time, EmailMailboxView *view)

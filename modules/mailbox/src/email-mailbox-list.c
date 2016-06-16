@@ -1763,7 +1763,11 @@ static void _mailbox_make_list(EmailMailboxView *view, const email_search_data_t
 				}
 			}
 
-			if ((view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->only_local == false
+			if (view->b_is_load_more_launched) {
+				mailbox_get_more_progress_item_add(view);
+			} else if (view->b_is_refresh_launched) {
+				mailbox_add_refresh_progress_bar(view);
+			} else if ((view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->only_local == false
 					&& view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX
 					&& view->account_type == EMAIL_SERVER_TYPE_IMAP4)
 				|| (view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->only_local == false
@@ -1777,8 +1781,6 @@ static void _mailbox_make_list(EmailMailboxView *view, const email_search_data_t
 
 			mailbox_hide_no_contents_view(view);
 		}
-		view->b_edge_bottom = false;
-		view->b_enable_get_more = true;
 	} else {
 		debug_log("no email exists.");
 
@@ -1864,6 +1866,7 @@ static void _mailbox_clear_list(EmailMailboxView *view)
 	mailbox_send_all_btn_remove(view);
 	mailbox_select_all_item_remove(view);
 	mailbox_last_updated_time_item_remove(view);
+	mailbox_remove_refresh_progress_bar(view);
 
 	debug_log("view->gl: 0x%x", view->gl);
 	if (view->gl) {
@@ -2565,7 +2568,11 @@ void mailbox_clear_edit_mode_list(EmailMailboxView *view)
 	DELETE_EVAS_OBJECT(view->save_btn);
 
 	if (0 < g_list_length(view->mail_list)) {
-		if (!view->b_searchmode
+		if (view->b_is_load_more_launched) {
+			mailbox_get_more_progress_item_add(view);
+		} else if (view->b_is_refresh_launched) {
+			mailbox_add_refresh_progress_bar(view);
+		} else if (!view->b_searchmode
 			&& ((view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->only_local == false
 					&& view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX
 					&& view->account_type == EMAIL_SERVER_TYPE_IMAP4)
@@ -2645,6 +2652,7 @@ void mailbox_remove_unnecessary_list_item_for_edit_mode(void *data)
 	mailbox_load_more_messages_item_remove(view);
 	mailbox_no_more_emails_item_remove(view);
 	mailbox_get_more_progress_item_remove(view);
+	mailbox_remove_refresh_progress_bar(view);
 }
 
 bool mailbox_check_searched_mail(int mail_id, void *data)

@@ -80,8 +80,8 @@ static void _setup_edit_mode(EmailMailboxView *view, mailbox_edit_type_e edit_ty
 		debug_log("Enter edit mode. type:(%d)", view->editmode_type);
 
 		view->b_editmode = true;
-		_change_view_for_selection_mode(view);
 		mailbox_sync_cancel_all(view);
+		_change_view_for_selection_mode(view);
 		mailbox_toolbar_create(view);
 		mailbox_create_select_info(view);
 	} else {
@@ -239,10 +239,22 @@ void _sync_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 	debug_enter();
 
 	EmailMailboxView *view = (EmailMailboxView *)data;
+	if (view->b_is_load_more_launched) {
+		debug_log("Load more operation is launched!");
+		mailbox_sync_cancel_all(view);
+		mailbox_get_more_progress_item_remove(view);
+	}
+
+	if (mailbox_sync_current_mailbox(view)) {
+		view->b_is_refresh_launched = true;
+		mailbox_load_more_messages_item_remove(view);
+		mailbox_add_refresh_progress_bar(view);
+	} else {
+		debug_error("Failed to trigger sync for current mailbox!");
+	}
 
 	DELETE_EVAS_OBJECT(view->more_ctxpopup);
-
-	mailbox_sync_current_mailbox(view);
+	debug_leave();
 }
 
 static void _compose_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_info)

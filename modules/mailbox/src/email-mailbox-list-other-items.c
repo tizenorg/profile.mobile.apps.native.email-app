@@ -37,6 +37,7 @@
 /*
  * Globals
  */
+#define GESTURE_MOMENT_MIN_Y 1000
 
 #define TIME_OUT	7.0
 #define GROUP_INDEX_LIST_ITEM_HEIGHT 52 /* 51 + 1 (margin) */
@@ -46,14 +47,19 @@
  */
 
 static char *_last_updated_time_gl_text_get(void *data, Evas_Object *obj, const char *part);
-static void _edge_bottom_cb(void *data, Evas_Object *obj, void *event_info);
 static char *_get_more_progress_gl_text_get(void *data, Evas_Object *obj, const char *part);
 static Evas_Object *_get_more_progress_gl_content_get(void *data, Evas_Object *obj, const char *source);
 static char *_load_more_messages_gl_text_get(void *data, Evas_Object *obj, const char *part);
-static Evas_Event_Flags _mailbox_gesture_flicks_abort_cb(void *data, void *event_info);
-static Evas_Event_Flags _mailbox_gesture_flicks_end_cb(void *data, void *event_info);
-static void _mailbox_gesture_flick_to_load_more(EmailMailboxView *view);
 
+/*Flick gestures logic*/
+static Evas_Event_Flags _mailbox_gesture_flicks_start_cb(void *data, void *event_info);
+static Evas_Event_Flags _mailbox_gesture_flicks_end_cb(void *data, void *event_info);
+static Eina_Bool _mailbox_is_mail_list_scrolled_to_top(EmailMailboxView *view);
+static Eina_Bool _mailbox_is_mail_list_scrolled_to_bottom(EmailMailboxView *view);
+static Eina_Bool _mailbox_is_load_more_operation_supported(EmailMailboxView *view);
+static Eina_Bool _mailbox_is_refresh_operation_supported(EmailMailboxView *view);
+static void _mailbox_gesture_do_refresh_by_flick(EmailMailboxView *view);
+static void _mailbox_gesture_do_load_more_by_flick(EmailMailboxView *view);
 
 /* Select All item */
 static char *_select_all_item_gl_text_get(void *data, Evas_Object *obj, const char *part);
@@ -113,29 +119,8 @@ static char *_last_updated_time_gl_text_get(void *data, Evas_Object *obj, const 
 		return NULL;
 }
 
-static void _edge_bottom_cb(void *data, Evas_Object *obj, void *event_info)
-{
-	debug_enter();
-	retm_if(!data, "data is NULL");
-
-	EmailMailboxView *view = (EmailMailboxView *)data;
-
-	/* should know the current mode, account id, and mailbox name. */
-	/* The view type is always DATE view. */
-	debug_log("view->mode(%d), view->mailbox_type(%d) b_edge_bottom(%d)", view->mode, view->mailbox_type, view->b_edge_bottom);
-
-	if (view->b_edge_bottom == false) {
-		view->b_edge_bottom = true;
-		debug_log("set b_edge_bottom as TRUE %d", view->b_edge_bottom);
-	}
-
-	debug_leave();
-}
-
 static char *_get_more_progress_gl_text_get(void *data, Evas_Object *obj, const char *part)
 {
-	debug_enter();
-
 	if (!strcmp(part, "elm.text")) {
 		return strdup(_("IDS_EMAIL_BODY_LOADING_MORE_ING_ABB"));
 	}
@@ -144,8 +129,6 @@ static char *_get_more_progress_gl_text_get(void *data, Evas_Object *obj, const 
 
 static Evas_Object *_get_more_progress_gl_content_get(void *data, Evas_Object *obj, const char *source)
 {
-	debug_enter();
-
 	if (!strcmp(source, "elm.swallow.icon")) {
 		Evas_Object *progressbar = elm_progressbar_add(obj);
 		elm_object_style_set(progressbar, "process_medium");
@@ -161,8 +144,6 @@ static Evas_Object *_get_more_progress_gl_content_get(void *data, Evas_Object *o
 
 static char *_load_more_messages_gl_text_get(void *data, Evas_Object *obj, const char *part)
 {
-	debug_enter();
-
 	if (!strcmp(part, "elm.text")) {
 		return strdup(_("IDS_EMAIL_BODY_FLICK_UPWARDS_TO_LOAD_MORE_M_NOUN_ABB"));
 	}
@@ -308,7 +289,7 @@ void mailbox_last_updated_time_item_update(int mailbox_id, EmailMailboxView *vie
 		mailbox_last_updated_time_item_add(view, true);
 	}
 
-	return;
+	debug_leave();
 }
 
 void mailbox_last_updated_time_item_remove(EmailMailboxView *view)
@@ -319,103 +300,194 @@ void mailbox_last_updated_time_item_remove(EmailMailboxView *view)
 		elm_object_item_del(view->update_time_item_data.base.item);
 		view->update_time_item_data.base.item = NULL;
 	}
+
+	debug_leave();
 }
 
 void mailbox_refresh_flicks_cb_register(EmailMailboxView *view)
 {
 	debug_enter();
 
-	evas_object_smart_callback_add(view->gl, "edge,bottom", _edge_bottom_cb, view);
-	debug_log("_edge_bottom_cb() is registered in view->gl(%p)", view->gl);
-
 	view->gesture_ly = elm_gesture_layer_add(view->gl);
 	if (view->gesture_ly) {
 		elm_gesture_layer_attach(view->gesture_ly, view->gl);
-		elm_gesture_layer_cb_set(view->gesture_ly, ELM_GESTURE_N_FLICKS, ELM_GESTURE_STATE_END, _mailbox_gesture_flicks_end_cb, view);
-		elm_gesture_layer_cb_set(view->gesture_ly, ELM_GESTURE_N_FLICKS, ELM_GESTURE_STATE_ABORT, _mailbox_gesture_flicks_abort_cb, view);
+		elm_gesture_layer_cb_set(view->gesture_ly, ELM_GESTURE_N_LINES, ELM_GESTURE_STATE_START, _mailbox_gesture_flicks_start_cb, view);
+		elm_gesture_layer_cb_set(view->gesture_ly, ELM_GESTURE_N_LINES, ELM_GESTURE_STATE_END, _mailbox_gesture_flicks_end_cb, view);
 	} else {
-		debug_warning("gesture layout INVALID!! gesture_ly(%p)", view->gesture_ly);
+		debug_warning("Failed to add gesture layout!");
 	}
+
+	debug_leave();
+}
+
+static Evas_Event_Flags _mailbox_gesture_flicks_start_cb(void *data, void *event_info)
+{
+	debug_enter();
+
+	retvm_if(!data, EVAS_EVENT_FLAG_NONE, "data == NULL");
+	retvm_if(!event_info, EVAS_EVENT_FLAG_NONE, "event_info == NULL");
+
+	EmailMailboxView *view = (EmailMailboxView *)data;
+	Elm_Gesture_Line_Info *event = (Elm_Gesture_Line_Info *) event_info;
+	debug_log("event->angle %f", event->angle);
+
+	view->b_load_flick_allowed = false;
+	view->b_refresh_flick_allowed = false;
+
+	if (view->b_editmode || view->b_searchmode || view->only_local) {
+		debug_log("Gesture flicks is not supported! Skip it");
+		return EVAS_EVENT_FLAG_NONE;
+	}
+
+	if (view->b_is_load_more_launched || view->b_is_refresh_launched) {
+		debug_log("Service is busy! Flick action is not available");
+		return EVAS_EVENT_FLAG_NONE;
+	}
+
+	if (_mailbox_is_refresh_operation_supported(view) && _mailbox_is_mail_list_scrolled_to_top(view)) {
+			view->b_refresh_flick_allowed = true;
+	}
+
+	if (_mailbox_is_load_more_operation_supported(view) && _mailbox_is_mail_list_scrolled_to_bottom(view)) {
+			view->b_load_flick_allowed = true;
+	}
+
+	debug_leave();
+	return EVAS_EVENT_FLAG_NONE;
 }
 
 static Evas_Event_Flags _mailbox_gesture_flicks_end_cb(void *data, void *event_info)
 {
 	debug_enter();
+
 	retvm_if(!data, EVAS_EVENT_FLAG_NONE, "data == NULL");
-	retvm_if(!event_info, EVAS_EVENT_FLAG_NONE, "event_info == NULL");
-
 	EmailMailboxView *view = (EmailMailboxView *)data;
-	retvm_if(!view, EVAS_EVENT_FLAG_NONE, "view == NULL");
-	Elm_Gesture_Line_Info *p = (Elm_Gesture_Line_Info *) event_info;
-	if (!view->b_editmode && !view->b_searchmode && !view->only_local) {
-		if ((p->angle > 20.0f && p->angle < 160.0f) || (p->angle > 200.0f && p->angle < 340.0f)) {
-			return EVAS_EVENT_FLAG_NONE;
+	Elm_Gesture_Line_Info *event = (Elm_Gesture_Line_Info *) event_info;
 
-		} else if (p->angle > 340.0f || p->angle < 20.0f) {
-			_mailbox_gesture_flick_to_load_more(view);
+	debug_log("event->angle %f", event->angle);
+	debug_log("abs(event->momentum.my) %d", abs(event->momentum.my));
 
+	if (abs(event->momentum.my) < GESTURE_MOMENT_MIN_Y) {
+		debug_log("Momentum to low, Skip flick event");
+	} else {
+		if (view->b_load_flick_allowed && (event->angle > 340.0f || event->angle < 20.0f)) {
+			_mailbox_gesture_do_load_more_by_flick(view);
+		} else if (view->b_refresh_flick_allowed && (event->angle > 170.0f && event->angle < 190.0f)) {
+			_mailbox_gesture_do_refresh_by_flick(view);
+		} else {
+			debug_log("Gesture action unsupported");
 		}
 	}
-	return EVAS_EVENT_FLAG_NONE;
 
+	view->b_refresh_flick_allowed = false;
+	view->b_load_flick_allowed = false;
+	return EVAS_EVENT_FLAG_NONE;
 }
 
-static void _mailbox_gesture_flick_to_load_more(EmailMailboxView *view)
+static Eina_Bool _mailbox_is_mail_list_scrolled_to_bottom(EmailMailboxView *view)
 {
 	debug_enter();
-	int ncnt = g_list_length(view->mail_list);
-	debug_log("view->mode(%d), view->mailbox_type(%d) b_edge_bottom(%d) sort_type(%d)", view->mode, view->mailbox_type, view->b_edge_bottom, view->sort_type);
-	if ((NULL != view->load_more_messages_item) && (view->b_edge_bottom == true || ncnt < 6) && (view->b_enable_get_more == true)) {
-		
-		if (view->mode == EMAIL_MAILBOX_MODE_ALL &&
-			(view->mailbox_type == EMAIL_MAILBOX_TYPE_NONE ||
-				view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX ||
-				view->mailbox_type == EMAIL_MAILBOX_TYPE_SEARCH_RESULT ||
-				view->mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED))
-			return;
 
-		if (view->mode == EMAIL_MAILBOX_MODE_MAILBOX &&
-			(view->mailbox_type == EMAIL_MAILBOX_TYPE_NONE ||
-				view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX ||
-				view->mailbox_type == EMAIL_MAILBOX_TYPE_SEARCH_RESULT ||
-				view->mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED))
-			return;
+	int scroll_region_y = -1;
+	int scroll_region_h = -1;
+	int list_h = -1;
+	elm_scroller_region_get(view->gl, NULL, &scroll_region_y, NULL, &scroll_region_h);
+	elm_scroller_child_size_get(view->gl, NULL, &list_h);
 
-		if (view->get_more_progress_item || view->sort_type != EMAIL_SORT_DATE_RECENT) {
-			return;
-		}
-
-		mailbox_sync_cancel_all(view);
-		if (mailbox_sync_more_messages(view)) {
-			mailbox_load_more_messages_item_remove(view);
-			mailbox_no_more_emails_item_remove(view);
-			mailbox_get_more_progress_item_add(view);
-		}
+	Eina_Bool is_on_bottom = EINA_FALSE;
+	if (scroll_region_y + scroll_region_h >= list_h) {
+		debug_log("Genlist is scrolled to bottom");
+		is_on_bottom =  EINA_TRUE;
+	} else {
+		debug_log("Genlist is not scrolled to bottom");
 	}
+
+	debug_leave();
+	return is_on_bottom;
 }
 
-static Evas_Event_Flags _mailbox_gesture_flicks_abort_cb(void *data, void *event_info)
+static Eina_Bool _mailbox_is_mail_list_scrolled_to_top(EmailMailboxView *view)
 {
 	debug_enter();
-	retvm_if(!data, EVAS_EVENT_FLAG_NONE, "data == NULL");
-	retvm_if(!event_info, EVAS_EVENT_FLAG_NONE, "event_info == NULL");
 
-	EmailMailboxView *view = (EmailMailboxView *)data;
-	retvm_if(!view, EVAS_EVENT_FLAG_NONE, "view == NULL");
-	Elm_Gesture_Line_Info *p = (Elm_Gesture_Line_Info *) event_info;
+	int scroll_region_x = -1;
+	int scroll_region_y = -1;
+	elm_scroller_region_get(view->gl, &scroll_region_x, &scroll_region_y, NULL, NULL);
 
-	if (!view->b_editmode && !view->b_searchmode && !view->only_local) {
-		if ((p->angle > 20.0f && p->angle < 160.0f) || (p->angle > 200.0f && p->angle < 340.0f)) {
-			return EVAS_EVENT_FLAG_NONE;
-		}
-
-		if (view->b_edge_bottom == true && (p->angle > 160.0f && p->angle < 200.0f)) {
-			view->b_edge_bottom = false;
-		}
-
+	Eina_Bool is_on_top = EINA_FALSE;
+	if (scroll_region_x == 0 && scroll_region_y == 0) {
+		debug_log("Genlist is scrolled to top");
+		is_on_top =  EINA_TRUE;
+	} else {
+		debug_log("Genlist is not scrolled to top");
 	}
 
-	return EVAS_EVENT_FLAG_NONE;
+	debug_leave();
+	return is_on_top;
+}
+
+static Eina_Bool _mailbox_is_load_more_operation_supported(EmailMailboxView *view)
+{
+
+	debug_log("view->mode(%d), view->mailbox_type(%d) sort_type(%d)", view->mode, view->mailbox_type, view->sort_type);
+
+	if (!view->load_more_messages_item) {
+		debug_log("No more messages can be loaded!");
+		return EINA_FALSE;
+	}
+
+	if ( (view->mailbox_type == EMAIL_MAILBOX_TYPE_NONE) || (view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX)
+			|| (view->mailbox_type == EMAIL_MAILBOX_TYPE_SEARCH_RESULT)
+			|| (view->mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED)) {
+		debug_log("Current mailbox type is %d so flick gesture to load more mail unsupported", view->mailbox_type);
+		return EINA_FALSE;
+	}
+
+	if (view->sort_type != EMAIL_SORT_DATE_RECENT) {
+		debug_log("Mail sort type is %d so flick gesture to load more mail unsupported", view->sort_type );
+		return EINA_FALSE;
+	}
+
+	return EINA_TRUE;
+}
+
+static Eina_Bool _mailbox_is_refresh_operation_supported(EmailMailboxView *view)
+{
+	if (view->mailbox_type == EMAIL_MAILBOX_TYPE_SEARCH_RESULT) {
+		debug_log("Unsupported mailbox type!");
+		return EINA_FALSE;
+	}
+
+	return EINA_TRUE;
+}
+
+static void _mailbox_gesture_do_load_more_by_flick(EmailMailboxView *view)
+{
+	debug_enter();
+
+	mailbox_sync_cancel_all(view);
+	if (mailbox_sync_more_messages(view)) {
+		view->b_is_load_more_launched = true;
+		mailbox_load_more_messages_item_remove(view);
+		mailbox_no_more_emails_item_remove(view);
+		mailbox_get_more_progress_item_add(view);
+	}
+
+	debug_leave();
+}
+
+static void _mailbox_gesture_do_refresh_by_flick(EmailMailboxView *view)
+{
+	debug_enter();
+
+	mailbox_sync_cancel_all(view);
+	if(mailbox_sync_current_mailbox(view)) {
+		view->b_is_refresh_launched = true;
+		mailbox_load_more_messages_item_remove(view);
+		mailbox_add_refresh_progress_bar(view);
+	}
+
+	debug_leave();
 }
 
 void mailbox_get_more_progress_item_add(EmailMailboxView *view)
@@ -432,11 +504,6 @@ void mailbox_get_more_progress_item_add(EmailMailboxView *view)
 	if (view->get_more_progress_item) {
 		debug_log("more_progress is already created(%p)", view->get_more_progress_item);
 		return;
-	}
-
-	if (view->b_enable_get_more) {
-		view->b_enable_get_more = false;
-		debug_log("_edge_bottom_cb() is unregistered in view->gl(%p)", view->gl);
 	}
 
 	view->total_mail_count = 0;
@@ -479,12 +546,6 @@ void mailbox_get_more_progress_item_add(EmailMailboxView *view)
 	elm_genlist_item_select_mode_set(view->get_more_progress_item, ELM_OBJECT_SELECT_MODE_DISPLAY_ONLY);
 	elm_genlist_item_bring_in(view->get_more_progress_item, ELM_GENLIST_ITEM_SCROLLTO_IN);
 
-
-	if (view->b_enable_get_more == false) {
-		view->b_enable_get_more = true;
-		debug_log("_edge_bottom_cb() is registered in view->gl(%p)", view->gl);
-	}
-
 	debug_leave();
 }
 
@@ -493,7 +554,6 @@ void mailbox_get_more_progress_item_remove(EmailMailboxView *view)
 	debug_enter();
 
 	if (view->get_more_progress_item) {
-		view->b_edge_bottom = false;
 		elm_object_item_del(view->get_more_progress_item);
 		view->get_more_progress_item = NULL;
 	}
@@ -517,7 +577,6 @@ void mailbox_load_more_messages_item_add(EmailMailboxView *view)
 									NULL);
 
 	elm_genlist_item_select_mode_set(view->load_more_messages_item, ELM_OBJECT_SELECT_MODE_NONE);
-	view->b_edge_bottom = false;
 	debug_leave();
 }
 
@@ -528,7 +587,6 @@ void mailbox_load_more_messages_item_remove(EmailMailboxView *view)
 	if (view->load_more_messages_item) {
 		elm_object_item_del(view->load_more_messages_item);
 		view->load_more_messages_item = NULL;
-		view->b_edge_bottom = false;
 	}
 }
 
@@ -774,8 +832,6 @@ void mailbox_select_all_item_remove(EmailMailboxView *view)
 
 static char *_no_more_emails_gl_text_get(void *data, Evas_Object *obj, const char *part)
 {
-	debug_enter();
-
 	if (!strcmp(part, "elm.text")) {
 		return strdup(_("IDS_EMAIL_BODY_NO_MORE_EMAILS_M_STATUS"));
 	}
@@ -817,4 +873,38 @@ void mailbox_no_more_emails_item_remove(EmailMailboxView *view)
 		elm_object_item_del(view->no_more_emails_item);
 		view->no_more_emails_item = NULL;
 	}
+}
+
+void mailbox_add_refresh_progress_bar(EmailMailboxView *view)
+{
+	debug_enter();
+
+	if (view->refresh_progress_bar) {
+		debug_log("refresh_progress_bar item already exist.");
+		return;
+	}
+
+	if(view->b_editmode || view->b_searchmode || view->no_content_shown) {
+		debug_log("Refresh progress unsuported for this view!");
+		return;
+	}
+
+	Evas_Object *progress_bar = elm_progressbar_add(view->content_layout);
+	elm_object_style_set(progress_bar, "process_large");
+	elm_progressbar_pulse(progress_bar, EINA_TRUE);
+	evas_object_show(progress_bar);
+	elm_object_part_content_set(view->content_layout, "refresh_progress", progress_bar);
+	view->refresh_progress_bar = progress_bar;
+
+	debug_leave();
+}
+
+void mailbox_remove_refresh_progress_bar(EmailMailboxView *view)
+{
+	debug_enter();
+
+	elm_object_part_content_unset(view->content_layout, "refresh_progress");
+	DELETE_EVAS_OBJECT(view->refresh_progress_bar);
+
+	debug_leave();
 }
