@@ -158,8 +158,6 @@ struct _view_data {
 	Elm_Object_Item *load_more_messages_item;
 	Elm_Object_Item *no_more_emails_item;
 	bool no_content_shown;
-	bool b_edge_bottom;
-	bool b_enable_get_more;
 
 	/*Main layout*/
 	Evas_Object *content_layout;
@@ -178,6 +176,9 @@ struct _view_data {
 
 	/*Compose button*/
 	Evas_Object *compose_btn;
+
+	/*Refrech progress bar*/
+	Evas_Object *refresh_progress_bar;
 
 	/* search */
 	Evas_Object *searchbar_ly;
@@ -250,6 +251,12 @@ struct _view_data {
 	gint sync_needed_mailbox_id;
 
 	Evas_Object *gesture_ly;
+	bool b_refresh_flick_allowed;
+	bool b_load_flick_allowed;
+
+	bool b_is_refresh_launched;
+	bool b_is_load_more_launched;
+
 	double vip_rule_value;
 
 	AddRemainingMailReqData *remaining_req;

@@ -22,7 +22,7 @@
 #include "email-mailbox.h"
 #include "email-mailbox-toolbar.h"
 #include "email-mailbox-list.h"
-#include "email-mailbox-list-other-items.h"
+#include "email-mailbox-list-extensions.h"
 #include "email-mailbox-search.h"
 #include "email-mailbox-noti-mgr.h"
 #include "email-mailbox-module-util.h"
