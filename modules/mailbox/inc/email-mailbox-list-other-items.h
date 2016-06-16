@@ -105,4 +105,16 @@ void mailbox_no_more_emails_item_add(EmailMailboxView *view);
  */
 void mailbox_no_more_emails_item_remove(EmailMailboxView *view);
 
+/**
+ * @brief Provides adding the "circle refresh progress bar" item to Mailbox list in case of mailbox refreshing mode
+ * @param[in]	view		Email mailbox data
+ */
+void mailbox_add_refresh_progress_bar(EmailMailboxView *view);
+
+/**
+ * @brief Free and release for "circle refresh progress bar" from Mailbox viewer
+ * @param[in]	view		Email mailbox data
+ */
+void mailbox_remove_refresh_progress_bar(EmailMailboxView *view);
+
 #endif	/* __DEF_EMAIL_MAILBOX_LIST_OTHER_ITEMS_H_ */

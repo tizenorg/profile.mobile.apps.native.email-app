@@ -308,4 +308,44 @@ void mailbox_account_color_list_free(EmailMailboxView *view);
  */
 void mailbox_set_input_entry_limit(Evas_Object *entry, int max_char_count, int max_byte_count);
 
+/**
+ * @brief Check if the mailbox list is scrolled to bottom
+ * @param[in]	view		Email mailbox data
+ * @return Eina_True if mail list is scrolled to bottom, otherwise EINA_FALSE
+ */
+Eina_Bool mailbox_is_mail_list_scrolled_to_bottom(EmailMailboxView *view);
+
+/**
+ * @brief Check if the mailbox list is scrolled to top
+ * @param[in]	view		Email mailbox data
+ * @return Eina_True if mail list is scrolled to top, otherwise EINA_FALSE
+ */
+Eina_Bool mailbox_is_mail_list_scrolled_to_top(EmailMailboxView *view);
+
+/**
+ * @brief Check if the mailbox load more operation is supported
+ * @param[in]	view		Email mailbox data
+ * @return Eina_True if operation supported, otherwise EINA_FALSE
+ */
+Eina_Bool mailbox_is_load_more_operation_supported(EmailMailboxView *view);
+
+/**
+ * @brief Check if the mailbox refresh operation is supported
+ * @param[in]	view		Email mailbox data
+ * @return Eina_True if operation supported, otherwise EINA_FALSE
+ */
+Eina_Bool mailbox_is_refresh_operation_supported(EmailMailboxView *view);
+
+/**
+ * @brief Provide mailbox refresh operation
+ * @param[in]	view		Email mailbox data
+ */
+void mailbox_do_refresh(EmailMailboxView *view);
+
+/**
+ * @brief  Provide mailbox load more emails
+ * @param[in]	view		Email mailbox data
+ */
+void mailbox_do_load_more_messages(EmailMailboxView *view);
+
 #endif /*__DEF_EMAIL_MAILBOX_UTIL_H_*/
