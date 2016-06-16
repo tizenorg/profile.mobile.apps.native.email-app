@@ -27,7 +27,7 @@
 #include "email-mailbox-noti-mgr.h"
 #include "email-mailbox-sync.h"
 #include "email-mailbox-search.h"
-#include "email-mailbox-list-other-items.h"
+#include "email-mailbox-list-extensions.h"
 
 /*
  * Declaration for static functions
@@ -80,8 +80,8 @@ static void _setup_edit_mode(EmailMailboxView *view, mailbox_edit_type_e edit_ty
 		debug_log("Enter edit mode. type:(%d)", view->editmode_type);
 
 		view->b_editmode = true;
-		_change_view_for_selection_mode(view);
 		mailbox_sync_cancel_all(view);
+		_change_view_for_selection_mode(view);
 		mailbox_toolbar_create(view);
 		mailbox_create_select_info(view);
 	} else {
@@ -239,10 +239,10 @@ void _sync_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 	debug_enter();
 
 	EmailMailboxView *view = (EmailMailboxView *)data;
+	mailbox_do_refresh(view);
 
 	DELETE_EVAS_OBJECT(view->more_ctxpopup);
-
-	mailbox_sync_current_mailbox(view);
+	debug_leave();
 }
 
 static void _compose_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_info)
@@ -254,7 +254,7 @@ static void _compose_toolbar_clicked_cb(void *data, Evas_Object *obj, void *even
 	retm_if(view->is_module_launching, "is_module_launching is true;");
 	view->is_module_launching = true;
 
-	int account_id = 0;
+	int account_id = 0;;
 
 	DELETE_EVAS_OBJECT(view->more_ctxpopup);
 	DELETE_EVAS_OBJECT(view->error_popup);

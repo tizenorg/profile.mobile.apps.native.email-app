@@ -23,7 +23,7 @@
 #include "email-common-types.h"
 #include "email-mailbox.h"
 #include "email-mailbox-list.h"
-#include "email-mailbox-list-other-items.h"
+#include "email-mailbox-list-extensions.h"
 #include "email-mailbox-toolbar.h"
 #include "email-mailbox-util.h"
 #include "email-mailbox-search.h"
@@ -263,8 +263,10 @@ void _search_button_clicked_cb(void *data, Evas_Object *obj EINA_UNUSED, void *e
 	DELETE_TIMER_OBJECT(view->search_entry_changed_timer);
 	G_FREE(view->current_entry_string);
 	mailbox_last_updated_time_item_remove(view);
-	if (view->btn_mailbox)
+	if (view->btn_mailbox) {
 		mailbox_naviframe_mailbox_button_remove(view);
+	}
+
 	mailbox_hide_compose_btn(view);
 	mailbox_get_more_progress_item_remove(view);
 	mailbox_load_more_messages_item_remove(view);
@@ -272,8 +274,8 @@ void _search_button_clicked_cb(void *data, Evas_Object *obj EINA_UNUSED, void *e
 	mailbox_send_all_btn_remove(view);
 
 	mailbox_create_no_contents_view(view, true);
-
 	mailbox_sync_cancel_all(view);
+	mailbox_remove_refresh_progress_bar(view);
 
 	mailbox_change_search_layout_state(view, true);
 	elm_entry_context_menu_disabled_set(view->search_editfield.entry, EINA_FALSE);

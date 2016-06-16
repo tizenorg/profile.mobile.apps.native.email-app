@@ -21,6 +21,7 @@
 #include "email-mailbox.h"
 #include "email-mailbox-util.h"
 #include "email-mailbox-sync.h"
+#include "email-mailbox-list-extensions.h"
 
 /*
  * Declaration for static functions
@@ -170,6 +171,8 @@ void mailbox_clear_prev_mailbox_info(EmailMailboxView *view)
 	view->mode = EMAIL_MAILBOX_MODE_UNKOWN;
 	view->mailbox_type = EMAIL_MAILBOX_TYPE_NONE;
 	view->mailbox_id = 0;
+	view->b_is_refresh_launched = false;
+	view->b_is_load_more_launched = false;
 }
 
 void mailbox_set_last_updated_time(time_t last_update_time, EmailMailboxView *view)
@@ -479,3 +482,112 @@ void mailbox_set_input_entry_limit(Evas_Object *entry, int max_char_count, int m
 	return;
 }
 
+Eina_Bool mailbox_is_mail_list_scrolled_to_bottom(EmailMailboxView *view)
+{
+	debug_enter();
+
+	int scroll_region_y = -1;
+	int scroll_region_h = -1;
+	int list_h = -1;
+	elm_scroller_region_get(view->gl, NULL, &scroll_region_y, NULL, &scroll_region_h);
+	elm_scroller_child_size_get(view->gl, NULL, &list_h);
+
+	Eina_Bool is_on_bottom = EINA_FALSE;
+	if (scroll_region_y + scroll_region_h >= list_h) {
+		debug_log("Genlist is scrolled to bottom");
+		is_on_bottom =  EINA_TRUE;
+	} else {
+		debug_log("Genlist is not scrolled to bottom");
+	}
+
+	debug_leave();
+	return is_on_bottom;
+}
+
+Eina_Bool mailbox_is_mail_list_scrolled_to_top(EmailMailboxView *view)
+{
+	debug_enter();
+
+	int scroll_region_x = -1;
+	int scroll_region_y = -1;
+	elm_scroller_region_get(view->gl, &scroll_region_x, &scroll_region_y, NULL, NULL);
+
+	Eina_Bool is_on_top = EINA_FALSE;
+	if (scroll_region_x == 0 && scroll_region_y == 0) {
+		debug_log("Genlist is scrolled to top");
+		is_on_top =  EINA_TRUE;
+	} else {
+		debug_log("Genlist is not scrolled to top");
+	}
+
+	debug_leave();
+	return is_on_top;
+}
+
+Eina_Bool mailbox_is_load_more_operation_supported(EmailMailboxView *view)
+{
+
+	debug_log("view->mode(%d), view->mailbox_type(%d) sort_type(%d)", view->mode, view->mailbox_type, view->sort_type);
+
+	if (!view->load_more_messages_item) {
+		debug_log("No more messages can be loaded!");
+		return EINA_FALSE;
+	}
+
+	if ( (view->mailbox_type == EMAIL_MAILBOX_TYPE_NONE) || (view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX)
+			|| (view->mailbox_type == EMAIL_MAILBOX_TYPE_SEARCH_RESULT)
+			|| (view->mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED)) {
+		debug_log("Current mailbox type is %d so load more mail unsupported", view->mailbox_type);
+		return EINA_FALSE;
+	}
+
+	if (view->sort_type != EMAIL_SORT_DATE_RECENT) {
+		debug_log("Mail sort type is %d so load more mail unsupported", view->sort_type );
+		return EINA_FALSE;
+	}
+
+	return EINA_TRUE;
+}
+
+Eina_Bool mailbox_is_refresh_operation_supported(EmailMailboxView *view)
+{
+	if (view->mailbox_type == EMAIL_MAILBOX_TYPE_SEARCH_RESULT) {
+		debug_log("Unsupported mailbox type!");
+		return EINA_FALSE;
+	}
+
+	return EINA_TRUE;
+}
+
+void mailbox_do_refresh(EmailMailboxView *view)
+{
+	debug_enter();
+
+	if (view->b_is_load_more_launched) {
+		debug_log("Load more operation is launched!");
+		mailbox_get_more_progress_item_remove(view);
+	}
+
+	if (mailbox_sync_current_mailbox(view)) {
+		mailbox_load_more_messages_item_remove(view);
+		mailbox_add_refresh_progress_bar(view);
+		view->b_is_refresh_launched = true;
+	} else {
+		debug_error("Failed to trigger sync for current mailbox!");
+	}
+
+	debug_leave();
+}
+
+void mailbox_do_load_more_messages(EmailMailboxView *view)
+{
+	debug_enter();
+
+	if (mailbox_sync_more_messages(view)) {
+		view->b_is_load_more_launched = true;
+		mailbox_load_more_messages_item_remove(view);
+		mailbox_get_more_progress_item_add(view);
+	}
+
+	debug_leave();
+}
