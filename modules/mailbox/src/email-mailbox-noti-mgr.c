@@ -19,7 +19,7 @@
 #include <gio/gio.h>
 #include "email-mailbox.h"
 #include "email-mailbox-list.h"
-#include "email-mailbox-list-other-items.h"
+#include "email-mailbox-list-extensions.h"
 #include "email-mailbox-search.h"
 #include "email-mailbox-sync.h"
 #include "email-mailbox-noti-mgr.h"
@@ -1012,17 +1012,18 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 			debug_log("NOTI_DOWNLOAD_START");
 			break;
 
+		case NOTI_DOWNLOAD_CANCEL:
 		case NOTI_DOWNLOAD_FINISH:
-			debug_log("NOTI_DOWNLOAD_FINISH");
+			debug_log("NOTI_DOWNLOAD_STOPPED");
 			account_id = data1;
 			mailbox_id = data2 ? atoi(data2) : 0;
+
 			if (view->mode == EMAIL_MAILBOX_MODE_MAILBOX
 				&& view->only_local == FALSE
 				&& !view->b_searchmode && !view->b_editmode
 				&& (mailbox_id == view->mailbox_id || (account_id == view->account_id && mailbox_id == 0))
 				&& g_list_length(view->mail_list)) {
 				mailbox_last_updated_time_item_update(view->mailbox_id, view);
-
 			}
 
 			if (_check_req_handle_list(data3) || data1 == 0) {
@@ -1032,7 +1033,17 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 					mailbox_req_handle_list_free();
 				}
 
-				mailbox_get_more_progress_item_remove(view);
+				debug_log("Refresh %d Load %d", view->b_is_refresh_launched, view->b_is_load_more_launched);
+				if (view->b_is_load_more_launched) {
+					view->b_is_load_more_launched = false;
+					mailbox_get_more_progress_item_remove(view);
+				}
+
+				if (view->b_is_refresh_launched) {
+					view->b_is_refresh_launched = false;
+					mailbox_remove_refresh_progress_bar(view);
+				}
+
 				if (0 < g_list_length(view->mail_list)) {
 					if (!view->b_searchmode && !view->b_editmode
 						&& ((view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->only_local == false
@@ -1061,7 +1072,16 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 					mailbox_req_handle_list_free();
 				}
 
-				mailbox_get_more_progress_item_remove(view);
+				if (view->b_is_load_more_launched) {
+					view->b_is_load_more_launched = false;
+					mailbox_get_more_progress_item_remove(view);
+				}
+
+				if (view->b_is_refresh_launched) {
+					view->b_is_refresh_launched = false;
+					mailbox_remove_refresh_progress_bar(view);
+				}
+
 				if (0 < g_list_length(view->mail_list)) {
 					if (!view->b_searchmode && !view->b_editmode
 						&& ((view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->only_local == false
@@ -1156,6 +1176,19 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 						mailbox_send_all_btn_add(view);
 					}
 				}
+			}
+			break;
+
+		case NOTI_SYNC_IMAP_MAILBOX_LIST_START:
+			debug_log("NOTI_SYNC_IMAP_MAILBOX_LIST_START");
+			break;
+
+		case NOTI_SYNC_IMAP_MAILBOX_LIST_CANCEL:
+		case NOTI_SYNC_IMAP_MAILBOX_LIST_FAIL:
+			debug_log("NOTI_SYNC_IMAP_MAILBOX_LIST_CANCEL");
+			if (view->b_is_refresh_launched) {
+				view->b_is_refresh_launched = false;
+				mailbox_remove_refresh_progress_bar(view);
 			}
 			break;
 
@@ -1481,6 +1514,8 @@ static void _mailbox_remove_deleted_flag_mail(int mail_id, void *data)
 			}
 
 			mailbox_list_remove_mail_item(view, ld);
+			mailbox_remove_refresh_progress_bar(view);
+			mailbox_get_more_progress_item_remove(view);
 
 			if (g_list_length(view->mail_list) > 0) {
 				if (!view->b_searchmode && !view->b_editmode

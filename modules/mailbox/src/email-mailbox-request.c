@@ -19,7 +19,7 @@
 #include "email-mailbox.h"
 #include "email-mailbox-request.h"
 #include "email-mailbox-list.h"
-#include "email-mailbox-list-other-items.h"
+#include "email-mailbox-list-extensions.h"
 #include "email-mailbox-noti-mgr.h"
 #include "email-mailbox-search.h"
 #include "email-mailbox-title.h"
@@ -430,6 +430,8 @@ static void _mailbox_move_mail_req_move_item_cb(email_request_h request, void *m
 		}
 
 		mailbox_list_remove_mail_item(view, ld);
+		mailbox_remove_refresh_progress_bar(view);
+		mailbox_get_more_progress_item_remove(view);
 
 		if (g_list_length(view->mail_list) > 0) {
 			if (!view->b_searchmode && !view->b_editmode
@@ -561,8 +563,11 @@ static void _mailbox_del_mail_req_del_item_cb(email_request_h request, void *msg
 	}
 
 	mailbox_list_remove_mail_item(view, ld);
+	mailbox_remove_refresh_progress_bar(view);
+	mailbox_get_more_progress_item_remove(view);
 
 	if (g_list_length(view->mail_list) > 0) {
+
 		if (!view->b_searchmode && !view->b_editmode
 			&& ((view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->only_local == false
 					&& view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX
@@ -657,6 +662,7 @@ static void _mailbox_add_mail_req_add_seed_mail_cb(email_request_h request, void
 	debug_log("thread_id(%d) mail_id(%d) info(%p)", req_data->thread_id, req_data->mail_id, ld);
 
 	mailbox_get_more_progress_item_remove(view);
+	mailbox_remove_refresh_progress_bar(view);
 
 	debug_log("(req, view) mode(%d, %d), mailbox_type(%d, %d), mailbox_id(%d, %d)",
 		req_data->mode, view->mode, req_data->mailbox_type, view->mailbox_type, req_data->mailbox_id, view->mailbox_id);
@@ -701,7 +707,8 @@ static void _mailbox_add_mail_req_add_seed_mail_cb(email_request_h request, void
 	if (view->no_content_shown) {
 		if (g_list_length(view->mail_list) > 0) {
 			mailbox_hide_no_contents_view(view);
-			if (!view->b_searchmode && !view->b_editmode
+
+			if(!view->b_searchmode && !view->b_editmode
 				&& ((view->mode == EMAIL_MAILBOX_MODE_MAILBOX && view->only_local == false
 				&& view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX
 				&& view->account_type == EMAIL_SERVER_TYPE_IMAP4)
