@@ -99,7 +99,7 @@ struct _view_data {
 	Evas_Object *composer_popup;
 	Evas_Object *context_popup;
 
-	Evas_Object *selected_entry;
+	Evas_Object *selected_widget;
 	Evas_Object *send_btn;
 
 	/* Related to from field */
@@ -181,6 +181,9 @@ struct _view_data {
 	/* Related to subject field */
 	Evas_Object *subject_layout;
 	email_editfield_t subject_entry;
+
+	/*Add attachment button in subject field*/
+	Evas_Object *attachment_btn;
 
 	/* Related to webview */
 	Evas_Object *ewk_view_layout;

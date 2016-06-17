@@ -146,12 +146,12 @@ static void _subject_entry_focused_cb(void *data, Evas_Object *obj, void *event_
 
 	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (composer_recipient_is_recipient_entry(view, view->selected_entry)) {
-		if (!composer_recipient_commit_recipient_on_entry(view, view->selected_entry)) {
+	if (composer_recipient_is_recipient_entry(view, view->selected_widget)) {
+		if (!composer_recipient_commit_recipient_on_entry(view, view->selected_widget)) {
 			return;
 		}
 	}
-	composer_recipient_unfocus_entry(view, view->selected_entry);
+	composer_recipient_unfocus_entry(view, view->selected_widget);
 	/* Force calculate the size on the evas.
 	 * Case - 1. There're many contacts in mbe and the focus is on the mbe.
 	 *        2. Click subject entry to set the focus on it.
@@ -173,9 +173,9 @@ static void _subject_entry_focused_cb(void *data, Evas_Object *obj, void *event_
 	}
 
 	Evas_Object *current_entry = view->subject_entry.entry;
-	if (view->selected_entry != current_entry) {
+	if (view->selected_widget != current_entry) {
 		composer_attachment_ui_contract_attachment_list(view);
-		view->selected_entry = current_entry;
+		view->selected_widget = current_entry;
 	}
 
 	debug_leave();
@@ -236,7 +236,7 @@ static void _subject_attach_files_clicked(void *data, Evas_Object *obj, void *ev
 	}
 
 	email_feedback_play_tap_sound();
-
+	view->selected_widget = view->attachment_btn;
 	ecore_imf_input_panel_hide();
 	int total_attachment_count = eina_list_count(view->attachment_item_list) + eina_list_count(view->attachment_inline_item_list);
 	if (total_attachment_count >= MAX_ATTACHMENT_ITEM) {
@@ -278,13 +278,13 @@ void composer_subject_update_detail(void *data, Evas_Object *parent)
 	editfield.layout = NULL;
 	editfield.entry = NULL;
 	_subject_create_entry(parent, &editfield);
-	Evas_Object *btn = _subject_create_add_attachment(parent);
+	view->attachment_btn = _subject_create_add_attachment(parent);
 
 	_subject_register_entry_callbacks(editfield.entry, view);
-	evas_object_smart_callback_add(btn, "clicked", _subject_attach_files_clicked, view);
+	evas_object_smart_callback_add(view->attachment_btn, "clicked", _subject_attach_files_clicked, view);
 
 	elm_object_part_content_set(parent, "ec.swallow.content", editfield.layout);
-	elm_object_part_content_set(parent, "ec.swallow.add_attachment", btn);
+	elm_object_part_content_set(parent, "ec.swallow.add_attachment", view->attachment_btn);
 	view->subject_entry = editfield;
 
 	debug_leave();

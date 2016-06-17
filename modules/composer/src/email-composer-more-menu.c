@@ -78,7 +78,7 @@ static void _more_menu_dismissed_cb(void *data, Evas_Object *obj, void *event_in
 
 	DELETE_EVAS_OBJECT(view->context_popup);
 	if (!view->composer_popup && !view->is_save_in_drafts_clicked) {
-		composer_util_focus_set_focus_with_idler(view, view->selected_entry);
+		composer_util_focus_set_focus_with_idler(view, view->selected_widget);
 	}
 
 	debug_leave();
@@ -184,7 +184,7 @@ static void _more_menu_send_to_myself_clicked(void *data, Evas_Object *obj, void
 
 	if (view->account_info->account_count == 1) {
 		_tomyself_append_myaddress(data, 0);
-		composer_util_focus_set_focus_with_idler(view, view->selected_entry);
+		composer_util_focus_set_focus_with_idler(view, view->selected_widget);
 	} else {
 		composer_util_popup_create_account_list_popup(data, composer_util_popup_response_cb, _tomyself_gl_sel, "email.2text.2icon/popup", EMAIL_COMPOSER_STRING_HEADER_SELECT_EMAIL_ADDRESS, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
 	}
@@ -282,13 +282,13 @@ static void _tomyself_append_myaddress(void *data, int index)
 	EmailComposerView *view = (EmailComposerView *)data;
 	Evas_Object *dest_mbe = NULL;
 
-	if (view->selected_entry == view->recp_cc_entry.entry) {
+	if (view->selected_widget == view->recp_cc_entry.entry) {
 		if (view->cc_recipients_cnt > 0) {
 			composer_recipient_reset_entry_with_mbe(view->composer_box, view->recp_cc_mbe_layout, view->recp_cc_mbe, view->recp_cc_layout, view->recp_cc_box, view->bcc_added ? view->recp_cc_label_cc : view->recp_cc_label_cc_bcc);
 		}
 		composer_recipient_change_entry(EINA_TRUE, view->recp_cc_box, view->recp_cc_entry_layout, view->recp_cc_display_entry_layout);
 		dest_mbe = view->recp_cc_mbe;
-	} else if (view->selected_entry == view->recp_bcc_entry.entry) {
+	} else if (view->selected_widget == view->recp_bcc_entry.entry) {
 		if (view->bcc_recipients_cnt > 0) {
 			composer_recipient_reset_entry_with_mbe(view->composer_box, view->recp_bcc_mbe_layout, view->recp_bcc_mbe, view->recp_bcc_layout, view->recp_bcc_box, view->recp_bcc_label);
 		}
@@ -300,7 +300,7 @@ static void _tomyself_append_myaddress(void *data, int index)
 		}
 		composer_recipient_change_entry(EINA_TRUE, view->recp_to_box, view->recp_to_entry_layout, view->recp_to_display_entry_layout);
 		dest_mbe = view->recp_to_mbe;
-		view->selected_entry = view->recp_to_entry.entry; /* To set focus to 'to' mbe */
+		view->selected_widget = view->recp_to_entry.entry; /* To set focus to 'to' mbe */
 	}
 
 	EmailRecpInfo *ri = composer_util_recp_make_recipient_info_with_display_name(view->account_info->account_list[index].user_email_address, view->account_info->account_list[index].user_display_name);

@@ -139,11 +139,11 @@ static void __composer_ps_gl_sel(void *data, Evas_Object *obj, void *event_info)
 
 	elm_genlist_item_selected_set(item, EINA_FALSE);
 
-	if (view->selected_entry == view->recp_to_entry.entry) {
+	if (view->selected_widget == view->recp_to_entry.entry) {
 		mbe = view->recp_to_mbe;
-	} else if (view->selected_entry == view->recp_cc_entry.entry) {
+	} else if (view->selected_widget == view->recp_cc_entry.entry) {
 		mbe = view->recp_cc_mbe;
-	} else if (view->selected_entry == view->recp_bcc_entry.entry) {
+	} else if (view->selected_widget == view->recp_bcc_entry.entry) {
 		mbe = view->recp_bcc_mbe;
 	}
 	retm_if(!mbe, "Invalid entry is selected!");
@@ -162,7 +162,7 @@ static void __composer_ps_gl_sel(void *data, Evas_Object *obj, void *event_info)
 	}
 
 	if (ri) {
-		elm_entry_entry_set(view->selected_entry, "");
+		elm_entry_entry_set(view->selected_widget, "");
 		char *markup_name = elm_entry_utf8_to_markup(ri->display_name);
 		elm_multibuttonentry_item_append(mbe, markup_name, NULL, ri);
 		FREE(markup_name);
@@ -476,13 +476,13 @@ static void composer_ps_selected_recipient_content_get(EmailComposerView *view, 
 	*editfield_layout = NULL;
 	retm_if(!view, "Invalid parameter: view is NULL!");
 
-	if (view->selected_entry == view->recp_to_entry.entry) {
+	if (view->selected_widget == view->recp_to_entry.entry) {
 		*recipient_layout = view->recp_to_layout;
 		*editfield_layout = view->recp_to_entry.layout;
-	} else if (view->selected_entry == view->recp_cc_entry.entry) {
+	} else if (view->selected_widget == view->recp_cc_entry.entry) {
 		*recipient_layout = view->recp_cc_layout;
 		*editfield_layout = view->recp_cc_entry.layout;
-	} else if (view->selected_entry == view->recp_bcc_entry.entry) {
+	} else if (view->selected_widget == view->recp_bcc_entry.entry) {
 		*recipient_layout = view->recp_bcc_layout;
 		*editfield_layout = view->recp_bcc_entry.layout;
 	}
