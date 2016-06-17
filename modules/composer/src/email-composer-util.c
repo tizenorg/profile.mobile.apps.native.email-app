@@ -847,6 +847,9 @@ void composer_util_focus_set_focus(void *data, Evas_Object *target)
 	} else if (target == view->ewk_view) {
 		debug_log("Focus set [ewk_view]");
 		elm_object_focus_set(view->ewk_btn, EINA_TRUE);
+	} else if (target == view->attachment_btn) {
+		debug_log("Focus set [attachment_btn]");
+		elm_object_focus_set(view->attachment_btn, EINA_TRUE);
 	} else {
 		debug_log("Focus set [NO! subject_entry]");
 		elm_object_focus_set(view->subject_entry.entry, EINA_TRUE);
@@ -863,8 +866,9 @@ static Eina_Bool __composer_util_focus_set_focus_idler_cb(void *data)
 
 	view->idler_set_focus = NULL;
 
-	if (!entry && !view->base.module->is_attach_panel_launched && (view->selected_entry != view->ewk_view)) {
-		entry = view->selected_entry;
+	if (!entry && !view->base.module->is_attach_panel_launched && (view->selected_widget != view->ewk_view) &&
+			(view->selected_widget != view->attachment_btn)) {
+		entry = view->selected_widget;
 	}
 
 	composer_util_focus_set_focus(view, entry);
@@ -908,13 +912,13 @@ static Evas_Coord _composer_util_get_selected_widget_position(EmailComposerView 
 
 	evas_object_geometry_get(view->composer_layout, NULL, &composer_layout_y, NULL, NULL);
 
-	if (view->selected_entry == view->recp_to_entry.entry) {
+	if (view->selected_widget == view->recp_to_entry.entry) {
 		evas_object_geometry_get(view->recp_to_layout, NULL, &entry_layout_y, NULL, NULL);
-	} else if (view->selected_entry == view->recp_cc_entry.entry) {
+	} else if (view->selected_widget == view->recp_cc_entry.entry) {
 		evas_object_geometry_get(view->recp_cc_layout, NULL, &entry_layout_y, NULL, NULL);
-	} else if (view->selected_entry == view->recp_bcc_entry.entry) {
+	} else if (view->selected_widget == view->recp_bcc_entry.entry) {
 		evas_object_geometry_get(view->recp_bcc_layout, NULL, &entry_layout_y, NULL, NULL);
-	} else if (view->selected_entry == view->subject_entry.entry) {
+	} else if (view->selected_widget == view->subject_entry.entry) {
 		evas_object_geometry_get(view->subject_layout, NULL, &entry_layout_y, NULL, NULL);
 	} else {
 		debug_log("No selected entry!");
@@ -1227,7 +1231,7 @@ void composer_util_return_composer_view(void *data)
 	elm_object_tree_focus_allow_set(view->composer_layout, EINA_TRUE);
 	elm_object_focus_allow_set(view->ewk_btn, EINA_TRUE);
 
-	composer_util_focus_set_focus_with_idler(view, view->selected_entry);
+	composer_util_focus_set_focus_with_idler(view, view->selected_widget);
 
 	debug_leave();
 }

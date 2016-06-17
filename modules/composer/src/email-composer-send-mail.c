@@ -1158,7 +1158,7 @@ void composer_exit_composer_get_contents(void *data)
 		}
 
 		if (prev_err > MBE_VALIDATION_ERROR_DUPLICATE_ADDRESS) {
-			view->selected_entry = error_entry;
+			view->selected_widget = error_entry;
 
 			view->is_send_btn_clicked = EINA_FALSE;
 			composer_recipient_display_error_string(view, prev_err);
@@ -1168,7 +1168,7 @@ void composer_exit_composer_get_contents(void *data)
 		}
 
 		if (composer_util_recp_is_mbe_empty(view)) {
-			view->selected_entry = view->recp_to_entry.entry;
+			view->selected_widget = view->recp_to_entry.entry;
 
 			view->is_send_btn_clicked = EINA_FALSE;
 			composer_recipient_display_error_string(view, MBE_VALIDATION_ERROR_NO_ADDRESS);

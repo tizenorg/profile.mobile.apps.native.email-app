@@ -210,7 +210,7 @@ static void _composer_setting_destroy_request(void *data, email_module_h module)
 	} else {
 		debug_log("added account id: [%d]", account_id);
 		view->is_adding_account_requested = EINA_TRUE;
-		view->selected_entry = view->recp_to_entry.entry;
+		view->selected_widget = view->recp_to_entry.entry;
 		email_module_destroy(module);
 	}
 
@@ -1171,7 +1171,7 @@ static void _composer_deactivate(email_view_t *self)
 		view->timer_destory_composer = ecore_timer_add(0.1f, _composer_destroy_timer_cb, view);
 
 	}
-	if (view->selected_entry == view->ewk_view) {
+	if (view->selected_widget == view->ewk_view) {
 		evas_object_focus_set(view->ewk_view, EINA_FALSE);
 	}
 
@@ -1197,7 +1197,7 @@ static void _composer_activate(email_view_t *self, email_view_state prev_state)
 	view->is_hided = EINA_FALSE;
 	_composer_contacts_update_recp_info_for_recipients(view);
 	if (view->need_to_set_focus_on_resume) {
-		composer_util_focus_set_focus(view, view->selected_entry);
+		composer_util_focus_set_focus(view, view->selected_widget);
 		view->need_to_set_focus_on_resume = EINA_FALSE;
 	}
 
@@ -1212,7 +1212,7 @@ static void _composer_activate(email_view_t *self, email_view_state prev_state)
 	}
 
 	if (!view->composer_popup) {
-		composer_util_focus_set_focus_with_idler(view, view->selected_entry);
+		composer_util_focus_set_focus_with_idler(view, view->selected_widget);
 	}
 
 	debug_leave();
@@ -1373,7 +1373,7 @@ static void _composer_orientation_change_update(EmailComposerView *view)
 	 * If we don't use timer here, bringin function doesn't work properly.
 	 */
 	DELETE_TIMER_OBJECT(view->timer_regionshow);
-	if (view->selected_entry != view->ewk_view) {
+	if ((view->selected_widget != view->ewk_view) && (view->selected_widget != view->attachment_btn)) {
 		view->timer_regionshow = ecore_timer_add(0.2f, composer_util_scroll_region_show_timer, view);
 	}
 

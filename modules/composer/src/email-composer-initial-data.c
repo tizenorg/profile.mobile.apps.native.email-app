@@ -1423,15 +1423,15 @@ static void _initial_data_set_selected_entry(EmailComposerView *view)
 	if (elm_multibuttonentry_first_item_get(view->recp_to_mbe) != NULL) {
 		if (g_strcmp0(elm_entry_entry_get(view->subject_entry.entry), "") == 0) {
 			debug_log("To field is not empty, setting focus to subject_entry field.");
-			view->selected_entry = view->subject_entry.entry;
+			view->selected_widget = view->subject_entry.entry;
 		} else if (view->ewk_view) {
 			debug_log("To field is not empty, setting focus to ewk_view field.");
-			view->selected_entry = view->ewk_view;
+			view->selected_widget = view->ewk_view;
 			view->cs_bringin_to_ewk = true;
 		}
 	} else {
 		debug_log("To field is empty, setting focus to To field.");
-		view->selected_entry = view->recp_to_entry.entry;
+		view->selected_widget = view->recp_to_entry.entry;
 	}
 
 	debug_leave();

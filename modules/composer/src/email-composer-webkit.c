@@ -107,7 +107,7 @@ static void _webkit_js_execute_set_focus_cb(Evas_Object *obj, const char *result
 	}
 
 	if (!view->composer_popup && (obj == view->ewk_view)) { /* Removing focus in case of scheduled email*/
-		composer_util_focus_set_focus(view, view->selected_entry);
+		composer_util_focus_set_focus(view, view->selected_widget);
 	}
 
 	view->is_ewk_ready = EINA_TRUE;
@@ -384,8 +384,8 @@ static void _ewk_view_focus_in_cb(void *data, Evas *e, Evas_Object *obj, void *e
 
 	view->ewk_accepts_focus = EINA_FALSE;
 
-	if (composer_recipient_is_recipient_entry(view, view->selected_entry)) {
-		if (!composer_recipient_commit_recipient_on_entry(view, view->selected_entry)) {
+	if (composer_recipient_is_recipient_entry(view, view->selected_widget)) {
+		if (!composer_recipient_commit_recipient_on_entry(view, view->selected_widget)) {
 
 			if (view->richtext_toolbar) {
 				composer_rich_text_disable_set(view, EINA_FALSE);
@@ -394,15 +394,15 @@ static void _ewk_view_focus_in_cb(void *data, Evas *e, Evas_Object *obj, void *e
 			return;
 		}
 	}
-	composer_recipient_unfocus_entry(view, view->selected_entry);
+	composer_recipient_unfocus_entry(view, view->selected_widget);
 	if (view->bcc_added && !view->cc_recipients_cnt && !view->bcc_recipients_cnt) {
 		composer_recipient_show_hide_bcc_field(view, EINA_FALSE);
 	}
 
 	/* This line(for selected_entry) should be here. (after composer_recipient_hide_contact_button()) */
-	if (view->selected_entry != view->ewk_view) {
+	if (view->selected_widget != view->ewk_view) {
 		composer_attachment_ui_contract_attachment_list(view);
-		view->selected_entry = view->ewk_view;
+		view->selected_widget = view->ewk_view;
 	}
 
 	if (view->richtext_toolbar) {
@@ -642,7 +642,7 @@ static void _ewk_view_contextmenu_customize_cb(void *data, Evas_Object *obj, voi
 	EmailComposerView *view = (EmailComposerView *)data;
 	Ewk_Context_Menu *contextmenu = (Ewk_Context_Menu *)event_info;
 
-	if (view->selected_entry != view->ewk_view) {
+	if (view->selected_widget != view->ewk_view) {
 		elm_object_focus_set(view->ewk_btn, EINA_TRUE);
 	}
 

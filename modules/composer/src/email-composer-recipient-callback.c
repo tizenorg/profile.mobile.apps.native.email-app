@@ -191,23 +191,23 @@ static void _recipient_mbe_popup_edit(EmailComposerView *view)
 
 	view->is_mbe_edit_mode = true; /* To prevent displaying gal-search popup when email address is set on entry. (entry_changed_cb is called!) */
 
-	char *existing_text = g_strdup(elm_entry_entry_get(view->selected_entry));
+	char *existing_text = g_strdup(elm_entry_entry_get(view->selected_widget));
 
 	debug_secure("index = %d, email_addr = %s", ri->selected_email_idx, ai->address);
-	elm_entry_entry_set(view->selected_entry, ai->address);
-	elm_entry_cursor_end_set(view->selected_entry);
-	elm_entry_input_panel_show(view->selected_entry);
+	elm_entry_entry_set(view->selected_widget, ai->address);
+	elm_entry_cursor_end_set(view->selected_widget);
+	elm_entry_input_panel_show(view->selected_widget);
 
 	elm_object_item_del(view->selected_mbe_item);
 	view->selected_mbe_item = NULL;
 
 	if (email_get_address_validation(existing_text)) {
 		Evas_Object *mbe = NULL;
-		if (view->selected_entry == view->recp_to_entry.entry) {
+		if (view->selected_widget == view->recp_to_entry.entry) {
 			mbe = view->recp_to_mbe;
-		} else if (view->selected_entry == view->recp_cc_entry.entry) {
+		} else if (view->selected_widget == view->recp_cc_entry.entry) {
 			mbe = view->recp_cc_mbe;
-		} else if (view->selected_entry == view->recp_bcc_entry.entry) {
+		} else if (view->selected_widget == view->recp_bcc_entry.entry) {
 			mbe = view->recp_bcc_mbe;
 		}
 		retm_if(!mbe, "Invalid entry is selected!");
@@ -282,22 +282,22 @@ static void _recipient_mbe_popup_move_recipient(EmailComposerView *view, Evas_Ob
 
 	/* We need to reset focus allow set which we set to false on mbe_select */
 	elm_object_tree_focus_allow_set(view->composer_layout, EINA_TRUE);
-	elm_object_focus_allow_set(view->selected_entry, EINA_TRUE);
+	elm_object_focus_allow_set(view->selected_widget, EINA_TRUE);
 	elm_object_focus_allow_set(view->subject_entry.entry, EINA_FALSE);
 	elm_object_focus_allow_set(view->ewk_btn, EINA_FALSE); /* ewk_btn isn't a child of composer_layout. so we need to control the focus of it as well. */
 	/* To reset recipient layout for the previous selected entry because selected_entry will be changed to dest mbe. */
-	composer_recipient_unfocus_entry(view, view->selected_entry);
+	composer_recipient_unfocus_entry(view, view->selected_widget);
 
 	if (dest_mbe == view->recp_to_mbe) {
-		view->selected_entry = view->recp_to_entry.entry;
+		view->selected_widget = view->recp_to_entry.entry;
 		composer_recipient_change_entry(EINA_TRUE, view->recp_to_box,
 				view->recp_to_entry_layout, view->recp_to_display_entry_layout);
 	} else if (dest_mbe == view->recp_cc_mbe) {
-		view->selected_entry = view->recp_cc_entry.entry;
+		view->selected_widget = view->recp_cc_entry.entry;
 		composer_recipient_change_entry(EINA_TRUE, view->recp_cc_box,
 				view->recp_cc_entry_layout, view->recp_cc_display_entry_layout);
 	} else if (dest_mbe == view->recp_bcc_mbe) {
-		view->selected_entry = view->recp_bcc_entry.entry;
+		view->selected_widget = view->recp_bcc_entry.entry;
 		composer_recipient_change_entry(EINA_TRUE, view->recp_bcc_box,
 				view->recp_bcc_entry_layout, view->recp_bcc_display_entry_layout);
 	}
@@ -462,9 +462,9 @@ void _recipient_contact_button_clicked_cb(void *data, Evas_Object *obj, void *ev
 
 	email_feedback_play_tap_sound();
 
-	if (((view->selected_entry == view->recp_to_entry.entry) && (view->to_recipients_cnt >= MAX_RECIPIENT_COUNT)) ||
-		((view->selected_entry == view->recp_cc_entry.entry) && (view->cc_recipients_cnt >= MAX_RECIPIENT_COUNT)) ||
-		((view->selected_entry == view->recp_bcc_entry.entry) && (view->bcc_recipients_cnt >= MAX_RECIPIENT_COUNT))) {
+	if (((view->selected_widget == view->recp_to_entry.entry) && (view->to_recipients_cnt >= MAX_RECIPIENT_COUNT)) ||
+		((view->selected_widget == view->recp_cc_entry.entry) && (view->cc_recipients_cnt >= MAX_RECIPIENT_COUNT)) ||
+		((view->selected_widget == view->recp_bcc_entry.entry) && (view->bcc_recipients_cnt >= MAX_RECIPIENT_COUNT))) {
 		char buf[EMAIL_BUFF_SIZE_1K] = { 0, };
 		snprintf(buf, sizeof(buf), email_get_email_string("IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_RECIPIENTS_HPD_REACHED"), MAX_RECIPIENT_COUNT);
 
@@ -587,21 +587,21 @@ void _recipient_mbe_added_cb(void *data, Evas_Object *obj, void *event_info)
 	}
 
 	if ((obj == view->recp_to_mbe) && !composer_util_is_object_packed_in(view->composer_box, view->recp_to_mbe_layout)) {
-		if (view->selected_entry == view->recp_to_entry.entry) {
+		if (view->selected_widget == view->recp_to_entry.entry) {
 			composer_recipient_reset_entry_with_mbe(view->composer_box, view->recp_to_mbe_layout, view->recp_to_mbe, view->recp_to_layout, view->recp_to_box, view->recp_to_label);
 		} else {
 			composer_recipient_change_entry(EINA_FALSE, view->recp_to_box, view->recp_to_entry_layout, view->recp_to_display_entry_layout);
 			composer_recipient_update_display_string(view, view->recp_to_mbe, view->recp_to_entry.entry, view->recp_to_display_entry.entry, view->to_recipients_cnt);
 		}
 	} else if ((obj == view->recp_cc_mbe) && !composer_util_is_object_packed_in(view->composer_box, view->recp_cc_mbe_layout)) {
-		if (view->selected_entry == view->recp_cc_entry.entry) {
+		if (view->selected_widget == view->recp_cc_entry.entry) {
 			composer_recipient_reset_entry_with_mbe(view->composer_box, view->recp_cc_mbe_layout, view->recp_cc_mbe, view->recp_cc_layout, view->recp_cc_box, view->bcc_added ? view->recp_cc_label_cc : view->recp_cc_label_cc_bcc);
 		} else {
 			composer_recipient_change_entry(EINA_FALSE, view->recp_cc_box, view->recp_cc_entry_layout, view->recp_cc_display_entry_layout);
 			composer_recipient_update_display_string(view, view->recp_cc_mbe, view->recp_cc_entry.entry, view->recp_cc_display_entry.entry, view->cc_recipients_cnt);
 		}
 	} else if ((obj == view->recp_bcc_mbe) && !composer_util_is_object_packed_in(view->composer_box, view->recp_bcc_mbe_layout)) {
-		if (view->selected_entry == view->recp_bcc_entry.entry) {
+		if (view->selected_widget == view->recp_bcc_entry.entry) {
 			composer_recipient_reset_entry_with_mbe(view->composer_box, view->recp_bcc_mbe_layout, view->recp_bcc_mbe, view->recp_bcc_layout, view->recp_bcc_box, view->recp_bcc_label);
 		} else {
 			composer_recipient_change_entry(EINA_FALSE, view->recp_bcc_box, view->recp_bcc_entry_layout, view->recp_bcc_display_entry_layout);
@@ -650,10 +650,10 @@ void _recipient_mbe_deleted_cb(void *data, Evas_Object *obj, void *event_info)
 	}
 
 	view->selected_mbe_item = NULL;
-	elm_entry_cursor_end_set(view->selected_entry);
+	elm_entry_cursor_end_set(view->selected_widget);
 	/* composer can also be destroyed when viewer module gets launched from notification */
 	if (!(view->is_back_btn_clicked || view->is_save_in_drafts_clicked || view->is_send_btn_clicked || view->is_composer_getting_destroyed)) {
-		composer_util_focus_set_focus_with_idler(view, view->selected_entry);
+		composer_util_focus_set_focus_with_idler(view, view->selected_widget);
 		composer_util_modify_send_button(view);
 	}
 	debug_leave();
@@ -728,12 +728,12 @@ void _recipient_mbe_selected_cb(void *data, Evas_Object *obj, void *event_info)
 		recipient_select_menu[RECP_SELECT_MENU_ADD_TO_CONTACTS] = EINA_TRUE;
 	}
 	if (view->cc_added) {
-		if (view->selected_entry == view->recp_to_entry.entry) {
+		if (view->selected_widget == view->recp_to_entry.entry) {
 			recipient_select_menu[RECP_SELECT_MENU_MOVE_TO_CC] = EINA_TRUE;
 		} else {
 			recipient_select_menu[RECP_SELECT_MENU_MOVE_TO_TO] = EINA_TRUE;
 		}
-		if (view->selected_entry == view->recp_bcc_entry.entry) {
+		if (view->selected_widget == view->recp_bcc_entry.entry) {
 			recipient_select_menu[RECP_SELECT_MENU_MOVE_TO_CC] = EINA_TRUE;
 		} else {
 			recipient_select_menu[RECP_SELECT_MENU_MOVE_TO_BCC] = EINA_TRUE;
@@ -779,7 +779,7 @@ void _recipient_entry_changed_cb(void *data, Evas_Object *obj, void *event_info)
 	retm_if(view->is_back_btn_clicked || view->is_save_in_drafts_clicked || view->is_send_btn_clicked, "While destroying composer!");
 
 	/* Because of elm_entry_entry_set(), this callback can be called even though the entry doesn't have the focus. */
-	ret_if(view->selected_entry != obj);
+	ret_if(view->selected_widget != obj);
 
 	const char *entry_str = elm_entry_entry_get(obj);
 	retm_if(!entry_str, "entry_str is [NULL]");
@@ -857,18 +857,18 @@ void _recipient_entry_focused_cb(void *data, Evas_Object *obj, void *event_info)
 		composer_rich_text_disable_set(view, EINA_TRUE);
 	}
 
-	if (view->selected_entry != obj) {
+	if (view->selected_widget != obj) {
 		/* Below code should be here, since it returned without resetting the entry in case of error before */
-		if (composer_recipient_is_recipient_entry(view, view->selected_entry)) {
-			if (!composer_recipient_commit_recipient_on_entry(view, view->selected_entry)) {
+		if (composer_recipient_is_recipient_entry(view, view->selected_widget)) {
+			if (!composer_recipient_commit_recipient_on_entry(view, view->selected_widget)) {
 				composer_recipient_unfocus_entry(view, obj); /* The current object should be unfocused if the function returns for composer_recipient_reset_entry_without_mbe to run */
 				debug_log("composer_recipient_commit_recipient_on_entry returned false");
 				return;
 			}
 		}
-		composer_recipient_unfocus_entry(view, view->selected_entry);
+		composer_recipient_unfocus_entry(view, view->selected_widget);
 		composer_attachment_ui_contract_attachment_list(view);
-		view->selected_entry = obj;
+		view->selected_widget = obj;
 	}
 
 	/* To show the entry within the screen. refer the comments on focused callback for subject entry.*/

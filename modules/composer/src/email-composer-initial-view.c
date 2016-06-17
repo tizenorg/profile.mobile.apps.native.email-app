@@ -979,7 +979,7 @@ void composer_initial_view_set_combined_scroller_rotation_mode(void *data)
 
 	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (view->selected_entry == view->ewk_view) {
+	if (view->selected_widget == view->ewk_view) {
 		_initial_view_cs_ensure_ewk_on_top(view, false);
 		_initial_view_cs_backup_scroll_pos(view);
 	}
