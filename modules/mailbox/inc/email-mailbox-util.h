@@ -348,4 +348,18 @@ void mailbox_do_refresh(EmailMailboxView *view);
  */
 void mailbox_do_load_more_messages(EmailMailboxView *view);
 
+/**
+ * @brief Convert mailbox type to translated alias of mailbox.
+ * @param[in]	mailbox_type		Email mailbox type
+ * @return Translated mailbox alias if mailbox type is not user-defined, otherwise NULL
+ */
+char *mailbox_get_mailbox_alias_by_mailbox_type(email_mailbox_type_e mailbox_type);
+
+/**
+ * @brief Get mailbox alias by mailbox id.
+ * @param[in]	mailbox_id		Email mailbox id
+ * @return Mailbox alias which is used on email server
+ */
+char *mailbox_get_mailbox_alias_by_mailbox_id(int mailbox_id);
+
 #endif /*__DEF_EMAIL_MAILBOX_UTIL_H_*/

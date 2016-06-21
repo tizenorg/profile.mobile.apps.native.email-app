@@ -21,6 +21,7 @@
 #include "email-mailbox.h"
 #include "email-mailbox-util.h"
 #include "email-mailbox-sync.h"
+#include "email-mailbox-list.h"
 #include "email-mailbox-list-extensions.h"
 
 /*
@@ -590,4 +591,41 @@ void mailbox_do_load_more_messages(EmailMailboxView *view)
 	}
 
 	debug_leave();
+}
+
+char *mailbox_get_mailbox_alias_by_mailbox_type(email_mailbox_type_e mailbox_type)
+{
+	switch (mailbox_type) {
+	case EMAIL_MAILBOX_TYPE_INBOX:
+		return strdup(_("IDS_EMAIL_HEADER_INBOX"));
+	case EMAIL_MAILBOX_TYPE_DRAFT:
+		return strdup(_("IDS_EMAIL_HEADER_DRAFTS"));
+	case EMAIL_MAILBOX_TYPE_OUTBOX:
+		return strdup(_("IDS_EMAIL_HEADER_OUTBOX"));
+	case EMAIL_MAILBOX_TYPE_SENTBOX:
+		return strdup(_("IDS_EMAIL_HEADER_SENT_M_EMAIL"));
+	case EMAIL_MAILBOX_TYPE_SPAMBOX:
+		return strdup(_("IDS_EMAIL_HEADER_SPAMBOX"));
+	case EMAIL_MAILBOX_TYPE_TRASH:
+		return strdup(_("IDS_EMAIL_HEADER_RECYCLE_BIN_ABB"));
+	default:
+		return NULL;
+	}
+}
+
+char *mailbox_get_mailbox_alias_by_mailbox_id(int mailbox_id)
+{
+	retvm_if(!email_engine_open_db(), NULL, "Failed to open db");
+	email_mailbox_t *mailbox = NULL;
+	char *mailbox_alias = NULL;
+
+	if (email_engine_get_mailbox_by_mailbox_id(mailbox_id, &mailbox)) {
+		mailbox_alias = strdup(mailbox->alias);
+		email_engine_free_mailbox_list(&mailbox, 1);
+	} else {
+		debug_log("Failed to get mail name!");
+	}
+
+	email_engine_close_db();
+	return mailbox_alias;
 }
