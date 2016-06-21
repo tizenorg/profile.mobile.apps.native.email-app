@@ -48,6 +48,7 @@
 #define EMAIL_MAILBOX_TITLE_DEFAULT_CHAR_COUNT 55
 
 #define EMAIL_MAILBOX_CHECK_CACHE_SIZE 42
+#define EMAIL_MAILBOX_FOLDERS_NAME_CACHE_SIZE 10
 
 typedef enum {
 	EMAIL_MAILBOX_MODE_UNKOWN = -1,
@@ -263,6 +264,8 @@ struct _view_data {
 
 	EmailMailboxCheckCache star_check_cache;
 	EmailMailboxCheckCache select_check_cache;
+
+	Eina_List *folders_names_cashe;
 };
 
 /**
@@ -279,6 +282,10 @@ typedef struct {
 
 } EmailMailboxModule;
 
+typedef struct {
+	int mailbox_id;
+	char *mailbox_name;
+} EmailFolderNameCashItem;
 /**
  * @brief Email mailbox mail item data
  */
@@ -286,13 +293,13 @@ typedef struct {
 	MailboxBaseItemData base;
 	EmailMailboxView *view;
 
+	char *folder_name;
 	gchar *alias;
 	gchar *sender;
 	gchar *preview_body;
 	char *title;
 	char *recipient;
 	gchar *timeordate;
-	gchar *fastscroll_date;
 	gchar *group_title;
 	gint mailbox_id;
 	int mailbox_type;
@@ -314,9 +321,6 @@ typedef struct {
 	gboolean is_to_address_mail;
 	gboolean is_priority_sender_mail;
 	time_t absolute_time;
-
-	Evas_Coord mouse_down_point_x;
-	Evas_Coord mouse_down_point_y;
 
 	Evas_Object *check_btn;
 	Evas_Object *flag_btn;
