@@ -162,4 +162,26 @@ bool mailbox_check_searched_mail(int mail_id, void *data);
  */
 void mailbox_list_make_remaining_items_in_thread(EmailMailboxView *view, AddRemainingMailReqData *req);
 
+/**
+ * @brief Release mailbox folders name cache
+ * @param[in]	view			Email Mailbox data
+ */
+void mailbox_folders_name_cache_free(EmailMailboxView *view);
+
+/**
+ * @brief Add new item into folders name cache
+ * @param[in]	view			Email Mailbox data
+ * @param[in]	mailbox_id		Email Mailbox id which is unique for each mailbox
+ * @param[in]	folder_name		Email folder name which is related to mailbox id
+ */
+void mailbox_folders_name_cashe_add_name(EmailMailboxView *view, int mailbox_id, const char *folder_name);
+
+/**
+ * @brief Add new item into folders name cache
+ * @param[in]	view			Email Mailbox data
+ * @param[in]	mailbox_id		Email Mailbox id which is unique for each mailbox
+ * @return	folder_name of current mailbox id if ot os listed in cache, othervise NULL
+ */
+char *mailbox_folders_name_cashe_get_name(EmailMailboxView *view, int mailbox_id);
+
 #endif	/* __DEF_EMAIL_MAILBOX_LIST_H_ */

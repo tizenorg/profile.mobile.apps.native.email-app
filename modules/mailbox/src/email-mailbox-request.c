@@ -361,9 +361,10 @@ static void _mailbox_move_mail_req_cb(email_request_h request)
 			gotom_if(!email_engine_open_db(), CLEANUP, "fail to open db");
 
 			email_mail_list_item_t *mail_info = email_engine_get_mail_by_mailid(*idx);
-			gotom_if(!mail_info, CLEANUP, "no email exits(%d)", *idx);
 
 			debug_warning_if(!email_engine_close_db(), "fail to close db");
+			gotom_if(!mail_info, CLEANUP, "no email exits(%d)", *idx);
+
 
 			MailItemData *ld = mailbox_list_make_mail_item_data(mail_info, NULL, view);
 			gotom_if(!ld, CLEANUP, "mailbox_list_make_mail_item_data() failed.");
@@ -618,9 +619,9 @@ static void _mailbox_add_mail_req_cb(email_request_h request)
 	gotom_if(!email_engine_open_db(), CLEANUP, "fail to open db");
 
 	mail_info = email_engine_get_mail_by_mailid(req_data->mail_id);
-	gotom_if(!mail_info, CLEANUP, "mail_info is NULL");
-
 	debug_warning_if(!email_engine_close_db(), "fail to close db");
+
+	gotom_if(!mail_info, CLEANUP, "mail_info is NULL");
 
 	if (mail_info->message_class == EMAIL_MESSAGE_CLASS_SMS && mail_info->save_status == EMAIL_MAIL_STATUS_SAVED_OFFLINE) {
 		debug_log("This is EAS SMS message. It will be added on the next sync operation");
