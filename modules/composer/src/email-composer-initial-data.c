@@ -1152,6 +1152,9 @@ void composer_initial_data_set_mail_info(EmailComposerView *view, bool is_draft_
 
 	g_free(html_body);
 
+	/* Set ewk_view_vertical_panning_hold_set() here due to structural issue of Chromium */
+	ewk_view_vertical_panning_hold_set(view->ewk_view, EINA_TRUE);
+
 	_initial_data_set_selected_entry(view);
 
 	debug_leave();
