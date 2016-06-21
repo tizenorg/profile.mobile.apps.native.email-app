@@ -744,8 +744,6 @@ static Evas_Object *_webkit_create_ewk_view(Evas_Object *parent, EmailComposerVi
 	Evas_Object *ewk_view = ewk_view_add(evas_object_evas_get(parent));
 	evas_object_size_hint_weight_set(ewk_view, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_size_hint_align_set(ewk_view, EVAS_HINT_FILL, EVAS_HINT_FILL);
-	ewk_view_vertical_panning_hold_set(ewk_view, EINA_TRUE);
-	/*evas_object_propagate_events_set(ewkview, EINA_FALSE);*/
 	ewk_view_split_scroll_overflow_enabled_set(ewk_view, EINA_TRUE);
 
 	/* To modify background color of webkit, following parts should be modified as well.

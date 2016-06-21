@@ -1067,7 +1067,6 @@ Evas_Object *viewer_get_webview(EmailViewerView *view)
 	ewk_context_did_start_download_callback_set(context, _viewer_download_start_cb, view);
 
 	/* Double_Scroller */
-	ewk_view_vertical_panning_hold_set(view->webview, EINA_TRUE);
 	viewer_webkit_add_callbacks(view);
 
 	int angle = elm_win_rotation_get(view->base.module->win);
@@ -1197,6 +1196,9 @@ void viewer_set_webview_content(EmailViewerView *view)
 				debug_secure("tmp_file_path [%s]", tmp_file_path);
 				/* If encoding(5th parameter) is missing, "UTF-8" is used to display contents. */
 				ewk_view_contents_set(view->webview, file_stream, strlen(file_stream), NULL, NULL, tmp_file_path);
+				/* Set ewk_view_vertical_panning_hold_set() here due to structural issue of Chromium */
+				ewk_view_vertical_panning_hold_set(view->webview, EINA_TRUE);
+
 				g_free(file_stream);
 				return;
 			}
@@ -1272,6 +1274,8 @@ void viewer_set_webview_content(EmailViewerView *view)
 		contents_size = STR_LEN(file_stream);
 	}
 	ewk_view_contents_set(view->webview, file_stream, contents_size, NULL, DEFAULT_CHARSET, tmp_file_path);
+	/* Set ewk_view_vertical_panning_hold_set() here due to structural issue of Chromium */
+	ewk_view_vertical_panning_hold_set(view->webview, EINA_TRUE);
 
 	g_free(file_stream);
 	file_stream = NULL;
