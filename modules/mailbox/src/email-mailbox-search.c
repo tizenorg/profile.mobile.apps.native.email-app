@@ -340,7 +340,7 @@ email_search_data_t *mailbox_make_search_data(EmailMailboxView *view)
 
 	email_search_data_t *search_data = calloc(1, sizeof(email_search_data_t));
 	retvm_if(!search_data, NULL, "search_data memory alloc failed");
-
+	search_data->search_type = EMAIL_SEARCH_IN_SINGLE_FOLDER;
 	search_data->subject = (char *)elm_entry_markup_to_utf8(elm_object_text_get(view->search_editfield.entry));
 	search_data->body_text = (char *)elm_entry_markup_to_utf8(elm_object_text_get(view->search_editfield.entry));
 	search_data->attach_text = (char *)elm_entry_markup_to_utf8(elm_object_text_get(view->search_editfield.entry));

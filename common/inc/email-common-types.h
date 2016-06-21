@@ -219,7 +219,14 @@ typedef struct {
 	int pop3_deleting_option;
 } account_user_data_t;
 
+typedef enum {
+	EMAIL_SEARCH_IN_SINGLE_FOLDER,
+	EMAIL_SEARCH_IN_ALL_FOLDERS,
+	EMAIL_SEARCH_IN_SERVER,
+} email_search_type_e;
+
 typedef struct {
+	email_search_type_e search_type;
 	char *subject;
 	char *sender;
 	char *recipient;
