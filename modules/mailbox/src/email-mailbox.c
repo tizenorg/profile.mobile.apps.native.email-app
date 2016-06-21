@@ -408,6 +408,10 @@ static int _mailbox_initialize(EmailMailboxView *view)
 	view->account_type = EMAIL_SERVER_TYPE_NONE;
 	view->b_format_24hour = false;
 
+	/*Search mode*/
+	view->b_searchmode = false;
+	view->search_type = EMAIL_SEARCH_NONE;
+
 	/*SelectAll Item*/
 	view->select_all_item_data.base.item_type = MAILBOX_LIST_ITEM_SELECT_ALL;
 	view->select_all_item_data.base.item = NULL;

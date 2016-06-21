@@ -257,6 +257,7 @@ void _search_button_clicked_cb(void *data, Evas_Object *obj EINA_UNUSED, void *e
 		return;
 	}
 	view->b_searchmode = true;
+	view->search_type = EMAIL_SEARCH_IN_SINGLE_FOLDER;
 
 	DELETE_EVAS_OBJECT(view->more_ctxpopup);
 

@@ -46,10 +46,16 @@
 #define BLOCK_COUNT 10
 #define FIRST_BLOCK_SIZE 9
 
+typedef email_list_sorting_rule_t EmailSortRulesList[2];
+
 /*
  * Structures
  */
 
+typedef struct {
+	int mailbox_id;
+	char *mailbox_name;
+} EmailFolderNameCacheItem;
 
 /*
  * Globals
@@ -99,10 +105,11 @@ static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_id(int account_
 static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_type(int account_id, int mailbox_type, int sort_type, int thread_id, const email_search_data_t *search_data, int *mail_count);
 static email_mail_list_item_t *_mailbox_get_priority_sender_mail_list(int sort_type, int thread_id, const email_search_data_t *search_data, int *mail_count);
 static email_mail_list_item_t *_mailbox_get_favourite_mail_list(int sort_type, int thread_id, const email_search_data_t *search_data, int *mail_count);
+static email_mail_list_item_t *_mailbox_get_mail_list_for_search_all_folders(int sort_type, const email_search_data_t *search_data, int *mail_count);
 
 static int _get_filter_cnt_for_search_data(const email_search_data_t *search_data);
 static void _add_search_data_into_filter_list(const email_search_data_t *search_data, email_list_filter_t *filter_list, int *current_index);
-static void _make_sorting_rule_list(email_sort_type_e sort_type, int account_id, email_list_sorting_rule_t *sorting_rule_list);
+static int _make_sorting_rule_list(email_sort_type_e sort_type, int account_id, EmailSortRulesList sorting_rule_list);
 
 /* mail list */
 static void _mailbox_make_list(EmailMailboxView *view, const email_search_data_t *search_data);
@@ -120,11 +127,17 @@ static void _mailbox_get_recipient_display_information(const gchar *addr_list, c
 static void mailbox_exit_clicked_edit_mode(void *data, Evas_Object *obj, void *event_info);
 static void mailbox_update_done_clicked_edit_mode(void *data, Evas_Object *obj, void *event_info);
 
-/* chack box cache */
+/* check box cache */
 static void _mailbox_check_cache_init(EmailMailboxCheckCache *cache, const char *obj_style);
 static void _mailbox_check_cache_free(EmailMailboxCheckCache *cache);
 static Evas_Object *_mailbox_check_cache_get_obj(EmailMailboxCheckCache *cache, Evas_Object *parent);
 static void _mailbox_check_cache_release_obj(EmailMailboxCheckCache *cache, Evas_Object *obj);
+
+/*Folders name cache for search in all folders mode*/
+static void _mailbox_folders_name_cache_add_name(EmailMailboxView *view, int mailbox_id, const char *folder_name);
+static char *_mailbox_folders_name_cache_get_name(EmailMailboxView *view, int mailbox_id);
+static int _mailbox_folder_name_cache_comparator_cb(const void *data1, const void *data2);
+
 static void _mailbox_list_insert_n_mails(EmailMailboxView *view, email_mail_list_item_t* mail_list, int count, const email_search_data_t *search_data);
 
 static const Elm_Genlist_Item_Class itc = {
@@ -170,7 +183,6 @@ static void _realized_item_cb(void *data, Evas_Object *obj, void *event_info)
 		ld->is_highlited = EINA_FALSE;
 		_mail_item_gl_text_style_set(ld);
 	}
-
 }
 
 static void _pressed_item_cb(void *data, Evas_Object *obj, void *event_info)
@@ -945,25 +957,32 @@ static email_mail_list_item_t *_mailbox_get_mail_list(EmailMailboxView *view, co
 	email_mail_list_item_t *mail_data = NULL;
 	int mailbox_type = EMAIL_MAILBOX_TYPE_NONE;
 
-	if (view->mailbox_type == EMAIL_MAILBOX_TYPE_NONE)
+	if (view->mailbox_type == EMAIL_MAILBOX_TYPE_NONE) {
 		mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
-	else
+	} else {
 		mailbox_type = view->mailbox_type;
+	}
 
 	if (view->b_searchmode) {
-		if (view->mode == EMAIL_MAILBOX_MODE_ALL) {
-			if (mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED)
-				mail_data = _mailbox_get_favourite_mail_list(view->sort_type, EMAIL_GET_MAIL_NORMAL, search_data, mail_count);
-			else
-				mail_data = _mailbox_get_mail_list_by_mailbox_type(0, mailbox_type, EMAIL_SORT_DATE_RECENT, EMAIL_GET_MAIL_NORMAL, search_data, mail_count);
-		}
+		retvm_if(!search_data, NULL, "Search data is NULL!");
+		if (view->search_type == EMAIL_SEARCH_IN_SINGLE_FOLDER) {
+			if (view->mode == EMAIL_MAILBOX_MODE_ALL) {
+				if (mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED) {
+					mail_data = _mailbox_get_favourite_mail_list(view->sort_type, EMAIL_GET_MAIL_NORMAL, search_data, mail_count);
+				} else {
+					mail_data = _mailbox_get_mail_list_by_mailbox_type(0, mailbox_type, EMAIL_SORT_DATE_RECENT, EMAIL_GET_MAIL_NORMAL, search_data, mail_count);
+				}
+			}
 #ifndef _FEATURE_PRIORITY_SENDER_DISABLE_
-		else if (view->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER) {
-			mail_data = _mailbox_get_priority_sender_mail_list(EMAIL_SORT_DATE_RECENT, EMAIL_GET_MAIL_NORMAL, search_data, mail_count);
-		}
+			else if (view->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER) {
+				mail_data = _mailbox_get_priority_sender_mail_list(EMAIL_SORT_DATE_RECENT, EMAIL_GET_MAIL_NORMAL, search_data, mail_count);
+			}
 #endif
-		else {
-			mail_data = _mailbox_get_mail_list_by_mailbox_id(view->account_id, view->mailbox_id, EMAIL_SORT_DATE_RECENT, EMAIL_GET_MAIL_NORMAL, search_data, mail_count);
+			else {
+				mail_data = _mailbox_get_mail_list_by_mailbox_id(view->account_id, view->mailbox_id, EMAIL_SORT_DATE_RECENT, EMAIL_GET_MAIL_NORMAL, search_data, mail_count);
+			}
+		} else if (view->search_type == EMAIL_SEARCH_IN_ALL_FOLDERS) {
+			mail_data = _mailbox_get_mail_list_for_search_all_folders(EMAIL_SORT_DATE_RECENT, search_data, mail_count);
 		}
 	} else {
 		if (view->mode == EMAIL_MAILBOX_MODE_ALL) {
@@ -992,7 +1011,7 @@ static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_id(int account_
 
 	email_mail_list_item_t *mail_list = NULL;
 	email_list_filter_t *filter_list = NULL;
-	email_list_sorting_rule_t *sorting_rule_list = NULL;
+	EmailSortRulesList sorting_rule_list;
 	int cnt_filter_list = 0;
 	int cnt_soring_rule = 0;
 	int i = 0;
@@ -1091,28 +1110,13 @@ static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_id(int account_
 	filter_list[i].list_filter_item.rule.key_value.integer_type_value = 1;
 	i++;
 
-	if (search_data)
+	if (search_data) {
 		_add_search_data_into_filter_list(search_data, filter_list, &i);
-
+	}
 	debug_log("filled filter count: %d", i + 1);
 
-	if (sort_type != EMAIL_SORT_DATE_RECENT && sort_type != EMAIL_SORT_DATE_OLDEST)
-		cnt_soring_rule = 2;
-	else
-		cnt_soring_rule = 1;
-
-	sorting_rule_list = calloc(cnt_soring_rule, sizeof(email_list_sorting_rule_t));
-	if (!sorting_rule_list) {
-		email_engine_free_list_filter(&filter_list, cnt_filter_list);
-		debug_error("sorting_rule_list is NULL - allocation memory failed");
-		return NULL;
-	}
-
-	_make_sorting_rule_list(sort_type, account_id, sorting_rule_list);
-
+	cnt_soring_rule = _make_sorting_rule_list(sort_type, account_id, sorting_rule_list);
 	email_engine_get_mail_list(filter_list, cnt_filter_list, sorting_rule_list, cnt_soring_rule, -1, -1, &mail_list, mail_count);
-
-	FREE(sorting_rule_list);
 	email_engine_free_list_filter(&filter_list, cnt_filter_list);
 
 	debug_log("mail_count(%d)", *mail_count);
@@ -1128,7 +1132,7 @@ static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_type(int accoun
 
 	email_mail_list_item_t *mail_list = NULL;
 	email_list_filter_t *filter_list = NULL;
-	email_list_sorting_rule_t *sorting_rule_list = NULL;
+	EmailSortRulesList sorting_rule_list;
 	int cnt_filter_list = 0;
 	int cnt_soring_rule = 0;
 	int i = 0;
@@ -1225,28 +1229,16 @@ static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_type(int accoun
 	filter_list[i].list_filter_item.rule.key_value.integer_type_value = 1;
 	i++;
 
-	if (search_data)
+	if (search_data) {
 		_add_search_data_into_filter_list(search_data, filter_list, &i);
+	}
 
 	debug_log("filled filter count: %d", i);
 
-	if (sort_type != EMAIL_SORT_DATE_RECENT && sort_type != EMAIL_SORT_DATE_OLDEST)
-		cnt_soring_rule = 2;
-	else
-		cnt_soring_rule = 1;
-
-	sorting_rule_list = calloc(cnt_soring_rule, sizeof(email_list_sorting_rule_t));
-	if (!sorting_rule_list) {
-		email_engine_free_list_filter(&filter_list, cnt_filter_list);
-		debug_error("sorting_rule_list is NULL - allocation memory failed");
-		return NULL;
-	}
-
-	_make_sorting_rule_list(sort_type, account_id, sorting_rule_list);
+	cnt_soring_rule = _make_sorting_rule_list(sort_type, account_id, sorting_rule_list);
 
 	email_engine_get_mail_list(filter_list, cnt_filter_list, sorting_rule_list, cnt_soring_rule, -1, -1, &mail_list, mail_count);
 
-	FREE(sorting_rule_list);
 	email_engine_free_list_filter(&filter_list, cnt_filter_list);
 
 	debug_log("mail_count(%d)", *mail_count);
@@ -1261,7 +1253,7 @@ static email_mail_list_item_t *_mailbox_get_priority_sender_mail_list(int sort_t
 	int j = 0;
 	email_mail_list_item_t *mail_list = NULL;
 	email_list_filter_t *filter_list = NULL;
-	email_list_sorting_rule_t *sorting_rule_list = NULL;
+	EmailSortRulesList sorting_rule_list;
 	int cnt_filter_list = 5;
 	int cnt_soring_rule = 0;
 
@@ -1327,23 +1319,10 @@ static email_mail_list_item_t *_mailbox_get_priority_sender_mail_list(int sort_t
 
 	debug_log("filled filter count: %d", j);
 
-	if (sort_type != EMAIL_SORT_DATE_RECENT && sort_type != EMAIL_SORT_DATE_OLDEST)
-		cnt_soring_rule = 2;
-	else
-		cnt_soring_rule = 1;
-
-	sorting_rule_list = calloc(cnt_soring_rule, sizeof(email_list_sorting_rule_t));
-	if (!sorting_rule_list) {
-		email_engine_free_list_filter(&filter_list, cnt_filter_list);
-		debug_error("sorting_rule_list is NULL - allocation memory failed");
-		return NULL;
-	}
-
-	_make_sorting_rule_list(sort_type, 0, sorting_rule_list);
+	cnt_soring_rule = _make_sorting_rule_list(sort_type, 0, sorting_rule_list);
 
 	email_engine_get_mail_list(filter_list, j, sorting_rule_list, cnt_soring_rule, -1, -1, &mail_list, mail_count);
 
-	FREE(sorting_rule_list);
 	email_engine_free_list_filter(&filter_list, cnt_filter_list);
 
 	debug_log("mail_count(%d)", *mail_count);
@@ -1357,7 +1336,7 @@ static email_mail_list_item_t *_mailbox_get_favourite_mail_list(int sort_type, i
 
 	email_mail_list_item_t *mail_list = NULL;
 	email_list_filter_t *filter_list = NULL;
-	email_list_sorting_rule_t *sorting_rule_list = NULL;
+	EmailSortRulesList sorting_rule_list;
 	int cnt_filter_list = 0;
 	int cnt_soring_rule = 0;
 	int i = 0;
@@ -1372,9 +1351,8 @@ static email_mail_list_item_t *_mailbox_get_favourite_mail_list(int sort_type, i
 
 	debug_log("cnt_filter_list: %d", cnt_filter_list);
 
-	filter_list = malloc(sizeof(email_list_filter_t)*cnt_filter_list);
+	filter_list = calloc(cnt_filter_list, sizeof(email_list_filter_t));
 	retvm_if(!filter_list, NULL, "filter_list memory alloc failed");
-	memset(filter_list, 0, sizeof(email_list_filter_t)*cnt_filter_list);
 
 	filter_list[i].list_filter_item_type = EMAIL_LIST_FILTER_ITEM_OPERATOR;
 	filter_list[i].list_filter_item.operator_type = EMAIL_LIST_FILTER_OPERATOR_LEFT_PARENTHESIS;
@@ -1447,27 +1425,75 @@ static email_mail_list_item_t *_mailbox_get_favourite_mail_list(int sort_type, i
 
 	debug_log("filled filter count: %d", i);
 
-	if (sort_type != EMAIL_SORT_DATE_RECENT && sort_type != EMAIL_SORT_DATE_OLDEST)
-		cnt_soring_rule = 2;
-	else
-		cnt_soring_rule = 1;
-	sorting_rule_list = malloc(sizeof(email_list_sorting_rule_t)*cnt_soring_rule);
-	if (!sorting_rule_list) {
-		email_engine_free_list_filter(&filter_list, cnt_filter_list);
-		debug_error("sorting_rule_list is NULL - allocation memory failed");
-		return NULL;
-	}
-	memset(sorting_rule_list, 0, sizeof(email_list_sorting_rule_t)*cnt_soring_rule);
-
-	_make_sorting_rule_list(sort_type, 0, sorting_rule_list);
+	cnt_soring_rule = _make_sorting_rule_list(sort_type, 0, sorting_rule_list);
 
 	email_engine_get_mail_list(filter_list, cnt_filter_list, sorting_rule_list, cnt_soring_rule, -1, -1, &mail_list, mail_count);
 
-	FREE(sorting_rule_list);
 	email_engine_free_list_filter(&filter_list, cnt_filter_list);
 
 	debug_log("mail_count(%d)", *mail_count);
 
+	return mail_list;
+}
+
+static email_mail_list_item_t *_mailbox_get_mail_list_for_search_all_folders(int sort_type, const email_search_data_t *search_data, int *mail_count)
+{
+	debug_enter();
+
+	email_mail_list_item_t *mail_list = NULL;
+	email_list_filter_t *filter_list = NULL;
+	EmailSortRulesList sorting_rule_list;
+	int cnt_soring_rule = 0;
+	int cnt_filter_list = 5;
+	int i = 0;
+
+	if (search_data ) {
+		cnt_filter_list += _get_filter_cnt_for_search_data(search_data);
+	}
+
+	debug_log("cnt_filter_list: %d", cnt_filter_list);
+
+	filter_list = calloc(cnt_filter_list, sizeof(email_list_filter_t));
+
+	filter_list[i].list_filter_item_type = EMAIL_LIST_FILTER_ITEM_RULE;
+	filter_list[i].list_filter_item.rule.target_attribute = EMAIL_MAIL_ATTRIBUTE_MAILBOX_ID;
+	filter_list[i].list_filter_item.rule.rule_type = EMAIL_LIST_FILTER_RULE_NOT_EQUAL;
+	filter_list[i].list_filter_item.rule.key_value.integer_type_value = -1;
+	i++;
+
+	filter_list[i].list_filter_item_type = EMAIL_LIST_FILTER_ITEM_OPERATOR;
+	filter_list[i].list_filter_item.operator_type = EMAIL_LIST_FILTER_OPERATOR_AND;
+	i++;
+
+	filter_list[i].list_filter_item_type = EMAIL_LIST_FILTER_ITEM_RULE;
+	filter_list[i].list_filter_item.rule.target_attribute = EMAIL_MAIL_ATTRIBUTE_MAILBOX_TYPE;
+	filter_list[i].list_filter_item.rule.rule_type = EMAIL_LIST_FILTER_RULE_NOT_EQUAL;
+	filter_list[i].list_filter_item.rule.key_value.integer_type_value = EMAIL_MAILBOX_TYPE_SEARCH_RESULT;
+	i++;
+
+	filter_list[i].list_filter_item_type = EMAIL_LIST_FILTER_ITEM_OPERATOR;
+	filter_list[i].list_filter_item.operator_type = EMAIL_LIST_FILTER_OPERATOR_AND;
+	i++;
+
+	filter_list[i].list_filter_item_type = EMAIL_LIST_FILTER_ITEM_RULE;
+	filter_list[i].list_filter_item.rule.target_attribute = EMAIL_MAIL_ATTRIBUTE_FLAGS_DELETED_FIELD;
+	filter_list[i].list_filter_item.rule.rule_type = EMAIL_LIST_FILTER_RULE_NOT_EQUAL;
+	filter_list[i].list_filter_item.rule.key_value.integer_type_value = 1;
+	i++;
+
+	if (search_data) {
+		_add_search_data_into_filter_list(search_data, filter_list, &i);
+	}
+
+	cnt_soring_rule = _make_sorting_rule_list(sort_type, 0, sorting_rule_list);
+
+	email_engine_get_mail_list(filter_list, cnt_filter_list, sorting_rule_list, cnt_soring_rule, -1, -1, &mail_list, mail_count);
+
+	email_engine_free_list_filter(&filter_list, cnt_filter_list);
+
+	debug_log("mail_count(%d)", *mail_count);
+
+	debug_leave();
 	return mail_list;
 }
 
@@ -1609,7 +1635,7 @@ static void _add_search_data_into_filter_list(const email_search_data_t *search_
 	debug_leave();
 }
 
-static void _make_sorting_rule_list(email_sort_type_e sort_type, int account_id, email_list_sorting_rule_t *sorting_rule_list)
+static int _make_sorting_rule_list(email_sort_type_e sort_type, int account_id, EmailSortRulesList sorting_rule_list)
 {
 	debug_enter();
 
@@ -1709,14 +1735,17 @@ static void _make_sorting_rule_list(email_sort_type_e sort_type, int account_id,
 
 	default:
 		debug_warning("INVALID sort_type.");
-		return;
+		return 0;
 	}
 
 	if (sort_type != EMAIL_SORT_DATE_RECENT && sort_type != EMAIL_SORT_DATE_OLDEST) {
 		sorting_rule_list[1].target_attribute = EMAIL_MAIL_ATTRIBUTE_DATE_TIME;
 		sorting_rule_list[1].sort_order = EMAIL_SORT_ORDER_DESCEND;
 		sorting_rule_list[1].force_boolean_check = false;
+		return 2;
 	}
+
+	return 1;
 }
 
 static void _mailbox_make_list(EmailMailboxView *view, const email_search_data_t *search_data)
@@ -2034,6 +2063,7 @@ static void _mailbox_get_recipient_display_information(const gchar *addr_list, c
 static void _mailbox_list_insert_n_mails(EmailMailboxView *view, email_mail_list_item_t *mail_list, int count, const email_search_data_t *search_data)
 {
 	debug_enter();
+
 	retm_if(!view, "view is NULL");
 	retm_if(!mail_list, "mail_list is NULL");
 
@@ -2045,8 +2075,147 @@ static void _mailbox_list_insert_n_mails(EmailMailboxView *view, email_mail_list
 		}
 
 		mailbox_list_insert_mail_item(ld, view);
-
 	}
+
+	debug_leave();
+}
+
+static void _mailbox_check_cache_init(EmailMailboxCheckCache *cache, const char *obj_style)
+{
+	cache->obj_style = obj_style;
+	cache->free_index = 0;
+	cache->used_index = EMAIL_MAILBOX_CHECK_CACHE_SIZE;
+}
+
+static void _mailbox_check_cache_free(EmailMailboxCheckCache *cache)
+{
+	int i = 0;
+	int free_index = cache->free_index;
+	int used_index = cache->used_index;
+
+	for (i = 0; i < free_index; ++i) {
+		evas_object_unref(cache->items[i]);
+		evas_object_del(cache->items[i]);
+	}
+
+	if (used_index < EMAIL_MAILBOX_CHECK_CACHE_SIZE) {
+		debug_warning("used_index: %d", used_index);
+		for (i = used_index; i < EMAIL_MAILBOX_CHECK_CACHE_SIZE; ++i) {
+			evas_object_unref(cache->items[i]);
+		}
+	}
+
+	cache->free_index = 0;
+	cache->used_index = EMAIL_MAILBOX_CHECK_CACHE_SIZE;
+}
+
+static Evas_Object *_mailbox_check_cache_get_obj(EmailMailboxCheckCache *cache, Evas_Object *parent)
+{
+	Evas_Object *result = NULL;
+
+	int free_index = cache->free_index;
+	int used_index = cache->used_index;
+
+	if (free_index > 0) {
+		--free_index;
+		--used_index;
+		result = cache->items[free_index];
+		cache->items[used_index] = result;
+		cache->free_index = free_index;
+		cache->used_index = used_index;
+	} else {
+
+		result = elm_check_add(parent);
+		elm_object_style_set(result, cache->obj_style);
+		evas_object_repeat_events_set(result, EINA_FALSE);
+		evas_object_propagate_events_set(result, EINA_FALSE);
+
+		debug_log("New object was spawned: %p", result);
+
+		if (used_index > 0) {
+			--used_index;
+			cache->items[used_index] = result;
+			cache->used_index = used_index;
+
+			evas_object_ref(result);
+		} else {
+			debug_warning("Cache is full!");
+		}
+	}
+
+	evas_object_show(result);
+
+	return result;
+}
+
+static void _mailbox_check_cache_release_obj(EmailMailboxCheckCache *cache, Evas_Object *obj)
+{
+	int i = cache->used_index;
+
+	for (; i < EMAIL_MAILBOX_CHECK_CACHE_SIZE; ++i) {
+		if (cache->items[i] == obj) {
+			int free_index = cache->free_index;
+			int used_index = cache->used_index;
+
+			cache->items[free_index] = obj;
+			cache->items[i] = cache->items[used_index];
+			++free_index;
+			++used_index;
+			cache->free_index = free_index;
+			cache->used_index = used_index;
+
+			evas_object_hide(obj);
+			return;
+		}
+	}
+
+	debug_warning("Object not found in cache!");
+}
+
+static void _mailbox_folders_name_cache_add_name(EmailMailboxView *view, int mailbox_id, const char *folder_name)
+{
+	debug_enter();
+	retm_if(!view || !folder_name, "Invalid arguments!");
+
+	EmailFolderNameCacheItem *cache_item = MEM_ALLOC(cache_item, 1);
+	cache_item->mailbox_id = mailbox_id;
+	cache_item->mailbox_name = strdup(folder_name);
+
+	view->folders_names_cache = eina_list_sorted_insert(view->folders_names_cache, _mailbox_folder_name_cache_comparator_cb, cache_item);
+	debug_leave();
+}
+
+static char *_mailbox_folders_name_cache_get_name(EmailMailboxView *view, int mailbox_id)
+{
+	retvm_if(!view, NULL, "Invalid arguments!");
+
+	EmailFolderNameCacheItem search_item = {
+			.mailbox_id = mailbox_id,
+			.mailbox_name = NULL
+	};
+	EmailFolderNameCacheItem *search_result = eina_list_search_sorted(view->folders_names_cache, _mailbox_folder_name_cache_comparator_cb, &search_item);
+
+	if (!search_result) {
+		return NULL;
+	} else {
+		return strdup(search_result->mailbox_name);
+	}
+}
+
+static int _mailbox_folder_name_cache_comparator_cb(const void *data1, const void *data2)
+{
+	const int mailbox_id1 = ((const EmailFolderNameCacheItem *) data1)->mailbox_id;
+	const int mailbox_id2 = ((const EmailFolderNameCacheItem *) data2)->mailbox_id;
+
+	if (mailbox_id1 > mailbox_id2) {
+		return 1;
+	}
+
+	if (mailbox_id1 < mailbox_id2) {
+		return -1;
+	}
+
+	return 0;
 }
 
 /*
@@ -2242,6 +2411,13 @@ MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t *mail_info
 	ld->checked = EINA_FALSE;
 	ld->is_highlited = EINA_FALSE;
 
+	/*Folder name for search mode*/
+	if (view->b_searchmode && view->search_type == EMAIL_SEARCH_IN_ALL_FOLDERS) {
+		ld->folder_name = mailbox_get_cached_folder_name(view, mail_info);
+	} else {
+		ld->folder_name = NULL;
+	}
+
 #ifndef _FEATURE_PRIORITY_SENDER_DISABLE_
 	if (mail_info->tag_id == PRIORITY_SENDER_TAG_ID) {
 		debug_log("this is priority sender email");
@@ -2291,7 +2467,7 @@ MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t *mail_info
 	} else {
 		ld->alias = STRNDUP(email_get_email_string("IDS_EMAIL_MBODY_NO_EMAIL_ADDRESS_OR_NAME"), ADDR_LEN - 1);
 	}
-	/*debug_secure("***FROM alias == [%s], email_address_sender : [%d]", ld->alias, STR_LEN(ld->alias));*/
+
 	FREE(alias);
 
 	if (ld->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX ||
@@ -2315,10 +2491,7 @@ MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t *mail_info
 		} else {
 			ld->recipient = STRNDUP(email_get_email_string("IDS_EMAIL_SBODY_NO_RECIPIENTS_M_NOUN"), RECIPIENT_LEN - 1);
 		}
-		/*debug_secure("info->recipient: %s", ld->recipient);*/
 	}
-
-	/*debug_secure("alias: %s, title: %s, ", ld->alias, ld->title);*/
 
 	/* date & time */
 	ld->absolute_time = mail_info->date_time;
@@ -2395,14 +2568,14 @@ void mailbox_list_free_mail_item_data(MailItemData *ld)
 {
 	retm_if(!ld, "ld is NULL");
 
-	FREE(ld->alias);
-	FREE(ld->sender);
-	FREE(ld->preview_body);
+	G_FREE(ld->alias);
+	G_FREE(ld->sender);
+	G_FREE(ld->preview_body);
+	G_FREE(ld->group_title);
+	FREE(ld->folder_name);
 	FREE(ld->title);
 	FREE(ld->recipient);
 	FREE(ld->timeordate);
-	G_FREE(ld->fastscroll_date);
-	G_FREE(ld->group_title);
 	ld->base.item = NULL;
 	FREE(ld);
 }
@@ -2662,13 +2835,12 @@ bool mailbox_check_searched_mail(int mail_id, void *data)
 	if (search_data)
 		cnt_filter_list += _get_filter_cnt_for_search_data(search_data);
 
-	filter_list = malloc(sizeof(email_list_filter_t)*cnt_filter_list);
+	filter_list = calloc(cnt_filter_list, sizeof(email_list_filter_t));
 	if (!filter_list) {
 		mailbox_free_mailbox_search_data(search_data);
 		debug_error("filter_list is NULL - allocation memory failed");
 		return NULL;
 	}
-	memset(filter_list, 0, sizeof(email_list_filter_t)*cnt_filter_list);
 
 	filter_list[i].list_filter_item_type = EMAIL_LIST_FILTER_ITEM_RULE;
 	filter_list[i].list_filter_item.rule.target_attribute = EMAIL_MAIL_ATTRIBUTE_MAIL_ID;
@@ -2718,94 +2890,39 @@ void mailbox_list_make_remaining_items_in_thread(EmailMailboxView *view, AddRema
 	debug_leave();
 }
 
-static void _mailbox_check_cache_init(EmailMailboxCheckCache *cache, const char *obj_style)
+char *mailbox_get_cached_folder_name(EmailMailboxView *view, email_mail_list_item_t *mail_info)
 {
-	cache->obj_style = obj_style;
-	cache->free_index = 0;
-	cache->used_index = EMAIL_MAILBOX_CHECK_CACHE_SIZE;
-}
+	debug_enter();
+	retvm_if(!view || !mail_info, NULL, "Invalid arguments!");
+	char *mailbox_alias = NULL;
 
-static void _mailbox_check_cache_free(EmailMailboxCheckCache *cache)
-{
-	int i = 0;
-	int free_index = cache->free_index;
-	int used_index = cache->used_index;
-
-	for (i = 0; i < free_index; ++i) {
-		evas_object_unref(cache->items[i]);
-		evas_object_del(cache->items[i]);
-	}
-
-	if (used_index < EMAIL_MAILBOX_CHECK_CACHE_SIZE) {
-		debug_warning("used_index: %d", used_index);
-		for (i = used_index; i < EMAIL_MAILBOX_CHECK_CACHE_SIZE; ++i) {
-			evas_object_unref(cache->items[i]);
-		}
-	}
-
-	cache->free_index = 0;
-	cache->used_index = EMAIL_MAILBOX_CHECK_CACHE_SIZE;
-}
-
-static Evas_Object *_mailbox_check_cache_get_obj(EmailMailboxCheckCache *cache, Evas_Object *parent)
-{
-	Evas_Object *result = NULL;
-
-	int free_index = cache->free_index;
-	int used_index = cache->used_index;
-
-	if (free_index > 0) {
-		--free_index;
-		--used_index;
-		result = cache->items[free_index];
-		cache->items[used_index] = result;
-		cache->free_index = free_index;
-		cache->used_index = used_index;
+	if (mail_info->mailbox_type != EMAIL_MAILBOX_TYPE_USER_DEFINED) {
+		mailbox_alias = mailbox_get_mailbox_alias_by_mailbox_type(mail_info->mailbox_type);
 	} else {
-
-		result = elm_check_add(parent);
-		elm_object_style_set(result, cache->obj_style);
-		evas_object_repeat_events_set(result, EINA_FALSE);
-		evas_object_propagate_events_set(result, EINA_FALSE);
-
-		debug_log("New object was spawned: %p", result);
-
-		if (used_index > 0) {
-			--used_index;
-			cache->items[used_index] = result;
-			cache->used_index = used_index;
-
-			evas_object_ref(result);
-		} else {
-			debug_warning("Cache is full!");
+		mailbox_alias = _mailbox_folders_name_cache_get_name(view, mail_info->mailbox_id);
+		if (!mailbox_alias) {
+			mailbox_alias = mailbox_get_mailbox_alias_by_mailbox_id(mail_info->mailbox_id);
+			_mailbox_folders_name_cache_add_name(view, mail_info->mailbox_id, mailbox_alias);
 		}
 	}
 
-	evas_object_show(result);
-
-	return result;
+	return mailbox_alias;
 }
 
-static void _mailbox_check_cache_release_obj(EmailMailboxCheckCache *cache, Evas_Object *obj)
+void mailbox_folders_name_cache_clear(EmailMailboxView *view)
 {
-	int i = cache->used_index;
+	debug_enter();
 
-	for (; i < EMAIL_MAILBOX_CHECK_CACHE_SIZE; ++i) {
-		if (cache->items[i] == obj) {
-			int free_index = cache->free_index;
-			int used_index = cache->used_index;
-
-			cache->items[free_index] = obj;
-			cache->items[i] = cache->items[used_index];
-			++free_index;
-			++used_index;
-			cache->free_index = free_index;
-			cache->used_index = used_index;
-
-			evas_object_hide(obj);
-			return;
-		}
+	if (!view->folders_names_cache) {
+		return;
 	}
 
-	debug_warning("Object not found in cache!");
+	EmailFolderNameCacheItem *item = NULL;
+	EINA_LIST_FREE(view->folders_names_cache, item) {
+		FREE(item->mailbox_name);
+		FREE(item);
+	}
+	view->folders_names_cache = NULL;
+
+	debug_leave();
 }

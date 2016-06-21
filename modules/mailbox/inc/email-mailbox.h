@@ -201,6 +201,8 @@ struct _view_data {
 	bool b_editmode;
 	mailbox_edit_type_e editmode_type;
 	bool b_searchmode;
+	email_search_type_e search_type;
+
 	bool b_restoring;
 
 	Ecore_Thread *add_remaining_thread;
@@ -263,6 +265,8 @@ struct _view_data {
 
 	EmailMailboxCheckCache star_check_cache;
 	EmailMailboxCheckCache select_check_cache;
+
+	Eina_List *folders_names_cache;
 };
 
 /**
@@ -286,13 +290,13 @@ typedef struct {
 	MailboxBaseItemData base;
 	EmailMailboxView *view;
 
+	char *folder_name;
 	gchar *alias;
 	gchar *sender;
 	gchar *preview_body;
 	char *title;
 	char *recipient;
 	gchar *timeordate;
-	gchar *fastscroll_date;
 	gchar *group_title;
 	gint mailbox_id;
 	int mailbox_type;
@@ -314,9 +318,6 @@ typedef struct {
 	gboolean is_to_address_mail;
 	gboolean is_priority_sender_mail;
 	time_t absolute_time;
-
-	Evas_Coord mouse_down_point_x;
-	Evas_Coord mouse_down_point_y;
 
 	Evas_Object *check_btn;
 	Evas_Object *flag_btn;

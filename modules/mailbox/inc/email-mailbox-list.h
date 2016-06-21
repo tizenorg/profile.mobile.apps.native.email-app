@@ -162,4 +162,18 @@ bool mailbox_check_searched_mail(int mail_id, void *data);
  */
 void mailbox_list_make_remaining_items_in_thread(EmailMailboxView *view, AddRemainingMailReqData *req);
 
+/**
+ * @brief Get cached folder name by mail info
+ * @param[in]	view			Email Mailbox data
+ * @param[in]	mail_info		Email mail list item data
+ * @return mailbox folder name on success or NULL if an error occurred
+ */
+char *mailbox_get_cached_folder_name(EmailMailboxView *view, email_mail_list_item_t *mail_info);
+
+/**
+ * @brief Release mailbox folders name cache
+ * @param[in]	view			Email Mailbox data
+ */
+void mailbox_folders_name_cache_clear(EmailMailboxView *view);
+
 #endif	/* __DEF_EMAIL_MAILBOX_LIST_H_ */
