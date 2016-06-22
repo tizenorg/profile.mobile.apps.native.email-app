@@ -104,11 +104,6 @@ static void _more_menu_del_cb(void *data, Evas *e, Evas_Object *obj, void *event
 		evas_object_freeze_events_set(view->ewk_view, EINA_FALSE);
 	}
 
-	if (!view->is_save_in_drafts_clicked) {
-		elm_object_tree_focus_allow_set(view->composer_layout, EINA_TRUE);
-		elm_object_focus_allow_set(view->ewk_btn, EINA_TRUE);
-	}
-
 	debug_leave();
 }
 
@@ -207,6 +202,8 @@ static void _more_menu_richtext_toolbar_show_clicked(void *data, Evas_Object *ob
 
 	DELETE_EVAS_OBJECT(view->context_popup);
 
+	composer_util_focus_set_focus_with_idler(view, view->selected_widget);
+
 	debug_leave();
 }
 
@@ -226,6 +223,8 @@ static void _more_menu_richtext_toolbar_hide_clicked(void *data, Evas_Object *ob
 	email_set_richtext_toolbar_status(EINA_FALSE);
 
 	DELETE_EVAS_OBJECT(view->context_popup);
+
+	composer_util_focus_set_focus_with_idler(view, view->selected_widget);
 
 	debug_leave();
 }
@@ -372,7 +371,7 @@ void composer_more_menu_clicked_cb(void *data, Evas_Object *obj, void *event_inf
 	 * This freezing event code is needed to prevent this scenario.
 	 */
 	evas_object_freeze_events_set(view->ewk_view, EINA_TRUE);
-	evas_object_focus_set(view->ewk_view, EINA_FALSE);
+	elm_object_focus_set(view->ewk_btn, EINA_FALSE);
 	ecore_imf_input_panel_hide();
 	DELETE_EVAS_OBJECT(view->context_popup);
 
@@ -381,8 +380,6 @@ void composer_more_menu_clicked_cb(void *data, Evas_Object *obj, void *event_inf
 	elm_ctxpopup_direction_priority_set(view->context_popup, ELM_CTXPOPUP_DIRECTION_UP, ELM_CTXPOPUP_DIRECTION_UNKNOWN, ELM_CTXPOPUP_DIRECTION_UNKNOWN, ELM_CTXPOPUP_DIRECTION_UNKNOWN);
 	elm_ctxpopup_auto_hide_disabled_set(view->context_popup, EINA_TRUE);
 
-	/* To prevent showing IME when the focus was on the webkit. ewk_btn isn't a child of composer_layout. so we need to control the focus of it as well. */
-	elm_object_focus_allow_set(view->ewk_btn, EINA_FALSE);
 	/* To prevent setting focus to last selected widget IME when device is rotated. (when ec_window is resized) */
 	elm_object_tree_focus_allow_set(view->composer_layout, EINA_FALSE);
 
