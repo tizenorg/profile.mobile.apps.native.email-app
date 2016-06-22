@@ -812,11 +812,11 @@ void composer_util_focus_set_focus(void *data, Evas_Object *target)
 
 	/* If ewk_view in focus some elm object may be in invalid focus state.
 	 * So unfocus any elm object to validate focus state.*/
-	if (evas_object_focus_get(view->ewk_view)) {
-		evas_object_focus_set(view->ewk_view, EINA_FALSE);
+	if (ewk_view_focus_get(view->ewk_view)) {
 		Evas_Object *elm_object_in_focus = elm_object_focused_object_get(view->base.content);
-		if (elm_object_in_focus) {
+		if (elm_object_in_focus != view->ewk_btn) {
 			elm_object_focus_set(elm_object_in_focus, EINA_FALSE);
+			ewk_view_focus_set(view->ewk_view, EINA_FALSE);
 		}
 	}
 
@@ -865,10 +865,6 @@ static Eina_Bool __composer_util_focus_set_focus_idler_cb(void *data)
 	Evas_Object *entry = (Evas_Object *)tdata->data;
 
 	view->idler_set_focus = NULL;
-
-	if (!entry && !view->base.module->is_attach_panel_launched && (view->selected_widget != view->ewk_view)) {
-		entry = view->selected_widget;
-	}
 
 	composer_util_focus_set_focus(view, entry);
 
@@ -1228,7 +1224,6 @@ void composer_util_return_composer_view(void *data)
 	view->is_save_in_drafts_clicked = EINA_FALSE;
 
 	elm_object_tree_focus_allow_set(view->composer_layout, EINA_TRUE);
-	elm_object_focus_allow_set(view->ewk_btn, EINA_TRUE);
 
 	composer_util_focus_set_focus_with_idler(view, view->selected_widget);
 

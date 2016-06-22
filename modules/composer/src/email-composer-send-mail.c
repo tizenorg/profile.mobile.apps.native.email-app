@@ -705,7 +705,6 @@ static void _composer_send_mail_storage_full_popup_response_cb(void *data, Evas_
 		view->is_save_in_drafts_clicked = EINA_FALSE;
 
 		elm_object_tree_focus_allow_set(view->composer_layout, EINA_TRUE);
-		elm_object_focus_allow_set(view->ewk_btn, EINA_TRUE);
 	} else {
 		DELETE_EVAS_OBJECT(view->composer_popup);
 		composer_util_return_composer_view(view);
@@ -1187,8 +1186,6 @@ void composer_exit_composer_get_contents(void *data)
 	}
 #endif
 
-	/* To prevent showing IME when the focus was on the webkit. ewk_btn isn't a child of composer_layout. so we need to control the focus of it as well. */
-	elm_object_focus_allow_set(view->ewk_btn, EINA_FALSE);
 	/* To prevent showing ime while sending email. */
 	elm_object_tree_focus_allow_set(view->composer_layout, EINA_FALSE);
 

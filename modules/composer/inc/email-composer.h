@@ -171,7 +171,6 @@ struct _view_data {
 
 	Eina_Bool is_last_item_selected;
 
-	Eina_Bool ewk_accepts_focus;
 	Eina_Bool allow_click_events;
 
 	/* For avoiding duplicate toast messages */
@@ -189,6 +188,10 @@ struct _view_data {
 	Evas_Object *ewk_view_layout;
 	Evas_Object *ewk_view;
 	Evas_Object *ewk_btn;
+	Ecore_Timer *ewk_focus_set_timer;
+	Ecore_Timer *ewk_focus_watch_timer;
+	Ecore_Timer *ewk_entry_sip_show_timer;
+	Eina_Bool is_ewk_focused;
 
 	double webview_load_progress;
 	Eina_Bool with_original_message;

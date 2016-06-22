@@ -167,11 +167,6 @@ static void _subject_entry_focused_cb(void *data, Evas_Object *obj, void *event_
 
 	DELETE_EVAS_OBJECT(view->context_popup);
 
-	composer_webkit_blur_webkit_focus(view);
-	if (view->richtext_toolbar) {
-		composer_rich_text_disable_set(view, EINA_TRUE);
-	}
-
 	Evas_Object *current_entry = view->subject_entry.entry;
 	if (view->selected_widget != current_entry) {
 		composer_attachment_ui_contract_attachment_list(view);
@@ -202,11 +197,7 @@ static void _show_attach_panel(EmailComposerView *view)
 				_get_image_list_cb, (void *)view) == EINA_FALSE) {
 			debug_error("EC_JS_GET_IMAGE_LIST failed.");
 		}
-		evas_object_focus_set(view->ewk_view, EINA_FALSE);
-		composer_webkit_blur_webkit_focus(view);
-		if (view->richtext_toolbar) {
-			composer_rich_text_disable_set(view, EINA_TRUE);
-		}
+		elm_object_focus_set(view->ewk_btn, EINA_FALSE);
 	}
 
 	debug_leave();
