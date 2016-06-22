@@ -124,9 +124,6 @@ void composer_util_popup_response_cb(void *data, Evas_Object *obj, void *event_i
 	}
 
 	elm_object_tree_focus_allow_set(view->composer_layout, EINA_TRUE);
-	elm_object_focus_allow_set(view->selected_widget, EINA_TRUE);
-	elm_object_focus_allow_set(view->subject_entry.entry, EINA_TRUE);
-	elm_object_focus_allow_set(view->ewk_btn, EINA_TRUE);
 
 	Evas_Object *target_widget = view->selected_widget;
 	if (view->is_inline_contents_inserted) {

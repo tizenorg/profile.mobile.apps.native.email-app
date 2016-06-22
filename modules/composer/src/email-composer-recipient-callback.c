@@ -282,9 +282,6 @@ static void _recipient_mbe_popup_move_recipient(EmailComposerView *view, Evas_Ob
 
 	/* We need to reset focus allow set which we set to false on mbe_select */
 	elm_object_tree_focus_allow_set(view->composer_layout, EINA_TRUE);
-	elm_object_focus_allow_set(view->selected_widget, EINA_TRUE);
-	elm_object_focus_allow_set(view->subject_entry.entry, EINA_FALSE);
-	elm_object_focus_allow_set(view->ewk_btn, EINA_FALSE); /* ewk_btn isn't a child of composer_layout. so we need to control the focus of it as well. */
 	/* To reset recipient layout for the previous selected entry because selected_entry will be changed to dest mbe. */
 	composer_recipient_unfocus_entry(view, view->selected_widget);
 
@@ -404,7 +401,6 @@ static void _recipient_mbe_popup_add_to_contact_selection_popup(void *data)
 	}
 
 	/* To prevent showing ime when the focus is changed. (when popup is deleted, the focus moves to the previous focused object) */
-	elm_object_focus_allow_set(view->ewk_btn, EINA_FALSE);
 	elm_object_tree_focus_allow_set(view->composer_layout, EINA_FALSE);
 
 	email_string_t EMAIL_COMPOSER_STRING_NO_TRANSITION = { NULL, title_str };
@@ -850,11 +846,6 @@ void _recipient_entry_focused_cb(void *data, Evas_Object *obj, void *event_info)
 		view->is_real_empty_entry = EINA_TRUE;
 	} else {
 		view->is_real_empty_entry = EINA_FALSE;
-	}
-
-	composer_webkit_blur_webkit_focus(view);
-	if (view->richtext_toolbar) {
-		composer_rich_text_disable_set(view, EINA_TRUE);
 	}
 
 	if (view->selected_widget != obj) {

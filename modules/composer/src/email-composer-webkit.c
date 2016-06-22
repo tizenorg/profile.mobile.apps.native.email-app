@@ -34,6 +34,13 @@ typedef enum {
 	CUSTOM_CONTEXT_MENU_ITEM_SMART_SEARCH = EWK_CONTEXT_MENU_ITEM_BASE_APPLICATION_TAG,
 } custom_context_menu_item_tag;
 
+#define _WEBKIT_FOCUS_SET_TIMEOUT_SEC 0.01
+#define _WEBKIT_ENTRY_SIP_SHOW_TIMEOUT_SEC 0.1
+
+// TODO Temp feature to fix EWK View focus callbacks. Remove when fixed.
+#define _WEBKIT_USE_FOCUS_WATCH_TIMER 1
+#define _WEBKIT_FOCUS_WATCH_TIMER_INTERVAL_SEC (1.0 / 60.0)
+
 #define _WEBKIT_CONSOLE_MESSAGE_LOG 0
 #define _WEBKIT_TEXT_STYLE_STATE_CALLBACK_LOG_ON 0
 
@@ -41,11 +48,13 @@ typedef enum {
  * Declaration for static functions
  */
 
-static void _ewk_view_mosue_up_cb(void *data, Evas *e, Evas_Object *obj, void *event_info);
-static void _ewk_view_focus_in_cb(void *data, Evas *e, Evas_Object *obj, void *event_info);
-static void _ewk_view_focus_out_cb(void *data, Evas *e, Evas_Object *obj, void *event_info);
+static Eina_Bool _webkit_entry_sip_show_timer_cb(void *data);
+static Eina_Bool _webkit_focus_set_timer_cb(void *data);
+
+static void _ewk_view_focus_in_cb(void *data, Evas_Object *obj, void *event_info);
 
 static void _webkit_button_focused_cb(void *data, Evas_Object *obj, void *event_info);
+static void _webkit_button_unfocused_cb(void *data, Evas_Object *obj, void *event_info);
 
 static void _webkit_js_execute_set_focus_cb(Evas_Object *obj, const char *result, void *data);
 static void _webkit_js_execute_insert_signature_cb(Evas_Object *obj, const char *result, void *data);
@@ -72,19 +81,95 @@ static Eina_Bool _webkit_parse_text_style_changed_data(const char *res_string, F
  * Definition for static functions
  */
 
+#if (_WEBKIT_USE_FOCUS_WATCH_TIMER)
+static Eina_Bool _webkit_focus_watch_timer_cb(void *data)
+{
+	EmailComposerView *view = data;
+
+	Eina_Bool is_ewk_focused = ewk_view_focus_get(view->ewk_view);
+
+	if (!view->is_ewk_focused != !is_ewk_focused) {
+		view->is_ewk_focused = is_ewk_focused;
+		debug_log();
+		if (is_ewk_focused) {
+			evas_object_smart_callback_call(view->ewk_view, "tmp,webview,focus,in", NULL);
+		} else {
+			evas_object_smart_callback_call(view->ewk_view, "tmp,webview,focus,out", NULL);
+		}
+		debug_log();
+	}
+
+	return ECORE_CALLBACK_RENEW;
+}
+#endif
+
+static Eina_Bool _webkit_entry_sip_show_timer_cb(void *data)
+{
+	debug_enter();
+	EmailComposerView *view = (EmailComposerView *)data;
+
+	view->ewk_entry_sip_show_timer = NULL;
+
+	Evas_Object *focused_elm_obj = elm_object_focused_object_get(view->base.content);
+	if (g_strcmp0(elm_object_widget_type_get(focused_elm_obj), "Elm_Entry") == 0) {
+		debug_log("Show SIP!");
+		elm_entry_input_panel_show(focused_elm_obj);
+	}
+
+	debug_leave();
+	return ECORE_CALLBACK_CANCEL;
+}
+
+static Eina_Bool _webkit_focus_set_timer_cb(void *data)
+{
+	debug_enter();
+	EmailComposerView *view = (EmailComposerView *)data;
+
+	view->ewk_focus_set_timer = NULL;
+
+	ewk_view_focus_set(view->ewk_view, EINA_TRUE);
+
+	if (view->need_to_set_focus_with_js) {
+		composer_webkit_set_focus_to_webview_with_js(view);
+	}
+	view->need_to_set_focus_with_js = EINA_TRUE;
+
+	if (view->richtext_toolbar) {
+		composer_rich_text_disable_set(view, EINA_FALSE);
+	}
+
+	debug_leave();
+	return ECORE_CALLBACK_CANCEL;
+}
+
 static void _webkit_button_focused_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-
 	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (!evas_object_focus_get(view->ewk_view)) {
-		evas_object_focus_set(view->ewk_view, EINA_TRUE);
-		if (view->need_to_set_focus_with_js) {
-			composer_webkit_set_focus_to_webview_with_js(view);
-		}
+	DELETE_TIMER_OBJECT(view->ewk_focus_set_timer);
+	view->ewk_focus_set_timer = ecore_timer_add(_WEBKIT_FOCUS_SET_TIMEOUT_SEC,
+			_webkit_focus_set_timer_cb, view);
+
+	debug_leave();
+}
+
+static void _webkit_button_unfocused_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	debug_enter();
+	EmailComposerView *view = (EmailComposerView *)data;
+
+	DELETE_TIMER_OBJECT(view->ewk_focus_set_timer);
+
+	if (view->richtext_toolbar) {
+		composer_rich_text_disable_set(view, EINA_TRUE);
 	}
-	view->need_to_set_focus_with_js = EINA_TRUE;
+
+	composer_webkit_blur_webkit_focus(view);
+
+	ewk_view_focus_set(view->ewk_view, EINA_FALSE);
+
+	view->cs_in_selection_mode = false;
 
 	debug_leave();
 }
@@ -102,9 +187,6 @@ static void _webkit_js_execute_set_focus_cb(Evas_Object *obj, const char *result
 	}
 
 	elm_object_tree_focus_allow_set(view->composer_layout, EINA_TRUE);
-	if (!elm_win_focus_highlight_enabled_get(view->base.module->win)) {
-		elm_object_focus_allow_set(view->send_btn, EINA_FALSE);
-	}
 
 	if (!view->composer_popup && (obj == view->ewk_view)) { /* Removing focus in case of scheduled email*/
 		composer_util_focus_set_focus(view, view->selected_widget);
@@ -119,6 +201,11 @@ static void _webkit_js_execute_set_focus_cb(Evas_Object *obj, const char *result
 			composer_exit_composer_get_contents(view); /* Exit out of composer without any pop-up.*/
 		}
 	}
+
+#if (_WEBKIT_USE_FOCUS_WATCH_TIMER)
+	view->ewk_focus_watch_timer = ecore_timer_add(_WEBKIT_FOCUS_WATCH_TIMER_INTERVAL_SEC,
+			_webkit_focus_watch_timer_cb, view);
+#endif
 
 	debug_leave();
 }
@@ -342,18 +429,7 @@ static void _webkit_js_execute_get_initial_body_content_cb(Evas_Object *obj, con
 	debug_leave();
 }
 
-static void _ewk_view_mosue_up_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
-{
-	debug_enter();
-
-	EmailComposerView *view = (EmailComposerView *)data;
-
-	if (view->allow_click_events && !elm_object_focus_get(view->ewk_btn)) {
-		view->ewk_accepts_focus = EINA_TRUE;
-	}
-}
-
-static void _ewk_view_focus_in_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
+static void _ewk_view_focus_in_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 
@@ -369,28 +445,15 @@ static void _ewk_view_focus_in_cb(void *data, Evas *e, Evas_Object *obj, void *e
 
 	/* If there's no focus on the webkit button, it'll set the focus to webkit again. */
 	if (!elm_object_focus_get(view->ewk_btn)) {
-		/* Idler used because recursion may do a nasty sings! */
-		if (view->ewk_accepts_focus) {
-			view->need_to_set_focus_with_js = EINA_FALSE;
-			debug_log("reset focus");
-			composer_util_focus_set_focus_with_idler(view, view->ewk_view);
-		} else {
-			debug_log("cancel focus");
-			composer_util_focus_set_focus_with_idler(view, NULL);
-		}
+		debug_log("reset focus");
+		view->need_to_set_focus_with_js = EINA_FALSE;
+		elm_object_focus_set(view->ewk_btn, EINA_TRUE);
 		debug_log("return");
 		return;
 	}
 
-	view->ewk_accepts_focus = EINA_FALSE;
-
 	if (composer_recipient_is_recipient_entry(view, view->selected_widget)) {
 		if (!composer_recipient_commit_recipient_on_entry(view, view->selected_widget)) {
-
-			if (view->richtext_toolbar) {
-				composer_rich_text_disable_set(view, EINA_FALSE);
-			}
-
 			return;
 		}
 	}
@@ -404,21 +467,6 @@ static void _ewk_view_focus_in_cb(void *data, Evas *e, Evas_Object *obj, void *e
 		composer_attachment_ui_contract_attachment_list(view);
 		view->selected_widget = view->ewk_view;
 	}
-
-	if (view->richtext_toolbar) {
-		composer_rich_text_disable_set(view, EINA_FALSE);
-	}
-
-	debug_leave();
-}
-
-static void _ewk_view_focus_out_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
-{
-	debug_enter();
-
-	EmailComposerView *view = (EmailComposerView *)data;
-
-	view->cs_in_selection_mode = false;
 
 	debug_leave();
 }
@@ -805,17 +853,17 @@ void composer_webkit_create_body_field(Evas_Object *parent, EmailComposerView *v
 
 	composer_webkit_add_callbacks(view->ewk_view, view);
 
-	Evas_Object *ewk_btn = elm_button_add(view->base.module->navi);
+	Evas_Object *ewk_btn = elm_button_add(view->composer_layout);
 	elm_object_style_set(ewk_btn, "transparent");
 	evas_object_freeze_events_set(ewk_btn, EINA_TRUE);
-	evas_object_size_hint_weight_set(ewk_btn, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	evas_object_size_hint_align_set(ewk_btn, EVAS_HINT_FILL, EVAS_HINT_FILL);
+	evas_object_pass_events_set(ewk_btn, EINA_TRUE);
 	evas_object_show(ewk_btn);
-	elm_object_part_content_set(view->base.content, "ec.swallow.webview.button", ewk_btn);
+	elm_object_part_content_set(view->composer_layout, "ec.swallow.webview.button", ewk_btn);
 
 	view->ewk_btn = ewk_btn;
 
 	evas_object_smart_callback_add(view->ewk_btn, "focused", _webkit_button_focused_cb, view);
+	evas_object_smart_callback_add(view->ewk_btn, "unfocused", _webkit_button_unfocused_cb, view);
 
 	composer_webkit_update_orientation(view);
 
@@ -832,9 +880,11 @@ void composer_webkit_add_callbacks(Evas_Object *ewk_view, void *data)
 
 	EmailComposerView *view = (EmailComposerView *)data;
 
-	evas_object_event_callback_add(ewk_view, EVAS_CALLBACK_FOCUS_IN, _ewk_view_focus_in_cb, view);
-	evas_object_event_callback_add(ewk_view, EVAS_CALLBACK_FOCUS_OUT, _ewk_view_focus_out_cb, view);
-	evas_object_event_callback_add(ewk_view, EVAS_CALLBACK_MOUSE_UP, _ewk_view_mosue_up_cb, view);
+#if (_WEBKIT_USE_FOCUS_WATCH_TIMER)
+	evas_object_smart_callback_add(ewk_view, "tmp,webview,focus,in", _ewk_view_focus_in_cb, view);
+#else
+	evas_object_smart_callback_add(ewk_view, "webview,focus,in", _ewk_view_focus_in_cb, view);
+#endif
 
 	evas_object_smart_callback_add(ewk_view, "load,progress", _ewk_view_load_progress_cb, view);
 	evas_object_smart_callback_add(ewk_view, "load,error", _ewk_view_load_error_cb, view);
@@ -864,9 +914,11 @@ void composer_webkit_del_callbacks(Evas_Object *ewk_view, void *data)
 
 	EmailComposerView *view = (EmailComposerView *)data;
 
-	evas_object_event_callback_del_full(ewk_view, EVAS_CALLBACK_FOCUS_IN, _ewk_view_focus_in_cb, view);
-	evas_object_event_callback_del_full(ewk_view, EVAS_CALLBACK_FOCUS_OUT, _ewk_view_focus_out_cb, view);
-	evas_object_event_callback_del_full(ewk_view, EVAS_CALLBACK_MOUSE_UP, _ewk_view_mosue_up_cb, view);
+#if (_WEBKIT_USE_FOCUS_WATCH_TIMER)
+	evas_object_smart_callback_del_full(ewk_view, "tmp,webview,focus,in", _ewk_view_focus_in_cb, view);
+#else
+	evas_object_smart_callback_del_full(ewk_view, "webview,focus,in", _ewk_view_focus_in_cb, view);
+#endif
 
 	evas_object_smart_callback_del_full(ewk_view, "load,progress", _ewk_view_load_progress_cb, view);
 	evas_object_smart_callback_del_full(ewk_view, "load,error", _ewk_view_load_error_cb, view);
@@ -908,6 +960,10 @@ void composer_webkit_blur_webkit_focus(void *data)
 			debug_error("EC_JS_SET_UNFOCUS is failed!");
 		}
 	}
+
+	DELETE_TIMER_OBJECT(view->ewk_entry_sip_show_timer);
+	view->ewk_entry_sip_show_timer = ecore_timer_add(_WEBKIT_ENTRY_SIP_SHOW_TIMEOUT_SEC,
+			_webkit_entry_sip_show_timer_cb, view);
 
 	debug_leave();
 }
