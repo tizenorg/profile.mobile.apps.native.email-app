@@ -851,6 +851,9 @@ static void _composer_destroy_evas_objects(EmailComposerView *view)
 	DELETE_TIMER_OBJECT(view->cs_events_timer1);
 	DELETE_TIMER_OBJECT(view->cs_events_timer2);
 	DELETE_TIMER_OBJECT(view->vcard_save_timer);
+	DELETE_TIMER_OBJECT(view->ewk_focus_set_timer);
+	DELETE_TIMER_OBJECT(view->ewk_focus_watch_timer);
+	DELETE_TIMER_OBJECT(view->ewk_entry_sip_show_timer);
 
 	DELETE_ANIMATOR_OBJECT(view->cs_animator);
 
@@ -1169,10 +1172,10 @@ static void _composer_deactivate(email_view_t *self)
 
 	if (view->is_need_close_composer_on_low_memory) {
 		view->timer_destory_composer = ecore_timer_add(0.1f, _composer_destroy_timer_cb, view);
-
 	}
+
 	if (view->selected_widget == view->ewk_view) {
-		evas_object_focus_set(view->ewk_view, EINA_FALSE);
+		elm_object_focus_set(view->ewk_btn, EINA_FALSE);
 	}
 
 	view->is_hided = EINA_TRUE;
