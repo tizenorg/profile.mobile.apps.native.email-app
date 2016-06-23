@@ -19,17 +19,21 @@
 #include "email-engine.h"
 #include "email-viewer.h"
 #include "email-viewer-util.h"
+#include "email-viewer-scroller.h"
 #include "email-viewer-ext-gesture.h"
 
-#define GESTURE_MOMENT_MIN_X 600
-#define GESTURE_ANGLE_MAX_DELTA 25.0
+#define EMAIL_GESTURE_MOMENT_MIN_X		600
+#define EMAIL_GESTURE_ANGLE_MAX_DELTA	25.0
+
+#define EMAIL_START_EWKVIEW_SCROLL_THRESHOLD_H 1
 
 /*
  * Declaration for static functions
  */
 
-static Evas_Event_Flags _onGestureStart(void *data, void *eventInfo);
-static Evas_Event_Flags _onGestureEnd(void *data, void *eventInfo);
+static Evas_Event_Flags _gesture_flicks_start_cb(void *data, void *eventInfo);
+static Evas_Event_Flags _gesture_flicks_end_cb(void *data, void *eventInfo);
+static Evas_Event_Flags _gesture_momentum_move_cb(void *data, void *eventInfo);
 
 /*
  * Definition for static functions
@@ -61,7 +65,7 @@ void __email_viewer_got_next_prev_message(void *data, gboolean next)
 	debug_leave();
 }
 
-static Evas_Event_Flags _onGestureStart(void *data, void *eventInfo)
+static Evas_Event_Flags _gesture_flicks_start_cb(void *data, void *eventInfo)
 {
 	debug_enter();
 	EmailViewerView *view = (EmailViewerView *) data;
@@ -75,7 +79,7 @@ static Evas_Event_Flags _onGestureStart(void *data, void *eventInfo)
 	return EVAS_EVENT_FLAG_NONE;
 }
 
-static Evas_Event_Flags _onGestureEnd(void *data, void *eventInfo)
+static Evas_Event_Flags _gesture_flicks_end_cb(void *data, void *eventInfo)
 {
 	debug_enter();
 	EmailViewerView *view = (EmailViewerView *) data;
@@ -84,8 +88,8 @@ static Evas_Event_Flags _onGestureEnd(void *data, void *eventInfo)
 	Evas_Coord ewk_ct_w = 0;
 	Evas_Coord ewk_ct_h = 0;
 
-	if ((abs(event->momentum.mx) < GESTURE_MOMENT_MIN_X) ||
-		(fabs(fabs(event->angle - 180.0) - 90.0) > GESTURE_ANGLE_MAX_DELTA)) {
+	if ((abs(event->momentum.mx) < EMAIL_GESTURE_MOMENT_MIN_X) ||
+		(fabs(fabs(event->angle - 180.0) - 90.0) > EMAIL_GESTURE_ANGLE_MAX_DELTA)) {
 		debug_log("Skip");
 		return EVAS_EVENT_FLAG_NONE;
 	}
@@ -106,6 +110,36 @@ static Evas_Event_Flags _onGestureEnd(void *data, void *eventInfo)
 	return EVAS_EVENT_FLAG_NONE;
 }
 
+static Evas_Event_Flags _gesture_momentum_move_cb(void *data, void *eventInfo)
+{
+	Elm_Gesture_Momentum_Info *event = eventInfo;
+	EmailViewerView *view = data;
+
+	if (event->my > 0) {
+		if (!view->is_main_scroller_scrolling) {
+			int ewk_pos = 0;
+			ewk_view_scroll_pos_get(view->webview, NULL, &ewk_pos);
+			if (ewk_pos == 0) {
+				viewer_stop_webkit_scroller_start_elm_scroller(view);
+			}
+		}
+	} else if (event->my < 0) {
+		if (view->is_main_scroller_scrolling) {
+			Evas_Coord ewk_scroll_h;
+			ewk_view_scroll_size_get(view->webview, NULL, &ewk_scroll_h);
+			if (ewk_scroll_h > EMAIL_START_EWKVIEW_SCROLL_THRESHOLD_H) {
+				Evas_Coord reg_x, reg_y, reg_w, reg_h, child_w, child_h;
+				elm_scroller_region_get(view->scroller, &reg_x, &reg_y, &reg_w, &reg_h);
+				elm_scroller_child_size_get(view->scroller, &child_w, &child_h);
+				if (reg_y == (child_h - reg_h)) {
+					viewer_stop_elm_scroller_start_webkit_scroller(view);
+				}
+			}
+		}
+	}
+
+	return EVAS_EVENT_FLAG_NONE;
+}
 
 /*
  * Definition for exported functions
@@ -124,8 +158,9 @@ void viewer_set_flick_layer(void *data)
 	elm_gesture_layer_attach(gesture_obj, view->scroller);
 	elm_gesture_layer_continues_enable_set(gesture_obj, EINA_FALSE);
 
-	elm_gesture_layer_cb_set(gesture_obj, ELM_GESTURE_N_FLICKS, ELM_GESTURE_STATE_START, _onGestureStart, view);
-	elm_gesture_layer_cb_set(gesture_obj, ELM_GESTURE_N_FLICKS, ELM_GESTURE_STATE_END, _onGestureEnd, view);
+	elm_gesture_layer_cb_set(gesture_obj, ELM_GESTURE_N_FLICKS, ELM_GESTURE_STATE_START, _gesture_flicks_start_cb, view);
+	elm_gesture_layer_cb_set(gesture_obj, ELM_GESTURE_N_FLICKS, ELM_GESTURE_STATE_END, _gesture_flicks_end_cb, view);
+	elm_gesture_layer_cb_set(gesture_obj, ELM_GESTURE_MOMENTUM, ELM_GESTURE_STATE_MOVE, _gesture_momentum_move_cb, view);
 
 	debug_leave();
 }

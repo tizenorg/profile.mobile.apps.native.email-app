@@ -1025,19 +1025,12 @@ Eina_Bool viewer_initialize_data(EmailViewerView *view)
 	view->b_load_finished = EINA_FALSE;
 	view->b_show_remote_images = EINA_FALSE;
 	view->is_long_pressed = EINA_FALSE;
-	view->is_webview_scrolling = EINA_FALSE;
 	view->is_main_scroller_scrolling = EINA_TRUE;
-	view->is_outer_scroll_bot_hit = EINA_FALSE;
-	view->is_magnifier_opened = EINA_FALSE;
 	view->is_recipient_ly_shown = EINA_FALSE;
 	view->is_download_message_btn_clicked = EINA_FALSE;
 	view->is_cancel_sending_btn_clicked = EINA_FALSE;
 	view->is_storage_full_popup_shown = EINA_FALSE;
 	view->need_pending_destroy = EINA_FALSE;
-	view->is_top_webview_reached = EINA_FALSE;
-	view->is_bottom_webview_reached = EINA_FALSE;
-	view->is_scrolling_down = EINA_FALSE;
-	view->is_scrolling_up = EINA_FALSE;
 	view->is_webview_text_selected = EINA_FALSE;
 
 	/*eml viewer*/
@@ -1464,8 +1457,6 @@ static void _outter_scroller_bottom_hit_cb(void *data, Evas_Object *obj, void *e
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 	EmailViewerView *view = (EmailViewerView *)data;
 
-	viewer_stop_elm_scroller_start_webkit_scroller(view);
-
 	debug_leave();
 }
 
@@ -1475,7 +1466,7 @@ static void _outter_scroller_top_hit_cb(void *data, Evas_Object *obj, void *even
 
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 	EmailViewerView *view = (EmailViewerView *)data;
-	view->is_outer_scroll_bot_hit = EINA_FALSE;
+
 	edje_object_part_drag_value_set(_EDJ(view->combined_scroller), "elm.dragable.vbar", 0.0, 0.0);
 	debug_leave();
 }
