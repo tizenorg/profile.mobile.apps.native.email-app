@@ -227,7 +227,6 @@ static void _subject_attach_files_clicked(void *data, Evas_Object *obj, void *ev
 	}
 
 	email_feedback_play_tap_sound();
-	view->selected_widget = view->attachment_btn;
 	ecore_imf_input_panel_hide();
 	int total_attachment_count = eina_list_count(view->attachment_item_list) + eina_list_count(view->attachment_inline_item_list);
 	if (total_attachment_count >= MAX_ATTACHMENT_ITEM) {

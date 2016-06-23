@@ -806,9 +806,6 @@ void composer_util_focus_set_focus(void *data, Evas_Object *target)
 	debug_enter();
 
 	EmailComposerView *view = (EmailComposerView *)data;
-	if (view->is_hided) {
-		view->need_to_set_focus_on_resume = EINA_TRUE;
-	}
 
 	/* If ewk_view in focus some elm object may be in invalid focus state.
 	 * So unfocus any elm object to validate focus state.*/
@@ -849,9 +846,6 @@ void composer_util_focus_set_focus(void *data, Evas_Object *target)
 	} else if (target == view->ewk_view) {
 		debug_log("Focus set [ewk_view]");
 		elm_object_focus_set(view->ewk_btn, EINA_TRUE);
-	} else if (target == view->attachment_btn) {
-		debug_log("Focus set [attachment_btn]");
-		elm_object_focus_set(view->attachment_btn, EINA_TRUE);
 	} else {
 		debug_log("Focus set [NO! subject_entry]");
 		elm_object_focus_set(view->subject_entry.entry, EINA_TRUE);

@@ -472,7 +472,7 @@ static void _ewk_view_focus_in_cb(void *data, Evas_Object *obj, void *event_info
 		composer_recipient_show_hide_bcc_field(view, EINA_FALSE);
 	}
 
-	/* This line(for selected_entry) should be here. (after composer_recipient_hide_contact_button()) */
+	/* This line(for selected_widget) should be here. (after composer_recipient_hide_contact_button()) */
 	if (view->selected_widget != view->ewk_view) {
 		composer_attachment_ui_contract_attachment_list(view);
 		view->selected_widget = view->ewk_view;

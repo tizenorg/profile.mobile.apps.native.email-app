@@ -57,7 +57,7 @@ static void _initial_data_set_mail_bcc_recipients(EmailComposerView *view);
 static void _initial_data_set_mail_subject(EmailComposerView *view);
 static char *_initial_data_get_mail_body(EmailComposerView *view);
 static void _initial_data_set_mail_attachment(EmailComposerView *view);
-static void _initial_data_set_selected_entry(EmailComposerView *view);
+static void _initial_data_set_selected_widget(EmailComposerView *view);
 
 static Eina_List *_initial_data_make_initial_recipients_list(Evas_Object *mbe);
 
@@ -1155,7 +1155,7 @@ void composer_initial_data_set_mail_info(EmailComposerView *view, bool is_draft_
 	/* Set ewk_view_vertical_panning_hold_set() here due to structural issue of Chromium */
 	ewk_view_vertical_panning_hold_set(view->ewk_view, EINA_TRUE);
 
-	_initial_data_set_selected_entry(view);
+	_initial_data_set_selected_widget(view);
 
 	debug_leave();
 	email_profiling_end(composer_initial_data_set_mail_info);
@@ -1419,7 +1419,7 @@ void composer_initial_data_free_initial_contents(EmailComposerView *view)
 	debug_leave();
 }
 
-static void _initial_data_set_selected_entry(EmailComposerView *view)
+static void _initial_data_set_selected_widget(EmailComposerView *view)
 {
 	debug_enter();
 

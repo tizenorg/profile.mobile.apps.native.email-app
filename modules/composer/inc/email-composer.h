@@ -356,7 +356,6 @@ struct _view_data {
 	Eina_Bool is_need_close_composer_on_low_memory;
 	Eina_Bool is_forward_download_processed;
 	Eina_Bool is_inline_contents_inserted;
-	Eina_Bool need_to_set_focus_on_resume;
 	Eina_Bool need_to_destroy_after_initializing;
 	Eina_Bool need_to_display_max_size_popup;
 	Eina_Bool is_force_destroy;

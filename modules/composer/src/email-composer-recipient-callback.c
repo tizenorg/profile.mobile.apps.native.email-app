@@ -280,7 +280,7 @@ static void _recipient_mbe_popup_move_recipient(EmailComposerView *view, Evas_Ob
 		composer_recipient_show_hide_bcc_field(view, EINA_TRUE);
 	}
 
-	/* To reset recipient layout for the previous selected entry because selected_entry will be changed to dest mbe. */
+	/* To reset recipient layout for the previous selected entry because selected_widget will be changed to dest mbe. */
 	composer_recipient_unfocus_entry(view, view->selected_widget);
 
 	if (dest_mbe == view->recp_to_mbe) {
@@ -299,7 +299,7 @@ static void _recipient_mbe_popup_move_recipient(EmailComposerView *view, Evas_Ob
 
 	/* Destination entry is changed to shown status. But some status values in EFL side aren't updated immediately.
 	 * They'll be updated on the next idle time.
-	 * We have to use idler here to set the focus to selected_entry because the focus is moved to another entry if we destroy popup here.
+	 * We have to use idler here to set the focus to selected_widget because the focus is moved to another entry if we destroy popup here.
 	 */
 	view->idler_move_recipient = ecore_idler_add(_recipient_mbe_move_recipient_destroy_popup_idler_cb, view);
 

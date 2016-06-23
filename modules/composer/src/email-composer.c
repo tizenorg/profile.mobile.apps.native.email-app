@@ -64,6 +64,7 @@ static COMPOSER_ERROR_TYPE_E _composer_initialize_themes(void *data);
 static COMPOSER_ERROR_TYPE_E _composer_construct_composer_data(void *data);
 
 static void _composer_attach_panel_reply_cb(void *data, const char **path_array, int array_len);
+static void _composer_attach_panel_close_cb(void *data);
 
 static void *_composer_vcard_save_worker(void *data);
 static Eina_Bool _composer_vcard_save_timer_cb(void *data);
@@ -412,6 +413,7 @@ static COMPOSER_ERROR_TYPE_E _composer_initialize_account_data(void *data)
 	email_attach_panel_listener_t listener = { 0 };
 	listener.cb_data = view;
 	listener.reply_cb = _composer_attach_panel_reply_cb;
+	listener.close_cb = _composer_attach_panel_close_cb;
 
 	email_module_set_attach_panel_listener(view->base.module, &listener);
 
@@ -738,6 +740,18 @@ static void _composer_attach_panel_reply_cb(void *data, const char **path_array,
 
 	composer_attachment_process_attachments_with_array(view,
 			path_array, array_len, ATTACH_BY_COPY_FILE, EINA_FALSE);
+
+	debug_leave();
+}
+
+static void _composer_attach_panel_close_cb(void *data)
+{
+	debug_enter();
+	EmailComposerView *view = data;
+
+	if (!view->composer_popup) {
+		composer_util_focus_set_focus_with_idler(view, view->selected_widget);
+	}
 
 	debug_leave();
 }
@@ -1199,10 +1213,6 @@ static void _composer_activate(email_view_t *self, email_view_state prev_state)
 
 	view->is_hided = EINA_FALSE;
 	_composer_contacts_update_recp_info_for_recipients(view);
-	if (view->need_to_set_focus_on_resume) {
-		composer_util_focus_set_focus(view, view->selected_widget);
-		view->need_to_set_focus_on_resume = EINA_FALSE;
-	}
 
 	if (evas_object_freeze_events_get(view->ewk_view)) {
 		evas_object_freeze_events_set(view->ewk_view, EINA_FALSE);
@@ -1214,7 +1224,7 @@ static void _composer_activate(email_view_t *self, email_view_state prev_state)
 		view->timer_adding_account = ecore_timer_add(0.01f, _composer_update_data_after_adding_account_timer_cb, view);
 	}
 
-	if (!view->composer_popup) {
+	if (!view->composer_popup && !view->base.module->is_attach_panel_launched) {
 		composer_util_focus_set_focus_with_idler(view, view->selected_widget);
 	}
 
