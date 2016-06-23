@@ -1,5 +1,5 @@
 Name:       org.tizen.email
-VCS:         profile/mobile/apps/native/email-app#5733c1cd69277acb62aa974dd45827a79777f666
+VCS:         profile/mobile/apps/native/email-app#863bd41c5ef2a6dd236c2c297b7f950ad34c5359
 #RS_Ver:    20160622_2 
 Summary:    Native email application
 Version:    0.9.34
