@@ -176,18 +176,11 @@ struct _view_data {
 	Eina_Bool b_load_finished;
 	Eina_Bool b_show_remote_images;
 	Eina_Bool is_long_pressed;
-	Eina_Bool is_webview_scrolling;
 	Eina_Bool is_main_scroller_scrolling;
-	Eina_Bool is_outer_scroll_bot_hit;
-	Eina_Bool is_magnifier_opened;
 	Eina_Bool is_recipient_ly_shown;
 	Eina_Bool is_download_message_btn_clicked;
 	Eina_Bool is_cancel_sending_btn_clicked;
 	Eina_Bool need_pending_destroy;
-	Eina_Bool is_top_webview_reached;
-	Eina_Bool is_bottom_webview_reached;
-	Eina_Bool is_scrolling_down;
-	Eina_Bool is_scrolling_up;
 	Eina_Bool is_storage_full_popup_shown;
 	bool can_destroy_on_msg_delete;
 	Eina_Bool is_webview_text_selected;

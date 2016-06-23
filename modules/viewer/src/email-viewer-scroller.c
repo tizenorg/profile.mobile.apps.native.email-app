@@ -168,9 +168,6 @@ static void _viewer_scroll_down_cb(void *data, Evas_Object *obj, void *event_inf
 	debug_enter_scroller();
 	EmailViewerView *view = (EmailViewerView *)data;
 
-	view->is_scrolling_down = EINA_TRUE;
-	view->is_scrolling_up = EINA_FALSE;
-
 	viewer_set_vertical_scroller_position(view);
 	viewer_set_vertical_scroller_size(view);
 
@@ -184,9 +181,6 @@ static void _viewer_scroll_up_cb(void *data, Evas_Object *obj, void *event_info)
 	debug_enter_scroller();
 
 	EmailViewerView *view = (EmailViewerView *)data;
-
-	view->is_scrolling_up = EINA_TRUE;
-	view->is_scrolling_down = EINA_FALSE;
 
 	viewer_set_vertical_scroller_position(view);
 	viewer_set_vertical_scroller_size(view);
@@ -257,10 +251,6 @@ static void _viewer_main_scroller_scroll_up_cb(void *data, Evas_Object *obj, voi
 	retm_if(g_lock == 1, "this function is already running");
 	g_lock = 1;	/*lock this function*/
 
-	view->is_bottom_webview_reached = EINA_FALSE;
-	view->is_scrolling_up = EINA_TRUE;
-	view->is_scrolling_down = EINA_FALSE;
-
 	_viewer_main_scroller_scroll(view, EINA_TRUE);
 
 	g_lock = 0;	/*unlock this function*/
@@ -276,10 +266,6 @@ static void _viewer_main_scroller_scroll_down_cb(void *data, Evas_Object *obj, v
 
 	retm_if(g_lock == 1, "this function is already running");
 	g_lock = 1;	/*lock this function*/
-
-	view->is_top_webview_reached = EINA_FALSE;
-	view->is_scrolling_down = EINA_TRUE;
-	view->is_scrolling_up = EINA_FALSE;
 
 	_viewer_main_scroller_scroll(view, EINA_FALSE);
 
@@ -328,7 +314,6 @@ void viewer_stop_elm_scroller_start_webkit_scroller(void *data)
 			}
 			ewk_view_vertical_panning_hold_set(view->webview, EINA_FALSE); /* restart */
 			view->is_main_scroller_scrolling = EINA_FALSE;
-			view->is_webview_scrolling = EINA_TRUE;
 		}
 	}
 
@@ -343,7 +328,7 @@ void viewer_stop_webkit_scroller_start_elm_scroller(void *data)
 	EmailViewerView *view = (EmailViewerView *)data;
 	retm_if(view->webview == NULL, "webview is NULL");
 
-	if (view->is_webview_scrolling) {
+	if (!view->is_main_scroller_scrolling) {
 		debug_log_scroller("main scroller start");
 		ewk_view_vertical_panning_hold_set(view->webview, EINA_TRUE); /* stop */
 
@@ -356,7 +341,6 @@ void viewer_stop_webkit_scroller_start_elm_scroller(void *data)
 
 		elm_scroller_region_bring_in(view->scroller, x, 0, w, h);
 		view->is_main_scroller_scrolling = EINA_TRUE;
-		view->is_webview_scrolling = EINA_FALSE;
 	}
 
 	debug_leave_scroller();
