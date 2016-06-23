@@ -1250,7 +1250,7 @@ static void _mailbox_on_back_key(email_view_t *self)
 	if (view->b_editmode) {
 		mailbox_exit_edit_mode(view);
 	} else if (view->b_searchmode) {
-		mailbox_finish_search_mode(view);
+		mailbox_back_key_click_handle(view);
 	} else {
 		if ((view->mode == EMAIL_MAILBOX_MODE_ALL || view->mode == EMAIL_MAILBOX_MODE_MAILBOX)
 			&& view->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX) {

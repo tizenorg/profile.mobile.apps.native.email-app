@@ -99,7 +99,7 @@ static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_id(int account_
 static email_mail_list_item_t *_mailbox_get_mail_list_by_mailbox_type(int account_id, int mailbox_type, int sort_type, int thread_id, const email_search_data_t *search_data, int *mail_count);
 static email_mail_list_item_t *_mailbox_get_priority_sender_mail_list(int sort_type, int thread_id, const email_search_data_t *search_data, int *mail_count);
 static email_mail_list_item_t *_mailbox_get_favourite_mail_list(int sort_type, int thread_id, const email_search_data_t *search_data, int *mail_count);
-static email_mail_list_item_t *_mailbox_get_mail_list_for_search_all_folders(int account_id, int sort_type, const email_search_data_t *search_data, int *mail_count);
+static email_mail_list_item_t *_mailbox_get_mail_list_for_search_all_folders(int sort_type, const email_search_data_t *search_data, int *mail_count);
 
 static int _get_filter_cnt_for_search_data(const email_search_data_t *search_data);
 static void _add_search_data_into_filter_list(const email_search_data_t *search_data, email_list_filter_t *filter_list, int *current_index);
@@ -368,7 +368,12 @@ static char *_mail_item_gl_sender_text_add(MailItemData *ld)
 			address_info = email_util_strtrim(ld->alias);
 	}
 
-	if (address_info) {
+	EmailMailboxView *view = ld->view;
+	if (view->b_searchmode && view->search_type == EMAIL_SEARCH_IN_ALL_FOLDERS) {
+		char text_buf[MAX_STR_LEN] = {0,};
+		snprintf(text_buf, sizeof(text_buf), "[%s] %s", ld->folder_name, address_info);
+		return strdup(text_buf);
+	} else if (address_info) {
 		return strdup(address_info);
 	}
 
@@ -423,7 +428,8 @@ static Evas_Object *_mail_item_gl_content_get(void *data, Evas_Object *obj, cons
 			return _mail_item_gl_select_checkbox_add(obj, ld);
 	}
 
-	if (!strcmp(part, "account_colorbar") && view && ld->account_id > 0 && view->account_count > 1 && (view->mode == EMAIL_MAILBOX_MODE_ALL
+	if (!strcmp(part, "account_colorbar") && view->account_count > 1 && (view->mode == EMAIL_MAILBOX_MODE_ALL
+					|| (view->b_searchmode && view->search_type == EMAIL_SEARCH_IN_ALL_FOLDERS)
 #ifndef _FEATURE_PRIORITY_SENDER_DISABLE_
 					|| view->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER
 #endif
@@ -958,7 +964,7 @@ static email_mail_list_item_t *_mailbox_get_mail_list(EmailMailboxView *view, co
 
 	if (view->b_searchmode) {
 		retvm_if(!search_data, NULL, "Search data is NULL!");
-		if (search_data->search_type == EMAIL_SEARCH_IN_SINGLE_FOLDER) {
+		if (view->search_type == EMAIL_SEARCH_IN_SINGLE_FOLDER) {
 			if (view->mode == EMAIL_MAILBOX_MODE_ALL) {
 				if (mailbox_type == EMAIL_MAILBOX_TYPE_FLAGGED) {
 					mail_data = _mailbox_get_favourite_mail_list(view->sort_type, EMAIL_GET_MAIL_NORMAL, search_data, mail_count);
@@ -974,8 +980,8 @@ static email_mail_list_item_t *_mailbox_get_mail_list(EmailMailboxView *view, co
 			else {
 				mail_data = _mailbox_get_mail_list_by_mailbox_id(view->account_id, view->mailbox_id, EMAIL_SORT_DATE_RECENT, EMAIL_GET_MAIL_NORMAL, search_data, mail_count);
 			}
-		} else if (search_data->search_type == EMAIL_SEARCH_IN_ALL_FOLDERS) {
-			mail_data = _mailbox_get_mail_list_for_search_all_folders(view->account_id, EMAIL_SORT_DATE_RECENT, search_data, mail_count);
+		} else if (view->search_type == EMAIL_SEARCH_IN_ALL_FOLDERS) {
+			mail_data = _mailbox_get_mail_list_for_search_all_folders(EMAIL_SORT_DATE_RECENT, search_data, mail_count);
 		}
 	} else {
 		if (view->mode == EMAIL_MAILBOX_MODE_ALL) {
@@ -1483,16 +1489,15 @@ static email_mail_list_item_t *_mailbox_get_favourite_mail_list(int sort_type, i
 	return mail_list;
 }
 
-static email_mail_list_item_t *_mailbox_get_mail_list_for_search_all_folders(int account_id, int sort_type, const email_search_data_t *search_data, int *mail_count)
+static email_mail_list_item_t *_mailbox_get_mail_list_for_search_all_folders(int sort_type, const email_search_data_t *search_data, int *mail_count)
 {
 	debug_enter();
-	debug_log("account_id: %d, sort_type: %d", account_id, sort_type);
 
 	email_mail_list_item_t *mail_list = NULL;
 	email_list_filter_t *filter_list = NULL;
 	email_list_sorting_rule_t *sorting_rule_list = NULL;
 	int cnt_soring_rule = 0;
-	int cnt_filter_list = 7;
+	int cnt_filter_list = 5;
 	int i = 0;
 
 	if (search_data ) {
@@ -1503,16 +1508,6 @@ static email_mail_list_item_t *_mailbox_get_mail_list_for_search_all_folders(int
 
 	filter_list = malloc(sizeof(email_list_filter_t) * cnt_filter_list);
 	memset(filter_list, 0, sizeof(email_list_filter_t) * cnt_filter_list);
-
-	filter_list[i].list_filter_item_type = EMAIL_LIST_FILTER_ITEM_RULE;
-	filter_list[i].list_filter_item.rule.target_attribute = EMAIL_MAIL_ATTRIBUTE_ACCOUNT_ID;
-	filter_list[i].list_filter_item.rule.rule_type = EMAIL_LIST_FILTER_RULE_EQUAL;
-	filter_list[i].list_filter_item.rule.key_value.integer_type_value = account_id;
-	i++;
-
-	filter_list[i].list_filter_item_type = EMAIL_LIST_FILTER_ITEM_OPERATOR;
-	filter_list[i].list_filter_item.operator_type = EMAIL_LIST_FILTER_OPERATOR_AND;
-	i++;
 
 	filter_list[i].list_filter_item_type = EMAIL_LIST_FILTER_ITEM_RULE;
 	filter_list[i].list_filter_item.rule.target_attribute = EMAIL_MAIL_ATTRIBUTE_MAILBOX_ID;
@@ -1553,7 +1548,7 @@ static email_mail_list_item_t *_mailbox_get_mail_list_for_search_all_folders(int
 	sorting_rule_list = malloc(sizeof(email_list_sorting_rule_t) * cnt_soring_rule);
 	memset(sorting_rule_list, 0, sizeof(email_list_sorting_rule_t) * cnt_soring_rule);
 
-	_make_sorting_rule_list(EMAIL_SORT_DATE_RECENT, account_id, sorting_rule_list);
+	_make_sorting_rule_list(EMAIL_SORT_DATE_RECENT, 0, sorting_rule_list);
 
 	email_engine_get_mail_list(filter_list, cnt_filter_list, sorting_rule_list, cnt_soring_rule, -1, -1, &mail_list, mail_count);
 
@@ -1994,7 +1989,6 @@ static email_search_data_t *_clone_search_data(const email_search_data_t *search
 	email_search_data_t *search_data_clone = calloc(1, sizeof(email_search_data_t));
 	retvm_if(!search_data_clone, NULL, "search_data_clone memory alloc failed");
 
-	search_data_clone->search_type = search_data->search_type;
 	if (search_data->body_text)
 		search_data_clone->body_text = g_strdup(search_data->body_text);
 	if (search_data->subject)
@@ -2467,7 +2461,7 @@ MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t *mail_info
 	ld->is_highlited = EINA_FALSE;
 
 	/*Folder name for search mode*/
-	if (view->b_searchmode && search_data && search_data->search_type == EMAIL_SEARCH_IN_ALL_FOLDERS) {
+	if (view->b_searchmode && view->search_type == EMAIL_SEARCH_IN_ALL_FOLDERS) {
 		ld->folder_name = _mailbox_get_cashed_folder_name(view, mail_info->mailbox_type, mail_info->mailbox_id);
 	} else {
 		ld->folder_name = NULL;
