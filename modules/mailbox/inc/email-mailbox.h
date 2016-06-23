@@ -202,6 +202,8 @@ struct _view_data {
 	bool b_editmode;
 	mailbox_edit_type_e editmode_type;
 	bool b_searchmode;
+	email_search_type_e search_type;
+
 	bool b_restoring;
 
 	Ecore_Thread *add_remaining_thread;

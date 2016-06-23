@@ -33,15 +33,31 @@
  * Declaration for static functions
  */
 
-/* others */
-static void _settings_cb(void *data, Evas_Object *obj, void *event_info);
+/* More menu logic */
 static void _more_ctxpopup_dismissed_cb(void *data, Evas_Object *obj, void *event_info);
 static void _more_ctxpopup_back_cb(void *data, Evas_Object *obj, void *event_info);
 static void _move_more_ctxpopup(Evas_Object *ctxpopup, Evas_Object *win);
 static void _resize_more_ctxpopup_cb(void *data, Evas *e, Evas_Object *obj, void *event_info);
 static void _delete_more_ctxpopup_cb(void *data, Evas *e, Evas_Object *obj, void *event_info);
 static void _more_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_info);
+
+/*More menu option items callbacks*/
+static void _more_refresh_cb(void *data, Evas_Object *obj, void *event_info);
+static void _more_search_cb(void *data, Evas_Object *obj, void *event_info);
+static void _more_search_in_all_folders_cb(void *data, Evas_Object *obj, void *event_info);
+static void _more_edit_unread_mode_cb(void *data, Evas_Object *obj, void *event_info);
+static void _more_edit_read_mode_cb(void *data, Evas_Object *obj, void *event_info);
+static void _more_edit_remove_spam_mode_cb(void *data, Evas_Object *obj, void *event_info);
+static void _more_edit_spam_mode_cb(void *data, Evas_Object *obj, void *event_info);
+static void _more_edit_move_mode_cb(void *data, Evas_Object *obj, void *event_info);
+static void _more_edit_delete_mode_cb(void *data, Evas_Object *obj, void *event_info);
+static void _more_settings_cb(void *data, Evas_Object *obj, void *event_info);
+
+
+/*Floating compose button*/
 static void _compose_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_info);
+
+/*Edit mode view setup*/
 static void _change_view_for_selection_mode(EmailMailboxView *view);
 static void _setup_edit_mode(EmailMailboxView *view, mailbox_edit_type_e edit_type);
 
@@ -89,6 +105,7 @@ static void _setup_edit_mode(EmailMailboxView *view, mailbox_edit_type_e edit_ty
 	}
 
 }
+
 static void _more_edit_delete_mode_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
@@ -147,7 +164,7 @@ static void _more_edit_unread_mode_cb(void *data, Evas_Object *obj, void *event_
 
 }
 
-static void _settings_cb(void *data, Evas_Object *obj, void *event_info)
+static void _more_settings_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 	retm_if(!data, "data is NULL");
@@ -234,7 +251,7 @@ static void _delete_more_ctxpopup_cb(void *data, Evas *e, Evas_Object *obj, void
 	evas_object_event_callback_del(view->more_ctxpopup, EVAS_CALLBACK_DEL, _delete_more_ctxpopup_cb);
 }
 
-void _sync_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_info)
+static void _more_refresh_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 
@@ -245,6 +262,27 @@ void _sync_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 	debug_leave();
 }
 
+static void _more_search_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	debug_enter();
+
+	EmailMailboxView *view = (EmailMailboxView *)data;
+	mailbox_actiate_search_mode(view, EMAIL_SEARCH_IN_SINGLE_FOLDER);
+
+	DELETE_EVAS_OBJECT(view->more_ctxpopup);
+	debug_leave();
+}
+
+static void _more_search_in_all_folders_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	debug_enter();
+
+	EmailMailboxView *view = (EmailMailboxView *)data;
+	mailbox_actiate_search_mode(view, EMAIL_SEARCH_IN_ALL_FOLDERS);
+
+	DELETE_EVAS_OBJECT(view->more_ctxpopup);
+	debug_leave();
+}
 static void _compose_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
@@ -328,9 +366,12 @@ static void _more_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_i
 	retm_if(view->composer, "view->composer(%p) is being shown.", view->composer);
 	retm_if(view->viewer, "view->viewer(%p) is being shown.", view->viewer);
 	retm_if(view->account, "view->account(%p) is being shown.", view->account);
-	debug_log("b_searchmode: %d, b_editmode: %d", view->b_searchmode, view->b_editmode);
-	retm_if(view->b_searchmode, "view->b_searchmode(%d) Search mode is ON.", view->b_searchmode);
 	retm_if(view->b_editmode, "view->b_editmode(%d) Edit mode is ON.", view->b_editmode);
+
+	if (view->b_searchmode && view->search_type != EMAIL_SEARCH_IN_SINGLE_FOLDER) {
+		debug_log("Search mode is ON, Search type: %d", view->search_type);
+		return;
+	}
 
 	view->more_ctxpopup = elm_ctxpopup_add(view->base.module->win);
 
@@ -343,29 +384,38 @@ static void _more_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_i
 	evas_object_event_callback_add(view->more_ctxpopup, EVAS_CALLBACK_DEL, _delete_more_ctxpopup_cb, view);
 	evas_object_event_callback_add(view->base.module->navi, EVAS_CALLBACK_RESIZE, _resize_more_ctxpopup_cb, view);
 
-	_add_ctx_menu_item(view, "IDS_EMAIL_OPT_REFRESH", NULL, _sync_toolbar_clicked_cb);
-	_add_ctx_menu_item(view, "IDS_EMAIL_OPT_SEARCH", NULL, _search_button_clicked_cb);
+	if (view->b_searchmode) {
+		//TODO Need to change with translatable IDS when it will be given form UX
+		_add_ctx_menu_item(view, "Search all folders", NULL, _more_search_in_all_folders_cb);
+		if (view->search_editfield.entry) {
+			Ecore_IMF_Context *imf_context = elm_entry_imf_context_get(view->search_editfield.entry);
+			ecore_imf_context_input_panel_hide(imf_context);
+		}
+	} else {
+		_add_ctx_menu_item(view, "IDS_EMAIL_OPT_REFRESH", NULL, _more_refresh_cb);
+		_add_ctx_menu_item(view, "IDS_EMAIL_OPT_SEARCH", NULL, _more_search_cb);
 
-	if (g_list_length(view->mail_list) > 0) {
-		_add_ctx_menu_item(view, "IDS_EMAIL_OPT_DELETE", NULL, _more_edit_delete_mode_cb);
-		if (view->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX
-				|| view->mailbox_type == EMAIL_MAILBOX_TYPE_TRASH
-				|| view->mailbox_type == EMAIL_MAILBOX_TYPE_SPAMBOX
-				|| view->mailbox_type == EMAIL_MAILBOX_TYPE_USER_DEFINED) {
-			_add_ctx_menu_item(view, "IDS_EMAIL_OPT_MOVE", NULL, _more_edit_move_mode_cb);
-			if (view->mailbox_type != EMAIL_MAILBOX_TYPE_SPAMBOX) {
-				_add_ctx_menu_item(view, "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX", NULL, _more_edit_spam_mode_cb);
-			} else {
-				_add_ctx_menu_item(view, "IDS_EMAIL_OPT_REMOVE_FROM_SPAM_ABB", NULL, _more_edit_remove_spam_mode_cb);
+		if (g_list_length(view->mail_list) > 0) {
+			_add_ctx_menu_item(view, "IDS_EMAIL_OPT_DELETE", NULL, _more_edit_delete_mode_cb);
+			if (view->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX
+					|| view->mailbox_type == EMAIL_MAILBOX_TYPE_TRASH
+					|| view->mailbox_type == EMAIL_MAILBOX_TYPE_SPAMBOX
+					|| view->mailbox_type == EMAIL_MAILBOX_TYPE_USER_DEFINED) {
+				_add_ctx_menu_item(view, "IDS_EMAIL_OPT_MOVE", NULL, _more_edit_move_mode_cb);
+				if (view->mailbox_type != EMAIL_MAILBOX_TYPE_SPAMBOX) {
+					_add_ctx_menu_item(view, "IDS_EMAIL_OPT_MOVE_TO_SPAMBOX", NULL, _more_edit_spam_mode_cb);
+				} else {
+					_add_ctx_menu_item(view, "IDS_EMAIL_OPT_REMOVE_FROM_SPAM_ABB", NULL, _more_edit_remove_spam_mode_cb);
+				}
+			}
+			if (view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX && view->mailbox_type != EMAIL_MAILBOX_TYPE_DRAFT
+					&& view->mailbox_type != EMAIL_MAILBOX_TYPE_TRASH && view->mailbox_type != EMAIL_MAILBOX_TYPE_SPAMBOX) {
+				_add_ctx_menu_item(view, "IDS_EMAIL_OPT_MARK_AS_READ_ABB", NULL, _more_edit_read_mode_cb);
+				_add_ctx_menu_item(view, "IDS_EMAIL_OPT_MARK_AS_UNREAD_ABB", NULL, _more_edit_unread_mode_cb);
 			}
 		}
-		if (view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX && view->mailbox_type != EMAIL_MAILBOX_TYPE_DRAFT
-				&& view->mailbox_type != EMAIL_MAILBOX_TYPE_TRASH && view->mailbox_type != EMAIL_MAILBOX_TYPE_SPAMBOX) {
-			_add_ctx_menu_item(view, "IDS_EMAIL_OPT_MARK_AS_READ_ABB", NULL, _more_edit_read_mode_cb);
-			_add_ctx_menu_item(view, "IDS_EMAIL_OPT_MARK_AS_UNREAD_ABB", NULL, _more_edit_unread_mode_cb);
-		}
+		_add_ctx_menu_item(view, "IDS_EMAIL_OPT_SETTINGS", NULL, _more_settings_cb);
 	}
-	_add_ctx_menu_item(view, "IDS_EMAIL_OPT_SETTINGS", NULL, _settings_cb);
 
 	elm_ctxpopup_direction_priority_set(view->more_ctxpopup, ELM_CTXPOPUP_DIRECTION_UP, ELM_CTXPOPUP_DIRECTION_UNKNOWN, ELM_CTXPOPUP_DIRECTION_UNKNOWN, ELM_CTXPOPUP_DIRECTION_UNKNOWN);
 	_move_more_ctxpopup(view->more_ctxpopup, view->base.module->win);
@@ -404,7 +454,8 @@ Evas_Object *mailbox_create_toolbar_more_btn(EmailMailboxView *view)
 	debug_enter();
 
 	Evas_Object *btn = elm_button_add(view->base.module->navi);
-	if (!btn) return NULL;
+	retvm_if(!btn, NULL, "btn is NULL");
+
 	elm_object_style_set(btn, "naviframe/more/default");
 	evas_object_smart_callback_add(btn, "clicked", _more_toolbar_clicked_cb, view);
 	return btn;
