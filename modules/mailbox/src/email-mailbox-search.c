@@ -51,33 +51,35 @@
  * Declaration for static functions
  */
 void _mailbox_create_searchbar(EmailMailboxView *view);
-static void _searchbar_back_key_cb_clicked(void *data, Evas_Object *obj, void *event_info);
-static void _searchbar_back_key_cb_pressed(void *data, Evas_Object *obj, void *event_info);
-static void _searchbar_back_key_cb_unpressed(void *data, Evas_Object *obj, void *event_info);
-static void _searchbar_enter_key_cb(void *data, Evas_Object *obj, void *event_info);
-static void _searchbar_entry_changed_cb(void *data, Evas_Object *obj, void *event_info);
+static void _mailbox_searchbar_back_key_clicked_cb(void *data, Evas_Object *obj, void *event_info);
+static void _mailbox_searchbar_back_key_pressed_cb(void *data, Evas_Object *obj, void *event_info);
+static void _mailbox_searchbar_back_key_unpressed_cb(void *data, Evas_Object *obj, void *event_info);
+static void _mailbox_searchbar_enter_key_cb(void *data, Evas_Object *obj, void *event_info);
+static void _mailbox_searchbar_entry_changed_cb(void *data, Evas_Object *obj, void *event_info);
 static void _mailbox_search_list_scroll_stop_cb(void *data, Evas_Object * obj, void *event_info);
 static Eina_Bool _mailbox_searchbar_entry_set_focus(void *data);
-static Eina_Bool _search_editfield_changed_timer_cb(void *data);
+static Eina_Bool _mailbox_search_editfield_changed_timer_cb(void *data);
+
+static void _mailbox_change_view_to_search_mode(EmailMailboxView *view);
+
 
 /*
  * Definition for static functions
  */
 
-static void _searchbar_back_key_cb_clicked(void *data, Evas_Object *obj, void *event_info)
+static void _mailbox_searchbar_back_key_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 
-	if (!data) {
-		debug_error("data is NULL");
-		return;
-	}
+	retm_if(!data, "data is NULL");
 	EmailMailboxView *view = (EmailMailboxView *)data;
-	mailbox_finish_search_mode(view);
 
+	mailbox_back_key_click_handle(view);
+
+	debug_leave();
 }
 
-static void _searchbar_back_key_cb_pressed(void *data, Evas_Object *obj, void *event_info)
+static void _mailbox_searchbar_back_key_pressed_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 
@@ -89,7 +91,7 @@ static void _searchbar_back_key_cb_pressed(void *data, Evas_Object *obj, void *e
 	edje_object_signal_emit(_EDJ(view->searchbar_ly), "btn.pressed", "elm");
 }
 
-static void _searchbar_back_key_cb_unpressed(void *data, Evas_Object *obj, void *event_info)
+static void _mailbox_searchbar_back_key_unpressed_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 
@@ -102,7 +104,7 @@ static void _searchbar_back_key_cb_unpressed(void *data, Evas_Object *obj, void 
 
 }
 
-static void _searchbar_enter_key_cb(void *data, Evas_Object *obj, void *event_info)
+static void _mailbox_searchbar_enter_key_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 
@@ -115,7 +117,7 @@ static void _searchbar_enter_key_cb(void *data, Evas_Object *obj, void *event_in
 		ecore_imf_context_input_panel_hide((Ecore_IMF_Context *)elm_entry_imf_context_get(view->search_editfield.entry));
 }
 
-static void _searchbar_entry_changed_cb(void *data, Evas_Object *obj, void *event_info)
+static void _mailbox_searchbar_entry_changed_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 	EmailMailboxView *view = (EmailMailboxView *)data;
@@ -123,11 +125,11 @@ static void _searchbar_entry_changed_cb(void *data, Evas_Object *obj, void *even
 	DELETE_TIMER_OBJECT(view->search_entry_changed_timer);
 	G_FREE(view->current_entry_string);
 	view->current_entry_string = (char *)elm_entry_markup_to_utf8(elm_object_text_get(view->search_editfield.entry));
-	view->search_entry_changed_timer = ecore_timer_add(0.5, _search_editfield_changed_timer_cb, (void *)view);
+	view->search_entry_changed_timer = ecore_timer_add(0.5, _mailbox_search_editfield_changed_timer_cb, (void *)view);
 
 }
 
-static Eina_Bool _search_editfield_changed_timer_cb(void *data)
+static Eina_Bool _mailbox_search_editfield_changed_timer_cb(void *data)
 {
 	debug_enter();
 	EmailMailboxView *view = (EmailMailboxView *)data;
@@ -189,77 +191,23 @@ void _mailbox_create_searchbar(EmailMailboxView *view)
 
 	Evas_Object *back_button = elm_button_add(view->searchbar_ly);
 	elm_object_style_set(back_button, "naviframe/back_btn/default");
-	evas_object_smart_callback_add(back_button, "clicked", _searchbar_back_key_cb_clicked, view);
-	evas_object_smart_callback_add(back_button, "pressed", _searchbar_back_key_cb_pressed, view);
-	evas_object_smart_callback_add(back_button, "unpressed", _searchbar_back_key_cb_unpressed, view);
+	evas_object_smart_callback_add(back_button, "clicked", _mailbox_searchbar_back_key_clicked_cb, view);
+	evas_object_smart_callback_add(back_button, "pressed", _mailbox_searchbar_back_key_pressed_cb, view);
+	evas_object_smart_callback_add(back_button, "unpressed", _mailbox_searchbar_back_key_unpressed_cb, view);
 	elm_object_part_content_set(view->searchbar_ly, "elm.swallow.button", back_button);
 
 	email_common_util_editfield_create(view->searchbar_ly, EF_TITLE_SEARCH | EF_CLEAR_BTN, &view->search_editfield);
 	elm_entry_input_panel_layout_set(view->search_editfield.entry, ELM_INPUT_PANEL_LAYOUT_NORMAL);
 	elm_entry_input_panel_return_key_type_set(view->search_editfield.entry, ELM_INPUT_PANEL_RETURN_KEY_TYPE_SEARCH);
 	elm_entry_autocapital_type_set(view->search_editfield.entry, ELM_AUTOCAPITAL_TYPE_NONE);
-	evas_object_smart_callback_add(view->search_editfield.entry, "activated", _searchbar_enter_key_cb, view);
+	evas_object_smart_callback_add(view->search_editfield.entry, "activated", _mailbox_searchbar_enter_key_cb, view);
 	elm_object_part_content_set(view->searchbar_ly, "elm.swallow.content", view->search_editfield.layout);
 
 }
 
-/*
- * Definition for exported functions
- */
-
-void mailbox_finish_search_mode(EmailMailboxView *view)
-{
-	debug_log("[Search Bar] Canceled Callback Called");
-
-	DELETE_TIMER_OBJECT(view->search_entry_changed_timer);
-	G_FREE(view->current_entry_string);
-
-	evas_object_smart_callback_del(view->gl, "scroll,drag,stop", _mailbox_search_list_scroll_stop_cb);
-	evas_object_smart_callback_del(view->search_editfield.entry, "changed", _searchbar_entry_changed_cb);
-	evas_object_smart_callback_del(view->search_editfield.entry, "preedit,changed", _searchbar_entry_changed_cb);
-
-	G_FREE(view->last_entry_string);
-
-	view->b_searchmode = false;
-	mailbox_create_no_contents_view(view, false);
-
-	mailbox_change_search_layout_state(view, false);
-
-	mailbox_list_refresh(view, NULL);
-	mailbox_naviframe_mailbox_button_add(view);
-	mailbox_show_compose_btn(view);
-}
-
-void mailbox_free_mailbox_search_data(email_search_data_t *search_data)
+static void _mailbox_change_view_to_search_mode(EmailMailboxView *view)
 {
 	debug_enter();
-	if (!search_data) {
-		return;
-	}
-
-	FREE(search_data->body_text);
-	FREE(search_data->subject);
-	FREE(search_data->sender);
-	FREE(search_data->recipient);
-	FREE(search_data->attach_text);
-	FREE(search_data);
-}
-
-void _search_button_clicked_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_UNUSED)
-{
-	debug_enter();
-	retm_if(!data, "data == NULL");
-
-	EmailMailboxView *view = (EmailMailboxView *)data;
-
-	if (view->b_searchmode) {
-		debug_log("already in search mode, return");
-		return;
-	}
-	view->b_searchmode = true;
-	view->search_type = EMAIL_SEARCH_IN_SINGLE_FOLDER;
-
-	DELETE_EVAS_OBJECT(view->more_ctxpopup);
 
 	DELETE_TIMER_OBJECT(view->search_entry_changed_timer);
 	G_FREE(view->current_entry_string);
@@ -280,9 +228,75 @@ void _search_button_clicked_cb(void *data, Evas_Object *obj EINA_UNUSED, void *e
 
 	mailbox_change_search_layout_state(view, true);
 	elm_entry_context_menu_disabled_set(view->search_editfield.entry, EINA_FALSE);
-	evas_object_smart_callback_add(view->search_editfield.entry, "changed", _searchbar_entry_changed_cb, view);
-	evas_object_smart_callback_add(view->search_editfield.entry, "preedit,changed", _searchbar_entry_changed_cb, view);
+	evas_object_smart_callback_add(view->search_editfield.entry, "changed", _mailbox_searchbar_entry_changed_cb, view);
+	evas_object_smart_callback_add(view->search_editfield.entry, "preedit,changed", _mailbox_searchbar_entry_changed_cb, view);
 	evas_object_smart_callback_add(view->gl, "scroll,drag,stop", _mailbox_search_list_scroll_stop_cb, view->search_editfield.entry);
+
+	debug_leave();
+}
+
+/*
+ * Definition for exported functions
+ */
+
+void mailbox_actiate_search_mode(EmailMailboxView *view, email_search_type_e search_type)
+{
+	debug_enter();
+
+	retm_if(!view, "view == NULL");
+	retm_if(view->b_searchmode && view->search_type == search_type, "Requested search mode is already set");
+
+	if (!view->b_searchmode) {
+		_mailbox_change_view_to_search_mode(view);
+		mailbox_folders_name_cache_clear(view);
+		view->b_searchmode = true;
+	}
+
+	view->search_type = search_type;
+
+	DELETE_TIMER_OBJECT(view->search_entry_changed_timer);
+	mailbox_show_search_result(view);
+
+}
+
+void mailbox_finish_search_mode(EmailMailboxView *view)
+{
+	debug_log("[Search Bar] Canceled Callback Called");
+
+	DELETE_TIMER_OBJECT(view->search_entry_changed_timer);
+	G_FREE(view->current_entry_string);
+
+	evas_object_smart_callback_del(view->gl, "scroll,drag,stop", _mailbox_search_list_scroll_stop_cb);
+	evas_object_smart_callback_del(view->search_editfield.entry, "changed", _mailbox_searchbar_entry_changed_cb);
+	evas_object_smart_callback_del(view->search_editfield.entry, "preedit,changed", _mailbox_searchbar_entry_changed_cb);
+
+	G_FREE(view->last_entry_string);
+
+	view->b_searchmode = false;
+	view->search_type = EMAIL_SEARCH_NONE;
+	mailbox_create_no_contents_view(view, false);
+
+	mailbox_change_search_layout_state(view, false);
+
+	mailbox_list_refresh(view, NULL);
+	mailbox_naviframe_mailbox_button_add(view);
+	mailbox_show_compose_btn(view);
+	mailbox_folders_name_cache_clear(view);
+}
+
+void mailbox_free_mailbox_search_data(email_search_data_t *search_data)
+{
+	debug_enter();
+	if (!search_data) {
+		return;
+	}
+
+	FREE(search_data->body_text);
+	FREE(search_data->subject);
+	FREE(search_data->sender);
+	FREE(search_data->recipient);
+	FREE(search_data->attach_text);
+	FREE(search_data);
 }
 
 void mailbox_change_search_layout_state(EmailMailboxView *view, bool show_search_layout)
@@ -342,16 +356,22 @@ email_search_data_t *mailbox_make_search_data(EmailMailboxView *view)
 	email_search_data_t *search_data = calloc(1, sizeof(email_search_data_t));
 	retvm_if(!search_data, NULL, "search_data memory alloc failed");
 
-	search_data->subject = (char *)elm_entry_markup_to_utf8(elm_object_text_get(view->search_editfield.entry));
-	search_data->body_text = (char *)elm_entry_markup_to_utf8(elm_object_text_get(view->search_editfield.entry));
-	search_data->attach_text = (char *)elm_entry_markup_to_utf8(elm_object_text_get(view->search_editfield.entry));
-	if ((view->mailbox_type == EMAIL_MAILBOX_TYPE_SENTBOX)
+	search_data->subject = elm_entry_markup_to_utf8(elm_object_text_get(view->search_editfield.entry));
+	search_data->body_text = elm_entry_markup_to_utf8(elm_object_text_get(view->search_editfield.entry));
+	search_data->attach_text = elm_entry_markup_to_utf8(elm_object_text_get(view->search_editfield.entry));
+	if (view->search_type == EMAIL_SEARCH_IN_ALL_FOLDERS) {
+		search_data->recipient = elm_entry_markup_to_utf8(elm_object_text_get(view->search_editfield.entry));
+		search_data->sender = elm_entry_markup_to_utf8(elm_object_text_get(view->search_editfield.entry));
+	} else if ((view->mailbox_type == EMAIL_MAILBOX_TYPE_SENTBOX)
 			|| (view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX)
 			|| (view->mailbox_type == EMAIL_MAILBOX_TYPE_DRAFT)) {
-		search_data->recipient = (char *)elm_entry_markup_to_utf8(elm_object_text_get(view->search_editfield.entry));
+		search_data->recipient = elm_entry_markup_to_utf8(elm_object_text_get(view->search_editfield.entry));
+		search_data->sender = NULL;
 	} else {
-		search_data->sender = (char *)elm_entry_markup_to_utf8(elm_object_text_get(view->search_editfield.entry));
+		search_data->recipient = NULL;
+		search_data->sender = elm_entry_markup_to_utf8(elm_object_text_get(view->search_editfield.entry));
 	}
+
 	debug_secure("[EMAIL_SEARCH_ALL] %s", search_data->subject);
 
 	return search_data;
@@ -360,9 +380,7 @@ email_search_data_t *mailbox_make_search_data(EmailMailboxView *view)
 int mailbox_show_search_result(EmailMailboxView *view)
 {
 	debug_enter();
-
-	if (!view)
-		return 0;
+	retvm_if(!view, 0, "Invalid arguments");
 
 	email_search_data_t *search_data = mailbox_make_search_data(view);
 
@@ -371,4 +389,17 @@ int mailbox_show_search_result(EmailMailboxView *view)
 	mailbox_free_mailbox_search_data(search_data);
 
 	return 0;
+}
+
+void mailbox_back_key_click_handle(EmailMailboxView *view)
+{
+	debug_enter();
+
+	if (view->search_type == EMAIL_SEARCH_IN_ALL_FOLDERS) {
+		mailbox_actiate_search_mode(view, EMAIL_SEARCH_IN_SINGLE_FOLDER);
+	} else if (view->search_type == EMAIL_SEARCH_IN_SINGLE_FOLDER) {
+		mailbox_finish_search_mode(view);
+	}
+
+	debug_leave();
 }
