@@ -375,7 +375,12 @@ static char *_mail_item_gl_sender_text_add(MailItemData *ld)
 			address_info = email_util_strtrim(ld->alias);
 	}
 
-	if (address_info) {
+	EmailMailboxView *view = ld->view;
+	if (view->b_searchmode && view->search_type == EMAIL_SEARCH_IN_ALL_FOLDERS) {
+		char text_buf[MAX_STR_LEN] = {0,};
+		snprintf(text_buf, sizeof(text_buf), "[%s] %s", ld->folder_name, address_info);
+		return strdup(text_buf);
+	} else if (address_info) {
 		return strdup(address_info);
 	}
 
@@ -430,7 +435,8 @@ static Evas_Object *_mail_item_gl_content_get(void *data, Evas_Object *obj, cons
 			return _mail_item_gl_select_checkbox_add(obj, ld);
 	}
 
-	if (!strcmp(part, "account_colorbar") && view && ld->account_id > 0 && view->account_count > 1 && (view->mode == EMAIL_MAILBOX_MODE_ALL
+	if (!strcmp(part, "account_colorbar") && view->account_count > 1 && (view->mode == EMAIL_MAILBOX_MODE_ALL
+					|| (view->b_searchmode && view->search_type == EMAIL_SEARCH_IN_ALL_FOLDERS)
 #ifndef _FEATURE_PRIORITY_SENDER_DISABLE_
 					|| view->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER
 #endif
@@ -438,7 +444,7 @@ static Evas_Object *_mail_item_gl_content_get(void *data, Evas_Object *obj, cons
 		return _mail_item_gl_account_colorbar_add(obj, ld);
 	}
 
-	if (!strcmp(part, "email.star.icon") && (view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX && ld->view->mailbox_type != EMAIL_MAILBOX_TYPE_DRAFT)) {
+	if (!strcmp(part, "email.star.icon") && (ld->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX && ld->mailbox_type != EMAIL_MAILBOX_TYPE_DRAFT)) {
 		return _mail_item_gl_star_checkbox_add(obj, ld);
 	}
 
@@ -569,7 +575,6 @@ static void _mail_item_check_process_change(MailItemData *ld)
 			&& view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
 				mailbox_send_all_btn_remove(view);
 			}
-		mailbox_change_search_layout_state(view, false);
 
 		mailbox_create_select_info(view);
 		mailbox_toolbar_create(view);

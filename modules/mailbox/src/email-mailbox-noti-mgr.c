@@ -232,11 +232,13 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 					G_FREE(view->mailbox_alias);
 				}
 
-				if (view->b_editmode)
+				if (view->b_editmode) {
 					mailbox_exit_edit_mode(view);
+				}
 
-				if (view->b_searchmode)
-					mailbox_finish_search_mode(view);
+				if (view->b_searchmode) {
+					mailbox_set_search_mode(view, EMAIL_SEARCH_NONE);
+				}
 
 				mailbox_view_title_update_all(view);
 				mailbox_update_notifications_status(view);
@@ -307,7 +309,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 				if (view->b_editmode) {
 					mailbox_exit_edit_mode(view);
 				} else if (view->b_searchmode) {
-					mailbox_finish_search_mode(view);
+					mailbox_set_search_mode(view, EMAIL_SEARCH_NONE);
 				}
 				mailbox_view_title_update_all(view);
 				mailbox_check_sort_type_validation(view);

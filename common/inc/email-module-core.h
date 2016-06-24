@@ -103,4 +103,12 @@ EMAIL_API Elm_Object_Item *email_module_view_push(email_view_t *view, const char
  */
 EMAIL_API int email_module_exit_view(email_view_t *view);
 
+/**
+ * @brief Dispatch back key press from view
+ *
+ * @param[in]	view		view pointer
+ *
+ */
+EMAIL_API void email_module_view_dispatch_back_key_press(email_view_t *view);
+
 #endif /* _EMAIL_MODULE_CORE_H_ */

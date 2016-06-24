@@ -2106,3 +2106,12 @@ void _email_view_back_btn_cb(void *data, Evas_Object *obj, void *event_info)
 
 	debug_leave();
 }
+
+void email_module_view_dispatch_back_key_press(email_view_t *view)
+{
+	debug_enter();
+
+	_email_view_on_back_key(view);
+
+	debug_leave();
+}

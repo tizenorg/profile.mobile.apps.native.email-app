@@ -286,9 +286,6 @@ void mailbox_view_title_update_all_without_mailbox_change(EmailMailboxView *view
 	FREE(markup_subtitle);
 	mailbox_toolbar_create(view);
 	mailbox_naviframe_mailbox_button_add(view);
-	if (!view->b_editmode && view->b_searchmode) {
-		mailbox_change_search_layout_state(view, true);
-	}
 }
 
 void mailbox_view_title_update_account_name(EmailMailboxView *view)
