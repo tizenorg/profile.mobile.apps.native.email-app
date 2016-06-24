@@ -817,7 +817,7 @@ void composer_util_focus_set_focus(void *data, Evas_Object *target)
 		}
 	}
 
-	retm_if(view->base.module->is_launcher_busy || view->is_hided || view->composer_popup || view->context_popup, "should not set focus");
+	retm_if(view->base.module->is_launcher_busy || view->is_hided || view->composer_popup || view->context_popup || !view->is_ewk_ready, "should not set focus");
 	retm_if(view->is_back_btn_clicked || view->is_save_in_drafts_clicked || view->is_send_btn_clicked, "while exiting composer");
 
 	/* XXX; check this. when is this routine needed? */

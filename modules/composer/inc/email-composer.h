@@ -189,7 +189,6 @@ struct _view_data {
 	Evas_Object *ewk_view;
 	Evas_Object *ewk_btn;
 	Ecore_Timer *ewk_focus_set_timer;
-	Ecore_Timer *ewk_focus_watch_timer;
 	Ecore_Timer *ewk_entry_sip_show_timer;
 	Eina_Bool is_ewk_focused;
 

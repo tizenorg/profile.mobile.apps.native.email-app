@@ -37,10 +37,6 @@ typedef enum {
 #define _WEBKIT_FOCUS_SET_TIMEOUT_SEC 0.01
 #define _WEBKIT_ENTRY_SIP_SHOW_TIMEOUT_SEC 0.1
 
-// TODO Temp feature to fix EWK View focus callbacks. Remove when fixed.
-#define _WEBKIT_USE_FOCUS_WATCH_TIMER 1
-#define _WEBKIT_FOCUS_WATCH_TIMER_INTERVAL_SEC (1.0 / 60.0)
-
 #define _WEBKIT_CONSOLE_MESSAGE_LOG 0
 #define _WEBKIT_TEXT_STYLE_STATE_CALLBACK_LOG_ON 0
 
@@ -82,28 +78,6 @@ static Eina_Bool _webkit_parse_text_style_changed_data(const char *res_string, F
 /*
  * Definition for static functions
  */
-
-#if (_WEBKIT_USE_FOCUS_WATCH_TIMER)
-static Eina_Bool _webkit_focus_watch_timer_cb(void *data)
-{
-	EmailComposerView *view = data;
-
-	Eina_Bool is_ewk_focused = ewk_view_focus_get(view->ewk_view);
-
-	if (!view->is_ewk_focused != !is_ewk_focused) {
-		view->is_ewk_focused = is_ewk_focused;
-		if (is_ewk_focused) {
-			debug_log("tmp,webview,focus,in");
-			evas_object_smart_callback_call(view->ewk_view, "tmp,webview,focus,in", NULL);
-		} else {
-			debug_log("tmp,webview,focus,out");
-			evas_object_smart_callback_call(view->ewk_view, "tmp,webview,focus,out", NULL);
-		}
-	}
-
-	return ECORE_CALLBACK_RENEW;
-}
-#endif
 
 static Eina_Bool _webkit_entry_sip_show_timer_cb(void *data)
 {
@@ -193,11 +167,11 @@ static void _webkit_js_execute_set_focus_cb(Evas_Object *obj, const char *result
 		view->is_loading_popup = EINA_FALSE;
 	}
 
+	view->is_ewk_ready = EINA_TRUE;
+
 	if (!view->composer_popup && (obj == view->ewk_view)) { /* Removing focus in case of scheduled email*/
 		composer_util_focus_set_focus(view, view->selected_widget);
 	}
-
-	view->is_ewk_ready = EINA_TRUE;
 
 	if (!view->vcard_save_thread) {
 		view->is_load_finished = EINA_TRUE;
@@ -206,11 +180,6 @@ static void _webkit_js_execute_set_focus_cb(Evas_Object *obj, const char *result
 			composer_exit_composer_get_contents(view); /* Exit out of composer without any pop-up.*/
 		}
 	}
-
-#if (_WEBKIT_USE_FOCUS_WATCH_TIMER)
-	view->ewk_focus_watch_timer = ecore_timer_add(_WEBKIT_FOCUS_WATCH_TIMER_INTERVAL_SEC,
-			_webkit_focus_watch_timer_cb, view);
-#endif
 
 	debug_leave();
 }
@@ -888,11 +857,7 @@ void composer_webkit_add_callbacks(Evas_Object *ewk_view, void *data)
 
 	EmailComposerView *view = (EmailComposerView *)data;
 
-#if (_WEBKIT_USE_FOCUS_WATCH_TIMER)
-	evas_object_smart_callback_add(ewk_view, "tmp,webview,focus,in", _ewk_view_focus_in_cb, view);
-#else
 	evas_object_smart_callback_add(ewk_view, "webview,focus,in", _ewk_view_focus_in_cb, view);
-#endif
 
 	evas_object_smart_callback_add(ewk_view, "load,progress", _ewk_view_load_progress_cb, view);
 	evas_object_smart_callback_add(ewk_view, "load,error", _ewk_view_load_error_cb, view);
@@ -922,11 +887,7 @@ void composer_webkit_del_callbacks(Evas_Object *ewk_view, void *data)
 
 	EmailComposerView *view = (EmailComposerView *)data;
 
-#if (_WEBKIT_USE_FOCUS_WATCH_TIMER)
-	evas_object_smart_callback_del_full(ewk_view, "tmp,webview,focus,in", _ewk_view_focus_in_cb, view);
-#else
 	evas_object_smart_callback_del_full(ewk_view, "webview,focus,in", _ewk_view_focus_in_cb, view);
-#endif
 
 	evas_object_smart_callback_del_full(ewk_view, "load,progress", _ewk_view_load_progress_cb, view);
 	evas_object_smart_callback_del_full(ewk_view, "load,error", _ewk_view_load_error_cb, view);

@@ -866,7 +866,6 @@ static void _composer_destroy_evas_objects(EmailComposerView *view)
 	DELETE_TIMER_OBJECT(view->cs_events_timer2);
 	DELETE_TIMER_OBJECT(view->vcard_save_timer);
 	DELETE_TIMER_OBJECT(view->ewk_focus_set_timer);
-	DELETE_TIMER_OBJECT(view->ewk_focus_watch_timer);
 	DELETE_TIMER_OBJECT(view->ewk_entry_sip_show_timer);
 
 	DELETE_ANIMATOR_OBJECT(view->cs_animator);
