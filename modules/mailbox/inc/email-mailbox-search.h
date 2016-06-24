@@ -19,22 +19,23 @@
 #define __DEF_EMAIL_MAILBOX_SEARCH_H_
 
 /**
- * @brief Cancel search mode in Mailbox and return to normal view
+ * @brief Activate search mode in Mailbox
+ * @param[in]	data			User data (Email mailbox data)
+ * @param[in]	search_type		Email search type
+ */
+void mailbox_activate_search_mode(EmailMailboxView *view, email_search_type_e search_type);
+
+/**
+ * @brief Cancel any search mode in Mailbox and return to normal view
  * @param[in]	view		Email mailbox data
  */
-void mailbox_finish_search_mode(EmailMailboxView *view);
+void mailbox_deactivate_search_mode(EmailMailboxView *view);
 
 /**
  * @brief Free Email search data
  * @param[in]	search_data		Email search data
  */
 void mailbox_free_mailbox_search_data(email_search_data_t *search_data);
-
-/**
- * @brief Callback that provides click on search button
- * @param[in]	data		User data (Email mailbox data)
- */
-void _search_button_clicked_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_UNUSED);
 
 /**
  * @brief Callback that provides click on search button
@@ -54,5 +55,11 @@ email_search_data_t *mailbox_make_search_data(EmailMailboxView *view);
  * @param[in]	view			Email mailbox data
  */
 int mailbox_show_search_result(EmailMailboxView *view);
+
+/**
+ * @brief Change search mode by back key click
+ * @param[in]	view			Email mailbox data
+ */
+void mailbox_back_key_click_handle(EmailMailboxView *view);
 
 #endif	/* __DEF_EMAIL_MAILBOX_SEARCH_H_ */

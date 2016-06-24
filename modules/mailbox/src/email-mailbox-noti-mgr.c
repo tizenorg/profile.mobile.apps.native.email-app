@@ -236,7 +236,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 					mailbox_exit_edit_mode(view);
 
 				if (view->b_searchmode)
-					mailbox_finish_search_mode(view);
+					mailbox_deactivate_search_mode(view);
 
 				mailbox_view_title_update_all(view);
 				mailbox_update_notifications_status(view);
@@ -307,7 +307,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 				if (view->b_editmode) {
 					mailbox_exit_edit_mode(view);
 				} else if (view->b_searchmode) {
-					mailbox_finish_search_mode(view);
+					mailbox_deactivate_search_mode(view);
 				}
 				mailbox_view_title_update_all(view);
 				mailbox_check_sort_type_validation(view);

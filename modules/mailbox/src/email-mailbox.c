@@ -658,6 +658,7 @@ static void _mailbox_finalize(EmailMailboxView *view)
 
 	mailbox_sending_mail_list_free(view);
 	mailbox_account_color_list_free(view);
+	mailbox_folders_name_cache_clear(view);
 
 	G_FREE(view->mailbox_alias);
 	G_FREE(view->account_name);
@@ -896,7 +897,7 @@ static int _mailbox_update_mailbox(EmailMailboxView *view, int account_id, int m
 	if (!need_update) {
 		debug_log("the proper mailbox is shown now.");
 		if (view->b_searchmode) {
-			mailbox_finish_search_mode(view);
+			mailbox_deactivate_search_mode(view);
 		}
 		return 0;
 	}
@@ -929,7 +930,7 @@ static int _mailbox_update_mailbox(EmailMailboxView *view, int account_id, int m
 	mailbox_check_sort_type_validation(view);
 
 	if (view->b_searchmode) {
-		mailbox_finish_search_mode(view);
+		mailbox_deactivate_search_mode(view);
 	} else {
 		mailbox_list_refresh(view, NULL);
 	}
@@ -1254,7 +1255,7 @@ static void _mailbox_on_back_key(email_view_t *self)
 	if (view->b_editmode) {
 		mailbox_exit_edit_mode(view);
 	} else if (view->b_searchmode) {
-		mailbox_finish_search_mode(view);
+		mailbox_back_key_click_handle(view);
 	} else {
 		if ((view->mode == EMAIL_MAILBOX_MODE_ALL || view->mode == EMAIL_MAILBOX_MODE_MAILBOX)
 			&& view->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX) {
