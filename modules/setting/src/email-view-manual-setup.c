@@ -795,6 +795,7 @@ static Evas_Object *_gl_ef_account_info_get_content_cb(void *data, Evas_Object *
 			elm_object_part_text_set(full_item_ly, "elm.text", email_setting_gettext(EMAIL_SETTING_STRING_USER_NAME));
 		}
 		setting_set_entry_str(li->editfield.entry, li->entry_str);
+		elm_entry_input_panel_return_key_type_set(li->editfield.entry, ELM_INPUT_PANEL_RETURN_KEY_TYPE_NEXT);
 		evas_object_propagate_events_set(li->editfield.entry, EINA_TRUE);
 		evas_object_smart_callback_add(li->editfield.entry, "changed", _backup_input_cb, li);
 		evas_object_smart_callback_add(li->editfield.entry, "preedit,changed", _backup_input_cb, li);
