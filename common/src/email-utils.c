@@ -2672,7 +2672,10 @@ EMAIL_API Eina_Bool email_file_cp(const char *source, const char *destination)
 
 EMAIL_API char *email_file_dir_get(const char *path)
 {
-	return dirname(strdup(path));
+	char *tmp_path = strdup(path);
+	char *res = strdup(dirname(tmp_path));
+	free(tmp_path);
+	return res;
 }
 
 EMAIL_API Eina_Bool email_file_exists(const char *file)
