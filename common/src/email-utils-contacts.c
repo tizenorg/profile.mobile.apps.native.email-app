@@ -620,9 +620,13 @@ EMAIL_API email_contact_list_info_t *email_contacts_get_contact_info_by_email_id
 	if (ret != CONTACTS_ERROR_NONE) {
 		debug_warning("contacts_list_get_current_record_p() failed (%d)", ret);
 		contacts_list_destroy(person_email_list, true);
+		free(contact_info);
 		return NULL;
 	}
-	contact_info->email_id = email_id;
+
+	if (contact_info) {
+		contact_info->email_id = email_id;
+	}
 	contacts_list_destroy(person_email_list, true);
 	debug_leave();
 	return contact_info;
