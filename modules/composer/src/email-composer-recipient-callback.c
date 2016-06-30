@@ -873,6 +873,10 @@ void _recipient_entry_unfocused_cb(void *data, Evas_Object *obj, void *event_inf
 	EmailComposerView *view = (EmailComposerView *)data;
 	_recipient_mbe_unselect_last_item(obj, view);
 
+	if (view->ps_is_runnig) {
+		composer_ps_stop_search(view);
+	}
+
 	debug_leave();
 }
 

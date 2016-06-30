@@ -32,6 +32,7 @@
 #define COMPOSER_PS_BOTTOM_PADDING ELM_SCALE_SIZE(16)
 #define COMPOSER_PS_BORDER_SIZE ELM_SCALE_SIZE(2)
 #define COMPOSER_PS_INITAL_WIDTH 256
+#define COMPOSER_PS_LIST_LIMIT 250
 
 Elm_Genlist_Item_Class __ps_itc;
 
@@ -303,8 +304,6 @@ static void __composer_ps_create_view(EmailComposerView *view)
 
 	composer_initial_view_cs_freeze_push(view);
 
-	view->ps_is_runnig = EINA_TRUE;
-
 	debug_leave();
 }
 
@@ -326,8 +325,6 @@ static void __composer_ps_destroy_view(EmailComposerView *view)
 	view->ps_genlist = NULL;
 
 	composer_initial_view_cs_freeze_pop(view);
-
-	view->ps_is_runnig = EINA_FALSE;
 
 	debug_leave();
 }
@@ -401,30 +398,37 @@ void composer_ps_start_search(void *data)
 	EmailComposerView *view = (EmailComposerView *)data;
 	Eina_List *ps_list = NULL;
 
+	/* Clear cached contact list on first search or if cached keyword is not a subset of new keyword */
+	if (view->ps_contacts_list && !strcasestr(view->ps_keyword, view->ps_cache_keyword)) {
+		email_contacts_delete_contact_info_list(&view->ps_contacts_list);
+	}
+
 	/* Retrieve contacts list from contacts db & phonelog db. If there's the list already searched, use it instead. */
 	if (!view->ps_contacts_list) {
-
-		view->ps_contacts_list = email_contacts_search_contacts_by_keyword(view->ps_keyword); /* contacts_list is cached for future use. */
+		view->ps_contacts_list = email_contacts_search_contacts_by_keyword(view->ps_keyword, COMPOSER_PS_LIST_LIMIT); /* contacts_list is cached for future use. */
 		ps_list = eina_list_clone(view->ps_contacts_list);
+		snprintf(view->ps_cache_keyword, EMAIL_LIMIT_EMAIL_ADDRESS_LENGTH + 1, "%s", view->ps_keyword);
 	} else {
 		ps_list = __composer_ps_search_through_list(view->ps_contacts_list, view->ps_keyword); /* cached contacts_list is used here. */
 	}
 
 	/* If there're some contacts found, append it to the genlist. If not, destroy the layout. */
 	if (!ps_list) {
-		if (view->ps_is_runnig) {
-			composer_ps_stop_search(view);
+		if (view->ps_layout) {
+			__composer_ps_destroy_view(view);
 		}
 	} else {
-		if (!view->ps_is_runnig) {
+		if (!view->ps_layout) {
 			__composer_ps_create_view(view);
-		} else if (view->ps_genlist) { /* Clear existing items to append new list. */
+		} else { /* Clear existing items to append new list. */
 			elm_genlist_clear(view->ps_genlist);
 		}
 
 		__composer_ps_append_result(view, ps_list, NULL);
-		DELETE_LIST_OBJECT(ps_list); /* DO NOT remove the item on the list. they are removed on composer_ps_stop_search() */
+		DELETE_LIST_OBJECT(ps_list); /* DO NOT remove the item on the list. they are removed on email_contacts_delete_contact_info_list() */
 	}
+
+	view->ps_is_runnig = EINA_TRUE;
 
 	debug_leave();
 }
@@ -437,13 +441,15 @@ void composer_ps_stop_search(void *data)
 
 	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (view->ps_is_runnig) {
+	if (view->ps_layout) {
 		__composer_ps_destroy_view(view);
 	}
 
 	if (view->ps_contacts_list) {
 		email_contacts_delete_contact_info_list(&view->ps_contacts_list);
 	}
+
+	view->ps_is_runnig = EINA_FALSE;
 
 	debug_leave();
 }

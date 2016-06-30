@@ -502,7 +502,7 @@ static void _initial_view_cs_update(EmailComposerView *view, int event_mask)
 		view->cs_notify_caret_pos = false;
 	}
 
-	if (view->ps_is_runnig && (event_mask & COMPOSER_CSEF_MAIN_SCROLLER_RESIZE)) {
+	if (view->ps_layout && (event_mask & COMPOSER_CSEF_MAIN_SCROLLER_RESIZE)) {
 		composer_ps_change_layout_size(view);
 	}
 }
