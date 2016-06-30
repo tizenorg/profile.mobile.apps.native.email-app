@@ -284,6 +284,12 @@ static void _reply_toolbar_create_fwd_options_popup(EmailViewerView *view)
 	evas_object_data_set(fwd_popup_genlist, VIEWER_EVAS_DATA_NAME, view);
 
 	view->fwd_popup_data = MEM_ALLOC(view->fwd_popup_data, 1);
+	if (!view->fwd_popup_data) {
+		debug_error("Failed to allocate memory for fwd_popup_data!");
+		DELETE_EVAS_OBJECT(view->fwd_option_popup);
+		return;
+	}
+
 	view->fwd_popup_data->radio_group = elm_radio_add(fwd_popup_genlist);
 	elm_radio_value_set(view->fwd_popup_data->radio_group, FWD_NEW_RECIPIENT_INDEX);
 

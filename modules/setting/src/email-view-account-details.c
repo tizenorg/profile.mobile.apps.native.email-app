@@ -260,7 +260,7 @@ static int _create(email_view_t *self)
 
 	_create_toolbar_more_btn(view);
 
-	if (account_data->incoming_server_type == EMAIL_SERVER_TYPE_IMAP4)
+	if (account_data && account_data->incoming_server_type == EMAIL_SERVER_TYPE_IMAP4)
 			view->is_imap_push_supported = _is_imap_push_supported(account_data);
 
 	_create_list(view);
