@@ -958,18 +958,6 @@ Eina_Bool composer_util_scroll_region_show_timer(void *data)
 	view->timer_regionshow = NULL;
 	composer_util_scroll_region_show(view);
 
-	/* To resize predictive search layout after rotating device.
-	 * (P140630-03288) Steps.
-	 *  1. Focus to CC or BCC
-	 *  2. Enter a char to make predictive search list (list should have more than 5 recp.)
-	 *  3. Rotate device landscape.
-	 *  4. Rotate device portrait.
-	 *  5. There's an empty space below the box. (It's because we moves the scroller to the focused entry.)
-	 */
-	if (view->ps_box) {
-		composer_ps_change_layout_size(view);
-	}
-
 	debug_leave();
 	return ECORE_CALLBACK_CANCEL;
 }
@@ -1171,7 +1159,7 @@ void composer_util_display_position(void *data)
 	debug_log("naviframe = [x:%d, y:%d, w:%d, h:%d]", x, y, w, h);
 	x = y = w = h = 0;
 
-	elm_scroller_region_get(view->main_scroller, &x, &y, &w, &h);
+	evas_object_geometry_get(view->main_scroller, &x, &y, &w, &h);
 	debug_log("scroller   = [x:%d, y:%d, w:%d, h:%d]", x, y, w, h);
 	x = y = w = h = 0;
 

@@ -226,8 +226,8 @@ struct _view_data {
 	Eina_List *ps_contacts_list;
 
 	Evas_Object *ps_layout;
-	Evas_Object *ps_box;
 	Evas_Object *ps_genlist;
+	int ps_genlist_min_height;
 
 	Ecore_Event_Handler *ps_mouse_down_handler;
 
