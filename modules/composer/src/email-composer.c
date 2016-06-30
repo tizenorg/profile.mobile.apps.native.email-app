@@ -79,8 +79,6 @@ static void _composer_destroy_composer(void *data);
 static void _composer_process_error_popup(EmailComposerView *view, COMPOSER_ERROR_TYPE_E error);
 
 static void _composer_set_environment_variables();
-static void _composer_add_main_callbacks(EmailComposerView *view);
-static void _composer_del_main_callbacks(EmailComposerView *view);
 
 static int _composer_module_create(email_module_t *self, email_params_h params);
 static void _composer_on_message(email_module_t *self, email_params_h msg);
@@ -98,9 +96,6 @@ static void _composer_start(EmailComposerView *view);
 static void _composer_orientation_change_update(EmailComposerView *view);
 static void _composer_language_change_update(EmailComposerView *view);
 
-static void _composer_virtualkeypad_state_on_cb(void *data, Evas_Object *obj, void *event_info);
-static void _composer_virtualkeypad_state_off_cb(void *data, Evas_Object *obj, void *event_info);
-static void _composer_virtualkeypad_size_changed_cb(void *data, Evas_Object *obj, void *event_info);
 static void _composer_gdbus_signal_receiver_cb(GDBusConnection *connection, const gchar *sender_name, const gchar *object_path,
 		const gchar *interface_name, const gchar *signal_name, GVariant *parameters, gpointer data);
 
@@ -726,8 +721,6 @@ static COMPOSER_ERROR_TYPE_E _composer_construct_composer_data(void *data)
 	ret = _composer_initialize_mail_info(view);
 	gotom_if(ret != COMPOSER_ERROR_NONE, CATCH, "_composer_construct_mail_info() failed");
 
-	_composer_add_main_callbacks(view);
-
 CATCH:
 	debug_leave();
 	return ret;
@@ -1039,27 +1032,6 @@ static void _composer_set_environment_variables()
 	debug_leave();
 }
 
-static void _composer_add_main_callbacks(EmailComposerView *view)
-{
-	debug_enter();
-
-	evas_object_smart_callback_add(view->base.module->conform, "virtualkeypad,state,on", _composer_virtualkeypad_state_on_cb, (void *)view);
-	evas_object_smart_callback_add(view->base.module->conform, "virtualkeypad,state,off", _composer_virtualkeypad_state_off_cb, (void *)view);
-	evas_object_smart_callback_add(view->base.module->conform, "virtualkeypad,size,changed", _composer_virtualkeypad_size_changed_cb, (void *)view);
-	debug_leave();
-}
-
-static void _composer_del_main_callbacks(EmailComposerView *view)
-{
-	debug_enter();
-
-	evas_object_smart_callback_del(view->base.module->conform, "virtualkeypad,state,on", _composer_virtualkeypad_state_on_cb);
-	evas_object_smart_callback_del(view->base.module->conform, "virtualkeypad,state,off", _composer_virtualkeypad_state_off_cb);
-	evas_object_smart_callback_del(view->base.module->conform, "virtualkeypad,size,changed", _composer_virtualkeypad_size_changed_cb);
-
-	debug_leave();
-}
-
 static void _composer_initial_view_draw_richtext_components_if_enabled(EmailComposerView *view)
 {
 	Eina_Bool richtext_toolbar_enabled = EINA_TRUE;
@@ -1251,7 +1223,6 @@ static void _composer_destroy(email_view_t *self)
 	email_params_free(&view->launch_params);
 
 	view->is_composer_getting_destroyed = EINA_TRUE;
-	_composer_del_main_callbacks(view);
 	_composer_destroy_composer(view);
 
 	debug_leave();
@@ -1409,45 +1380,6 @@ static void _composer_update(email_view_t *self, int flags)
 	}
 	if (flags & EVUF_LANGUAGE_CHANGED) {
 		_composer_language_change_update(view);
-	}
-
-	debug_leave();
-}
-
-static void _composer_virtualkeypad_state_on_cb(void *data, Evas_Object *obj, void *event_info)
-{
-	debug_enter();
-
-	EmailComposerView *view = (EmailComposerView *)data;
-
-	if (view->ps_box) {
-		composer_ps_change_layout_size(view);
-	}
-
-	debug_leave();
-}
-
-static void _composer_virtualkeypad_state_off_cb(void *data, Evas_Object *obj, void *event_info)
-{
-	debug_enter();
-
-	EmailComposerView *view = (EmailComposerView *)data;
-
-	if (view->ps_box) {
-		composer_ps_change_layout_size(view);
-	}
-
-	debug_leave();
-}
-
-static void _composer_virtualkeypad_size_changed_cb(void *data, Evas_Object *obj, void *event_info)
-{
-	debug_enter();
-
-	EmailComposerView *view = (EmailComposerView *)data;
-
-	if (view->ps_box) {
-		composer_ps_change_layout_size(view);
 	}
 
 	debug_leave();

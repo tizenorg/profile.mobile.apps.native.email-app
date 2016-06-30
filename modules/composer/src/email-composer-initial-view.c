@@ -26,6 +26,7 @@
 #include "email-composer-attachment.h"
 #include "email-composer-rich-text-toolbar.h"
 #include "email-composer-js.h"
+#include "email-composer-predictive-search.h"
 #include "email-color-box.h"
 
 #define CS_BRING_REL_ACCEL1 (ELM_SCALE_SIZE(20.0f))
@@ -499,6 +500,10 @@ static void _initial_view_cs_update(EmailComposerView *view, int event_mask)
 			ewk_view_script_execute(view->ewk_view, EC_JS_NOTIFY_CARET_POS_CHANGE, NULL, NULL);
 		}
 		view->cs_notify_caret_pos = false;
+	}
+
+	if (view->ps_is_runnig && (event_mask & COMPOSER_CSEF_MAIN_SCROLLER_RESIZE)) {
+		composer_ps_change_layout_size(view);
 	}
 }
 
