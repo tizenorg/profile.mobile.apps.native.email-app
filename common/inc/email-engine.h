@@ -259,6 +259,10 @@ EMAIL_API gboolean email_engine_close_db(void);
 
 EMAIL_API gboolean email_engine_cancel_job(int account_id, int handle, email_cancelation_type cancel_type);
 
+/*Server search API*/
+EMAIL_API gboolean email_engine_launch_server_search(int account_id, int mailbox_id, email_search_data_t *search_data, int *handle);
+EMAIL_API gboolean email_engine_clear_server_search_result(int account_id);
+
 G_END_DECLS
 #endif	/* _EMAIL_ENGINE_H_ */
 
