@@ -30,6 +30,7 @@
 
 #define ACCOUNT_MIN						-1
 
+typedef email_search_filter_t EmailServerSearchFilterList[7];
 
 static guint _g_edb_ref_count = 0;
 
@@ -2152,6 +2153,88 @@ EMAIL_API gboolean email_engine_cancel_job(int account_id, int handle, email_can
 		return FALSE;
 	}
 
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_launch_server_search(int account_id, int mailbox_id, email_search_data_t *search_data, int *handle)
+{
+	debug_enter();
+	retvm_if(!search_data, FALSE, "Invalid args! Search_data data is NULL!");
+
+	double date_range = difftime(search_data->to_time, search_data->from_time);
+	retvm_if(date_range < 0.0, FALSE, "Date range is invalid!");
+
+	EmailServerSearchFilterList search_filter_list;
+	int search_filter_count = 0;
+
+	search_filter_list[search_filter_count].search_filter_type = EMAIL_SEARCH_FILTER_TYPE_ALL;
+	search_filter_list[search_filter_count].search_filter_key_value.integer_type_key_value = 0;
+	search_filter_count++;
+
+	if (search_data->subject) {
+		search_filter_list[search_filter_count].search_filter_type = EMAIL_SEARCH_FILTER_TYPE_SUBJECT;
+		search_filter_list[search_filter_count].search_filter_key_value.string_type_key_value = search_data->subject;
+		search_filter_count++;
+	}
+
+	if (search_data->sender) {
+		search_filter_list[search_filter_count].search_filter_type = EMAIL_SEARCH_FILTER_TYPE_FROM;
+		search_filter_list[search_filter_count].search_filter_key_value.string_type_key_value = search_data->sender;
+		search_filter_count++;
+	}
+
+	if (search_data->recipient) {
+		search_filter_list[search_filter_count].search_filter_type = EMAIL_SEARCH_FILTER_TYPE_TO;
+		search_filter_list[search_filter_count].search_filter_key_value.string_type_key_value = search_data->recipient;
+		search_filter_count++;
+	}
+
+	if (search_data->body_text) {
+		search_filter_list[search_filter_count].search_filter_type = EMAIL_SEARCH_FILTER_TYPE_BODY;
+		search_filter_list[search_filter_count].search_filter_key_value.string_type_key_value = search_data->body_text;
+		search_filter_count++;
+	}
+
+	if (date_range > 0.0) {
+		search_filter_list[search_filter_count].search_filter_type = EMAIL_SEARCH_FILTER_TYPE_SENT_DATE_SINCE;
+		search_filter_list[search_filter_count].search_filter_key_value.time_type_key_value = search_data->from_time;
+		search_filter_count++;
+
+		search_filter_list[search_filter_count].search_filter_type = EMAIL_SEARCH_FILTER_TYPE_SENT_DATE_BEFORE;
+		search_filter_list[search_filter_count].search_filter_key_value.time_type_key_value = search_data->to_time;
+		search_filter_count++;
+	} else if(date_range == 0.0) {
+		search_filter_list[search_filter_count].search_filter_type = EMAIL_SEARCH_FILTER_TYPE_SENT_DATE_ON;
+		search_filter_list[search_filter_count].search_filter_key_value.time_type_key_value = search_data->to_time;
+		search_filter_count++;
+	} else {
+		debug_error("Time range is invalid!");
+	}
+
+	*handle = -1;
+	int err = email_search_mail_on_server(account_id, mailbox_id, search_filter_list, search_filter_count, handle);
+
+	if (err != EMAIL_ERROR_NONE || *handle < 0) {
+		debug_critical("fail to request search server - err (%d)", err);
+		return FALSE;
+	}
+
+	debug_leave();
+	return TRUE;
+}
+
+EMAIL_API gboolean email_engine_clear_server_search_result(int account_id)
+{
+	debug_enter();
+
+	int err = email_clear_result_of_search_mail_on_server(account_id);
+	debug_log("Result %d", err);
+	if (err != EMAIL_ERROR_NONE) {
+		debug_critical("failed in email_clear_result_of_search_mail_on_server() - err (%d)", err);
+		return FALSE;
+	}
+
+	debug_leave();
 	return TRUE;
 }
 
