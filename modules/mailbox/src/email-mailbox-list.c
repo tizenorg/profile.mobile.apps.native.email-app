@@ -964,6 +964,8 @@ static email_mail_list_item_t *_mailbox_get_mail_list(EmailMailboxView *view, co
 
 	if (view->mailbox_type == EMAIL_MAILBOX_TYPE_NONE) {
 		mailbox_type = EMAIL_MAILBOX_TYPE_INBOX;
+	} else if (view->search_type == EMAIL_SEARCH_ON_SERVER) {
+		mailbox_type = EMAIL_MAILBOX_TYPE_SEARCH_RESULT;
 	} else {
 		mailbox_type = view->mailbox_type;
 	}
@@ -988,6 +990,8 @@ static email_mail_list_item_t *_mailbox_get_mail_list(EmailMailboxView *view, co
 			}
 		} else if (view->search_type == EMAIL_SEARCH_IN_ALL_FOLDERS) {
 			mail_data = _mailbox_get_mail_list_for_search_all_folders(EMAIL_SORT_DATE_RECENT, search_data, mail_count);
+		} else if (view->search_type == EMAIL_SEARCH_ON_SERVER) {
+			mail_data = _mailbox_get_mail_list_by_mailbox_type(view->account_id, mailbox_type, view->sort_type, EMAIL_GET_MAIL_NORMAL, NULL, mail_count);
 		}
 	} else {
 		if (view->mode == EMAIL_MAILBOX_MODE_ALL) {
