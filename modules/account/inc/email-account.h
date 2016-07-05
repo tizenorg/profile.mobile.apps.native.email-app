@@ -151,6 +151,7 @@ struct _view_data
 	Evas_Object *entry;
 	Evas_Object *popup;
 	Evas_Object *popup_ok_btn;
+	Ecore_Idler *popup_focus_idler;
 
 	Elm_Object_Item *group_title_item;
 	Elm_Object_Item *it;

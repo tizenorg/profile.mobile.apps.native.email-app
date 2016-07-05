@@ -36,11 +36,14 @@ static void _entry_maxlength_reached_cb(void *data, Evas_Object *obj, void *even
 static void _entry_changed_cb(void *data, Evas_Object *obj, void *event_info);
 static void _entry_clicked_cb(void *data, Evas_Object *obj, void *event_info);
 
-static void _register_entry_popup_rot_callback(Evas_Object *popup, EmailAccountView *view, const char *header);
+static void _register_entry_popup_rot_callback(Evas_Object *popup, EmailAccountView *view);
+static void _unregister_entry_popup_rot_callback(Evas_Object *popup, EmailAccountView *view);
+
 static void _entry_popup_keypad_down_cb(void *data, Evas_Object *obj, void *event_info);
 static void _entry_popup_keypad_up_cb(void *data, Evas_Object *obj, void *event_info);
 static void _entry_popup_rot_cb(void *data, Evas_Object *obj, void *event_info);
 static void _entry_popup_del_cb(void *data, Evas *evas, Evas_Object *obj, void *event_info);
+static Eina_Bool _entry_popup_idler_cb(void *data);
 
 EMAIL_DEFINE_GET_EDJ_PATH(email_get_account_theme_path, "/email-account.edj")
 
@@ -360,6 +363,17 @@ char *account_get_user_email_address(int account_id)
 	return address;
 }
 
+static Eina_Bool _entry_popup_idler_cb(void *data)
+{
+	EmailAccountView *view = data;
+
+	elm_object_focus_set(view->entry, EINA_TRUE);
+
+	view->popup_focus_idler = NULL;
+
+	return ECORE_CALLBACK_DONE;
+}
+
 Evas_Object *account_create_entry_popup(EmailAccountView *view, email_string_t t_title,
 		const char *entry_text, const char *entry_selection_text,
 		Evas_Smart_Cb _back_response_cb, Evas_Smart_Cb _done_key_cb,
@@ -405,6 +419,7 @@ Evas_Object *account_create_entry_popup(EmailAccountView *view, email_string_t t
 	popup = elm_popup_add(view->base.module->navi);
 	elm_popup_align_set(popup, ELM_NOTIFY_ALIGN_FILL, 1.0);
 	eext_object_event_callback_add(popup, EEXT_CALLBACK_BACK, _back_response_cb, view);
+	evas_object_event_callback_add(popup, EVAS_CALLBACK_DEL, _entry_popup_del_cb, view);
 	evas_object_size_hint_weight_set(popup, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 
 	if (t_title.id) {
@@ -483,8 +498,11 @@ Evas_Object *account_create_entry_popup(EmailAccountView *view, email_string_t t
 	view->popup = popup;
 	view->popup_ok_btn = btn2;
 
-	elm_object_focus_set(editfield.entry, EINA_TRUE);
-	_register_entry_popup_rot_callback(popup, view, t_title.id);
+	evas_object_data_del(popup, "_header");
+	evas_object_data_set(popup, "_header", t_title.id);
+	_register_entry_popup_rot_callback(popup, view);
+
+	view->popup_focus_idler = ecore_idler_add(_entry_popup_idler_cb, view);
 
 	return popup;
 }
@@ -604,17 +622,22 @@ void account_sync_cancel_all(EmailAccountView *view)
 	}
 }
 
-static void _register_entry_popup_rot_callback(Evas_Object *popup, EmailAccountView *view, const char *header)
+static void _register_entry_popup_rot_callback(Evas_Object *popup, EmailAccountView *view)
 {
 	debug_enter();
 
-	evas_object_data_del(popup, "_header");
-	evas_object_data_set(popup, "_header", header);
-
-	evas_object_event_callback_add(popup, EVAS_CALLBACK_DEL, _entry_popup_del_cb, view);
 	evas_object_smart_callback_add(view->base.module->conform, "virtualkeypad,state,on", _entry_popup_keypad_up_cb, view);
 	evas_object_smart_callback_add(view->base.module->conform, "virtualkeypad,state,off", _entry_popup_keypad_down_cb, view);
 	evas_object_smart_callback_add(view->base.module->win, "wm,rotation,changed", _entry_popup_rot_cb, view);
+}
+
+static void _unregister_entry_popup_rot_callback(Evas_Object *popup, EmailAccountView *view)
+{
+	debug_enter();
+
+	evas_object_smart_callback_del_full(view->base.module->conform, "virtualkeypad,state,on", _entry_popup_keypad_up_cb, view);
+	evas_object_smart_callback_del_full(view->base.module->conform, "virtualkeypad,state,off", _entry_popup_keypad_down_cb, view);
+	evas_object_smart_callback_del_full(view->base.module->win, "wm,rotation,changed", _entry_popup_rot_cb, view);
 }
 
 static void _entry_popup_keypad_down_cb(void *data, Evas_Object *obj, void *event_info)
@@ -668,11 +691,17 @@ static void _entry_popup_rot_cb(void *data, Evas_Object *obj, void *event_info)
 static void _entry_popup_del_cb(void *data, Evas *evas, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
-	EmailAccountView *view = (EmailAccountView *)data;
 
-	evas_object_smart_callback_del_full(view->base.module->conform, "virtualkeypad,state,on", _entry_popup_keypad_up_cb, view);
-	evas_object_smart_callback_del_full(view->base.module->conform, "virtualkeypad,state,off", _entry_popup_keypad_down_cb, view);
-	evas_object_smart_callback_del_full(view->base.module->win, "wm,rotation,changed", _entry_popup_rot_cb, view);
+	EmailAccountView *view = data;
+
+	if (view->popup_focus_idler) {
+		ecore_idler_del(view->popup_focus_idler);
+		view->popup_focus_idler = NULL;
+	}
+	view->entry = NULL;
+	view->popup_ok_btn = NULL;
+
+	_unregister_entry_popup_rot_callback(obj, view);
 }
 
 int account_color_list_get_account_color(EmailAccountView *view, int account_id)
