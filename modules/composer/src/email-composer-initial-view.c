@@ -58,8 +58,12 @@ static void _initial_view_create_naviframe_buttons(Evas_Object *parent, Evas_Obj
 static void _initial_view_update_rttb_position(EmailComposerView *view);
 static void _initial_view_notify_ewk_visible_area(EmailComposerView *view);
 
+static void _initial_view_cs_begin_scroll(EmailComposerView *view);
+static void _initial_view_cs_end_scroll(EmailComposerView *view);
+
 static void _initial_view_cs_stop_animator(EmailComposerView *view);
 static void _initial_view_cs_stop_dragging(EmailComposerView *view);
+static void _initial_view_cs_stop_all(EmailComposerView *view);
 static int _initial_view_cs_fix_pos(EmailComposerView *view, int y);
 static void _initial_view_cs_set_pos(EmailComposerView *view, int y);
 static void _initial_view_cs_handle_event(EmailComposerView *view, int event_mask);
@@ -317,6 +321,28 @@ static void _initial_view_notify_ewk_visible_area(EmailComposerView *view)
 	evas_object_smart_callback_call(view->ewk_view, "visible,content,changed", &rect);
 }
 
+static void _initial_view_cs_begin_scroll(EmailComposerView *view)
+{
+	if (view->cs_is_scrolling) {
+		return;
+	}
+	view->cs_is_scrolling = true;
+
+	debug_log("COMBINED_SCROLL BEGIN");
+	evas_object_smart_callback_call(view->ewk_view, "custom,scroll,begin", NULL);
+}
+
+static void _initial_view_cs_end_scroll(EmailComposerView *view)
+{
+	if (!view->cs_is_scrolling) {
+		return;
+	}
+	view->cs_is_scrolling = false;
+
+	debug_log("COMBINED_SCROLL END");
+	evas_object_smart_callback_call(view->ewk_view, "custom,scroll,end", NULL);
+}
+
 static void _initial_view_cs_stop_animator(EmailComposerView *view)
 {
 	debug_enter();
@@ -331,6 +357,13 @@ static void _initial_view_cs_stop_dragging(EmailComposerView *view)
 {
 	view->cs_is_sliding = false;
 	view->cs_is_dragging = false;
+}
+
+static void _initial_view_cs_stop_all(EmailComposerView *view)
+{
+	_initial_view_cs_stop_animator(view);
+	_initial_view_cs_stop_dragging(view);
+	_initial_view_cs_end_scroll(view);
 }
 
 static int _initial_view_cs_fix_pos(EmailComposerView *view, int y)
@@ -489,7 +522,6 @@ static void _initial_view_cs_update(EmailComposerView *view, int event_mask)
 
 	if (need_set_pos) {
 		if ((ecore_time_get() - view->cs_backup_pos_time) < CS_CARET_BACKUP_TIMEOUT_SEC) {
-			_initial_view_cs_stop_animator(view);
 			new_scroll_pos = view->cs_backup_scroll_pos;
 		}
 		_initial_view_cs_set_pos(view, new_scroll_pos);
@@ -638,16 +670,20 @@ static Eina_Bool _initial_view_cs_animator_cb(void *data, double pos)
 		new_pos = (int)(view->cs_anim_pos1 + view->cs_anim_v1 * t + 0.5f * view->cs_anim_a2 * t * t + 0.5f);
 	}
 
+	_initial_view_cs_begin_scroll(view);
+
 	_initial_view_cs_set_pos(view, new_pos);
 
 	if (new_pos != view->cs_scroll_pos) {
 		view->cs_animator = NULL;
+		_initial_view_cs_end_scroll(view);
 		debug_log("End reached.");
 		return ECORE_CALLBACK_CANCEL;
 	}
 
 	if (pos == 1.0) {
 		view->cs_animator = NULL;
+		_initial_view_cs_end_scroll(view);
 		debug_log("Animator finished.");
 		return ECORE_CALLBACK_CANCEL;
 	}
@@ -693,6 +729,7 @@ static void _initial_view_main_scroller_down_cb(void *data, Evas *e, Evas_Object
 		view->cs_drag_cur_time = event->timestamp;
 
 		_initial_view_cs_stop_animator(view);
+		_initial_view_cs_begin_scroll(view);
 	}
 }
 
@@ -743,6 +780,8 @@ static void _initial_view_main_scroller_up_cb(void *data, Evas *e, Evas_Object *
 		view->cs_anim_t1 = -view->cs_anim_v0 / view->cs_anim_a1;
 		view->cs_anim_duration = view->cs_anim_t1;
 		view->cs_animator = ecore_animator_timeline_add(view->cs_anim_duration, _initial_view_cs_animator_cb, view);
+	} else {
+		_initial_view_cs_end_scroll(view);
 	}
 }
 
@@ -984,6 +1023,8 @@ void composer_initial_view_set_combined_scroller_rotation_mode(void *data)
 
 	EmailComposerView *view = (EmailComposerView *)data;
 
+	_initial_view_cs_stop_all(view);
+
 	if (view->selected_widget == view->ewk_view) {
 		_initial_view_cs_ensure_ewk_on_top(view, false);
 		_initial_view_cs_backup_scroll_pos(view);
@@ -1129,7 +1170,9 @@ void composer_initial_view_cs_show(EmailComposerView *view, int pos)
 	retm_if(!view->cs_ready, "Not ready!");
 
 	_initial_view_cs_stop_animator(view);
+	_initial_view_cs_begin_scroll(view);
 	_initial_view_cs_set_pos(view, pos);
+	_initial_view_cs_end_scroll(view);
 }
 
 void composer_initial_view_cs_freeze_push(EmailComposerView *view)
@@ -1139,8 +1182,7 @@ void composer_initial_view_cs_freeze_push(EmailComposerView *view)
 
 	++view->cs_freeze_count;
 
-	_initial_view_cs_stop_dragging(view);
-	_initial_view_cs_stop_animator(view);
+	_initial_view_cs_stop_all(view);
 }
 
 void composer_initial_view_cs_freeze_pop(EmailComposerView *view)

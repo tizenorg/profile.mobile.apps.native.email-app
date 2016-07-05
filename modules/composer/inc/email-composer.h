@@ -266,6 +266,7 @@ struct _view_data {
 	int cs_drag_content_y;
 	bool cs_is_sliding;
 	bool cs_is_dragging;
+	bool cs_is_scrolling;
 
 	float cs_anim_pos0;
 	float cs_anim_pos1;
