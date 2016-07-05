@@ -211,6 +211,13 @@ void mailbox_clear_prev_mailbox_info(EmailMailboxView *view);
 void mailbox_set_last_updated_time(time_t last_update_time, EmailMailboxView *view);
 
 /**
+ * @brief Return localized date string, need to free after usage
+ * @param[in]	time		Structure represented time
+ * @return localized date string in region format with weekday, date, month and year on success, otherwise NULL
+ */
+char *mailbox_get_formatted_date(time_t time);
+
+/**
  * @brief Compare received Mail ID if exist in Mail item data
  * @param[in]	a	Mail item data
  * @param[in]	b	Mail ID
