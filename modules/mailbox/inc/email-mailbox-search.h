@@ -38,9 +38,9 @@ void mailbox_free_mailbox_search_data(email_search_data_t *search_data);
 email_search_data_t *mailbox_make_search_data(EmailMailboxView *view);
 
 /**
- * @brief Show search result
+ * @brief Update search result view and search UI components
  * @param[in]	view			Email mailbox data
  */
-int mailbox_show_search_result(EmailMailboxView *view);
+void mailbox_update_search_view(EmailMailboxView *view);
 
 #endif	/* __DEF_EMAIL_MAILBOX_SEARCH_H_ */

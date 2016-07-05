@@ -732,6 +732,15 @@ static void _insert_mail_item_to_list(EmailMailboxView *view, MailItemData *ld)
 						ELM_GENLIST_ITEM_NONE,
 						_mail_item_gl_selected_cb,
 						NULL);
+	} else if (view->search_btn_item_data.base.item != NULL) {
+		ld->base.item = elm_genlist_item_insert_before(view->gl,
+						&itc,
+						ld,
+						NULL,
+						view->search_btn_item_data.base.item,
+						ELM_GENLIST_ITEM_NONE,
+						_mail_item_gl_selected_cb,
+						NULL);
 	} else {
 		ld->base.item = elm_genlist_item_append(view->gl,
 						&itc,
@@ -1769,6 +1778,7 @@ static void _mailbox_make_list(EmailMailboxView *view, const email_search_data_t
 	mail_list = _mailbox_get_mail_list(view, search_data, &mail_count);
 
 	if (mail_list) {
+		mailbox_hide_no_contents_view(view);
 		/* Display last updated time for individual accounts */
 		if (view->mode == EMAIL_MAILBOX_MODE_MAILBOX
 				&& view->only_local == FALSE && !view->b_searchmode) {
@@ -1781,9 +1791,7 @@ static void _mailbox_make_list(EmailMailboxView *view, const email_search_data_t
 		/* add remaining items */
 		_mailbox_make_remaining_items(view, search_data, mail_list, mail_count);
 
-		if (view->b_searchmode) {
-			mailbox_hide_no_contents_view(view);
-		} else {
+		if (!view->b_searchmode) {
 			if ((view->mode == EMAIL_MAILBOX_MODE_ALL || view->mode == EMAIL_MAILBOX_MODE_MAILBOX)
 				&& view->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX && mail_count > 0) {
 				bool sending_mail_exist = false;
@@ -1812,17 +1820,15 @@ static void _mailbox_make_list(EmailMailboxView *view, const email_search_data_t
 			} else if (view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX) {
 				mailbox_no_more_emails_item_add(view);
 			}
-
-			mailbox_hide_no_contents_view(view);
 		}
 	} else {
 		debug_log("no email exists.");
+		if (view->b_editmode) {
+			mailbox_exit_edit_mode(view);
+		}
 
-		if (view->b_searchmode) {
-			mailbox_show_no_contents_view(view);
-		} else {
-			if (view->b_editmode)
-				mailbox_exit_edit_mode(view);
+		//Search mode has separate logic for empty state
+		if (!view->b_searchmode) {
 			mailbox_show_no_contents_view(view);
 		}
 	}

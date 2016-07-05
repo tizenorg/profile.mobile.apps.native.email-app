@@ -412,6 +412,14 @@ static int _mailbox_initialize(EmailMailboxView *view)
 	view->b_searchmode = false;
 	view->search_type = EMAIL_SEARCH_NONE;
 
+	/*Server search button item*/
+	view->search_btn_item_data.base.item_type = MAILBOX_LIST_ITEM_SERVER_SEARCH_BUTTON;
+	view->search_btn_item_data.base.item = NULL;
+	view->search_btn_item_data.view = view;
+
+	view->search_progress_item_data.item_type = MAILBOX_LIST_ITEM_SERVER_SEARCH_PROGRESS;
+	view->search_progress_item_data.item = NULL;
+
 	/*SelectAll Item*/
 	view->select_all_item_data.base.item_type = MAILBOX_LIST_ITEM_SELECT_ALL;
 	view->select_all_item_data.base.item = NULL;
@@ -1060,7 +1068,7 @@ static void _mailbox_create_view(EmailMailboxView *view)
 	mailbox_list_create_view(view);
 
 	/* create nocontents layout */
-	mailbox_create_no_contents_view(view, false);
+	mailbox_create_no_contents_view(view);
 
 	elm_object_part_content_set(view->content_layout, "list", view->gl);
 	view->sub_layout_search = view->content_layout;
@@ -1342,59 +1350,31 @@ email_module_t *mailbox_module_alloc()
 	return &module->base;
 }
 
-void mailbox_create_no_contents_view(EmailMailboxView *view, bool search_mode)
+void mailbox_create_no_contents_view(EmailMailboxView *view)
 {
-	debug_log("search_mode : %d", search_mode);
+	retm_if(!view, "Invalid argument!");
 
-	if (!view) {
-		debug_warning("view is NULL");
-		return;
-	}
-
-	Evas_Object *no_content_scroller = elm_object_part_content_get(view->content_layout, "noc");
-	if (no_content_scroller) {
-		debug_log("remove no content view");
-		elm_object_part_content_unset(view->content_layout, "noc");
-		evas_object_del(no_content_scroller);
-		no_content_scroller = NULL;
-	}
-
-	Evas_Object *no_content = NULL;
-	no_content = elm_layout_add(view->content_layout);
-
-	if (search_mode) {
-		elm_layout_theme_set(no_content, "layout", "nocontents", "search");
-		elm_object_domain_translatable_part_text_set(no_content, "elm.text", PACKAGE, "IDS_EMAIL_NPBODY_NO_RESULTS_FOUND");
-	} else {
-		elm_layout_theme_set(no_content, "layout", "nocontents", "default");
-		elm_object_domain_translatable_part_text_set(no_content, "elm.text", PACKAGE, "IDS_EMAIL_BODY_NO_EMAILS");
-	}
+	Evas_Object *no_content = elm_layout_add(view->content_layout);
 	evas_object_size_hint_align_set(no_content, EVAS_HINT_FILL, EVAS_HINT_FILL);
 	evas_object_size_hint_weight_set(no_content, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	elm_layout_theme_set(no_content, "layout", "nocontents", "default");
 
 	/* Added Scrollar to fix the searchbar not showing in landscape mode completely*/
-	no_content_scroller = elm_scroller_add(view->content_layout);
+	Evas_Object *no_content_scroller = elm_scroller_add(view->content_layout);
 	elm_scroller_policy_set(no_content_scroller, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_OFF);
 	elm_object_focus_allow_set(no_content_scroller, EINA_FALSE);
-	evas_object_show(no_content_scroller);
 	elm_object_content_set(no_content_scroller, no_content);
-
-	elm_layout_signal_emit(no_content, "text,disabled", "");
-	elm_layout_signal_emit(no_content, "align.center", "elm");
-
+	evas_object_show(no_content_scroller);
 	elm_object_part_content_set(view->content_layout, "noc", no_content_scroller);
-
-	if (view->no_content_shown && !search_mode) {
-		mailbox_hide_no_contents_view(view);
-	}
 }
 
 void mailbox_show_no_contents_view(EmailMailboxView *view)
 {
 	debug_enter();
 
-	if (evas_object_visible_get(view->gl))
+	if (evas_object_visible_get(view->gl)) {
 		evas_object_hide(view->gl);
+	}
 
 	edje_object_signal_emit(_EDJ(view->sub_layout_search), "hide_list", "elm");
 	edje_object_signal_emit(_EDJ(view->sub_layout_search), "show_noc", "elm");
@@ -1405,13 +1385,10 @@ void mailbox_show_no_contents_view(EmailMailboxView *view)
 	Evas_Object *no_content = elm_object_content_get(no_content_scroller);
 
 	if (view->b_searchmode == true) {
-		elm_layout_theme_set(no_content, "layout", "nocontents", "search");
 		elm_object_domain_translatable_part_text_set(no_content, "elm.text", PACKAGE, "IDS_EMAIL_NPBODY_NO_RESULTS_FOUND");
-		elm_object_domain_translatable_part_text_set(no_content, "elm.help.text", PACKAGE, "");
+		elm_object_part_text_set(no_content, "elm.help.text", NULL);
 	} else {
-		elm_layout_theme_set(no_content, "layout", "nocontents", "default");
 		elm_object_domain_translatable_part_text_set(no_content, "elm.text", PACKAGE, "IDS_EMAIL_NPBODY_NO_EMAILS");
-
 		if (view->mode == EMAIL_MAILBOX_MODE_PRIORITY_SENDER) {
 			elm_object_domain_translatable_part_text_set(no_content, "elm.help.text", PACKAGE, "IDS_EMAIL_BODY_AFTER_YOU_ADD_PRIORITY_SENDERS_EMAILS_FROM_THEM_WILL_BE_SHOWN_HERE");
 		} else if (view->mode == EMAIL_MAILBOX_MODE_ALL && view->mailbox_type == EMAIL_MAILBOX_TYPE_INBOX) {
@@ -1459,16 +1436,19 @@ void mailbox_refresh_fullview(EmailMailboxView *view, bool update_title)
 
 	DELETE_EVAS_OBJECT(view->more_ctxpopup);
 
-	if (view->b_editmode)
+	if (view->b_editmode) {
 		mailbox_exit_edit_mode(view);
+	}
 
-	if (update_title)
+	if (update_title) {
 		mailbox_view_title_update_all(view);
+	}
 
-	if (view->b_searchmode)
-		mailbox_show_search_result(view);
-	else
+	if (view->b_searchmode) {
+		mailbox_update_search_view(view);
+	} else {
 		mailbox_list_refresh(view, NULL);
+	}
 
 }
 
