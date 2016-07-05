@@ -37,6 +37,7 @@ ADD_CUSTOM_COMMAND(
 				${PROJECT_EDC_DIR}/mailbox/email-mailbox-theme.edc
 				${PROJECT_EDC_DIR}/mailbox/email-mailbox-genlist-style.edc
 				${PROJECT_EDC_DIR}/mailbox/email-mailbox-macros.edc
+				${PROJECT_EDC_DIR}/mailbox/email-mailbox-server-search.edc
 				${PROJECT_EDC_DIR}/common/email-colors.edc
 				${PROJECT_EDC_DIR}/common/email-parts.edc
 )
