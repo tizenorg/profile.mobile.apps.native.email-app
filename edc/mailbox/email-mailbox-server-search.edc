@@ -1,0 +1,205 @@
+/*
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+#define DATE_RANGE_POPUP_PADDING_TOP						21
+#define DATE_RANGE_POPUP_PADDING_LEFT						32
+#define DATE_RANGE_POPUP_PADDING_RIGHT						32
+#define DATE_RANGE_POPUP_PADDING_BOTTOM						38
+#define DATE_RANGE_POPUP_PADDING_MIDDLE						38
+#define DATE_RANGE_POPUP_LABEL_PADDING_BOTTOM				11
+#define DATE_RANGE_POPUP_BUTTON_MIN_HEIGHT					78
+#define DATE_RANGE_POPUP_BUTTON_MIN_WIDTH					496
+
+#define SERVER_SEARCH_BTN_ITEM_PADDING_TOP					21
+#define SERVER_SEARCH_BTN_ITEM_PADDING_BOTTOM				21
+#define SERVER_SEARCH_BTN_MIN_HEIGHT						78
+#define SERVER_SEARCH_BTN_MIN_WIDTH							496
+
+group { name: "email/layout/server_search_btn_item";
+	parts {
+		E_PART_PADDING_TOP(SERVER_SEARCH_BTN_ITEM_PADDING_TOP);
+		E_PART_PADDING_BOTTOM(SERVER_SEARCH_BTN_ITEM_PADDING_BOTTOM);
+		E_PART_SWALLOW("swallow.server_search.btn",
+			description {
+				state: "default" 0.0;
+				align: 0.5 0.5;
+				rel1 {
+					relative: 0 1;
+					to_y: "padding.top";
+				}
+				rel2 {
+					relative: 1 0;
+					to_y: "padding.bottom";
+				}
+				min: SERVER_SEARCH_BTN_MIN_WIDTH SERVER_SEARCH_BTN_MIN_HEIGHT;
+				max: SERVER_SEARCH_BTN_MIN_WIDTH SERVER_SEARCH_BTN_MIN_HEIGHT;
+			}
+		)
+	}
+}
+
+group { name: "email/layout/date_range_popup";
+	styles {
+		style { name: "label_text_style";
+			base: "font=BreezeSansFallback align=left font_size=32 color=#666666 wrap=word ellipsis=1.0";
+			tag: "br" "\n";
+			tag: "tab" "\t";
+		}
+	}
+
+	parts {
+		E_PART_PADDING_LEFT(DATE_RANGE_POPUP_PADDING_LEFT);
+		E_PART_PADDING_RIGHT(DATE_RANGE_POPUP_PADDING_RIGHT);
+		E_PART_PADDING_TOP(DATE_RANGE_POPUP_PADDING_TOP);
+		E_PART_PADDING_BOTTOM(DATE_RANGE_POPUP_PADDING_BOTTOM);
+
+		E_PART_TEXTBLOCK("text_label.from",
+			description { state: "default" 0.0;
+				align: 0.5 0.0;
+				text {
+					style: "label_text_style";
+					min: 0 1;
+				}
+				rel1 {
+					relative: 1 1;
+					to_x: "padding.left";
+					to_y: "padding.top";
+				}
+				rel2 {
+					relative: 0 1;
+					to_x: "padding.right";
+					to_y: "padding.top";
+				}
+			}
+		)
+
+		E_PART_SPACER("padding.text_label_from.bottom",
+			description {
+				state: "default" 0.0;
+				fixed: 0 1;
+				align: 0.5 0.0;
+				rel1 {
+					relative: 1 1;
+					to_x: "padding.left";
+					to_y: "text_label.from";
+				}
+				rel2 {
+					relative: 0 1;
+					to_x: "padding.right";
+					to_y: "text_label.from";
+				}
+				min: 0 DATE_RANGE_POPUP_LABEL_PADDING_BOTTOM;
+			}
+		)
+
+		E_PART_SWALLOW("swallow.date_button.from",
+			description {
+				state: "default" 0.0;
+				align: 0.5 0.0;
+				rel1 {
+					relative: 1 1;
+					to_x: "padding.left";
+					to_y: "padding.text_label_from.bottom";
+				}
+				rel2 {
+					relative: 0 1;
+					to_x: "padding.right";
+					to_y: "padding.text_label_from.bottom";
+				}
+				min: DATE_RANGE_POPUP_BUTTON_MIN_WIDTH DATE_RANGE_POPUP_BUTTON_MIN_HEIGHT;
+				max: DATE_RANGE_POPUP_BUTTON_MIN_WIDTH DATE_RANGE_POPUP_BUTTON_MIN_HEIGHT;
+			}
+		)
+
+		E_PART_SPACER("padding.date_button_from.bottom",
+			description {
+				state: "default" 0.0;
+				fixed: 0 1;
+				align: 0.5 0.0;
+				rel1 {
+					relative: 1 1;
+					to_x: "padding.left";
+					to_y: "swallow.date_button.from";
+				}
+				rel2 {
+					relative: 0 1;
+					to_x: "padding.right";
+					to_y: "swallow.date_button.from";
+				}
+				min: 0 DATE_RANGE_POPUP_PADDING_MIDDLE;
+			}
+		)
+
+		E_PART_TEXTBLOCK("text_label.to",
+			description { state: "default" 0.0;
+				align: 0.5 0.0;
+				text {
+					style: "label_text_style";
+					min: 0 1;
+				}
+				rel1 {
+					relative: 1 1;
+					to_x: "padding.left";
+					to_y: "padding.date_button_from.bottom";
+				}
+				rel2 {
+					relative: 0 1;
+					to_x: "padding.right";
+					to_y: "padding.date_button_from.bottom";
+				}
+			}
+		)
+
+		E_PART_SPACER("padding.text_label_to.bottom",
+			description {
+				state: "default" 0.0;
+				fixed: 0 1;
+				align: 0.5 0.0;
+				rel1 {
+					relative: 1 1;
+					to_x: "padding.left";
+					to_y: "text_label.to";
+				}
+				rel2 {
+					relative: 0 1;
+					to_x: "padding.right";
+					to_y: "text_label.to";
+				}
+				min: 0 DATE_RANGE_POPUP_LABEL_PADDING_BOTTOM;
+			}
+		)
+
+		E_PART_SWALLOW("swallow.date_button.to",
+			description {
+				state: "default" 0.0;
+				align: 0.5 0.0;
+				rel1 {
+					relative: 1 1;
+					to_x: "padding.left";
+					to_y: "padding.text_label_to.bottom";
+				}
+				rel2 {
+					relative: 0 0;
+					to_x: "padding.right";
+					to_y: "padding.bottom";
+				}
+				min: DATE_RANGE_POPUP_BUTTON_MIN_WIDTH DATE_RANGE_POPUP_BUTTON_MIN_HEIGHT;
+				max: DATE_RANGE_POPUP_BUTTON_MIN_WIDTH DATE_RANGE_POPUP_BUTTON_MIN_HEIGHT;
+			}
+		)
+	}
+}

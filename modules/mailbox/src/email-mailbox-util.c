@@ -215,6 +215,23 @@ void mailbox_set_last_updated_time(time_t last_update_time, EmailMailboxView *vi
 
 }
 
+char *mailbox_get_formatted_date(time_t time)
+{
+	debug_enter();
+
+	const char *icu_locale = NULL;
+	char *formatted_text = NULL;
+
+	int ret = i18n_ulocale_get_default(&icu_locale);
+	retvm_if(ret != I18N_ERROR_NONE, NULL,  "i18n_ulocale_get_default() failed! ret:[%d]");
+
+	formatted_text = email_get_date_text(icu_locale, EMAIL_WEEKDAY_DATE_MONTH_YEAR_FORMAT, &time);
+	debug_log("Obtained data format %s", formatted_text);
+
+	debug_leave();
+	return formatted_text;
+}
+
 int mailbox_compare_mailid_in_list(gconstpointer a, gconstpointer b)
 {
 	MailItemData *ld = (MailItemData *)a;
@@ -255,47 +272,41 @@ Evas_Object *mailbox_create_popup(EmailMailboxView *view, const char *title, con
 {
 	debug_enter();
 	retvm_if(!view, NULL, "view is NULL");
-	retvm_if(!content, NULL, "content is NULL");
-	retvm_if(!back_button_cb, NULL, "response_cb is NULL");
-	retvm_if(!btn1_response_cb || !btn1_text, NULL, "btn1_response_cb or btn1_text is NULL");
 
 	Evas_Object *popup = elm_popup_add(view->base.module->navi);
-	eext_object_event_callback_add(popup, EEXT_CALLBACK_BACK, back_button_cb, view);
+	if (back_button_cb) {
+		eext_object_event_callback_add(popup, EEXT_CALLBACK_BACK, back_button_cb, view);
+	}
+
 	evas_object_size_hint_weight_set(popup, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	elm_popup_align_set(popup, ELM_NOTIFY_ALIGN_FILL, 1.0);
 
 	if (title) {
 		elm_object_domain_translatable_part_text_set(popup, "title,text", PACKAGE, title);
 	}
+
 	if (content) {
 		elm_object_domain_translatable_text_set(popup, PACKAGE, content);
 	}
 
-	if (btn2_text) {
+	if (btn1_text) {
 		Evas_Object *btn1 = elm_button_add(popup);
 		elm_object_style_set(btn1, "popup");
 		elm_object_domain_translatable_text_set(btn1, PACKAGE, btn1_text);
 		elm_object_part_content_set(popup, "button1", btn1);
 		evas_object_smart_callback_add(btn1, "clicked", btn1_response_cb, view);
 		elm_object_focus_set(btn1, EINA_TRUE);
+	}
 
+	if (btn2_text) {
 		Evas_Object *btn2 = elm_button_add(popup);
 		elm_object_style_set(btn2, "popup");
 		elm_object_domain_translatable_text_set(btn2, PACKAGE, btn2_text);
 		elm_object_part_content_set(popup, "button2", btn2);
 		evas_object_smart_callback_add(btn2, "clicked", btn2_response_cb, view);
-
-	} else {
-		Evas_Object *btn1 = elm_button_add(popup);
-		elm_object_style_set(btn1, "popup");
-		elm_object_domain_translatable_text_set(btn1, PACKAGE, btn1_text);
-		elm_object_part_content_set(popup, "button1", btn1);
-		evas_object_smart_callback_add(btn1, "clicked", btn1_response_cb, view);
-		elm_object_focus_set(btn1, EINA_TRUE);
 	}
 
 	evas_object_show(popup);
-
 	return popup;
 }
 

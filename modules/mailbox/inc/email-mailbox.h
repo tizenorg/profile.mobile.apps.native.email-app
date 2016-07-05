@@ -105,6 +105,8 @@ typedef enum {
 	MAILBOX_LIST_ITEM_LOADING_PROCESS,
 	MAILBOX_LIST_ITEM_LOAD_MORE_MESSAGE,
 	MAILBOX_LIST_ITEM_NO_MORE_MAILS,
+	MAILBOX_LIST_ITEM_SERVER_SEARCH_BUTTON,
+	MAILBOX_LIST_ITEM_SERVER_SEARCH_PROGRESS,
 } MailboxListItemType;
 
 
@@ -124,6 +126,22 @@ typedef struct {
 	Evas_Object *checkbox;
 	EmailMailboxView *view;
 } SelectAllItemData;
+
+typedef struct {
+	MailboxBaseItemData base;
+	EmailMailboxView *view;
+} ServerSearchBtnItemData;
+
+typedef enum {
+	SERVER_SEARCH_DATE_RANGE_FROM_DATE,
+	SERVER_SEARCH_SEARCH_DATE_RANGE_TO_DATE,
+} ServerSearchDateRangeType;
+
+typedef struct {
+	ServerSearchDateRangeType range_type;
+	Evas_Object *datetime_obj;
+	Evas_Object *popup;
+} MailboxDatePickerData;
 
 /**
  * @brief Email mailbox data
@@ -190,6 +208,17 @@ struct _view_data {
 	gboolean b_advanced_search_view;
 	gboolean editable_search;
 	Ecore_Idler *search_entry_focus_idler;
+
+	/*Server search*/
+	time_t search_from_date;
+	time_t search_to_date;
+	ServerSearchBtnItemData search_btn_item_data;
+	MailboxBaseItemData search_progress_item_data;
+	Evas_Object *date_range_popup;
+	Evas_Object *date_btn_from;
+	Evas_Object *date_btn_to;
+	MailboxDatePickerData *datepicker_data;
+
 
 	/* other popup */
 	Evas_Object *error_popup;
@@ -350,9 +379,8 @@ void mailbox_update_notifications_status(EmailMailboxView *view);
 /**
  * @brief Create no content view with search mode or not.
  * @param[in]	view		Email mailbox data
- * @param[in]	search_mode		If TRUE "search" layout will be used, if FALSE view will be hidden with "default" layout
  */
-void mailbox_create_no_contents_view(EmailMailboxView *view, bool search_mode);
+void mailbox_create_no_contents_view(EmailMailboxView *view);
 
 /**
  * @brief Function provides show appearance to the no content view
