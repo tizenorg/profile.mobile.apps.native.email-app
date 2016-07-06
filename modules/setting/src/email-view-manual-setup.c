@@ -293,7 +293,7 @@ static void _create_list(EmailSettingView *view)
 
 	view->genlist = elm_genlist_add(view->base.content);
 	elm_genlist_mode_set(view->genlist, ELM_LIST_COMPRESS);
-	elm_genlist_homogeneous_set(view->genlist, EINA_TRUE);
+	elm_genlist_homogeneous_set(view->genlist, EINA_FALSE);
 	elm_scroller_policy_set(view->genlist, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_AUTO);
 
 	view->sending_secure_radio_grp = elm_radio_add(view->genlist);
