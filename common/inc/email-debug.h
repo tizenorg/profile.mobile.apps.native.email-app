@@ -26,9 +26,15 @@
 #define LOG_TAG "EMAIL_COMM"
 #endif
 
-#ifdef _DEBUG
+#if defined(_DEBUG)
 #ifndef TIZEN_DEBUG_ENABLE
 #define TIZEN_DEBUG_ENABLE
+#endif
+#endif
+
+#if defined(_DEBUG) || defined(_RELEASE_DEBUG)
+#ifndef EMAIL_DEBUG_ENABLE
+#define EMAIL_DEBUG_ENABLE
 #endif
 #endif
 
@@ -115,7 +121,7 @@ static inline int _debug_nop_expr_impl(bool expr __attribute__((unused)),
 #define debug_secure_fatal_if(expr, fmt, args...)	_debug_nop_expr(expr, fmt, ##args)
 #endif /* TIZEN_DEBUG_ENABLE */
 
-#ifdef _DEBUG
+#ifdef EMAIL_DEBUG_ENABLE
 
 #define debug_trace(fmt, args...)		_debug(DLOG_DEBUG, fmt, ##args)
 #define debug_log(fmt, args...)			_debug(DLOG_INFO, fmt, ##args)
@@ -140,7 +146,7 @@ static inline int _debug_nop_expr_impl(bool expr __attribute__((unused)),
 #define debug_enter()	debug_trace(" * Enter *")
 #define debug_leave()	debug_trace(" * Leave *")
 
-#else	/* _DEBUG */
+#else	/* EMAIL_DEBUG_ENABLE */
 
 #define debug_trace(fmt, args...)		_debug_nop(fmt, ##args)
 #define debug_log(fmt, args...)			_debug_nop(fmt, ##args)
@@ -157,7 +163,7 @@ static inline int _debug_nop_expr_impl(bool expr __attribute__((unused)),
 #define debug_enter()	_debug_nop("")
 #define debug_leave()	_debug_nop("")
 
-#endif	/* _DEBUG */
+#endif	/* EMAIL_DEBUG_ENABLE */
 
 #define RETURN_IF_FAIL(expr) \
 	do { \
