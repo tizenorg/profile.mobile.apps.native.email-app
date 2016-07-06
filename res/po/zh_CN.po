@@ -67,6 +67,9 @@ msgstr "正在发送邮件..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "正在发送电子邮件..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "搜索完成"
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "正在调整文件大小..."
 
@@ -466,6 +469,12 @@ msgstr "垃圾箱"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "显示全部文件夹"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "设置日期范围"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "设置日期"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "已发送"
 
@@ -562,6 +571,9 @@ msgstr "拍照"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "全部发送"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "搜索服务器"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "保存"
 
@@ -600,6 +612,9 @@ msgstr "无法打开与服务器的连接。出现安全错误。"
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "收件人"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "至"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "将删除该文件夹及其所有内容。"
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "转发："
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "从"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "发件人"
@@ -925,6 +943,9 @@ msgstr "帐户"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "设置"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "设置"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "确定"
 
@@ -942,6 +963,9 @@ msgstr "取消"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "昨天"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "正在搜索..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "最新更新"
@@ -1004,7 +1028,7 @@ msgid "IDS_ST_HEADER_EMAIL"
 msgstr "电子邮件"
 
 msgid "IDS_ST_BUTTON_NEXT"
-msgstr "下一步"
+msgstr "下一个"
 
 msgid "IDS_ST_BODY_SILENT"
 msgstr "静音"
@@ -1074,4 +1098,7 @@ msgstr "转发电子邮件"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s 与其他 %2$d 个"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "搜索所有文件夹"
 

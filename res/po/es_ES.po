@@ -67,6 +67,9 @@ msgstr "Enviando mensaje de correo electrónico..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Envío de correos electrónicos..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Búsqueda completa."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Cambiando el tamaño de los archivos..."
 
@@ -466,6 +469,12 @@ msgstr "Correo no deseado"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Mostrar todas las carpetas"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Defina el intervalo de fechas"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Configurar fecha"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Enviados"
 
@@ -562,6 +571,9 @@ msgstr "Hacer foto"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Enviar todo"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Servidor de búsqueda"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Guard"
 
@@ -600,6 +612,9 @@ msgstr "No se puede abrir conexión al servidor. Se ha producido un error de seg
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "Para"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "A"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "Esta carpeta y todo su contenido se eliminarán."
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "Rnv:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "De"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "De"
@@ -845,7 +863,7 @@ msgid "IDS_EMAIL_POP_UNABLE_TO_CONNECT_TO_SERVER"
 msgstr "No se puede conectar con el servidor"
 
 msgid "IDS_EMAIL_POP_DOWNLOAD_FAILED"
-msgstr "Descarga no disponible"
+msgstr "Error de descarga."
 
 msgid "IDS_EMAIL_POP_DOWNLOADING_ING"
 msgstr "Descargando..."
@@ -925,6 +943,9 @@ msgstr "Cuentas"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Ajustes"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Definir"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "Aceptar"
 
@@ -942,6 +963,9 @@ msgstr "Cancelar"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Ayer"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Buscando..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Útima actualización"
@@ -1074,4 +1098,7 @@ msgstr "Reenviar correo electrónico"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s y %2$d más"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Buscar en todas las carpetas"
 

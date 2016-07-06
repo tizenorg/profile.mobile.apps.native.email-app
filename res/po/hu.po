@@ -67,6 +67,9 @@ msgstr "E-mail küldése..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "E-mailek küldése..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "A keresés befejeződött."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Fájlok átméretezése..."
 
@@ -466,6 +469,12 @@ msgstr "Levélszemét"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Összes mappa megjelenítése"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Dátumtartomány beállítása"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Dátumbeállítás"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Elküldött"
 
@@ -562,6 +571,9 @@ msgstr "Fényképezés"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Összes küldése"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Szerver keresése"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Mentés"
 
@@ -600,6 +612,9 @@ msgstr "Nem létesíthető kapcsolat a szerverrel. Biztonsági hiba történt."
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "Címzett"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "Vége"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "Törölni fogja a mappát és annak tartalmát."
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "Továbbított:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Kezdete"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Feladó"
@@ -925,6 +943,9 @@ msgstr "Fiókok"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Beállítások"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Beállít"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "OK"
 
@@ -942,6 +963,9 @@ msgstr "Mégse"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Tegnap"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Keresés..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Legutóbbi frissítés"
@@ -1074,4 +1098,7 @@ msgstr "E-mail továbbküldése"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s és további %2$d"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Keresés az összes mappában"
 

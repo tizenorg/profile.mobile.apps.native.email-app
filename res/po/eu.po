@@ -67,6 +67,9 @@ msgstr "Mezu elektronikoa bidaltzen..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Mezu elektronikoak bidaltzen..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Bilaketa osatu da."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Fitxategien neurria aldatzen..."
 
@@ -466,6 +469,12 @@ msgstr "Spam postontzia"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Erakutsi karpeta guztiak"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Ezarri data tartea"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Data ezarri"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Bidalita"
 
@@ -562,6 +571,9 @@ msgstr "Atera argazkia"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Bidali denak"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Bilatu zerbitzaria"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Gorde"
 
@@ -600,6 +612,9 @@ msgstr "Ezin da zerbitzarirako konexioa ireki. Segurtasun errorea gertatu da."
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "Nori"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "Noiz arte"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "Karpeta hau eta haren eduki guztia ezabatuko dira."
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "FWD:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Noiztik"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Nork"
@@ -925,6 +943,9 @@ msgstr "Kontuak"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Ezarpenak"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Ezarri"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "Ados"
 
@@ -942,6 +963,9 @@ msgstr "Ezeztatu"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Atzo"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Bilatzen"
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Azkeneko eguneratzea"
@@ -1074,4 +1098,7 @@ msgstr "Birbidali mezu elektronikoa"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s eta %2$d gehiago"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Bilatu karpeta guztiak"
 

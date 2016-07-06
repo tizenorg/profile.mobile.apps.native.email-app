@@ -67,6 +67,9 @@ msgstr "Slanje e-pošte..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Slanje e-poruka..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Pretraga je završena."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Promena veličine fajlova..."
 
@@ -466,6 +469,12 @@ msgstr "Sanduče za spam"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Prikaži sve foldere"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Podesi opseg datuma"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Podesi datum"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Poslato"
 
@@ -562,6 +571,9 @@ msgstr "Slikaj"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Pošalji sve"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Pretraži server"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Sač."
 
@@ -600,6 +612,9 @@ msgstr "Nije moguće uspostaviti vezu sa serverom. Došlo je do bezbednosne gre�
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "Za"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "Do"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "Ovaj folder i sav njegov sadržaj će biti izbrisani."
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "Prosl:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Od"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Od"
@@ -925,6 +943,9 @@ msgstr "Nalozi"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Podešavanja"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Podesi"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "OK"
 
@@ -942,6 +963,9 @@ msgstr "Otkaži"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Juče"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Pretraga..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Poslednja obnova"
@@ -1074,4 +1098,7 @@ msgstr "Prosledi e-poštu"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s i još %2$d"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Pretraži sve foldere"
 

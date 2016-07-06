@@ -67,6 +67,9 @@ msgstr "Αποστολή email..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Αποστολή email..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Η αναζήτηση ολοκληρώθηκε."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Αλλαγή μεγέθους αρχείων..."
 
@@ -466,6 +469,12 @@ msgstr "Φάκελος ανεπιθύμητης αλληλογραφίας"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Προβολή όλων των φακέλων"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Ορισμός εύρους ημερομηνιών"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Pύθμιση ημερομηνίας"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Απεσταλμένα"
 
@@ -562,6 +571,9 @@ msgstr "Λήψη φωτογρ."
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Αποστολή όλων"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Αναζήτηση στο διακομιστή"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Αποθ."
 
@@ -601,6 +613,9 @@ msgstr "Δεν ήταν δυνατό το άνοιγμα σύνδεσης με �
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "Προς"
 
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "Προς"
+
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "Αυτός ο φάκελος και όλο το περιεχόμενό του θα διαγραφούν."
 
@@ -632,7 +647,7 @@ msgid "IDS_EMAIL_BODY_NO_MORE_EMAILS_M_STATUS"
 msgstr "Δεν υπάρχουν άλλα email"
 
 msgid "IDS_EMAIL_BODY_MY_FILES_M_APPLICATION"
-msgstr "Τα Αρχεία Μου"
+msgstr "Τα Αρχεία μου"
 
 msgid "IDS_EMAIL_BODY_MAPS_ABB"
 msgstr "Χάρτες"
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "Προωθ.:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Από"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Από"
@@ -925,6 +943,9 @@ msgstr "Λογαριασμοί"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Ρυθμίσεις"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Ορισμός"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "OK"
 
@@ -942,6 +963,9 @@ msgstr "Ακύρωση"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Xθές"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Αναζήτηση..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Τελευταία ενημέρωση"
@@ -1074,4 +1098,7 @@ msgstr "Προώθηση email"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s και %2$d ακόμα"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Αναζήτηση σε όλους τους φακέλους"
 

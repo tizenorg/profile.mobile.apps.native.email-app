@@ -67,6 +67,9 @@ msgstr "Se trimite e-mailul..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Se trimit e-mailurile..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Căutare finalizată."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Se redimensionează fișierele..."
 
@@ -466,6 +469,12 @@ msgstr "Casetă cu mesaje nedorite"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Afișare integrală foldere"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Setare interval de date"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Setare dată"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Trimise"
 
@@ -562,6 +571,9 @@ msgstr "Fotografiere"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Trimitere toate"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Căutare pe server"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Salv."
 
@@ -600,6 +612,9 @@ msgstr "Imposibil de deschis conexiunea la server. A apărut o eroare de securit
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "Către"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "La"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "Acest folder și tot conținutul său vor fi șterse."
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "Fw:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "De la"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "De la"
@@ -925,6 +943,9 @@ msgstr "Conturi"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Setări"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Afișare"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "OK"
 
@@ -942,6 +963,9 @@ msgstr "Anulare"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Ieri"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Căutare..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Ultima actualizare"
@@ -1074,4 +1098,7 @@ msgstr "Redirecționare e-mail"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s și încă %2$d"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Căutare în toate folderele"
 

@@ -67,6 +67,9 @@ msgstr "Enviant correu electrònic..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Enviant correus electrònics..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Cerca completa."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Canviant mida de fitxers..."
 
@@ -466,6 +469,12 @@ msgstr "Safata de correu brossa"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Mostrar totes les carpetes"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Definir interval de dates"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Definir data"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Enviat"
 
@@ -562,6 +571,9 @@ msgstr "Fer foto"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Enviar tot"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Cercar el servidor"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Desar"
 
@@ -600,6 +612,9 @@ msgstr "No es pot obrir la connexió al servidor. S'ha produït un error de segu
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "Per a"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "A"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "S'esborrarà aquesta carpeta i tot el seu contingut."
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "Reenv.:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "De"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "De"
@@ -925,6 +943,9 @@ msgstr "Comptes"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Ajustaments"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Definir"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "Acceptar"
 
@@ -942,6 +963,9 @@ msgstr "Cancel·lar"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Ahir"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Cercant..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Última actualització"
@@ -1074,4 +1098,7 @@ msgstr "Reenviar correu electrònic"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s i %2$d més"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Cercar totes les carpetes"
 

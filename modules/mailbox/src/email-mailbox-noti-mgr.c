@@ -1111,7 +1111,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 						}
 
 						if (auth_method == EMAIL_AUTHENTICATION_METHOD_XOAUTH2) {
-							mailbox_create_error_popup(data4, data1, view);
+							mailbox_create_error_popup(data4, data1);
 						} else {
 							int mailbox_id = 0;
 							if (data2)
@@ -1130,7 +1130,7 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 						view->sync_needed_mailbox_id = mailbox_id;
 						mailbox_create_password_changed_popup(view, data1);
 					} else {
-						mailbox_create_error_popup(data4, data1, view);
+						mailbox_create_error_popup(data4, data1);
 					}
 				}
 			} else {
@@ -1227,14 +1227,21 @@ static void _gdbus_event_mailbox_receive(GDBusConnection *connection,
 			break;
 
 		case NOTI_SEARCH_ON_SERVER_START:
-
+			debug_log("NOTI_SEARCH_ON_SERVER_START account_id %d, handler %d", data1, data3);
 			break;
 
 		case NOTI_SEARCH_ON_SERVER_FINISH:
+			debug_log("NOTI_SEARCH_ON_SERVER_FINISH account_id %d, handler %d", data1, data3);
+			mailbox_server_search_finished_event_handler(view, EINA_TRUE);
+			break;
+
+		case NOTI_SEARCH_ON_SERVER_CANCEL:
+			debug_log("NOTI_SEARCH_ON_SERVER_CANCEL account_id %d, handler %d", data1, data3);
 			break;
 
 		case NOTI_SEARCH_ON_SERVER_FAIL:
-		case NOTI_SEARCH_ON_SERVER_CANCEL:
+			debug_log("NOTI_SEARCH_ON_SERVER_FAIL account_id %d, handler %d", data1, data3);
+			mailbox_server_search_finished_event_handler(view, EINA_FALSE);
 			break;
 
 		case NOTI_VALIDATE_AND_CREATE_ACCOUNT_FINISH:

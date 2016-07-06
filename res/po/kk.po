@@ -67,6 +67,9 @@ msgstr "Электрондық хабар жіберілуде..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Электрондық пошта хабарлары жіберілуде..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Іздеу аяқталды."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Файлдар өлшемін өзгерту..."
 
@@ -466,6 +469,12 @@ msgstr "Спам қалтасы"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Барлық қалтаны көрсету"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Күн ауқымын таңдаңыз"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Күнді орнату"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Жіберілген"
 
@@ -562,6 +571,9 @@ msgstr "Сур-ке түс-у"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Барлығын жіберу"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Іздеу сервері"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Сақтау"
 
@@ -600,6 +612,9 @@ msgstr "Сервер байланысын ашу мүмкін емес. Қауі
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "Кімге"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "Дейін"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "Осы қалта мен оның барлық мазмұны жойылады."
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "Қайта жіберу:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Бастап"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Кімнен"
@@ -925,6 +943,9 @@ msgstr "Есептік жазбалар"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Параметрлер"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Орнату"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "OK"
 
@@ -942,6 +963,9 @@ msgstr "Тоқтату"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Кеше"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Іздеуде...."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Соңғы жаңартылғандар"
@@ -1074,4 +1098,7 @@ msgstr "Элек. пошта бағытын өзгерту"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s және тағы %2$d"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Барлық қалталарды іздеу"
 

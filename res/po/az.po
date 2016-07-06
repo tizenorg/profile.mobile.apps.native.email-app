@@ -67,6 +67,9 @@ msgstr "E-poçt göndərilir..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "E-poçtlar göndərilir..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Axtarış tamamlandı."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Faylların ölçüsü dəyişilir..."
 
@@ -466,6 +469,12 @@ msgstr "Spam qutusu"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Bütün qovluqları göstər"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Məlumat aralığını seç"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Tarixi təyin et"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Göndərildi"
 
@@ -562,6 +571,9 @@ msgstr "Şəkil çək"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Hamısını göndər"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Serverdə axtar"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Saxla"
 
@@ -599,6 +611,9 @@ msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRE
 msgstr "Serverlə bağlantını açmaq mümkün deyil. Təhlükəsizlik səhvi baş verdi."
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
+msgstr "Kimə"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
 msgstr "Kimə"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "FWD:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Kimdən"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Kimdən"
@@ -925,6 +943,9 @@ msgstr "Hesablar"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Parametrlər"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Qur"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "OK"
 
@@ -942,6 +963,9 @@ msgstr "Ləğv et"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Dünən"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Axtarır..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Son yenilənmiş"
@@ -1074,4 +1098,7 @@ msgstr "E-poçtu yönləndirin"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s və daha %2$d"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Bütün qovluqları axtar"
 

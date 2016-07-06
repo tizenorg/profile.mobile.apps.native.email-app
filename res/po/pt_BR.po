@@ -67,6 +67,9 @@ msgstr "Enviando e-mail..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Enviando e-mails..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Pesquisa concluída."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Redimensionando arquivos..."
 
@@ -466,6 +469,12 @@ msgstr "Caixa de Spam"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Mostrar todas as pastas"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Definir intervalo de datas"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Definir data"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Enviado"
 
@@ -562,6 +571,9 @@ msgstr "Tirar foto"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Enviar tudo"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Selecionar no Servidor"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Salvar"
 
@@ -600,6 +612,9 @@ msgstr "Não é possível abrir conexão para o servidor. Erro de segurança."
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "Para"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "Até"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "Esta pasta e todo seu conteúdo será excluído."
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "Enc:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "De"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "De"
@@ -925,6 +943,9 @@ msgstr "Contas"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Configurações"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Definir"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "OK"
 
@@ -942,6 +963,9 @@ msgstr "Cancelar"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Ontem"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Procurando..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Última atualização"
@@ -1074,4 +1098,7 @@ msgstr "Encaminhar e-mail"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s e mais %2$d"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Pesquisar todas as pastas"
 

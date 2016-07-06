@@ -67,6 +67,9 @@ msgstr "Wysyłanie e-maila..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Wysyłanie e-maili..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Wyszukiwanie zakończone."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Zmiana rozmiaru plików..."
 
@@ -466,6 +469,12 @@ msgstr "Skrzynka spamu"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Pokaż wszystkie katalogi"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Ustawianie zakresu dat"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Ustaw datę"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Wysłane"
 
@@ -562,6 +571,9 @@ msgstr "Zrób zdjęcie"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Wyślij wszystko"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Przeszukaj serwer"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Zapisz"
 
@@ -599,6 +611,9 @@ msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRE
 msgstr "Nie można otworzyć połączenia z serwerem. Wystąpił błąd zabezpieczeń."
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
+msgstr "Do"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
 msgstr "Do"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "PD:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Od"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Od"
@@ -925,6 +943,9 @@ msgstr "Konta"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Ustawienia"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Ustaw"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "OK"
 
@@ -942,6 +963,9 @@ msgstr "Anuluj"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Wczoraj"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Wyszukiwanie..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Ostatnia aktualizacja"
@@ -1074,4 +1098,7 @@ msgstr "Przesyłanie dalej e-maila"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s i jeszcze %2$d"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Przeszukaj wszystkie katalogi"
 

@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <glib.h>
 #include <glib/gprintf.h>
+#include <notification.h>
 
 #include "email-debug.h"
 #include "email-common-types.h"
@@ -38,6 +39,7 @@ void _mailbox_create_searchbar(EmailMailboxView *view);
 static void _mailbox_searchbar_back_key_clicked_cb(void *data, Evas_Object *obj, void *event_info);
 static void _mailbox_searchbar_back_key_pressed_cb(void *data, Evas_Object *obj, void *event_info);
 static void _mailbox_searchbar_back_key_unpressed_cb(void *data, Evas_Object *obj, void *event_info);
+static void _mailbox_searchbar_entry_set_input_disabled(EmailMailboxView *view, Eina_Bool is_input_disabled);
 static void _mailbox_searchbar_enter_key_cb(void *data, Evas_Object *obj, void *event_info);
 static void _mailbox_searchbar_entry_changed_cb(void *data, Evas_Object *obj, void *event_info);
 static void _mailbox_search_list_scroll_stop_cb(void *data, Evas_Object * obj, void *event_info);
@@ -45,14 +47,16 @@ static Eina_Bool _mailbox_searchbar_entry_set_focus(void *data);
 static Eina_Bool _mailbox_search_editfield_changed_timer_cb(void *data);
 
 static void _mailbox_change_view_to_search_mode(EmailMailboxView *view);
+static void _mailbox_change_view_to_regular_mode(EmailMailboxView *view);
 static void _mailbox_change_search_layout_state(EmailMailboxView *view, bool show_search_layout);
-static void _mailbox_exit_search_mode(EmailMailboxView *view);
 static void _mailbox_show_search_result(EmailMailboxView *view);
 
 /*Server search functionality*/
 static Eina_Bool _mailbox_is_server_search_supported(EmailMailboxView *view);
 static void _mailbox_setup_server_search_mode(EmailMailboxView *view);
 static void _mailbox_exit_server_search_mode(EmailMailboxView *view);
+static void _mailbox_launch_server_search(EmailMailboxView *view);
+static void _mailbox_cancel_server_search(EmailMailboxView *view);
 static void _mailbox_search_init_sever_search_time_range(EmailMailboxView *view);
 static void _mailbox_server_search_update_from_time_value(EmailMailboxView *view, time_t new_from_time);
 static void _mailbox_server_search_update_to_time_value(EmailMailboxView *view, time_t new_to_time);
@@ -160,6 +164,18 @@ static void _mailbox_searchbar_enter_key_cb(void *data, Evas_Object *obj, void *
 	}
 }
 
+static void _mailbox_searchbar_entry_set_input_disabled(EmailMailboxView *view, Eina_Bool is_input_disabled)
+{
+	debug_enter();
+	retm_if(!view, "view is NULL");
+
+	Evas_Object *entry = view->search_editfield.entry;
+	retm_if(!entry, "entry is NULL");
+	evas_object_freeze_events_set(entry, is_input_disabled);
+
+	debug_leave();
+}
+
 static void _mailbox_searchbar_entry_changed_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
@@ -219,7 +235,7 @@ static Eina_Bool _mailbox_searchbar_entry_set_focus(void *data)
 	return ECORE_CALLBACK_CANCEL;
 }
 
-static void _mailbox_exit_search_mode(EmailMailboxView *view)
+static void _mailbox_change_view_to_regular_mode(EmailMailboxView *view)
 {
 	debug_enter();
 
@@ -232,11 +248,15 @@ static void _mailbox_exit_search_mode(EmailMailboxView *view)
 
 	G_FREE(view->last_entry_string);
 
+	if (view->search_type == EMAIL_SEARCH_ON_SERVER) {
+		_mailbox_exit_server_search_mode(view);
+	}
+
 	view->b_searchmode = false;
 	view->search_type = EMAIL_SEARCH_NONE;
 
+	email_engine_clear_server_search_result(view->account_id);
 	_mailbox_change_search_layout_state(view, false);
-
 	mailbox_list_refresh(view, NULL);
 	mailbox_naviframe_mailbox_button_add(view);
 	mailbox_show_compose_btn(view);
@@ -383,9 +403,52 @@ static void _mailbox_exit_server_search_mode(EmailMailboxView *view)
 {
 	debug_enter();
 
-	DELETE_EVAS_OBJECT(view->datepicker_data->popup);
+	if (view->server_search_handler) {
+		_mailbox_cancel_server_search(view);
+	}
+
+	if (view->datepicker_data) {
+		DELETE_EVAS_OBJECT(view->datepicker_data->popup);
+	}
 	DELETE_EVAS_OBJECT(view->date_range_popup);
+
+	debug_leave();
+}
+
+static void _mailbox_launch_server_search(EmailMailboxView *view)
+{
+	debug_enter();
+	retm_if(view->server_search_handler, "Server search is already launched!");
+
+	email_search_data_t *search_data = mailbox_make_search_data(view);
+	retm_if(!search_data, "Failed to create search data");
+
+	email_engine_clear_server_search_result(view->account_id);
+	if (!email_engine_launch_server_search(view->account_id, view->mailbox_id, search_data, &view->server_search_handler)) {
+		debug_error("Failed to launch server search!");
+		notification_status_message_post(_("IDS_EMAIL_HEADER_UNABLE_TO_PERFORM_ACTION_ABB"));
+	} else {
+		mailbox_list_clear(view);
+		_mailbox_add_server_search_processing_item(view);
+		_mailbox_searchbar_entry_set_input_disabled(view, EINA_TRUE);
+	}
+
+	mailbox_free_mailbox_search_data(search_data);
+	debug_leave();
+}
+
+static void _mailbox_cancel_server_search(EmailMailboxView *view)
+{
+	debug_enter();
+	retm_if(!view->server_search_handler, "Server search is not launched!");
+
+	email_engine_cancel_job(view->server_search_handler, view->account_id, EMAIL_CANCELED_BY_USER);
+	email_engine_clear_server_search_result(view->account_id);
+	view->server_search_handler = 0;
+
 	_mailbox_remove_server_search_processing_item(view);
+	_mailbox_add_server_search_btn(view);
+	_mailbox_searchbar_entry_set_input_disabled(view, EINA_FALSE);
 
 	debug_leave();
 }
@@ -590,11 +653,13 @@ static void _mailbox_search_date_range_popup_cancel_btn_click_cb(void *data, Eva
 static void _mailbox_search_date_range_popup_done_btn_click_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
+
 	retm_if(!data, "Invalid arguments");
 	EmailMailboxView *view = data;
 
+	_mailbox_launch_server_search(view);
 	DELETE_EVAS_OBJECT(view->date_range_popup);
-	//TODO Logic for running server search will be added here
+
 	debug_leave();
 }
 
@@ -711,7 +776,6 @@ static void _mailbox_search_date_picker_popup_del_cb(void *data, Evas *e, Evas_O
 	debug_leave();
 }
 
-//TODO will be used when server search logic added
 static void _mailbox_add_server_search_processing_item(EmailMailboxView *view)
 {
 	debug_enter();
@@ -733,7 +797,6 @@ static void _mailbox_add_server_search_processing_item(EmailMailboxView *view)
 	debug_leave();
 }
 
-//TODO will be used when server search logic added
 static void _mailbox_remove_server_search_processing_item(EmailMailboxView *view)
 {
 	debug_enter();
@@ -788,6 +851,10 @@ static void _mailbox_show_search_result(EmailMailboxView *view)
 	email_search_data_t *search_data = mailbox_make_search_data(view);
 	retm_if(!search_data, "Failed to create search data");
 
+	if (view->search_type != EMAIL_SEARCH_ON_SERVER) {
+		email_engine_clear_server_search_result(view->account_id);
+	}
+
 	mailbox_list_refresh(view, search_data);
 	mailbox_free_mailbox_search_data(search_data);
 
@@ -804,16 +871,16 @@ static void _mailbox_show_search_result(EmailMailboxView *view)
  * Definition for exported functions
  */
 
-void mailbox_set_search_mode(EmailMailboxView *view, email_search_type_e search_type)
+void mailbox_set_search_mode(EmailMailboxView *view, email_search_type_e new_search_type)
 {
 	debug_enter();
 
 	retm_if(!view, "view == NULL");
-	retm_if(view->search_type == search_type, "Requested search mode is already set");
+	retm_if(view->search_type == new_search_type, "Requested search mode is already set");
 
-	if (search_type == EMAIL_SEARCH_NONE) {
+	if (new_search_type == EMAIL_SEARCH_NONE) {
 		debug_log("Exiting search mode...");
-		_mailbox_exit_search_mode(view);
+		_mailbox_change_view_to_regular_mode(view);
 		return;
 	}
 
@@ -823,16 +890,18 @@ void mailbox_set_search_mode(EmailMailboxView *view, email_search_type_e search_
 		view->b_searchmode = true;
 	}
 
+	email_search_type_e old_searh_type = view->search_type;
+	view->search_type = new_search_type;
 	DELETE_TIMER_OBJECT(view->search_entry_changed_timer);
-	if (view->search_type == EMAIL_SEARCH_ON_SERVER) {
-		_mailbox_exit_server_search_mode(view);
-	}
 
-	view->search_type = search_type;
-	if (view->search_type == EMAIL_SEARCH_ON_SERVER) {
+	if (new_search_type == EMAIL_SEARCH_ON_SERVER) {
 		_mailbox_setup_server_search_mode(view);
 	} else {
-		_mailbox_show_search_result(view);
+		if (old_searh_type == EMAIL_SEARCH_ON_SERVER) {
+			_mailbox_exit_server_search_mode(view);
+		} else {
+			_mailbox_show_search_result(view);
+		}
 	}
 
 	debug_leave();
@@ -879,6 +948,11 @@ email_search_data_t *mailbox_make_search_data(EmailMailboxView *view)
 		search_data->sender = elm_entry_markup_to_utf8(elm_object_text_get(view->search_editfield.entry));
 	}
 
+	if (view->search_type == EMAIL_SEARCH_ON_SERVER) {
+		search_data->from_time = view->search_from_time;
+		search_data->to_time = view->search_to_time;
+	}
+
 	debug_secure("[EMAIL_SEARCH_ALL] %s", search_data->subject);
 	debug_leave();
 	return search_data;
@@ -895,5 +969,26 @@ void mailbox_update_search_view(EmailMailboxView *view)
 	}
 
 	_mailbox_show_search_result(view);
+	debug_leave();
+}
+
+void mailbox_server_search_finished_event_handler(EmailMailboxView *view, Eina_Bool result_status)
+{
+	debug_enter();
+	retm_if(!view, "view is NULL");
+	retm_if(!view->server_search_handler, "Unexpected event from email service! Skip it");
+
+	view->server_search_handler = 0;
+	_mailbox_remove_server_search_processing_item(view);
+	_mailbox_searchbar_entry_set_input_disabled(view, EINA_FALSE);
+	_mailbox_show_search_result(view);
+
+	if (result_status) {
+		notification_status_message_post(_("IDS_EMAIL_TPOP_SEARCH_COMPLETE"));
+	} else {
+		mailbox_create_error_popup(EMAIL_ERROR_NO_RESPONSE, view->account_id);
+	}
+
+	mailbox_set_search_mode(view, EMAIL_SEARCH_IN_SINGLE_FOLDER);
 	debug_leave();
 }

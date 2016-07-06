@@ -67,6 +67,9 @@ msgstr "正在發送電子郵件..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "正在發送電子郵件"
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "搜尋完成。"
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "正在調整檔案大小..."
 
@@ -466,6 +469,12 @@ msgstr "垃圾訊息匣"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "顯示所有資料夾"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "設定日期範圍"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "設定日期"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "已發送"
 
@@ -562,6 +571,9 @@ msgstr "拍照"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "發送全部"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "搜尋伺服器"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "儲存"
 
@@ -600,6 +612,9 @@ msgstr "無法開啟至伺服器的連線。發生安全性錯誤。"
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "收件人"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "至"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "此資料夾及其所有內容將被刪除。"
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "轉寄："
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "自"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "由"
@@ -925,6 +943,9 @@ msgstr "帳戶"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "設定"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "設定"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "確定"
 
@@ -942,6 +963,9 @@ msgstr "取消"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "昨天"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "正在搜尋..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "最近更新"
@@ -1004,7 +1028,7 @@ msgid "IDS_ST_HEADER_EMAIL"
 msgstr "電子郵件"
 
 msgid "IDS_ST_BUTTON_NEXT"
-msgstr "下一步"
+msgstr "下一頁"
 
 msgid "IDS_ST_BODY_SILENT"
 msgstr "靜音"
@@ -1013,7 +1037,7 @@ msgid "IDS_EMAIL_OPT_ENABLE_RICH_TEXT_ABB2"
 msgstr "啟用 RTF 文字"
 
 msgid "IDS_EMAIL_OPT_DISABLE_RICH_TEXT_ABB2"
-msgstr "停用 RTF 文字"
+msgstr "停用多格式文字"
 
 msgid "IDS_EMAIL_BUTTON_SHOW_ABB"
 msgstr "顯示"
@@ -1074,4 +1098,7 @@ msgstr "轉寄電子郵件"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s 與其他 %2$d 個"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "搜尋所有資料夾"
 

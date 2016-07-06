@@ -67,6 +67,9 @@ msgstr "Siunčiamas el. laiškas..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Siunčiami el. laiškai..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Paieška baigta."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Keičiamas failų dydis..."
 
@@ -466,6 +469,12 @@ msgstr "Nepageidaujamų žinučių dėžutė"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Rodyti visus aplankus"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Nustatyti datos diapazoną"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Nustatyti datą"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Išsiųsta"
 
@@ -562,6 +571,9 @@ msgstr "Fotografuoti"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Siųsti visiems"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Ieškoti serverio"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Saug."
 
@@ -600,6 +612,9 @@ msgstr "Neįmanoma užmegzti ryšio su serveriu. Įvyko saugos klaida."
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "Kur"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "Iki"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "Šis aplankas ir visas jo turinys bus ištrintas."
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "Pers."
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Nuo"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Nuo"
@@ -925,6 +943,9 @@ msgstr "Paskyros"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Nustatymai"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Nustatyti"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "Gerai"
 
@@ -942,6 +963,9 @@ msgstr "Atšaukti"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Vakar"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Ieškoma..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Paskutinį kartą atnaujinta"
@@ -1074,4 +1098,7 @@ msgstr "Persiųsti el. laišką"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s ir dar %2$d"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Ieškoti visų aplankų"
 

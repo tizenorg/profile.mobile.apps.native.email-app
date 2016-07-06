@@ -67,6 +67,9 @@ msgstr "E-Mail wird gesendet..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "E-Mails werden gesendet..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Suche beendet."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Dateigröße wird angepasst..."
 
@@ -466,6 +469,12 @@ msgstr "Spamordner"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Alle Ordner anzeigen"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Festlegen eines Datumsbereichs"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Datum einstellen"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Gesendet"
 
@@ -562,6 +571,9 @@ msgstr "Foto aufn."
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Alle senden"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Server suchen"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Speich."
 
@@ -600,6 +612,9 @@ msgstr "Verbindung mit Server kann nicht geöffnet werden. Sicherheitsfehler auf
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "An"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "Bis"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "Dieser Ordner und der gesamte zugehörige Inhalt werden gelöscht."
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "WG:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Von"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Von"
@@ -925,6 +943,9 @@ msgstr "Konten"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Einstellungen"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Festlegen"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "OK"
 
@@ -942,6 +963,9 @@ msgstr "Abbruch"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Gestern"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Suche läuft..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Zuletzt aktualisiert"
@@ -1074,4 +1098,7 @@ msgstr "Weiterleiten einer E-Mail"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s und %2$d weitere"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Alle Ordner durchsuchen"
 

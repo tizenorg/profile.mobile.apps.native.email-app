@@ -2326,6 +2326,13 @@ void mailbox_list_refresh(EmailMailboxView *view, const email_search_data_t *sea
 	debug_leave();
 }
 
+void mailbox_list_clear(EmailMailboxView *view)
+{
+	debug_enter();
+	_mailbox_clear_list(view);
+	debug_leave();
+}
+
 void mailbox_list_insert_mail_item(MailItemData *ld, EmailMailboxView *view)
 {
 	debug_enter();

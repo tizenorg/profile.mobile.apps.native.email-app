@@ -253,9 +253,8 @@ Evas_Object *mailbox_create_popup(EmailMailboxView *view, const char *title, con
  * @brief Creates error popup
  * @param[in]	error_type			Error type
  * @param[in]	account_id			Account ID
- * @param[in]	view			Email mailbox data
  */
-void mailbox_create_error_popup(int error_type, int account_id, EmailMailboxView *view);
+void mailbox_create_error_popup(int error_type, int account_id);
 
 /**
  * @brief Creates password change popup

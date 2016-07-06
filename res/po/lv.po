@@ -67,6 +67,9 @@ msgstr "Sūta e-pasta ziņu..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Sūta e-pasta ziņas..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Meklēšana ir pabeigta."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Maina failu lielumu..."
 
@@ -466,6 +469,12 @@ msgstr "Surogātpasts"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Parādīt visas mapes"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Iestatīt datuma diapazonu"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Iestatīt datumu"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Nosūtītie"
 
@@ -562,6 +571,9 @@ msgstr "Fotografēt"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Sūtīt visu"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Meklēt serverī"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Sagl."
 
@@ -600,6 +612,9 @@ msgstr "Nevar izveidot savienojumu ar serveri. Radās drošības kļūda."
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "Kam"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "Līdz"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "Šī mape un viss tās saturs tiks izdzēsts."
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "Pārs.:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "No"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "No"
@@ -925,6 +943,9 @@ msgstr "Konti"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Iestatījumi"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Iestatīt"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "Labi"
 
@@ -942,6 +963,9 @@ msgstr "Atcelt"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Vakar"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Meklē..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Pēdējā atjaunināšana"
@@ -1074,4 +1098,7 @@ msgstr "Pārsūtīt e-pasta ziņu"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s un %2$d citi"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Meklēt visās mapēs"
 

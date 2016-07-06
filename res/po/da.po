@@ -67,6 +67,9 @@ msgstr "Sender e-mail ..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Sender e-mails ..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Søgning udført."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Ændrer filstørrelser ..."
 
@@ -466,6 +469,12 @@ msgstr "Spambakke"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Vis alle mapper"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Angiv datointerval"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Indstil dato"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Sendt"
 
@@ -562,6 +571,9 @@ msgstr "Tag billede"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Send alle"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Søg på server"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Gem"
 
@@ -599,6 +611,9 @@ msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRE
 msgstr "Kan ikke åbne forbindelse til server. Der opstod sikkerhedsfejl."
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
+msgstr "Til"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
 msgstr "Til"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "Vs:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Fra"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Fra"
@@ -925,6 +943,9 @@ msgstr "Konti"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Indstillinger"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Indstil"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "OK"
 
@@ -942,6 +963,9 @@ msgstr "Annuller"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "I går"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Søger ..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Sidst opdateret"
@@ -1074,4 +1098,7 @@ msgstr "Videresend e-mail"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s og %2$d mere"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Søg i alle mapper"
 
