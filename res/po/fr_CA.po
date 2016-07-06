@@ -67,6 +67,9 @@ msgstr "Envoi de courriel..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Envoi de courriels..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Recherche terminée."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Redimensionnement des fichiers..."
 
@@ -466,6 +469,12 @@ msgstr "Boite des spams"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Afficher tous les dossiers"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Définir une plage de dates"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Définir la date"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Envoyer"
 
@@ -562,6 +571,9 @@ msgstr "Photograph."
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Envoyer à tous"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Rechercher sur le serveur"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Enreg."
 
@@ -599,6 +611,9 @@ msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRE
 msgstr "Connexion impossible au serveur. Une erreur de sécurité est survenue."
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
+msgstr "À"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
 msgstr "À"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "TR :"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "De"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "De"
@@ -925,6 +943,9 @@ msgstr "Comptes"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Paramètres"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Appliquer"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "OK"
 
@@ -942,6 +963,9 @@ msgstr "Annuler"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Hier"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Recherche..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Dernière mise à jour"
@@ -1074,4 +1098,7 @@ msgstr "Transfert du courriel"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s et %2$d autres fich."
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Rechercher dans tous les dossiers"
 

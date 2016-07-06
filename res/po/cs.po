@@ -67,6 +67,9 @@ msgstr "Odesílání e-mailu..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Odesílání e-mailů..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Vyhledávání bylo dokončeno."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Probíhá změna velikosti souborů..."
 
@@ -466,6 +469,12 @@ msgstr "Nevyžádaná pošta"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Zobrazit všechny složky"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Nastavte období"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Nastavit datum"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Odeslané"
 
@@ -562,6 +571,9 @@ msgstr "Vyfotit"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Odeslat vše"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Hledat na serveru"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Uložit"
 
@@ -600,6 +612,9 @@ msgstr "Nelze otevřít připojení k serveru. Došlo k chybě zabezpečení."
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "Komu"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "Do"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "Tato složka a veškerý její obsah budou odstraněny."
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "Fw:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Od"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Od"
@@ -925,6 +943,9 @@ msgstr "Účty"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Nastavení"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Nastavit"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "OK"
 
@@ -942,6 +963,9 @@ msgstr "Storno"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Včera"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Hledání..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Poslední aktualizace"
@@ -1074,4 +1098,7 @@ msgstr "Předat e-mail dál"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s a %2$d dalších"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Hledat ve všech složkách"
 

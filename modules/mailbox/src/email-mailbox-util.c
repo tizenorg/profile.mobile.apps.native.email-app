@@ -310,7 +310,7 @@ Evas_Object *mailbox_create_popup(EmailMailboxView *view, const char *title, con
 	return popup;
 }
 
-void mailbox_create_error_popup(int error_type, int account_id, EmailMailboxView *view)
+void mailbox_create_error_popup(int error_type, int account_id)
 {
 	debug_enter();
 

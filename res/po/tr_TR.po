@@ -67,6 +67,9 @@ msgstr "E-posta gönderiliyor..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "E-postalar gönderiliyor..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Arama tamamlandı."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Dosyalar yeniden boyutlandırılıyor..."
 
@@ -466,6 +469,12 @@ msgstr "Spam kutusu"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Tüm dosyaları göster"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Tarih aralığını ayarla"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Tarihi ayarla"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Gönderildi"
 
@@ -562,6 +571,9 @@ msgstr "Resim çek"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Tümünü gönder"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Sunucu ara"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Kaydet"
 
@@ -599,6 +611,9 @@ msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRE
 msgstr "Sunucuya bağlanılamıyor. Güvenlik hatası oluştu."
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
+msgstr "Bitiş"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
 msgstr "Bitiş"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "İlt:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Başlangıç"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Kimden"
@@ -925,6 +943,9 @@ msgstr "Hesaplar"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Ayarlar"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Ayarla"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "Tamam"
 
@@ -942,6 +963,9 @@ msgstr "İptal"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Dün"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Aranıyor..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Son güncelleme"
@@ -1074,4 +1098,7 @@ msgstr "E-postayı yönlendir"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s ve %2$d tane daha"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Tüm klasörleri ara"
 

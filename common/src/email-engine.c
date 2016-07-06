@@ -2166,29 +2166,38 @@ EMAIL_API gboolean email_engine_launch_server_search(int account_id, int mailbox
 	email_search_filter_t search_filter_list[EMAIL_SERVER_SEARCH_FILTER_LIST_MAX_SIZE];
 	int search_filter_count = 0;
 
-	search_filter_list[search_filter_count].search_filter_type = EMAIL_SEARCH_FILTER_TYPE_ALL;
-	search_filter_list[search_filter_count].search_filter_key_value.integer_type_key_value = 0;
-	search_filter_count++;
+	/*
+	 * EMAIL_SEARCH_FILTER_TYPE_ALL set to 0 works as OR operator in SQL request so if at least one  string search_data field is not empty need to set it as 0
+	 * If only data range is set in search data this operator should not be used at all so only mails with valid data will be found
+	 * Sequence is important and EMAIL_SEARCH_FILTER_TYPE_ALL need to be set first.
+	 */
 
-	if (search_data->subject) {
+	if (STR_VALID(search_data->subject) || STR_VALID(search_data->sender)
+			|| STR_VALID(search_data->recipient) || STR_VALID(search_data->body_text)) {
+		search_filter_list[search_filter_count].search_filter_type = EMAIL_SEARCH_FILTER_TYPE_ALL;
+		search_filter_list[search_filter_count].search_filter_key_value.integer_type_key_value = 0;
+		search_filter_count++;
+	}
+
+	if (STR_VALID(search_data->subject)) {
 		search_filter_list[search_filter_count].search_filter_type = EMAIL_SEARCH_FILTER_TYPE_SUBJECT;
 		search_filter_list[search_filter_count].search_filter_key_value.string_type_key_value = search_data->subject;
 		search_filter_count++;
 	}
 
-	if (search_data->sender) {
+	if (STR_VALID(search_data->sender)) {
 		search_filter_list[search_filter_count].search_filter_type = EMAIL_SEARCH_FILTER_TYPE_FROM;
 		search_filter_list[search_filter_count].search_filter_key_value.string_type_key_value = search_data->sender;
 		search_filter_count++;
 	}
 
-	if (search_data->recipient) {
+	if (STR_VALID(search_data->recipient)) {
 		search_filter_list[search_filter_count].search_filter_type = EMAIL_SEARCH_FILTER_TYPE_TO;
 		search_filter_list[search_filter_count].search_filter_key_value.string_type_key_value = search_data->recipient;
 		search_filter_count++;
 	}
 
-	if (search_data->body_text) {
+	if (STR_VALID(search_data->body_text)) {
 		search_filter_list[search_filter_count].search_filter_type = EMAIL_SEARCH_FILTER_TYPE_BODY;
 		search_filter_list[search_filter_count].search_filter_key_value.string_type_key_value = search_data->body_text;
 		search_filter_count++;

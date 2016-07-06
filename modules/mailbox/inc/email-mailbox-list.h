@@ -52,6 +52,12 @@ void mailbox_list_system_settings_callback_unregister();
 void mailbox_list_refresh(EmailMailboxView *view, const email_search_data_t *search_data);
 
 /**
+ * @brief Clear content of mail list in Mailbox
+ * @param[in]	view		Email mailbox data
+ */
+void mailbox_list_clear(EmailMailboxView *view);
+
+/**
  * @brief Insert item to Mailbox genlist
  * @param[in]	ld				Mail item data to attach
  * @param[in]	view		Email mailbox data

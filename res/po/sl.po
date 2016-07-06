@@ -67,6 +67,9 @@ msgstr "Pošiljanje e-pošte ..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Pošiljanje e-poštnih sporočil ..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Iskanje je končano."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Spreminjanje velikosti datotek ..."
 
@@ -466,6 +469,12 @@ msgstr "Neželena pošta"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Pokaži vse mape"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Nastavite datumski obseg"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Nastavi datum"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Poslano"
 
@@ -562,6 +571,9 @@ msgstr "Slikaj"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Pošlji vse"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Iskanje strežnika"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Shrani"
 
@@ -600,6 +612,9 @@ msgstr "Povezave s strežnikom ni mogoče vzpostaviti. Prišlo je do varnostne n
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "Za"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "Do"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "Ta mapa in vsa njena vsebina bo izbrisana."
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "POSR.:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Od"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Od"
@@ -925,6 +943,9 @@ msgstr "Računi"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Nastavitve"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Nastavi"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "V redu"
 
@@ -942,6 +963,9 @@ msgstr "Prekliči"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Včeraj"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Iščem"
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Zadnja posodobitev"
@@ -1074,4 +1098,7 @@ msgstr "Posredujte e-pošto"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s in še toliko: %2$d"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Iskanje po vseh mapah"
 

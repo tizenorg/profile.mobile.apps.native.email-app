@@ -67,6 +67,9 @@ msgstr "ელწერილი იგზავნება..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "იგზავნება ელწერილები..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "ძებნა დასრულდა."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "იცვლება ფაილების ზომა..."
 
@@ -466,6 +469,12 @@ msgstr "სპამების ყუთი"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "ყველა საქაღალდის ჩვენება"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "თარიღების დიაპაზონის დაყენება"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "თარიღის დაყენება"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "გაიგზავნა"
 
@@ -562,6 +571,9 @@ msgstr "გადაღება"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "ყველასთვის გაგზავნა"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "სერვერზე ძებნა"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "შენახ."
 
@@ -600,6 +612,9 @@ msgstr "სერვერთან დაკავშირება ვერ 
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "ვის"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "საბოლოო"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "ეს საქაღალდე და მთელი მისი შემცველობა წაიშლება."
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "გადაგზავნა:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "დასაწყისი"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "საიდან"
@@ -925,6 +943,9 @@ msgstr "ანგარიშები"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "პარამეტრები"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "დაყენება"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "კი"
 
@@ -942,6 +963,9 @@ msgstr "გაუქმება"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "გუშინ"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "იძებნება..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "ბოლოს განახლდა"
@@ -1074,4 +1098,7 @@ msgstr "ელწერილის გადაგზავნა"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s და კიდევ სხვა %2$d"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "ყველა საქაღალდეში ძებნა"
 

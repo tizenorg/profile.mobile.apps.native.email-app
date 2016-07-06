@@ -2326,6 +2326,13 @@ void mailbox_list_refresh(EmailMailboxView *view, const email_search_data_t *sea
 	debug_leave();
 }
 
+void mailbox_list_clear(EmailMailboxView *view)
+{
+	debug_enter();
+	_mailbox_clear_list(view);
+	debug_leave();
+}
+
 void mailbox_list_insert_mail_item(MailItemData *ld, EmailMailboxView *view)
 {
 	debug_enter();
@@ -2419,12 +2426,20 @@ MailItemData *mailbox_list_make_mail_item_data(email_mail_list_item_t *mail_info
 	ld->flag_type = mail_info->flags_flagged_field;
 	ld->mail_status = mail_info->save_status;
 	ld->mailbox_id = mail_info->mailbox_id;
-	ld->mailbox_type = mail_info->mailbox_type;
 	ld->reply_flag = mail_info->flags_answered_field;
 	ld->forward_flag = mail_info->flags_forwarded_field;
 	ld->view = view;
 	ld->checked = EINA_FALSE;
 	ld->is_highlited = EINA_FALSE;
+
+	/* When server search is launched email service uses virtual folder EMAIL_MAILBOX_TYPE_SEARCH_RESULT for store searched mail.
+	 * But email application handles this mail like mail from regular mailbox so mailbox type changed here.
+	 */
+	if (view->search_type == EMAIL_SEARCH_ON_SERVER) {
+		ld->mailbox_type = view->mailbox_type;
+	} else {
+		ld->mailbox_type = mail_info->mailbox_type;
+	}
 
 	/*Folder name for search mode*/
 	if (view->b_searchmode && view->search_type == EMAIL_SEARCH_IN_ALL_FOLDERS) {

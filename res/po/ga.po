@@ -67,6 +67,9 @@ msgstr "R-phost á sheoladh..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "R-phoist á seoladh..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Cuardach curtha i gcrích."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Comhaid á n-athmhéidniú..."
 
@@ -466,6 +469,12 @@ msgstr "Bosca Turscair"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Taispeáin gach fillteán"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Socraigh raon dátaí"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Socraigh dáta"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Seolta"
 
@@ -562,6 +571,9 @@ msgstr "Glac pictiúr"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Seol gach"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Cuardaigh freastalaí"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Sábhl."
 
@@ -600,6 +612,9 @@ msgstr "Ní féidir an nasc leis an bhfreastalaí a oscailt. Tharla earráid sl�
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "Chuig"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "Go dtí"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "Scriosfar an fillteán seo agus gach inneachar a bhaineann leis."
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "Seol ar aghd:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Ó"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Ó"
@@ -925,6 +943,9 @@ msgstr "Cuntais"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Socruithe"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Socraigh"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "OK"
 
@@ -942,6 +963,9 @@ msgstr "Cealaigh"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Inné"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Ag cuardach..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Nuashonraithe go deireanach"
@@ -1074,4 +1098,7 @@ msgstr "Seol r-phost ar aghaidh"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s agus %2$d eile"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Cuardaigh gach fillteán"
 

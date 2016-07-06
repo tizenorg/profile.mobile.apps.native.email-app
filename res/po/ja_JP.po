@@ -67,6 +67,9 @@ msgstr "Eメールを送信中..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Eメールを送信中..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "検索が完了しました。"
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "ファイルのサイズを変更中..."
 
@@ -466,6 +469,12 @@ msgstr "スパムボックス"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "全てのフォルダを表示"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "日付の範囲を設定"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "日付設定"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "送信済み"
 
@@ -562,6 +571,9 @@ msgstr "写真を撮影"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "全て送信"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "サーバーを検索"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "保存"
 
@@ -600,6 +612,9 @@ msgstr "サーバーへの接続を開始できません。セキュリティエ
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "宛先"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "終了"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "このフォルダと全てのコンテンツを削除します。"
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "FW:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "開始"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "送信元"
@@ -925,6 +943,9 @@ msgstr "アカウント"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "設定"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "設定"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "OK"
 
@@ -942,6 +963,9 @@ msgstr "キャンセル"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "昨日"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "検索中..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "最終更新日"
@@ -1064,7 +1088,7 @@ msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
 msgstr "添付ファイルを含める"
 
 msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
-msgstr "前の宛先を含める"
+msgstr "元の宛先を含める"
 
 msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
 msgstr "新しい宛先のみ"
@@ -1074,4 +1098,7 @@ msgstr "Eメールを転送"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$sと他%2$d件"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "全てのフォルダを検索"
 

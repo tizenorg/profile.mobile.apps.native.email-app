@@ -67,6 +67,9 @@ msgstr "이메일 보내는 중..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "이메일 보내는 중..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "검색을 완료하였습니다."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "파일 크기 조절 중..."
 
@@ -466,6 +469,12 @@ msgstr "스팸함"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "모든 폴더 표시"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "날짜 범위 설정"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "날짜 설정"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "보낸 메일함"
 
@@ -562,6 +571,9 @@ msgstr "사진 촬영"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "모두 보내기"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "서버 검색"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "저장"
 
@@ -600,6 +612,9 @@ msgstr "보안 오류가 발생하여 서버에 연결할 수 없습니다."
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "받는 사람"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "종료"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "폴더 및 포함된 파일을 삭제합니다."
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "전달:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "시작"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "보낸 사람"
@@ -925,6 +943,9 @@ msgstr "계정"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "설정"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "설정"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "확인"
 
@@ -942,6 +963,9 @@ msgstr "취소"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "어제"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "검색 중..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "마지막 업데이트"
@@ -1074,4 +1098,7 @@ msgstr "이메일 전달"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s 외 %2$d개"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "모든 폴더 검색"
 

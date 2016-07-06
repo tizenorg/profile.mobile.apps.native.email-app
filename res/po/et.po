@@ -67,6 +67,9 @@ msgstr "E-kirja saatmine..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "E-kirjade saatmine..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Otsing on lõpetatud."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Failide suuruse muutmine..."
 
@@ -466,6 +469,12 @@ msgstr "Rämpspost"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Näita kõiki kaustu"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Kuupäeva ulatuse määramine"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Määra kuupäev"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Saadetud"
 
@@ -562,6 +571,9 @@ msgstr "Pildista"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Saada kõik"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Otsi serverist"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Salv."
 
@@ -600,6 +612,9 @@ msgstr "Ei saa avada uhendust serveriga. Ilmnes turvalisuse torge."
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "Saaja"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "Kuni"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "See kaust ja selle sisu kustutatakse."
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "Edasta:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Alates"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Saatja"
@@ -925,6 +943,9 @@ msgstr "Kontod"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Seaded"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Määra"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "OK"
 
@@ -942,6 +963,9 @@ msgstr "Tühista"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Eile"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Otsimine..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Viimati värskendatud"
@@ -1074,4 +1098,7 @@ msgstr "E-kirja edasisaatmine"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s ja veel %2$d"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Otsi kõikidest kaustadest"
 

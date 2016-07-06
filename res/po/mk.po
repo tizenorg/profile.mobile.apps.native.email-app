@@ -67,6 +67,9 @@ msgstr "Се праќа е-пошта..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Се праќа е-пошта..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Пребарувањето заврши."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Се менува големината на фајловите..."
 
@@ -466,6 +469,12 @@ msgstr "Несакана пошта"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Прикажи ги сите папки"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Одредете временски опсег"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Постави датум"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Пратени"
 
@@ -562,6 +571,9 @@ msgstr "Фотографирај"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Прати ги сите"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Пребарај го серверот"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Сочув."
 
@@ -599,6 +611,9 @@ msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRE
 msgstr "Не може да се отвори врската со серверот. Дојде до безбедносна грешка."
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
+msgstr "До"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
 msgstr "До"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "Пре:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Од"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Од"
@@ -925,6 +943,9 @@ msgstr "Сметки"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Поставувања"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Постави"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "OK"
 
@@ -942,6 +963,9 @@ msgstr "Откажи"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Вчера"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Пребарување..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Последен пат ажурирано"
@@ -1074,4 +1098,7 @@ msgstr "Препрати е-пошта"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s и уште %2$d"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Пребарај ги сите папки"
 

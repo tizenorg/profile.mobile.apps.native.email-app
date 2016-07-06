@@ -67,6 +67,9 @@ msgstr "Отправка электронной почты..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Отправка сообщений электронной почты..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Поиск завершен."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Изменение размеров файлов..."
 
@@ -466,6 +469,12 @@ msgstr "Спам"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Показать все папки"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Задать диапазон дат"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Установить дату"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Отправленные"
 
@@ -562,6 +571,9 @@ msgstr "Снять"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Отправить все"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Поиск на сервере"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Сохр."
 
@@ -600,6 +612,9 @@ msgstr "Невозможно открыть подключение к серве
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "Кому"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "По"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "Данная папка будет удалена со всем ее содержимым."
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "Fwd:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "С"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "От"
@@ -925,6 +943,9 @@ msgstr "Учетные записи"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Настройки"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Установить"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "ОК"
 
@@ -942,6 +963,9 @@ msgstr "Отмена"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Вчера"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Поиск..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Последнее обновление"
@@ -1074,4 +1098,7 @@ msgstr "Пересылка эл. письма"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s и еще %2$d"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Искать по всем папкам"
 

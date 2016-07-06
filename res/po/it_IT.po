@@ -67,6 +67,9 @@ msgstr "Invio e-mail..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Invio di e-mail in corso..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Ricerca completata."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Ridimensionamento dei file in corso..."
 
@@ -466,6 +469,12 @@ msgstr "Cartella spam"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Mostra tutte le cartelle"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Imposta intervallo di date"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Imposta data"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Inviati"
 
@@ -562,6 +571,9 @@ msgstr "Scatta foto"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Invia tutti"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Ricerca in server"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Salva"
 
@@ -599,6 +611,9 @@ msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRE
 msgstr "Impossibile aprire la connessione al server. Errore di protezione."
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
+msgstr "A"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
 msgstr "A"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "I:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Da"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Da"
@@ -925,6 +943,9 @@ msgstr "Account"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Impostazioni"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Imposta"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "OK"
 
@@ -942,6 +963,9 @@ msgstr "Annulla"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Ieri"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Ricerca..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Ultimo aggiornamento"
@@ -1074,4 +1098,7 @@ msgstr "Inoltra e-mail"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s e altri %2$d"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Cerca in tutte le cartelle"
 

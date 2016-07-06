@@ -67,6 +67,9 @@ msgstr "Skickar e-postmeddelande ..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Skickar e-postmeddelanden ..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Sökning slutförd."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Ändrar storlek på filer ..."
 
@@ -466,6 +469,12 @@ msgstr "Skräppost"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Visa alla mappar"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Ange datumområde"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Ställ in datum"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Skickat"
 
@@ -562,6 +571,9 @@ msgstr "Ta foto"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Skicka alla"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Sök på servern"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Spara"
 
@@ -599,6 +611,9 @@ msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRE
 msgstr "Det går inte att öppna anslutningen till servern. Ett säkerhetsfel inträffade."
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
+msgstr "Till"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
 msgstr "Till"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "Vb:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Från"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Från"
@@ -925,6 +943,9 @@ msgstr "Konton"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Inställningar"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Ange"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "OK"
 
@@ -942,6 +963,9 @@ msgstr "Avbryt"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Igår"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Söker..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Senast uppdaterad"
@@ -1074,4 +1098,7 @@ msgstr "Vidarebefordra e-post"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s och %2$d till"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Sök i alla mappar"
 

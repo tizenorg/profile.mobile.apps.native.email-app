@@ -385,8 +385,7 @@ static void _more_toolbar_clicked_cb(void *data, Evas_Object *obj, void *event_i
 	evas_object_event_callback_add(view->base.module->navi, EVAS_CALLBACK_RESIZE, _resize_more_ctxpopup_cb, view);
 
 	if (view->b_searchmode) {
-		//TODO Need to change with translatable IDS when it will be given form UX
-		_add_ctx_menu_item(view, "Search all folders", NULL, _more_search_in_all_folders_cb);
+		_add_ctx_menu_item(view, "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB", NULL, _more_search_in_all_folders_cb);
 		if (view->search_editfield.entry) {
 			elm_entry_input_panel_hide(view->search_editfield.entry);
 		}

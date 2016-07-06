@@ -67,6 +67,9 @@ msgstr "Ուղարկում է էլփոստը..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Ուղարկվում են նամակներ..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Որոնումն ավարտվեց:"
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Ֆայլերի չափերը փոխվում են..."
 
@@ -466,6 +469,12 @@ msgstr "Սպամի արկղ"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Ցույց տալ բոլոր թղթապանակները"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Նախադրել թվականների միջակայք"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Գործադրել ամսաթիվը"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Ուղարկած"
 
@@ -562,6 +571,9 @@ msgstr "Լուսանկարել"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Ուղարկել բոլորը"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Որոնել սերվեր"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Պհպնել"
 
@@ -600,6 +612,9 @@ msgstr "Անհնար է բացել սերվերի հետ կապը. անվտան�
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "Ում՝"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "Մինչև"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "Այս պանակն ու իր պարունակությունը կվերացվեն:"
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "Փխնց."
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Սկսած"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Ումից"
@@ -925,6 +943,9 @@ msgstr "Հաշիվներ"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Դրվածքներ"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Գործադրել"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "Ընդունել"
 
@@ -942,6 +963,9 @@ msgstr "Չեղարկել"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Երեկ"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Որոնում է..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Վերջին անգամ թարմացված"
@@ -1074,4 +1098,7 @@ msgstr "Փոխանցել նամակը"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s ու ևս %2$d"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Որոնել բոլոր պանակներում"
 

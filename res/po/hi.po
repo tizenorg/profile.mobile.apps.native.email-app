@@ -67,6 +67,9 @@ msgstr "ईमेल भेज रहा है..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "ईमेल्स भेज रहे हैं..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "खोज पूर्ण।"
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "फाइलों का आकार बदला जा रहा है..."
 
@@ -466,6 +469,12 @@ msgstr "स्‍पैमबॉक्‍स"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "सभी फोल्‍डर दिखाएँ"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "तिथि सीमा सेट करें"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "तिथि सेट करें"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "भेजा गया"
 
@@ -562,6 +571,9 @@ msgstr "तस्वीर लें"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "सभी को भेजें"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "सर्वर खोजें"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "सेव"
 
@@ -600,6 +612,9 @@ msgstr "सर्वर से कनेक्‍शन खोलने मे�
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "प्रति"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "को"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "यह फोल्डर और इसकी सभी सामग्री हटाई जाएगी।"
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "FWD:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "से"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "से"
@@ -925,6 +943,9 @@ msgstr "खातें"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "सेटिंग्स"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "सेट करें"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "ओके"
 
@@ -942,6 +963,9 @@ msgstr "रद्द"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "बीता हुआ कल"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "खोज रहा है..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "अंतिम अपडेट किया हुआ"
@@ -1074,4 +1098,7 @@ msgstr "ईमेल अग्रेषित करें"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s और %2$d अधिक"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "सभी फोल्डर्स खोजें"
 

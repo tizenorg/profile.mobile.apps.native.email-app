@@ -67,6 +67,9 @@ msgstr "E-mail verzenden..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "E-mails verzenden..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Zoeken voltooid."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Grootte bestanden wijzigen..."
 
@@ -466,6 +469,12 @@ msgstr "Ongewenste berichten"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Alle mappen weergeven"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Datumbereik instellen"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Datum instellen"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Verzonden"
 
@@ -562,6 +571,9 @@ msgstr "Foto maken"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Alles verzenden"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Server zoeken"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Opsln"
 
@@ -600,6 +612,9 @@ msgstr "Kan verbinding met server niet openen. Beveiligingsfout opgetreden."
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
 msgstr "Aan"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
+msgstr "Tot"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
 msgstr "Deze map en alle inhoud ervan worden verwijderd."
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "Fw:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Van"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Van"
@@ -925,6 +943,9 @@ msgstr "Accounts"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Instellingen"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Instellen"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "OK"
 
@@ -942,6 +963,9 @@ msgstr "Annuleer"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Gisteren"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Zoeken..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Laatst bijgewerkt"
@@ -1074,4 +1098,7 @@ msgstr "E-mail doorsturen"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s en nog %2$d"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Zoeken in alle mappen"
 

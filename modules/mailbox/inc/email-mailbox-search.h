@@ -20,10 +20,10 @@
 
 /**
  * @brief Set search mode in Mailbox view
- * @param[in]	data			User data (Email mailbox data)
- * @param[in]	search_type		Email search type
+ * @param[in]	data				User data (Email mailbox data)
+ * @param[in]	new_search_type		Email search type
  */
-void mailbox_set_search_mode(EmailMailboxView *view, email_search_type_e search_type);
+void mailbox_set_search_mode(EmailMailboxView *view, email_search_type_e new_search_type);
 
 /**
  * @brief Free Email search data
@@ -42,5 +42,12 @@ email_search_data_t *mailbox_make_search_data(EmailMailboxView *view);
  * @param[in]	view			Email mailbox data
  */
 void mailbox_update_search_view(EmailMailboxView *view);
+
+/**
+ * @brief Event handler for finishing server search
+ * @param[in]	view			Email mailbox data
+ * @param[in]	result			Server search result, EINA_TRUE if search completed successful, EINA_FALSE in case of internal errors
+ */
+void mailbox_server_search_finished_event_handler(EmailMailboxView *view, Eina_Bool result);
 
 #endif	/* __DEF_EMAIL_MAILBOX_SEARCH_H_ */

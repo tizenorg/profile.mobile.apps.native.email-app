@@ -67,6 +67,9 @@ msgstr "جارٍ إرسال البريد الإلكتروني..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "جارٍ إرسال رسائل البريد الإلكتروني..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "اكتمل البحث."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "جارٍ تغيير حجم الملفات..."
 
@@ -466,6 +469,12 @@ msgstr "البريد العشوائي"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "عرض كل المجلدات"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "ضبط نطاق التاريخ"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "ضبط التاريخ"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "المرسَلة"
 
@@ -562,6 +571,9 @@ msgstr "التقاط صورة"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "إرسال الكل"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "البحث على الخادم"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "حفظ"
 
@@ -599,6 +611,9 @@ msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRE
 msgstr "يتعذر فتح اتصال بالخادم. حدث خطأ في الأمان."
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
+msgstr "إلى"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
 msgstr "إلى"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "تحويل:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "من"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "من"
@@ -925,6 +943,9 @@ msgstr "حسابات"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "الضبط"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "ضبط"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "موافق"
 
@@ -942,6 +963,9 @@ msgstr "إلغاء"
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "أمس"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "قيد البحث"
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "آخر تحديث"
@@ -1074,4 +1098,7 @@ msgstr "تحويل البريد الإلكتروني"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s و%2$d غير ذلك"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "البحث في كل المجلدات"
 

@@ -210,6 +210,7 @@ struct _view_data {
 	Ecore_Idler *search_entry_focus_idler;
 
 	/*Server search*/
+	int server_search_handler;
 	time_t search_from_date;
 	time_t search_to_date;
 	ServerSearchBtnItemData search_btn_item_data;

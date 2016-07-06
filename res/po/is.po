@@ -67,6 +67,9 @@ msgstr "Sendi tölvupóst..."
 msgid "IDS_EMAIL_TPOP_SENDING_EMAILS_ING"
 msgstr "Sendi tölvupóst..."
 
+msgid "IDS_EMAIL_TPOP_SEARCH_COMPLETE"
+msgstr "Leit lokið."
+
 msgid "IDS_EMAIL_TPOP_RESIZING_FILES_ING"
 msgstr "Breyti stærð skráa..."
 
@@ -466,6 +469,12 @@ msgstr "Ruslpóstur"
 msgid "IDS_EMAIL_HEADER_SHOW_ALL_FOLDERS_ABB"
 msgstr "Sýna allar möppur"
 
+msgid "IDS_EMAIL_HEADER_SET_DATE_RANGE_ABB"
+msgstr "Veldu tímabil"
+
+msgid "IDS_EMAIL_HEADER_SET_DATE"
+msgstr "Stilla dagsetningu"
+
 msgid "IDS_EMAIL_HEADER_SENT_M_EMAIL"
 msgstr "Sent"
 
@@ -562,6 +571,9 @@ msgstr "Taka mynd"
 msgid "IDS_EMAIL_BUTTON_SEND_ALL"
 msgstr "Senda allt"
 
+msgid "IDS_EMAIL_BUTTON_SEARCH_SERVER_ABB"
+msgstr "Leita á netþjóni"
+
 msgid "IDS_EMAIL_BUTTON_SAVE_ABB"
 msgstr "Vista"
 
@@ -599,6 +611,9 @@ msgid "IDS_EMAIL_BODY_UNABLE_TO_OPEN_CONNECTION_TO_SERVER_SECURITY_ERROR_OCCURRE
 msgstr "Mistókst að tengjast við netþjón. Öryggisvilla kom upp."
 
 msgid "IDS_EMAIL_BODY_TO_M_RECIPIENT"
+msgstr "Til"
+
+msgid "IDS_EMAIL_BODY_TO_M_DATE"
 msgstr "Til"
 
 msgid "IDS_EMAIL_BODY_THIS_FOLDER_AND_ALL_ITS_CONTENT_WILL_BE_DELETED"
@@ -648,6 +663,9 @@ msgstr "IMAP4"
 
 msgid "IDS_EMAIL_BODY_FWD_C"
 msgstr "FRS:"
+
+msgid "IDS_EMAIL_BODY_FROM_M_DATE"
+msgstr "Frá"
 
 msgid "IDS_EMAIL_BODY_FROM_MSENDER"
 msgstr "Frá"
@@ -925,6 +943,9 @@ msgstr "Reikningar"
 msgid "IDS_EMAIL_BUTTON_SETTINGS"
 msgstr "Stillingar"
 
+msgid "IDS_EMAIL_BUTTON_SET"
+msgstr "Stilla"
+
 msgid "IDS_EMAIL_BUTTON_OK"
 msgstr "Í lagi"
 
@@ -942,6 +963,9 @@ msgstr "Hætta v."
 
 msgid "IDS_EMAIL_BODY_YESTERDAY"
 msgstr "Í gær"
+
+msgid "IDS_EMAIL_BODY_SEARCHING_ING"
+msgstr "Verið er að leita..."
 
 msgid "IDS_EMAIL_BODY_LAST_UPDATED"
 msgstr "Síðast uppfært"
@@ -1074,4 +1098,7 @@ msgstr "Framsenda tölvupóst"
 
 msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
 msgstr "%1$s og %2$d í viðbót"
+
+msgid "IDS_EMAIL_OPT_SEARCH_ALL_FOLDERS_ABB"
+msgstr "Leita í öllum möppum"
 
