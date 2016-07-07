@@ -15,21 +15,25 @@
  *
  */
 
-//header layout
-#define HEADER_LAYOUT_RIGHT_PADDING 32
-#define HEADER_LAYOUT_LEFT_PADDING 32
-#define HEADER_LAYOUT_TOP_PADDING 24
-#define HEADER_LAYOUT_BOTTOM_PADDING 22
-#define HEADER_SUBJECT_BOTTOM_PADDING 24
-#define HEADER_DETAILS_BTN_RIGHT_PADDING 32
-#define HEADER_DETAILS_BTN_MIN_WIDTH 150
-#define HEADER_DETAILS_BTN_MIN_HEIGHT 50
+//subject layout
+#define SUBJECT_LAYOUT_RIGHT_PADDING 32
+#define SUBJECT_LAYOUT_LEFT_PADDING 32
+#define SUBJECT_LAYOUT_TOP_PADDING 24
+#define SUBJECT_LAYOUT_BOTTOM_PADDING 12
+#define SUBJECT_LAYOUT_FAVOURITE_BTN_OUTER_SIZE 80
+#define SUBJECT_LAYOUT_FAVOURITE_BTN_INNER_SIZE 50
+#define SUBJECT_LAYOUT_FAVOURITE_BTN_INNER_PADDING 15
+#define SUBJECT_LAYOUT_FAVOURITE_BTN_TOP_PADDING (17 + SUBJECT_LAYOUT_FAVOURITE_BTN_INNER_PADDING)
+#define SUBJECT_LAYOUT_FAVOURITE_BTN_RIGHT_PADDING (17 + SUBJECT_LAYOUT_FAVOURITE_BTN_INNER_PADDING)
 
-#define HEADER_FAVOURITE_BTN_OUTER_SIZE 80
-#define HEADER_FAVOURITE_BTN_INNER_SIZE 50
-#define HEADER_FAVOURITE_BTN_INNER_PADDING 15
-#define HEADER_FAVOURITE_BTN_TOP_PADDING (17 + HEADER_FAVOURITE_BTN_INNER_PADDING)
-#define HEADER_FAVOURITE_BTN_RIGHT_PADDING (17 + HEADER_FAVOURITE_BTN_INNER_PADDING)
+//details layout
+#define DETAILS_LAYOUT_LEFT_PADDING 32
+#define DETAILS_LAYOUT_RIGHT_PADDING 32
+#define DETAILS_LAYOUT_TOP_PADDING 12
+#define DETAILS_LAYOUT_BOTTOM_PADDING 22
+#define DETAILS_LAYOUT_BTN_RIGHT_PADDING 32
+#define DETAILS_LAYOUT_BTN_MIN_WIDTH 150
+#define DETAILS_LAYOUT_BTN_MIN_HEIGHT 50
 
 //body button
 #define DOWNLOAD_BUTTON_MIN_HEIGHT	96
@@ -37,6 +41,14 @@
 #define DOWNLOAD_BUTTON_TEXTBLOCK_HEIGHT_MIN 44
 #define DOWNLOAD_BUTTON_TEXTBLOCK_PADDING_BOTTOM_HEIGHT 32
 #define TRANSPARENT_COLOR_VALUE 0 0 0 0
+
+//attachment layout
+#define ATTACHMENT_TOP_PADDING				22
+#define ATTACHMENT_BOTTOM_PADDING			22
+#define ATTACHMENT_LEFT_PADDING				32
+#define ATTACHMENT_RIGHT_PADDING			32
+#define ATTACHMENT_ICON_SIZE				50
+#define ATTACHMENT_ICON_RIGHT_PADDING		8
 
 #define EVENT_PART(NAME, SRC)  \
 		part { name: NAME; \
@@ -62,7 +74,7 @@ group {
 }
 
 group {
-	name: "ev/header/base";
+	name: "ev/header/details_layout";
 	styles {
 		style { name: "date_text_style";
 			base: "font=BreezeSansFallback align=right font_size=28 color=#3DB9CC wrap=word ellipsis=1.0";
@@ -71,130 +83,57 @@ group {
 		}
 	}
 	parts {
-		E_SWALLOW_BG
-		E_PART_PADDING_LEFT(HEADER_LAYOUT_LEFT_PADDING)
-		E_PART_PADDING_RIGHT(HEADER_LAYOUT_RIGHT_PADDING)
-		E_PART_PADDING_TOP(HEADER_LAYOUT_TOP_PADDING)
-		E_PART_PADDING_BOTTOM(HEADER_LAYOUT_BOTTOM_PADDING)
+		E_PART_PADDING_LEFT(DETAILS_LAYOUT_LEFT_PADDING)
+		E_PART_PADDING_RIGHT(DETAILS_LAYOUT_RIGHT_PADDING)
+		E_PART_PADDING_TOP(DETAILS_LAYOUT_TOP_PADDING)
+		E_PART_PADDING_BOTTOM(DETAILS_LAYOUT_BOTTOM_PADDING)
 
-		E_PART_SPACER("favourite_btn.padding.top",
-			description { state: "default" 0.0;
-				fixed: 0 1;
-				align: 0.5 0.0;
-				rel2.relative: 1.0 0.0;
-				min: 0 HEADER_FAVOURITE_BTN_TOP_PADDING;
-			}
-		)
-
-		E_PART_SWALLOW("header.favourite.btn",
-			description { state: "default" 0.0;
-				align: 1 0;
-				rel1 {
-					relative: 0 1;
-					to_x: "padding.right";
-					to_y: "favourite_btn.padding.top";
+		E_PART_SWALLOW("swallow.details.btn",
+				description { state: "default" 0.0;
+					align: 0.0 0.5;
+					fixed: 1 0;
+					rel1 {
+						relative: 1.0 1.0;
+						to_x: "padding.left";
+						to_y: "padding.top";
+					}
+					rel2 {
+						relative: 1.0 0.0;
+						to_x: "padding.left";
+						to_y: "padding.bottom";
+					}
+					min: DETAILS_LAYOUT_BTN_MIN_WIDTH DETAILS_LAYOUT_BTN_MIN_HEIGHT;
 				}
-				rel2 {
-					relative: 0 1;
-					to_x: "padding.right";
-					to_y: "favourite_btn.padding.top";
-				}
-				min: HEADER_FAVOURITE_BTN_INNER_SIZE HEADER_FAVOURITE_BTN_INNER_SIZE;
-			}
-		)
-
-		E_PART_SPACER("header.favourite_btn.padding.left",
-			description { state: "default" 0.0;
-				fixed: 1 0;
-				align: 1 0.5;
-				rel1 {
-					relative: 0 0;
-					to_x: "header.favourite.btn";
-				}
-				rel2 {
-					relative: 0 1;
-					to_x: "header.favourite.btn";
-				}
-				min: HEADER_FAVOURITE_BTN_RIGHT_PADDING 0;
-			}
-		)
-
-		E_PART_SWALLOW("header.subject.swallow",
-			description { state: "default" 0.0;
-				align: 0.5 0;
-				rel1 {
-					relative: 1 1;
-					to_x: "padding.left";
-					to_y: "padding.top";
-				}
-				rel2 {
-					relative: 0 1;
-					to_x: "header.favourite_btn.padding.left";
-					to_y: "padding.top";
-				}
-			}
-		)
-
-		E_PART_SPACER("header.subject.padding.bottom",
-			description { state: "default" 0.0;
-				align: 0.5 0.0;
-				fixed: 0 1;
-				rel1 {
-					relative: 0 1;
-					to_y: "header.subject.swallow";
-				}
-				rel2 {
-					relative: 1 1;
-					to_y: "header.subject.swallow";
-				}
-				min: 0 HEADER_SUBJECT_BOTTOM_PADDING;
-			}
-		)
-
-		E_PART_SWALLOW("header.details.btn",
+			)
+	
+		E_PART_SPACER("details.btn.padding.right",
 			description { state: "default" 0.0;
 				align: 0.0 0.5;
-				rel1 {
-					relative: 1.0 1.0;
-					to_x: "padding.left";
-					to_y: "header.subject.padding.bottom";
-				}
-				rel2 {
-					relative: 1.0 0.0;
-					to_x: "padding.left";
-					to_y: "padding.bottom";
-				}
-				min: HEADER_DETAILS_BTN_MIN_WIDTH HEADER_DETAILS_BTN_MIN_HEIGHT;
-			}
-		)
-
-		E_PART_SPACER("header.details.btn.padding.right",
-			description { state: "default" 0.0;
-				align: 0 0.5;
 				fixed: 1.0 0.0;
 				rel1 {
-					relative: 1.0 0.0;
-					to_x: "header.details.btn";
+					relative: 1.0 1.0;
+					to_x: "swallow.details.btn";
+					to_y: "padding.top";
 				}
 				rel2 {
-					relative: 1.0 1.0;
-					to_x: "header.details.btn";
+					relative: 1.0 0.0;
+					to_x: "swallow.details.btn";
+					to_y: "padding.bottom";
 				}
-				min: HEADER_DETAILS_BTN_RIGHT_PADDING 0;
+				min: DETAILS_LAYOUT_BTN_RIGHT_PADDING 0;
 			}
 		)
 
-		E_PART_TEXTBLOCK("header.date.text",
+		E_PART_TEXTBLOCK("text.date",
 			description { state: "default" 0.0;
-				align: 0.0 0.5;
+				align: 0.5 1.0;
 				text {
 					style: "date_text_style";
-					min: 0 1;
 				}
 				rel1 {
 					relative: 1.0 1.0;
-					to_x: "header.details.btn.padding.right";
-					to_y: "header.subject.padding.bottom";
+					to_x: "details.btn.padding.right";
+					to_y: "padding.top";
 				}
 				rel2 {
 					relative: 0.0 0.0;
@@ -206,13 +145,73 @@ group {
 	}
 }
 
-//attachment layout
-#define ATTACHMENT_TOP_PADDING				22
-#define ATTACHMENT_BOTTOM_PADDING			22
-#define ATTACHMENT_LEFT_PADDING				32
-#define ATTACHMENT_RIGHT_PADDING			32
-#define ATTACHMENT_ICON_SIZE				50
-#define ATTACHMENT_ICON_RIGHT_PADDING		8
+group {
+	name: "ev/header/subject_layout";
+	parts {
+		E_PART_PADDING_LEFT(SUBJECT_LAYOUT_LEFT_PADDING)
+		E_PART_PADDING_RIGHT(SUBJECT_LAYOUT_RIGHT_PADDING)
+		E_PART_PADDING_TOP(SUBJECT_LAYOUT_TOP_PADDING)
+		E_PART_PADDING_BOTTOM(SUBJECT_LAYOUT_BOTTOM_PADDING)
+
+		E_PART_SPACER("favourite_btn.padding.top",
+			description { state: "default" 0.0;
+				fixed: 0 1;
+				align: 0.5 0.0;
+				rel2.relative: 1.0 0.0;
+				min: 0 SUBJECT_LAYOUT_FAVOURITE_BTN_TOP_PADDING;
+			}
+		)
+
+		E_PART_SWALLOW("swallow.favourite.btn",
+			description { state: "default" 0.0;
+				fixed: 1 0;
+				align: 1 0;
+				rel1 {
+					relative: 0 1;
+					to_x: "padding.right";
+					to_y: "favourite_btn.padding.top";
+				}
+				rel2 {
+					relative: 0 0;
+					to_x: "padding.right";
+					to_y: "padding.bottom";
+				}
+				min: SUBJECT_LAYOUT_FAVOURITE_BTN_INNER_SIZE SUBJECT_LAYOUT_FAVOURITE_BTN_INNER_SIZE;
+			}
+		)
+
+		E_PART_SPACER("favourite_btn.padding.left",
+			description { state: "default" 0.0;
+				fixed: 1 0;
+				align: 1 0.5;
+				rel1 {
+					relative: 0 0;
+					to_x: "swallow.favourite.btn";
+				}
+				rel2 {
+					relative: 0 1;
+					to_x: "swallow.favourite.btn";
+				}
+				min: SUBJECT_LAYOUT_FAVOURITE_BTN_RIGHT_PADDING 0;
+			}
+		)
+
+		E_PART_SWALLOW("swallow.subject",
+			description { state: "default" 0.0;
+				rel1 {
+					relative: 1 1;
+					to_x: "padding.left";
+					to_y: "padding.top";
+				}
+				rel2 {
+					relative: 0 0;
+					to_x: "favourite_btn.padding.left";
+					to_y: "padding.bottom";
+				}
+			}
+		)
+	}
+}
 
 group {
 	name: "ev/attachment/base";

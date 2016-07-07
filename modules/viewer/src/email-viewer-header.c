@@ -55,9 +55,10 @@ static i18n_udatepg_h viewer_pattern_generator = NULL;
  */
 
 /*header layouts*/
-static void _header_create_main_layout(EmailViewerView *view);
-static void _header_create_subject_entry(EmailViewerView *view);
+static void _header_create_subject_layout(EmailViewerView *view);
+static void _header_create_details_layout(EmailViewerView *view);
 static void _header_create_divider(EmailViewerView *view);
+
 static void _header_create_attachment_preview(void *data);
 static void _header_delete_attachment_preview(void *data);
 static void _header_update_attachments_preview(void *data);
@@ -71,7 +72,6 @@ static void _header_details_button_clicked_cb(void *data, Evas_Object *obj, void
 static void _header_pack_recipient_ly(void *data, VIEWER_TO_CC_BCC_LY recipient);
 
 /*favorite icon logic*/
-static void _header_create_favorite_btn(EmailViewerView *view);
 static void _header_favorite_clicked_cb(void *data, Evas_Object *obj, void *event_info);
 static void _header_popup_response_cb(void *data, Evas_Object *obj, void *event_info);
 
@@ -85,53 +85,53 @@ static email_string_t EMAIL_VIEWER_STR_FAILED_TO_SET_FAVOURITE = { NULL, N_("Fai
  * Definition for static functions
  */
 
-static void _header_create_main_layout(EmailViewerView *view)
+static void _header_create_subject_layout(EmailViewerView *view)
 {
 	debug_enter();
 	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
-	/* append sender */
-	view->header_ly = viewer_load_edj(view->base.content, email_get_viewer_theme_path(), "ev/header/base", EVAS_HINT_EXPAND, 0.0);
-	evas_object_size_hint_align_set(view->header_ly, EVAS_HINT_FILL, 0.0);
-	evas_object_show(view->header_ly);
+	view->subject_ly = viewer_load_edj(view->base.content, email_get_viewer_theme_path(), "ev/header/subject_layout", EVAS_HINT_EXPAND, 0.0);
+	evas_object_size_hint_align_set(view->subject_ly, EVAS_HINT_FILL, EVAS_HINT_FILL);
+	evas_object_size_hint_weight_set(view->subject_ly, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 
-	_header_create_subject_entry(view);
+	view->subject_entry = elm_entry_add(view->subject_ly);
+	elm_entry_text_style_user_push(view->subject_entry, VIEWER_SUBJECT_ENTRY_TEXT_STYLE);
+	elm_entry_editable_set(view->subject_entry, EINA_FALSE);
+	evas_object_freeze_events_set(view->subject_entry, EINA_TRUE);
+	elm_object_part_content_set(view->subject_ly, "swallow.subject", view->subject_entry);
 
 	if ((view->mailbox_type != EMAIL_MAILBOX_TYPE_OUTBOX) && (view->viewer_type == EMAIL_VIEWER)) {
-		_header_create_favorite_btn(view);
+		view->favourite_btn = elm_button_add(view->subject_ly);
+		elm_object_style_set(view->favourite_btn, "transparent");
+		evas_object_smart_callback_add(view->favourite_btn, "clicked", _header_favorite_clicked_cb, view);
+		elm_object_part_content_set(view->subject_ly, "swallow.favourite.btn", view->favourite_btn);
 	}
-
-	if (view->to_recipients_cnt + view->cc_recipients_cnt + view->bcc_recipients_cnt > 0) {
-		_header_show_hide_details_text_set(view, EINA_FALSE);
-	}
+	evas_object_show(view->subject_ly);
 
 	debug_leave();
 }
 
-static void _header_create_subject_entry(EmailViewerView *view)
+static void _header_create_details_layout(EmailViewerView *view)
 {
 	debug_enter();
 	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
-	view->subject_entry = elm_entry_add(view->header_ly);
-	elm_object_part_content_set(view->header_ly, "header.subject.swallow", view->subject_entry);
-	elm_entry_text_style_user_push(view->subject_entry, VIEWER_SUBJECT_ENTRY_TEXT_STYLE);
-	elm_entry_editable_set(view->subject_entry, EINA_FALSE);
-	evas_object_freeze_events_set(view->subject_entry, EINA_TRUE);
-}
+	view->details_ly = viewer_load_edj(view->base.content, email_get_viewer_theme_path(), "ev/header/details_layout", EVAS_HINT_EXPAND, 0.0);
+	evas_object_size_hint_align_set(view->details_ly, EVAS_HINT_FILL, EVAS_HINT_FILL);
+	evas_object_size_hint_weight_set(view->details_ly, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 
-static void _header_create_favorite_btn(EmailViewerView *view)
-{
-	debug_enter();
-	retm_if(view == NULL, "Invalid parameter: view[NULL]");
-
-	if (!view->favourite_btn) {
-		view->favourite_btn = elm_button_add(view->header_ly);
-		elm_object_style_set(view->favourite_btn, "transparent");
-		evas_object_smart_callback_add(view->favourite_btn, "clicked", _header_favorite_clicked_cb, view);
-		elm_object_part_content_set(view->header_ly, "header.favourite.btn", view->favourite_btn);
+	if (view->to_recipients_cnt + view->cc_recipients_cnt + view->bcc_recipients_cnt > 0) {
+		Evas_Object *details_btn = elm_button_add(view->details_ly);
+		elm_object_style_set(details_btn, "default");
+		elm_object_scale_set(details_btn, EXPAND_BUTTON_SCALE);
+		evas_object_smart_callback_add(details_btn, "clicked", _header_details_button_clicked_cb, view);
+		elm_object_part_content_set(view->details_ly, "swallow.details.btn", details_btn);
+		evas_object_show(details_btn);
+		view->details_button = details_btn;
+		_header_show_hide_details_text_set(view, EINA_FALSE);
 	}
 
+	evas_object_show(view->details_ly);
 	debug_leave();
 }
 
@@ -141,7 +141,7 @@ static void _header_create_divider(EmailViewerView *view)
 
 	retm_if(view == NULL, "Invalid parameter: view[NULL]");
 
-	view->header_divider = evas_object_rectangle_add(view->header_ly);
+	view->header_divider = evas_object_rectangle_add(evas_object_evas_get(view->details_ly));
 	evas_object_size_hint_fill_set(view->header_divider, EVAS_HINT_FILL, EVAS_HINT_FILL);
 	evas_object_color_set(view->header_divider, AO005_ON_WHITE);
 	evas_object_size_hint_min_set(view->header_divider, 0, VIEWER_HEADER_DIVIDER_HEIGHT);
@@ -170,16 +170,6 @@ static void _header_show_hide_details_text_set(void *data, Eina_Bool is_opened)
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 	EmailViewerView *view = (EmailViewerView *)data;
 
-	if (view->details_button == NULL) {
-		Evas_Object *details_btn = elm_button_add(view->header_ly);
-		elm_object_style_set(details_btn, "default");
-		elm_object_scale_set(details_btn, EXPAND_BUTTON_SCALE);
-		evas_object_smart_callback_add(details_btn, "clicked", _header_details_button_clicked_cb, view);
-		elm_object_part_content_set(view->header_ly, "header.details.btn", details_btn);
-		evas_object_show(details_btn);
-		view->details_button = details_btn;
-	}
-
 	char *btn_text = NULL;
 	if (is_opened) {
 		btn_text = email_get_email_string("IDS_EMAIL_BUTTON_HIDE_ABB3");
@@ -201,13 +191,13 @@ static void _header_pack_recipient_ly(void *data, VIEWER_TO_CC_BCC_LY recipient)
 
 	switch (recipient) {
 		case EMAIL_VIEWER_TO_LAYOUT:
-			elm_box_pack_after(view->main_bx, view->to_ly, view->header_ly);
+			elm_box_pack_after(view->main_bx, view->to_ly, view->details_ly);
 			break;
 		case EMAIL_VIEWER_CC_LAYOUT:
 			if (view->to_ly)
 				elm_box_pack_after(view->main_bx, view->cc_ly, view->to_ly);
 			else
-				elm_box_pack_after(view->main_bx, view->cc_ly, view->header_ly);
+				elm_box_pack_after(view->main_bx, view->cc_ly, view->details_ly);
 			break;
 		case EMAIL_VIEWER_BCC_LAYOUT:
 			if (view->cc_ly)
@@ -215,7 +205,7 @@ static void _header_pack_recipient_ly(void *data, VIEWER_TO_CC_BCC_LY recipient)
 			else if (view->to_ly)
 				elm_box_pack_after(view->main_bx, view->bcc_ly, view->to_ly);
 			else
-				elm_box_pack_after(view->main_bx, view->bcc_ly, view->header_ly);
+				elm_box_pack_after(view->main_bx, view->bcc_ly, view->details_ly);
 			break;
 		default:
 			break;
@@ -423,9 +413,9 @@ void header_create_view(void *data)
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 	EmailViewerView *view = (EmailViewerView *)data;
-	_header_create_main_layout(view);
+	_header_create_subject_layout(view);
+	_header_create_details_layout(view);
 	_header_create_divider(view);
-
 	header_layout_pack(view);
 	debug_leave();
 }
@@ -436,7 +426,6 @@ void header_update_view(void *data)
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 	EmailViewerView *view = (EmailViewerView *)data;
 	retm_if(view->eViewerErrorType != VIEWER_ERROR_NONE, "Some Error occurred");
-
 
 	header_update_sender_name_and_prio_status(view);
 	header_update_sender_address(view);
@@ -462,7 +451,8 @@ void header_layout_unpack(void *data)
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 	EmailViewerView *view = (EmailViewerView *)data;
 
-	elm_box_unpack(view->main_bx, view->header_ly);
+	elm_box_unpack(view->main_bx, view->subject_ly);
+	elm_box_unpack(view->main_bx, view->details_ly);
 
 	if (view->has_attachment && view->attachment_ly) {
 		elm_box_unpack(view->main_bx, view->attachment_ly);
@@ -492,13 +482,15 @@ void header_layout_pack(void *data)
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 	EmailViewerView *view = (EmailViewerView *)data;
 
-	/* 1. sender */
-	elm_box_pack_start(view->main_bx, view->header_ly);
-	Evas_Object *bottom_ly = view->header_ly;
-	/* 2-2. recipient */
+	/* 1. subject layout */
+	elm_box_pack_start(view->main_bx, view->subject_ly);
+	/* 2. details layout*/
+	elm_box_pack_after(view->main_bx, view->details_ly, view->subject_ly);
+	Evas_Object *bottom_ly = view->details_ly;
+	/* 3. recipients */
 	if (view->is_recipient_ly_shown) {
 		if (view->to_ly) {
-			elm_box_pack_before(view->main_bx, view->to_ly, view->header_ly);
+			elm_box_pack_before(view->main_bx, view->to_ly, view->details_ly);
 			bottom_ly = view->to_ly;
 		}
 
@@ -506,7 +498,7 @@ void header_layout_pack(void *data)
 			if (view->to_ly && view->cc_ly) {
 				elm_box_pack_after(view->main_bx, view->cc_ly, view->to_ly);
 			} else if (view->cc_ly) {
-				elm_box_pack_after(view->main_bx, view->cc_ly, view->header_ly);
+				elm_box_pack_after(view->main_bx, view->cc_ly, view->details_ly);
 			}
 			bottom_ly = view->cc_ly;
 		}
@@ -518,7 +510,7 @@ void header_layout_pack(void *data)
 				elm_box_pack_after(view->main_bx, view->bcc_ly, view->to_ly);
 			}
 			if (view->to_ly == NULL && view->cc_ly == NULL) {
-				elm_box_pack_after(view->main_bx, view->bcc_ly, view->header_ly);
+				elm_box_pack_after(view->main_bx, view->bcc_ly, view->details_ly);
 			}
 			bottom_ly = view->bcc_ly;
 		}
@@ -666,7 +658,7 @@ void header_update_date(EmailViewerView *view)
 		FREE(formatted_date);
 	}
 
-	elm_object_part_text_set(view->header_ly, "header.date.text", date_time);
+	elm_object_part_text_set(view->details_ly, "text.date", date_time);
 
 	debug_leave();
 }
@@ -701,6 +693,18 @@ void header_update_subject_text(EmailViewerView *view)
 	} else {
 		elm_entry_entry_set(view->subject_entry, _("IDS_EMAIL_SBODY_NO_SUBJECT_M_NOUN"));
 	}
+
+	/*Need to resize layout width and recalculate entry manually to avoid entry blink*/
+	int win_h = 0, win_w = 0;
+	elm_win_screen_size_get(view->base.module->win, NULL, NULL, &win_w, &win_h);
+	if (view->base.orientation == APP_DEVICE_ORIENTATION_0
+			|| view->base.orientation == APP_DEVICE_ORIENTATION_180) {
+		evas_object_resize(view->subject_ly, win_w, 0);
+	} else {
+		evas_object_resize(view->subject_ly, win_h, 0);
+	}
+	evas_object_smart_calculate(view->subject_entry);
+	evas_object_smart_calculate(view->subject_ly);
 
 	free(subject_txt);
 	debug_leave();
