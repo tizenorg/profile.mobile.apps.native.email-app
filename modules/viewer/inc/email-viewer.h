@@ -201,12 +201,16 @@ struct _view_data {
 	int move_status;
 
 	/*Header Evas Object */
-	Evas_Object *header_ly;
+	Evas_Object *subject_ly;
 	Evas_Object *subject_entry;
 	Evas_Object *favourite_btn;
-	Evas_Object *attachment_ly;
-	Evas_Object *header_divider;
+
+	Evas_Object *details_ly;
 	Evas_Object *details_button;
+	Evas_Object *header_divider;
+
+	Evas_Object *attachment_ly;
+
 
 	/*Reply toolbar*/
 	Evas_Object *reply_toolbar_ly;

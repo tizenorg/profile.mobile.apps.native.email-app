@@ -1066,7 +1066,8 @@ Eina_Bool viewer_initialize_data(EmailViewerView *view)
 	view->move_status = 0;
 
 	/* Evas Object */
-	view->header_ly = NULL;
+	view->subject_ly = NULL;
+	view->details_ly = NULL;
 	view->reply_toolbar_ly = NULL;
 	view->favourite_btn = NULL;
 	view->subject_entry = NULL;
@@ -1253,7 +1254,8 @@ void viewer_delete_evas_objects(EmailViewerView *view, Eina_Bool isHide)
 
 	if (isHide) {
 		DELETE_EVAS_OBJECT(view->combined_scroller);
-		DELETE_EVAS_OBJECT(view->header_ly);
+		DELETE_EVAS_OBJECT(view->subject_ly);
+		DELETE_EVAS_OBJECT(view->details_ly);
 		DELETE_EVAS_OBJECT(view->reply_toolbar_ly);
 		DELETE_EVAS_OBJECT(view->to_ly);
 		DELETE_EVAS_OBJECT(view->cc_ly);

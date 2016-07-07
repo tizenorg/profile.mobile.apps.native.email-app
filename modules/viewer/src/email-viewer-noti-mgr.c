@@ -639,7 +639,6 @@ static void _noti_mgr_on_gdbus_event_receive(GDBusConnection *connection,
 
 					viewer_set_webview_content(view);
 
-					elm_object_focus_set(view->header_ly, EINA_TRUE);
 					elm_scroller_region_show(view->scroller, scr_x, scr_y, scr_w, scr_h);
 					header_update_view(view);
 				} else {
