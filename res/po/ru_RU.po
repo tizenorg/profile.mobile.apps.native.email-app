@@ -1060,3 +1060,18 @@ msgstr "Сохранено."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Сбой при удалении."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Включить вложения"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Включить предыдущ. получат."
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Только новые получатели"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Пересылка эл. письма"
+
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s и еще %2$d"
+

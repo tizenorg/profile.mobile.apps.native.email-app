@@ -371,7 +371,7 @@ static COMPOSER_ERROR_TYPE_E _send_mail(EmailComposerView *view)
 					&view->org_mail_info->mail_data->mail_id, 1, EMAIL_MAIL_ATTRIBUTE_REPLIED_TIME, sending_time);
 			email_engine_set_flags_field(view->account_info->original_account->account_id,
 					&view->original_mail_id, 1, EMAIL_FLAGS_ANSWERED_FIELD, 1, 1);
-		} else if (view->composer_type == RUN_COMPOSER_FORWARD) {
+		} else if (view->composer_type == RUN_COMPOSER_FORWARD || view->composer_type == RUN_COMPOSER_FORWARD_ALL) {
 			email_engine_update_mail_attribute(view->org_mail_info->mail_data->account_id,
 					&view->org_mail_info->mail_data->mail_id, 1, EMAIL_MAIL_ATTRIBUTE_FORWARDED_TIME, sending_time);
 			email_engine_set_flags_field(view->account_info->original_account->account_id,
@@ -624,9 +624,6 @@ static void _composer_send_mail_storage_full_popup_response_cb(void *data, Evas_
 		view->is_send_btn_clicked = EINA_FALSE;
 		view->is_back_btn_clicked = EINA_FALSE;
 		view->is_save_in_drafts_clicked = EINA_FALSE;
-
-		elm_object_tree_focus_allow_set(view->composer_layout, EINA_TRUE);
-		elm_object_focus_allow_set(view->ewk_btn, EINA_TRUE);
 	} else {
 		DELETE_EVAS_OBJECT(view->composer_popup);
 		composer_util_return_composer_view(view);
@@ -970,7 +967,7 @@ void composer_exit_composer_get_contents(void *data)
 		}
 
 		if (prev_err > MBE_VALIDATION_ERROR_DUPLICATE_ADDRESS) {
-			view->selected_entry = error_entry;
+			view->selected_widget = error_entry;
 
 			view->is_send_btn_clicked = EINA_FALSE;
 			composer_recipient_display_error_string(view, prev_err);
@@ -980,7 +977,7 @@ void composer_exit_composer_get_contents(void *data)
 		}
 
 		if (composer_util_recp_is_mbe_empty(view)) {
-			view->selected_entry = view->recp_to_entry.entry;
+			view->selected_widget = view->recp_to_entry.entry;
 
 			view->is_send_btn_clicked = EINA_FALSE;
 			composer_recipient_display_error_string(view, MBE_VALIDATION_ERROR_NO_ADDRESS);
@@ -999,8 +996,6 @@ void composer_exit_composer_get_contents(void *data)
 	}
 #endif
 
-	/* To prevent showing IME when the focus was on the webkit. ewk_btn isn't a child of composer_layout. so we need to control the focus of it as well. */
-	elm_object_focus_allow_set(view->ewk_btn, EINA_FALSE);
 	/* To prevent showing ime while sending email. */
 	elm_object_tree_focus_allow_set(view->composer_layout, EINA_FALSE);
 

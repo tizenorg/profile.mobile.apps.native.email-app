@@ -1060,3 +1060,18 @@ msgstr "Sábháilte."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Theip ar scriosadh."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Áirigh ceangaltáin"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Áirigh faighteoirí roimhe"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Faighteoirí nua amháin"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Seol r-phost ar aghaidh"
+
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s agus %2$d eile"
+

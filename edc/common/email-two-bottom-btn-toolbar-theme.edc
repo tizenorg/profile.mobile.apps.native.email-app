@@ -15,10 +15,10 @@
  *
  */
 
-#define ES_BOTTOM_BAR_MAX_HEIGHT 152
-#define ES_BOTTOM_BAR_BUTTON_MAX_HEIGHT 104
-#define ES_BOTTOM_BAR_HOR_BORDER_PADDING_WIDTH 32
-#define ES_BOTTOM_BAR_CENTER_PADDING_WIDTH 32
+#define BOTTOM_BAR_MAX_HEIGHT 152
+#define BOTTOM_BAR_BUTTON_MAX_HEIGHT 104
+#define BOTTOM_BAR_HOR_BORDER_PADDING_WIDTH 32
+#define BOTTOM_BAR_CENTER_PADDING_WIDTH 32
 
 group {
 	name: "two_bottom_btn";
@@ -30,7 +30,7 @@ group {
 			scale: 1;
 			description {
 				state: "default" 0.0;
-				min: 0 ES_BOTTOM_BAR_MAX_HEIGHT;
+				min: 0 BOTTOM_BAR_MAX_HEIGHT;
 				color: 255 255 255 255;
 			}
 		}
@@ -42,8 +42,8 @@ group {
 			description {
 			state: "default" 0.0;
 				fixed: 1 0;
-				min: ES_BOTTOM_BAR_HOR_BORDER_PADDING_WIDTH 0;
-				max: ES_BOTTOM_BAR_HOR_BORDER_PADDING_WIDTH -1;
+				min: BOTTOM_BAR_HOR_BORDER_PADDING_WIDTH 0;
+				max: BOTTOM_BAR_HOR_BORDER_PADDING_WIDTH -1;
 				rel1 { relative: 0.0 0.0; }
 				rel2 { relative: 0.0 1.0; }
 				align: 0.0 0.0;
@@ -56,8 +56,8 @@ group {
 			scale: 1;
 			description {
 				state: "default" 0.0;
-				min: ES_BOTTOM_BAR_HOR_BORDER_PADDING_WIDTH 0;
-				max: ES_BOTTOM_BAR_HOR_BORDER_PADDING_WIDTH -1;
+				min: BOTTOM_BAR_HOR_BORDER_PADDING_WIDTH 0;
+				max: BOTTOM_BAR_HOR_BORDER_PADDING_WIDTH -1;
 				fixed: 1 0;
 				rel1 { relative: 1.0 0.0; }
 				rel2 { relative: 1.0 1.0; }
@@ -72,8 +72,8 @@ group {
 			description {
 				state: "default" 0.0;
 				fixed: 1 0;
-				min: ES_BOTTOM_BAR_CENTER_PADDING_WIDTH 0;
-				max: ES_BOTTOM_BAR_CENTER_PADDING_WIDTH -1;
+				min: BOTTOM_BAR_CENTER_PADDING_WIDTH 0;
+				max: BOTTOM_BAR_CENTER_PADDING_WIDTH -1;
 				align: 0.5 0.0;
 			}
 		}
@@ -84,7 +84,7 @@ group {
 			scale: 1;
 			description {
 				state: "default" 0.0;
-				max: -1 ES_BOTTOM_BAR_BUTTON_MAX_HEIGHT;
+				max: -1 BOTTOM_BAR_BUTTON_MAX_HEIGHT;
 				rel1 {relative: 1.0 0.0; to_x: "left.padding";}
 				rel2 { relative: 0.0 1.0; to_x: "center.padding";}
 				align: 0.0 0.5;
@@ -97,7 +97,7 @@ group {
 			scale: 1;
 			description {
 				state: "default" 0.0;
-				max: -1 ES_BOTTOM_BAR_BUTTON_MAX_HEIGHT;
+				max: -1 BOTTOM_BAR_BUTTON_MAX_HEIGHT;
 				rel1 { relative: 1.0 0.0; to_x: "center.padding";}
 				rel2 { relative: 0.0 1.0; to_x: "right.padding";}
 				align: 0.0 0.5;

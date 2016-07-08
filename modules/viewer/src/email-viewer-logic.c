@@ -302,7 +302,8 @@ static void _make_internal_subject(void *data)
 	if (STR_VALID(view->subject)) {
 		FREE(view->subject);
 	}
-	view->subject = g_strdup(mail_info->subject);
+	view->subject = strdup(mail_info->subject);
+
 	debug_secure("subject (%s)", view->subject);
 }
 

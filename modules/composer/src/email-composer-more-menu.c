@@ -78,7 +78,7 @@ static void _more_menu_dismissed_cb(void *data, Evas_Object *obj, void *event_in
 
 	DELETE_EVAS_OBJECT(view->context_popup);
 	if (!view->composer_popup && !view->is_save_in_drafts_clicked) {
-		composer_util_focus_set_focus_with_idler(view, view->selected_entry);
+		composer_util_focus_set_focus_with_idler(view, view->selected_widget);
 	}
 
 	debug_leave();
@@ -102,11 +102,6 @@ static void _more_menu_del_cb(void *data, Evas *e, Evas_Object *obj, void *event
 
 	if (evas_object_freeze_events_get(view->ewk_view)) {
 		evas_object_freeze_events_set(view->ewk_view, EINA_FALSE);
-	}
-
-	if (!view->is_save_in_drafts_clicked) {
-		elm_object_tree_focus_allow_set(view->composer_layout, EINA_TRUE);
-		elm_object_focus_allow_set(view->ewk_btn, EINA_TRUE);
 	}
 
 	debug_leave();
@@ -184,7 +179,7 @@ static void _more_menu_send_to_myself_clicked(void *data, Evas_Object *obj, void
 
 	if (view->account_info->account_count == 1) {
 		_tomyself_append_myaddress(data, 0);
-		composer_util_focus_set_focus_with_idler(view, view->selected_entry);
+		composer_util_focus_set_focus_with_idler(view, view->selected_widget);
 	} else {
 		composer_util_popup_create_account_list_popup(data, composer_util_popup_response_cb, _tomyself_gl_sel, "email.2text.2icon/popup", EMAIL_COMPOSER_STRING_HEADER_SELECT_EMAIL_ADDRESS, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
 	}
@@ -207,6 +202,8 @@ static void _more_menu_richtext_toolbar_show_clicked(void *data, Evas_Object *ob
 
 	DELETE_EVAS_OBJECT(view->context_popup);
 
+	composer_util_focus_set_focus_with_idler(view, view->selected_widget);
+
 	debug_leave();
 }
 
@@ -226,6 +223,8 @@ static void _more_menu_richtext_toolbar_hide_clicked(void *data, Evas_Object *ob
 	email_set_richtext_toolbar_status(EINA_FALSE);
 
 	DELETE_EVAS_OBJECT(view->context_popup);
+
+	composer_util_focus_set_focus_with_idler(view, view->selected_widget);
 
 	debug_leave();
 }
@@ -282,25 +281,25 @@ static void _tomyself_append_myaddress(void *data, int index)
 	EmailComposerView *view = (EmailComposerView *)data;
 	Evas_Object *dest_mbe = NULL;
 
-	if (view->selected_entry == view->recp_cc_entry.entry) {
+	if (view->selected_widget == view->recp_cc_entry.entry) {
 		if (view->cc_recipients_cnt > 0) {
 			composer_recipient_reset_entry_with_mbe(view->composer_box, view->recp_cc_mbe_layout, view->recp_cc_mbe, view->recp_cc_layout, view->recp_cc_box, view->bcc_added ? view->recp_cc_label_cc : view->recp_cc_label_cc_bcc);
 		}
-		composer_recipient_change_entry(EINA_TRUE, view->recp_cc_box, &view->recp_cc_entry, &view->recp_cc_display_entry, view->recp_cc_entry_layout, view->recp_cc_display_entry_layout);
+		composer_recipient_change_entry(EINA_TRUE, view->recp_cc_box, view->recp_cc_entry_layout, view->recp_cc_display_entry_layout);
 		dest_mbe = view->recp_cc_mbe;
-	} else if (view->selected_entry == view->recp_bcc_entry.entry) {
+	} else if (view->selected_widget == view->recp_bcc_entry.entry) {
 		if (view->bcc_recipients_cnt > 0) {
 			composer_recipient_reset_entry_with_mbe(view->composer_box, view->recp_bcc_mbe_layout, view->recp_bcc_mbe, view->recp_bcc_layout, view->recp_bcc_box, view->recp_bcc_label);
 		}
-		composer_recipient_change_entry(EINA_TRUE, view->recp_bcc_box, &view->recp_bcc_entry, &view->recp_bcc_display_entry, view->recp_bcc_entry_layout, view->recp_bcc_display_entry_layout);
+		composer_recipient_change_entry(EINA_TRUE, view->recp_bcc_box, view->recp_bcc_entry_layout, view->recp_bcc_display_entry_layout);
 		dest_mbe = view->recp_bcc_mbe;
 	} else {
 		if (view->to_recipients_cnt > 0) {
 			composer_recipient_reset_entry_with_mbe(view->composer_box, view->recp_to_mbe_layout, view->recp_to_mbe, view->recp_to_layout, view->recp_to_box, view->recp_to_label);
 		}
-		composer_recipient_change_entry(EINA_TRUE, view->recp_to_box, &view->recp_to_entry, &view->recp_to_display_entry, view->recp_to_entry_layout, view->recp_to_display_entry_layout);
+		composer_recipient_change_entry(EINA_TRUE, view->recp_to_box, view->recp_to_entry_layout, view->recp_to_display_entry_layout);
 		dest_mbe = view->recp_to_mbe;
-		view->selected_entry = view->recp_to_entry.entry; /* To set focus to 'to' mbe */
+		view->selected_widget = view->recp_to_entry.entry; /* To set focus to 'to' mbe */
 	}
 
 	EmailRecpInfo *ri = composer_util_recp_make_recipient_info_with_display_name(view->account_info->account_list[index].user_email_address, view->account_info->account_list[index].user_display_name);
@@ -372,7 +371,7 @@ void composer_more_menu_clicked_cb(void *data, Evas_Object *obj, void *event_inf
 	 * This freezing event code is needed to prevent this scenario.
 	 */
 	evas_object_freeze_events_set(view->ewk_view, EINA_TRUE);
-	evas_object_focus_set(view->ewk_view, EINA_FALSE);
+	elm_object_focus_set(view->ewk_btn, EINA_FALSE);
 	ecore_imf_input_panel_hide();
 	DELETE_EVAS_OBJECT(view->context_popup);
 
@@ -381,8 +380,6 @@ void composer_more_menu_clicked_cb(void *data, Evas_Object *obj, void *event_inf
 	elm_ctxpopup_direction_priority_set(view->context_popup, ELM_CTXPOPUP_DIRECTION_UP, ELM_CTXPOPUP_DIRECTION_UNKNOWN, ELM_CTXPOPUP_DIRECTION_UNKNOWN, ELM_CTXPOPUP_DIRECTION_UNKNOWN);
 	elm_ctxpopup_auto_hide_disabled_set(view->context_popup, EINA_TRUE);
 
-	/* To prevent showing IME when the focus was on the webkit. ewk_btn isn't a child of composer_layout. so we need to control the focus of it as well. */
-	elm_object_focus_allow_set(view->ewk_btn, EINA_FALSE);
 	/* To prevent setting focus to last selected widget IME when device is rotated. (when ec_window is resized) */
 	elm_object_tree_focus_allow_set(view->composer_layout, EINA_FALSE);
 

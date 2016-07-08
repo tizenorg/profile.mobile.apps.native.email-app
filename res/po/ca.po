@@ -1060,3 +1060,18 @@ msgstr "Desat"
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Error en eliminar"
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Incloure fitxers adjunts"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Incloure destinat anterior"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Només destinataris nous"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Reenviar correu electrònic"
+
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s i %2$d més"
+

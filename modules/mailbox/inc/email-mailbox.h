@@ -193,7 +193,6 @@ struct _view_data {
 	/* other popup */
 	Evas_Object *error_popup;
 	Evas_Object *passwd_popup;
-	Evas_Object *outbox_send_all_bar;
 	Evas_Object *outbox_send_all_btn;
 
 	bool b_hide_checkbox;

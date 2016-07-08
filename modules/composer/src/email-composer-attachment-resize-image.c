@@ -189,7 +189,6 @@ static Eina_Bool _attachment_resize_image_do_resize_on_thread(void *data)
 	EmailComposerView *view = (EmailComposerView *)data;
 
 	/* Not to show IME before destroying is called. (The focus moves to entry..) */
-	elm_object_focus_allow_set(view->ewk_btn, EINA_FALSE);
 	elm_object_tree_focus_allow_set(view->composer_layout, EINA_FALSE);
 
 	view->composer_popup = composer_util_popup_create_with_progress_horizontal(view, EMAIL_COMPOSER_STRING_OPT_ADD_ATTACHMENT_ABB, EMAIL_COMPOSER_STRING_POP_RESIZNG_ING, _attachment_resize_image_thread_cancel_cb,

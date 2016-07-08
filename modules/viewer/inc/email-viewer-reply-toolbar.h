@@ -15,15 +15,15 @@
  *
  */
 
-collections {
+#ifndef __EMAIL_VIEWER_REPLY_TOOLBAR_H__
+#define __EMAIL_VIEWER_REPLY_TOOLBAR_H__
 
-	base_scale: 2.6;		// multi scale for HD resolution
+/**
+ * @brief Create toolbar with reply/forward buttons
+ *
+ * @param[in]	view		Email viewer data
+ *
+ */
+void reply_toolbar_create_view(EmailViewerView *view);
 
-	#include "../../edc/common/email-colors.edc"
-	#include "../../edc/common/email-round-icon-button-style.edc"
-	#include "../../edc/common/email-parts.edc"
-	#include "../../edc/viewer/email-viewer-base-layout.edc"
-	#include "../../edc/viewer/email-viewer-subject-layout.edc"
-	#include "../../edc/viewer/email-viewer-popup.edc"
-	#include "../../edc/viewer/email-viewer-scroller.edc"
-}
+#endif /* __EMAIL_VIEWER_REPLY_TOOLBAR_H__ */

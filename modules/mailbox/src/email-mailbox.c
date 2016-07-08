@@ -299,7 +299,10 @@ static email_run_type_e _mailbox_params_get_run_type(email_params_h params)
 		} else {
 			debug_error("email_params_get_int_opt() failed!");
 		}
-	} else if (strcmp(operation, APP_CONTROL_OPERATION_COMPOSE) == 0) {
+	} else if (strcmp(operation, APP_CONTROL_OPERATION_COMPOSE) == 0
+			|| strcmp(operation, APP_CONTROL_OPERATION_SHARE) == 0
+			|| strcmp(operation, APP_CONTROL_OPERATION_MULTI_SHARE) == 0
+			|| strcmp(operation, APP_CONTROL_OPERATION_SHARE_TEXT) == 0) {
 		result = RUN_COMPOSER_EXTERNAL;
 	} else {
 		debug_warning("Operation is not supported: %s", operation);

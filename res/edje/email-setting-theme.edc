@@ -29,6 +29,5 @@ collections {
 	#include "../../edc/common/email-colors.edc"
 	#include "../../edc/common/email-templates.edc"
 	#include "../../edc/common/email-parts.edc"
-	#include "../../edc/setting/email-setting-two-bottom-btn-theme.edc"
 	#include "../../edc/setting/email-setting-genlist-item-custom-theme.edc"
 }

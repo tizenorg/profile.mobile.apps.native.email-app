@@ -61,6 +61,7 @@ collections {
 	base_scale: 2.6;		// multi scale for HD resolution
 
 	#include "../../edc/common/email-title-search.edc"
+	#include "../../edc/common/email-two-bottom-btn-toolbar-theme.edc"
 
 /* account_icon */
 	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_ACCOUNT_COMBINED_INBOX_FOLDER_ICON, 64, AO012 );
@@ -91,10 +92,6 @@ collections {
 	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_ICON_LIST_REPLY_FORWARD, 48, COLOR_WHITE );
 	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_COMPOSE_BUTTON, 80, COLOR_WHITE );
 	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_SEARCH_BACK_BUTTON, 80, COLOR_WHITE );
-
-/* viewer_icon */
-	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_ICON_DOWN, 50, AO006 );
-	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_ICON_CANCEL, 50, AO006 );
 
 /* folders_icon */
 	RESOURCE_IMAGE_SQUARE( EMAIL_IMAGE_CORE_EXPAND_OPENED, 36, AO006 );

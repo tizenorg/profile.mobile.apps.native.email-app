@@ -1060,3 +1060,18 @@ msgstr "Salvo."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Falha ao apagar."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Incluir anexos"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Incluir destin. anteriores"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Apenas novos destinatários"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Encaminhar e-mail"
+
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s e mais %2$d"
+

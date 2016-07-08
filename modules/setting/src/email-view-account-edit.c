@@ -688,7 +688,7 @@ static void _onoff_cb(void *data, Evas_Object *obj, void *event_info)
 						account_data->outgoing_server_use_same_authenticator ? EINA_TRUE : EINA_FALSE);
 				elm_genlist_item_update(_li->gl_it);
 			} else if (_li->index == OUTGOING_PORT_LIST_ITEM) {
-				elm_entry_input_panel_return_key_type_set(elm_object_item_part_content_get(_li->gl_it, "elm.icon.entry"),
+				elm_entry_input_panel_return_key_type_set(_li->editfield.entry,
 						account_data->outgoing_server_use_same_authenticator ?
 						ELM_INPUT_PANEL_RETURN_KEY_TYPE_DONE : ELM_INPUT_PANEL_RETURN_KEY_TYPE_NEXT);
 			}
@@ -1272,11 +1272,10 @@ static void _return_key_cb(void *data, Evas_Object *obj, void *event_info)
 		break;
 	}
 
-
 	while (dest_index && l) {
 		ListItemData *_li = l->data;
 		if (_li->index == dest_index) {
-			dest_entry = elm_object_item_part_content_get(_li->gl_it, "elm.icon.entry");
+			dest_entry = _li->editfield.entry;
 			elm_object_focus_set(dest_entry, EINA_TRUE);
 			elm_genlist_item_bring_in(_li->gl_it, ELM_GENLIST_ITEM_SCROLLTO_IN);
 			elm_entry_cursor_end_set(dest_entry);

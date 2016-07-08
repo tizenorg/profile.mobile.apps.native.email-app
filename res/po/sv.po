@@ -1060,3 +1060,18 @@ msgstr "Sparad."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Det gick inte att radera."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Inkludera bilagor"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Inkludera tidig. mottagare"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Endast nya mottagare"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Vidarebefordra e-post"
+
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s och %2$d till"
+

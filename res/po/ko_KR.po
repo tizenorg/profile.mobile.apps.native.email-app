@@ -1060,3 +1060,18 @@ msgstr "저장하였습니다."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "삭제하지 못하였습니다."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "첨부파일 포함"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "기존 수신인 포함"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "수신인 새로 추가"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "이메일 전달"
+
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s 외 %2$d개"
+

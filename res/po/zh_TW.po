@@ -914,7 +914,7 @@ msgid "IDS_EMAIL_HEADER_NOTIFICATIONS_ABB"
 msgstr "通知"
 
 msgid "IDS_EMAIL_HEADER_GENERAL"
-msgstr "一般設定"
+msgstr "一般"
 
 msgid "IDS_EMAIL_HEADER_DELETE"
 msgstr "刪除"
@@ -1059,4 +1059,19 @@ msgstr "已儲存。"
 
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "無法刪除。"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "包含附件"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "包含之前的收件人"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "僅限新收件人"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "轉寄電子郵件"
+
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s 與其他 %2$d 個"
 

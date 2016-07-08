@@ -33,8 +33,6 @@
  */
 
 static char *_attachment_thumbnail_create_thumbnail_for_image(EmailComposerView *view, const char *source);
-static char *_attachment_thumbnail_create_thumbnail_for_video(const char *source);
-static char *_attachment_thumbnail_create_thumbnail_for_audio(const char *source);
 static Evas_Object *_attachment_thumbnail_create_thumbnail(EmailComposerView *view, const char *filepath, const char *filename, Evas_Object *parent);
 
 static void _attachment_ui_item_delete_button_clicked_cb(void *data, Evas_Object *obj, void *event_info);
@@ -79,169 +77,6 @@ static char *_attachment_thumbnail_create_thumbnail_for_image(EmailComposerView 
 	return thumb_path;
 }
 
-static char *_attachment_thumbnail_create_thumbnail_for_video(const char *source)
-{
-	debug_enter();
-
-	retvm_if(!source, NULL, "source is NULL!");
-
-	metadata_extractor_h metadata = NULL;
-	char *thumb_path = NULL;
-	unsigned char *dst = NULL;
-	void *rawdata = NULL;
-	char *value = NULL;
-	int rawdata_len = 0;
-	int width = 0;
-	int height = 0;
-	int orient = 0;
-	int ret = METADATA_EXTRACTOR_ERROR_NONE;
-
-	email_media_content_get_image_thumbnail(source, &thumb_path);
-	if (!thumb_path) {
-		ret = metadata_extractor_create(&metadata);
-		retvm_if(ret != METADATA_EXTRACTOR_ERROR_NONE, NULL, "metadata_extractor_create() failed! ret:[%d]", ret);
-
-		ret = metadata_extractor_set_path(metadata, source);
-		gotom_if(ret != METADATA_EXTRACTOR_ERROR_NONE, EXIT_FUNC, "metadata_extractor_set_path() failed! ret:[%d]", ret);
-
-		ret = metadata_extractor_get_metadata(metadata, METADATA_VIDEO_WIDTH, &value);
-		gotom_if(ret != METADATA_EXTRACTOR_ERROR_NONE, EXIT_FUNC, "metadata_extractor_get_metadata() failed! ret:[%d]", ret);
-
-		if (value) {
-			width = atoi(value);
-			free(value);
-			value = NULL;
-		}
-
-		ret = metadata_extractor_get_metadata(metadata, METADATA_VIDEO_HEIGHT, &value);
-		gotom_if(ret != METADATA_EXTRACTOR_ERROR_NONE, EXIT_FUNC, "metadata_extractor_get_metadata() failed! ret:[%d]", ret);
-
-		if (value) {
-			height = atoi(value);
-			free(value);
-			value = NULL;
-		}
-
-		ret = metadata_extractor_get_metadata(metadata, METADATA_ROTATE, &value);
-		gotom_if(ret != METADATA_EXTRACTOR_ERROR_NONE, EXIT_FUNC, "metadata_extractor_get_metadata() failed! ret:[%d]", ret);
-
-		if (value) {
-			orient = atoi(value);
-			free(value);
-			value = NULL;
-		}
-
-		ret = metadata_extractor_get_frame(metadata, &rawdata, &rawdata_len);
-		gotom_if(ret != METADATA_EXTRACTOR_ERROR_NONE, EXIT_FUNC, "metadata_extractor_get_frame() failed! ret:[%d]", ret);
-
-		if (rawdata && rawdata_len > 0) {
-			char dst_filepath[EMAIL_FILEPATH_MAX] = { 0, };
-			char filepath[EMAIL_FILEPATH_MAX] = { 0, };
-			composer_util_file_get_temp_filename(source, dst_filepath, EMAIL_FILEPATH_MAX, NULL);
-
-			char *filename = (char *)email_file_file_get(dst_filepath);
-			if (filename && (strlen(filename) >= (EMAIL_FILENAME_MAX - 5))) {
-				filename[EMAIL_FILENAME_MAX - 5] = '\0'; /* To append extension */
-			}
-			snprintf(filepath, EMAIL_FILEPATH_MAX, "%s.jpg", dst_filepath);
-
-			if (orient) {
-				int dst_width = 0;
-				int dst_height = 0;
-
-				/*if (orient == 90) {
-					rot = IMAGE_UTIL_ROTATION_90;
-				} else if (orient == 180) {
-					rot = IMAGE_UTIL_ROTATION_180;
-				} else if (orient == 270) {
-					rot = IMAGE_UTIL_ROTATION_270;
-				}*/
-
-				dst = (unsigned char *)calloc(1, rawdata_len);
-				gotom_if(!dst, EXIT_FUNC, "Failed to allocate memory for dst!");
-				ret = image_util_encode_jpeg(dst, dst_width, dst_height, IMAGE_UTIL_COLORSPACE_RGB888, 95, filepath);
-				gotom_if(ret != IMAGE_UTIL_ERROR_NONE, EXIT_FUNC, "image_util_encode_jpeg() failed! ret:[%d]", ret);
-			} else {
-				ret = image_util_encode_jpeg((const unsigned char *)rawdata, width, height, IMAGE_UTIL_COLORSPACE_RGB888, 95, filepath);
-				gotom_if(ret != IMAGE_UTIL_ERROR_NONE, EXIT_FUNC, "image_util_encode_jpeg() failed! ret:[%d]", ret);
-			}
-
-			if (email_file_exists(filepath)) {
-				thumb_path = g_strdup(filepath);
-			}
-		}
-	}
-
-EXIT_FUNC:
-	g_free(rawdata);
-	g_free(dst);
-
-	if (metadata) {
-		ret = metadata_extractor_destroy(metadata);
-		debug_warning_if(ret != METADATA_EXTRACTOR_ERROR_NONE, "metadata_extractor_destroy() failed! ret:[%d]", ret);
-	}
-
-	debug_leave();
-	return thumb_path;
-}
-
-static char *_attachment_thumbnail_create_thumbnail_for_audio(const char *source)
-{
-	debug_enter();
-
-	retvm_if(!source, NULL, "source is NULL!");
-
-	metadata_extractor_h metadata = NULL;
-	char *thumb_path = NULL;
-	void *artwork = NULL;
-	char *artwork_mime = NULL;
-	int artwork_size = 0;
-	int ret = METADATA_EXTRACTOR_ERROR_NONE;
-
-	email_media_content_get_image_thumbnail(source, &thumb_path);
-	if (!thumb_path) {
-		ret = metadata_extractor_create(&metadata);
-		retvm_if(ret != METADATA_EXTRACTOR_ERROR_NONE, NULL, "metadata_extractor_create() failed! ret:[%d]", ret);
-
-		ret = metadata_extractor_set_path(metadata, source);
-		gotom_if(ret != METADATA_EXTRACTOR_ERROR_NONE, EXIT_FUNC, "metadata_extractor_set_path() failed! ret:[%d]", ret);
-
-		ret = metadata_extractor_get_artwork(metadata, &artwork, &artwork_size, &artwork_mime);
-		gotom_if(ret != METADATA_EXTRACTOR_ERROR_NONE, EXIT_FUNC, "metadata_extractor_get_artwork() failed! ret:[%d]", ret);
-
-		debug_secure("artwork_mime: (%s), artwork_size: (%d)", artwork_mime, artwork_size);
-
-		if (artwork && artwork_size > 0) {
-			char dst_filepath[EMAIL_FILEPATH_MAX] = { 0, };
-			char filepath[EMAIL_FILEPATH_MAX] = { 0, };
-			composer_util_file_get_temp_filename(source, dst_filepath, EMAIL_FILEPATH_MAX, NULL);
-
-			char *filename = (char *)email_file_file_get(dst_filepath);
-			if (filename && (strlen(filename) >= (EMAIL_FILENAME_MAX - 5))) {
-				filename[EMAIL_FILENAME_MAX - 5] = '\0'; /* To append extension */
-			}
-			snprintf(filepath, EMAIL_FILEPATH_MAX, "%s.jpg", dst_filepath);
-
-			gboolean result = email_save_file(filepath, (char *)artwork, artwork_size);
-			if (result && email_file_exists(filepath)) {
-				thumb_path = g_strdup(filepath);
-			}
-		}
-	}
-
-EXIT_FUNC:
-	g_free(artwork);
-	g_free(artwork_mime);
-
-	if (metadata) {
-		ret = metadata_extractor_destroy(metadata);
-		debug_warning_if(ret != METADATA_EXTRACTOR_ERROR_NONE, "metadata_extractor_destroy() failed! ret:[%d]", ret);
-	}
-
-	debug_leave();
-	return thumb_path;
-}
-
 static Evas_Object *_attachment_thumbnail_create_thumbnail(EmailComposerView *view, const char *filepath, const char *filename, Evas_Object *parent)
 {
 	debug_enter();
@@ -261,16 +96,9 @@ static Evas_Object *_attachment_thumbnail_create_thumbnail(EmailComposerView *vi
 		free(mime_type);
 	}
 
-	if (filepath && email_file_exists(filepath)) {
+	if (ftype == EMAIL_FILE_TYPE_IMAGE && filepath && email_file_exists(filepath)) {
 		debug_secure("filepath: (%s)", filepath);
-
-		if (ftype == EMAIL_FILE_TYPE_IMAGE) {
-			thumb_path = _attachment_thumbnail_create_thumbnail_for_image(view, filepath);
-		} else if (ftype == EMAIL_FILE_TYPE_VIDEO) {
-			thumb_path = _attachment_thumbnail_create_thumbnail_for_video(filepath);
-		} else if (ftype == EMAIL_FILE_TYPE_MUSIC) {
-			thumb_path = _attachment_thumbnail_create_thumbnail_for_audio(filepath);
-		}
+		thumb_path = _attachment_thumbnail_create_thumbnail_for_image(view, filepath);
 	}
 
 	if (thumb_path && strlen(thumb_path)) {

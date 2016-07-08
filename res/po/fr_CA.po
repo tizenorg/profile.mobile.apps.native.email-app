@@ -1060,3 +1060,18 @@ msgstr "Enregistré."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Impossible de supprimer."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Inclure les pièces jointes"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Inclure destinat. précéd."
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Nouv. destinataires uniq."
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Transfert du courriel"
+
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s et %2$d autres fich."
+

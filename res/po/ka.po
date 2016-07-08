@@ -1060,3 +1060,18 @@ msgstr "შენახულია."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "ვერ წაიშალა."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "დანართების დამატება"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "წინა ადრესატების დამატება"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "მხოლოდ ახალი მიმღებები"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "ელწერილის გადაგზავნა"
+
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s და კიდევ სხვა %2$d"
+

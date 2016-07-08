@@ -26,6 +26,8 @@
 
 #define B0211_C 0xFA /* Core GUI Item BG gray color */
 
+#define T057L1 115, 115, 115, 255 /* Core GUI Progressbar subtext font color */
+
 #define TRANSPARENT				0, 0, 0, 0
 #define COLOR_BLACK 			0, 0, 0, 255
 #define COLOR_WHITE				255, 255, 255, 255
@@ -33,7 +35,6 @@
 #define COLOR_DARK_GRAY			213, 213, 212, 255
 #define COLOR_BLUE 				61, 185, 204, 255
 
-#define VIEWER_SUBJECT_FONT_COLOR		250, 250, 250, 255
 #define ACCOUNT_CURRENT_FOLDER_COLOR	61, 185, 204, 255
 #define ENTRY_GUIDE_TEXT_FONT_COLOR		176, 176, 176, 255
 

@@ -455,28 +455,25 @@ static char *_gl_ringtone_text_get_cb(void *data, Evas_Object *obj, const char *
 	if (!strcmp(part, "elm.text")) {
 		return strdup(email_setting_gettext(EMAIL_SETTING_STRING_NOTI_SOUND));
 	} else if (!strcmp(part, "elm.text.sub")) {
-		char *ringtone = NULL;
+		const char *ringtone = NULL;
 		char *ringtone_file = NULL;
 		int value = -1;
 
 		if (li->index == ALERT_RINGTONE_LIST_ITEM) {
 			value = view->account_data->options.default_ringtone_status;
-			ringtone = strdup(view->account_data->options.alert_ringtone_path);
+			ringtone = view->account_data->options.alert_ringtone_path;
 		} else {
 			return NULL;
 		}
 
 		if (value) {
-			FREE(ringtone);
 			ringtone_file = strdup(email_setting_gettext(EMAIL_SETTING_STRING_DEFAULT_RINGTONE));
-		} else if (!value && !STR_VALID(ringtone)) {
-			FREE(ringtone);
-			ringtone_file = strdup(email_setting_gettext(EMAIL_SETTING_STRING_SILENT_RINGTONE));
-		} else {
+		} else if (STR_VALID(ringtone)) {
 			ringtone_file = _get_alert_title(ringtone);
-			debug_secure("ringtone file: %s", ringtone_file);
-			FREE(ringtone);
+		} else {
+			ringtone_file = strdup(email_setting_gettext(EMAIL_SETTING_STRING_SILENT_RINGTONE));
 		}
+
 		return ringtone_file;
 	}
 	return NULL;
@@ -510,7 +507,7 @@ CATCH:
 		if (name == NULL) {
 			return NULL;
 		}
-		return g_strdup(name);
+		return strdup(name);
 	}
 
 	return alert_title;

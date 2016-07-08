@@ -456,6 +456,7 @@ EMAIL_API bool email_get_need_restart_flag();
 
 EMAIL_API int email_preview_attachment_file(email_module_t *module, const char *path, email_launched_app_listener_t *listener);
 EMAIL_API email_ext_save_err_type_e email_prepare_temp_file_path(const int index,const char *tmp_root_dir, const char *src_file_path, char **dst_file_path);
+EMAIL_API void email_set_ellipsised_text(Evas_Object *text_obj, const char *text, int max_width);
 /*
  * Memory trace utility.
  */

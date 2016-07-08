@@ -732,10 +732,10 @@ static void _insert_mail_item_to_list_from_noti(EmailMailboxView *view, MailItem
 	debug_enter();
 	debug_secure_trace("prev->title: [%s], next->title: [%s]", prev ? prev->title : "NULL", next ? next->title : "NULL");
 
-	Elm_Object_Item *select_all_item = view->update_time_item_data.base.item;
-	Elm_Object_Item *update_time_item = view->select_all_item_data.base.item;
+	Elm_Object_Item *select_all_item = view->select_all_item_data.base.item;
+	Elm_Object_Item *update_time_item = view->update_time_item_data.base.item;
 
-	if (!prev) {
+	if (!prev || !prev->base.item) {
 		if (update_time_item) {
 			ld->base.item = elm_genlist_item_insert_after(view->gl,
 								&itc,
@@ -1862,6 +1862,8 @@ static void _mailbox_clear_list(EmailMailboxView *view)
 	mailbox_load_more_messages_item_remove(view);
 	mailbox_no_more_emails_item_remove(view);
 	mailbox_send_all_btn_remove(view);
+	mailbox_select_all_item_remove(view);
+	mailbox_last_updated_time_item_remove(view);
 
 	debug_log("view->gl: 0x%x", view->gl);
 	if (view->gl) {

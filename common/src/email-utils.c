@@ -2726,11 +2726,13 @@ EMAIL_API char *email_util_get_login_failure_string(int account_id)
 
 EMAIL_API Eina_Bool email_file_cp(const char *source, const char *destination)
 {
-	int input = 0, output = 0;
-	if ((input = open(source, O_RDONLY)) == -1) {
+	int input = open(source, O_RDONLY);
+	if (input == -1) {
 		return EINA_FALSE;
 	}
-	if ((output = open(destination, O_WRONLY | O_CREAT, 0777)) == -1) {
+
+	int output = open(destination, O_WRONLY | O_CREAT, 0777);
+	if (output == -1) {
 		close(input);
 		return EINA_FALSE;
 	}
@@ -2752,7 +2754,10 @@ EMAIL_API Eina_Bool email_file_cp(const char *source, const char *destination)
 
 EMAIL_API char *email_file_dir_get(const char *path)
 {
-	return dirname(strdup(path));
+	char *tmp_path = strdup(path);
+	char *res = strdup(dirname(tmp_path));
+	free(tmp_path);
+	return res;
 }
 
 EMAIL_API Eina_Bool email_file_exists(const char *file)
@@ -3124,6 +3129,54 @@ EMAIL_API email_ext_save_err_type_e email_prepare_temp_file_path(const int index
 
 	debug_log("return value = %d", ret_val);
 	return ret_val;
+}
+
+EMAIL_API void email_set_ellipsised_text(Evas_Object *text_obj, const char *text, int max_width)
+{
+	debug_enter();
+
+	char STR_DOTS[] = "...";
+	evas_object_text_text_set(text_obj, STR_DOTS);
+	int dots_width = evas_object_text_horiz_width_without_ellipsis_get(text_obj);
+
+	int text_uncut_width = max_width - dots_width;
+	evas_object_text_text_set(text_obj, text);
+
+	int byte_offset = 0;
+	int char_position = 0;
+	int cut_position = 0;
+	Eina_Bool is_cut_needed = EINA_FALSE;
+
+	while (true) {
+		const char ch = text[char_position];
+		if (ch == '\0') {
+			break;
+		}
+		eina_unicode_utf8_next_get(text, &byte_offset);
+		if (ch != ' ') {
+			int x = 0;
+			int w = 0;
+			evas_object_text_char_pos_get(text_obj, char_position, &x, NULL, &w, NULL);
+			int ww = x + w;
+			if (ww <= text_uncut_width) {
+				cut_position = byte_offset;
+			} else if (ww > max_width) {
+				is_cut_needed = EINA_TRUE;
+				break;
+			}
+		}
+		char_position++;
+	}
+
+	if (is_cut_needed) {
+		char buff[EMAIL_BUFF_SIZE_BIG];
+		memcpy(buff, text, cut_position);
+		memcpy(buff + cut_position, STR_DOTS, sizeof(STR_DOTS));
+
+		evas_object_text_text_set(text_obj, buff);
+	}
+
+	debug_leave();
 }
 
 /* EOF */

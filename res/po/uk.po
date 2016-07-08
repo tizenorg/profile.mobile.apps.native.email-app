@@ -1060,3 +1060,18 @@ msgstr "Збережено."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Не вдалося видалити."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Включити вкладення"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Включити попер. одержувачів"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Лише нові одержувачі"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Пересилання ел. повідомлення"
+
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s та інші %2$d"
+

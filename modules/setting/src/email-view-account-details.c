@@ -260,7 +260,7 @@ static int _create(email_view_t *self)
 
 	_create_toolbar_more_btn(view);
 
-	if (account_data->incoming_server_type == EMAIL_SERVER_TYPE_IMAP4)
+	if (account_data && account_data->incoming_server_type == EMAIL_SERVER_TYPE_IMAP4)
 			view->is_imap_push_supported = _is_imap_push_supported(account_data);
 
 	_create_list(view);
@@ -1526,7 +1526,7 @@ static void _create_toolbar_more_btn(EmailSettingView *view)
 	Evas_Object *remove_btn = NULL;
 	Evas_Object *btn_ly = NULL;
 	btn_ly = elm_layout_add(view->base.content);
-	elm_layout_file_set(btn_ly, email_get_setting_theme_path(), "two_bottom_btn");
+	elm_layout_file_set(btn_ly, email_get_common_theme_path(), "two_bottom_btn");
 
 	sync_btn = elm_button_add(btn_ly);
 	elm_object_style_set(sync_btn, "bottom");

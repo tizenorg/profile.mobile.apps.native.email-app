@@ -1060,3 +1060,18 @@ msgstr "Меморирано."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Неуспешно бришење."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Вклучи прилози"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Вклучи претходни приматели"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Само нови приматели"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Препрати е-пошта"
+
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s и уште %2$d"
+

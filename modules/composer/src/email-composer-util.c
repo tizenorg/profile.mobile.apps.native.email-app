@@ -861,21 +861,18 @@ void composer_util_focus_set_focus(void *data, Evas_Object *target)
 	debug_enter();
 
 	EmailComposerView *view = (EmailComposerView *)data;
-	if (view->is_hided) {
-		view->need_to_set_focus_on_resume = EINA_TRUE;
-	}
 
 	/* If ewk_view in focus some elm object may be in invalid focus state.
 	 * So unfocus any elm object to validate focus state.*/
-	if (evas_object_focus_get(view->ewk_view)) {
-		evas_object_focus_set(view->ewk_view, EINA_FALSE);
+	if (ewk_view_focus_get(view->ewk_view)) {
 		Evas_Object *elm_object_in_focus = elm_object_focused_object_get(view->base.content);
-		if (elm_object_in_focus) {
+		if (elm_object_in_focus != view->ewk_btn) {
 			elm_object_focus_set(elm_object_in_focus, EINA_FALSE);
+			ewk_view_focus_set(view->ewk_view, EINA_FALSE);
 		}
 	}
 
-	retm_if(view->base.module->is_launcher_busy || view->is_hided || view->composer_popup || view->context_popup, "should not set focus");
+	retm_if(view->base.module->is_launcher_busy || view->is_hided || view->composer_popup || view->context_popup || !view->is_ewk_ready, "should not set focus");
 	retm_if(view->is_back_btn_clicked || view->is_save_in_drafts_clicked || view->is_send_btn_clicked, "while exiting composer");
 
 	/* XXX; check this. when is this routine needed? */
@@ -884,6 +881,8 @@ void composer_util_focus_set_focus(void *data, Evas_Object *target)
 		view->recp_from_ctxpopup = NULL;
 		composer_recipient_from_ctxpopup_item_delete(view);
 	}
+
+	elm_object_tree_focus_allow_set(view->composer_layout, EINA_TRUE);
 
 	if (!target) {
 		debug_log("Focus set [None]");
@@ -917,10 +916,6 @@ static Eina_Bool __composer_util_focus_set_focus_idler_cb(void *data)
 	Evas_Object *entry = (Evas_Object *)tdata->data;
 
 	view->idler_set_focus = NULL;
-
-	if (!entry && !view->base.module->is_attach_panel_launched && (view->selected_entry != view->ewk_view)) {
-		entry = view->selected_entry;
-	}
 
 	composer_util_focus_set_focus(view, entry);
 
@@ -963,13 +958,13 @@ static Evas_Coord _composer_util_get_selected_widget_position(EmailComposerView 
 
 	evas_object_geometry_get(view->composer_layout, NULL, &composer_layout_y, NULL, NULL);
 
-	if (view->selected_entry == view->recp_to_entry.entry) {
+	if (view->selected_widget == view->recp_to_entry.entry) {
 		evas_object_geometry_get(view->recp_to_layout, NULL, &entry_layout_y, NULL, NULL);
-	} else if (view->selected_entry == view->recp_cc_entry.entry) {
+	} else if (view->selected_widget == view->recp_cc_entry.entry) {
 		evas_object_geometry_get(view->recp_cc_layout, NULL, &entry_layout_y, NULL, NULL);
-	} else if (view->selected_entry == view->recp_bcc_entry.entry) {
+	} else if (view->selected_widget == view->recp_bcc_entry.entry) {
 		evas_object_geometry_get(view->recp_bcc_layout, NULL, &entry_layout_y, NULL, NULL);
-	} else if (view->selected_entry == view->subject_entry.entry) {
+	} else if (view->selected_widget == view->subject_entry.entry) {
 		evas_object_geometry_get(view->subject_layout, NULL, &entry_layout_y, NULL, NULL);
 	} else {
 		debug_log("No selected entry!");
@@ -1017,18 +1012,6 @@ Eina_Bool composer_util_scroll_region_show_timer(void *data)
 
 	view->timer_regionshow = NULL;
 	composer_util_scroll_region_show(view);
-
-	/* To resize predictive search layout after rotating device.
-	 * (P140630-03288) Steps.
-	 *  1. Focus to CC or BCC
-	 *  2. Enter a char to make predictive search list (list should have more than 5 recp.)
-	 *  3. Rotate device landscape.
-	 *  4. Rotate device portrait.
-	 *  5. There's an empty space below the box. (It's because we moves the scroller to the focused entry.)
-	 */
-	if (view->ps_box) {
-		composer_ps_change_layout_size(view);
-	}
 
 	debug_leave();
 	return ECORE_CALLBACK_CANCEL;
@@ -1219,7 +1202,7 @@ void composer_util_display_position(void *data)
 	debug_log("naviframe = [x:%d, y:%d, w:%d, h:%d]", x, y, w, h);
 	x = y = w = h = 0;
 
-	elm_scroller_region_get(view->main_scroller, &x, &y, &w, &h);
+	evas_object_geometry_get(view->main_scroller, &x, &y, &w, &h);
 	debug_log("scroller   = [x:%d, y:%d, w:%d, h:%d]", x, y, w, h);
 	x = y = w = h = 0;
 
@@ -1267,10 +1250,7 @@ void composer_util_return_composer_view(void *data)
 	view->is_back_btn_clicked = EINA_FALSE;
 	view->is_save_in_drafts_clicked = EINA_FALSE;
 
-	elm_object_tree_focus_allow_set(view->composer_layout, EINA_TRUE);
-	elm_object_focus_allow_set(view->ewk_btn, EINA_TRUE);
-
-	composer_util_focus_set_focus_with_idler(view, view->selected_entry);
+	composer_util_focus_set_focus_with_idler(view, view->selected_widget);
 
 	debug_leave();
 }

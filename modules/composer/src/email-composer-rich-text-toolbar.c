@@ -272,7 +272,7 @@ static Evas_Object *_create_colorselector(Evas_Object *box, EmailComposerView *v
 	Evas_Object *colorselector = elm_colorselector_add(box);
 	Elm_Colorselector_Mode mode = ELM_COLORSELECTOR_PALETTE;
 	elm_colorselector_mode_set(colorselector, mode);
-	evas_object_size_hint_fill_set(colorselector, EVAS_HINT_FILL, EVAS_HINT_FILL);
+	evas_object_size_hint_fill_set(colorselector, 0.5, EVAS_HINT_FILL);
 	evas_object_size_hint_weight_set(colorselector, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_show(colorselector);
 
@@ -890,7 +890,7 @@ EMAIL_API void composer_rich_text_font_style_params_set(EmailComposerView *view,
 	view->richtext_font_color.alpha = DEFAULT_ALFA_CHANNEL_VALUE;
 	view->richtext_bg_color.alpha = DEFAULT_ALFA_CHANNEL_VALUE;
 
-	if (!view->richtext_is_disable && evas_object_focus_get(view->ewk_view)) {
+	if (!view->richtext_is_disable && elm_object_focus_get(view->ewk_btn)) {
 		_update_all_buttons_state(view);
 	}
 

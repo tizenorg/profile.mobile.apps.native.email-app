@@ -154,11 +154,11 @@ static void _launch_app_recipient_contacts_reply_cb(void *data, app_control_resu
 
 		char *markup_name = elm_entry_utf8_to_markup(ri->display_name);
 
-		if (view->selected_entry == view->recp_to_entry.entry) {
+		if (view->selected_widget == view->recp_to_entry.entry) {
 			elm_multibuttonentry_item_append(view->recp_to_mbe, markup_name, NULL, ri);
-		} else if (view->selected_entry == view->recp_cc_entry.entry) {
+		} else if (view->selected_widget == view->recp_cc_entry.entry) {
 			elm_multibuttonentry_item_append(view->recp_cc_mbe, markup_name, NULL, ri);
-		} else if (view->selected_entry == view->recp_bcc_entry.entry) {
+		} else if (view->selected_widget == view->recp_bcc_entry.entry) {
 			elm_multibuttonentry_item_append(view->recp_bcc_mbe, markup_name, NULL, ri);
 		} else {
 			debug_error("Not matched!!");

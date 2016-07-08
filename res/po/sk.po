@@ -1060,3 +1060,18 @@ msgstr "Uložené."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Vymazanie zlyhalo."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Zahrnúť prílohy"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Zahrnúť predch. príjemcov"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Iba noví príjemcovia"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Preposlanie e-mailu"
+
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s a ešte %2$d"
+

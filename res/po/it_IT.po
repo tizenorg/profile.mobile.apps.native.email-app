@@ -1060,3 +1060,18 @@ msgstr "Salvato."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Impossibile eliminare."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Includi allegati"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Includi destinatari preced."
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Solo nuovi destinatari"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Inoltra e-mail"
+
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s e altri %2$d"
+

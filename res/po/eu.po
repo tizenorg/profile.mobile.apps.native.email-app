@@ -1060,3 +1060,18 @@ msgstr "Gordeta"
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Errorea ezabatzerakoan"
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Sartu eranskinak"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Sartu aurreko hartzaileak"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Hartzaile berriak soilik"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Birbidali mezu elektronikoa"
+
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s eta %2$d gehiago"
+

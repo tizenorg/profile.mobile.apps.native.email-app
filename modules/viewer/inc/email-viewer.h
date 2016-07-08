@@ -94,9 +94,11 @@ typedef struct _ev_attachment_data_tag EV_attachment_data;
 
 typedef struct _view_data EmailViewerView;
 
+typedef struct _fwd_option_popup_data FwdOptionPopupData;
 /**
  * @brief Email viewer data
  */
+
 struct _view_data {
 	email_view_t base;
 
@@ -174,18 +176,11 @@ struct _view_data {
 	Eina_Bool b_load_finished;
 	Eina_Bool b_show_remote_images;
 	Eina_Bool is_long_pressed;
-	Eina_Bool is_webview_scrolling;
 	Eina_Bool is_main_scroller_scrolling;
-	Eina_Bool is_outer_scroll_bot_hit;
-	Eina_Bool is_magnifier_opened;
 	Eina_Bool is_recipient_ly_shown;
 	Eina_Bool is_download_message_btn_clicked;
 	Eina_Bool is_cancel_sending_btn_clicked;
 	Eina_Bool need_pending_destroy;
-	Eina_Bool is_top_webview_reached;
-	Eina_Bool is_bottom_webview_reached;
-	Eina_Bool is_scrolling_down;
-	Eina_Bool is_scrolling_up;
 	Eina_Bool is_storage_full_popup_shown;
 	bool can_destroy_on_msg_delete;
 	Eina_Bool is_webview_text_selected;
@@ -206,13 +201,24 @@ struct _view_data {
 	int move_status;
 
 	/*Header Evas Object */
-	Evas_Object *en_subject;
 	Evas_Object *subject_ly;
-	Evas_Object *sender_ly;
-	Evas_Object *attachment_ly;
-	Evas_Object *header_divider;
-	Evas_Object *priority_sender_image;
+	Evas_Object *subject_entry;
+	Evas_Object *favourite_btn;
+
+	Evas_Object *details_ly;
 	Evas_Object *details_button;
+	Evas_Object *header_divider;
+
+	Evas_Object *attachment_ly;
+
+
+	/*Reply toolbar*/
+	Evas_Object *reply_toolbar_ly;
+	Evas_Object *reply_option_popup;
+	Evas_Object *fwd_option_popup;
+	FwdOptionPopupData *fwd_popup_data;
+	ViewerReplyType selected_reply_type;
+
 
 	Evas_Object *webview_ly;
 	Evas_Object *webview_button;
@@ -313,16 +319,6 @@ typedef struct {
 } EmailViewerModule;
 
 /**
- * @brief Font size item data
- */
-typedef struct {
-	int index;
-	char *font_text;
-	Evas_Object *radio;
-	EmailViewerView *view;
-} FontsizeItem;
-
-/**
  * @brief Email viewer attachment state enum
  */
 typedef enum {
@@ -367,13 +363,12 @@ struct _ev_attachment_data_tag {
 	int progress_val;	/* 1/100 % */
 	bool need_update;
 	bool is_saved;
-	bool is_progress_info_packed;
+	bool is_progress_packed;
 
 	/* GUI objects */
 	Evas_Object *content_box;
 	Evas_Object *progressbar;
 	Evas_Object *download_button;
-	Evas_Object *download_button_icon;
 	Evas_Object *filename_label;
 	Evas_Object *progress_info_box;
 	Evas_Object *progress_label_right;
@@ -386,6 +381,13 @@ enum {
 	POPUP_ELEMENT_TYPE_BTN1,
 	POPUP_ELEMENT_TYPE_BTN2,
 	POPUP_ELEMENT_TYPE_BTN3,
+};
+
+struct _fwd_option_popup_data {
+	Evas_Object *radio_group;
+	Eina_Bool is_add_attach_checked;
+	Evas_Object *add_attach_checkbox;
+	ViewerFwdType selectedType;
 };
 
 enum {
@@ -416,36 +418,6 @@ void _reset_view(EmailViewerView *view, Eina_Bool update_body);
  *
  */
 void _hide_view(EmailViewerView *view);
-
-/**
- * @brief Callback to reply
- *
- * @param[in]	data			User data (Email viewer data)
- * @param[in]	obj				Unused
- * @param[in]	event_info		Unused
- *
- */
-void _reply_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_UNUSED);
-
-/**
- * @brief Callback to reply all
- *
- * @param[in]	data			User data (Email viewer data)
- * @param[in]	obj				Unused
- * @param[in]	event_info		Unused
- *
- */
-void _reply_all_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_UNUSED);
-
-/**
- * @brief Callback to forward
- *
- * @param[in]	data			User data (Email viewer data)
- * @param[in]	obj				Unused
- * @param[in]	event_info		Unused
- *
- */
-void _forward_cb(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_UNUSED);
 
 /**
  * @brief Callback to delete

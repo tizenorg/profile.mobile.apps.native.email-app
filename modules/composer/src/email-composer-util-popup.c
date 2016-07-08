@@ -123,18 +123,12 @@ void composer_util_popup_response_cb(void *data, Evas_Object *obj, void *event_i
 		view->selected_mbe_item = NULL;
 	}
 
-	elm_object_tree_focus_allow_set(view->composer_layout, EINA_TRUE);
-	elm_object_focus_allow_set(view->selected_entry, EINA_TRUE);
-	elm_object_focus_allow_set(view->subject_entry.entry, EINA_TRUE);
-	elm_object_focus_allow_set(view->ewk_btn, EINA_TRUE);
-
-	Evas_Object *target_entry = view->selected_entry;
 	if (view->is_inline_contents_inserted) {
 		view->is_inline_contents_inserted = EINA_FALSE;
-		target_entry = view->ewk_view;
+		view->selected_widget = view->ewk_view;
 	}
 
-	composer_util_focus_set_focus_with_idler(view, target_entry);
+	composer_util_focus_set_focus_with_idler(view, view->selected_widget);
 
 	debug_leave();
 }

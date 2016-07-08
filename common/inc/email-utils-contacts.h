@@ -50,7 +50,7 @@ EMAIL_API email_contact_list_info_t *email_contacts_get_contact_info_by_email_ad
 EMAIL_API int email_contacts_get_contact_name_by_email_address(char *email_address, char **contact_name);
 EMAIL_API void email_contacts_delete_contact_info(email_contact_list_info_t **contacts_list_item);
 EMAIL_API void email_contacts_delete_contact_info_list(Eina_List **list);
-EMAIL_API Eina_List *email_contacts_search_contacts_by_keyword(const char *search_word);
+EMAIL_API Eina_List *email_contacts_search_contacts_by_keyword(const char *search_word, int limit);
 EMAIL_API char *email_contacts_create_vcard_from_id(int id, const char *vcard_dir_path, Eina_Bool my_profile);
 EMAIL_API char *email_contacts_create_vcard_from_id_list(const int *id_list, int count, const char *vcard_dir_path, volatile Eina_Bool *cancel);
 

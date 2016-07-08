@@ -1060,3 +1060,18 @@ msgstr "Lagret."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Kunne ikke slette."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Inkluder vedlegg"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Inkluder tidl. mottakere"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Bare nye mottakere"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Videresend e-post"
+
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s og %2$d til"
+

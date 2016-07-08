@@ -1060,3 +1060,18 @@ msgstr "Yaddaşa yazıldı."
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Silmək mümkün olmadı."
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Qoşmaları daxil et"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Əvvəlki qəb ed daxil et"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Yalnız yeni qəbul edənlər"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "E-poçtu yönləndirin"
+
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s və daha %2$d"
+

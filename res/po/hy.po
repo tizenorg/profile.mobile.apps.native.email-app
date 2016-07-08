@@ -1060,3 +1060,18 @@ msgstr "Պահպանվեց:"
 msgid "IDS_EMAIL_POP_FAILED_TO_DELETE"
 msgstr "Չհաջողվեց ջնջել:"
 
+msgid "IDS_EMAIL_OPT_INCLUDE_ATTACHMENTS_ABB2"
+msgstr "Ներառել կցուրդներ"
+
+msgid "IDS_EMAIL_OPT_INCLUDE_PREVIOUS_RECIPIENTS_ABB"
+msgstr "Ներառել նախորդ հասցետերերին"
+
+msgid "IDS_EMAIL_OPT_NEW_RECIPIENTS_ONLY_ABB2"
+msgstr "Միայն նոր հասցեատերերը"
+
+msgid "IDS_EMAIL_HEADER_FORWARD_EMAIL_ABB"
+msgstr "Փոխանցել նամակը"
+
+msgid "IDS_EMAIL_MBODY_P1SS_AND_P2SD_MORE"
+msgstr "%1$s ու ևս %2$d"
+
