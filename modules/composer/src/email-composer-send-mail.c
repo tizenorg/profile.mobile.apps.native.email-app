@@ -42,7 +42,6 @@
 
 static MBE_VALIDATION_ERROR _check_vaildify_of_recipient_field(EmailComposerView *view, Evas_Object *obj);
 
-static void _delete_image_control_layer_cb(Evas_Object *obj, const char *result, void *data);
 static void _get_image_list_before_leaving_composer_cb(Evas_Object *obj, const char *result, void *data);
 static void _get_final_plain_text_cb(Evas_Object *obj, const char *result, void *data);
 static void _get_final_html_content_cb(Evas_Object *obj, const char *result, void *data);
@@ -136,25 +135,6 @@ static MBE_VALIDATION_ERROR _check_vaildify_of_recipient_field(EmailComposerView
 
 	debug_leave();
 	return err;
-}
-
-static void _delete_image_control_layer_cb(Evas_Object *obj, const char *result, void *data)
-{
-	debug_enter();
-
-	EmailComposerView *view = (EmailComposerView *)data;
-
-	if (!view->is_checkbox_clicked) {
-		if (!ewk_view_script_execute(view->ewk_view, EC_JS_GET_IMAGE_LIST_FROM_NEW_MESSAGE, _get_image_list_before_leaving_composer_cb, (void *)view)) {
-			debug_error("EC_JS_GET_IMAGE_LIST_FROM_NEW_MESSAGE failed.");
-		}
-	} else {
-		if (!ewk_view_script_execute(view->ewk_view, EC_JS_GET_IMAGE_LIST, _get_image_list_before_leaving_composer_cb, (void *)view)) {
-			debug_error("EC_JS_GET_IMAGE_LIST failed.");
-		}
-	}
-
-	debug_leave();
 }
 
 static void _get_image_list_before_leaving_composer_cb(Evas_Object *obj, const char *result, void *data)
@@ -999,8 +979,14 @@ void composer_exit_composer_get_contents(void *data)
 	/* To prevent showing ime while sending email. */
 	elm_object_tree_focus_allow_set(view->composer_layout, EINA_FALSE);
 
-	if (!ewk_view_script_execute(view->ewk_view, EC_JS_REMOVE_IMAGE_CONTROL_LAYER, _delete_image_control_layer_cb, (void *)view)) {
-		debug_error("EC_JS_REMOVE_IMAGE_CONTROL_LAYER failed.");
+	if (!view->is_checkbox_clicked) {
+		if (!ewk_view_script_execute(view->ewk_view, EC_JS_GET_IMAGE_LIST_FROM_NEW_MESSAGE, _get_image_list_before_leaving_composer_cb, (void *)view)) {
+			debug_error("EC_JS_GET_IMAGE_LIST_FROM_NEW_MESSAGE failed.");
+		}
+	} else {
+		if (!ewk_view_script_execute(view->ewk_view, EC_JS_GET_IMAGE_LIST, _get_image_list_before_leaving_composer_cb, (void *)view)) {
+			debug_error("EC_JS_GET_IMAGE_LIST failed.");
+		}
 	}
 
 	debug_leave();

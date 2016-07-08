@@ -1356,11 +1356,6 @@ static void _composer_orientation_change_update(EmailComposerView *view)
 		view->timer_regionshow = ecore_timer_add(0.2f, composer_util_scroll_region_show_timer, view);
 	}
 
-	/* If there's a popup which has list or genlist, we should resize it to fit to the desired size. */
-	if (view->composer_popup) {
-		composer_util_popup_resize_popup_for_rotation(view->composer_popup, view->is_horizontal);
-	}
-
 	debug_leave();
 }
 

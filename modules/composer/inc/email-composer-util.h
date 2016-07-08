@@ -117,15 +117,6 @@ Evas_Object *composer_util_popup_create_with_progress_horizontal(EmailComposerVi
 void composer_util_popup_response_cb(void *data, Evas_Object *obj, void *event_info);
 
 /**
- * @brief Provides resize for popup when rotation occurs
- *
- * @param[in]	popup			Popup instance
- * @param[in]	is_horizontal	Select horizontal or landscape mode
- *
- */
-void composer_util_popup_resize_popup_for_rotation(Evas_Object *popup, Eina_Bool is_horizontal);
-
-/**
  * @brief Creates account list popup
  *
  * @param[in]	data»			User data (Email composer data)

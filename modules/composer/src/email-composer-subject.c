@@ -43,9 +43,6 @@ static void _subject_entry_activated_cb(void *data, Evas_Object *obj, void *even
 static void _subject_attach_files_clicked(void *data, Evas_Object *obj, void *event_info);
 static void _entry_filter_accept_set(void *data, Evas_Object *entry, char **text);
 
-static void _show_attach_panel(EmailComposerView *view);
-static void _get_image_list_cb(Evas_Object *o, const char *result, void *data);
-
 static email_string_t EMAIL_COMPOSER_STRING_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED = { PACKAGE, "IDS_EMAIL_TPOP_MAXIMUM_NUMBER_OF_CHARACTERS_HPD_REACHED" };
 
 
@@ -187,32 +184,6 @@ static void _subject_entry_activated_cb(void *data, Evas_Object *obj, void *even
 	debug_leave();
 }
 
-static void _show_attach_panel(EmailComposerView *view)
-{
-	debug_enter();
-
-	if (email_module_launch_attach_panel(view->base.module, EMAIL_APMT_GENERAL) == 0) {
-		// To update inline image list to calculate total attachment size
-		if (ewk_view_script_execute(view->ewk_view, EC_JS_GET_IMAGE_LIST,
-				_get_image_list_cb, (void *)view) == EINA_FALSE) {
-			debug_error("EC_JS_GET_IMAGE_LIST failed.");
-		}
-		elm_object_focus_set(view->ewk_btn, EINA_FALSE);
-	}
-
-	debug_leave();
-}
-
-static void _get_image_list_cb(Evas_Object *o, const char *result, void *data)
-{
-	debug_enter();
-
-	retm_if(!data, "Invalid parameter: data is NULL!");
-	EmailComposerView *view = (EmailComposerView *)data;
-
-	composer_util_update_inline_image_list(view, result);
-}
-
 static void _subject_attach_files_clicked(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
@@ -232,7 +203,7 @@ static void _subject_attach_files_clicked(void *data, Evas_Object *obj, void *ev
 	if (total_attachment_count >= MAX_ATTACHMENT_ITEM) {
 		composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_ATTACHMENT_MAX_NUMBER_EXCEEDED, composer_util_popup_response_cb, view);
 	} else {
-		_show_attach_panel(view);
+		composer_attachment_show_attach_panel(view, EMAIL_APMT_GENERAL);
 	}
 
 	debug_leave();

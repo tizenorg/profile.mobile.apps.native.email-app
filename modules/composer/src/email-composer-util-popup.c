@@ -133,32 +133,6 @@ void composer_util_popup_response_cb(void *data, Evas_Object *obj, void *event_i
 	debug_leave();
 }
 
-void composer_util_popup_resize_popup_for_rotation(Evas_Object *popup, Eina_Bool is_horizontal)
-{
-	debug_enter();
-
-	int item_count = (int)(ptrdiff_t)evas_object_data_get(popup, COMPOSER_EVAS_DATA_NAME_POPUP_ITEM_COUNT);
-	if (item_count) {
-		int is_gengrid = (int)(ptrdiff_t)evas_object_data_get(popup, COMPOSER_EVAS_DATA_NAME_POPUP_IS_GENGRID);
-		if (is_gengrid) {
-			Evas_Object *layout = elm_object_content_get(popup);
-			if (is_horizontal) {
-				elm_layout_file_set(layout, email_get_composer_theme_path(), "ec/popup/gengrid/landscape");
-			} else {
-				if (item_count > 6) {
-					elm_layout_file_set(layout, email_get_composer_theme_path(), "ec/popup/gengrid/portrait/3line");
-				} else {
-					elm_layout_file_set(layout, email_get_composer_theme_path(), "ec/popup/gengrid/portrait/2line");
-				}
-			}
-			Evas_Object *gengrid = elm_object_part_content_get(layout, "elm.swallow.content");
-			elm_gengrid_item_show(elm_gengrid_first_item_get(gengrid), ELM_GENGRID_ITEM_SCROLLTO_TOP);
-		}
-	}
-
-	debug_leave();
-}
-
 static char *__composer_util_popup_account_gl_text_get(void *data, Evas_Object *obj, const char *part)
 {
 	EmailComposerView *view = (EmailComposerView *)evas_object_data_get(obj, COMPOSER_EVAS_DATA_NAME);

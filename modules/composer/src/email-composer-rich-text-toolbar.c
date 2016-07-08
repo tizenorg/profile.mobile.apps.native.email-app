@@ -18,6 +18,7 @@
 #include "email-popup-utils.h"
 #include "email-composer-rich-text-toolbar.h"
 #include "email-composer-util.h"
+#include "email-composer-attachment.h"
 
 #define DEFAULT_ALFA_CHANNEL_VALUE 255
 #define MAX_COLOR_VALUE 255
@@ -680,7 +681,7 @@ static void _insert_inline_image(EmailComposerView *view)
 {
 	debug_enter();
 
-	email_module_launch_attach_panel(view->base.module, EMAIL_APMT_IMAGES);
+	composer_attachment_show_attach_panel(view, EMAIL_APMT_IMAGES);
 }
 
 static void _create_option_selection_popup(EmailComposerView *view, RichTextTypes type)

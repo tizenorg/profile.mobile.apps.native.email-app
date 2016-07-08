@@ -41,6 +41,8 @@ static void _attachment_process_normal_attachments(void *data, Evas_Object *obj,
 static void _attachment_insert_inline_image_to_webkit(EmailComposerView *view, const char *file_path);
 static void _attachment_insert_inline_image(EmailComposerView *view, const char *path);
 
+static void _attachment_get_image_list_cb(Evas_Object *o, const char *result, void *data);
+
 static email_string_t EMAIL_COMPOSER_STRING_NULL = { NULL, NULL };
 static email_string_t EMAIL_COMPOSER_STRING_BUTTON_OK = { PACKAGE, "IDS_EMAIL_BUTTON_OK" };
 static email_string_t EMAIL_COMPOSER_STRING_BUTTON_CANCEL = { PACKAGE, "IDS_EMAIL_BUTTON_CANCEL" };
@@ -283,8 +285,6 @@ static void _attachment_insert_inline_image_to_webkit(EmailComposerView *view, c
 		debug_error("EC_JS_INSERT_IMAGE is failed!");
 	}
 
-	// TODO check EC_JS_CONNECT_EVENT_LISTENER
-
 	g_free(script);
 
 	debug_leave();
@@ -327,6 +327,15 @@ static void _attachment_insert_inline_image(EmailComposerView *view, const char 
 	debug_leave();
 }
 
+static void _attachment_get_image_list_cb(Evas_Object *o, const char *result, void *data)
+{
+	debug_enter();
+	retm_if(!data, "Invalid parameter: data is NULL!");
+
+	EmailComposerView *view = (EmailComposerView *)data;
+
+	composer_util_update_inline_image_list(view, result);
+}
 
 /*
  * Definition for exported functions
@@ -595,6 +604,22 @@ void composer_attachment_launch_attachment_error_popup(COMPOSER_ERROR_TYPE_E err
 	} else {
 		view->composer_popup = composer_util_popup_create(view, EMAIL_COMPOSER_STRING_HEADER_UNABLE_TO_ADD_ATTACHMENT_ABB, EMAIL_COMPOSER_STRING_POP_AN_UNKNOWN_ERROR_HAS_OCCURRED,
 		                                                response_cb, EMAIL_COMPOSER_STRING_BUTTON_OK, EMAIL_COMPOSER_STRING_NULL, EMAIL_COMPOSER_STRING_NULL);
+	}
+
+	debug_leave();
+}
+
+void composer_attachment_show_attach_panel(EmailComposerView *view, email_attach_panel_mode_type_e mode)
+{
+	debug_enter();
+
+	if (email_module_launch_attach_panel(view->base.module, mode) == 0) {
+		// To update inline image list to calculate total attachment size
+		if (ewk_view_script_execute(view->ewk_view, EC_JS_GET_IMAGE_LIST,
+				_attachment_get_image_list_cb, (void *)view) == EINA_FALSE) {
+			debug_error("EC_JS_GET_IMAGE_LIST failed.");
+		}
+		elm_object_focus_set(view->ewk_btn, EINA_FALSE);
 	}
 
 	debug_leave();

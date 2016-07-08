@@ -41,35 +41,20 @@
  * @brief TODO Need to revise all the types of structure and enum for consistency
  */
 #define COMPOSER_EVAS_DATA_NAME "ComposerModule"
-#define COMPOSER_EVAS_DATA_NAME_POPUP_IS_GENGRID "popup_gengrid"
-#define COMPOSER_EVAS_DATA_NAME_POPUP_ITEM_COUNT "popup_item_count"
-#define COMPOSER_EVAS_DATA_NAME_POPUP_ITEM_HEIGHT "popup_item_height"
 
-#define COMPOSER_PREDICTIVE_SEARCH_ITEM_DEFAULT_HEIGHT ELM_SCALE_SIZE(144)
-
-#define COMPOSER_SCHEME_MMS "mms://"
-#define COMPOSER_SCHEME_WAP "wap://"
-#define COMPOSER_SCHEME_FTP "ftp://"
-#define COMPOSER_SCHEME_HTTP "http://"
-#define COMPOSER_SCHEME_HTTPS "https://"
-#define COMPOSER_SCHEME_RTSP "rtsp://"
 #define COMPOSER_SCHEME_FILE "file://"
 #define COMPOSER_SCHEME_MAILTO "mailto:"
 
-#define COMPOSER_SCHEME_GROUP_EVENT "group://events?"
+#define COMPOSER_PREFIX_EWK_EVENT "EMAIL_EWK_EVENT: "
 
-#define COMPOSER_SCHEME_CLICK_IMAGE "clickimage://"
-#define COMPOSER_SCHEME_IMAGE_CONTROL_LAYER "imagecontrollayer://"
-#define COMPOSER_SCHEME_RESIZE_START "resizestart://"
-#define COMPOSER_SCHEME_RESIZE_END "resizeend://"
-#define COMPOSER_SCHEME_START_DRAG "startdrag://"
-#define COMPOSER_SCHEME_STOP_DRAG "stopdrag://"
-#define COMPOSER_SCHEME_EXCEENDED_MAX "exceededmax://"
-#define COMPOSER_SCHEME_CLICK_CHECKBOX "clickcheckbox://"
-#define COMPOSER_SCHEME_GET_FOCUS_NEW "getfocusnewmessagediv://"
-#define COMPOSER_SCHEME_GET_FOCUS_ORG "getfocusorgmessagediv://"
-#define COMPOSER_SCHEME_TEXT_STYLE_CHANGE "getchangedtextstyle://"
-#define COMPOSER_SCHEME_CARET_POS_CHANGE "caretposchanged://"
+#define COMPOSER_EVENT_IMAGE_DRAG_START "image-drag-start"
+#define COMPOSER_EVENT_IMAGE_DRAG_END "image-drag-end"
+#define COMPOSER_EVENT_MAX_SIZE_EXCEEDED "max-size-exceeded"
+#define COMPOSER_EVENT_CHECKBOX_CLICKED "checkbox-clicked:"
+#define COMPOSER_EVENT_NEW_MESSAGE_DIV_FOCUSED "new-message-div-focused"
+#define COMPOSER_EVENT_ORG_MESSAGE_DIV_FOCUSED "org-message-div-focused"
+#define COMPOSER_EVENT_TEXT_STYLE_CHANGED "text-style-changed:"
+#define COMPOSER_EVENT_CARET_POS_CHANGED "caret-pos-changed"
 
 #define COMPOSER_MIME_CONTACT_SHARE "application/vnd.tizen.contact"
 
@@ -80,7 +65,7 @@
 #define COMPOSER_MAILTO_BODY_PREFIX "body="
 #define COMPOSER_MAILTO_ATTACHMENT_PREFIX "attachment="*/
 
-#define COMPOSER_TEXT_STYLE_CHANGE_MESSAGE "getchangedtextstyle://" \
+#define COMPOSER_TEXT_STYLE_CHANGE_MESSAGE COMPOSER_EVENT_TEXT_STYLE_CHANGED \
 	"font_size=%dpx&" \
 	"bold=%d&" \
 	"underline=%d&" \

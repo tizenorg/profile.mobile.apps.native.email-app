@@ -140,4 +140,11 @@ void composer_attachment_ui_expand_attachment_list(EmailComposerView *view);
  */
 void composer_attachment_resize_image(EmailComposerView *view, Eina_List *attachment_list);
 
+/**
+ * @brief Sown attach panel in specified mode
+ * @param[in]	view»				Email composer data
+ * @param[in]	mode				Attachment panel open mode
+ */
+void composer_attachment_show_attach_panel(EmailComposerView *view, email_attach_panel_mode_type_e mode);
+
 #endif /* __EMAIL_COMPOSER_ATTACHMENT_H__ */

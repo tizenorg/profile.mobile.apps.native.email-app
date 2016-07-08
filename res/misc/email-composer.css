@@ -37,6 +37,7 @@ html {
 	background-color:#ffffff !important;
 	overflow-x: auto;
 	overflow-y: hidden;
+	backface-visibility: hidden;
 }
 
 .css-body-IncludeOriginalMessage {
@@ -52,6 +53,7 @@ html {
 	text-align: initial !important; /* initial: For LTR, left. For RTL, right */
 	background-color:#ffffff !important;
 	overflow: hidden;
+	backface-visibility: hidden;
 }
 
 .css-newMessage {
@@ -103,21 +105,21 @@ html {
 .css-originalMessageBarCheckbox-checked {
 	width: 26px;
 	height: 26px;
-	-webkit-mask: url("/usr/apps/org.tizen.email/res/images/composer_icon/core_check_bg.png") no-repeat center center;
+	-webkit-mask: url("../images/composer_icon/core_check_bg.png") no-repeat center center;
 	-webkit-mask-size: 100% 100%;
 }
 
 .css-originalMessageBarCheckbox-unchecked {
 	width: 26px;
 	height: 26px;
-	-webkit-mask: url("/usr/apps/org.tizen.email/res/images/composer_icon/core_check_bg_stroke.png") no-repeat center center;
+	-webkit-mask: url("../images/composer_icon/core_check_bg_stroke.png") no-repeat center center;
 	-webkit-mask-size: 100% 100%;
 }
 
 .css-originalMessageBarCheckbox-checked .checkicon {
 	width: 26px;
 	height: 26px;
-	-webkit-mask: url("/usr/apps/org.tizen.email/res/images/composer_icon/core_check_icon.png") no-repeat;
+	-webkit-mask: url("../images/composer_icon/core_check_icon.png") no-repeat;
 	-webkit-mask-size: 100% 100%;
 }
 

@@ -37,7 +37,6 @@ typedef enum {
 #define _WEBKIT_FOCUS_SET_TIMEOUT_SEC 0.01
 #define _WEBKIT_ENTRY_SIP_SHOW_TIMEOUT_SEC 0.1
 
-#define _WEBKIT_CONSOLE_MESSAGE_LOG 0
 #define _WEBKIT_TEXT_STYLE_STATE_CALLBACK_LOG_ON 0
 
 /*
@@ -65,10 +64,10 @@ static void _webkit_js_execute_get_initial_html_content_cb(Evas_Object *obj, con
 static void _ewk_view_load_progress_cb(void *data, Evas_Object *obj, void *event_info);
 static void _ewk_view_load_error_cb(void *data, Evas_Object *obj, void *event_info);
 static void _ewk_view_load_nonemptylayout_finished_cb(void *data, Evas_Object *obj, void *event_info);
-static void _ewk_view_policy_navigation_decide_cb(void *data, Evas_Object *obj, void *event_info);
 static void _ewk_view_contextmenu_customize_cb(void *data, Evas_Object *webview, void *event_info);
+static void _ewk_view_console_message_cb(void *data, Evas_Object *obj, void *event_info);
 
-/*static void _ewk_view_console_message(void *data, Evas_Object *obj, void *event_info);*/
+static void _ewk_view_handle_user_event(EmailComposerView *view, const char *event);
 
 static Evas_Object *_webkit_create_ewk_view(Evas_Object *parent, EmailComposerView *view);
 static Eina_Bool _webkit_parse_text_style_changed_data(const char *res_string, FontStyleParams *params);
@@ -493,107 +492,72 @@ static Eina_Bool _webkit_parse_text_style_changed_data(const char *res_string, F
 	return EINA_TRUE;
 }
 
-static void _ewk_view_policy_navigation_decide_cb(void *data, Evas_Object *obj, void *event_info)
+static void _ewk_view_handle_user_event(EmailComposerView *view, const char *event)
 {
 	debug_enter();
 
-	retm_if(!data, "Invalid parameter: data is NULL!");
-	retm_if(!event_info, "Invalid parameter: event_info is NULL!");
-
-	EmailComposerView *view = (EmailComposerView *)data;
-	Evas_Object *ewk_view = (Evas_Object *)obj;
+	retm_if(!view, "Invalid parameter: view is NULL!");
+	retm_if(!event, "Invalid parameter: event is NULL!");
 
 	if (view->is_load_finished) {
-		Ewk_Policy_Decision *policy_decision = (Ewk_Policy_Decision *)event_info;
+		debug_secure("===> processed event: (%s)", event);
+		if (g_str_has_prefix(event, COMPOSER_EVENT_IMAGE_DRAG_START)) {
+			composer_initial_view_cs_freeze_push(view);
+		} else if (g_str_has_prefix(event, COMPOSER_EVENT_IMAGE_DRAG_END)) {
+			composer_initial_view_cs_freeze_pop(view);
+		} else if (g_str_has_prefix(event, COMPOSER_EVENT_CHECKBOX_CLICKED)) {
+			char buf[EMAIL_BUFF_SIZE_1K] = { 0, };
+			snprintf(buf, sizeof(buf), "%s", event + strlen(COMPOSER_EVENT_CHECKBOX_CLICKED));
+			debug_log("click status: (%s)", buf);
 
-		debug_secure("url:%s", ewk_policy_decision_url_get(policy_decision));
-		debug_secure("scheme:%s", ewk_policy_decision_scheme_get(policy_decision));
-		debug_secure("cookie:%s", ewk_policy_decision_cookie_get(policy_decision));
-		debug_secure("host:%s", ewk_policy_decision_host_get(policy_decision));
-		debug_secure("response_mime:%s", ewk_policy_decision_response_mime_get(policy_decision));
-		debug_secure("type: %d", ewk_policy_decision_type_get(policy_decision));
+			view->is_checkbox_clicked = atoi(buf);
+			if (view->is_checkbox_clicked) {
+				snprintf(buf, sizeof(buf), EC_JS_UPDATE_COLOR_OF_CHECKBOX, COLOR_BLUE);
+			} else {
+				snprintf(buf, sizeof(buf), EC_JS_UPDATE_COLOR_OF_CHECKBOX, COLOR_DARK_GRAY);
+			}
 
-		ewk_policy_decision_ignore(policy_decision);
-
-		const char *escaped_string = ewk_policy_decision_url_get(policy_decision);
-		char *unescaped_string = g_uri_unescape_string(escaped_string, NULL);
-		char *url = unescaped_string;
-		char *save_ptr = NULL;
-
-		if (g_str_has_prefix(url, COMPOSER_SCHEME_GROUP_EVENT)) {
-			debug_secure("Got group event");
-			url = strtok_r(url + strlen(COMPOSER_SCHEME_GROUP_EVENT), ";", &save_ptr);
-		}
-
-		while (url) {
-			debug_secure("===> processed url: (%s)", url);
-			if (g_str_has_prefix(url, COMPOSER_SCHEME_RESIZE_START)) {
-				composer_initial_view_cs_freeze_push(view);
-			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_RESIZE_END)) {
-				composer_initial_view_cs_freeze_pop(view);
-			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_START_DRAG)) {
-				Ewk_Settings *ewkSetting = ewk_view_settings_get(ewk_view);
-				ewk_settings_uses_keypad_without_user_action_set(ewkSetting, EINA_FALSE); /* To not show IME without user action */
-			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_STOP_DRAG)) {
-				Ewk_Settings *ewkSetting = ewk_view_settings_get(ewk_view);
-				ewk_settings_uses_keypad_without_user_action_set(ewkSetting, EINA_TRUE);
-			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_CLICK_CHECKBOX)) {
-				char buf[EMAIL_BUFF_SIZE_1K] = { 0, };
-				snprintf(buf, sizeof(buf), "%s", url + strlen(COMPOSER_SCHEME_CLICK_CHECKBOX));
-				debug_log("click status: (%s)", buf);
-
-				view->is_checkbox_clicked = atoi(buf);
-				if (view->is_checkbox_clicked) {
-					snprintf(buf, sizeof(buf), EC_JS_UPDATE_COLOR_OF_CHECKBOX, COLOR_BLUE);
-				} else {
-					snprintf(buf, sizeof(buf), EC_JS_UPDATE_COLOR_OF_CHECKBOX, COLOR_DARK_GRAY);
-				}
-
-				if (!ewk_view_script_execute(view->ewk_view, buf, NULL, (void *)view)) {
-					debug_error("EC_JS_UPDATE_COLOR_OF_CHECKBOX failed.");
-				}
-				/* Not to move the focus to new meesage div when focused ui is enabled. */
-				if (!elm_win_focus_highlight_enabled_get(view->base.module->win) && !view->is_focus_on_new_message_div) {
-					if (ewk_view_script_execute(view->ewk_view, EC_JS_SET_FOCUS_NEW_MESSAGE, NULL, view) == EINA_FALSE) {
-						debug_error("EC_JS_SET_FOCUS_NEW_MESSAGE is failed!");
-					}
-				}
-				edje_object_signal_emit(_EDJ(view->composer_layout), "ec,action,clicked,layout", "");
-			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_GET_FOCUS_NEW)) {
-				view->is_focus_on_new_message_div = EINA_TRUE;
-			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_GET_FOCUS_ORG)) {
-				view->is_focus_on_new_message_div = EINA_FALSE;
-			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_EXCEENDED_MAX)) {
-				char buf[EMAIL_BUFF_SIZE_1K] = { 0, };
-				snprintf(buf, sizeof(buf), email_get_email_string("IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"), MAX_MESSAGE_SIZE);
-				int noti_ret = notification_status_message_post(buf);
-				debug_warning_if(noti_ret != NOTIFICATION_ERROR_NONE, "notification_status_message_post() failed! ret:(%d)", noti_ret);
-			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_TEXT_STYLE_CHANGE)) {
-				if (view->richtext_toolbar) {
-					FontStyleParams params = { 0 };
-					if (_webkit_parse_text_style_changed_data(url, &params)) {
-						composer_rich_text_font_style_params_set(view, &params);
-					} else {
-						debug_error("_webkit_parse_text_style_changed_data failed!");
-					}
-				}
-			} else if (g_str_has_prefix(url, COMPOSER_SCHEME_CARET_POS_CHANGE)) {
-				if (elm_object_focus_get(view->ewk_btn)) {
-					int x = 0;
-					int top = 0;
-					int bottom = 0;
-					int isCollapsed = 0;
-					if (sscanf(url + strlen(COMPOSER_SCHEME_CARET_POS_CHANGE), "%d%d%d%d", &x, &top, &bottom, &isCollapsed) == 4) {
-						composer_initial_view_caret_pos_changed_cb(view, top, bottom, (isCollapsed != 0));
-					}
-				} else {
-					debug_log("Not in focus");
+			if (!ewk_view_script_execute(view->ewk_view, buf, NULL, (void *)view)) {
+				debug_error("EC_JS_UPDATE_COLOR_OF_CHECKBOX failed.");
+			}
+			/* Not to move the focus to new meesage div when focused ui is enabled. */
+			if (!elm_win_focus_highlight_enabled_get(view->base.module->win) && !view->is_focus_on_new_message_div) {
+				if (ewk_view_script_execute(view->ewk_view, EC_JS_SET_FOCUS_NEW_MESSAGE, NULL, view) == EINA_FALSE) {
+					debug_error("EC_JS_SET_FOCUS_NEW_MESSAGE is failed!");
 				}
 			}
-			url = (save_ptr ? strtok_r(NULL, ";", &save_ptr) : NULL);
+			edje_object_signal_emit(_EDJ(view->composer_layout), "ec,action,clicked,layout", "");
+		} else if (g_str_has_prefix(event, COMPOSER_EVENT_NEW_MESSAGE_DIV_FOCUSED)) {
+			view->is_focus_on_new_message_div = EINA_TRUE;
+		} else if (g_str_has_prefix(event, COMPOSER_EVENT_ORG_MESSAGE_DIV_FOCUSED)) {
+			view->is_focus_on_new_message_div = EINA_FALSE;
+		} else if (g_str_has_prefix(event, COMPOSER_EVENT_MAX_SIZE_EXCEEDED)) {
+			char buf[EMAIL_BUFF_SIZE_1K] = { 0, };
+			snprintf(buf, sizeof(buf), email_get_email_string("IDS_EMAIL_TPOP_MAXIMUM_MESSAGE_SIZE_HPD_KB_REACHED"), MAX_MESSAGE_SIZE);
+			int noti_ret = notification_status_message_post(buf);
+			debug_warning_if(noti_ret != NOTIFICATION_ERROR_NONE, "notification_status_message_post() failed! ret:(%d)", noti_ret);
+		} else if (g_str_has_prefix(event, COMPOSER_EVENT_TEXT_STYLE_CHANGED)) {
+			if (view->richtext_toolbar) {
+				FontStyleParams params = { 0 };
+				if (_webkit_parse_text_style_changed_data(event, &params)) {
+					composer_rich_text_font_style_params_set(view, &params);
+				} else {
+					debug_error("_webkit_parse_text_style_changed_data failed!");
+				}
+			}
+		} else if (g_str_has_prefix(event, COMPOSER_EVENT_CARET_POS_CHANGED)) {
+			if (elm_object_focus_get(view->ewk_btn)) {
+				int x = 0;
+				int top = 0;
+				int bottom = 0;
+				int isCollapsed = 0;
+				if (sscanf(event + strlen(COMPOSER_EVENT_CARET_POS_CHANGED), "%d%d%d%d", &x, &top, &bottom, &isCollapsed) == 4) {
+					composer_initial_view_caret_pos_changed_cb(view, top, bottom, (isCollapsed != 0));
+				}
+			} else {
+				debug_log("Not in focus");
+			}
 		}
-
-		g_free(unescaped_string);
 	}
 
 	debug_leave();
@@ -688,19 +652,20 @@ static void _ewk_view_contextmenu_customize_cb(void *data, Evas_Object *obj, voi
 	debug_leave();
 }
 
-#if (_WEBKIT_CONSOLE_MESSAGE_LOG)
-static void _ewk_view_console_message(void *data, Evas_Object *obj, void *event_info)
+static void _ewk_view_console_message_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	retm_if(event_info == NULL, "Invalid parameter: event_info is NULL!");
 
 	Ewk_Console_Message *msg = (Ewk_Console_Message *)event_info;
 
 	const char *log = ewk_console_message_text_get(msg);
-	unsigned line = ewk_console_message_line_get(msg);
-
-	debug_log("ConMsg:%d> %s", line, log);
+	if (g_str_has_prefix(log, COMPOSER_PREFIX_EWK_EVENT)) {
+		_ewk_view_handle_user_event(data, log + sizeof(COMPOSER_PREFIX_EWK_EVENT) - 1);
+	} else {
+		unsigned line = ewk_console_message_line_get(msg);
+		debug_log("ConMsg:%d> %s", line, log);
+	}
 }
-#endif
 
 static Evas_Object *_webkit_create_ewk_view(Evas_Object *parent, EmailComposerView *view)
 {
@@ -737,7 +702,6 @@ static Evas_Object *_webkit_create_ewk_view(Evas_Object *parent, EmailComposerVi
 	 * This feature will prevent weview loading scrollbar when we scroll it.
 	 */
 	ewk_settings_extra_feature_set(ewkSetting, "scrollbar,visibility", EINA_FALSE);
-	ewk_settings_uses_keypad_without_user_action_set(ewkSetting, EINA_TRUE);
 	ewk_settings_select_word_automatically_set(ewkSetting, EINA_TRUE);
 	ewk_settings_auto_fitting_set(ewkSetting, EINA_FALSE);
 	evas_object_show(ewk_view);
@@ -808,12 +772,9 @@ void composer_webkit_add_callbacks(Evas_Object *ewk_view, void *data)
 	evas_object_smart_callback_add(ewk_view, "load,finished", _ewk_view_load_nonemptylayout_finished_cb, view);
 #endif
 
-	evas_object_smart_callback_add(ewk_view, "policy,navigation,decide", _ewk_view_policy_navigation_decide_cb, view);
 	evas_object_smart_callback_add(ewk_view, "contextmenu,customize", _ewk_view_contextmenu_customize_cb, view);
 
-#if (_WEBKIT_CONSOLE_MESSAGE_LOG)
-	evas_object_smart_callback_add(ewk_view, "console,message", _ewk_view_console_message, view);
-#endif
+	evas_object_smart_callback_add(ewk_view, "console,message", _ewk_view_console_message_cb, view);
 
 	debug_leave();
 }
@@ -838,12 +799,9 @@ void composer_webkit_del_callbacks(Evas_Object *ewk_view, void *data)
 	evas_object_smart_callback_del_full(ewk_view, "load,finished", _ewk_view_load_nonemptylayout_finished_cb, view);
 #endif
 
-	evas_object_smart_callback_del_full(ewk_view, "policy,navigation,decide", _ewk_view_policy_navigation_decide_cb, view);
 	evas_object_smart_callback_del_full(ewk_view, "contextmenu,customize", _ewk_view_contextmenu_customize_cb, view);
 
-#if (_WEBKIT_CONSOLE_MESSAGE_LOG)
-	evas_object_smart_callback_del_full(ewk_view, "console,message", _ewk_view_console_message, view);
-#endif
+	evas_object_smart_callback_del_full(ewk_view, "console,message", _ewk_view_console_message_cb, view);
 
 	debug_leave();
 }
