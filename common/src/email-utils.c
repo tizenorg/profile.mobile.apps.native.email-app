@@ -2229,7 +2229,9 @@ EMAIL_API char *email_get_datetime_format(void)
 	int res = 0;
 	bool is_hour24 = false;
 
-	lang = getenv("LANGUAGE");
+	lang = strdup(getenv("LANGUAGE"));
+	retvm_if(lang == NULL, NULL, "lang is NULL. Allocation memory failed.");
+
 	_update_lang_environment("en_US");
 
 	res = system_settings_get_value_string(SYSTEM_SETTINGS_KEY_LOCALE_COUNTRY, &region_fmt);
