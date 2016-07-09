@@ -108,6 +108,9 @@ struct _view_data {
 	Evas_Object *base_ly;
 	Evas_Object *main_bx;
 
+	// TODO test object. need to delete
+	Evas_Object *test_rect;
+
 	/* module */
 	email_module_h loaded_module;
 	int create_contact_arg;

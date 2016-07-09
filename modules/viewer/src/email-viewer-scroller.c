@@ -346,6 +346,33 @@ void viewer_stop_webkit_scroller_start_elm_scroller(void *data)
 	debug_leave_scroller();
 }
 
+static void _viewer_main_scroller_scroll_start_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	EmailViewerView *view = data;
+	evas_object_smart_callback_call(view->webview, "custom,scroll,start", NULL);
+}
+
+static void _viewer_main_scroller_scroll_end_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	EmailViewerView *view = data;
+	evas_object_smart_callback_call(view->webview, "custom,scroll,end", NULL);
+}
+
+static void _scroller_resize_cb(void *data, Evas *evas, Evas_Object *obj, void *event_info)
+{
+	viewer_refresh_webview_visible_geometry(data);
+}
+
+static void _webview_move_cb(void *data, Evas *evas, Evas_Object *obj, void *event_info)
+{
+	viewer_refresh_webview_visible_geometry(data);
+}
+
+static void _viewer_main_scroller_scroll_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	viewer_refresh_webview_visible_geometry(data);
+}
+
 void viewer_create_combined_scroller(void *data)
 {
 	debug_enter_scroller();
@@ -364,9 +391,28 @@ void viewer_create_combined_scroller(void *data)
 	viewer_set_vertical_scroller_size(view);
 	viewer_set_horizontal_scroller_size(view);
 
+	// TODO test object. need to delete
+	view->test_rect = evas_object_rectangle_add(evas_object_evas_get(view->scroller));
+	evas_object_color_set(view->test_rect, 255, 0, 0, 100);
+	evas_object_propagate_events_set(view->test_rect, EINA_TRUE);
+	evas_object_repeat_events_set(view->test_rect, EINA_TRUE);
+	evas_object_show(view->test_rect);
+
 	/*set callbacks for scroll*/
+
+	// TODO: need to replace this from here
+	evas_object_event_callback_add(view->scroller, EVAS_CALLBACK_RESIZE, _scroller_resize_cb, view);
+	evas_object_event_callback_add(view->webview, EVAS_CALLBACK_MOVE, _webview_move_cb, view);
+
+	evas_object_smart_callback_add(view->scroller, "scroll", _viewer_main_scroller_scroll_cb, view);
 	evas_object_smart_callback_add(view->scroller, "scroll,up", _viewer_main_scroller_scroll_up_cb, view);
 	evas_object_smart_callback_add(view->scroller, "scroll,down", _viewer_main_scroller_scroll_down_cb, view);
+
+	evas_object_smart_callback_add(view->scroller, "scroll,anim,start", _viewer_main_scroller_scroll_start_cb, view);
+	evas_object_smart_callback_add(view->scroller, "scroll,anim,stop", _viewer_main_scroller_scroll_end_cb, view);
+	evas_object_smart_callback_add(view->scroller, "scroll,drag,start", _viewer_main_scroller_scroll_start_cb, view);
+	evas_object_smart_callback_add(view->scroller, "scroll,drag,stop", _viewer_main_scroller_scroll_end_cb, view);
+
 	evas_object_smart_callback_add(view->webview, "scroll,up", _viewer_scroll_up_cb, view);
 	evas_object_smart_callback_add(view->webview, "scroll,down", _viewer_scroll_down_cb, view);
 	evas_object_smart_callback_add(view->webview, "scroll,left", viewer_scroll_left_cb, view);
