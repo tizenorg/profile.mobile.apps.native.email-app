@@ -50,15 +50,14 @@
 #undef LOG_TAG
 #define LOG_TAG "EMAIL_VIEWER"
 
-#define DEBUG_SCROLLER
 #ifdef DEBUG_SCROLLER
+#define debug_enter_scroller()					do { debug_trace(" * Enter *"); } while (0)
+#define debug_leave_scroller()					do { debug_trace(" * Leave *"); } while (0)
+#define debug_log_scroller(fmt, args...)			do { debug_log(fmt, ##args); } while (0)
+#else
 #define debug_enter_scroller()
 #define debug_leave_scroller()
 #define debug_log_scroller(fmt, args...)
-#else
-#define debug_enter_scroller()					do { debug_trace(" * Enter *"); } while (0)
-#define debug_leave_scroller()					do { debug_trace(" * Leave *"); } while (0)
-#define debug_log_scroller(fmt, args...)			do { LOGI(fmt, ##args); } while (0)
 #endif
 
 #ifdef _TIZEN_2_4_BUILD_
@@ -183,10 +182,9 @@ struct _view_data {
 	Eina_Bool need_pending_destroy;
 	Eina_Bool is_storage_full_popup_shown;
 	bool can_destroy_on_msg_delete;
-	Eina_Bool is_webview_text_selected;
-
 	/* Webview resize */
 	float scale_factor;
+	Ecore_Idler *webview_move_idler;
 	int webview_width;
 	int webview_height;
 
@@ -282,9 +280,6 @@ struct _view_data {
 	gboolean request_report;
 	bool is_smil_mail;
 	email_account_t *account;
-
-	/* idler */
-	Ecore_Idler *idler_regionbringin;
 
 	/* timer */
 	Ecore_Timer *rcpt_scroll_corr;

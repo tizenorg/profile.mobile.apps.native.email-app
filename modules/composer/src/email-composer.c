@@ -843,7 +843,6 @@ static void _composer_destroy_evas_objects(EmailComposerView *view)
 	DELETE_IDLER_OBJECT(view->idler_show_ctx_popup);
 	DELETE_IDLER_OBJECT(view->idler_destroy_self);
 	DELETE_IDLER_OBJECT(view->idler_regionshow);
-	DELETE_IDLER_OBJECT(view->idler_regionbringin);
 	DELETE_IDLER_OBJECT(view->idler_move_recipient);
 
 	DELETE_TIMER_OBJECT(view->timer_ctxpopup_show);
