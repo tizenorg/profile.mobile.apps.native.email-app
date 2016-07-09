@@ -1304,4 +1304,51 @@ void viewer_delete_body_button(EmailViewerView *view)
 	elm_box_unpack(view->main_bx, view->dn_btn);
 	DELETE_EVAS_OBJECT(view->dn_btn);
 }
+
+void viewer_refresh_webview_visible_geometry(EmailViewerView *view)
+{
+	/*This function calls from scroll callback so logs from here shows too often.
+	 * To prevent logs spam debug_log_scroller() logs are used
+	 */
+	debug_enter_scroller();
+
+	retm_if(!view, "view is NULL");
+
+	Eina_Rectangle rect = { 0 };
+	rect.x = 0;
+
+	Evas_Coord scr_y, scr_w, scr_h;
+	scr_y = scr_w = scr_h = 0;
+	evas_object_geometry_get(view->scroller, NULL, &scr_y, &scr_w, &scr_h);
+	debug_log_scroller("scroller: y[%d] w[%d] h[%d]", scr_y, scr_w, scr_h);
+	rect.w = scr_w;
+
+	Evas_Coord ewk_h = 0;
+	evas_object_geometry_get(view->webview_ly, NULL, NULL, NULL, &ewk_h);
+	debug_log_scroller("webview layout: h[%d]", ewk_h);
+
+	Evas_Coord reg_y, reg_h, child_h;
+	elm_scroller_region_get(view->scroller, NULL, &reg_y, NULL, &reg_h);
+	debug_log_scroller("scroller region: y[%d] h[%d]", reg_y, reg_h);
+
+	elm_scroller_child_size_get(view->scroller, NULL, &child_h);
+	debug_log_scroller("scroller child: h[%d]", child_h);
+
+	int ewk_scroller_pos_y = child_h - ewk_h - reg_y;
+	if (ewk_scroller_pos_y < 0) {
+		ewk_scroller_pos_y = 0;
+	}
+	rect.y = scr_y + ewk_scroller_pos_y;
+	rect.h = reg_h - ewk_scroller_pos_y;
+
+	debug_log_scroller("visible content rectangle: x[%d] y[%d] w[%d] h[%d]", rect.x, rect.y, rect.w, rect.h);
+
+	/* This is needed to notify ewk_view about visible content has been changed */
+	if (rect.h >= 0) {
+		evas_object_smart_callback_call(view->webview, "visible,content,changed", &rect);
+	}
+
+	debug_leave_scroller();
+}
+
 /* EOF */
