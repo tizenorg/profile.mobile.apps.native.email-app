@@ -68,4 +68,6 @@ void viewer_stop_webkit_scroller_start_elm_scroller(void *data);
  */
 void viewer_create_combined_scroller(void *data);
 
+void _refresh_webview_geometry(void *data);
+
 #endif	/* __EMAIL_VIEWER_SCROLLER_H__ */
