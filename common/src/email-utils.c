@@ -2241,14 +2241,12 @@ EMAIL_API char *email_get_datetime_format(void)
 					"res = %d", res);
 			_update_lang_environment(lang);
 			FREE(region_fmt);
-			FREE(lang);
 			return NULL;
 		}
 	} else {
 		debug_error("failed to get system settings locale country. "
 				"res = %d", res);
 		_update_lang_environment(lang);
-		FREE(lang);
 		return NULL;
 	}
 
@@ -2262,7 +2260,6 @@ EMAIL_API char *email_get_datetime_format(void)
 
 	_update_lang_environment(lang);
 	FREE(region_fmt);
-	FREE(lang);
 
 	debug_leave();
 
