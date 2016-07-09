@@ -1626,6 +1626,9 @@ static void _destroy_viewer(EmailViewerView *view)
 	_viewer_deinitialize_theme(view);
 	_g_md = NULL;
 
+	// TODO test object. need to delete
+	evas_object_del(view->test_rect);
+
 	debug_leave();
 }
 

@@ -438,6 +438,8 @@ static void _webview_mouse_down_cb(void *data, Evas *evas, Evas_Object *obj, voi
 static void _webview_resize_cb(void *data, Evas *evas, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
+
+	viewer_refresh_webview_visible_geometry(data);
 }
 
 static void _webview_zoom_started_cb(void *data, Evas_Object *obj, void *event_info)
