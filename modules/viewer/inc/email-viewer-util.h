@@ -349,5 +349,13 @@ void viewer_remove_temp_folders(EmailViewerView *view);
  */
 void viewer_remove_temp_files(EmailViewerView *view);
 
+/**
+ * @brief Refreshes visible area of webview
+ *
+ * @param[in]	view			Email viewer data
+ *
+ */
+void viewer_refresh_webview_visible_geometry(EmailViewerView *view);
+
 #endif	/* __EMAIL_VIEWER_UTIL_H__ */
 /* EOF */

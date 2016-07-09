@@ -26,14 +26,10 @@ static void _viewer_scroll_down_cb(void *data, Evas_Object *obj, void *event_inf
 static void _viewer_scroll_up_cb(void *data, Evas_Object *obj, void *event_info);
 static void viewer_scroll_left_cb(void *data, Evas_Object *obj, void *event_info);
 static void _viewer_scroll_right_cb(void *data, Evas_Object *obj, void *event_info);
-static void _viewer_main_scroller_scroll(void *data, Eina_Bool is_up);
-static void _viewer_main_scroller_scroll_up_cb(void *data, Evas_Object *obj, void *event_info);
-static void _viewer_main_scroller_scroll_down_cb(void *data, Evas_Object *obj, void *event_info);
+static void _viewer_main_scroller_scroll(EmailViewerView *view);
 static Evas_Object *_viewer_create_combined_scroller_layout(Evas_Object *parent);
 static void _set_horizontal_scroller_position(EmailViewerView *view);
 
-
-static int g_lock = 0;
 static void _viewer_set_horizontal_scroller_view_sizes(EmailViewerView *view)
 {
 	debug_enter_scroller();
@@ -218,11 +214,9 @@ static void _viewer_scroll_right_cb(void *data, Evas_Object *obj, void *event_in
 	debug_leave_scroller();
 }
 
-static void _viewer_main_scroller_scroll(void *data, Eina_Bool is_up)
+static void _viewer_main_scroller_scroll(EmailViewerView *view)
 {
 	debug_enter_scroller();
-
-	EmailViewerView *view = (EmailViewerView *)data;
 
 	_viewer_set_vertical_scroller_view_sizes(view);
 
@@ -238,38 +232,6 @@ static void _viewer_main_scroller_scroll(void *data, Eina_Bool is_up)
 	edje_object_part_drag_value_set(_EDJ(view->combined_scroller), "elm.dragable.vbar", 0.0, pos);
 	debug_log_scroller("pos: %f", pos);
 	viewer_set_vertical_scroller_size(view);
-
-	debug_leave_scroller();
-}
-
-static void _viewer_main_scroller_scroll_up_cb(void *data, Evas_Object *obj, void *event_info)
-{
-	debug_enter_scroller();
-
-	EmailViewerView *view = (EmailViewerView *)data;
-
-	retm_if(g_lock == 1, "this function is already running");
-	g_lock = 1;	/*lock this function*/
-
-	_viewer_main_scroller_scroll(view, EINA_TRUE);
-
-	g_lock = 0;	/*unlock this function*/
-
-	debug_leave_scroller();
-}
-
-static void _viewer_main_scroller_scroll_down_cb(void *data, Evas_Object *obj, void *event_info)
-{
-	debug_enter_scroller();
-
-	EmailViewerView *view = (EmailViewerView *)data;
-
-	retm_if(g_lock == 1, "this function is already running");
-	g_lock = 1;	/*lock this function*/
-
-	_viewer_main_scroller_scroll(view, EINA_FALSE);
-
-	g_lock = 0;	/*unlock this function*/
 
 	debug_leave_scroller();
 }
@@ -346,6 +308,18 @@ void viewer_stop_webkit_scroller_start_elm_scroller(void *data)
 	debug_leave_scroller();
 }
 
+static void _viewer_main_scroller_scroll_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	debug_enter_scroller();
+	retm_if(data == NULL, "Invalid parameter: data[NULL]");
+
+	EmailViewerView *view = (EmailViewerView *)data;
+	viewer_refresh_webview_visible_geometry(data);
+	_viewer_main_scroller_scroll(view);
+
+	debug_leave_scroller();
+}
+
 void viewer_create_combined_scroller(void *data)
 {
 	debug_enter_scroller();
@@ -365,13 +339,11 @@ void viewer_create_combined_scroller(void *data)
 	viewer_set_horizontal_scroller_size(view);
 
 	/*set callbacks for scroll*/
-	evas_object_smart_callback_add(view->scroller, "scroll,up", _viewer_main_scroller_scroll_up_cb, view);
-	evas_object_smart_callback_add(view->scroller, "scroll,down", _viewer_main_scroller_scroll_down_cb, view);
+	evas_object_smart_callback_add(view->scroller, "scroll", _viewer_main_scroller_scroll_cb, view);
 	evas_object_smart_callback_add(view->webview, "scroll,up", _viewer_scroll_up_cb, view);
 	evas_object_smart_callback_add(view->webview, "scroll,down", _viewer_scroll_down_cb, view);
 	evas_object_smart_callback_add(view->webview, "scroll,left", viewer_scroll_left_cb, view);
 	evas_object_smart_callback_add(view->webview, "scroll,right", _viewer_scroll_right_cb, view);
 
 	debug_leave_scroller();
-	return;
 }

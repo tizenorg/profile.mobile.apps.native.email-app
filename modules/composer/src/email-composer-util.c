@@ -982,7 +982,6 @@ Eina_Bool composer_util_scroll_region_bringin_idler(void *data)
 
 	EmailComposerView *view = (EmailComposerView *)data;
 
-	view->idler_regionbringin = NULL;
 	composer_util_scroll_region_bringin(view);
 
 	debug_leave();

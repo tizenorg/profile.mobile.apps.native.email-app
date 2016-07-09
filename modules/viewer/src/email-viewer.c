@@ -960,7 +960,6 @@ void _hide_view(EmailViewerView *view)
 	viewer_stop_ecore_running_apis(view);
 	viewer_delete_evas_objects(view, EINA_TRUE);
 	viewer_remove_hard_link_for_inline_images(view);
-
 	viewer_remove_temp_files(view);
 	viewer_remove_temp_folders(view);
 	viewer_free_viewer_data(view);
@@ -1029,7 +1028,6 @@ Eina_Bool viewer_initialize_data(EmailViewerView *view)
 	view->is_cancel_sending_btn_clicked = EINA_FALSE;
 	view->is_storage_full_popup_shown = EINA_FALSE;
 	view->need_pending_destroy = EINA_FALSE;
-	view->is_webview_text_selected = EINA_FALSE;
 
 	/*eml viewer*/
 	view->viewer_type = EMAIL_VIEWER;
@@ -1093,7 +1091,6 @@ Eina_Bool viewer_initialize_data(EmailViewerView *view)
 	view->to_recipient_idler = NULL;
 	view->cc_recipient_idler = NULL;
 	view->bcc_recipient_idler = NULL;
-	view->idler_regionbringin = NULL;
 
 	view->attachment_save_thread = 0;
 	view->attachment_update_job = NULL;
@@ -1111,6 +1108,7 @@ Eina_Bool viewer_initialize_data(EmailViewerView *view)
 	view->cancel_sending_ctx_item = NULL;
 
 	view->webview_data = NULL;
+	view->webview_move_idler = NULL;
 
 	/* Email Viewer Private variables */
 	view->file_id = NULL;
@@ -1212,10 +1210,10 @@ void viewer_stop_ecore_running_apis(EmailViewerView *view)
 
 	DELETE_TIMER_OBJECT(view->launch_timer);
 	DELETE_TIMER_OBJECT(view->rcpt_scroll_corr);
-	DELETE_IDLER_OBJECT(view->idler_regionbringin);
 	DELETE_IDLER_OBJECT(view->to_recipient_idler);
 	DELETE_IDLER_OBJECT(view->cc_recipient_idler);
 	DELETE_IDLER_OBJECT(view->bcc_recipient_idler);
+	DELETE_IDLER_OBJECT(view->webview_move_idler);
 }
 
 void viewer_delete_evas_objects(EmailViewerView *view, Eina_Bool isHide)
