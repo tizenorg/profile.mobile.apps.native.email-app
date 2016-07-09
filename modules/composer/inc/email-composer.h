@@ -79,7 +79,6 @@ struct _view_data {
 	Ecore_Idler *idler_show_ctx_popup;
 	Ecore_Idler *idler_destroy_self;
 	Ecore_Idler *idler_regionshow;
-	Ecore_Idler *idler_regionbringin;
 	Ecore_Idler *idler_move_recipient;
 
 	/* Timers */
