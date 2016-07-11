@@ -271,11 +271,9 @@ static void _push_naviframe(EmailSettingView *view)
 	elm_object_domain_translatable_text_set(view->next_btn, EMAIL_SETTING_STRING_NEXT.domain, EMAIL_SETTING_STRING_NEXT.id);
 	evas_object_smart_callback_add(view->next_btn, "clicked", _next_btn_clicked_cb, view);
 	elm_layout_content_set(btn_ly, "btn2.swallow", view->next_btn);
+	elm_object_disabled_set(view->next_btn, !_check_null_field(view));
 
 	elm_object_item_part_content_set(navi_it, "toolbar", btn_ly);
-
-	_check_validation_field(view);
-
 	evas_object_show(view->base.content);
 }
 
@@ -515,8 +513,6 @@ static Eina_Bool _check_validation_field(EmailSettingView *view)
 		l = g_slist_next(l);
 	}
 
-	elm_object_disabled_set(view->next_btn, !ret);
-
 	return ret;
 }
 
@@ -676,8 +672,12 @@ static void _backup_input_cb(void *data, Evas_Object *obj, void *event_info)
 	FREE(li->entry_str);
 	li->entry_str = setting_get_entry_str(obj);
 
+	Eina_Bool is_input_valid = _check_validation_field(li->view);
+
+	elm_object_disabled_set(li->view->next_btn, !is_input_valid);
+
 	if (li->index == OUTGOING_PORT_LIST_ITEM) {
-		elm_entry_input_panel_return_key_disabled_set(li->editfield.entry, !_check_validation_field(li->view));
+		elm_entry_input_panel_return_key_disabled_set(li->editfield.entry, !is_input_valid);
 	}
 }
 
@@ -726,6 +726,7 @@ static void _return_key_cb(void *data, Evas_Object *obj, void *event_info)
 		else if (li->index == OUTGOING_SERVER_LIST_ITEM)
 			next_entry = entry_smtp_port;
 		elm_object_focus_set(next_entry, EINA_TRUE);
+		elm_entry_cursor_end_set(next_entry);
 	} else {
 		_perform_account_validation(view);
 	}
