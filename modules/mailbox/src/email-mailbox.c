@@ -1157,8 +1157,6 @@ static void _mailbox_sys_settings_datetime_format_changed_cb(system_settings_key
 
 	EmailMailboxView *view = (EmailMailboxView *)data;
 
-	char *dt_fmt = email_get_datetime_format();
-
 	/* This values is used on mailbox_last_updated_time_item_update function. */
 	system_settings_get_value_bool(
 			SYSTEM_SETTINGS_KEY_LOCALE_TIMEFORMAT_24HOUR,
@@ -1167,9 +1165,6 @@ static void _mailbox_sys_settings_datetime_format_changed_cb(system_settings_key
 	if (view->update_time_item_data.base.item) {
 		mailbox_last_updated_time_item_update(view->mailbox_id, view);
 	}
-
-	FREE(dt_fmt);
-
 }
 
 static void _mailbox_vip_rule_value_changed_cb(const char *key, void *data)
