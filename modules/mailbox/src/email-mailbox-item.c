@@ -147,11 +147,11 @@ void mailbox_process_delete_mail(void *data, Ecore_Thread *thd)
 				}
 			}
 
-			if (email_engine_delete_mail_list(trashbox_id, mail_list[i], delete_option)) {
+			if (email_engine_delete_mail_list(trashbox_id, mail_list[acct], delete_option)) {
 				ok = true;
 			}
 		} else {
-			if (email_engine_move_mail_list(trashbox_id, mail_list[i], 0)) {
+			if (email_engine_move_mail_list(trashbox_id, mail_list[acct], 0)) {
 				ok = true;
 			}
 		}
