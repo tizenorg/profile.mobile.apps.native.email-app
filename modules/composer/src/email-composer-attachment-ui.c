@@ -418,21 +418,10 @@ static void _attachment_ui_item_update_thumbnail(ComposerAttachmentItemData *att
 	debug_enter();
 
 	EmailComposerView *view = (EmailComposerView *)attachment_item_data->view;
-	Evas_Object *layout = attachment_item_data->layout;
 	email_attachment_data_t *attachment_data = attachment_item_data->attachment_data;
 
-	/* Delete old thumbnail if it exists. */
-	Evas_Object *old_thumbnail = elm_object_part_content_unset(layout, "ec.swallow.icon");
-	DELETE_EVAS_OBJECT(old_thumbnail);
-
-	Evas_Object *thumbnail_layout = elm_layout_add(layout);
-	elm_layout_theme_set(thumbnail_layout, "layout", "list/B/type.2", "email/default");
-	evas_object_show(thumbnail_layout);
-
-	Evas_Object *thumbnail = _attachment_thumbnail_create_thumbnail(view, attachment_data->attachment_path, attachment_data->attachment_name, thumbnail_layout);
-
-	elm_layout_content_set(thumbnail_layout, "ec.swallow.content", thumbnail);
-	elm_object_part_content_set(layout, "ec.swallow.icon", thumbnail_layout);
+	Evas_Object *thumbnail = _attachment_thumbnail_create_thumbnail(view, attachment_data->attachment_path, attachment_data->attachment_name, attachment_item_data->layout);
+	elm_object_part_content_set(attachment_item_data->layout, "ec.swallow.icon", thumbnail);
 
 	debug_leave();
 }
@@ -441,18 +430,14 @@ static void _attachment_ui_item_create_delete_button(ComposerAttachmentItemData 
 {
 	debug_enter();
 
-	Evas_Object *button_layout = elm_layout_add(parent);
-	elm_layout_file_set(button_layout, email_get_composer_theme_path(), "ec/attachment/layout/clear_button");
-
-	Evas_Object *delete_button = elm_button_add(button_layout);
+	Evas_Object *delete_button = elm_button_add(parent);
 	elm_object_style_set(delete_button, "icon_expand_delete");
 	elm_object_tree_focus_allow_set(delete_button, EINA_FALSE);
 	evas_object_repeat_events_set(delete_button, EINA_FALSE);
 	evas_object_smart_callback_add(delete_button, "clicked", _attachment_ui_item_delete_button_clicked_cb, attachment_item_data);
-	evas_object_show(button_layout);
+	evas_object_show(delete_button);
 
-	elm_layout_content_set(button_layout, "ec.swallow.content", delete_button);
-	elm_object_part_content_set(parent, "ec.swallow.button", button_layout);
+	elm_object_part_content_set(parent, "ec.swallow.button", delete_button);
 
 	debug_leave();
 }
