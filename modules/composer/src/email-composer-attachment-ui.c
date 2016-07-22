@@ -418,21 +418,10 @@ static void _attachment_ui_item_update_thumbnail(ComposerAttachmentItemData *att
 	debug_enter();
 
 	EmailComposerView *view = (EmailComposerView *)attachment_item_data->view;
-	Evas_Object *layout = attachment_item_data->layout;
 	email_attachment_data_t *attachment_data = attachment_item_data->attachment_data;
 
-	/* Delete old thumbnail if it exists. */
-	Evas_Object *old_thumbnail = elm_object_part_content_unset(layout, "ec.swallow.icon");
-	DELETE_EVAS_OBJECT(old_thumbnail);
-
-	Evas_Object *thumbnail_layout = elm_layout_add(layout);
-	elm_layout_theme_set(thumbnail_layout, "layout", "list/B/type.2", "email/default");
-	evas_object_show(thumbnail_layout);
-
-	Evas_Object *thumbnail = _attachment_thumbnail_create_thumbnail(view, attachment_data->attachment_path, attachment_data->attachment_name, thumbnail_layout);
-
-	elm_layout_content_set(thumbnail_layout, "ec.swallow.content", thumbnail);
-	elm_object_part_content_set(layout, "ec.swallow.icon", thumbnail_layout);
+	Evas_Object *thumbnail = _attachment_thumbnail_create_thumbnail(view, attachment_data->attachment_path, attachment_data->attachment_name, attachment_item_data->layout);
+	elm_object_part_content_set(attachment_item_data->layout, "ec.swallow.icon", thumbnail);
 
 	debug_leave();
 }
