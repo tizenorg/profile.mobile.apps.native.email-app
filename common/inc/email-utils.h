@@ -331,7 +331,6 @@ EMAIL_API const char *email_get_locale_dir();
 
 EMAIL_API const char *email_get_common_theme_path();
 
-EMAIL_API const char *email_get_default_html_path();
 EMAIL_API const char *email_get_template_html_path();
 EMAIL_API const char *email_get_template_html_text_path();
 

@@ -86,7 +86,7 @@
 #define EC_JS_SET_UNFOCUS_ORG_MESSAGE	"document.getElementById('"EC_NAME_ORG_MESSAGE"').blur(); void 0;"
 
 /* These javascript functions are defined in email-composer.js */
-#define EC_JS_INITIALIZE_COMPOSER "InitializeEmailComposer(/* TODO pass ELM_SCALE_SIZE here */);"
+#define EC_JS_INITIALIZE_COMPOSER "InitializeEmailComposer('%s', '%s');"
 
 #define EC_JS_IS_CHECKBOX_CHECKED "IsCheckboxChecked();"
 #define EC_JS_HAS_ORIGINAL_MESSAGE_BAR "HasOriginalMessageBar();"

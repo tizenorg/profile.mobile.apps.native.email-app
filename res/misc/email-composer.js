@@ -69,11 +69,11 @@ var G_VAL_IMG_STYLE = "margin: 4px 0px; padding: 0px; display: inline-block;";
 
 var G_VAL_IMAGE_OVERLAY_COLOR = "rgba(0, 0, 0, 0.2)";
 var G_VAL_IMAGE_OUTLINE_COLOR = "rgb(0, 191, 230)";
-var G_VAL_IMAGE_OUTLINE_WIDTH = (4.0 * G_VAL_CSS_SCALE_RATIO);
-var G_VAL_IMAGE_HANDLE_IMG_PATH = "../../../res/images/composer_icon/email_crop_handler.png";
-var G_VAL_IMAGE_HANDLE_SIZE = (30.0 * G_VAL_CSS_SCALE_RATIO);
+var G_VAL_IMAGE_HANDLE_IMG_PATH = "images/composer_icon/email_crop_handler_padded.png";
+var G_VAL_IMAGE_OUTLINE_WIDTH = 4;
+var G_VAL_IMAGE_HANDLE_SIZE = 32;
 var G_VAL_IMAGE_HANDLE_TOUCH_RADIUS = G_VAL_IMAGE_HANDLE_SIZE;
-var G_VAL_IMAGE_MIN_SIZE = (G_VAL_IMAGE_HANDLE_SIZE * 2);
+var G_VAL_IMAGE_MIN_SIZE = (2 * G_VAL_IMAGE_HANDLE_SIZE);
 
 var G_VAL_LONG_TAP_DELAY_MS = 500.0;
 var G_VAL_MIN_HIT_TEST_INTERVAL_MS = 150.0;
@@ -375,7 +375,7 @@ function ImageLayer() {
 			"; outline-offset: " + (-G_VAL_IMAGE_OUTLINE_WIDTH / 2.0) + "px;";
 		element_.appendChild(overlay);
 
-		var baseDotStyle = "position: absolute; pointer-events: none; outline: 1px solid transparent;" +
+		var baseDotStyle = "position: absolute; pointer-events: none; " +
 			"width: " + G_VAL_IMAGE_HANDLE_SIZE + "px; height: " + G_VAL_IMAGE_HANDLE_SIZE + "px; " +
 			"margin: " + (-G_VAL_IMAGE_HANDLE_SIZE / 2.0) + "px; background-color: " + G_VAL_IMAGE_OUTLINE_COLOR +
 			"; -webkit-mask-image: url(" + G_VAL_IMAGE_HANDLE_IMG_PATH + "); -webkit-mask-size: cover; ";
@@ -635,11 +635,23 @@ function ImageLayer() {
 }
 
 /* Used by c-code */
-function InitializeEmailComposer(elmScaleSize) {
+function InitializeEmailComposer(elmScaleSize, resDirUri) {
 	utils.log(arguments.callee.name + "()");
 
 	if (elmScaleSize) {
-		G_VAL_CSS_SCALE_RATIO *= elmScaleSize;
+		G_VAL_CSS_SCALE_RATIO *= parseFloat(elmScaleSize);
+		utils.log(arguments.callee.name + "() elmScaleSize: " + elmScaleSize +
+			"; as float: " + parseFloat(elmScaleSize));
+	}
+
+	G_VAL_IMAGE_OUTLINE_WIDTH *= G_VAL_CSS_SCALE_RATIO;
+	G_VAL_IMAGE_HANDLE_SIZE *= G_VAL_CSS_SCALE_RATIO;
+	G_VAL_IMAGE_HANDLE_TOUCH_RADIUS *= G_VAL_CSS_SCALE_RATIO;
+	G_VAL_IMAGE_MIN_SIZE *= G_VAL_CSS_SCALE_RATIO;
+
+	if (resDirUri) {
+		G_VAL_IMAGE_HANDLE_IMG_PATH = resDirUri + "/" + G_VAL_IMAGE_HANDLE_IMG_PATH;
+		utils.log(arguments.callee.name + "() resDirUri: " + resDirUri);
 	}
 
 	var originalMessageBar = document.getElementById(G_NAME_ORG_MESSAGE_BAR);

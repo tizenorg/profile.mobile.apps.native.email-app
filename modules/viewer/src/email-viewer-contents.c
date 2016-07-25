@@ -1145,38 +1145,6 @@ void viewer_set_webview_content(EmailViewerView *view)
 		debug_log("SET show images is FAILED!");
 	}
 
-	char tmp_file_path[MAX_PATH_LEN] = { 0, };
-
-	/* set content */
-	if (wvd->body_type == BODY_TYPE_HTML) {
-		retm_if(wvd->uri == NULL, "Invalid uri: wvd->uri [NULL]");
-		/* Fix for issue - Sometimes html content of previous mail is shown
-		 * Set the default html page if file size is 0 */
-		struct stat statbuf = { 0 };
-		int status = lstat(wvd->uri, &statbuf);
-		if (!status) {
-			debug_log("Total file size: %d", (int)statbuf.st_size);
-			if ((int)statbuf.st_size == 0) {
-				debug_log("Set URI with default html");
-				char *file_stream = NULL;
-				file_stream = email_get_buff_from_file(email_get_default_html_path(), 0);
-				retm_if(!file_stream, "file_stream is NULL -allocation memory failed");
-
-				snprintf(tmp_file_path, sizeof(tmp_file_path), "file://%s", email_get_default_html_path());
-				debug_secure("tmp_file_path [%s]", tmp_file_path);
-				/* If encoding(5th parameter) is missing, "UTF-8" is used to display contents. */
-				ewk_view_contents_set(view->webview, file_stream, strlen(file_stream), NULL, NULL, tmp_file_path);
-				/* Set ewk_view_vertical_panning_hold_set() here due to structural issue of Chromium */
-				ewk_view_vertical_panning_hold_set(view->webview, EINA_TRUE);
-
-				g_free(file_stream);
-				return;
-			}
-		}
-		snprintf(tmp_file_path, sizeof(tmp_file_path), "file://%s", wvd->uri);
-		debug_secure("file://%s", wvd->uri);
-	}
-
 	GHashTable *hashtable = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
 	retm_if(hashtable == NULL, "hashtable is null");
 	if (wvd->body_type == BODY_TYPE_TEXT) {
@@ -1188,17 +1156,23 @@ void viewer_set_webview_content(EmailViewerView *view)
 
 	debug_log("body_type: %d", wvd->body_type);
 	if (wvd->body_type == BODY_TYPE_HTML) {
-		char *file_buffer = email_get_buff_from_file(wvd->uri, 0);
+		retm_if(wvd->uri == NULL, "Invalid uri: wvd->uri [NULL]");
+		struct stat statbuf = { 0 };
+		int status = lstat(wvd->uri, &statbuf);
+		if ((status == 0) && (statbuf.st_size > 0)) {
+			char *file_buffer = email_get_buff_from_file(wvd->uri, 0);
+			retm_if(!file_buffer, "file_stream is NULL - allocation memory failed");
 			_viewer_remove_trailing_open_tag(file_buffer);
-		if (view->charset) {
-			char *encoded_text = NULL;
-			encoded_text = email_body_encoding_convert(file_buffer, view->charset, DEFAULT_CHARSET);
-			if (encoded_text) {
-				g_free(file_buffer);
-				file_buffer = encoded_text;
+			if (view->charset) {
+				char *encoded_text = NULL;
+				encoded_text = email_body_encoding_convert(file_buffer, view->charset, DEFAULT_CHARSET);
+				if (encoded_text) {
+					g_free(file_buffer);
+					file_buffer = encoded_text;
+				}
 			}
+			g_hash_table_insert(hashtable, g_strdup("BODY"), file_buffer);
 		}
-		g_hash_table_insert(hashtable, g_strdup("BODY"), file_buffer);
 	}
 
 	char *file_stream = NULL;
@@ -1236,6 +1210,7 @@ void viewer_set_webview_content(EmailViewerView *view)
 		fclose(fp);
 	}
 
+	char tmp_file_path[MAX_PATH_LEN] = { 0, };
 	snprintf(tmp_file_path, sizeof(tmp_file_path), "file://%s", view->temp_viewer_html_file_path);
 	debug_secure("tmp_file_path [%s]", tmp_file_path);
 	size_t contents_size = 0;
