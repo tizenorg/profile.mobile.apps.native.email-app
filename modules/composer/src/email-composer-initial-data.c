@@ -724,15 +724,12 @@ static char *_initial_data_get_mail_body(EmailComposerView *view)
 				/* Convert plain-text to html content */
 				body_document = (char *)email_get_parse_plain_text(temp_body_plain, STR_LEN(temp_body_plain));
 				g_free(temp_body_plain);
-			} else {
-				body_document = (char *)email_get_buff_from_file(email_get_default_html_path(), 0);
 			}
 
-			/* To insert css style when the mail is in outbox because there's no css style on an outgoing mail. (Outbox > Mail > Menu > Edit) */
-			if (view->org_mail_info->mail_data->mailbox_type == EMAIL_MAILBOX_TYPE_OUTBOX) {
+			if (body_document) {
 				char *temp_body = body_document;
 				body_document = g_strconcat(EC_TAG_BODY_CSS_START, temp_body, EC_TAG_BODY_END, NULL);
-				FREE(temp_body);
+				g_free(temp_body);
 			}
 		}
 	} else {

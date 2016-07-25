@@ -308,8 +308,24 @@ static void _webkit_js_execute_check_body_layout_cb(Evas_Object *obj, const char
 		}
 	}
 
-	if (!ewk_view_script_execute(obj, EC_JS_INITIALIZE_COMPOSER, _webkit_js_execute_init_composer_body_cb, (void *)view)) {
-		debug_error("EC_JS_INITIALIZE_COMPOSER failed.");
+	char elm_scale_size_str[EMAIL_BUFF_SIZE_MID] = { 0 };
+	snprintf(elm_scale_size_str, EMAIL_BUFF_SIZE_MID, "%f", elm_config_scale_get() / elm_app_base_scale_get());
+	char *const comma = strchr(elm_scale_size_str, ',');
+	if (comma) {
+		*comma = '.';
+	}
+
+	gchar *const res_uri = g_uri_escape_string(email_get_res_dir(), COMPOSER_URI_ALLOWED_JS_SAFE_CHARS, TRUE);
+	gchar *const init_script = (res_uri ? g_strdup_printf(EC_JS_INITIALIZE_COMPOSER, elm_scale_size_str, res_uri) : NULL);
+	g_free(res_uri);
+
+	if (init_script) {
+		if (!ewk_view_script_execute(obj, init_script, _webkit_js_execute_init_composer_body_cb, (void *)view)) {
+			debug_error("EC_JS_INITIALIZE_COMPOSER script execution failed.");
+		}
+		g_free(init_script);
+	} else {
+		debug_error("EC_JS_INITIALIZE_COMPOSER script generation failed.");
 	}
 
 	debug_leave();

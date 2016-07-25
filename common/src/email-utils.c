@@ -454,7 +454,6 @@ EMAIL_DEFINE_GET_PATH(email_get_locale_dir, res, "/locale")
 
 EMAIL_DEFINE_GET_EDJ_PATH(email_get_common_theme_path, "/email-common-theme.edj")
 
-EMAIL_DEFINE_GET_MISC_PATH(email_get_default_html_path, "/_email_default.html")
 EMAIL_DEFINE_GET_MISC_PATH(email_get_template_html_path, "/_email_template.html")
 EMAIL_DEFINE_GET_MISC_PATH(email_get_template_html_text_path, "/_email_template_text.html")
 
