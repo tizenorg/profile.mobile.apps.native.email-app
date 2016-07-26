@@ -20,15 +20,6 @@
 
 #include "email-viewer.h"
 
-#define VIEWER_JS_HAVE_IMAGES \
-	"function getImgs() { " \
-		"var images = document.images;" \
-		"if (images.length > 0) {" \
-			"return 'true';" \
-		"} else {" \
-			"return 'false';" \
-		"}" \
-	"};" \
-	"getImgs();"
+#define VIEWER_JS_HAVE_IMAGES "((document.images.length > 0) ? 'true' : 'false');"
 
 #endif /* __EMAIL_VIEWER_JS_H__ */

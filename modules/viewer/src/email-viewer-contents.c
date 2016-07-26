@@ -1172,6 +1172,8 @@ void viewer_set_webview_content(EmailViewerView *view)
 				}
 			}
 			g_hash_table_insert(hashtable, g_strdup("BODY"), file_buffer);
+		} else {
+			debug_error("status: %d; statbuf.st_size: %d; errno: %d; ", status, (int)statbuf.st_size, errno);
 		}
 	}
 

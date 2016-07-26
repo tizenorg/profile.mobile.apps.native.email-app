@@ -64,8 +64,8 @@ var G_VAL_ORG_MESSAGE_BAR_TEXT_SIZE = 18;
 
 var G_VAL_REMOVE_INVALID_IMAGES = false;
 
-var G_VAL_EDITOR_MARGIN_SIZE = 10;
-var G_VAL_IMG_STYLE = "margin: 4px 0px; padding: 0px; display: inline-block;";
+var G_VAL_IMAGE_INITIZL_SIZE = 0.8;
+var G_VAL_IMAGE_STYLE = "margin: 4px 0px; padding: 0px; display: block;";
 
 var G_VAL_IMAGE_OVERLAY_COLOR = "rgba(0, 0, 0, 0.2)";
 var G_VAL_IMAGE_OUTLINE_COLOR = "rgb(0, 191, 230)";
@@ -883,7 +883,7 @@ function InsertImage(fileUri) {
 	img.onload = function () {
 		var w = img.width;
 		var h = img.height;
-		var maxWidth = Math.min(screen.width, screen.height) - 2 * G_VAL_EDITOR_MARGIN_SIZE;
+		var maxWidth = Math.min(screen.width, screen.height) * G_VAL_IMAGE_INITIZL_SIZE;
 		if (w > maxWidth) {
 			h *= maxWidth / w;
 			w = maxWidth;
@@ -893,14 +893,13 @@ function InsertImage(fileUri) {
 		img.setAttribute("height", h);
 
 		range.deleteContents();
-		range.insertNode(document.createElement("BR"));
 		range.insertNode(img);
 		range.collapse(false);
 		selection.removeAllRanges();
 		selection.addRange(range);
 	}
 	img.src = fileUri;
-	img.style.cssText = G_VAL_IMG_STYLE;
+	img.style.cssText = G_VAL_IMAGE_STYLE;
 }
 
 function GetImageSourcesFromElement(element) {
