@@ -340,7 +340,6 @@ Eina_Bool composer_util_image_get_rotation_for_jpeg_image(const char *src_file_p
 {
 	debug_enter();
 
-	retvm_if(email_file_exists(src_file_path) == EINA_FALSE, EINA_FALSE, "Invalid parameter: file not exist!");
 	retvm_if(!rotation, EINA_FALSE, "Invalid parameter: rotation is NULL!");
 
 	Eina_Bool ret = EINA_TRUE;
@@ -354,10 +353,11 @@ Eina_Bool composer_util_image_get_rotation_for_jpeg_image(const char *src_file_p
 		short exif_value = exif_get_short(exif_entry->data, byte_order);
 		debug_log("value = %d", exif_value);
 
-		if (exif_value >= EXIF_NOT_AVAILABLE && exif_value <= EXIF_ROT_270) {
+		if (exif_value > EXIF_NOT_AVAILABLE && exif_value <= EXIF_ROT_270) {
 			*rotation = exif_value;
 		} else {
 			*rotation = EXIF_NOT_AVAILABLE;
+			ret = EINA_FALSE;
 		}
 	} else {
 		debug_secure("exif_entry(for EXIF_TAG_ORIENTATION) is NULL!");

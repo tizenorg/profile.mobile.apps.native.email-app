@@ -137,8 +137,20 @@ void composer_attachment_ui_expand_attachment_list(EmailComposerView *view);
  * @brief Creates popup for resize images selection
  * @param[in]	view»				Email composer data
  * @param[in]	attachment_list»	Attachment list of images
+ * @return EINA_TRUE on success or EINA_FALSE if none or an error occurred
  */
-void composer_attachment_resize_image(EmailComposerView *view, Eina_List *attachment_list);
+Eina_Bool composer_attachment_show_image_resize_popup(EmailComposerView *view, Eina_List *attachment_list);
+
+/**
+ * @brief Starts resizing images on thread
+ * @param[in]	view»				Email composer data
+ * @param[in]	attachment_list		Attachment list of images
+ * @param[in]	quality				Image resize quality
+ * @param[in]	is_inline	»		is inline (body content attachment), Eina_Bool value
+ * @return EINA_TRUE on success or EINA_FALSE if none or an error occurred
+ */
+Eina_Bool composer_attachment_resize_image_on_thread(EmailComposerView *view, Eina_List *attachment_list,
+		int quality, Eina_Bool is_inline);
 
 /**
  * @brief Sown attach panel in specified mode

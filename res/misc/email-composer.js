@@ -891,15 +891,16 @@ function InsertImage(fileUri) {
 
 		img.setAttribute("width", w);
 		img.setAttribute("height", h);
-
-		range.deleteContents();
-		range.insertNode(img);
-		range.collapse(false);
-		selection.removeAllRanges();
-		selection.addRange(range);
+		img.style.cssText = G_VAL_IMAGE_STYLE;
 	}
 	img.src = fileUri;
-	img.style.cssText = G_VAL_IMAGE_STYLE;
+	img.style.display = "none";
+
+	range.deleteContents();
+	range.insertNode(img);
+	range.collapse(false);
+	selection.removeAllRanges();
+	selection.addRange(range);
 }
 
 function GetImageSourcesFromElement(element) {

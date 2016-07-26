@@ -212,9 +212,9 @@ struct _view_data {
 
 	/* For resizing images */
 	Ecore_Thread *thread_resize_image;
-	Eina_Bool resize_thread_cancel;
 	Eina_List *resize_image_list;
 	int resize_image_quality;
+	Eina_Bool resize_image_inline;
 
 	/* For downloading attachment */
 	int handle_for_downloading_attachment;

@@ -31,15 +31,15 @@
 
 static void _attachment_download_attachment_response_cb(void *data, Evas_Object *obj, void *event_info);
 
-static COMPOSER_ERROR_TYPE_E _attachment_check_errors_of_file_in_list(EmailComposerView *view, Eina_List *list, int to_be_moved_or_copied, Eina_Bool is_inline);
-static void _attachment_separate_list_into_relavant_lists(EmailComposerView *view, Eina_List *org_list, Eina_List **normal_list, Eina_List **image_list);
+static COMPOSER_ERROR_TYPE_E _attachment_check_errors_of_file_in_list(EmailComposerView *view, Eina_List *list, int to_be_moved_or_copied);
+static void _attachment_separate_list_into_relavant_lists(Eina_List *org_list, Eina_List **normal_list, Eina_List **resize_list, Eina_Bool is_inline);
 
 static void _attachment_process_attachments_list(EmailComposerView *view, Eina_List *list, int to_be_moved_or_copied, Eina_Bool is_inline);
+static void _attachment_process_attachments(EmailComposerView *view, Eina_Bool is_inline);
 static void _attachment_process_inline_attachments(void *data, Evas_Object *obj, void *event_info);
 static void _attachment_process_normal_attachments(void *data, Evas_Object *obj, void *event_info);
 
 static void _attachment_insert_inline_image_to_webkit(EmailComposerView *view, const char *file_path);
-static void _attachment_insert_inline_image(EmailComposerView *view, const char *path);
 
 static void _attachment_get_image_list_cb(Evas_Object *o, const char *result, void *data);
 
@@ -78,7 +78,7 @@ static void _attachment_download_attachment_response_cb(void *data, Evas_Object 
 	debug_leave();
 }
 
-static COMPOSER_ERROR_TYPE_E _attachment_check_errors_of_file_in_list(EmailComposerView *view, Eina_List *list, int to_be_moved_or_copied, Eina_Bool is_inline)
+static COMPOSER_ERROR_TYPE_E _attachment_check_errors_of_file_in_list(EmailComposerView *view, Eina_List *list, int to_be_moved_or_copied)
 {
 	debug_enter();
 
@@ -150,25 +150,35 @@ static COMPOSER_ERROR_TYPE_E _attachment_check_errors_of_file_in_list(EmailCompo
 	return err;
 }
 
-static void _attachment_separate_list_into_relavant_lists(EmailComposerView *view, Eina_List *org_list, Eina_List **normal_list, Eina_List **image_list)
+static void _attachment_separate_list_into_relavant_lists(Eina_List *org_list, Eina_List **normal_list, Eina_List **resize_list, Eina_Bool is_inline)
 {
 	debug_enter();
 
-	retm_if(!view, "view is NULL!");
 	retm_if(!org_list, "org_list is NULL!");
 	retm_if(!normal_list, "normal_list is NULL!");
-	retm_if(!image_list, "image_list is NULL!");
+	retm_if(!resize_list, "resize_list is NULL!");
 
 	char *p = NULL;
-	Eina_List *l = NULL;
 
-	EINA_LIST_FOREACH(org_list, l, p) {
+	EINA_LIST_FREE(org_list, p) {
 		char *mime_type = email_get_mime_type_from_file(p);
 		email_file_type_e ftype = email_get_file_type_from_mime_type(mime_type);
-		if ((ftype == EMAIL_FILE_TYPE_IMAGE) && composer_util_image_is_resizable_image_type(mime_type) && (email_get_file_size(p) <= MAX_RESIZABLE_IMAGE_FILE_SIZE)) {
-			*image_list = eina_list_append(*image_list, g_strdup(p));
+		Eina_Bool need_add_to_image_list = EINA_FALSE;
+		if (ftype == EMAIL_FILE_TYPE_IMAGE) {
+			if (is_inline) {
+				int rotation = EXIF_NOT_AVAILABLE;
+				need_add_to_image_list = ((g_strcmp0(mime_type, "image/jpeg") == 0) &&
+						composer_util_image_get_rotation_for_jpeg_image(p, &rotation) &&
+						(rotation != EXIF_NORMAL));
+			} else {
+				need_add_to_image_list = (composer_util_image_is_resizable_image_type(mime_type) &&
+						(email_get_file_size(p) <= MAX_RESIZABLE_IMAGE_FILE_SIZE));
+			}
+		}
+		if (need_add_to_image_list) {
+			*resize_list = eina_list_append(*resize_list, p);
 		} else {
-			*normal_list = eina_list_append(*normal_list, g_strdup(p));
+			*normal_list = eina_list_append(*normal_list, p);
 		}
 
 		FREE(mime_type);
@@ -184,7 +194,7 @@ static void _attachment_process_attachments_list(EmailComposerView *view, Eina_L
 	retm_if(!view, "view is NULL!");
 	retm_if(!list, "list is NULL!");
 
-	COMPOSER_ERROR_TYPE_E err = _attachment_check_errors_of_file_in_list(view, list, to_be_moved_or_copied, is_inline);
+	COMPOSER_ERROR_TYPE_E err = _attachment_check_errors_of_file_in_list(view, list, to_be_moved_or_copied);
 
 	/* To process attachment list after showing error popup if it exists. */
 	Evas_Smart_Cb response_cb;
@@ -193,9 +203,9 @@ static void _attachment_process_attachments_list(EmailComposerView *view, Eina_L
 			response_cb = _attachment_process_inline_attachments;
 		} else {
 			response_cb = _attachment_process_normal_attachments;
-			evas_object_freeze_events_set(view->base.module->navi, EINA_TRUE);
-			evas_object_freeze_events_set(view->ewk_view, EINA_TRUE);
 		}
+		evas_object_freeze_events_set(view->base.module->navi, EINA_TRUE);
+		evas_object_freeze_events_set(view->ewk_view, EINA_TRUE);
 	} else {
 		response_cb = composer_util_popup_response_cb; /* If there're already max attachments, list is NULL. */
 	}
@@ -209,22 +219,59 @@ static void _attachment_process_attachments_list(EmailComposerView *view, Eina_L
 	debug_leave();
 }
 
+static void _attachment_process_attachments(EmailComposerView *view, Eina_Bool is_inline)
+{
+	debug_enter();
+
+	char *p = NULL;
+	Eina_Bool ret = EINA_TRUE;
+	Eina_List *normal_list = NULL;
+	Eina_List *resize_list = NULL;
+
+	_attachment_separate_list_into_relavant_lists(view->attachment_list_to_be_processed, &normal_list, &resize_list, is_inline);
+	view->attachment_list_to_be_processed = NULL;
+
+	if (normal_list) {
+		/* When adding normal and image attachment together, if max attachment size is exceeded, error popup will be displayed after processing image files. */
+		ret = composer_attachment_create_list(view, normal_list, is_inline, (resize_list ? EINA_TRUE : EINA_FALSE));
+		EINA_LIST_FREE(normal_list, p) {
+			g_free(p);
+		}
+	}
+
+	if (resize_list) {
+		if (ret) {
+			if (is_inline) {
+				if (composer_attachment_resize_image_on_thread(view, resize_list,
+						RESIZE_IMAGE_ORIGINAL_SIZE, EINA_TRUE)) {
+					return;
+				}
+			} else {
+				if (composer_attachment_show_image_resize_popup(view, resize_list)) {
+					return;
+				}
+			}
+			ret = composer_attachment_create_list(view, resize_list, is_inline, EINA_FALSE);
+		}
+		EINA_LIST_FREE(resize_list, p) {
+			g_free(p);
+		}
+	}
+
+	if (ret) {
+		composer_util_popup_response_cb(view, NULL, NULL);
+	}
+
+	debug_leave();
+}
+
 static void _attachment_process_inline_attachments(void *data, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
 
 	EmailComposerView *view = (EmailComposerView *)data;
-	char *p = NULL;
 
-	Eina_Bool ret = composer_attachment_create_list(view, view->attachment_list_to_be_processed, EINA_TRUE, EINA_FALSE);
-	if (ret) {
-		composer_util_popup_response_cb(view, NULL, NULL);
-	}
-
-	EINA_LIST_FREE(view->attachment_list_to_be_processed, p) {
-		g_free(p);
-	}
-	view->attachment_list_to_be_processed = NULL;
+	_attachment_process_attachments(view, EINA_TRUE);
 
 	debug_leave();
 }
@@ -234,37 +281,8 @@ static void _attachment_process_normal_attachments(void *data, Evas_Object *obj,
 	debug_enter();
 
 	EmailComposerView *view = (EmailComposerView *)data;
-	char *p = NULL;
-	Eina_Bool ret = EINA_TRUE;
-	Eina_List *normal_list = NULL;
-	Eina_List *image_list = NULL;
 
-	_attachment_separate_list_into_relavant_lists(view, view->attachment_list_to_be_processed, &normal_list, &image_list);
-
-	if (normal_list) {
-		/* When adding normal and image attachment together, if max attachment size is exceeded, error popup will be displayed after processing image files. */
-		ret = composer_attachment_create_list(view, normal_list, EINA_FALSE, (image_list ? EINA_TRUE : EINA_FALSE));
-		if (!image_list && ret) {
-			composer_util_popup_response_cb(view, NULL, NULL);
-		}
-		EINA_LIST_FREE(normal_list, p) {
-			g_free(p);
-		}
-	}
-
-	if (image_list) {
-		if (ret) {
-			composer_attachment_resize_image(view, image_list);
-		}
-		EINA_LIST_FREE(image_list, p) {
-			g_free(p);
-		}
-	}
-
-	EINA_LIST_FREE(view->attachment_list_to_be_processed, p) {
-		g_free(p);
-	}
-	view->attachment_list_to_be_processed = NULL;
+	_attachment_process_attachments(view, EINA_FALSE);
 
 	debug_leave();
 }
@@ -286,43 +304,6 @@ static void _attachment_insert_inline_image_to_webkit(EmailComposerView *view, c
 	}
 
 	g_free(script);
-
-	debug_leave();
-}
-
-static void _attachment_insert_inline_image(EmailComposerView *view, const char *path)
-{
-	debug_enter();
-
-	/* XXX; The feature Inserting inline image to webkit is not supported in current UX.
-	 * XXX; Uncomment these codes if rotating jpeg image with orientation is needed.
-	 */
-	/*char tmp_file_path[EMAIL_FILEPATH_MAX + 1] = { 0, };
-	char *mime_type = email_get_mime_type_from_file(path);
-
-	if (!g_strcmp0(mime_type, "image/jpeg")) {
-		int rotation = 0;
-		if (composer_util_image_get_rotation_for_jpeg_image(path, &rotation)) {
-			if (rotation == EXIF_ROT_90 || rotation == EXIF_ROT_180 || rotation == EXIF_ROT_270) {
-				if (composer_util_file_get_temp_filename(path, tmp_file_path, EMAIL_FILEPATH_MAX, NULL)) {
-					if (composer_util_image_rotate_jpeg_image(path, tmp_file_path, rotation)) {
-						path = tmp_file_path;
-					} else {
-						debug_warning("composer_util_image_rotate_jpeg_image() failed!");
-					}
-				} else {
-					debug_warning("composer_util_file_get_temp_filename() failed!");
-				}
-			} else {
-				debug_log("No need to rotate image (rotation = %d)", rotation);
-			}
-		} else {
-			debug_log("composer_util_image_get_rotation_for_jpeg_image() failed!");
-		}
-	}
-	FREE(mime_type);*/
-
-	_attachment_insert_inline_image_to_webkit(view, path);
 
 	debug_leave();
 }
@@ -377,7 +358,7 @@ Eina_Bool composer_attachment_create_list(EmailComposerView *view, Eina_List *at
 		}
 
 		if (is_inline) {
-			_attachment_insert_inline_image(view, recv);
+			_attachment_insert_inline_image_to_webkit(view, recv);
 		} else {
 			email_attachment_data_t *attachment_data = (email_attachment_data_t *)calloc(1, sizeof(email_attachment_data_t));
 			if (!attachment_data) {
