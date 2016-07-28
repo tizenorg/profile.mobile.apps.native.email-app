@@ -1045,6 +1045,7 @@ function GetCaretPosition() {
 		} else {
 			var spanParent,
 				span = document.createElement("span");
+			span.style.cssFloat = "left";
 			span.appendChild(document.createTextNode("\u200b"));
 			range.insertNode(span);
 			rects = range.getClientRects();
