@@ -329,7 +329,6 @@ static bool _storage_device_supported_cb(int storage_id, storage_type_e type,
 		storage_state_e state, const char *path, void *user_data);
 static void _copy_path_skip_last_bs(char *dst, int dst_size, const char *src);
 
-static void _update_lang_environment(const char *lang);
 static void _generate_best_pattern(const char *locale, i18n_uchar *customSkeleton, char *formattedString, void *time);
 static int _open_pattern_n_formatter(const char *locale, char *skeleton, i18n_udate_format_h *formatter);
 static int _close_pattern_n_formatter(i18n_udate_format_h formatter);
@@ -2211,64 +2210,6 @@ EMAIL_API void email_set_is_inbox_active(bool is_active)
 	}
 }
 
-static void _update_lang_environment(const char *lang)
-{
-	if (lang && strcmp(lang, "")) {
-		setenv("LANGUAGE", lang, 1);
-	} else {
-		unsetenv("LANGUAGE");
-	}
-}
-
-EMAIL_API char *email_get_datetime_format(void)
-{
-	debug_enter();
-
-	char *dt_fmt = NULL, *region_fmt = NULL, *lang = NULL;
-	char buf[EMAIL_BUFF_SIZE_HUG] = {'\0'};
-	int res = 0;
-	bool is_hour24 = false;
-
-	lang = getenv("LANGUAGE");
-	_update_lang_environment("en_US");
-
-	res = system_settings_get_value_string(SYSTEM_SETTINGS_KEY_LOCALE_COUNTRY, &region_fmt);
-	if (res == SYSTEM_SETTINGS_ERROR_NONE && region_fmt != NULL) {
-		res = system_settings_get_value_bool(
-				SYSTEM_SETTINGS_KEY_LOCALE_TIMEFORMAT_24HOUR, &is_hour24);
-		if (res != SYSTEM_SETTINGS_ERROR_NONE) {
-			debug_error("failed to get system settings locale time format. "
-					"res = %d", res);
-			_update_lang_environment(lang);
-			FREE(region_fmt);
-			FREE(lang);
-			return NULL;
-		}
-	} else {
-		debug_error("failed to get system settings locale country. "
-				"res = %d", res);
-		_update_lang_environment(lang);
-		FREE(lang);
-		return NULL;
-	}
-
-	if (is_hour24) {
-		snprintf(buf, sizeof(buf), "%s_DTFMT_24HR", region_fmt);
-	} else {
-		snprintf(buf, sizeof(buf), "%s_DTFMT_12HR", region_fmt);
-	}
-
-	dt_fmt = dgettext("dt_fmt", buf);
-
-	_update_lang_environment(lang);
-	FREE(region_fmt);
-	FREE(lang);
-
-	debug_leave();
-
-	return strdup(dt_fmt);
-}
-
 EMAIL_API char *email_get_system_string(const char *string_id)
 {
 	return dgettext(SYSTEM_STRING, string_id);
@@ -2672,7 +2613,10 @@ EMAIL_API Eina_Bool email_file_cp(const char *source, const char *destination)
 
 EMAIL_API char *email_file_dir_get(const char *path)
 {
-	return dirname(strdup(path));
+	char *tmp_path = strdup(path);
+	char *res = strdup(dirname(tmp_path));
+	free(tmp_path);
+	return res;
 }
 
 EMAIL_API Eina_Bool email_file_exists(const char *file)

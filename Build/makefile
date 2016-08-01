@@ -21,6 +21,7 @@ PROJ_ROOT := $(call BSLASH2SLASH,$(PROJPATH))
 
 APPTYPE := $(type)
 
+OUTPUT_DIR := $(call BSLASH2SLASH,$(OUTPUT_DIR))
 OBJ_OUTPUT := $(call BSLASH2SLASH,$(OUTPUT_DIR)/objs)
 
 OS_NAME = $(shell $(UNAME))
@@ -74,8 +75,8 @@ FUNC_EDC2EDCD = $(patsubst %.edc,$(OBJ_OUTPUT)/%.edc.d,$(notdir $(1)))
 FUNC_EDC2EDJ = $(patsubst %.edc,$(OUTPUT_DIR)/res/edje/%.edj,$(notdir $(1)))
 FUNC_PO2MO = $(patsubst %.po,$(OUTPUT_DIR)/res/locale/%/LC_MESSAGES/$(LOWER_APPNAME).mo,$(notdir $(1)))
 
-C_OBJS := $(call FUNC_C2O,$(C_SRCS)) 
-CPP_OBJS := $(call FUNC_CPP2O,$(CPP_SRCS)) 
+C_OBJS := $(call FUNC_C2O,$(C_SRCS))
+CPP_OBJS := $(call FUNC_CPP2O,$(CPP_SRCS))
 OBJS := $(C_OBJS) $(CPP_OBJS)
 EDJ_DEPS := $(call FUNC_EDC2EDCD,$(EDCS))
 EDJ_FILES := $(call FUNC_EDC2EDJ,$(EDCS))
@@ -96,7 +97,7 @@ $(APPFILE) : $(OBJS) $(UOBJS)
 	@echo '  Building target: $@'
 	@echo '  Invoking: C/C++ Linker'
 	@$(MKDIR) $(MKDIR_OP) $(subst $(BSLASH),/,$(@D))
-	$(CXX) -o "$(APPFILE)" $(OBJS) $(UOBJS) $(LIBPATHS) -Xlinker --as-needed $(LIBS) $(LINK_FLAGS) $(TC_LINKER_MISC) $(RS_LINKER_MISC) -pie -lpthread -Xlinker -rpath="/home/developer/sdk_tools/lib" --sysroot="$(SYSROOT)" -Xlinker --version-script="$(PROJ_PATH)/.exportMap" -L"$(SBI_SYSROOT)/usr/lib" $(RS_LIBRARIES) -Xlinker -rpath="/opt/usr/apps/$(APPID)/lib" -Werror-implicit-function-declaration
+	$(CXX) -o "$(APPFILE)" $(OBJS) $(UOBJS) $(LIBPATHS) -Xlinker --as-needed $(LIBS) $(LINK_FLAGS) $(TC_LINKER_MISC) $(RS_LINKER_MISC) -pie -lpthread -Xlinker -rpath="/home/developer/sdk_tools/lib" --sysroot="$(SYSROOT)" -Xlinker --version-script="$(PROJ_ROOT)/.exportMap" -L"$(SBI_SYSROOT)/usr/lib" $(RS_LIBRARIES) -Xlinker -rpath="/opt/usr/apps/$(APPID)/lib" -Werror-implicit-function-declaration
 	@echo '  Finished building target: $@'
 endif
 ifeq ($(strip $(APPTYPE)),staticLib)
@@ -172,32 +173,24 @@ preproc :
 ifneq ($(strip $(PREBUILD_COMMAND)),)
 ifneq ($(strip $(PREBUILD_DESC)),)
 	@echo $(PREBUILD_DESC)
-endif	
+endif
 	@echo $(shell $(PREBUILD_COMMAND))
-endif	
+endif
 
 
 postproc :
 ifneq ($(strip $(POSTBUILD_COMMAND)),)
 ifneq ($(strip $(POSTBUILD_DESC)),)
 	@echo $(POSTBUILD_DESC)
-endif	
+endif
 	@echo $(shell $(POSTBUILD_COMMAND))
-endif	
+endif
 
 ifneq ($(strip $(PLATFORM_INCS)),)
 $(PLATFORM_INCS_FILE) :
-	@$(MKDIR) $(MKDIR_OP) $(OBJ_OUTPUT)
 	@echo '  Building inc file: $@'
-ifneq ($(findstring Linux,$(OS_NAME)),)
+	@$(MKDIR) $(MKDIR_OP) $(OBJ_OUTPUT)
 	@echo $(PLATFORM_INCS) > $@
-else
-ifneq ($(findstring 3.82,$(MAKE_VERSION)),)
-	$(file > $@,$(PLATFORM_INCS))
-else
-	@echo $(PLATFORM_INCS) > $@
-endif	 
-endif
 endif
 
 define EDJ_PROC
@@ -211,25 +204,25 @@ EDC_$(1)_COMPILER_FLAGS += -sd "$$(SDK_TOOLPATH)/enventor/share/enventor/sounds"
 EDC_$(1)_COMPILER_FLAGS += -fd "$$(SDK_TOOLPATH)/enventor/share/enventor/fonts"
 
 ifneq ($$(strip $(3)),)
-EDC_$(1)_COMPILER_FLAGS += $$(addprefix -id $$(PROJ_PATH)/,$$($(3)))
+EDC_$(1)_COMPILER_FLAGS += $$(addprefix -id $$(PROJ_ROOT)/,$$($(3)))
 endif
 ifneq ($$(strip $(4)),)
 EDC_$(1)_COMPILER_FLAGS += $$(addprefix -id ,$$($(4)))
 endif
 ifneq ($$(strip $(5)),)
-EDC_$(1)_COMPILER_FLAGS += $$(addprefix -sd $$(PROJ_PATH)/,$$($(5)))
+EDC_$(1)_COMPILER_FLAGS += $$(addprefix -sd $$(PROJ_ROOT)/,$$($(5)))
 endif
 ifneq ($$(strip $(6)),)
 EDC_$(1)_COMPILER_FLAGS += $$(addprefix -sd ,$$($(6)))
 endif
 ifneq ($$(strip $(7)),)
-EDC_$(1)_COMPILER_FLAGS += $$(addprefix -fd $$(PROJ_PATH)/,$$($(7)))
+EDC_$(1)_COMPILER_FLAGS += $$(addprefix -fd $$(PROJ_ROOT)/,$$($(7)))
 endif
 ifneq ($$(strip $(8)),)
 EDC_$(1)_COMPILER_FLAGS += $$(addprefix -fd ,$$($(8)))
 endif
 
-$$(EDJ_FILE) : $$(PROJ_PATH)/$$(EDC)
+$$(EDJ_FILE) : $$(PROJ_ROOT)/$$(EDC)
 	@echo '  Building file: $$<'
 	@echo '  Invoking: EDC Resource Compiler'
 	@$$(MKDIR) $$(MKDIR_OP) $$(subst $$(BSLASH),/,$$(@D))

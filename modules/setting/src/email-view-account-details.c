@@ -260,7 +260,7 @@ static int _create(email_view_t *self)
 
 	_create_toolbar_more_btn(view);
 
-	if (account_data->incoming_server_type == EMAIL_SERVER_TYPE_IMAP4)
+	if (account_data && account_data->incoming_server_type == EMAIL_SERVER_TYPE_IMAP4)
 			view->is_imap_push_supported = _is_imap_push_supported(account_data);
 
 	_create_list(view);
@@ -410,7 +410,6 @@ static void _create_list(EmailSettingView *view)
 	view->genlist = elm_genlist_add(view->base.content);
 	elm_scroller_policy_set(view->genlist, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_AUTO);
 	elm_genlist_mode_set(view->genlist, ELM_LIST_COMPRESS);
-	elm_genlist_homogeneous_set(view->genlist, EINA_TRUE);
 
 	view->roaming_radio_grp = elm_radio_add(view->base.content);
 	elm_radio_value_set(view->roaming_radio_grp, -1);

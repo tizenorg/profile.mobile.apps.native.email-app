@@ -64,6 +64,7 @@ static COMPOSER_ERROR_TYPE_E _composer_initialize_themes(void *data);
 static COMPOSER_ERROR_TYPE_E _composer_construct_composer_data(void *data);
 
 static void _composer_attach_panel_reply_cb(void *data, const char **path_array, int array_len);
+static void _composer_attach_panel_close_cb(void *data);
 
 static void *_composer_vcard_save_worker(void *data);
 static Eina_Bool _composer_vcard_save_timer_cb(void *data);
@@ -78,8 +79,6 @@ static void _composer_destroy_composer(void *data);
 static void _composer_process_error_popup(EmailComposerView *view, COMPOSER_ERROR_TYPE_E error);
 
 static void _composer_set_environment_variables();
-static void _composer_add_main_callbacks(EmailComposerView *view);
-static void _composer_del_main_callbacks(EmailComposerView *view);
 
 static int _composer_module_create(email_module_t *self, email_params_h params);
 static void _composer_on_message(email_module_t *self, email_params_h msg);
@@ -97,9 +96,6 @@ static void _composer_start(EmailComposerView *view);
 static void _composer_orientation_change_update(EmailComposerView *view);
 static void _composer_language_change_update(EmailComposerView *view);
 
-static void _composer_virtualkeypad_state_on_cb(void *data, Evas_Object *obj, void *event_info);
-static void _composer_virtualkeypad_state_off_cb(void *data, Evas_Object *obj, void *event_info);
-static void _composer_virtualkeypad_size_changed_cb(void *data, Evas_Object *obj, void *event_info);
 static void _composer_gdbus_signal_receiver_cb(GDBusConnection *connection, const gchar *sender_name, const gchar *object_path,
 		const gchar *interface_name, const gchar *signal_name, GVariant *parameters, gpointer data);
 
@@ -210,7 +206,7 @@ static void _composer_setting_destroy_request(void *data, email_module_h module)
 	} else {
 		debug_log("added account id: [%d]", account_id);
 		view->is_adding_account_requested = EINA_TRUE;
-		view->selected_entry = view->recp_to_entry.entry;
+		view->selected_widget = view->recp_to_entry.entry;
 		email_module_destroy(module);
 	}
 
@@ -412,6 +408,7 @@ static COMPOSER_ERROR_TYPE_E _composer_initialize_account_data(void *data)
 	email_attach_panel_listener_t listener = { 0 };
 	listener.cb_data = view;
 	listener.reply_cb = _composer_attach_panel_reply_cb;
+	listener.close_cb = _composer_attach_panel_close_cb;
 
 	email_module_set_attach_panel_listener(view->base.module, &listener);
 
@@ -724,8 +721,6 @@ static COMPOSER_ERROR_TYPE_E _composer_construct_composer_data(void *data)
 	ret = _composer_initialize_mail_info(view);
 	gotom_if(ret != COMPOSER_ERROR_NONE, CATCH, "_composer_construct_mail_info() failed");
 
-	_composer_add_main_callbacks(view);
-
 CATCH:
 	debug_leave();
 	return ret;
@@ -738,6 +733,18 @@ static void _composer_attach_panel_reply_cb(void *data, const char **path_array,
 
 	composer_attachment_process_attachments_with_array(view,
 			path_array, array_len, ATTACH_BY_COPY_FILE, EINA_FALSE);
+
+	debug_leave();
+}
+
+static void _composer_attach_panel_close_cb(void *data)
+{
+	debug_enter();
+	EmailComposerView *view = data;
+
+	if (!view->composer_popup) {
+		composer_util_focus_set_focus_with_idler(view, view->selected_widget);
+	}
 
 	debug_leave();
 }
@@ -836,7 +843,6 @@ static void _composer_destroy_evas_objects(EmailComposerView *view)
 	DELETE_IDLER_OBJECT(view->idler_show_ctx_popup);
 	DELETE_IDLER_OBJECT(view->idler_destroy_self);
 	DELETE_IDLER_OBJECT(view->idler_regionshow);
-	DELETE_IDLER_OBJECT(view->idler_regionbringin);
 	DELETE_IDLER_OBJECT(view->idler_move_recipient);
 
 	DELETE_TIMER_OBJECT(view->timer_ctxpopup_show);
@@ -851,6 +857,8 @@ static void _composer_destroy_evas_objects(EmailComposerView *view)
 	DELETE_TIMER_OBJECT(view->cs_events_timer1);
 	DELETE_TIMER_OBJECT(view->cs_events_timer2);
 	DELETE_TIMER_OBJECT(view->vcard_save_timer);
+	DELETE_TIMER_OBJECT(view->ewk_focus_set_timer);
+	DELETE_TIMER_OBJECT(view->ewk_entry_sip_show_timer);
 
 	DELETE_ANIMATOR_OBJECT(view->cs_animator);
 
@@ -1023,27 +1031,6 @@ static void _composer_set_environment_variables()
 	debug_leave();
 }
 
-static void _composer_add_main_callbacks(EmailComposerView *view)
-{
-	debug_enter();
-
-	evas_object_smart_callback_add(view->base.module->conform, "virtualkeypad,state,on", _composer_virtualkeypad_state_on_cb, (void *)view);
-	evas_object_smart_callback_add(view->base.module->conform, "virtualkeypad,state,off", _composer_virtualkeypad_state_off_cb, (void *)view);
-	evas_object_smart_callback_add(view->base.module->conform, "virtualkeypad,size,changed", _composer_virtualkeypad_size_changed_cb, (void *)view);
-	debug_leave();
-}
-
-static void _composer_del_main_callbacks(EmailComposerView *view)
-{
-	debug_enter();
-
-	evas_object_smart_callback_del(view->base.module->conform, "virtualkeypad,state,on", _composer_virtualkeypad_state_on_cb);
-	evas_object_smart_callback_del(view->base.module->conform, "virtualkeypad,state,off", _composer_virtualkeypad_state_off_cb);
-	evas_object_smart_callback_del(view->base.module->conform, "virtualkeypad,size,changed", _composer_virtualkeypad_size_changed_cb);
-
-	debug_leave();
-}
-
 static void _composer_initial_view_draw_richtext_components_if_enabled(EmailComposerView *view)
 {
 	Eina_Bool richtext_toolbar_enabled = EINA_TRUE;
@@ -1169,10 +1156,10 @@ static void _composer_deactivate(email_view_t *self)
 
 	if (view->is_need_close_composer_on_low_memory) {
 		view->timer_destory_composer = ecore_timer_add(0.1f, _composer_destroy_timer_cb, view);
-
 	}
-	if (view->selected_entry == view->ewk_view) {
-		evas_object_focus_set(view->ewk_view, EINA_FALSE);
+
+	if (view->selected_widget == view->ewk_view) {
+		elm_object_focus_set(view->ewk_btn, EINA_FALSE);
 	}
 
 	view->is_hided = EINA_TRUE;
@@ -1196,10 +1183,6 @@ static void _composer_activate(email_view_t *self, email_view_state prev_state)
 
 	view->is_hided = EINA_FALSE;
 	_composer_contacts_update_recp_info_for_recipients(view);
-	if (view->need_to_set_focus_on_resume) {
-		composer_util_focus_set_focus(view, view->selected_entry);
-		view->need_to_set_focus_on_resume = EINA_FALSE;
-	}
 
 	if (evas_object_freeze_events_get(view->ewk_view)) {
 		evas_object_freeze_events_set(view->ewk_view, EINA_FALSE);
@@ -1211,8 +1194,8 @@ static void _composer_activate(email_view_t *self, email_view_state prev_state)
 		view->timer_adding_account = ecore_timer_add(0.01f, _composer_update_data_after_adding_account_timer_cb, view);
 	}
 
-	if (!view->composer_popup) {
-		composer_util_focus_set_focus_with_idler(view, view->selected_entry);
+	if (!view->composer_popup && !view->base.module->is_attach_panel_launched) {
+		composer_util_focus_set_focus_with_idler(view, view->selected_widget);
 	}
 
 	debug_leave();
@@ -1239,7 +1222,6 @@ static void _composer_destroy(email_view_t *self)
 	email_params_free(&view->launch_params);
 
 	view->is_composer_getting_destroyed = EINA_TRUE;
-	_composer_del_main_callbacks(view);
 	_composer_destroy_composer(view);
 
 	debug_leave();
@@ -1373,7 +1355,7 @@ static void _composer_orientation_change_update(EmailComposerView *view)
 	 * If we don't use timer here, bringin function doesn't work properly.
 	 */
 	DELETE_TIMER_OBJECT(view->timer_regionshow);
-	if (view->selected_entry != view->ewk_view) {
+	if (view->selected_widget != view->ewk_view) {
 		view->timer_regionshow = ecore_timer_add(0.2f, composer_util_scroll_region_show_timer, view);
 	}
 
@@ -1397,45 +1379,6 @@ static void _composer_update(email_view_t *self, int flags)
 	}
 	if (flags & EVUF_LANGUAGE_CHANGED) {
 		_composer_language_change_update(view);
-	}
-
-	debug_leave();
-}
-
-static void _composer_virtualkeypad_state_on_cb(void *data, Evas_Object *obj, void *event_info)
-{
-	debug_enter();
-
-	EmailComposerView *view = (EmailComposerView *)data;
-
-	if (view->ps_box) {
-		composer_ps_change_layout_size(view);
-	}
-
-	debug_leave();
-}
-
-static void _composer_virtualkeypad_state_off_cb(void *data, Evas_Object *obj, void *event_info)
-{
-	debug_enter();
-
-	EmailComposerView *view = (EmailComposerView *)data;
-
-	if (view->ps_box) {
-		composer_ps_change_layout_size(view);
-	}
-
-	debug_leave();
-}
-
-static void _composer_virtualkeypad_size_changed_cb(void *data, Evas_Object *obj, void *event_info)
-{
-	debug_enter();
-
-	EmailComposerView *view = (EmailComposerView *)data;
-
-	if (view->ps_box) {
-		composer_ps_change_layout_size(view);
 	}
 
 	debug_leave();

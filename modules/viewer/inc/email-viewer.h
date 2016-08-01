@@ -50,15 +50,14 @@
 #undef LOG_TAG
 #define LOG_TAG "EMAIL_VIEWER"
 
-#define DEBUG_SCROLLER
 #ifdef DEBUG_SCROLLER
+#define debug_enter_scroller()					do { debug_trace(" * Enter *"); } while (0)
+#define debug_leave_scroller()					do { debug_trace(" * Leave *"); } while (0)
+#define debug_log_scroller(fmt, args...)			do { debug_log(fmt, ##args); } while (0)
+#else
 #define debug_enter_scroller()
 #define debug_leave_scroller()
 #define debug_log_scroller(fmt, args...)
-#else
-#define debug_enter_scroller()					do { debug_trace(" * Enter *"); } while (0)
-#define debug_leave_scroller()					do { debug_trace(" * Leave *"); } while (0)
-#define debug_log_scroller(fmt, args...)			do { LOGI(fmt, ##args); } while (0)
 #endif
 
 #ifdef _TIZEN_2_4_BUILD_
@@ -176,24 +175,16 @@ struct _view_data {
 	Eina_Bool b_load_finished;
 	Eina_Bool b_show_remote_images;
 	Eina_Bool is_long_pressed;
-	Eina_Bool is_webview_scrolling;
 	Eina_Bool is_main_scroller_scrolling;
-	Eina_Bool is_outer_scroll_bot_hit;
-	Eina_Bool is_magnifier_opened;
 	Eina_Bool is_recipient_ly_shown;
 	Eina_Bool is_download_message_btn_clicked;
 	Eina_Bool is_cancel_sending_btn_clicked;
 	Eina_Bool need_pending_destroy;
-	Eina_Bool is_top_webview_reached;
-	Eina_Bool is_bottom_webview_reached;
-	Eina_Bool is_scrolling_down;
-	Eina_Bool is_scrolling_up;
 	Eina_Bool is_storage_full_popup_shown;
 	bool can_destroy_on_msg_delete;
-	Eina_Bool is_webview_text_selected;
-
 	/* Webview resize */
 	float scale_factor;
+	Ecore_Idler *webview_move_idler;
 	int webview_width;
 	int webview_height;
 
@@ -208,12 +199,16 @@ struct _view_data {
 	int move_status;
 
 	/*Header Evas Object */
-	Evas_Object *header_ly;
+	Evas_Object *subject_ly;
 	Evas_Object *subject_entry;
 	Evas_Object *favourite_btn;
-	Evas_Object *attachment_ly;
-	Evas_Object *header_divider;
+
+	Evas_Object *details_ly;
 	Evas_Object *details_button;
+	Evas_Object *header_divider;
+
+	Evas_Object *attachment_ly;
+
 
 	/*Reply toolbar*/
 	Evas_Object *reply_toolbar_ly;
@@ -285,9 +280,6 @@ struct _view_data {
 	gboolean request_report;
 	bool is_smil_mail;
 	email_account_t *account;
-
-	/* idler */
-	Ecore_Idler *idler_regionbringin;
 
 	/* timer */
 	Ecore_Timer *rcpt_scroll_corr;

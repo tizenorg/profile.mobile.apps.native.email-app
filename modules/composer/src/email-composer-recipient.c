@@ -81,13 +81,13 @@ static void _recipient_entry_layout_clicked_cb(void *data, Evas_Object *obj, con
 		return;
 	}
 
-	if ((obj == view->recp_to_layout) && (view->selected_entry != view->recp_to_entry.entry)) {
+	if ((obj == view->recp_to_layout) && (view->selected_widget != view->recp_to_entry.entry)) {
 		composer_recipient_change_entry(EINA_TRUE, view->recp_to_box, view->recp_to_entry_layout, view->recp_to_display_entry_layout);
 		composer_util_focus_set_focus(view, view->recp_to_entry.entry);
-	} else if ((obj == view->recp_cc_layout) && (view->selected_entry != view->recp_cc_entry.entry)) {
+	} else if ((obj == view->recp_cc_layout) && (view->selected_widget != view->recp_cc_entry.entry)) {
 		composer_recipient_change_entry(EINA_TRUE, view->recp_cc_box,view->recp_cc_entry_layout, view->recp_cc_display_entry_layout);
 		composer_util_focus_set_focus(view, view->recp_cc_entry.entry);
-	} else if ((obj == view->recp_bcc_layout) && (view->selected_entry != view->recp_bcc_entry.entry)) {
+	} else if ((obj == view->recp_bcc_layout) && (view->selected_widget != view->recp_bcc_entry.entry)) {
 		composer_recipient_change_entry(EINA_TRUE, view->recp_bcc_box, view->recp_bcc_entry_layout, view->recp_bcc_display_entry_layout);
 		composer_util_focus_set_focus(view, view->recp_bcc_entry.entry);
 	}
@@ -153,7 +153,7 @@ static void _recipient_notify_invalid_recipient(EmailComposerView *view, MBE_VAL
 		}
 	}
 
-	composer_util_focus_set_focus_with_idler(view, view->selected_entry);
+	composer_util_focus_set_focus_with_idler(view, view->selected_widget);
 
 	debug_leave();
 }
@@ -301,7 +301,7 @@ static void _recipient_from_ctxpopup_dismissed_cb(void *data, Evas_Object *obj, 
 	evas_object_del(view->recp_from_ctxpopup);
 	view->recp_from_ctxpopup = NULL;
 	composer_recipient_from_ctxpopup_item_delete(view);
-	composer_util_focus_set_focus_with_idler(view, view->selected_entry);
+	composer_util_focus_set_focus_with_idler(view, view->selected_widget);
 
 	debug_leave();
 }

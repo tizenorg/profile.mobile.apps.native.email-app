@@ -246,7 +246,7 @@ static void _create_list(EmailSettingView *view)
 	genlist = elm_genlist_add(view->base.content);
 	elm_genlist_mode_set(genlist, ELM_LIST_COMPRESS);
 	elm_scroller_policy_set(genlist, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_AUTO);
-	elm_genlist_homogeneous_set(genlist, EINA_TRUE);
+	elm_genlist_homogeneous_set(genlist, EINA_FALSE);
 	view->genlist = genlist;
 
 	view->itc1 = setting_get_genlist_class_item("type1", _gl_text_get_cb, _gl_content_get_cb, NULL, NULL);

@@ -225,98 +225,130 @@
 		}
 
 		parts {
-			PART(RECT, "bg",
+			part { name: "bg";
+				scale: 1;
+				type: RECT;
 				repeat_events: 0;
 				description { state: "default" 0.0;
 					color: NAVIFRAME_TITLE_BG;
 					min: 0 TITLE_BAR_MIN_HEIGHT;
-					max: -1 TITLE_BAR_MIN_HEIGHT;
 				}
-			)
+			}
 
-			PART(SPACER, "elm.padding.left",
-				DSC_FROM_L("default" 0.0,
+			part { name: "elm.padding.left";
+				scale: 1;
+				type: SPACER;
+				description { state: "default" 0.0;
+					fixed: 1 0;
+					align: 0.0 0.5;
+					rel2.relative: 0.0 1.0;
 					min: TITLE_PADDING_LEFT 0;
-					max: TITLE_PADDING_LEFT -1;
-				)
-			)
+				}
+			}
 
-			PART(SPACER, "elm.padding.top",
-				DSC_FROM_T("default" 0.0,
+			part { name: "elm.padding.top";
+				scale: 1;
+				type: SPACER;
+				description { state: "default" 0.0;
+					fixed: 0 1;
+					align: 0.5 0.0;
+					rel2.relative: 1.0 0.0;
 					min: 0 TITLE_1_LINE_PADDING_TOP;
-					max: -1 TITLE_1_LINE_PADDING_TOP;
-				)
+				}
 				description { state: "two_lines_mode" 0.0;
 					inherit: "default" 0.0;
-					min: 0 TITLE_2_LINES_PADDING_TOP ;
-					max: -1 TITLE_2_LINES_PADDING_TOP ;
+					fixed: 0 1;
+					min: 0 TITLE_2_LINES_PADDING_TOP;
 				}
-			)
+			}
 
-			PART(SPACER, "elm.padding.bottom",
-				DSC_FROM_B("default" 0.0,
+			part { name: "elm.padding.bottom";
+				scale: 1;
+				type: SPACER;
+				description { state: "default" 0.0;
+					fixed: 0 1;
+					align: 0.5 1.0;
+					rel1.relative: 0.0 1.0;
 					min: 0 TITLE_1_LINE_PADDING_BOTTOM;
-					max: -1 TITLE_1_LINE_PADDING_BOTTOM;
-				)
+				}
 				description { state: "two_lines_mode" 0.0;
 					inherit: "default" 0.0;
+					fixed: 0 1;
 					min: 0 TITLE_2_LINES_PADDING_BOTTOM;
-					max: -1 TITLE_2_LINES_PADDING_BOTTOM;
 				}
-			)
+			}
 
-			PART(SWALLOW, "mailbox_button",
-				DSC_FROM_R("default" 0.0,
+			part { name: "mailbox_button";
+				scale: 1;
+				type: SWALLOW;
+				description { state: "default" 0.0;
+					fixed: 1 0;
+					align: 1.0 0.5;
+					rel1.relative: 1.0 0.0;
 					min: TITLE_MAILBOX_BUTTON_WIDTH 0;
-					max: TITLE_MAILBOX_BUTTON_WIDTH -1;
-				)
-			)
+				}
+			}
 
-			PART(TEXTBLOCK, "title.text",
-				DSC_LRT("default" 0.0, "elm.padding.left", "mailbox_button", "elm.padding.top",
+			part { name: "title.text";
+				scale: 1;
+				type: TEXTBLOCK;
+				description { state: "default" 0.0;
+					align: 0.5 0;
+					rel1 {
+						relative: 1 1;
+						to_x: "elm.padding.left";
+						to_y: "elm.padding.top";
+					}
+					rel2 {
+						relative: 0 1;
+						to_x: "mailbox_button";
+						to_y: "elm.padding.top";
+					}
 					text {
 						style: "mailbox_title";
 						align: 0.0 0.5;
-						min: 0 1;
-						max: 0 1;
 					}
-
 					min: 0 TITLE_1_LINE_HEIGHT_MIN;
-					max: -1 TITLE_1_LINE_HEIGHT_MIN;
-				)
-
-				description {state: "two_lines_mode" 0.0;
-					inherit: "default" 0.0;
-					text {
-						style: "mailbox_title_main";
-						align: 0.0 1.0;
-						min: 0 1;
-						max: 0 1;
-					}
-					min: 0 TITLE_MAIN_TEXT_HEIGHT_MIN;
-					max: -1 TITLE_MAIN_TEXT_HEIGHT_MIN;
 				}
-
-			)
-
-			PART(TEXTBLOCK, "title.text.sub",
-				DSC_LRB("default" 0.0, "elm.padding.left", "mailbox_button", "elm.padding.bottom",
-					text {
-						style: "mailbox_title_sub";
-						align: 0.0 0.5;
-						min: 0 1;
-						max: 0 1;
-					}
-					min: 0 0;
-					max: 0 0;
-				)
-
 				description { state: "two_lines_mode" 0.0;
 					inherit: "default" 0.0;
-					min: 0 TITLE_SUB_TEXT_HEIGHT_MIN;
-					max: -1 TITLE_SUB_TEXT_HEIGHT_MIN;
+					fixed: 1 0;
+					align: 0.5 0;
+					text {
+						style: "mailbox_title_main";
+					}
+					min: 0 TITLE_MAIN_TEXT_HEIGHT_MIN;
 				}
-			)
+			}
+
+			part { name: "title.text.sub";
+				scale: 1;
+				type: TEXTBLOCK;
+				description { state: "default" 0.0;
+					rel1 {
+						relative: 1 1;
+						to_x: "elm.padding.left";
+						to_y: "title.text";
+					}
+					rel2 {
+						relative: 0 0;
+						to_x: "mailbox_button";
+						to_y: "elm.padding.bottom";
+					}
+					visible: 0;
+					min: 0 0;
+					max: 0 0;
+				}
+				description { state: "two_lines_mode" 0.0;
+					inherit: "default" 0.0;
+					visible: 1;
+					min: 0 TITLE_SUB_TEXT_HEIGHT_MIN;
+					max: -1 -1;
+					text {
+						style: "mailbox_title_sub";
+					}
+				}
+			}
 		}
 
 		programs{

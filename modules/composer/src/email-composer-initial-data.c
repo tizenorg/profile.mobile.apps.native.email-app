@@ -57,7 +57,7 @@ static void _initial_data_set_mail_bcc_recipients(EmailComposerView *view);
 static void _initial_data_set_mail_subject(EmailComposerView *view);
 static char *_initial_data_get_mail_body(EmailComposerView *view);
 static void _initial_data_set_mail_attachment(EmailComposerView *view);
-static void _initial_data_set_selected_entry(EmailComposerView *view);
+static void _initial_data_set_selected_widget(EmailComposerView *view);
 
 static Eina_List *_initial_data_make_initial_recipients_list(Evas_Object *mbe);
 
@@ -1152,7 +1152,10 @@ void composer_initial_data_set_mail_info(EmailComposerView *view, bool is_draft_
 
 	g_free(html_body);
 
-	_initial_data_set_selected_entry(view);
+	/* Set ewk_view_vertical_panning_hold_set() here due to structural issue of Chromium */
+	ewk_view_vertical_panning_hold_set(view->ewk_view, EINA_TRUE);
+
+	_initial_data_set_selected_widget(view);
 
 	debug_leave();
 	email_profiling_end(composer_initial_data_set_mail_info);
@@ -1416,22 +1419,22 @@ void composer_initial_data_free_initial_contents(EmailComposerView *view)
 	debug_leave();
 }
 
-static void _initial_data_set_selected_entry(EmailComposerView *view)
+static void _initial_data_set_selected_widget(EmailComposerView *view)
 {
 	debug_enter();
 
 	if (elm_multibuttonentry_first_item_get(view->recp_to_mbe) != NULL) {
 		if (g_strcmp0(elm_entry_entry_get(view->subject_entry.entry), "") == 0) {
 			debug_log("To field is not empty, setting focus to subject_entry field.");
-			view->selected_entry = view->subject_entry.entry;
+			view->selected_widget = view->subject_entry.entry;
 		} else if (view->ewk_view) {
 			debug_log("To field is not empty, setting focus to ewk_view field.");
-			view->selected_entry = view->ewk_view;
+			view->selected_widget = view->ewk_view;
 			view->cs_bringin_to_ewk = true;
 		}
 	} else {
 		debug_log("To field is empty, setting focus to To field.");
-		view->selected_entry = view->recp_to_entry.entry;
+		view->selected_widget = view->recp_to_entry.entry;
 	}
 
 	debug_leave();

@@ -35,8 +35,8 @@ static int _email_contacts_get_contacts_list_info(contacts_list_h list, email_co
 static int _email_contacts_get_contacts_list_by_email_id(int email_id, contacts_list_h *list);
 static int _email_contacts_get_log_list(contacts_match_str_flag_e match, contacts_list_h *list, const char *search_word);
 static int _email_contacts_get_log_list_info(contacts_list_h list, email_contact_list_info_t *ct_list_info);
-static Eina_List * _email_contacts_logs_db_search(const char *search_word, Eina_Hash *hash);
-static Eina_List * _email_contacts_contacts_db_search(const char *search_word, Eina_Hash *hash);
+static Eina_List * _email_contacts_logs_db_search(const char *search_word, Eina_Hash *hash, int limit);
+static Eina_List * _email_contacts_contacts_db_search(const char *search_word, Eina_Hash *hash, int limit);
 static bool _email_contacts_is_valid_vcard_file_name_char(char c);
 static char *_email_contacts_make_vcard_file_path(const char* display_name, const char *vcard_dir_path);
 static bool _email_contacts_write_vcard_to_file(int fd, contacts_record_h record, Eina_Bool my_profile);
@@ -234,12 +234,16 @@ static int _email_contacts_get_log_list_info(contacts_list_h list, email_contact
 	return ct_ret;
 }
 
-static Eina_List * _email_contacts_logs_db_search(const char *search_word, Eina_Hash *hash)
+static Eina_List * _email_contacts_logs_db_search(const char *search_word, Eina_Hash *hash, int limit)
 {
 	debug_enter();
 
 	retvm_if(!search_word, NULL, "Invalid parameter: search_word is NULL!");
 	retvm_if(!hash, NULL, "Invalid parameter: hash is NULL!");
+
+	if (limit <= 0) {
+		return NULL;
+	}
 
 	int ret = CONTACTS_ERROR_NONE;
 	Eina_List *contacts_list = NULL;
@@ -304,6 +308,9 @@ static Eina_List * _email_contacts_logs_db_search(const char *search_word, Eina_
 			} else {
 				eina_hash_add(hash, buf, contact_info);
 				contacts_list = eina_list_append(contacts_list, contact_info);
+				if (limit && (eina_list_count(contacts_list) == limit)) {
+					break;
+				}
 			}
 		} else {
 			debug_log("There's no email addresses on the contact! Freeing!");
@@ -320,12 +327,16 @@ static Eina_List * _email_contacts_logs_db_search(const char *search_word, Eina_
 	return contacts_list;
 }
 
-static Eina_List * _email_contacts_contacts_db_search(const char *search_word, Eina_Hash *hash)
+static Eina_List * _email_contacts_contacts_db_search(const char *search_word, Eina_Hash *hash, int limit)
 {
 	debug_enter();
 
 	retvm_if(!search_word, NULL, "Invalid parameter: search_word is NULL!");
 	retvm_if(!hash, NULL, "Invalid parameter: hash is NULL!");
+
+	if (limit <= 0) {
+		return NULL;
+	}
 
 	int ret = CONTACTS_ERROR_NONE;
 	Eina_List *contacts_list = NULL;
@@ -387,6 +398,10 @@ static Eina_List * _email_contacts_contacts_db_search(const char *search_word, E
 					if (eina_hash_find(hash, buf) == NULL) {
 						eina_hash_add(hash, buf, contact_info);
 					}
+
+					if (limit && (eina_list_count(contacts_list) == limit)) {
+						break;
+					}
 				}
 			} else {
 				debug_log("There's no email addresses on the contact! Freeing!");
@@ -398,6 +413,10 @@ static Eina_List * _email_contacts_contacts_db_search(const char *search_word, E
 
 		ret = contacts_list_destroy(list, EINA_TRUE);
 		debug_warning_if(ret != CONTACTS_ERROR_NONE, "contacts_list_destroy() failed! ret:(%d)", ret);
+
+		if (limit && (eina_list_count(contacts_list) == limit)) {
+			break;
+		}
 	}
 
 	debug_leave();
@@ -620,9 +639,13 @@ EMAIL_API email_contact_list_info_t *email_contacts_get_contact_info_by_email_id
 	if (ret != CONTACTS_ERROR_NONE) {
 		debug_warning("contacts_list_get_current_record_p() failed (%d)", ret);
 		contacts_list_destroy(person_email_list, true);
+		free(contact_info);
 		return NULL;
 	}
-	contact_info->email_id = email_id;
+
+	if (contact_info) {
+		contact_info->email_id = email_id;
+	}
 	contacts_list_destroy(person_email_list, true);
 	debug_leave();
 	return contact_info;
@@ -691,15 +714,15 @@ EMAIL_API void email_contacts_delete_contact_info_list(Eina_List **list)
 	debug_leave();
 }
 
-EMAIL_API Eina_List *email_contacts_search_contacts_by_keyword(const char *search_word)
+EMAIL_API Eina_List *email_contacts_search_contacts_by_keyword(const char *search_word, int limit)
 {
 	debug_enter();
 
 	Eina_Hash *hash = eina_hash_string_superfast_new(NULL); /* Hash for omitting duplicate entries. */
 	retvm_if(!hash, NULL, "ugd->ps_hash is NULL!");
 
-	Eina_List *contacts_list = _email_contacts_contacts_db_search(search_word, hash); /* Retrieve contacts list from contacts db */
-	Eina_List *recents_list = _email_contacts_logs_db_search(search_word, hash); /* Retrieve contacts list from phonelog db */
+	Eina_List *contacts_list = _email_contacts_contacts_db_search(search_word, hash, limit); /* Retrieve contacts list from contacts db */
+	Eina_List *recents_list = _email_contacts_logs_db_search(search_word, hash,	limit - eina_list_count(contacts_list)); /* Retrieve contacts list from phonelog db */
 
 	Eina_List *search_result = eina_list_merge(contacts_list, recents_list); /* contacts_list is cached for future use. */
 	eina_hash_free(hash);

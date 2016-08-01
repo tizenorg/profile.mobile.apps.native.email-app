@@ -29,7 +29,10 @@
  * Declaration for static variables
  */
 
-#define COMPOSER_PREDICTIVE_LAYOUT_BOTTOM_MASKING_ADJ ELM_SCALE_SIZE(16) /* It is to take care of the bottom bg & effect of the layout */
+#define COMPOSER_PS_BOTTOM_PADDING ELM_SCALE_SIZE(16)
+#define COMPOSER_PS_BORDER_SIZE ELM_SCALE_SIZE(2)
+#define COMPOSER_PS_INITAL_WIDTH 256
+#define COMPOSER_PS_LIST_LIMIT 250
 
 Elm_Genlist_Item_Class __ps_itc;
 
@@ -49,8 +52,7 @@ Evas_Object *__composer_ps_create_genlist(Evas_Object *parent, EmailComposerView
 static void __composer_ps_create_view(EmailComposerView *view);
 static void __composer_ps_destroy_view(EmailComposerView *view);
 
-static Eina_Bool _composer_correct_ps_layout_size_timer_cb(void *data);
-static void composer_ps_selected_recipient_content_get(EmailComposerView *view, Evas_Object **recipient_layout, Evas_Object **editfield_layout);
+static void composer_ps_selected_recipient_editfield_get(EmailComposerView *view, email_editfield_t **editfield);
 
 static void __composer_ps_append_result(EmailComposerView *view, Eina_List *predict_list, Elm_Object_Item *parent);
 static Eina_List *__composer_ps_search_through_list(Eina_List *src, const char *search_word);
@@ -139,11 +141,11 @@ static void __composer_ps_gl_sel(void *data, Evas_Object *obj, void *event_info)
 
 	elm_genlist_item_selected_set(item, EINA_FALSE);
 
-	if (view->selected_entry == view->recp_to_entry.entry) {
+	if (view->selected_widget == view->recp_to_entry.entry) {
 		mbe = view->recp_to_mbe;
-	} else if (view->selected_entry == view->recp_cc_entry.entry) {
+	} else if (view->selected_widget == view->recp_cc_entry.entry) {
 		mbe = view->recp_cc_mbe;
-	} else if (view->selected_entry == view->recp_bcc_entry.entry) {
+	} else if (view->selected_widget == view->recp_bcc_entry.entry) {
 		mbe = view->recp_bcc_mbe;
 	}
 	retm_if(!mbe, "Invalid entry is selected!");
@@ -162,7 +164,7 @@ static void __composer_ps_gl_sel(void *data, Evas_Object *obj, void *event_info)
 	}
 
 	if (ri) {
-		elm_entry_entry_set(view->selected_entry, "");
+		elm_entry_entry_set(view->selected_widget, "");
 		char *markup_name = elm_entry_utf8_to_markup(ri->display_name);
 		elm_multibuttonentry_item_append(mbe, markup_name, NULL, ri);
 		FREE(markup_name);
@@ -234,6 +236,19 @@ static char *__composer_ps_insert_match_tag(char *input, char *matched_word)
 	return string;
 }
 
+static void __composer_ps_genlist_size_hint_changed(void *data, Evas *e, Evas_Object *obj, void *event_info)
+{
+	debug_enter();
+	EmailComposerView *view = data;
+
+	int genlist_min_height = 0;
+	evas_object_size_hint_min_get(view->ps_genlist, NULL, &genlist_min_height);
+	if (genlist_min_height != view->ps_genlist_min_height) {
+		view->ps_genlist_min_height = genlist_min_height;
+		composer_ps_change_layout_size(view);
+	}
+}
+
 Evas_Object *__composer_ps_create_genlist(Evas_Object *parent, EmailComposerView *view)
 {
 	debug_enter();
@@ -246,28 +261,24 @@ Evas_Object *__composer_ps_create_genlist(Evas_Object *parent, EmailComposerView
 
 	Evas_Object *layout = elm_layout_add(parent);
 	elm_layout_file_set(layout, email_get_composer_theme_path(), "ec/predictive_search/base");
-	evas_object_size_hint_weight_set(layout, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	evas_object_size_hint_align_set(layout, EVAS_HINT_FILL, EVAS_HINT_FILL);
-	evas_object_show(layout);
+	evas_object_hide(layout);
 
-	Evas_Object *box = elm_box_add(layout);
-	evas_object_size_hint_weight_set(box, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	evas_object_size_hint_align_set(box, EVAS_HINT_FILL, EVAS_HINT_FILL);
-	evas_object_show(box);
+	Evas_Object *grid = elm_grid_add(layout);
+	evas_object_show(grid);
 
-	Evas_Object *genlist = elm_genlist_add(box);
-	evas_object_size_hint_weight_set(genlist, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	evas_object_size_hint_align_set(genlist, EVAS_HINT_FILL, EVAS_HINT_FILL);
+	Evas_Object *genlist = elm_genlist_add(grid);
 	elm_object_focus_allow_set(genlist, EINA_FALSE);
 	elm_genlist_mode_set(genlist, ELM_LIST_COMPRESS);
-	elm_genlist_homogeneous_set(genlist, EINA_TRUE);
+	elm_genlist_homogeneous_set(genlist, EINA_FALSE);
+	elm_scroller_content_min_limit(genlist, EINA_FALSE, EINA_TRUE);
 	evas_object_show(genlist);
 
-	elm_box_pack_end(box, genlist);
-	elm_object_part_content_set(layout, "ec.swallow.content", box);
+	elm_grid_pack(grid, genlist, 0, 0, 100, 100);
+	elm_object_part_content_set(layout, "ec.swallow.content", grid);
 	eext_object_event_callback_add(layout, EEXT_CALLBACK_BACK, __composer_ps_back_cb, view);
 	view->ps_genlist = genlist;
-	view->ps_box = box;
+
+	view->ps_genlist_min_height = 0;
 
 	debug_leave();
 	return layout;
@@ -286,9 +297,12 @@ static void __composer_ps_create_view(EmailComposerView *view)
 		view->ps_mouse_down_handler = ecore_event_handler_add(ECORE_EVENT_MOUSE_BUTTON_DOWN, __composer_ps_mouse_down_cb, view);
 	}
 
-	composer_initial_view_cs_freeze_push(view);
+	evas_object_event_callback_add(view->ps_genlist, EVAS_CALLBACK_CHANGED_SIZE_HINTS,
+			__composer_ps_genlist_size_hint_changed, view);
 
-	view->ps_is_runnig = EINA_TRUE;
+	evas_object_resize(view->ps_layout, COMPOSER_PS_INITAL_WIDTH, 0); /* To force size calculations */
+
+	composer_initial_view_cs_freeze_push(view);
 
 	debug_leave();
 }
@@ -305,13 +319,12 @@ static void __composer_ps_destroy_view(EmailComposerView *view)
 	}
 
 	eext_object_event_callback_del(view->ps_layout, EEXT_CALLBACK_BACK, __composer_ps_back_cb);
+	evas_object_event_callback_del_full(view->ps_genlist, EVAS_CALLBACK_CHANGED_SIZE_HINTS,
+			__composer_ps_genlist_size_hint_changed, view);
 	DELETE_EVAS_OBJECT(view->ps_layout);
 	view->ps_genlist = NULL;
-	view->ps_box = NULL;
 
 	composer_initial_view_cs_freeze_pop(view);
-
-	view->ps_is_runnig = EINA_FALSE;
 
 	debug_leave();
 }
@@ -330,8 +343,6 @@ static void __composer_ps_append_result(EmailComposerView *view, Eina_List *pred
 		item->view = view;
 		elm_genlist_item_append(view->ps_genlist, &__ps_itc, item, NULL, ELM_GENLIST_ITEM_NONE, __composer_ps_gl_sel, view);
 	}
-
-	composer_ps_change_layout_size(view);
 
 	debug_leave();
 }
@@ -357,138 +368,21 @@ static Eina_List *__composer_ps_search_through_list(Eina_List *src, const char *
 	return result;
 }
 
-static int _composer_ps_genlist_item_max_height_calculate(EmailComposerView  *view)
+static void composer_ps_selected_recipient_editfield_get(EmailComposerView *view, email_editfield_t **editfield)
 {
 	debug_enter();
-	retvm_if(!view, 0, "Invalid parameter: view is NULL!");
-
-	int item_height = 0;
-	Elm_Object_Item *gl_item = NULL;
-
-	Eina_List *relized_items = elm_genlist_realized_items_get(view->ps_genlist);
-	retvm_if(!relized_items, item_height, "Error: relized_items is NULL!");
-
-	gl_item = eina_list_data_get(relized_items);
-	Evas_Object *track_rect = elm_object_item_track(gl_item);
-	retvm_if(!track_rect, item_height, "Error: track_rect is NULL!");
-
-	evas_object_geometry_get(track_rect, NULL, NULL, NULL, &item_height);
-	elm_object_item_untrack(gl_item);
-	EINA_LIST_FREE(relized_items, gl_item);
-
-	debug_leave();
-	return item_height;
-}
-
-static Eina_Bool _composer_correct_ps_layout_size_timer_cb(void *data)
-{
-	debug_enter();
-
-	EmailComposerView *view = (EmailComposerView *)data;
-
-	Evas_Object *recipient_layout = NULL, *editfield_layout = NULL;
-	Evas_Coord recipient_layout_y = 0, recipient_layout_h = 0;
-	Evas_Coord editfield_layout_width = 0, editfield_layout_x = 0;
-
-	double total_height = 0, available_height = 0, item_height = 0, minimum_height = 0;
-	double box_height = 0;
-	int count = 0;
-
-	Ecore_IMF_Context *ctx = ecore_imf_context_add(ecore_imf_context_default_id_get());
-	Evas_Coord cx = 0, cy = 0, cw = 0, ch = 0;
-	ecore_imf_context_input_panel_geometry_get(ctx, &cx, &cy, &cw, &ch);
-	ecore_imf_context_del(ctx);
-
-	Evas_Coord nHeight = 0;
-	evas_object_geometry_get(view->base.module->win, NULL, NULL, NULL, &nHeight);
-	composer_ps_selected_recipient_content_get(view, &recipient_layout, &editfield_layout);
-	retvm_if((!recipient_layout || !editfield_layout), ECORE_CALLBACK_CANCEL, "Invalid mbe entry is selected!");
-
-	evas_object_geometry_get(recipient_layout, NULL, &recipient_layout_y, NULL, &recipient_layout_h);
-	evas_object_geometry_get(editfield_layout, &editfield_layout_x, NULL, &editfield_layout_width, NULL);
-
-	if (recipient_layout_y < view->cs_top) {
-		composer_initial_view_cs_show(view, view->cs_scroll_pos - (view->cs_top - recipient_layout_y));
-		recipient_layout_y = view->cs_top;
-	}
-	item_height = _composer_ps_genlist_item_max_height_calculate(view);
-	retvm_if(item_height == 0, ECORE_CALLBACK_CANCEL, "Failed to calculate item height!");
-
-	count = elm_genlist_items_count(view->ps_genlist);
-	total_height = count * item_height;
-	available_height = nHeight - (recipient_layout_y + recipient_layout_h + COMPOSER_PREDICTIVE_LAYOUT_BOTTOM_MASKING_ADJ + ch);
-	int display_item_count = (int) (available_height / item_height);
-	debug_log("display_item_count: [%d]", display_item_count);
-
-	int rot = elm_win_rotation_get(view->base.module->win);
-	if ((rot == 0) || (rot == 180)) { /* Portrait */
-		if (count > display_item_count) {
-			minimum_height = item_height * display_item_count;
-		} else {
-			minimum_height = total_height;
-		}
-	} else { /* Landscape */
-		minimum_height = item_height;
-	}
-
-	debug_log("item:[%f], avail:[%f], minimum:[%f], total:[%f]", item_height, available_height, minimum_height, total_height);
-	composer_util_display_position(view);
-
-	/* Move scroller to show the list. (Landscape: at least 1, Portrait: at least 3) */
-	if (available_height < minimum_height) {
-		int delta = minimum_height - available_height;
-		int new_scroll_pos = view->cs_scroll_pos + delta;
-
-		recipient_layout_y -= delta;
-
-		debug_log("view->cs_scroll_pos:[%d]", view->cs_scroll_pos);
-		debug_log("new_scroll_pos:[%d]", new_scroll_pos);
-
-		composer_initial_view_cs_show(view, new_scroll_pos);
-	}
-
-	/* Calculate box height. */
-	if (total_height < available_height) {
-		box_height = total_height;
-	} else if (minimum_height < available_height) {
-		box_height = available_height;
-	} else {
-		box_height = minimum_height;
-	}
-
-	debug_log("==> box_height: (%f)", box_height);
-
-	evas_object_size_hint_min_set(view->ps_box, 0, box_height);
-	evas_object_size_hint_max_set(view->ps_box, -1, box_height);
-
-	evas_object_resize(view->ps_layout, editfield_layout_width, box_height + ELM_SCALE_SIZE(4)); /* 4 means top line and bottom line on the layout */
-	evas_object_move(view->ps_layout, editfield_layout_x, recipient_layout_y + recipient_layout_h);
-
-	debug_leave();
-	return ECORE_CALLBACK_CANCEL;
-
-}
-
-static void composer_ps_selected_recipient_content_get(EmailComposerView *view, Evas_Object **recipient_layout, Evas_Object **editfield_layout)
-{
-	debug_enter();
-	*recipient_layout = NULL;
-	*editfield_layout = NULL;
 	retm_if(!view, "Invalid parameter: view is NULL!");
+	retm_if(!editfield, "Invalid parameter: editfield is NULL!");
 
-	if (view->selected_entry == view->recp_to_entry.entry) {
-		*recipient_layout = view->recp_to_layout;
-		*editfield_layout = view->recp_to_entry.layout;
-	} else if (view->selected_entry == view->recp_cc_entry.entry) {
-		*recipient_layout = view->recp_cc_layout;
-		*editfield_layout = view->recp_cc_entry.layout;
-	} else if (view->selected_entry == view->recp_bcc_entry.entry) {
-		*recipient_layout = view->recp_bcc_layout;
-		*editfield_layout = view->recp_bcc_entry.layout;
+	*editfield = NULL;
+
+	if (view->selected_widget == view->recp_to_entry.entry) {
+		*editfield = &view->recp_to_entry;
+	} else if (view->selected_widget == view->recp_cc_entry.entry) {
+		*editfield = &view->recp_cc_entry;
+	} else if (view->selected_widget == view->recp_bcc_entry.entry) {
+		*editfield = &view->recp_bcc_entry;
 	}
-
-	debug_leave();
-
 }
 
 /*
@@ -504,30 +398,37 @@ void composer_ps_start_search(void *data)
 	EmailComposerView *view = (EmailComposerView *)data;
 	Eina_List *ps_list = NULL;
 
+	/* Clear cached contact list on first search or if cached keyword is not a subset of new keyword */
+	if (view->ps_contacts_list && !strcasestr(view->ps_keyword, view->ps_cache_keyword)) {
+		email_contacts_delete_contact_info_list(&view->ps_contacts_list);
+	}
+
 	/* Retrieve contacts list from contacts db & phonelog db. If there's the list already searched, use it instead. */
 	if (!view->ps_contacts_list) {
-
-		view->ps_contacts_list = email_contacts_search_contacts_by_keyword(view->ps_keyword); /* contacts_list is cached for future use. */
+		view->ps_contacts_list = email_contacts_search_contacts_by_keyword(view->ps_keyword, COMPOSER_PS_LIST_LIMIT); /* contacts_list is cached for future use. */
 		ps_list = eina_list_clone(view->ps_contacts_list);
+		snprintf(view->ps_cache_keyword, EMAIL_LIMIT_EMAIL_ADDRESS_LENGTH + 1, "%s", view->ps_keyword);
 	} else {
 		ps_list = __composer_ps_search_through_list(view->ps_contacts_list, view->ps_keyword); /* cached contacts_list is used here. */
 	}
 
 	/* If there're some contacts found, append it to the genlist. If not, destroy the layout. */
 	if (!ps_list) {
-		if (view->ps_is_runnig) {
-			composer_ps_stop_search(view);
+		if (view->ps_layout) {
+			__composer_ps_destroy_view(view);
 		}
 	} else {
-		if (!view->ps_is_runnig) {
+		if (!view->ps_layout) {
 			__composer_ps_create_view(view);
-		} else if (view->ps_genlist) { /* Clear existing items to append new list. */
+		} else { /* Clear existing items to append new list. */
 			elm_genlist_clear(view->ps_genlist);
 		}
 
 		__composer_ps_append_result(view, ps_list, NULL);
-		DELETE_LIST_OBJECT(ps_list); /* DO NOT remove the item on the list. they are removed on composer_ps_stop_search() */
+		DELETE_LIST_OBJECT(ps_list); /* DO NOT remove the item on the list. they are removed on email_contacts_delete_contact_info_list() */
 	}
+
+	view->ps_is_runnig = EINA_TRUE;
 
 	debug_leave();
 }
@@ -540,7 +441,7 @@ void composer_ps_stop_search(void *data)
 
 	EmailComposerView *view = (EmailComposerView *)data;
 
-	if (view->ps_is_runnig) {
+	if (view->ps_layout) {
 		__composer_ps_destroy_view(view);
 	}
 
@@ -548,27 +449,85 @@ void composer_ps_stop_search(void *data)
 		email_contacts_delete_contact_info_list(&view->ps_contacts_list);
 	}
 
+	view->ps_is_runnig = EINA_FALSE;
+
 	debug_leave();
 }
 
 void composer_ps_change_layout_size(EmailComposerView *view)
 {
 	debug_enter();
+	retm_if(!view, "Invalid parameter: view is NULL!");
 
-	Evas_Object *recipient_layout = NULL, *editfield_layout = NULL;
-	composer_ps_selected_recipient_content_get(view, &recipient_layout, &editfield_layout);
-	retm_if(!recipient_layout || !editfield_layout, "Failed to get recipient content");
+	if (view->ps_genlist_min_height == 0) {
+		debug_log("Genlist min height is 0");
+		evas_object_hide(view->ps_layout);
+		return;
+	}
 
-	Evas_Coord recipient_layout_y = 0, recipient_layout_h = 0;
-	Evas_Coord editfield_layout_width = 0, editfield_layout_x = 0;
+	email_editfield_t *editfield = NULL;
+	int scroller_y = 0;
+	int scroller_h = 0;
 
+	composer_ps_selected_recipient_editfield_get(view, &editfield);
+	retm_if(!editfield, "Failed to get selected recipient editfield");
 
-	evas_object_geometry_get(recipient_layout, NULL, &recipient_layout_y, NULL, &recipient_layout_h);
-	evas_object_geometry_get(editfield_layout, &editfield_layout_x, NULL, &editfield_layout_width, NULL);
+	evas_object_geometry_get(view->main_scroller, NULL, &scroller_y, NULL, &scroller_h);
 
-	evas_object_resize(view->ps_layout, editfield_layout_width, COMPOSER_PREDICTIVE_SEARCH_ITEM_DEFAULT_HEIGHT); /* Initial resize to calculate genlist item height */
-	evas_object_move(view->ps_layout, editfield_layout_x, recipient_layout_y + recipient_layout_h);
+	const int target_h = (view->ps_genlist_min_height + COMPOSER_PS_BORDER_SIZE * 2);
 
-	ecore_timer_add(0.1f, _composer_correct_ps_layout_size_timer_cb, view);
+	debug_log("scroller_y: %d; scroller_h: %d; target_h: %d", scroller_y, scroller_h, target_h);
+
+	int i = 0;
+	for (i = 0; i < 2; ++i) {
+		int composer_layout_y = 0;
+		int editfield_layout_x = 0;
+		int editfield_layout_y = 0;
+		int editfield_layout_w = 0;
+		int editfield_layout_h = 0;
+
+		evas_object_geometry_get(view->composer_layout, NULL, &composer_layout_y, NULL, NULL);
+		evas_object_geometry_get(editfield->layout, &editfield_layout_x, &editfield_layout_y,
+				&editfield_layout_w, &editfield_layout_h);
+
+		debug_log("composer_layout_y: %d; editfield_layout_y: %d; editfield_layout_h: %d",
+				composer_layout_y, editfield_layout_y, editfield_layout_h);
+
+		const int optimal_scroll_pos = (editfield_layout_y - composer_layout_y);
+		const int extra_h = (editfield_layout_y - scroller_y);
+
+		debug_log("optimal_scroll_pos: %d; extra_h: %d", optimal_scroll_pos, extra_h);
+
+		if ((i == 0) && (extra_h < 0)) {
+			debug_log("extra_h < 0 - scroll to optimal position!");
+			composer_initial_view_cs_show(view, optimal_scroll_pos);
+			continue;
+		}
+
+		const int avail_top = (editfield_layout_y + editfield_layout_h);
+		const int avail_bottom = (scroller_y + scroller_h - COMPOSER_PS_BOTTOM_PADDING);
+		const int avail_h = (avail_bottom - avail_top);
+		const int max_h = (avail_h + extra_h);
+
+		debug_log("avail_top: %d; avail_bottom: %d; avail_h: %d; max_h: %d",
+			avail_top, avail_bottom, avail_h, max_h);
+
+		if ((i == 0) && (target_h > avail_h) && (avail_h < max_h)) {
+			debug_log("avail_h < max_h - adjusting scroll position...");
+			composer_initial_view_cs_show(view, optimal_scroll_pos - MAX(0, max_h - target_h));
+			continue;
+		}
+
+		const int result_h = MIN(avail_h, target_h);
+
+		debug_log("result_h: %d", result_h);
+
+		evas_object_move(view->ps_layout, editfield_layout_x, avail_top);
+		evas_object_resize(view->ps_layout, editfield_layout_w, result_h);
+		evas_object_show(view->ps_layout);
+
+		break;
+	}
+
 	debug_leave();
 }

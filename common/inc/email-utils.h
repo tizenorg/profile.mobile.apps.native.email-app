@@ -410,8 +410,6 @@ EMAIL_API bool email_get_combined_mail_count_by_mailbox_type(int mailbox_type, i
 
 EMAIL_API void email_set_is_inbox_active(bool is_active);
 
-EMAIL_API char *email_get_datetime_format(void);
-
 EMAIL_API char *email_get_system_string(const char *string_id);
 EMAIL_API char *email_get_email_string(const char *string_id);
 

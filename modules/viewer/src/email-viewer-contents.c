@@ -58,8 +58,6 @@ static void _webview_policy_navigation_decide_cb(void *data, Evas_Object *obj, v
 static void _webview_load_error_cb(void *data, Evas_Object *obj, void *event_info);
 static void _webview_load_noemptylayout_finished_cb(void *data, Evas_Object *obj, void *event_info);
 static void _webview_load_progress_cb(void *data, Evas_Object *obj, void *event_info);
-static Eina_Bool _webview_scroll_region_bringin_idler(void *data);
-static void _webview_contextmenu_willshow_cb(void *data, Evas_Object *obj, void *event_info);
 
 static void _webview_edge_top_cb(void *data, Evas_Object *obj, void *event_info);
 static void _webview_edge_bottom_cb(void *data, Evas_Object *obj, void *event_info);
@@ -70,8 +68,6 @@ static void _webview_zoom_finished_cb(void *data, Evas_Object *obj, void *event_
 
 static void _webview_contextmenu_customize_cb(void *data, Evas_Object *webview, void *event_info);
 static void _webview_contextmenu_selected_cb(void *data, Evas_Object *webview, void *event_info);
-static void _webview_magnifier_show_cb(void *data, Evas_Object *obj, void *event_info);
-static void _webview_magnifier_hide_cb(void *data, Evas_Object *obj, void *event_info);
 
 static void _webview_btn_focused(void *data, Evas_Object *obj, void *event_info);
 static void _webview_btn_unfocused(void *data, Evas_Object *obj, void *event_info);
@@ -79,12 +75,32 @@ static void _viewer_launch_smart_search(EmailViewerView *view, char *link_url);
 static void _viewer_share_text(EmailViewerView *view, char *share_text);
 static char *_viewer_convert_plain_text_body(EmailViewerWebview *wvd);
 
-static int _g_pos_x;
-static int _g_pos_y;
+/* This is needed to notify ewk_view about visible content has been changed */
+static void _webview_move_cb(void *data, Evas *evas, Evas_Object *obj, void *event_info);
+static Eina_Bool _webview_move_idler_cb(void *data);
 
 /*
  * Definition for static functions
  */
+
+static void _webview_move_cb(void *data, Evas *evas, Evas_Object *obj, void *event_info)
+{
+	retm_if(!data, "Invalid parameter: data is NULL!");
+	EmailViewerView *view = data;
+
+	DELETE_IDLER_OBJECT(view->webview_move_idler);
+	view->webview_move_idler = ecore_idler_add(_webview_move_idler_cb, data);
+}
+
+static Eina_Bool _webview_move_idler_cb(void *data)
+{
+	retvm_if(!data, ECORE_CALLBACK_DONE, "Invalid parameter: data is NULL!");
+	EmailViewerView *view = data;
+
+	DELETE_IDLER_OBJECT(view->webview_move_idler);
+	viewer_refresh_webview_visible_geometry(view);
+	return ECORE_CALLBACK_DONE;
+}
 
 static void _create_combined_scroller_and_resize_webview(EmailViewerView *view)
 {
@@ -386,8 +402,6 @@ static void _webview_edge_top_cb(void *data, Evas_Object *obj, void *event_info)
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 	EmailViewerView *view = (EmailViewerView *)data;
 
-	view->is_top_webview_reached = EINA_TRUE;
-
 	viewer_stop_webkit_scroller_start_elm_scroller(view);
 
 	debug_leave();
@@ -398,8 +412,6 @@ static void _webview_edge_bottom_cb(void *data, Evas_Object *obj, void *event_in
 	debug_enter();
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 	EmailViewerView *view = (EmailViewerView *)data;
-
-	view->is_bottom_webview_reached = EINA_TRUE;
 
 	edje_object_part_drag_value_set(_EDJ(view->combined_scroller), "elm.dragable.vbar", 0.0, 1.0);
 
@@ -432,18 +444,17 @@ static void _webview_mouse_down_cb(void *data, Evas *evas, Evas_Object *obj, voi
 {
 	retm_if(data == NULL, "Invalid parameter: data[NULL]");
 	EmailViewerView *view = (EmailViewerView *)data;
-	retm_if(view->webview == NULL, "view->webview is NULL.");
 
-	Evas_Event_Mouse_Down *mouse_info = (Evas_Event_Mouse_Down *)event_info;
-	/*debug_log("output position: [%d, %d]", mouse_info->output.x, mouse_info->output.y);*/
-	_g_pos_x = mouse_info->output.x;
-	_g_pos_y = mouse_info->output.y;
 	view->is_long_pressed = EINA_FALSE;
 }
 
 static void _webview_resize_cb(void *data, Evas *evas, Evas_Object *obj, void *event_info)
 {
 	debug_enter();
+	retm_if(data == NULL, "Invalid parameter: data[NULL]");
+
+	viewer_refresh_webview_visible_geometry((EmailViewerView *)data);
+	debug_leave();
 }
 
 static void _webview_zoom_started_cb(void *data, Evas_Object *obj, void *event_info)
@@ -816,87 +827,9 @@ void viewer_launch_download_manager(EmailViewerView *view, const char *download_
 	debug_warning_if(noti_ret != NOTIFICATION_ERROR_NONE, "notification_status_message_post() failed! ret:(%d)", noti_ret);
 }
 
-static void _webview_magnifier_show_cb(void *data, Evas_Object *obj, void *event_info)
-{
-	debug_enter();
-	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerView *view = (EmailViewerView *)data;
-	view->is_magnifier_opened = EINA_TRUE;
-
-	debug_leave();
-}
-
-static void _webview_magnifier_hide_cb(void *data, Evas_Object *obj, void *event_info)
-{
-	debug_enter();
-	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerView *view = (EmailViewerView *)data;
-	view->is_magnifier_opened = EINA_FALSE;
-	debug_leave();
-}
-
-
 /*
  * Definition for exported functions
  */
-
-static Eina_Bool _webview_scroll_region_bringin_idler(void *data)
-{
-	debug_enter();
-
-	retvm_if(data == NULL, ECORE_CALLBACK_CANCEL, "Invalid parameter: data[NULL]");
-	EmailViewerView *view = (EmailViewerView *)data;
-	Evas_Coord sc_width = 0, sc_height = 0;
-	Evas_Coord web_y = 0;
-
-	view->idler_regionbringin = NULL;
-	evas_object_geometry_get(view->webview_ly, NULL, &web_y, NULL, NULL);
-
-	elm_scroller_region_get(view->scroller, 0, NULL, &sc_width, &sc_height);
-	elm_scroller_region_bring_in(view->scroller, 0, web_y, sc_width, sc_height);
-	debug_log("size_to_be_scrolled :%d", web_y);
-
-	debug_leave();
-	return ECORE_CALLBACK_CANCEL;
-}
-
-static void _webview_contextmenu_willshow_cb(void *data, Evas_Object *obj, void *event_info)
-{
-	debug_enter();
-
-	retm_if(data == NULL, "Invalid parameter: data[NULL]");
-	EmailViewerView *view = (EmailViewerView *)data;
-	Evas_Point *pt = (Evas_Point *)event_info;
-
-	Evas_Coord web_y = 0, top_coordinate_y = 0;
-	evas_object_geometry_get(view->webview, NULL, &web_y, NULL, NULL);
-	evas_object_geometry_get(view->scroller, NULL, &top_coordinate_y, NULL, NULL);
-
-	debug_log("==> will show at [%d, %d]", pt->x, pt->y);
-
-	if ((top_coordinate_y != web_y) && view->is_webview_text_selected) {
-		DELETE_IDLER_OBJECT(view->idler_regionbringin);
-		view->idler_regionbringin = ecore_idler_add(_webview_scroll_region_bringin_idler, view);
-	}
-	view->is_webview_text_selected = EINA_FALSE;
-
-	debug_leave();
-}
-
-static void _webview_textselection_mode_cb(void *data, Evas_Object *obj, void *event_info)
-{
-	debug_enter();
-
-	retm_if(!data || !event_info, "invalid data");
-
-	EmailViewerView *view = (EmailViewerView *)data;
-	bool *is_text_selection_mode = (bool *)event_info;
-	debug_log("=> [%d]", *is_text_selection_mode);
-
-	view->is_webview_text_selected = (Eina_Bool)*is_text_selection_mode;
-
-	debug_leave();
-}
 
 void viewer_webkit_add_callbacks(void *data)
 {
@@ -922,15 +855,12 @@ void viewer_webkit_add_callbacks(void *data)
 
 		evas_object_smart_callback_add(view->webview, "contextmenu,customize", _webview_contextmenu_customize_cb, view);
 		evas_object_smart_callback_add(view->webview, "contextmenu,selected", _webview_contextmenu_selected_cb, view);
-		evas_object_smart_callback_add(view->webview, "contextmenu,willshow", _webview_contextmenu_willshow_cb, view);
-		evas_object_smart_callback_add(view->webview, "textselection,mode", _webview_textselection_mode_cb, view);
-		evas_object_smart_callback_add(view->webview, "magnifier,show", _webview_magnifier_show_cb, view);
-		evas_object_smart_callback_add(view->webview, "magnifier,hide", _webview_magnifier_hide_cb, view);
 		evas_object_smart_callback_add(view->webview, "zoom,started", _webview_zoom_started_cb, view);
 		evas_object_smart_callback_add(view->webview, "zoom,finished", _webview_zoom_finished_cb, view);
 
 		evas_object_event_callback_add(view->webview, EVAS_CALLBACK_MOUSE_DOWN, _webview_mouse_down_cb, view);
 		evas_object_event_callback_add(view->webview, EVAS_CALLBACK_RESIZE, _webview_resize_cb, view);
+		evas_object_event_callback_add(view->webview, EVAS_CALLBACK_MOVE, _webview_move_cb, view);
 
 		evas_object_smart_callback_add(view->webview_button, "focused", _webview_btn_focused, view);
 		evas_object_smart_callback_add(view->webview_button, "unfocused", _webview_btn_unfocused, view);
@@ -965,15 +895,12 @@ void viewer_webkit_del_callbacks(void *data)
 
 		evas_object_smart_callback_del_full(view->webview, "contextmenu,customize", _webview_contextmenu_customize_cb, view);
 		evas_object_smart_callback_del_full(view->webview, "contextmenu,selected", _webview_contextmenu_selected_cb, view);
-		evas_object_smart_callback_del_full(view->webview, "contextmenu,willshow", _webview_contextmenu_willshow_cb, view);
-		evas_object_smart_callback_del_full(view->webview, "textselection,mode", _webview_textselection_mode_cb, view);
-		evas_object_smart_callback_del_full(view->webview, "magnifier,show", _webview_magnifier_show_cb, view);
-		evas_object_smart_callback_del_full(view->webview, "magnifier,hide", _webview_magnifier_hide_cb, view);
 		evas_object_smart_callback_del_full(view->webview, "zoom,started", _webview_zoom_started_cb, view);
 		evas_object_smart_callback_del_full(view->webview, "zoom,finished", _webview_zoom_finished_cb, view);
 
 		evas_object_event_callback_del_full(view->webview, EVAS_CALLBACK_MOUSE_DOWN, _webview_mouse_down_cb, view);
 		evas_object_event_callback_del_full(view->webview, EVAS_CALLBACK_RESIZE, _webview_resize_cb, view);
+		evas_object_event_callback_del_full(view->webview, EVAS_CALLBACK_MOVE, _webview_move_cb, view);
 
 		evas_object_smart_callback_del_full(view->webview_button, "focused", _webview_btn_focused, view);
 		evas_object_smart_callback_del_full(view->webview_button, "unfocused", _webview_btn_unfocused, view);
@@ -1067,7 +994,6 @@ Evas_Object *viewer_get_webview(EmailViewerView *view)
 	ewk_context_did_start_download_callback_set(context, _viewer_download_start_cb, view);
 
 	/* Double_Scroller */
-	ewk_view_vertical_panning_hold_set(view->webview, EINA_TRUE);
 	viewer_webkit_add_callbacks(view);
 
 	int angle = elm_win_rotation_get(view->base.module->win);
@@ -1197,6 +1123,9 @@ void viewer_set_webview_content(EmailViewerView *view)
 				debug_secure("tmp_file_path [%s]", tmp_file_path);
 				/* If encoding(5th parameter) is missing, "UTF-8" is used to display contents. */
 				ewk_view_contents_set(view->webview, file_stream, strlen(file_stream), NULL, NULL, tmp_file_path);
+				/* Set ewk_view_vertical_panning_hold_set() here due to structural issue of Chromium */
+				ewk_view_vertical_panning_hold_set(view->webview, EINA_TRUE);
+
 				g_free(file_stream);
 				return;
 			}
@@ -1272,6 +1201,8 @@ void viewer_set_webview_content(EmailViewerView *view)
 		contents_size = STR_LEN(file_stream);
 	}
 	ewk_view_contents_set(view->webview, file_stream, contents_size, NULL, DEFAULT_CHARSET, tmp_file_path);
+	/* Set ewk_view_vertical_panning_hold_set() here due to structural issue of Chromium */
+	ewk_view_vertical_panning_hold_set(view->webview, EINA_TRUE);
 
 	g_free(file_stream);
 	file_stream = NULL;

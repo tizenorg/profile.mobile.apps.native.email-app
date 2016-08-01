@@ -79,7 +79,6 @@ struct _view_data {
 	Ecore_Idler *idler_show_ctx_popup;
 	Ecore_Idler *idler_destroy_self;
 	Ecore_Idler *idler_regionshow;
-	Ecore_Idler *idler_regionbringin;
 	Ecore_Idler *idler_move_recipient;
 
 	/* Timers */
@@ -99,7 +98,7 @@ struct _view_data {
 	Evas_Object *composer_popup;
 	Evas_Object *context_popup;
 
-	Evas_Object *selected_entry;
+	Evas_Object *selected_widget;
 	Evas_Object *send_btn;
 
 	/* Related to from field */
@@ -171,7 +170,6 @@ struct _view_data {
 
 	Eina_Bool is_last_item_selected;
 
-	Eina_Bool ewk_accepts_focus;
 	Eina_Bool allow_click_events;
 
 	/* For avoiding duplicate toast messages */
@@ -182,10 +180,16 @@ struct _view_data {
 	Evas_Object *subject_layout;
 	email_editfield_t subject_entry;
 
+	/*Add attachment button in subject field*/
+	Evas_Object *attachment_btn;
+
 	/* Related to webview */
 	Evas_Object *ewk_view_layout;
 	Evas_Object *ewk_view;
 	Evas_Object *ewk_btn;
+	Ecore_Timer *ewk_focus_set_timer;
+	Ecore_Timer *ewk_entry_sip_show_timer;
+	Eina_Bool is_ewk_focused;
 
 	double webview_load_progress;
 	Eina_Bool with_original_message;
@@ -217,12 +221,13 @@ struct _view_data {
 
 	/* Related to predictive search */
 	char ps_keyword[EMAIL_LIMIT_EMAIL_ADDRESS_LENGTH + 1];
+	char ps_cache_keyword[EMAIL_LIMIT_EMAIL_ADDRESS_LENGTH + 1];
 	Eina_Bool ps_is_runnig;
 	Eina_List *ps_contacts_list;
 
 	Evas_Object *ps_layout;
-	Evas_Object *ps_box;
 	Evas_Object *ps_genlist;
+	int ps_genlist_min_height;
 
 	Ecore_Event_Handler *ps_mouse_down_handler;
 
@@ -260,6 +265,7 @@ struct _view_data {
 	int cs_drag_content_y;
 	bool cs_is_sliding;
 	bool cs_is_dragging;
+	bool cs_is_scrolling;
 
 	float cs_anim_pos0;
 	float cs_anim_pos1;
@@ -350,7 +356,6 @@ struct _view_data {
 	Eina_Bool is_need_close_composer_on_low_memory;
 	Eina_Bool is_forward_download_processed;
 	Eina_Bool is_inline_contents_inserted;
-	Eina_Bool need_to_set_focus_on_resume;
 	Eina_Bool need_to_destroy_after_initializing;
 	Eina_Bool need_to_display_max_size_popup;
 	Eina_Bool is_force_destroy;

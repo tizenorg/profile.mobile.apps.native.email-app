@@ -677,7 +677,7 @@ EMAIL_API gboolean email_engine_get_mail_list(email_list_filter_t *filter_list, 
 	if ((err != EMAIL_ERROR_NONE) || (*mail_list && (*mail_count <= 0))) {
 		*mail_list = NULL;
 		*mail_count = 0;
-		debug_error("email_get_mail_list_ex failed: %d;");
+		debug_error("email_get_mail_list_ex failed: %d;", err);
 		return FALSE;
 	}
 
@@ -702,7 +702,7 @@ EMAIL_API gboolean email_engine_get_mail_count(email_list_filter_t *filter_list,
 	if ((err != EMAIL_ERROR_NONE) || (*total_mail_count < *unseen_mail_count)) {
 		*total_mail_count = 0;
 		*unseen_mail_count = 0;
-		debug_error("email_count_mail failed: %d;");
+		debug_error("email_count_mail failed: %d;", err);
 		return FALSE;
 	}
 
@@ -1921,7 +1921,7 @@ EMAIL_API void email_engine_free_mail_data_list(email_mail_data_t** mail_list, i
 	if (*mail_list) {
 		int err = email_free_mail_data(mail_list, count);
 		if (err != EMAIL_ERROR_NONE) {
-			debug_error("email_free_mail_data_list failed: %d");
+			debug_error("email_free_mail_data_list failed: %d", err);
 		}
 	}
 
@@ -1937,7 +1937,7 @@ EMAIL_API void email_engine_free_attachment_data_list(
 	if (*attachment_data_list) {
 		int err = email_free_attachment_data(attachment_data_list, attachment_count);
 		if (err != EMAIL_ERROR_NONE) {
-			debug_error("email_free_attachment_data failed: %d");
+			debug_error("email_free_attachment_data failed: %d", err);
 		}
 	}
 
@@ -2036,7 +2036,7 @@ EMAIL_API void email_engine_free_list_filter(email_list_filter_t **filter_list, 
 	if (*filter_list) {
 		int err = email_free_list_filter(filter_list, count);
 		if (err != EMAIL_ERROR_NONE) {
-			debug_error("email_free_list_filter failed: %d");
+			debug_error("email_free_list_filter failed: %d", err);
 		}
 	}
 
@@ -2068,7 +2068,7 @@ EMAIL_API void email_engine_free_address_info_list(email_address_info_list_t** a
 	if (*address_info_list) {
 		int err = email_free_address_info_list(address_info_list);
 		if (err != EMAIL_ERROR_NONE) {
-			debug_error("email_free_address_info_list failed: %d");
+			debug_error("email_free_address_info_list failed: %d", err);
 		}
 	}
 
