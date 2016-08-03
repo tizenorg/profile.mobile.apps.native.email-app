@@ -76,11 +76,6 @@ static void _recipient_entry_layout_clicked_cb(void *data, Evas_Object *obj, con
 	EmailComposerView *view = (EmailComposerView *)data;
 	ret_if(!view->is_load_finished);
 
-	if (!view->allow_click_events) {
-		debug_log("Click was blocked.");
-		return;
-	}
-
 	if ((obj == view->recp_to_layout) && (view->selected_widget != view->recp_to_entry.entry)) {
 		composer_recipient_change_entry(EINA_TRUE, view->recp_to_box, view->recp_to_entry_layout, view->recp_to_display_entry_layout);
 		composer_util_focus_set_focus(view, view->recp_to_entry.entry);
@@ -423,11 +418,6 @@ static void _recipient_from_button_clicked_cb(void *data, Evas_Object *obj, void
 	retm_if(!data, "Invalid parameter: data is NULL!");
 
 	EmailComposerView *view = (EmailComposerView *)data;
-
-	if (!view->allow_click_events) {
-		debug_log("Click was blocked.");
-		return;
-	}
 
 	if (view->recp_from_ctxpopup) {
 		_recipient_from_ctxpopup_dismissed_cb(view, NULL, NULL);

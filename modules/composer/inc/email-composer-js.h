@@ -25,6 +25,7 @@
 #define EC_HTML_META_INFO_FMT \
 	"<html>" \
 	"<head>" \
+	"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">" \
 	"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no\" />" \
 	"<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/email-composer.css\">" \
 	"<script src=\"%s/email-composer.js\"></script>" \
@@ -108,6 +109,8 @@
 #define EC_JS_GET_INITIAL_CONTENTS "GetComposedHtmlContents('0');"
 #define EC_JS_GET_COMPOSED_CONTENTS "GetComposedHtmlContents('%s');"
 
-#define EC_JS_NOTIFY_CARET_POS_CHANGE "NotifyCaretPosChange();"
+#define EC_JS_NOTIFY_CARET_POS_CHANGE "NotifyCaretPosChange(true);"
+
+#define EC_JS_SET_SCROLL_TOP "SetScrollTop(%d);"
 
 #endif /* __EMAIL_COMPOSER_JS_H__ */

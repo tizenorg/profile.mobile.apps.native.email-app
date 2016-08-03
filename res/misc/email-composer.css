@@ -38,6 +38,7 @@ html {
 	overflow-x: auto;
 	overflow-y: hidden;
 	backface-visibility: hidden;
+	word-wrap: break-word;
 }
 
 .css-body-IncludeOriginalMessage {
@@ -54,6 +55,7 @@ html {
 	background-color:#ffffff !important;
 	overflow: hidden;
 	backface-visibility: hidden;
+	word-wrap: break-word;
 }
 
 .css-newMessage {

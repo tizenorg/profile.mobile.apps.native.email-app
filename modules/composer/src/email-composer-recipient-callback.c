@@ -449,11 +449,6 @@ void _recipient_contact_button_clicked_cb(void *data, Evas_Object *obj, void *ev
 	EmailComposerView *view = (EmailComposerView *)data;
 	retm_if(view->base.module->is_launcher_busy, "is_launcher_busy = true");
 
-	if (!view->allow_click_events) {
-		debug_log("Click was blocked.");
-		return;
-	}
-
 	email_feedback_play_tap_sound();
 
 	if (((view->selected_widget == view->recp_to_entry.entry) && (view->to_recipients_cnt >= MAX_RECIPIENT_COUNT)) ||
@@ -665,11 +660,6 @@ void _recipient_mbe_selected_cb(void *data, Evas_Object *obj, void *event_info)
 	view->selected_mbe_item = (Elm_Object_Item *)event_info;
 	ri = (EmailRecpInfo *)elm_object_item_data_get(view->selected_mbe_item);
 	retm_if(!ri, "ri is NULL!");
-
-	if (!view->allow_click_events) {
-		debug_log("Click was blocked.");
-		return;
-	}
 
 	EmailAddressInfo *ai = (EmailAddressInfo *)eina_list_nth(ri->email_list, ri->selected_email_idx);
 	retm_if(!ai, "ai is NULL!");

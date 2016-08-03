@@ -95,6 +95,11 @@ var g_curUnorderedList = 0;
 var g_lastRange = null;
 var g_lastRangeIsForward = false;
 
+var g_scrollTop = 0;
+var g_frameRequestId = 0;
+
+var g_imageLayer = null;
+
 var utils = {
 	/** @param {Range} newRange */
 	setSelectionFromRange: function (newRange) {
@@ -183,14 +188,13 @@ utils.log("==> screen.width:" + screen.width);
 utils.log("==> window.innerWidth:" + window.innerWidth);
 utils.log("==> window.devicePixelRatio:" + window.devicePixelRatio);
 
-function CaretPos(x, top, bottom, isCollapsed) {
-	this.x = Math.round(x);
+function CaretPos(top, bottom, isCollapsed) {
 	this.top = Math.round(top);
 	this.bottom = Math.round(bottom);
 	this.isCollapsed = isCollapsed;
 
 	this.toString = function () {
-		return this.x + " " + this.top + " " + this.bottom + " " + this.isCollapsed;
+		return this.top + " " + this.bottom + " " + this.isCollapsed;
 	};
 }
 
@@ -287,16 +291,16 @@ function OnKeyDown(obj, event) {
 		document.execCommand('Undo', false, null);
 	} else if ((event.keyCode == 13) || (event.keyCode == 8)) { // Enter, Backspace
 		utils.log(arguments.callee.name + ": [special key]");
-		setTimeout(NotifyCaretPosChange, 0);
+		setTimeout(function () { NotifyCaretPosChange(false); }, 0);
 	} else {
 		utils.log(arguments.callee.name + ": [" + event + " / " + event.keyCode + "]");
 	}
 }
 
-function NotifyCaretPosChange() {
-	var caretPos = GetCaretPosition();
+function NotifyCaretPosChange(force) {
+	var caretPos = GetCaretPosition(force);
 	if (caretPos) {
-		utils.sendUserEvent("caret-pos-changed" + caretPos);
+		utils.sendUserEvent("caret-pos-changed:" + caretPos);
 	}
 }
 
@@ -338,6 +342,10 @@ function OnPaste(obj, ev) {
 }
 
 function ImageLayer() {
+
+	this.cancel = function () {
+		candidateElement_ = null;
+	}
 
 	/** @type {HTMLElement} */
 	var element_ = null;
@@ -634,7 +642,25 @@ function ImageLayer() {
 	});
 }
 
+function animationStepCb(timestamp) {
+	document.body.scrollTop = g_scrollTop;
+	g_frameRequestId = 0;
+}
+
 /* Used by c-code */
+
+function SetScrollTop(pos) {
+	pos = Math.round(pos / G_VAL_PIXEL_RATIO);
+	if (pos !== g_scrollTop) {
+		g_scrollTop = pos;
+		if (!g_frameRequestId) {
+			g_frameRequestId = requestAnimationFrame(animationStepCb);
+		}
+	}
+
+	g_imageLayer.cancel();
+}
+
 function InitializeEmailComposer(elmScaleSize, resDirUri) {
 	utils.log(arguments.callee.name + "()");
 
@@ -682,11 +708,21 @@ function InitializeEmailComposer(elmScaleSize, resDirUri) {
 		document.body.addEventListener('keydown', function () { OnKeyDown(this, event); }, false);
 	}
 
-	new ImageLayer();
+	g_imageLayer = new ImageLayer();
 
 	document.body.addEventListener('DOMNodeInserted', function () { OnNodeInserted(this, event); }, false);
 
 	document.addEventListener('selectionchange', function () { OnSelectionChanged(); }, false);
+
+	window.addEventListener("scroll", function () {
+		if (!g_frameRequestId) {
+			var scrollTop = document.body.scrollTop;
+			if (scrollTop !== g_scrollTop) {
+				utils.log("Prevent scroll: " + scrollTop);
+				g_frameRequestId = requestAnimationFrame(animationStepCb);
+			}
+		}
+	});
 }
 
 function OnSelectionChanged() {
@@ -695,7 +731,7 @@ function OnSelectionChanged() {
 	if (res != null) {
 		utils.sendUserEvent("text-style-changed:" + res);
 	}
-	NotifyCaretPosChange();
+	NotifyCaretPosChange(false);
 }
 
 function GetCurFontParamsString() {
@@ -1013,78 +1049,64 @@ function GetComposedHtmlContents(inlineImageSrcs) {
 	return dstContent.outerHTML;
 }
 
-function GetCaretPosition() {
-	var range, rects, rect;
+function GetCaretPosition(force) {
+	var rect;
+	var isCollapsed = 1;
+
+	var lastRange = g_lastRange;
+	g_lastRange = null;
+
 	var sel = window.getSelection();
-	var x = 0, top = 0, bottom = 0, scrollY = 0, isCollapsed = 1;
 
 	if (sel.rangeCount > 0) {
 		isCollapsed = sel.isCollapsed ? 1 : 0;
-		range = sel.getRangeAt(0);
-		rects = range.getClientRects();
+		var range = sel.getRangeAt(0);
+		var rects = range.getClientRects();
 		if (rects.length > 0) {
-			if (g_lastRange) {
-				if (range.compareBoundaryPoints(Range.START_TO_START, g_lastRange) != 0) {
+			if (lastRange) {
+				if (range.compareBoundaryPoints(Range.START_TO_START, lastRange) != 0) {
 					g_lastRangeIsForward = false;
-				} else if (range.compareBoundaryPoints(Range.END_TO_END, g_lastRange) != 0) {
+				} else if (range.compareBoundaryPoints(Range.END_TO_END, lastRange) != 0) {
 					g_lastRangeIsForward = true;
+				} else if (!force && !isCollapsed) {
+					return null;
 				}
 			}
-			if (g_lastRangeIsForward) {
-				rect = rects[rects.length - 1];
-				x = rect.right;
-				top = rect.top;
-				bottom = rect.bottom;
-			} else {
-				rect = rects[0];
-				x = rect.left;
-				top = rect.top;
-				bottom = rect.bottom;
-			}
+			rect = rects[g_lastRangeIsForward ? (rects.length - 1) : 0];
 			g_lastRange = range;
 		} else {
-			var spanParent,
-				span = document.createElement("span");
+			var span = document.createElement("span");
 			span.style.cssFloat = "left";
 			span.appendChild(document.createTextNode("\u200b"));
 			range.insertNode(span);
-			rects = range.getClientRects();
+			var rects = range.getClientRects();
 			if (rects.length > 0) {
 				rect = rects[0];
-				x = rect.left;
-				top = rect.top;
-				bottom = rect.bottom;
 			}
-			spanParent = span.parentNode;
+			var spanParent = span.parentNode;
 			spanParent.removeChild(span);
 			spanParent.normalize();
 		}
 	} else {
 		var node = document.activeElement;
-		if (node == document.getElementById(G_NAME_ORG_MESSAGE_BAR_CHECKBOX)) {
-			rects = node.getClientRects();
+		if (node === document.getElementById(G_NAME_ORG_MESSAGE_BAR_CHECKBOX)) {
+			var rects = node.getClientRects();
 			if (rects.length > 0) {
 				rect = rects[0];
-				x = rect.left;
-				top = rect.top;
-				bottom = rect.bottom;
 			}
 		}
 	}
 
-	if (top == bottom) {
+	if (!rect) {
 		return null;
 	}
 
-	scrollY = window.scrollY;
-	top += scrollY;
-	bottom += scrollY;
+	var scrollY = window.scrollY;
 
 	return new CaretPos(
-		x * G_VAL_PIXEL_RATIO,
-		top * G_VAL_PIXEL_RATIO,
-		bottom * G_VAL_PIXEL_RATIO,
-		isCollapsed);
+		(rect.top + scrollY) * G_VAL_PIXEL_RATIO,
+		(rect.bottom + scrollY) * G_VAL_PIXEL_RATIO,
+		isCollapsed);;
 }
 
 function RestoreCurrentSelection() {

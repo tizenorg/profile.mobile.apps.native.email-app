@@ -54,7 +54,7 @@
 #define COMPOSER_EVENT_NEW_MESSAGE_DIV_FOCUSED "new-message-div-focused"
 #define COMPOSER_EVENT_ORG_MESSAGE_DIV_FOCUSED "org-message-div-focused"
 #define COMPOSER_EVENT_TEXT_STYLE_CHANGED "text-style-changed:"
-#define COMPOSER_EVENT_CARET_POS_CHANGED "caret-pos-changed"
+#define COMPOSER_EVENT_CARET_POS_CHANGED "caret-pos-changed:"
 
 #define COMPOSER_MIME_CONTACT_SHARE "application/vnd.tizen.contact"
 

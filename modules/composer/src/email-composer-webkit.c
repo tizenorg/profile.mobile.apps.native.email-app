@@ -129,7 +129,9 @@ static void _webkit_unset_focus(EmailComposerView *view)
 
 	ewk_view_focus_set(view->ewk_view, EINA_FALSE);
 
-	view->cs_in_selection_mode = false;
+	if (view->is_ewk_ready) {
+		view->cs_bringin_to_ewk = false;
+	}
 
 	debug_leave();
 }
@@ -563,11 +565,10 @@ static void _ewk_view_handle_user_event(EmailComposerView *view, const char *eve
 			}
 		} else if (g_str_has_prefix(event, COMPOSER_EVENT_CARET_POS_CHANGED)) {
 			if (elm_object_focus_get(view->ewk_btn)) {
-				int x = 0;
 				int top = 0;
 				int bottom = 0;
 				int isCollapsed = 0;
-				if (sscanf(event + strlen(COMPOSER_EVENT_CARET_POS_CHANGED), "%d%d%d%d", &x, &top, &bottom, &isCollapsed) == 4) {
+				if (sscanf(event + strlen(COMPOSER_EVENT_CARET_POS_CHANGED), "%d%d%d", &top, &bottom, &isCollapsed) == 3) {
 					composer_initial_view_caret_pos_changed_cb(view, top, bottom, (isCollapsed != 0));
 				}
 			} else {
@@ -663,8 +664,6 @@ static void _ewk_view_contextmenu_customize_cb(void *data, Evas_Object *obj, voi
 		ewk_context_menu_item_append_as_action(contextmenu, EWK_CONTEXT_MENU_ITEM_TAG_CLIPBOARD, email_get_email_string("IDS_EMAIL_OPT_CLIPBOARD"), EINA_TRUE);
 	}
 
-	composer_initial_view_activate_selection_mode(view);
-
 	debug_leave();
 }
 
@@ -693,12 +692,6 @@ static Evas_Object *_webkit_create_ewk_view(Evas_Object *parent, EmailComposerVi
 	evas_object_size_hint_weight_set(ewk_view, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_size_hint_align_set(ewk_view, EVAS_HINT_FILL, EVAS_HINT_FILL);
 	ewk_view_split_scroll_overflow_enabled_set(ewk_view, EINA_TRUE);
-
-	/* To modify background color of webkit, following parts should be modified as well.
-	 * 1. here / 2. background-color in css / 3. color_class of webview_bg part in edc file
-	 */
-	evas_object_color_set(ewk_view, COLOR_WHITE); /* This color is used to set the BG color for webview before webkit gets background color from js or html(setBackgroundColor in webkit). */
-	ewk_view_draws_transparent_background_set(ewk_view, EINA_TRUE); /* The default color of webview tiles is white. This API makes the BG transparent. */
 
 	Ewk_Settings *ewkSetting = ewk_view_settings_get(ewk_view);
 	debug_warning_if(!ewkSetting, "ewk_view_settings_get() failed!");

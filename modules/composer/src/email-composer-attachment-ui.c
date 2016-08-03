@@ -200,11 +200,6 @@ static void _attachment_ui_item_clicked_cb(void *data, Evas_Object *obj, const c
 	EmailComposerView *view = (EmailComposerView *)attach_item_data->view;
 	email_attachment_data_t *attachment = attach_item_data->attachment_data;
 
-	if (!view->allow_click_events) {
-		debug_log("Click was blocked.");
-		return;
-	}
-
 	/* When a user clicks attachment layout multiple times quickly, app launch requested is called multiple times. */
 	ret_if(view->base.module->is_launcher_busy);
 

@@ -192,11 +192,6 @@ static void _subject_attach_files_clicked(void *data, Evas_Object *obj, void *ev
 	EmailComposerView *view = (EmailComposerView *)data;
 	retm_if(!view->is_load_finished, "Composer hasn't been launched completely!");
 
-	if (!view->allow_click_events) {
-		debug_log("Click was blocked.");
-		return;
-	}
-
 	email_feedback_play_tap_sound();
 	ecore_imf_input_panel_hide();
 	int total_attachment_count = eina_list_count(view->attachment_item_list) + eina_list_count(view->attachment_inline_item_list);

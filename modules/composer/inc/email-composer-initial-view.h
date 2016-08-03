@@ -87,12 +87,6 @@ void composer_initial_view_cs_freeze_push(EmailComposerView *view);
 void composer_initial_view_cs_freeze_pop(EmailComposerView *view);
 
 /**
- * @brief Activate selection mode
- * @param[in]	view»			Email composer data
- */
-void composer_initial_view_activate_selection_mode(EmailComposerView *view);
-
-/**
  * @brief Callback when coret position chenged
  * @param[in]	view»			Email composer data
  * @param[in]	top»			Top position value

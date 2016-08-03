@@ -171,8 +171,6 @@ struct _view_data {
 
 	Eina_Bool is_last_item_selected;
 
-	Eina_Bool allow_click_events;
-
 	/* For avoiding duplicate toast messages */
 	int prev_toast_error;
 	Ecore_Timer *timer_duplicate_toast_in_reciepients;
@@ -236,15 +234,15 @@ struct _view_data {
 	/* Related to combined scroller */
 	Evas_Object *combined_scroller;
 
+	/* etc */
 	bool cs_ready;
-
+	bool cs_prefer_bringin;
 	bool cs_bringin_to_ewk;
 	bool cs_notify_caret_pos;
+	bool cs_is_scrolling;
+	Eina_Rectangle cs_ewk_visible_rect;
 
-	bool cs_in_selection_mode;
-	bool cs_has_selection;
-	bool cs_has_magnifier;
-
+	/* Related to scrolling */
 	int cs_top;
 	int cs_width;
 	int cs_height;
@@ -256,19 +254,17 @@ struct _view_data {
 	int cs_scroll_pos;
 	int cs_main_scroll_pos;
 
-	int cs_backup_scroll_pos;
-	double cs_backup_pos_time;
-
+	/* Related to touch parsing */
 	int cs_freeze_count;
 	int cs_drag_down_y;
 	int cs_drag_start_y;
-	int cs_drag_cur_y;
+	float cs_drag_cur_y;
 	unsigned int cs_drag_cur_time;
 	int cs_drag_content_y;
 	bool cs_is_sliding;
 	bool cs_is_dragging;
-	bool cs_is_scrolling;
 
+	/* Related to animation */
 	float cs_anim_pos0;
 	float cs_anim_pos1;
 	float cs_anim_pos2;
@@ -281,6 +277,7 @@ struct _view_data {
 	float cs_anim_t;
 	Ecore_Animator *cs_animator;
 
+	/* Related to event processing */
 	int cs_immediate_event_mask;
 	int cs_pending_event_mask;
 	Ecore_Timer *cs_events_timer1;
